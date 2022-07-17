@@ -32,6 +32,21 @@ body {
   background: var(--red);
 }
 
+/*-----headings-----*/
+
+h1 {
+  color: var(--white);
+  font-weight: 800;
+}
+
+h3 {
+  color: var(--white);
+  font-weight: 300;
+  font-size: 1.85rem;
+}
+
+/*-----scrollbar-----*/
+
 ::-webkit-scrollbar {
   width: 20px;
 }
@@ -51,23 +66,12 @@ body {
   background-color: var(--grey-three);
 }
 
-h1 {
-  color: var(--white);
-  font-weight: 800;
-}
-
-h3 {
-  color: var(--white);
-  font-weight: 300;
-  font-size: 1.85rem;
-}
-
 /*-----navbar-----*/
 
 .logo{ 
   color: #0F111A;
   font-weight: 800;
-  font-size: 1024.5rem;
+  font-size: 2.5rem;
 }
 
 nav { 
@@ -160,7 +164,7 @@ button {
   width:400px;
   border-radius: 20px;
   float: right;
-  transform: rotate(3.7deg) translateY(-22%) translateX(-12%);
+  transform: rotate(3.7deg) translateY(-24%) translateX(-12%);
 }
 
 
