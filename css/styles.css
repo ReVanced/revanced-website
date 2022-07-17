@@ -157,10 +157,10 @@ button {
 }
 
 .hero-img {
-  width:500px;
-  border-radius: 25px;
+  width:400px;
+  border-radius: 20px;
   float: right;
-  transform: rotate(3.69deg) translateY(-18%) translateX(-18%);
+  transform: rotate(3.69deg) translateY(-22%) translateX(-12%);
 }
 
 
