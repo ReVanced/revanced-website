@@ -121,9 +121,6 @@ nav li:hover {
   color: var(--red)
 }
 
-.hero{
-
-}
 button {
   font-weight: 600;
   color: var(--white);
