@@ -16,7 +16,7 @@
 		color: var(--white);
 		border-radius: 200px;
         border: 0;
-		padding: 15px 0px;
+		padding: px 0px;
         width:60px;
         height:60px;
 		cursor: pointer;

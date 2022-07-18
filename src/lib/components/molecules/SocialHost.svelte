@@ -11,12 +11,11 @@
 
 <style>
     .social-host {
-
         justify-content: space-between;
-        position: absolute;
-        margin-left: 6rem;
+        position: sticky;
 		align-items: center;
-        display: inline-block;
-        transform: translateY(380%);
+        bottom:0;
+        padding-left: 5rem;
+        padding-bottom: 3rem;
     }
 </style>

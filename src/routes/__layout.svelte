@@ -40,7 +40,6 @@ import SocialHost from "$lib/components/molecules/SocialHost.svelte";
 	:global(html) {
 		font-size: 100%;
 		box-sizing: border-box;
-		overflow-x: hidden;
 	}
 
 	:global(body) {
