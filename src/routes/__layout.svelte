@@ -1,3 +1,10 @@
+<script>
+
+import Button from "$lib/components/atoms/Button.svelte";
+import NavHost from "$lib/components/molecules/NavHost.svelte";
+
+</script>
+
 <svelte:head>
 	<meta charset="UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,7 +19,9 @@
 	<link rel="stylesheet" href="css/styles.css" />
 </svelte:head>
 
+<NavHost></NavHost>
 <slot />
+
 
 <style>
 	:global(*) {
@@ -44,19 +53,19 @@
 		--grey-three: #3e404f;
 	}
 
-	::selection {
+	:global(::selection) {
 		color: var(--white);
 		background: var(--red);
 	}
 
 	/*-----headings-----*/
 
-	h1 {
+	:global(h1) {
 		color: var(--white);
 		font-weight: 800;
 	}
 
-	h3 {
+	:global(h3) {
 		color: var(--white);
 		font-weight: 300;
 		font-size: 1.85rem;
@@ -64,123 +73,27 @@
 
 	/*-----scrollbar-----*/
 
-	::-webkit-scrollbar {
+	:global(::-webkit-scrollbar) {
 		width: 20px;
-	}
-
-	::-webkit-scrollbar-track {
 		background-color: transparent;
 	}
 
-	::-webkit-scrollbar-thumb {
+	:global(::-webkit-scrollbar-thumb) {
 		background-color: var(--grey-two);
 		border-radius: 20px;
 		border: 6px solid transparent;
 		background-clip: content-box;
 	}
 
-	::-webkit-scrollbar-thumb:hover {
+	:global(::-webkit-scrollbar-thumb:hover) {
 		background-color: var(--grey-three);
 	}
 
-	/*-----navbar-----*/
-
-	.logo {
-		color: #0f111a;
-		font-weight: 800;
-		font-size: 2.5rem;
+	:global(::-webkit-scrollbar-track-piece){
+		display:none;
 	}
 
-	nav {
-		width: 100%;
-		display: flex;
-		padding: 1.5rem 4rem 1.5rem 4rem;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	nav li {
-		width: 160px;
-		text-align: center;
-		list-style: none;
-		display: inline-block;
-		position: relative;
-		align-items: center;
-	}
-
-	nav a {
-		color: var(--white);
-		text-decoration: none;
-		font-size: 1.25rem;
-	}
-
-	nav li:hover {
-		font-weight: 600;
-		border: 3px solid var(--grey-two);
-		padding: 10px 30px;
-		border-radius: 200px;
-	}
-
-	/*-----body-----*/
-
-	.wrapper {
-		padding-left: 6rem;
-		padding-right: 6rem;
-	}
-
-	.hero-text {
-		margin-top: 3%;
-		align-items: center;
-	}
-
-	.hero-text h1 {
-		font-size: 6.5rem;
-		letter-spacing: -0.04em;
-	}
-
-	.redder {
-		color: var(--red);
-	}
-
-	button {
-		font-weight: 600;
-		color: var(--white);
-		border: 3px solid var(--red);
-		border-radius: 200px;
-		padding: 12px 40px;
-		cursor: pointer;
-		background-color: transparent;
-	}
-
-	.hero-text button {
-		font-size: 1.5rem;
-		margin-top: 45px;
-		transform: translateX(-5%);
-		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		transition-duration: 0.4s;
-	}
-
-	.filled-button {
-		background-color: var(--red);
-	}
-
-	.hero-text .filled-button {
-		margin-right: 20px;
-		box-shadow: 0px 0px 32px 1px var(--red-glow);
-	}
-
-	.hero-text .filled-button:hover {
-		box-shadow: 0px 0px 32px 1px var(--red-glow), 0px 0px 32px 1px var(--red-glow);
-	}
-
-	.hero-text button:hover {
-		transform: translate(-5%, -5%);
-	}
-
-	.hero-img {
-		width: 400px;
-		border-radius: 20px;
-		float: right;
-		transform: rotate(3.7deg) translateY(-24%) translateX(-12%);
+	:global(::-webkit-scrollbar-track) {
+  		background: rgba(0, 0, 0, 0.2);
 	}
 </style>
