@@ -14,13 +14,19 @@
 		list-style: none;
 		display: inline-block;
 		position: relative;
+		margin-left: 7x;
+		margin-right: 7px;
 		align-items: center;
+		user-select: none;
+		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		transition-duration: 0.1s;
 	}
 
 	a {
 		color: var(--white);
 		text-decoration: none;
 		font-size: 1.25rem;
+		user-select: none;
 	}
 
 	li:hover {

@@ -15,6 +15,10 @@ import NavHost from "$lib/components/molecules/NavHost.svelte";
 		href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
 		rel="stylesheet"
 	/>
+	<meta name="og:title" content="ReVanced"/>
+	<meta name="og:image" itemprop="image" content="embed.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0f111a">
 	<title>ReVanced</title>
 	<link rel="stylesheet" href="css/styles.css" />
 </svelte:head>
@@ -51,6 +55,7 @@ import NavHost from "$lib/components/molecules/NavHost.svelte";
 		--grey-one: #1c1e29;
 		--grey-two: #2b2d3a;
 		--grey-three: #3e404f;
+		--grey-four: #1B1E29;
 	}
 
 	:global(::selection) {
@@ -87,13 +92,5 @@ import NavHost from "$lib/components/molecules/NavHost.svelte";
 
 	:global(::-webkit-scrollbar-thumb:hover) {
 		background-color: var(--grey-three);
-	}
-
-	:global(::-webkit-scrollbar-track-piece){
-		display:none;
-	}
-
-	:global(::-webkit-scrollbar-track) {
-  		background: rgba(0, 0, 0, 0.2);
 	}
 </style>

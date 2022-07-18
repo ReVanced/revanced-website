@@ -3,7 +3,7 @@
 </script>
 
 <nav>
-	<div class="logo">ReVanced</div>
+	<img class="logo" src="/logo.svg" alt="ReVanced Logo"/>
 	<ul>
 		<Navigation href="/">Home</Navigation>
 		<Navigation href="/download">Download</Navigation>
@@ -17,9 +17,14 @@
 		width: 100%;
 		display: flex;
 		padding-top: 1.25rem;
-		padding-right: 4rem;
+		padding-right: 2rem;
+		padding-left: 6rem;
 		justify-content: space-between;
 		align-items: center;
-        min-height: 83px;
+        min-height: 90px;
 	}
+	.logo {
+		width: 3rem;
+	}
+
 </style>

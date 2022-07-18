@@ -2,14 +2,16 @@
  
 </script>
 
-<img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager"/>
+<div class="hero-img" style ="background-image:url('/manager.png')" alt="Screenshot of ReVanced Manager">afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real </div>
 
 <style>
 	.hero-img {
-		width: 400px;
+        height: 400px;
+        width:fit-content;
 		border-radius: 20px;
-		float: right;
-		transform: rotate(3.7deg) translateY(-24%) translateX(-12%);
+		transform: rotate(3.7deg) translateY(-35%) translateX(200%);
+		user-select: none;
+        position: absolute;
 	}
 </style>
 
