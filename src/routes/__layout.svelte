@@ -2,6 +2,8 @@
 
 import Button from "$lib/components/atoms/Button.svelte";
 import NavHost from "$lib/components/molecules/NavHost.svelte";
+import SocialButton from "$lib/components/atoms/SocialButton.svelte";
+import SocialHost from "$lib/components/molecules/SocialHost.svelte";
 
 </script>
 
@@ -25,7 +27,7 @@ import NavHost from "$lib/components/molecules/NavHost.svelte";
 
 <NavHost></NavHost>
 <slot />
-
+<SocialHost />
 
 <style>
 	:global(*) {
@@ -56,6 +58,7 @@ import NavHost from "$lib/components/molecules/NavHost.svelte";
 		--grey-two: #2b2d3a;
 		--grey-three: #3e404f;
 		--grey-four: #1B1E29;
+		--grey-five: #D0D0D0;
 	}
 
 	:global(::selection) {

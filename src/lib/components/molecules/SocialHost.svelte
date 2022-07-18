@@ -13,6 +13,8 @@
     .social-host {
 
         justify-content: space-between;
+        position: absolute;
+        margin-left: 6rem;
 		align-items: center;
         display: inline-block;
         transform: translateY(380%);

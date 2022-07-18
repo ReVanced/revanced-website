@@ -8,7 +8,6 @@
 <div class="wrapper">
 	<IndexDescription />
 	<HeroImage />
-	<SocialHost />
 </div>
 
 <Wave />
