@@ -35,9 +35,8 @@
 
     .social-host {
         width: 100;
+        gap:2rem;
 		align-items: center;
-        margin-left: 5rem;
-        margin-right: 5rem;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }

@@ -18,7 +18,6 @@
 
 <style>
 	.hero-text {
-		margin-top: 3%;
 		align-items: center;
 	}
 

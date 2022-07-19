@@ -4,6 +4,7 @@ import Button from "$lib/components/atoms/Button.svelte";
 import NavHost from "$lib/components/molecules/NavHost.svelte";
 import SocialButton from "$lib/components/atoms/SocialButton.svelte";
 import SocialHost from "$lib/components/molecules/SocialHost.svelte";
+import Wave from '$lib/components/atoms/Wave.svelte';
 
 </script>
 
@@ -28,6 +29,7 @@ import SocialHost from "$lib/components/molecules/SocialHost.svelte";
 <NavHost></NavHost>
 <slot />
 <SocialHost />
+<Wave />
 
 <style>
 	:global(*) {
@@ -48,6 +50,12 @@ import SocialHost from "$lib/components/molecules/SocialHost.svelte";
 		padding: 0;
 		line-height: 1.3;
 		background-color: #0f111a;
+	}
+
+	:global(.wrapper) {
+		margin-left: 6%;
+		margin-right: 6%;
+		margin-top: 3%
 	}
 
 	:root {
