@@ -11,7 +11,6 @@
 
 <style>
 	.download-selection {
-		transform: translateY(60%);
 		background-color: var(--grey-one);
 		border-radius: 200px;
 		display: flex;
