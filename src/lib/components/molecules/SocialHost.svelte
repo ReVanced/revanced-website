@@ -12,10 +12,9 @@
 <style>
     .social-host {
         justify-content: space-between;
-        position: sticky;
+        position: absolute;
 		align-items: center;
-        bottom:0;
-        padding-left: 5rem;
-        padding-bottom: 3rem;
+        bottom: 3rem;
+        left: 5rem;
     }
 </style>

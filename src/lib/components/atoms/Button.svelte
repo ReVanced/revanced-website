@@ -4,12 +4,11 @@
 	export let href = '#';
 </script>
 
-
-<button class={type}>
-	<a {href}>
-		<slot/>
-	</a>
-</button>
+<a {href}>
+	<button class={type}>
+			<slot/>
+	</button>
+</a>
 
 <style>
 	a {
