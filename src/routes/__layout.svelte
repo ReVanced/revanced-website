@@ -19,7 +19,9 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		rel="stylesheet"
 	/>
 	<meta name="og:title" content="ReVanced"/>
-	<meta name="og:image" itemprop="image" content="embed.png">
+	<meta name="og:image" itemprop="image" content="/embed.png">
+	<meta property="og:description" content="ReVanced - An extensible framework for building application mods.">
+	<meta name="twitter:image" itemprop="image" content="/embed.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#0f111a">
 	<title>ReVanced</title>
