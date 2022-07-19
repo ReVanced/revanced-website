@@ -7,10 +7,11 @@
     <div class="hero-text">
         <!-- <img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager" /> -->
         <IndexHeroTitle></IndexHeroTitle>
-        <h3>
+        <h2>
 			An extensible framework for<br />
 			building application mods.
-		</h3>
+		</h2>
+		
 		<div class="hero-buttons">
 			<Button kind="primary" href="/download">Download</Button>
 			<Button href="/docs">Read The Docs</Button>

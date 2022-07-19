@@ -81,7 +81,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		font-weight: 800;
 	}
 
-	:global(h3) {
+	:global(h2) {
 		color: var(--white);
 		font-weight: 300;
 		font-size: 1.85rem;

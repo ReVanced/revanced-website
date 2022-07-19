@@ -9,7 +9,7 @@
 	<button>
 		<img {src} {alt}><slot/>
 	</button>
-	<h3>{username}</h3>
+	<h2>{username}</h2>
 </a>
 
 <style>
