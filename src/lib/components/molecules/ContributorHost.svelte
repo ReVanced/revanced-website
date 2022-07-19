@@ -1,12 +1,9 @@
 <script>
-    import SocialButton from "../atoms/SocialButton.svelte";
+    import ContributorButton from "../atoms/ContributorButton.svelte";
 </script>
 
 <div class="social-host">
-    <SocialButton></SocialButton>
-    <SocialButton></SocialButton>
-    <SocialButton></SocialButton>
-    <SocialButton></SocialButton>
+    <ContributorButton></ContributorButton>
 </div>
 
 <style>

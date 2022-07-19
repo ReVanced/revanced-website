@@ -16,7 +16,7 @@
 		color: var(--white);
 		border-radius: 200px;
         border: 0;
-		padding: px 0px;
+		padding: 14px;
         width:60px;
         height:60px;
 		cursor: pointer;
@@ -29,6 +29,10 @@
         margin-right:0.5rem;
 		margin-left: 0.5rem;
 	}
+
+    img {
+        width:30px;
+    }
 
 	button:hover {
 		transform: translate(-5%, -5%);
