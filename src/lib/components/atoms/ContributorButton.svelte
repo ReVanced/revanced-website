@@ -4,13 +4,11 @@
 	export let alt = "Contributors Image"
 </script>
 
-<div>
-	<a {href}>
-		<button>
-			<img {src} {alt}><slot/>
-		</button>
-	</a>
-</div>
+<a {href}>
+	<button>
+		<img {src} {alt}><slot/>
+	</button>
+</a>
 
 <style>
 	a {
