@@ -16,5 +16,6 @@
 		align-items: center;
         bottom: 3rem;
         left: 5rem;
+        user-select: none;
     }
 </style>
