@@ -1,12 +1,12 @@
 <script>
-	import DownloadSelection from '../atoms/DownloadSelection.svelte';
+	import DownloadChannel from '../atoms/DownloadChannel.svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let items = ['Manager', 'CLI', 'Patches', 'Integrations'];
+	export let items = ['Stable', 'Development'];
 
-	export let activeTab = 'Manager';
+	export let activeTab = 'Stable';
 
 	$: handleTabChange = (item) => {
 		activeTab = item;
@@ -15,10 +15,10 @@
 
 <div class="download-selection">
 	{#each items as item}
-		<DownloadSelection active={item === activeTab} 
+		<DownloadChannel active={item === activeTab} 
 			on:click={handleTabChange(item)}>
 				{item}
-		</DownloadSelection>
+		</DownloadChannel>
 	{/each}
 </div>
 

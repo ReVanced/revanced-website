@@ -23,7 +23,7 @@
 	button {
 		font-weight: 300;
 		height: 60px;
-		width: 21vw;
+		width: 43vw;
 		color: var(--white);
 		border-radius: 200px;
 		border: 0;

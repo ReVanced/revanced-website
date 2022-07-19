@@ -69,6 +69,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		--grey-three: #3e404f;
 		--grey-four: #1B1E29;
 		--grey-five: #D0D0D0;
+		--grey-six: #a19e9e;
 	}
 
 	:global(::selection) {
@@ -97,13 +98,13 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(::-webkit-scrollbar-thumb) {
-		background-color: var(--grey-two);
+		background-color: var(--grey-three);
 		border-radius: 20px;
 		border: 6px solid transparent;
 		background-clip: content-box;
 	}
 
 	:global(::-webkit-scrollbar-thumb:hover) {
-		background-color: var(--grey-three);
+		background-color: var(--grey-four);
 	}
 </style>

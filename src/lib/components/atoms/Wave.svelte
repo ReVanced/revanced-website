@@ -11,7 +11,8 @@
   svg {
     position: absolute;
     z-index: -2;
-    bottom:0
+    bottom:0;
+    transform: translateY(20%);
   }
 
   .wave {
