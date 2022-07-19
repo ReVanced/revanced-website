@@ -17,6 +17,7 @@
 		list-style: none;
 		display: inline-block;
 		position: relative;
+		font-weight: 300;
 		margin-left: 7px;
 		margin-right: 7px;
 		align-items: center;
