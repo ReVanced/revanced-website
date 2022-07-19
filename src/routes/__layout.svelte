@@ -43,6 +43,7 @@ import SocialHost from "$lib/components/molecules/SocialHost.svelte";
 	}
 
 	:global(body) {
+		overflow-y: hidden;
 		margin: 0;
 		padding: 0;
 		line-height: 1.3;

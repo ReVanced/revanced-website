@@ -4,9 +4,41 @@
 
 <div class="social-host">
     <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>    
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
+    <ContributorButton></ContributorButton>
 </div>
 
 <style>
+	div {
+		display: grid;
+		grid-column: 9;
+		gap: 100px;
+		grid-column-start: 1;
+		grid-column-end: 9;
+	}
     .social-host {
         width: 100;
         justify-content: space-between;

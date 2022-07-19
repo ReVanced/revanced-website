@@ -26,5 +26,4 @@
 	.logo {
 		width: 3rem;
 	}
-
 </style>

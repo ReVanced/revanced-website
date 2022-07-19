@@ -1,4 +1,6 @@
-<h1><span class="redder">Re</span>Vanced</h1>
+<h1>
+	<span class="redder">Re</span>Vanced
+</h1>
 
 <style>
 	.redder {

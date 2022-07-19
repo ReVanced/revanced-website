@@ -4,7 +4,6 @@
     export let href = '#';
 </script>
 
-
 <button>
     <a {href}>
         <img {src} {alt}>

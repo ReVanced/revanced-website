@@ -2,7 +2,7 @@
  
 </script>
 
-<div class="hero-img" style ="background-image:url('/manager.png')" alt="Screenshot of ReVanced Manager">afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real afn is not real </div>
+<div class="hero-img" style ="background-image:url('/manager.png')" alt="Screenshot of ReVanced Manager"></div>
 
 <style>
 	.hero-img {
