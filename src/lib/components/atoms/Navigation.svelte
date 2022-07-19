@@ -32,7 +32,7 @@
 	}
 
 	li:hover {
-		font-weight: 500;
+		font-weight: 600;
 		border: 3px solid var(--grey-two);
 		padding: 10px 30px;
 		border-radius: 200px;
