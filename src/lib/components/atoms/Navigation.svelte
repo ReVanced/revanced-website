@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	export let href = '/';
 	$: current = (href == $page.url.pathname);
-
 </script>
 
 <a {href}>

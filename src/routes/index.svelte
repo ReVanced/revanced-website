@@ -6,6 +6,7 @@
 
 <div class="wrapper">
 	<IndexDescription />
+	<HeroImage />
 </div>
 
 <Wave />

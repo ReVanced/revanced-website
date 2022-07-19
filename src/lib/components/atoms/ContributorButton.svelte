@@ -1,13 +1,16 @@
 <script>
-	export let href = '#';
+	export let href = "https://github.com/ushie"
+	export let src = "https://github.com/ushie.png"
+	export let alt = "Contributors Image"
 </script>
 
-
-<button>
+<div>
 	<a {href}>
-		<slot/>
+		<button>
+			<img {src} {alt}><slot/>
+		</button>
 	</a>
-</button>
+</div>
 
 <style>
 	a {
@@ -20,10 +23,10 @@
 		border-radius: 200px;
         border: 0;
 		padding: 5px 5px;
-        width:128px;
-        height:128px;
-        max-height: 128px;
-        max-width: 128px;
+        width:86px;
+        height:86px;
+        max-height: 86px;
+        max-width: 86px;
 		cursor: pointer;
 		background-color: var(--grey-four);
 		font-size: 1.5rem;
@@ -35,5 +38,11 @@
 
 	button:hover {
 		transform: translate(-5%, -5%);
+	}
+
+	img {
+		border-radius: 50%;
+        max-height: 86px;
+        max-width: 86px;
 	}
 </style>
