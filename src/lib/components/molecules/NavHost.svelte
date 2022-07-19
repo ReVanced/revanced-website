@@ -3,7 +3,9 @@
 </script>
 
 <nav>
-	<img class="logo" src="/logo.svg" alt="ReVanced Logo"/>
+	<a href="/">
+		<img class="logo" src="/logo.svg" alt="ReVanced Logo"/>
+	</a>
 	<ul>
 		<Navigation href="/">Home</Navigation>
 		<Navigation href="/download">Download</Navigation>
@@ -25,5 +27,6 @@
 	}
 	.logo {
 		width: 3rem;
+		cursor: pointer;
 	}
 </style>
