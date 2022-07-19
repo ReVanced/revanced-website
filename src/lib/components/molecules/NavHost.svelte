@@ -1,8 +1,6 @@
 <script>
 	import Navigation from '../atoms/Navigation.svelte';
 	import { page } from '$app/stores';
-	export let href = '/';
-	$: current = href == $page.url.pathname;
 </script>
 
 <nav>
