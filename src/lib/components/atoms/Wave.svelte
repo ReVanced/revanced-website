@@ -8,10 +8,16 @@
 </svg>
 
 <style>
+  svg {
+    position: absolute;
+    z-index: -2;
+    bottom:0
+  }
+
   .wave {
     animation: wave-anim 40s;
     animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    animation-iteration-count: infinite;  
     fill: var(--red);
   }
 

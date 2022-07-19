@@ -1,6 +1,7 @@
 <script>
 	import Button from '$lib/components/atoms/Button.svelte';
     import IndexHeroTitle from '../atoms/IndexHeroTitle.svelte';
+
 </script>
 
 <section class="hero">

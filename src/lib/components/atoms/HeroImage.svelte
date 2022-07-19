@@ -2,16 +2,17 @@
  
 </script>
 
-<div class="hero-img" style ="background-image:url('/manager.png')" alt="Screenshot of ReVanced Manager"></div>
+<img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager"/>
 
 <style>
 	.hero-img {
-        height: 400px;
-        width:fit-content;
+        height: 40rem;
+		z-index: -1;
+        width:auto;
+		float:right;
 		border-radius: 20px;
-		transform: rotate(3.7deg) translateY(-35%) translateX(200%);
+		transform: rotate(3.7deg) translateY(-5%);
 		user-select: none;
-        position: absolute;
 	}
 </style>
 
