@@ -37,4 +37,8 @@
 	button:hover {
 		transform: translate(-5%, -5%);
 	}
+
+	button:hover img {
+		filter: brightness(1.2);
+	}
 </style>
