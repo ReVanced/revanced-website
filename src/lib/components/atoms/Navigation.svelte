@@ -5,7 +5,11 @@
 
 </script>
 
-<li class:selected="{current === true}"><a {href}><slot/></a></li>
+<a {href}>
+	<li class:selected="{current === true}">
+		<slot/>
+	</li>
+</a>
 
 <style>
 	li {
@@ -17,7 +21,6 @@
 		margin-left: 7x;
 		margin-right: 7px;
 		align-items: center;
-		user-select: none;
 		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		transition-duration: 0.1s;
 	}
