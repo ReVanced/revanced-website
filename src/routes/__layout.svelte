@@ -19,7 +19,9 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		rel="stylesheet"
 	/>
 	<meta name="og:title" content="ReVanced"/>
-	<meta name="og:image" itemprop="image" content="embed.png">
+	<meta name="og:image" itemprop="image" content="/embed.png">
+	<meta property="og:description" content="An extensible framework for building application mods.">
+	<meta name="twitter:image" itemprop="image" content="/embed.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#0f111a">
 	<title>ReVanced</title>
@@ -28,7 +30,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 
 <NavHost></NavHost>
 <slot />
-<SocialHost />
 <Wave />
 
 <style>
@@ -45,7 +46,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(body) {
-		overflow-y: hidden;
 		margin: 0;
 		padding: 0;
 		line-height: 1.3;
@@ -53,9 +53,9 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(.wrapper) {
-		margin-left: 6%;
-		margin-right: 6%;
-		margin-top: 3%
+		margin-inline: auto;
+		width: min(87%, 100rem);
+		margin-top: 1.5%
 	}
 
 	:root {
@@ -67,6 +67,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		--grey-three: #3e404f;
 		--grey-four: #1B1E29;
 		--grey-five: #D0D0D0;
+		--grey-six: #a19e9e;
 	}
 
 	:global(::selection) {
@@ -81,7 +82,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		font-weight: 800;
 	}
 
-	:global(h3) {
+	:global(h2) {
 		color: var(--white);
 		font-weight: 300;
 		font-size: 1.85rem;
@@ -95,13 +96,13 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(::-webkit-scrollbar-thumb) {
-		background-color: var(--grey-two);
+		background-color: var(--grey-three);
 		border-radius: 20px;
 		border: 6px solid transparent;
 		background-clip: content-box;
 	}
 
 	:global(::-webkit-scrollbar-thumb:hover) {
-		background-color: var(--grey-three);
+		background-color: var(--grey-four);
 	}
 </style>

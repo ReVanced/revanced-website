@@ -1,7 +1,9 @@
 <script>
-    import DownloadSelectionHost from '$lib/components/molecules/DownloadSelectionHost.svelte';
+    import DownloadChannelHost from '$lib/components/molecules/DownloadChannelHost.svelte';
+    import DownloadSelectorHost from '$lib/components/molecules/DownloadSelectorHost.svelte';
 </script>
 
 <div class="wrapper">
-    <DownloadSelectionHost></DownloadSelectionHost>
+    <DownloadChannelHost></DownloadChannelHost>
+    <DownloadSelectorHost></DownloadSelectorHost>
 </div>

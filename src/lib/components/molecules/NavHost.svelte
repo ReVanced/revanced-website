@@ -25,12 +25,13 @@
 	nav {
 		width: 100%;
 		display: flex;
-		padding-top: 1.25rem;
+		padding-top: 0.75rem;
 		padding-right: 3rem;
 		padding-left: 6rem;
 		justify-content: space-between;
 		align-items: center;
 		min-height: 90px;
+		user-select: none;
 	}
 
 	.logo {
@@ -40,6 +41,7 @@
 	.logo-image {
 		width: 2.9rem;
 		cursor: pointer;
+		transform: translateY(5%);
 	}
 	
 	h1 {
@@ -47,7 +49,6 @@
 		margin-left: 1rem;
 		font-size: 2.75rem;
 		letter-spacing: -0.04em;
-		transform: translateY(-5%);
 	}
 
 	h1 span {
