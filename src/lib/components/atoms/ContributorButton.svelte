@@ -31,8 +31,7 @@
 		cursor: pointer;
 		background-color: var(--grey-four);
 		font-size: 1.5rem;
-		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		transition-duration: 0.4s;
+		transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		user-select: none;
 	}
 

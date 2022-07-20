@@ -12,7 +12,7 @@
 
 <style>
 	li {
-		width: 160px;
+		width: 150px;
 		text-align: center;
 		list-style: none;
 		display: inline-block;
@@ -21,6 +21,7 @@
 		margin-left: 7px;
 		margin-right: 7px;
 		align-items: center;
+		border: var(--grey-six);
 		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		transition-duration: 0.25s;
 	}
@@ -28,7 +29,7 @@
 	a {
 		color: var(--white);
 		text-decoration: none;
-		font-size: 1.25rem;
+		font-size: 1.1rem;
 		user-select: none;
 	}
 

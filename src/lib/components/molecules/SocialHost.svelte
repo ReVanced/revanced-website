@@ -15,7 +15,7 @@
         position: absolute;
 		align-items: center;
         bottom: 3rem;
-        left: 5rem;
+        left: 4.5rem;
         user-select: none;
     }
 </style>

@@ -54,8 +54,8 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 
 	:global(.wrapper) {
 		margin-inline: auto;
-		width: min(90%, 100rem);
-		margin-top: 3%
+		width: min(87%, 100rem);
+		margin-top: 1.5%
 	}
 
 	:root {
