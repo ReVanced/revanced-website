@@ -22,17 +22,18 @@
 
 	button {
 		font-weight: 300;
+		font-size: 1.5rem;
 		height: 60px;
-		width: 43vw;
+		width: 100%;
 		color: var(--white);
 		border-radius: 200px;
 		border: 0;
 		padding: 12px 40px;
 		cursor: pointer;
 		background-color: transparent;
-		font-size: 1.5rem;
 		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 		transition-duration: 0.4s;
+		transition-property: background-color;
 		user-select: none;
 	}
 

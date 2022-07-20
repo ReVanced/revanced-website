@@ -27,7 +27,8 @@
 		background-color: var(--grey-one);
 		border-radius: 200px;
 		display: flex;
-		justify-content: space-between;
 		padding: 8px 8px;
+        display: grid;
+		grid-template-columns: 1fr 1fr;
 	}
 </style>

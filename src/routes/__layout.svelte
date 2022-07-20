@@ -30,7 +30,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 
 <NavHost></NavHost>
 <slot />
-<SocialHost />
 <Wave />
 
 <style>
@@ -47,7 +46,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(body) {
-		overflow-y: hidden;
 		margin: 0;
 		padding: 0;
 		line-height: 1.3;
@@ -55,8 +53,8 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(.wrapper) {
-		margin-left: 6%;
-		margin-right: 6%;
+		margin-inline: auto;
+		width: min(90%, 100rem);
 		margin-top: 3%
 	}
 
