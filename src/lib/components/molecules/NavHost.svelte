@@ -57,15 +57,15 @@
 	}
 
 
-	@media screen and (max-width: 1050px) {
+	@media screen and (max-width: 1052px) {
 
 		h1 {
 			display: none;
 		}
 
 		nav {
-			padding-right: 1rem;
-			padding-left: 4rem;
+			padding-left: 7%;
+			padding-right: 1%;
 		}
 	}
 
