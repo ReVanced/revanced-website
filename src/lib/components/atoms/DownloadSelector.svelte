@@ -27,6 +27,7 @@
 		border-radius: 15px;
         justify-content: center;
 		height:100%;
+        min-width:250px;
 	}
 
     h1 {
