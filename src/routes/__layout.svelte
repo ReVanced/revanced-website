@@ -25,7 +25,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#0f111a">
 	<title>ReVanced</title>
-	<link rel="stylesheet" href="css/styles.css" />
 </svelte:head>
 
 <NavHost></NavHost>
