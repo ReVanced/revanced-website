@@ -11,7 +11,7 @@
         width:auto;
 		float:right;
 		border-radius: 20px;
-		transform: rotate(3.7deg) translateY(-5%);
+		transform: rotate(3.7deg) translateY(2%) translateX(-15%);
 		user-select: none;
 	}
 </style>
