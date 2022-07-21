@@ -18,8 +18,8 @@
 		display: inline-block;
 		position: relative;
 		font-weight: 300;
-		margin-left: 7px;
-		margin-right: 7px;
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
 		align-items: center;
 		border: var(--grey-six);
 		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);

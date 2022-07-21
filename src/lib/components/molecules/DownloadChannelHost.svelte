@@ -13,7 +13,7 @@
 	};
 </script>
 
-<div class="download-selection">
+<div class="download-channel">
 	{#each items as item}
 		<DownloadChannel active={item === activeTab} 
 			on:click={handleTabChange(item)}>
@@ -23,12 +23,12 @@
 </div>
 
 <style>
-	.download-selection {
+	.download-channel {
 		background-color: var(--grey-one);
 		border-radius: 200px;
-		display: flex;
-		padding: 8px 8px;
+		padding: 0.5rem 0.5rem;
         display: grid;
 		grid-template-columns: 1fr 1fr;
+		gap:1rem;
 	}
 </style>

@@ -14,8 +14,8 @@
 		</h2>
 		
 		<div class="hero-buttons">
-			<Button kind="primary" href="/download">Download</Button>
-			<Button href="/docs">Read The Docs</Button>
+			<Button kind="primary" href="/download" fontsize="1.5rem">Download</Button>
+			<Button href="/docs" fontsize="1.5rem">Read The Docs</Button>
 		</div>
     </div>
 </section>
@@ -26,6 +26,8 @@
 	}
 	
 	.hero-buttons {
+		display: flex;
+		gap:1rem;
 		user-select: none;
 	}
 

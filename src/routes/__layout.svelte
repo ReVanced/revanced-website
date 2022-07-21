@@ -68,6 +68,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		--grey-four: #1B1E29;
 		--grey-five: #D0D0D0;
 		--grey-six: #a19e9e;
+		--grey-seven: #535563;
 	}
 
 	:global(::selection) {
@@ -88,6 +89,24 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		font-size: 1.85rem;
 	}
 
+    :global(h3) {
+		color: var(--white);
+		font-weight: 600;
+		font-size: 1rem;
+    }
+
+    :global(h4) {
+		color:var(--grey-six);
+        font-weight:500;
+        font-size: 1rem;
+    }
+
+    :global(h5) {
+		color:var(--white);
+        font-weight: 300;
+        font-size: 1rem;
+    }
+
 	/*-----scrollbar-----*/
 
 	:global(::-webkit-scrollbar) {
@@ -103,6 +122,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(::-webkit-scrollbar-thumb:hover) {
-		background-color: var(--grey-four);
+		background-color: var(--grey-seven);
 	}
 </style>

@@ -22,8 +22,8 @@
 
 	button {
 		font-weight: 300;
-		font-size: 1.5rem;
-		height: 60px;
+		font-size: 1.4rem;
+		height: 55px;
 		width: 100%;
 		color: var(--white);
 		border-radius: 200px;

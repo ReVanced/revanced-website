@@ -9,19 +9,24 @@
     <DownloadSelector></DownloadSelector>
     <DownloadSelector></DownloadSelector>
     <DownloadSelector></DownloadSelector>
+    <DownloadSelector></DownloadSelector>
 </div>
 
 
 <style>
     .download-selector-main {
-        margin-top: 2rem;
-        padding: 12px 12px;
-        border-radius: 25px;
         background-color: var(--grey-one);
-        width: 100;
-        gap:15px;
-		align-items: center;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        margin-top: 2rem;
+        padding: 0.75rem 0.75rem;
+        border-radius: 25px;
+        width: 100%;
+        gap:0.9rem;
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        grid-auto-flow: column;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        overflow-x: scroll;
+
     }
 </style>

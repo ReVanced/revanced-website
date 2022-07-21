@@ -2,10 +2,12 @@
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
 	export let href = '#';
+	export let fontsize = '1.2rem';
+
 </script>
 
 <a {href}>
-	<button class={type}>
+	<button class={type} style="font-size: {fontsize};">
 			<slot/>
 	</button>
 </a>
@@ -25,10 +27,8 @@
 		padding: 12px 40px;
 		cursor: pointer;
 		background-color: transparent;
-		font-size: 1.5rem;
 		margin-top: 45px;
 		transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		margin-right: 20px;
 		user-select: none;
 	}
 
