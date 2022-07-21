@@ -124,4 +124,12 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	:global(::-webkit-scrollbar-thumb:hover) {
 		background-color: var(--grey-seven);
 	}
+
+	:global(input),
+	:global(textarea),
+	:global(button),
+	:global(select),
+	:global(a) {
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
 </style>
