@@ -22,7 +22,7 @@
 		margin-right: 0.5rem;
 		align-items: center;
 		border: var(--grey-six);
-		transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		transition-timing-function: var(--bezier-one);
 		transition-duration: 0.25s;
 	}
 
