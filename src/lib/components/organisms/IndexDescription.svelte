@@ -29,7 +29,8 @@
 		display: flex;
 		gap:1rem;
 		user-select: none;
-		transform: translateX(-3px)
+		transform: translateX(-3px);
+		margin-top: 3rem;
 	}
 
 	.hero-text h1 {
