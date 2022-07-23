@@ -12,14 +12,15 @@
 
 <style>
 	li {
+		border: var(--grey-six);
 		width: 150px;
 		text-align: center;
 		list-style: none;
 		display: inline-block;
 		position: relative;
+		margin-left: 0.25rem;
+		margin-right: 0.25rem;
 		font-weight: 300;
-		margin-left: 0.5rem;
-		margin-right: 0.5rem;
 		align-items: center;
 		border: var(--grey-six);
 		transition-timing-function: var(--bezier-one);

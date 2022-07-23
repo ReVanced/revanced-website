@@ -34,6 +34,7 @@
 		user-select: none;
 	}
 
+
 	.logo {
 		display: inline-block;
 	}
@@ -53,5 +54,24 @@
 
 	h1 span {
 		color: var(--red);
+	}
+
+
+	@media screen and (max-width: 1052px) {
+
+		h1 {
+			display: none;
+		}
+
+		nav {
+			padding-left: 7%;
+			padding-right: 1%;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		nav {
+			background-color: purple;
+		}
 	}
 </style>
