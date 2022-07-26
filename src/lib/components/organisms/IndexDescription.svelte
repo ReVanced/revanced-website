@@ -14,8 +14,8 @@
 		</h2>
 		
 		<div class="hero-buttons">
-			<Button kind="primary" href="/download" fontsize="1.5rem">Download</Button>
-			<Button href="/docs" fontsize="1.5rem">Read The Docs</Button>
+			<Button kind="primary" href="/download" fontsize="1.3rem">Download</Button>
+			<Button href="/docs" fontsize="1.3rem">Read The Docs</Button>
 		</div>
     </div>
 </section>
@@ -37,4 +37,5 @@
 		font-size: 6.5rem;
 		letter-spacing: -0.04em;
 	}
+
 </style>

@@ -54,12 +54,12 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	:global(.wrapper) {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 1.5%
+		margin-top: 8%
 	}
 
 	:root {
 		--white: #ffe1e1;
-		--red: #ff4151;
+		--red: #ff4151;		
 		--red-glow: #ff838d40;
 		--grey-one: #1c1e29;
 		--grey-two: #2b2d3a;
@@ -85,7 +85,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	:global(h2) {
 		color: var(--white);
 		font-weight: 300;
-		font-size: 1.85rem;
+		font-size: 1.75rem;
 	}
 
     :global(h3) {
