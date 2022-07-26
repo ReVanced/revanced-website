@@ -10,7 +10,7 @@
 	h1 {
 		color: var(--white);
 		font-weight: 800;
-        font-size: 6.5rem;
+        font-size: 6rem;
 		letter-spacing: -0.04em;
 	}
 </style>
