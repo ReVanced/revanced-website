@@ -15,7 +15,14 @@
         position: absolute;
 		align-items: center;
         bottom: 3rem;
-        left: 6.5%;
+        left: 5.5rem;
         user-select: none;
+    }
+
+    @media screen and (max-width: 1052px) {
+        .social-host {
+            left: 6%;
+        }
+
     }
 </style>
