@@ -26,23 +26,14 @@
 <style>
 	nav {
 		width: 100%;
-		position: fixed;
  		top: 0;
 		display: flex;
-		padding-top: 1.5rem;
+		padding-top: 0.75rem;
 		padding-right: 3rem;
 		padding-left: 6rem;
-		padding-bottom: 1.5rem;
 		justify-content: space-between;
 		align-items: center;
 		min-height: 90px;
-		user-select: none;
-		background-color: #0f111ab8;
-		backdrop-filter: blur(50px);
-		background-blend-mode: overlay;
-		display: flex;
-		z-index: 99;
-		margin-bottom: 20rem;
 	}
 
 
