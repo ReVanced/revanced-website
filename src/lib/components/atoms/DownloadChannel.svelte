@@ -31,7 +31,7 @@
 		padding: 12px 40px;
 		cursor: pointer;
 		background-color: transparent;
-		transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		transition: background-color 0.4s var(--bezier-one), box-shadow 0.4s var(--bezier-one);
 		user-select: none;
 	}
 

@@ -68,6 +68,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		--grey-five: #D0D0D0;
 		--grey-six: #a19e9e;
 		--grey-seven: #535563;
+		--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94)
 	}
 
 	:global(::selection) {
