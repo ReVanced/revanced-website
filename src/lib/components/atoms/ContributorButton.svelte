@@ -1,5 +1,5 @@
 <script>
-	export const username = "Ushie"
+	export const username = "afnzmn"
 	export const href = `https://github.com/${username}`
 	export const src = `https://github.com/${username}.png`
 	export const alt = `${username}'s contributor profile picture`
