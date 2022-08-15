@@ -4,35 +4,9 @@
 
 <div class="social-host">
     <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>    
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
-    <ContributorButton></ContributorButton>
 </div>
 
 <style>
-
     .social-host {
         width: 100;
         gap:2rem;

@@ -1,11 +1,9 @@
 <script>
-
-import Button from "$lib/components/atoms/Button.svelte";
-import NavHost from "$lib/components/molecules/NavHost.svelte";
-import SocialButton from "$lib/components/atoms/SocialButton.svelte";
-import SocialHost from "$lib/components/molecules/SocialHost.svelte";
-import Wave from '$lib/components/atoms/Wave.svelte';
-
+	import Button from '$lib/components/atoms/Button.svelte';
+	import NavHost from '$lib/components/molecules/NavHost.svelte';
+	import SocialButton from '$lib/components/atoms/SocialButton.svelte';
+	import SocialHost from '$lib/components/molecules/SocialHost.svelte';
+	import Wave from '$lib/components/atoms/Wave.svelte';
 </script>
 
 <svelte:head>
@@ -18,16 +16,19 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
 		rel="stylesheet"
 	/>
-	<meta name="og:title" content="ReVanced"/>
-	<meta name="og:image" itemprop="image" content="/embed.png">
-	<meta property="og:description" content="An extensible framework for building application mods.">
-	<meta name="twitter:image" itemprop="image" content="/embed.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#0f111a">
+	<meta name="og:title" content="ReVanced" />
+	<meta name="og:image" itemprop="image" content="/embed.png" />
+	<meta
+		property="og:description"
+		content="An extensible framework for building application mods."
+	/>
+	<meta name="twitter:image" itemprop="image" content="/embed.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="theme-color" content="#0f111a" />
 	<title>ReVanced</title>
 </svelte:head>
 
-<NavHost></NavHost>
+<NavHost />
 <slot />
 <Wave />
 
@@ -54,7 +55,7 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	:global(.wrapper) {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 1.5%
+		margin-top: 1.5%;
 	}
 
 	:root {
@@ -64,8 +65,8 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		--grey-one: #1c1e29;
 		--grey-two: #2b2d3a;
 		--grey-three: #3e404f;
-		--grey-four: #1B1E29;
-		--grey-five: #D0D0D0;
+		--grey-four: #1b1e29;
+		--grey-five: #d0d0d0;
 		--grey-six: #a19e9e;
 		--grey-seven: #535563;
 		--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94)
@@ -110,14 +111,16 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	/*-----scrollbar-----*/
 
 	:global(::-webkit-scrollbar) {
-		width: 20px;
+		width: 16px;
 		background-color: transparent;
 	}
 
 	:global(::-webkit-scrollbar-thumb) {
-		background-color: var(--grey-three);
-		border-radius: 20px;
-		border: 6px solid transparent;
+		background-color: var(--grey-two); /* color of the scroll thumb */
+		border-radius: 1rem 0 0 1rem; /* roundness of the scroll thumb */
+		border-bottom: 0.25rem solid transparent; /* creates padding around scroll thumb */
+		border-left: 0.25rem solid transparent; /* creates padding around scroll thumb */
+		border-top: 0.25rem solid transparent; /* creates padding around scroll thumb */
 		background-clip: content-box;
 	}
 
