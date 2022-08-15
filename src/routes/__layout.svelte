@@ -41,6 +41,8 @@
 	}
 
 	:global(html) {
+		margin: 0;
+		padding: 0;
 		font-size: 100%;
 		box-sizing: border-box;
 	}
