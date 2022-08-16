@@ -1,33 +1,32 @@
 <script>
 	import Button from '$lib/components/atoms/Button.svelte';
-    import IndexHeroTitle from '../atoms/IndexHeroTitle.svelte';
-
+	import IndexHeroTitle from '../atoms/IndexHeroTitle.svelte';
 </script>
 
 <section class="hero">
-    <div class="hero-text">
-        <!-- <img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager" /> -->
-        <IndexHeroTitle></IndexHeroTitle>
-        <h2>
+	<div class="hero-text">
+		<!-- <img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager" /> -->
+		<IndexHeroTitle />
+		<h2>
 			An extensible framework for<br />
 			building application mods.
 		</h2>
-		
+
 		<div class="hero-buttons">
 			<Button kind="primary" href="/download" fontsize="1.3rem">Download</Button>
 			<Button href="/docs" fontsize="1.3rem">Read The Docs</Button>
 		</div>
-    </div>
+	</div>
 </section>
 
 <style>
 	.hero-text {
 		align-items: center;
 	}
-	
+
 	.hero-buttons {
 		display: flex;
-		gap:1rem;
+		gap: 1rem;
 		user-select: none;
 		transform: translateX(-3px);
 	}
@@ -36,5 +35,4 @@
 		font-size: 6.5rem;
 		letter-spacing: -0.04em;
 	}
-
 </style>

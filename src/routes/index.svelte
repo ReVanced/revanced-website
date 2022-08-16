@@ -6,7 +6,7 @@
 
 <div class="wrapper">
 
-	<HeroImage></HeroImage>
+	<HeroImage />
 	<IndexDescription />
 	<SocialHost />
 
