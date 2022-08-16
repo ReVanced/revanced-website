@@ -22,6 +22,7 @@
 	button {
 		color: var(--white);
 		border-radius: 200px;
+		overflow: hidden;
         border: 0;
 		/* padding: 5px 5px; */
         width:86px;
@@ -40,10 +41,7 @@
 	}
 
 	img {
-		/* margin: 0;
-		padding: 0; */
-		border-radius: 50%;
-        max-height: 86px;
-        max-width: 86px;
+		height: 100%;
+		width: 100%;
 	}
 </style>

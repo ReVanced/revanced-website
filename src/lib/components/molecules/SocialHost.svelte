@@ -12,11 +12,10 @@
 <style>
     .social-host {
         justify-content: space-between;
-        position: absolute;
 		align-items: center;
+        position: fixed;
         bottom: 3rem;
         left: 5.5rem;
-        user-select: none;
     }
 
     @media screen and (max-width: 1052px) {
