@@ -45,6 +45,7 @@
 		padding: 0;
 		font-size: 100%;
 		box-sizing: border-box;
+		overflow-y: scroll;
 	}
 
 	:global(body) {

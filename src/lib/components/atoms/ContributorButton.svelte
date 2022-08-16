@@ -1,8 +1,8 @@
-<script>
-	export const username = "afnzmn"
-	export const href = `https://github.com/${username}`
-	export const src = `https://github.com/${username}.png`
-	export const alt = `${username}'s contributor profile picture`
+<script lang="ts">
+	export let username: String;
+	let href = `https://github.com/${username}`
+	let src = `https://github.com/${username}.png`
+	let alt = `${username}'s contributor profile picture`
 </script>
 
 <a {href}>
@@ -30,13 +30,13 @@
         max-width: 86px;
 		cursor: pointer;
 		background-color: var(--grey-four);
-		font-size: 1.5rem;
 		transition: transform 0.4s var(--bezier-one);
+		margin-bottom: 1rem;
 		user-select: none;
 	}
 
-	button:hover {
-		transform: translate(0%, -5%);
+	a:hover > button {
+		transform: translateY(-5%);
 	}
 
 	img {
