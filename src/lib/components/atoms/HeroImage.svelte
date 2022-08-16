@@ -18,7 +18,7 @@
 	}
 	@media (max-width: 1919px) {
 		.hero-img {
-			position: absolute;
+			position: fixed;
 			height: 90vh;
 			top: 90px;
 			right: 7.5%;

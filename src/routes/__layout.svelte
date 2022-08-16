@@ -110,7 +110,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
     }
 
 	/*-----scrollbar-----*/
-
 	:global(::-webkit-scrollbar) {
 		width: 20px;
 		background-color: transparent;
