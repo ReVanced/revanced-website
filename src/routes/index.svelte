@@ -17,7 +17,8 @@
 		height: calc(100vh - 90px);
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: center;
+		gap: 22rem;
 		align-items: center;
 	}
 	@media (max-width: 1919px) {

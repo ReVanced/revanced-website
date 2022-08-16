@@ -18,7 +18,7 @@
 		user-select: none;
 		position: absolute;
 		display: flex;
-		bottom: 3rem;
+		bottom: 2rem;
         gap: 1.5rem;
 		left: 0;
 	}

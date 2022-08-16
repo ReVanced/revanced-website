@@ -13,7 +13,7 @@
 		float: right;
 		border-radius: 2rem;
 		transform: rotate(3.7deg);
-		box-shadow: 0 1rem 3rem 0 #0f111a;
+		box-shadow: 0 1rem 5rem 0 #0f111ad4;
 		user-select: none;
 	}
 	@media (max-width: 1919px) {
