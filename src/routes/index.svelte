@@ -34,6 +34,7 @@
 	@media (max-width: 768px) {
 		.wrappezoid {
 			flex-direction: column;
+			height: auto;
 		}
 	}
 </style>
