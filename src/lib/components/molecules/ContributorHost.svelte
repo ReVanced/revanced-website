@@ -10,6 +10,7 @@
 </div>
 
 <style>
+
     .social-host {
         gap: 2rem;
         width: 100;
