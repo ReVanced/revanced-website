@@ -40,8 +40,11 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(html) {
+		margin: 0;
+		padding: 0;
 		font-size: 100%;
 		box-sizing: border-box;
+		overflow-y: scroll;
 	}
 
 	:global(body) {
@@ -54,11 +57,10 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	:global(.wrapper) {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 1.5%
 	}
 
 	:root {
-		--white: #ffe1e1;
+		--white: #fff;
 		--red: #ff4151;		
 		--red-glow: #ff838d40;
 		--grey-one: #1c1e29;
@@ -108,7 +110,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
     }
 
 	/*-----scrollbar-----*/
-
 	:global(::-webkit-scrollbar) {
 		width: 20px;
 		background-color: transparent;

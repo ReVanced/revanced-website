@@ -9,10 +9,11 @@
 
 <style>
   svg {
-    position: absolute;
+    position: fixed;
     z-index: -2;
-    bottom:0;
-    transform: translateY(20%);
+    bottom: 0;
+    height: 35vh;
+    width: 100%;
   }
 
   .wave {
