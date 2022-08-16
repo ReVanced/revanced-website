@@ -5,11 +5,23 @@
 </script>
 
 <div class="wrapper">
-
-	<HeroImage />
-	<IndexDescription />
+	<div class="wrappezoid">
+		<IndexDescription />
+		<HeroImage />
+	</div>
 	<SocialHost />
-
 </div>
 
-
+<style>
+	.wrappezoid {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+	@media (max-width: 768px) {
+		.wrappezoid {
+			flex-direction: column;
+		}
+	}
+</style>

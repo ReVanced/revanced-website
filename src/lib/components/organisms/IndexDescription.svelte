@@ -20,15 +20,20 @@
 </section>
 
 <style>
-	.hero-text {
+	h2 {
+		margin-top: 1rem;
+	}
+	.hero {
+		padding-bottom: 10rem;
+	}
+	.hero-text { 
 		align-items: center;
 	}
 
 	.hero-buttons {
-		display: flex;
 		gap: 1rem;
+		display: flex;
 		user-select: none;
-		transform: translateX(-3px);
 	}
 
 	.hero-text h1 {

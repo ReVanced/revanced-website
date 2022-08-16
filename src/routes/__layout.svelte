@@ -62,7 +62,7 @@
 	}
 
 	:root {
-		--white: #ffe1e1;
+		--white: #fff;
 		--red: #ff4151;		
 		--red-glow: #ff838d40;
 		--grey-one: #1c1e29;
