@@ -54,6 +54,10 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		background-color: #0f111a;
 	}
 
+	:global(html, body) {
+		max-width: 100%;
+	}
+
 	:global(.wrapper) {
 		margin-inline: auto;
 		width: min(87%, 100rem);

@@ -21,7 +21,7 @@
 		gap: 22rem;
 		align-items: center;
 	}
-	@media (max-width: 1919px) {
+	@media (max-width: 1700px) {
 		.wrappezoid {
 			justify-content: space-between;
 		}

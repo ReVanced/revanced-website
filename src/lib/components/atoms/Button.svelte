@@ -42,10 +42,10 @@
 	}
 
 	button:hover {
-		transform: translate(0%, -5%);
+		transform: translateY(-5%);
 	}
 	button:active {
 		transition-duration: 0.1s;
-		transform: translate(0);
+		transform: translateY(-3%);
 	}
 </style>
