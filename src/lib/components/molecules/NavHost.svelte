@@ -50,21 +50,30 @@
 		width: 100%;
 	}
 
-	.logo {
-		display: inline-block;
+	ul {
+		display: flex;
+		gap:0.75rem;
+		align-items: center;
 	}
 
+	.logo {
+		display: flex;
+	}
+
+	a {
+		text-decoration: none;
+	}
 	.logo-image {
 		width: 2.9rem;
 		cursor: pointer;
-		transform: translateY(5%);
 	}
 
 	h1 {
 		display: inline-block;
 		margin-left: 1rem;
-		font-size: 2.75rem;
+		font-size: 2.4rem;
 		letter-spacing: -0.04em;
+		height:90%;
 	}
 
 	h1 span {
@@ -78,9 +87,6 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		nav {
-			/* background-color: purple; */
-		}
 		ul {
 			display: none;
 		}
@@ -110,7 +116,6 @@
 		height: 3px;
 		background: #fff;
 		border-radius: 5px;
-		box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
 		transition: all 0.5s ease-in-out;
 	}
 	.menu-btn__burger::before,
@@ -121,7 +126,6 @@
 		height: 3px;
 		background: #fff;
 		border-radius: 5px;
-		box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
 		transition: all 0.5s ease-in-out;
 	}
 	.menu-btn__burger::before {

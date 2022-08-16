@@ -13,38 +13,34 @@
 <style>
 	li {
 		border: var(--grey-six);
-		width: 150px;
+		width: 140px;
 		text-align: center;
 		list-style: none;
 		display: inline-block;
 		position: relative;
-		margin-left: 0.25rem;
-		margin-right: 0.25rem;
 		font-weight: 300;
 		align-items: center;
 		border: var(--grey-six);
 		transition-timing-function: var(--bezier-one);
 		transition-duration: 0.25s;
+		padding: 10px 20px;
+		border-radius: 200px;
 	}
 
 	a {
 		color: var(--white);
 		text-decoration: none;
-		font-size: 1.1rem;
+		font-size: 1rem;
 		user-select: none;
 	}
 
 	li:hover {
 		font-weight: 600;
 		border: 3px solid var(--grey-two);
-		padding: 10px 30px;
-		border-radius: 200px;
 	}
 
 	li.selected	 {
 		font-weight: 600;
 		border: 3px solid var(--red);
-		padding: 10px 30px;
-		border-radius: 200px;
 	}
 </style>
