@@ -23,7 +23,7 @@
 			height: 90vh;
 			top: 90px;
 			right: 7.5%;
-			transform: rotate(3.7deg) translateY(10%);
+			transform: rotate(3.7deg) translateY(5%);
 		}
 	}
 </style>
