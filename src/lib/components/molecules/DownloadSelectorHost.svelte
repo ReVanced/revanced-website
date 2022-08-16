@@ -2,7 +2,6 @@
     import DownloadSelector from "../atoms/DownloadSelector.svelte";
 </script>
 
-<div class="recent"><DownloadSelector/></div>
 <div class="main">
     <DownloadSelector></DownloadSelector>
     <DownloadSelector></DownloadSelector>

@@ -11,27 +11,19 @@
 		z-index: -1;
 		width: auto;
 		float: right;
-		border-radius: 1.5rem;
+		border-radius: 2rem;
 		transform: rotate(3.7deg);
 		box-shadow: 0 1rem 3rem 0 #0f111a;
 		user-select: none;
 	}
 	@media (max-width: 1919px) {
 		.hero-img {
+			border-radius: 3vh;
 			position: fixed;
 			height: 90vh;
 			top: 90px;
 			right: 7.5%;
 			transform: rotate(3.7deg) translateY(10%);
 		}
-	}
-	.hero-img::after{
-		box-shadow: inset 2rem 2rem 5rem -3rem var(--grey-two), inset -2rem -2rem 5rem -3rem var(--grey-one);
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
 	}
 </style>
