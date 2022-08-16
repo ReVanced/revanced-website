@@ -58,7 +58,6 @@
 	:global(.wrapper) {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 1.5%;
 	}
 
 	:root {

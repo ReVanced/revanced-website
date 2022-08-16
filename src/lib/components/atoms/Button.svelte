@@ -27,7 +27,6 @@
 		padding: 12px 40px;
 		cursor: pointer;
 		background-color: transparent;
-		margin-top: 45px;
 		transition: transform 0.4s var(--bezier-one), box-shadow 0.4s var(--bezier-one);
 		user-select: none;
 	}

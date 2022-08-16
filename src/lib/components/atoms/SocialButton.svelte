@@ -24,8 +24,6 @@
 		background-color: var(--grey-four);
 		color: var(--white);
 		user-select: none;
-		margin-right: 0.5rem;
-		margin-left: 0.5rem;
 	}
 
 	div {
