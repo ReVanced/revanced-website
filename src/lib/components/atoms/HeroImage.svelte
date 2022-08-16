@@ -16,7 +16,7 @@
 		box-shadow: 0 1rem 5rem 0 #0f111ad4;
 		user-select: none;
 	}
-	@media (max-width: 1919px) {
+	@media (max-width: 1700px) {
 		.hero-img {
 			border-radius: 3vh;
 			position: fixed;
