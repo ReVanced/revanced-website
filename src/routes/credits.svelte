@@ -1,7 +1,13 @@
 <script>
     import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-    </script>
+    let peoples = [
+        "Ushie",
+        "afnzmn",
+        "baiorett",
+        "PickleNik",
+    ]
+</script>
 
 <div class="wrapper">
-    <ContributorHost></ContributorHost>
+    <ContributorHost {peoples}></ContributorHost>
 </div>

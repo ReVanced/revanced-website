@@ -10,7 +10,23 @@
 	h1 {
 		color: var(--white);
 		font-weight: 800;
-        font-size: 6.5rem;
+		font-size: 6rem;
 		letter-spacing: -0.04em;
+		line-height: 0.75em;
+	}
+	@media screen and (max-width: 1919px) {
+		h1 {
+			font-size: 5rem;
+		}
+	}
+	@media screen and (max-width: 1052px) {
+		h1 {
+			font-size: 4.5rem;
+		}
+	}
+	@media screen and (max-width: 768px) {
+		h1 {
+			font-size: 4rem;
+		}
 	}
 </style>

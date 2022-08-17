@@ -25,7 +25,6 @@ import Wave from '$lib/components/atoms/Wave.svelte';
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#0f111a">
 	<title>ReVanced</title>
-	<link rel="stylesheet" href="css/styles.css" />
 </svelte:head>
 
 <NavHost></NavHost>
@@ -41,8 +40,11 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(html) {
+		margin: 0;
+		padding: 0;
 		font-size: 100%;
 		box-sizing: border-box;
+		overflow-y: scroll;
 	}
 
 	:global(body) {
@@ -52,15 +54,18 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		background-color: #0f111a;
 	}
 
+	:global(html, body) {
+		max-width: 100%;
+	}
+
 	:global(.wrapper) {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 1.5%
 	}
 
 	:root {
-		--white: #ffe1e1;
-		--red: #ff4151;
+		--white: #fff;
+		--red: #ff4151;		
 		--red-glow: #ff838d40;
 		--grey-one: #1c1e29;
 		--grey-two: #2b2d3a;
@@ -68,6 +73,8 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 		--grey-four: #1B1E29;
 		--grey-five: #D0D0D0;
 		--grey-six: #a19e9e;
+		--grey-seven: #535563;
+		--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94)
 	}
 
 	:global(::selection) {
@@ -85,11 +92,28 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	:global(h2) {
 		color: var(--white);
 		font-weight: 300;
-		font-size: 1.85rem;
+		font-size: 1.75rem;
 	}
 
-	/*-----scrollbar-----*/
+    :global(h3) {
+		color: var(--white);
+		font-weight: 600;
+		font-size: 1rem;
+    }
 
+    :global(h4) {
+		color:var(--grey-six);
+        font-weight:500;
+        font-size: 1rem;
+    }
+
+    :global(h5) {
+		color:var(--white);
+        font-weight: 300;
+        font-size: 1rem;
+    }
+
+	/*-----scrollbar-----*/
 	:global(::-webkit-scrollbar) {
 		width: 20px;
 		background-color: transparent;
@@ -103,6 +127,14 @@ import Wave from '$lib/components/atoms/Wave.svelte';
 	}
 
 	:global(::-webkit-scrollbar-thumb:hover) {
-		background-color: var(--grey-four);
+		background-color: var(--grey-seven);
+	}
+
+	:global(input),
+	:global(textarea),
+	:global(button),
+	:global(select),
+	:global(a) {
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
 	}
 </style>

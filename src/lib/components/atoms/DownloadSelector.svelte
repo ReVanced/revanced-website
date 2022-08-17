@@ -3,26 +3,17 @@
 </script>
 
 <div class="download-selection">
-    <h1>99.9.9a</h1>
-    <h3>2022-07-11</h3>
+    <h1>2.5.0</h1>
+    <h4>2022-07-11</h4>
     <div class="info">
-        <div class='rounded-fill'>
-            <h2>Features</h2>
-        </div>
+        <h3>Features</h3>
         <ul>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
-            <li><h4>sn is so oococolol</h4></li>
+            <li><h5>feature request issue template <a href="https://github.com/revanced/revanced-patcher/commit/112bc998f4761a647cb9eab7454e35264fa96fd9">(1b39278)</a></h5></li>
+            <li><h5>issue templates [skip ci] <a href="https://github.com/revanced/revanced-patcher/commit/112bc998f4761a647cb9eab7454e35264fa96fd9">(112bc99)</a></h5></li>
+        </ul>
+        <h3>Bug Fixes</h3>
+        <ul>
+            <li><h5>missing additional items [skip ci] <a href="https://github.com/revanced/revanced-patcher/commit/0ebab8bf598d993df6e340651205cba48f1ef725">(0ebab8b)</a></h5></li>
         </ul>
     </div>
     <div class="button">
@@ -33,63 +24,62 @@
 <style>
 	.download-selection {
 		background-color: var(--grey-two);
-		border-radius: 20px;
+		border-radius: 15px;
         justify-content: center;
-		height:50vh;
+		height:100%;
+        min-width:300px;
 	}
 
     h1 {
         text-align: center;
-        margin-top: 1.75rem;
+        padding-top: 1.4rem;
         font-weight: 700;
     }
-    h2 {
+    
+    h3 {
         text-align: left;
-        font-weight: 700;
-        font-size:1.2rem;
-    }
-
-    .rounded-fill {
         display:inline-block;
         border-radius: 200px;
         margin-left: 1rem;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.75rem;
         background-color: var(--grey-three);
     }
 
+    h4 {
+        text-align: center;
+    }
+    
+
+
     .info{
         margin-top: 1rem;
-        overflow-y: scroll;
         margin-right: 0.5rem;
-        -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
-    }
-
-    h3 {
-        font-weight:400;
-        font-size: 1.2rem;
-        text-align: center;
-        color:var(--grey-six)
-    }
-
-    h4 {
-        color: var(--white);
-        font-weight: 300;
+        padding-bottom: 1.5rem;
+        height:30vh;
+        overflow-y: scroll;
+        -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent);
     }
 
     ul {
+        margin-top: 0.5rem;
         margin-left:3rem;
+        margin-bottom:1rem;
         line-height: 1.5rem;
-        height: 10vw;
     }
 
     li {
-        color:var(--white)
+        color:var(--white);
+    }
+
+    ul a {
+        text-decoration: none;
+        color:var(--red);
     }
 
     .button {
         display:flex;
         justify-content: center;
-        margin-top: -2rem;
+        padding: 1.5rem 0;
     }
 
 </style>
