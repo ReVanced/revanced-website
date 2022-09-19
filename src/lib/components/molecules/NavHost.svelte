@@ -28,7 +28,7 @@
 				{/if}
 			</div>
 		</a>
-		<ul>
+		<ul class="{`navbar-list${menuOpen ? ' mobile' : ''}`}">
 			<Navigation href="/">Home</Navigation>
 			<Navigation href="/download">Download</Navigation>
 			<Navigation href="/docs">Docs</Navigation>
@@ -145,5 +145,15 @@
 	}
 	.menu-btn.open .menu-btn__burger::after {
 		transform: rotate(-45deg) translate(35px, 35px);
+	}
+	.navbar-list.mobile{
+		background-color: var(--grey-one);
+		position: fixed;
+		justify-content: center;
+		display: grid;
+		top:6rem;
+		height: calc(100% - 300px);
+		width: 25rem;
+		border-radius: 2rem;
 	}
 </style>
