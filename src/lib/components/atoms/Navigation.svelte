@@ -18,7 +18,7 @@
 		list-style: none;
 		display: inline-block;
 		position: relative;
-		font-weight: 300;
+		font-weight: 400;
 		align-items: center;
 		border: var(--grey-six);
 		transition-timing-function: var(--bezier-one);
@@ -35,12 +35,12 @@
 	}
 
 	li:hover {
-		font-weight: 600;
+		font-weight: 700;
 		border: 3px solid var(--grey-two);
 	}
 
 	li.selected	 {
-		font-weight: 600;
+		font-weight: 700;
 		border: 3px solid var(--red);
 	}
 </style>
