@@ -17,7 +17,7 @@
         background-color: var(--grey-one);
         margin-top: 2rem;
         padding: 0.75rem 0.75rem;
-        border-radius: 25px;
+        border-radius: 16px;
     }
 
     .main {

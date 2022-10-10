@@ -19,7 +19,7 @@
 		position: absolute;
 		display: flex;
 		bottom: 2rem;
-        gap: 1.5rem;
+        gap: 1rem;
 		left: 0;
 	}
 

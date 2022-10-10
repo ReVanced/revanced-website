@@ -21,7 +21,7 @@
 		cursor: pointer;
 		border-radius: 200px;
 		transition: transform 0.4s var(--bezier-one);
-		background-color: var(--grey-four);
+		background-color: var(--grey-two);
 		color: var(--white);
 		user-select: none;
 	}

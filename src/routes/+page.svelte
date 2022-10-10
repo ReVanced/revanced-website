@@ -9,8 +9,8 @@
 		<IndexDescription />
 		<div id="heroimg"><HeroImage /></div>
 	</div>
-	<SocialHost />
 </div>
+<SocialHost />
 
 <style>
 	.wrappezoid {

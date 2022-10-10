@@ -3,30 +3,32 @@
 	$: type = 'button-' + kind;
 	export let href = '#';
 	export let fontsize = '1.2rem';
+	export let icon = "";
+
+	function handleClick() {
+		location.href = href;
+	}
 
 </script>
 
-<a {href}>
-	<button class={type} style="font-size: {fontsize};">
-			<slot/>
-	</button>
-</a>
+<button class={type} style="font-size: {fontsize};" on:click={handleClick}>
+	<img src="icons/{icon}.svg" alt="{icon}"/>
+		<slot/>
+</button>
 
 <style>
-	a {
-		color: var(--white);
-		text-decoration: none;
-	} 
 
 	button,
 	.button-secondary {
-		font-weight: 600;
 		color: var(--white);
-		border: 3px solid var(--grey-three);
-		border-radius: 200px;
+		text-decoration: none;
+		font-weight: 600;
+		border: none;
+		border-radius: 16px;
 		padding: 12px 40px;
+		display: block;
 		cursor: pointer;
-		background-color: transparent;
+		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), box-shadow 0.4s var(--bezier-one);
 		user-select: none;
 	}
@@ -35,6 +37,7 @@
 		border: 3px solid var(--red);
 		background-color: var(--red);
 		box-shadow: 0px 0px 32px 1px var(--red-glow);
+		color: var(--grey-four)
 	}
 
 	.button-primary:hover {
@@ -45,7 +48,17 @@
 		transform: translateY(-5%);
 	}
 	button:active {
-		transition-duration: 0.1s;
-		transform: translateY(-3%);
+		transform: scale(98%);
+	}
+
+	img {
+		height: 25px;
+	}
+
+	button, .button-secondary {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem
 	}
 </style>

@@ -1,6 +1,15 @@
 <script lang="ts">
     import ContributorButton from "../atoms/ContributorButton.svelte";
     export let peoples: Array<String>;
+
+    import { onMount } from 'svelte';
+    
+	onMount(async () => {
+		const response = await fetch('https://releases.rvcd.win/contributors');
+		const json = await response.json();
+        console.log(json);
+	});
+
 </script>
 
 <div class="social-host">

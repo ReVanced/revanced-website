@@ -17,7 +17,7 @@
 	});
 </script>
 
-<div class="wrapper">
+<div class="nav-parent">
 	<nav>
 		<a href="/">
 			<div class="logo">
@@ -41,12 +41,19 @@
 </div>
 
 <style>
+
+	.nav-parent {
+		background-color: var(--grey-six);
+		padding: 0 5rem;
+		margin-bottom: 1rem;
+	}
+
 	nav {
 		top: 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		min-height: 90px;
+		min-height: 70px;
 		width: 100%;
 	}
 
@@ -56,15 +63,13 @@
 		align-items: center;
 	}
 
-	.logo {
-		display: flex;
-	}
 
 	a {
 		text-decoration: none;
 	}
 	.logo-image {
-		width: 2.9rem;
+		width: 2.4rem;
+		height: auto;
 		cursor: pointer;
 	}
 
@@ -73,7 +78,7 @@
 		margin-left: 1rem;
 		font-size: 2.4rem;
 		letter-spacing: -0.04em;
-		height:90%;
+		height: 90%;
 	}
 
 	h1 span {

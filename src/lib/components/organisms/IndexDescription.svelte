@@ -8,13 +8,12 @@
 		<!-- <img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager" /> -->
 		<IndexHeroTitle />
 		<h2>
-			An extensible framework for<br />
-			building application mods.
+			An extensible framework for building <br />application mods.
 		</h2>
 
 		<div class="hero-buttons">
-			<Button kind="primary" href="/download" fontsize="1.3rem">Download</Button>
-			<Button href="/docs" fontsize="1.3rem">Read The Docs</Button>
+			<Button icon="download" kind="primary" href="download" fontsize="1.2rem">Download</Button>
+			<Button icon="docs" href="docs" fontsize="1.2rem" >Read The Docs</Button>
 		</div>
 	</div>
 </section>
@@ -46,9 +45,9 @@
 	}
 
 	.hero-buttons {
-		gap: 1rem;
 		display: flex;
 		user-select: none;
+		gap: 1rem;
 	}
 
 	.hero-text h1 {
