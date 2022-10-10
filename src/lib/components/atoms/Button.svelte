@@ -8,16 +8,18 @@
 	function handleClick() {
 		location.href = href;
 	}
-
 </script>
 
-<button class={type} style="font-size: {fontsize};" on:click={handleClick}>
+<button 
+	class={type} 
+	style="font-size: {fontsize};" 
+	on:click={handleClick}
+>
 	<img src="icons/{icon}.svg" alt="{icon}"/>
-		<slot/>
+	<slot/>
 </button>
 
 <style>
-
 	button,
 	.button-secondary {
 		color: var(--white);
@@ -40,10 +42,6 @@
 		color: var(--grey-four)
 	}
 
-	.button-primary:hover {
-		box-shadow: 0px 0px 32px 1px var(--red-glow), 0px 0px 32px 1px var(--red-glow);
-	}
-
 	button:hover {
 		transform: translateY(-5%);
 	}
@@ -51,14 +49,15 @@
 		transform: scale(98%);
 	}
 
-	img {
-		height: 25px;
-	}
-
-	button, .button-secondary {
+	button, 
+	.button-secondary {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		gap: 0.5rem
+	}
+
+	img {
+		height: 25px;
 	}
 </style>

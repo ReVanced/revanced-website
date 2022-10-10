@@ -5,6 +5,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Manrope', sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 html{
@@ -29,6 +30,7 @@ html, body{
 .wrapper{
     margin-inline: auto;
     width: min(87%, 100rem);
+    margin-top: 7rem;
 }
 
 :root {
@@ -97,12 +99,4 @@ h5{
 
 ::-webkit-scrollbar-thumb:hover{
     background-color: var(--grey-seven);
-}
-
-input,
-textarea,
-button,
-select,
-a {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }

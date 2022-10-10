@@ -17,44 +17,42 @@
 	});
 </script>
 
-<div class="nav-parent">
-	<nav>
-		<a href="/">
-			<div class="logo">
-				<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
+<nav>
+	<a href="/">
+		<div class="logo">
+			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 
-				{#if $page.url.pathname !== '/'}
-					<h1><span>Re</span>Vanced</h1>
-				{/if}
-			</div>
-		</a>
-		<ul>
-			<Navigation href="/">Home</Navigation>
-			<Navigation href="/download">Download</Navigation>
-			<Navigation href="/docs">Docs</Navigation>
-			<Navigation href="/credits">Credits</Navigation>
-		</ul>
-		<div class="menu-btn" class:open={menuOpen} bind:this={menuBtn}>
-			<div class="menu-btn__burger" />
+			{#if $page.url.pathname !== '/'}
+				<h1><span>Re</span>Vanced</h1>
+			{/if}
 		</div>
-	</nav>
-</div>
+	</a>
+	<ul>
+		<Navigation href="/">Home</Navigation>
+		<Navigation href="/download">Download</Navigation>
+		<Navigation href="/docs">Docs</Navigation>
+		<Navigation href="/credits">Credits</Navigation>
+	</ul>
+	<div class="menu-btn" class:open={menuOpen} bind:this={menuBtn}>
+		<div class="menu-btn__burger" />
+	</div>
+</nav>
 
 <style>
 
-	.nav-parent {
-		background-color: var(--grey-six);
-		padding: 0 5rem;
-		margin-bottom: 1rem;
-	}
 
 	nav {
+		padding: 0% 4% 0% 6%;
 		top: 0;
+		position: fixed;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		min-height: 70px;
+		height: 70px;
 		width: 100%;
+		background-color: var(--grey-six);
+		backdrop-filter: blur(15px);
+    	-webkit-backdrop-filter: blur(15px);
 	}
 
 	ul {

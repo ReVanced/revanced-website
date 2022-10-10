@@ -1,9 +1,17 @@
 <script>
 </script>
 
-<div class="hero-img"><img height="100%" src="/manager.png" alt="Screenshot of ReVanced Manager" /></div>
+<div class="hero-img">
+	<img 
+		src="/manager.png" 
+		alt="Screenshot of ReVanced Manager" 
+	/>
+</div>
 
 <style>
+	img {
+		height: 100%;
+	}
 	.hero-img {
 		overflow: hidden;
 		height: 80vh;
