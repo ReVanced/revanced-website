@@ -18,11 +18,12 @@
 		display: inline-block;
 		position: relative;
 		font-weight: 500;
+		font-size: 0.9rem;
 		align-items: center;
 		border: var(--grey-six);
 		transition-timing-function: var(--bezier-one);
 		transition-duration: 0.25s;
-		padding: 11px 30px;
+		padding: 10px 25px;
 		border-radius: 200px;
 	}
 
@@ -40,6 +41,6 @@
 
 	li.selected	 {
 		background-color: var(--grey-three);
-		color: var(--red)
+		color: var(--white)
 	}
 </style>
