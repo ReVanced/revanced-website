@@ -1,13 +1,12 @@
 <script>
-	export let src = 'socials/github.svg';
-	export let alt = 'GitHub';
+	export let src = 'github';
 	export let href = '#';
 </script>
 
 <div>
 	<button>
 		<a {href}>
-			<img {src} {alt} />
+			<img src='socials/{src}.svg' alt={src} />
 		</a>
 	</button>
 </div>

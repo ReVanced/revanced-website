@@ -1,7 +1,10 @@
 <script lang="ts">
 	import Navigation from '../atoms/Navigation.svelte';
+	import { fly } from 'svelte/transition';
+	import {quintOut} from 'svelte/easing';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	
 	let menuBtn: HTMLElement;
 	let menuOpen = false;
 	onMount(() => {
@@ -23,7 +26,12 @@
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 
 			{#if $page.url.pathname !== '/'}
-				<h1><span>Re</span>Vanced</h1>
+				<h1 
+				in:fly="{{ y: 10, easing: quintOut, duration: 700 }}"
+				out:fly="{{ y: 10, easing: quintOut, duration: 500 }}"
+				>
+					<span>Re</span>Vanced
+				</h1>
 			{/if}
 		</div>
 	</a>
@@ -42,7 +50,7 @@
 
 
 	nav {
-		padding: 0% 4% 0% 6%;
+		padding: 0% 1rem 0% 2rem;
 		top: 0;
 		position: fixed;
 		display: flex;
@@ -50,6 +58,7 @@
 		justify-content: space-between;
 		height: 70px;
 		width: 100%;
+		z-index: 999;
 		background-color: var(--grey-six);
 		backdrop-filter: blur(15px);
     	-webkit-backdrop-filter: blur(15px);
@@ -66,15 +75,20 @@
 		text-decoration: none;
 	}
 	.logo-image {
-		width: 2.4rem;
-		height: auto;
+		height: 1.75rem;
+		width: auto;
 		cursor: pointer;
+	}
+
+	.logo {
+		display:flex;
+		align-items: center;
 	}
 
 	h1 {
 		display: inline-block;
 		margin-left: 1rem;
-		font-size: 2.4rem;
+		font-size: 1.75rem;
 		letter-spacing: -0.04em;
 		height: 90%;
 	}
@@ -83,7 +97,7 @@
 		color: var(--red);
 	}
 
-	@media screen and (max-width: 1052px) {
+	@media screen and (max-width: 400px) {
 		h1 {
 			display: none;
 		}

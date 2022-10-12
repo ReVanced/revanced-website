@@ -3,10 +3,10 @@
 </script>
 
 <div class="social-host">
-	<SocialButton src="socials/github.svg" alt="GitHub" href="https://revanced.app/github" />
-	<SocialButton src="socials/discord.svg" alt="Discord" href="http://revanced.app/discord" />
-	<SocialButton src="socials/reddit.svg" alt="Reddit" href="https://revanced.app/reddit" />
-	<SocialButton src="socials/telegram.svg" alt="Telegram" href="https://revanced.app/telegram" />
+	<SocialButton src="github" href="https://revanced.app/github" />
+	<SocialButton src="discord" href="http://revanced.app/discord" />
+	<SocialButton src="reddit" href="https://revanced.app/reddit" />
+	<SocialButton src="telegram" href="https://revanced.app/telegram" />
 </div>
 
 <style>
