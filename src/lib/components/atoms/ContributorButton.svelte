@@ -17,7 +17,7 @@
 		color: var(--white);
 		text-decoration: none;
 		text-align: center;
-		padding: 0.5rem;
+		padding: 0.5rem 0.1rem;
 		border-radius: 12px;
 		width:100px;
 		transition: all 0.3s var(--bezier-one);

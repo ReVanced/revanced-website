@@ -36,6 +36,7 @@
 	}
 
 	li:hover {
+		color: var(--white);
 		background-color: var(--grey-one);
 	}
 
