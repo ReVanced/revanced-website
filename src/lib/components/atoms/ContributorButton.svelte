@@ -1,13 +1,13 @@
 <script lang="ts">
-	export let username: String;
-	let href = `https://github.com/${username}`
-	let src = `https://github.com/${username}.png`
+	export let username: string;
+	export let pfp: string;
+	export let url: string;
 	let alt = `${username}'s contributor profile picture`
 </script>
 
-<a {href}>
+<a href={url} target="_blank">
 	<button>
-		<img {src} {alt}><slot/>
+		<img src={pfp} alt={alt}><slot/>
 	</button>
 	<h2>{username}</h2>
 </a>
@@ -17,6 +17,9 @@
 		color: var(--white);
 		text-decoration: none;
 		text-align: center;
+		padding: 0.5rem;
+		border-radius: 12px;
+		transition: all 0.3s var(--bezier-one);
 	} 
 
 	button {
@@ -24,9 +27,8 @@
 		border-radius: 200px;
 		overflow: hidden;
         border: 0;
-		/* padding: 5px 5px; */
-        width:86px;
-        height:86px;
+        width:45px;
+        height:45px;
         max-height: 86px;
         max-width: 86px;
 		cursor: pointer;
@@ -36,8 +38,12 @@
 		user-select: none;
 	}
 
-	a:hover > button {
-		transform: translateY(-5%);
+	a:hover  {
+		background-color: var(--grey-one);
+	}
+
+	h2 {
+		font-size: 1rem;
 	}
 
 	img {

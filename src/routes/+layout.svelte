@@ -1,7 +1,5 @@
 <script lang="ts">
 	import NavHost from "$lib/components/molecules/NavHost.svelte";
-	import Wave from '$lib/components/atoms/Wave.svelte';
-
 	import '../app.css';
 </script>
 
@@ -20,4 +18,3 @@
 
 <NavHost/>
 <slot />
-<Wave />

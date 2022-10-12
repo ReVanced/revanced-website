@@ -1,13 +1,20 @@
-<script>
+<script lang="ts">
     import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-    let peoples = [
-        "Ushie",
-        "afnzmn",
-        "baiorett",
-        "PickleNik",
-    ]
+
 </script>
 
-<div class="wrapper">
-    <ContributorHost {peoples}></ContributorHost>
+<div class="wrapper contrib-grid">
+    <ContributorHost repo="cli"/>
+    <ContributorHost repo="patcher"/>
+    <ContributorHost repo="patches"/>
+    <ContributorHost repo="integrations"/>
+    <ContributorHost repo="manager"/>
 </div>
+
+<style>
+    .contrib-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+</style>

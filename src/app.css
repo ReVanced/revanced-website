@@ -19,7 +19,7 @@ html{
 body{
     margin: 0;
     padding: 0;
-    line-height: 1.3;
+    line-height: 1.4;
     background-color: var(--bg-color);
 }
 
@@ -36,7 +36,7 @@ html, body{
 :root {
     --white: #fff;
     --red: #8bc3f4;	
-    --bg-color: #181C1E;	
+    --bg-color: #1A1C1E;	
     --grey-one: #252B31;
     --grey-two: #28313b;
     --grey-three: #3c4759c3;
@@ -48,8 +48,7 @@ html, body{
 }
 
 ::selection{
-    color: var(--white);
-    background: var(--red);
+    background: var(--grey-three);
 }
 
 /*-----headings-----*/
@@ -58,6 +57,7 @@ h1{
     color: var(--white);
     font-weight: 700;
 	line-height: 0.75em;
+    font-size: 1.75rem;
 }
 
 h2{
@@ -68,35 +68,42 @@ h2{
 
 h3{
     color: var(--white);
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1rem;
 }
 
 h4{
-    color:var(--grey-six);
+    color:var(--white);
     font-weight:500;
-    font-size: 1rem;
+    font-size: 1.25rem;
+    letter-spacing: 0.02rem;
 }
 
 h5{
     color:var(--white);
     font-weight: 300;
     font-size: 1rem;
+    letter-spacing: 0.02rem;
 }
 
-/*-----scrollbar-----*/
-::-webkit-scrollbar{
-    width: 20px;
+h6{
+    color:var(--grey-five);
+    font-weight: 300;
+    font-size: 1rem;
+    letter-spacing: 0.02rem;
+
+}
+
+::-webkit-scrollbar {
+    width: 11px;
     background-color: transparent;
 }
 
-::-webkit-scrollbar-thumb{
-    background-color: var(--grey-three);
-    border-radius: 20px;
-    border: 6px solid transparent;
+::-webkit-scrollbar-thumb {
+    background-color: var(--grey-two);
     background-clip: content-box;
 }
 
-::-webkit-scrollbar-thumb:hover{
-    background-color: var(--grey-seven);
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--grey-three);
 }
