@@ -10,11 +10,3 @@
     <ContributorHost repo="integrations"/>
     <ContributorHost repo="manager"/>
 </div>
-
-<style>
-    .contrib-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-</style>

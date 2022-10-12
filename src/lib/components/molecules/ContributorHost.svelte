@@ -44,7 +44,7 @@
         gap: 1.5rem;
         display: grid;
 		align-items: center;
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
         background-color: var(--grey-six);
         padding: 1.5rem;
         border-radius: 28px;

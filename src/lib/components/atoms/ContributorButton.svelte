@@ -19,6 +19,7 @@
 		text-align: center;
 		padding: 0.5rem;
 		border-radius: 12px;
+		width:100px;
 		transition: all 0.3s var(--bezier-one);
 	} 
 
@@ -44,6 +45,9 @@
 
 	h2 {
 		font-size: 1rem;
+		white-space: nowrap;
+	 	overflow: hidden;
+  		text-overflow: ellipsis;
 	}
 
 	img {
