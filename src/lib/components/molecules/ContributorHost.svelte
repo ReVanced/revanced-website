@@ -11,7 +11,7 @@
     onMount (() => {
         ContributorsStore.subscribe(async (data) => {
             contribs = await data;
-            contribs = contribs[repo]
+            contribs = contribs[repo].contributors
         });
     });
 
@@ -29,7 +29,7 @@
         <div class="contrib-host">    
             {#each contribs as contrib}
                 {#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
-                    <ContributorButton username={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
+                    <ContributorButton name={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
                 {/if}
             {/each}
         </div>

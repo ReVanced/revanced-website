@@ -1,15 +1,15 @@
 <script lang="ts">
-	export let username: string;
+	export let name: string;
 	export let pfp: string;
 	export let url: string;
-	let alt = `${username}'s contributor profile picture`
+	let alt = `${name}'s profile picture`
 </script>
 
 <a href={url} target="_blank">
 	<button>
 		<img src={pfp} alt={alt}><slot/>
 	</button>
-	<h2>{username}</h2>
+	<h2>{name}</h2>
 </a>
 
 <style>
