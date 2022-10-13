@@ -22,6 +22,8 @@
 		border-radius: 16px;
 	}
 	div, .button-secondary {
+		height: 60px;
+		width: max-content;
 		color: var(--white);
 		font-weight: 600;
 		border: none;

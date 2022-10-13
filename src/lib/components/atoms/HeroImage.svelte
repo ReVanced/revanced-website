@@ -14,8 +14,8 @@
 	}
 	.hero-img {
 		overflow: hidden;
-		height: 80vh;
-		max-height: 80rem;
+		height: 70vh;
+		max-height: 70rem;
 		z-index: -1;
 		width: auto;
 		float: right;

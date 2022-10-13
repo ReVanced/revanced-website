@@ -42,6 +42,6 @@
 
 	li.selected	 {
 		background-color: var(--grey-three);
-		color: var(--white)
+		color: var(--red)
 	}
 </style>
