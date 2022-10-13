@@ -25,7 +25,7 @@
 
 	button {
 		color: var(--white);
-		border-radius: 200px;
+		border-radius: 50%;
 		overflow: hidden;
         border: 0;
         width:45px;
@@ -33,14 +33,18 @@
         max-height: 86px;
         max-width: 86px;
 		cursor: pointer;
-		background-color: var(--grey-four);
+		background-color: transparent;
 		transition: transform 0.4s var(--bezier-one);
 		margin-bottom: 1rem;
 		user-select: none;
 	}
 
 	a:hover  {
-		background-color: var(--grey-one);
+		background-color: var(--grey-three);
+	}
+
+	a:hover > h2 {
+		color: var(--red);
 	}
 
 	h2 {
