@@ -34,10 +34,10 @@
 <section>
     <div 
         class="menu" 
-        in:fly="{{ y: 10, easing: quintOut, duration: 750}}"
     >
-        <h3>PACKAGES</h3>
         {#if pkg_list}
+        <div in:fly="{{ y: 10, easing: quintOut, duration: 750}}">
+            <h3>PACKAGES</h3>
             <div class="package-list">
                 {#each pkg_list as pkg, i }
                     <div 
@@ -49,13 +49,15 @@
                     </div>
                 {/each}
             </div>
+        </div>
         {/if}
+        
     </div>
 
         {#if patches}
             <div class="patches-list patches-container">
                 {#each patches as patch, i}
-                    <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: (75 * i)}}">
+                    <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: (80 * i)}}">
                         <Patch
                             name={patch.name
                                 // im sorry
