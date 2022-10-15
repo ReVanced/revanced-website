@@ -27,8 +27,6 @@
 
 			{#if $page.url.pathname !== '/'}
 				<h1 
-				in:fly="{{ y: 10, easing: quintOut, duration: 700 }}"
-				out:fly="{{ y: 10, easing: quintOut, duration: 500 }}"
 				>
 					<span>Re</span>Vanced
 				</h1>
@@ -39,6 +37,7 @@
 		<Navigation href="/">Home</Navigation>
 		<Navigation href="/download">Download</Navigation>
 		<Navigation href="/docs">Docs</Navigation>
+		<Navigation href="/patches">Patches</Navigation>
 		<Navigation href="/credits">Credits</Navigation>
 	</ul>
 	<div class="menu-btn" class:open={menuOpen} bind:this={menuBtn}>

@@ -5,7 +5,7 @@
 	import Wave from '$lib/components/atoms/Wave.svelte';
 </script>
 
-<div class="wrapper">
+<div class="wrap">
 	<div class="wrappezoid">
 		<Home />
 		<div id="heroimg"><HeroImage /></div>
@@ -15,6 +15,11 @@
 <Wave />
 
 <style>
+	.wrap {
+		margin-inline: auto;
+		width: min(87%, 100rem);
+		margin-top: 7rem;
+	}
 	.wrappezoid {
 		height: calc(100vh - 120px);
 		display: flex;

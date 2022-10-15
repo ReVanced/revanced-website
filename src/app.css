@@ -29,7 +29,7 @@ html, body{
 
 .wrapper{
     margin-inline: auto;
-    width: min(87%, 100rem);
+    width: min(90%, 100rem);
     margin-top: 7rem;
 }
 
@@ -56,8 +56,8 @@ html, body{
 h1{
     color: var(--white);
     font-weight: 700;
-	line-height: 0.75em;
-    font-size: 1.75rem;
+	line-height: 1.5rem;
+    font-size: 1.5rem;
 }
 
 h2{
@@ -86,7 +86,7 @@ h5{
     letter-spacing: 0.02rem;
 }
 
-h6{
+h6 {
     color:var(--grey-five);
     font-weight: 300;
     font-size: 1rem;
