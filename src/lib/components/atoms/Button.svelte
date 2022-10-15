@@ -2,14 +2,14 @@
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
 	export let href = '#';
-	export let fontsize = '1.2rem';
+	export let width = 'max-content';
 	export let icon = "";
 </script>
 
 <a href={href}>
 	<div 
 		class={type} 
-		style="font-size: {fontsize};" 
+		style="width: {width};" 
 	>
 		<img src="icons/{icon}.svg" alt="{icon}"/>
 		<slot/>
@@ -22,8 +22,8 @@
 		border-radius: 16px;
 	}
 	div, .button-secondary {
+		font-size: 1.1rem;
 		height: 60px;
-		width: max-content;
 		color: var(--white);
 		font-weight: 600;
 		border: none;

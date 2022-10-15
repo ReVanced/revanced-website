@@ -12,8 +12,8 @@
 		</h2>
 
 		<div class="hero-buttons">
-			<Button icon="download" kind="primary" href="download" fontsize="1.2rem">Download</Button>
-			<Button icon="docs" href="docs" fontsize="1.2rem" >Read The Docs</Button>
+			<Button icon="download" kind="primary" href="download" width="100%">Download</Button>
+			<Button icon="docs" href="docs" width="100%" >Read The Docs</Button>
 		</div>
 	</div>
 </section>
