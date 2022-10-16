@@ -8,7 +8,7 @@
     let patches: any;
     let pkg_list = [];
 
-    let current = 'all';
+    let current = '';
 
     onMount (async () => {
         PatchesStore.subscribe(async (e) => {
@@ -37,9 +37,10 @@
     >
         {#if pkg_list}
         <div in:fly="{{ y: 10, easing: quintOut, duration: 750}}">
-            <h3>PACKAGES</h3>
+            <h5>PACKAGES</h5>
+            <hr/>
             <div class="package-list">
-                {#each pkg_list as pkg, i }
+                {#each pkg_list as pkg}
                     <div 
                         class="package"
                         class:selected={current === pkg}
@@ -53,29 +54,28 @@
         {/if}
         
     </div>
-
-        {#if patches}
-            <div class="patches-list patches-container">
-                {#each patches as patch, i}
-                    <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: (80 * i)}}">
-                        <Patch
-                            name={patch.name
-                                // im sorry
-                                .replace(/-/g, ' ')
-                                .replace(/(?:^|\s)\S/g, x => x.toUpperCase())
-                                .replace(/Microg/g, 'MicroG')
-                                .replace(/Hdr/g, 'HDR')
-                                .replace(/Sponsorblock/g, 'SponsorBlock')
-                                .replace(/Tiktok/g, 'TikTok')
-                            }
-                            desc={patch.description}
-                            ver={patch.version}
-                            hasPatchOptions={!!patch.options.length}
-                        />
-                    </div>
-                {/each}
-            </div>
-        {/if}
+    {#if patches}
+        <div class="patches-list patches-container">
+            {#each patches as patch, i}
+                <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: (80 * i)}}">
+                    <Patch
+                        name={patch.name
+                            // im sorry
+                            .replace(/-/g, ' ')
+                            .replace(/(?:^|\s)\S/g, x => x.toUpperCase())
+                            .replace(/Microg/g, 'MicroG')
+                            .replace(/Hdr/g, 'HDR')
+                            .replace(/Sponsorblock/g, 'SponsorBlock')
+                            .replace(/Tiktok/g, 'TikTok')
+                        }
+                        desc={patch.description}
+                        ver={patch.version}
+                        hasPatchOptions={!!patch.options.length}
+                    />
+                </div>
+            {/each}
+        </div>
+    {/if}
 </section>
 
 <style>
@@ -88,6 +88,12 @@
         gap: 1rem;
     }
 
+    h5 {
+        font-weight: 500;
+    }
+    h3 {
+        font-size: 0.9rem;
+    }
     .patches-container {
         display: flex;
         flex-direction: column;
@@ -111,6 +117,7 @@
     }
 
     .package-list {
+        margin-top: 1rem;
         display: flex;
         flex-direction: column;
         white-space: normal;
@@ -137,21 +144,33 @@
     }
 
     .selected::before{
+        transition: all 0.4s var(--bezier-one);
         opacity: 1;
     }
 
+    hr {
+        display: block; 
+        height: 1px;
+        border: 0; 
+        border-top: 1px solid var(--grey-three);
+        margin-top: 1rem;
+    }
+    
     .package > h3 {
         color: var(--grey-five);
+        transition: all 0.4s var(--bezier-one);
     }
 
-    .selected {
-        background-color: var(--grey-three);
-    }
     .selected > h3 {
         color: var(--red);
+        transition: all 0.4s var(--bezier-one);
     }
 
-    .package:not(.selected):hover {
+    .package:hover {
         background-color: var(--grey-six);
+    }
+    
+    .package:hover > h3 {
+        color: var(--white);
     }
 </style>

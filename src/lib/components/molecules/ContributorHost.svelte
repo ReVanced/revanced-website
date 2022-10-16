@@ -75,7 +75,7 @@
         grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
         background-color: var(--grey-six);
         padding: 1.5rem;
-        border-radius: 28px;
+        border-radius: 16px;
     }
 
 </style>
