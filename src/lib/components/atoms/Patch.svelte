@@ -19,19 +19,19 @@
 
 <div 
     class="patch-container {hasPatchOptions ? 'expanded' : ''}"
-    on:click={hasPatchOptions ? handleClick : ''}>
+    on:click={hasPatchOptions ? handleClick : ''}
+>
     <div class="things">  
         <div class="title">
             <h1>{name}</h1>
             <h3>{ver}</h3>
         </div>
-        
+
         {#if hasPatchOptions}
             <img id="arrow" src="/icons/arrow.svg" alt="dropdown">
         {/if}
     </div>
     <!-- <h3>{pkgName}</h3> -->
-
     <h4>{desc}</h4>
 </div>
 

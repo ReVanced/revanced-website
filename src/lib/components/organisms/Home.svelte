@@ -13,7 +13,7 @@
 
 		<div class="hero-buttons">
 			<Button icon="download" kind="primary" href="download" width="100%">Download</Button>
-			<Button icon="docs" href="docs" width="100%" >Read The Docs</Button>
+			<Button icon="docs" href="docs" width='true' >Read The Docs</Button>
 		</div>
 	</div>
 </section>

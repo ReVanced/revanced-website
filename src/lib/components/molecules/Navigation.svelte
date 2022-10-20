@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Navigation from '../atoms/Navigation.svelte';
+	import Navigation from '../atoms/NavButton.svelte';
 	import { fly } from 'svelte/transition';
 	import {quintOut} from 'svelte/easing';
 	import { onMount } from 'svelte';
@@ -24,12 +24,8 @@
 	<a href="/">
 		<div class="logo">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-
 			{#if $page.url.pathname !== '/'}
-				<h1 
-				>
-					<span>Re</span>Vanced
-				</h1>
+				<h1 ><span>Re</span>Vanced</h1>
 			{/if}
 		</div>
 	</a>
@@ -46,7 +42,6 @@
 </nav>
 
 <style>
-
 
 	nav {
 		padding: 0% 1rem 0% 2rem;
@@ -73,6 +68,7 @@
 	a {
 		text-decoration: none;
 	}
+
 	.logo-image {
 		height: 1.75rem;
 		width: auto;
@@ -93,7 +89,7 @@
 	}
 
 	h1 span {
-		color: var(--red);
+		color: var(--accent-color);
 	}
 
 	@media screen and (max-width: 400px) {

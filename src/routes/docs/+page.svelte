@@ -46,13 +46,13 @@
     a {
         text-decoration: none;
         color: var(--white);
-        border-bottom: 1.5px solid var(--red);
+        border-bottom: 1.5px solid var(--accent-color);
         padding: 0px 5px;
         transition: all 0.4s var(--bezier-one);
     }
 
     a:hover {
-        background-color: var(--red);
+        background-color: var(--accent-color);
         border-radius: 6px;
         color: var(--grey-four)
     }
@@ -64,7 +64,6 @@
 
     .menu {
         padding: 90px 15px 0px 15px;
-        background-color: var(--grey-six);
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -72,7 +71,6 @@
 
     .content {
         padding: 100px 30px 0px 30px;
-        background-color: var(--grey-one);
     }
 
     .doc-section {

@@ -20,7 +20,7 @@
     animation: wave-anim 40s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;  
-    fill: var(--red);
+    fill: var(--accent-color);
   }
 
   @keyframes wave-anim {

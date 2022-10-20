@@ -8,7 +8,6 @@
     onMount (() => {
         ContributorsStore.subscribe(async (e) => {
             data = await e;
-            console.log(data);
         });
     });
 </script>

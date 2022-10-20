@@ -2,14 +2,14 @@
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
 	export let href = '#';
-	export let width = 'max-content';
-	export let icon = "";
+	export let width = 'false';
+	export let icon = '';
 </script>
 
-<a href={href}>
+<a {href}>
 	<div 
 		class={type} 
-		style="width: {width};" 
+		style="width: {width ? '100%' : 'max-width'}" 
 	>
 		<img src="icons/{icon}.svg" alt="{icon}"/>
 		<slot/>
@@ -21,6 +21,7 @@
 		text-decoration: none;
 		border-radius: 16px;
 	}
+
 	div, .button-secondary {
 		font-size: 1.1rem;
 		height: 60px;
@@ -37,8 +38,8 @@
 	}
 
 	.button-primary {
-		background-color: var(--red);
-		box-shadow: 0px 0px 32px 1px var(--red-glow);
+		background-color: var(--accent-color);
+		box-shadow: 0px 0px 32px 1px var(--accent-color-glow);
 		color: var(--grey-four)
 	}
 

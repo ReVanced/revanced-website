@@ -3,16 +3,14 @@
 	export let href = '#';
 </script>
 
-<div>
-	<button>
-		<a {href}>
-			<img src='socials/{src}.svg' alt={src} />
-		</a>
-	</button>
-</div>
+<a {href}>
+	<div>
+		<img src='socials/{src}.svg' alt={src} />
+	</div>
+</a>
 
 <style>
-	button {
+	div {
 		border: 0;
 		width: 60px;
 		height: 60px;
@@ -26,7 +24,8 @@
 	}
 
 	div {
-		display: inline-block;
+		display: flex;
+		justify-content: center;
 	}
 
 	img {
@@ -34,11 +33,11 @@
 		width: 30px;
 	}
 
-	div:hover > button {
+	div:hover {
 		transform: translateY(-5%);
 	}
 
-	button:hover img {
+	div:hover img {
 		filter: brightness(1.2);
 	}
 </style>

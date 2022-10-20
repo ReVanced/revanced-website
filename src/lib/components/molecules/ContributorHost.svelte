@@ -43,10 +43,10 @@
 {/if}
 
 <style>
-
     h2 {
         margin-bottom: 1rem;
     }
+
     a {
         transition: all 0.3s var(--bezier-one);
         display:block;
@@ -65,7 +65,7 @@
     a:hover > h2 {
         width: max-content;
         background-color: var(--grey-three);
-        color: var(--red);
+        color: var(--accent-color);
     }
 
     .contrib-host {
@@ -77,5 +77,4 @@
         padding: 1.5rem;
         border-radius: 16px;
     }
-
 </style>

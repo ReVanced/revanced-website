@@ -44,7 +44,7 @@
 	}
 
 	a:hover > h2 {
-		color: var(--red);
+		color: var(--accent-color);
 	}
 
 	h2 {

@@ -1,12 +1,13 @@
 <h1>
-	<span class="redder">Re</span>Vanced
+	<span>Re</span>Vanced
 </h1>
 
 <style>
-	.redder {
-		color: var(--red);
-	}
 
+	span {
+		color: var(--accent-color);
+	}
+	
 	h1 {
 		color: var(--white);
 		font-weight: 700;

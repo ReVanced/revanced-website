@@ -6,9 +6,9 @@
     import { quintOut } from 'svelte/easing';
 
     let patches: any;
-    let pkg_list = [];
+    let pkg_list: Object[] = [];
 
-    let current = '';
+    let current: boolean | Object = false;
 
     onMount (async () => {
         PatchesStore.subscribe(async (e) => {
@@ -24,7 +24,9 @@
                     };
                 });
             };
-        });
+        })
+
+
 
     });
 
@@ -32,19 +34,17 @@
 </script>
 
 <section>
-    <div 
-        class="menu" 
-    >
+    <div class="menu">
         {#if pkg_list}
-        <div in:fly="{{ y: 10, easing: quintOut, duration: 750}}">
+        <div in:fly="{{ y: 10, easing: quintOut, duration: 750 }}">
             <h5>PACKAGES</h5>
             <hr/>
             <div class="package-list">
                 {#each pkg_list as pkg}
                     <div 
                         class="package"
-                        class:selected={current === pkg}
-                        on:click={() => current = pkg}
+                        class:selected={ current === pkg }
+                        on:click={ () => current = (current === pkg) ? false : pkg }
                     > 
                         <h3>{pkg}</h3>
                     </div>
@@ -52,7 +52,6 @@
             </div>
         </div>
         {/if}
-        
     </div>
     {#if patches}
         <div class="patches-list patches-container">
@@ -85,7 +84,7 @@
         width: min(95%, 100rem);
         display:grid;
         grid-template-columns: 300px 3fr;
-        gap: 1rem;
+        gap: 2.5rem;
     }
 
     h5 {
@@ -116,6 +115,14 @@
         gap: 1rem;
     }
 
+    hr {
+        display: block; 
+        height: 1px;
+        border: 0; 
+        border-top: 1px solid var(--grey-three);
+        margin-top: 1rem;
+    }
+
     .package-list {
         margin-top: 1rem;
         display: flex;
@@ -129,6 +136,7 @@
         border-radius: 8px;
         cursor: pointer;
         display: flex;
+        align-items: center;
         gap: 0.6rem;
         width: 100%;
         user-select: none;
@@ -137,40 +145,35 @@
 
     .package::before {
         content: '';
+        height: 5px;
         inline-size: 4px;
         border-radius: 200px;
-        background-color: var(--red);
+        background-color: var(--accent-color);
+        transition: all 0.2s var(--bezier-one);
         opacity: 0;
     }
 
     .selected::before{
-        transition: all 0.4s var(--bezier-one);
+        height: 20px;
+        transition: all 0.3s var(--bezier-one);
         opacity: 1;
-    }
-
-    hr {
-        display: block; 
-        height: 1px;
-        border: 0; 
-        border-top: 1px solid var(--grey-three);
-        margin-top: 1rem;
     }
     
     .package > h3 {
         color: var(--grey-five);
-        transition: all 0.4s var(--bezier-one);
+        transition: all 0.3s var(--bezier-one);
     }
 
     .selected > h3 {
-        color: var(--red);
-        transition: all 0.4s var(--bezier-one);
+        color: var(--accent-color);
+        transition: all 0.3s var(--bezier-one);
     }
 
-    .package:hover {
+    .package:hover, .selected {
         background-color: var(--grey-six);
     }
     
-    .package:hover > h3 {
+    .package:not(.selected):hover > h3 {
         color: var(--white);
     }
 </style>

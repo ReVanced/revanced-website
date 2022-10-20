@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
 
-*{
+* {
     box-sizing: inherit;
     margin: 0;
     padding: 0;
-    font-family: 'Manrope', sans-serif;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    font-family: "Manrope", sans-serif;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-html{
+html {
     margin: 0;
     padding: 0;
     font-size: 100%;
@@ -16,18 +16,19 @@ html{
     overflow-y: scroll;
 }
 
-body{
+body {
     margin: 0;
     padding: 0;
     line-height: 1.4;
     background-color: var(--bg-color);
 }
 
-html, body{
+html,
+body {
     max-width: 100%;
 }
 
-.wrapper{
+.wrapper {
     margin-inline: auto;
     width: min(90%, 100rem);
     margin-top: 7rem;
@@ -35,63 +36,62 @@ html, body{
 
 :root {
     --white: #fff;
-    --red: #8bc3f4;	
-    --bg-color: #1A1C1E;	
-    --grey-one: #252B31;
+    --accent-color: #8bc3f4;
+    --bg-color: #1a1c1e;
+    --grey-one: #252b31;
     --grey-two: #28313b;
     --grey-three: #3c4759c3;
-    --grey-four: #1B1E29;
+    --grey-four: #1b1e29;
     --grey-five: hsl(208, 30%, 75%);
     --grey-six: #23282da7;
     --grey-seven: #535563;
-    --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-::selection{
+::selection {
     background: var(--grey-three);
 }
 
 /*-----headings-----*/
 
-h1{
+h1 {
     color: var(--white);
     font-weight: 700;
-	line-height: 1.5rem;
+    line-height: 1.5rem;
     font-size: 1.5rem;
 }
 
-h2{
+h2 {
     color: var(--grey-five);
     font-weight: 400;
     font-size: 1.4rem;
 }
 
-h3{
+h3 {
     color: var(--white);
     font-weight: 500;
     font-size: 1rem;
 }
 
-h4{
-    color:var(--white);
-    font-weight:500;
+h4 {
+    color: var(--white);
+    font-weight: 500;
     font-size: 1.25rem;
     letter-spacing: 0.02rem;
 }
 
-h5{
-    color:var(--white);
+h5 {
+    color: var(--white);
     font-weight: 300;
     font-size: 1rem;
     letter-spacing: 0.02rem;
 }
 
 h6 {
-    color:var(--grey-five);
+    color: var(--grey-five);
     font-weight: 300;
     font-size: 1rem;
     letter-spacing: 0.02rem;
-
 }
 
 ::-webkit-scrollbar {
