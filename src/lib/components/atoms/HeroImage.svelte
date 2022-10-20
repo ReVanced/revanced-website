@@ -2,10 +2,7 @@
 </script>
 
 <div class="hero-img">
-	<img 
-		src="/manager.png" 
-		alt="Screenshot of ReVanced Manager" 
-	/>
+	<img src="/manager.png" alt="Screenshot of ReVanced Manager" />
 </div>
 
 <style>

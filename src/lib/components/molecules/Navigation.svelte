@@ -1,10 +1,8 @@
 <script lang="ts">
 	import Navigation from '../atoms/NavButton.svelte';
-	import { fly } from 'svelte/transition';
-	import {quintOut} from 'svelte/easing';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	
+
 	let menuBtn: HTMLElement;
 	let menuOpen = false;
 	onMount(() => {
@@ -25,7 +23,7 @@
 		<div class="logo">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 			{#if $page.url.pathname !== '/'}
-				<h1 ><span>Re</span>Vanced</h1>
+				<h1><span>Re</span>Vanced</h1>
 			{/if}
 		</div>
 	</a>
@@ -42,9 +40,8 @@
 </nav>
 
 <style>
-
 	nav {
-		padding: 0% 1rem 0% 2rem;
+		padding: 0 1rem 0 2rem;
 		top: 0;
 		position: fixed;
 		display: flex;
@@ -55,15 +52,14 @@
 		z-index: 999;
 		background-color: var(--grey-six);
 		backdrop-filter: blur(15px);
-    	-webkit-backdrop-filter: blur(15px);
+		-webkit-backdrop-filter: blur(15px);
 	}
 
 	ul {
 		display: flex;
-		gap:0.75rem;
+		gap: 0.75rem;
 		align-items: center;
 	}
-
 
 	a {
 		text-decoration: none;
@@ -76,7 +72,7 @@
 	}
 
 	.logo {
-		display:flex;
+		display: flex;
 		align-items: center;
 	}
 

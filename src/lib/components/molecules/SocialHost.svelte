@@ -12,14 +12,14 @@
 <style>
 	.social-host {
 		width: min(87%, 100rem);
-        /* same as margin-inline: auto on .wrapper */
-        padding: 0 max(6.5%, calc(50vw - 50rem));
+		/* same as margin-inline: auto on .wrapper */
+		padding: 0 max(6.5%, calc(50vw - 50rem));
 		align-items: center;
 		user-select: none;
 		position: absolute;
 		display: flex;
 		bottom: 2rem;
-        gap: 1rem;
+		gap: 1rem;
 		left: 0;
 	}
 
@@ -27,7 +27,7 @@
 		.social-host {
 			left: 0;
 			width: 100%;
-            display: flex;
+			display: flex;
 			justify-content: center;
 		}
 	}

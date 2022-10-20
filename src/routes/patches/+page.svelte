@@ -25,11 +25,7 @@
                 });
             };
         })
-
-
-
     });
-
     
 </script>
 
@@ -53,6 +49,7 @@
         </div>
         {/if}
     </div>
+
     {#if patches}
         <div class="patches-list patches-container">
             {#each patches as patch, i}

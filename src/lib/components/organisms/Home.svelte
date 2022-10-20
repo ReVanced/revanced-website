@@ -13,7 +13,7 @@
 
 		<div class="hero-buttons">
 			<Button icon="download" kind="primary" href="download" width="100%">Download</Button>
-			<Button icon="docs" href="docs" width='true' >Read The Docs</Button>
+			<Button icon="docs" href="docs" width="true">Read The Docs</Button>
 		</div>
 	</div>
 </section>
@@ -27,8 +27,8 @@
 	.hero {
 		padding-bottom: 10rem;
 	}
-	
-	.hero-text { 
+
+	.hero-text {
 		align-items: center;
 	}
 
@@ -51,11 +51,9 @@
 		br {
 			content: ' ';
 		}
-		
+
 		.hero-buttons {
 			flex-direction: column;
 		}
-		
 	}
-	
 </style>

@@ -1,80 +1,72 @@
 <script lang="ts">
-    import ContributorButton from "../atoms/ContributorPerson.svelte";
-    import { fly } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
-   
-    export let contribs;
-    export let repo: string;
-    
-    let repo_name = repo.replace(/-/g, ' ')
-        .replace(/revanced\/revanced/g, 'ReVanced')
-        .replace(/cli/g, 'CLI')
-        .replace(/api/g, 'API')
-        .replace(/(?:^|\s)\S/g, x => x.toUpperCase())
+	import ContributorButton from '../atoms/ContributorPerson.svelte';
 
-    let usersIwantToExplodeSoBadly = [
-        'semantic-release-bot',
-    ]
-    
+	export let contribs;
+	export let repo: string;
+
+	let repo_name = repo
+		.replace(/-/g, ' ')
+		.replace(/revanced\/revanced/g, 'ReVanced')
+		.replace(/cli/g, 'CLI')
+		.replace(/api/g, 'API')
+		.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase());
+
+	let usersIwantToExplodeSoBadly = ['semantic-release-bot'];
 </script>
 
 {#if contribs}
-    <div 
-        class="container" 
-        in:fly="{{ y: 10, easing: quintOut, duration: 700 }}"
-    >
-        <a href='https://github.com/{repo}' target="_blank">
-            <h2>{repo_name}</h2>
-        </a>
+	<div class="container">
+		<a href="https://github.com/{repo}" target="_blank">
+			<h2>{repo_name}</h2>
+		</a>
 
-        <div class="contrib-host">    
-            {#each contribs as contrib}
-                {#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
-                    <ContributorButton 
+		<div class="contrib-host">
+			{#each contribs as contrib}
+				{#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
+					<ContributorButton 
                         name={contrib.login} 
                         pfp={contrib.avatar_url} 
                         url={contrib.html_url} 
                     />
-                {/if}
-            {/each}
-        </div>
-
-    </div>
+				{/if}
+			{/each}
+		</div>
+	</div>
 {/if}
 
 <style>
-    h2 {
-        margin-bottom: 1rem;
-    }
+	h2 {
+		margin-bottom: 1rem;
+	}
 
-    a {
-        transition: all 0.3s var(--bezier-one);
-        display:block;
-        text-decoration: none;
-        width: max-content;
-        border-radius: 8px;
-    }
+	a {
+		transition: all 0.3s var(--bezier-one);
+		display: block;
+		text-decoration: none;
+		width: max-content;
+		border-radius: 8px;
+	}
 
-    a > h2 {
-        transition: all 0.3s var(--bezier-one);
-        width: max-content;
-        padding: 0rem 0.4rem;
-        border-radius: 8px;
-    }
+	a > h2 {
+		transition: all 0.3s var(--bezier-one);
+		width: max-content;
+		padding: 0rem 0.4rem;
+		border-radius: 8px;
+	}
 
-    a:hover > h2 {
-        width: max-content;
-        background-color: var(--grey-three);
-        color: var(--accent-color);
-    }
+	a:hover > h2 {
+		width: max-content;
+		background-color: var(--grey-three);
+		color: var(--accent-color);
+	}
 
-    .contrib-host {
-        gap: 1.5rem;
-        display: grid;
-        justify-items: center;
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-        background-color: var(--grey-six);
-        padding: 1.5rem;
-        border-radius: 16px;
-    }
+	.contrib-host {
+		gap: 1.5rem;
+		display: grid;
+		justify-items: center;
+		grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+		background-color: var(--grey-six);
+		padding: 1.5rem;
+		border-radius: 16px;
+	}
 </style>

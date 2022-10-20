@@ -30,7 +30,7 @@
 	}
 	@media (max-width: 1700px) {
 		.wrappezoid {
-			justify-content: space-between;;
+			justify-content: space-between;
 		}
 	}
 	@media (max-width: 1052px) {

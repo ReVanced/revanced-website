@@ -3,11 +3,10 @@
 </h1>
 
 <style>
-
 	span {
 		color: var(--accent-color);
 	}
-	
+
 	h1 {
 		color: var(--white);
 		font-weight: 700;

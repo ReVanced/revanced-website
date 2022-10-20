@@ -1,12 +1,12 @@
 <script>
 	import { page } from '$app/stores';
 	export let href = '/';
-	$: current = (href === $page.url.pathname);
+	$: current = href === $page.url.pathname;
 </script>
 
 <a {href}>
-	<li class:selected="{current === true}">
-		<slot/>
+	<li class:selected={current === true}>
+		<slot />
 	</li>
 </a>
 
@@ -40,8 +40,8 @@
 		background-color: var(--grey-one);
 	}
 
-	li.selected	 {
+	li.selected {
 		background-color: var(--grey-three);
-		color: var(--accent-color)
+		color: var(--accent-color);
 	}
 </style>
