@@ -1,6 +1,7 @@
 <script lang="ts">
     import Patch from "$lib/components/atoms/Patch.svelte";
     import PatchesStore from "$lib/stores/PatchesStore";
+    import Footer from "$lib/components/atoms/Footer.svelte";
     import { onMount } from "svelte";
     import { fly } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
@@ -74,6 +75,7 @@
     {/if}
 </section>
 
+<Footer/>
 <style>
     section {
         padding-top: 4.25rem;

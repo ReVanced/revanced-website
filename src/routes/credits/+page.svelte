@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
 	import ContributorsStore from '../../lib/stores/ContributorsStore.js';
+    import Footer from '$lib/components/atoms/Footer.svelte';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
@@ -32,3 +33,5 @@
 		margin-bottom: 3rem;
 	}
 </style>
+
+<Footer />
