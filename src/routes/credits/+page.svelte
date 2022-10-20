@@ -1,13 +1,24 @@
 <script lang="ts">
     import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
+    import ContributorsStore from '../../lib/stores/ContributorsStore.js';
+    import { onMount } from "svelte";
+
+    let data;
+
+    onMount (() => {
+        ContributorsStore.subscribe(async (e) => {
+            data = await e;
+            console.log(data);
+        });
+    });
 </script>
 
 <div class="wrapper contrib-grid">
-    <ContributorHost repo="cli"/>
-    <ContributorHost repo="patcher"/>
-    <ContributorHost repo="patches"/>
-    <ContributorHost repo="integrations"/>
-    <ContributorHost repo="manager"/>
+    {#if data}
+        {#each data.repositories as { contributors, name }}
+            <ContributorHost contribs={contributors} repo={name}/>
+        {/each}
+    {/if}
 </div>
 
 <style>

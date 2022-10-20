@@ -6,8 +6,8 @@
 </script>
 
 <a href={url} target="_blank">
-	<button>
-		<img src={pfp} alt={alt}><slot/>
+	<button tabindex="-1">
+		<img src={pfp} {alt}>
 	</button>
 	<h2>{name}</h2>
 </a>

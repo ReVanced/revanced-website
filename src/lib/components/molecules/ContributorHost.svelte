@@ -1,21 +1,16 @@
 <script lang="ts">
-    import ContributorsStore from "../../stores/ContributorsStore.js";
-    import ContributorButton from "../atoms/ContributorButton.svelte";
-    import { onMount } from "svelte";
+    import ContributorButton from "../atoms/ContributorPerson.svelte";
     import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
    
-    let contribs: Object;
-    let repo_link: string;
+    export let contribs;
     export let repo: string;
-
-    onMount (() => {
-        ContributorsStore.subscribe(async (e) => {
-            let data = await e;
-            repo_link = 'https://github.com/' + data[repo].name;
-            contribs = data[repo].contributors
-        });
-    });
+    
+    let repo_name = repo.replace(/-/g, ' ')
+        .replace(/revanced\/revanced/g, 'ReVanced')
+        .replace(/cli/g, 'CLI')
+        .replace(/api/g, 'API')
+        .replace(/(?:^|\s)\S/g, x => x.toUpperCase())
 
     let usersIwantToExplodeSoBadly = [
         'semantic-release-bot',
@@ -24,10 +19,14 @@
 </script>
 
 {#if contribs}
-    <div class="container" in:fly="{{ y: 10, easing: quintOut, duration: 700 }}">
-        <a href={repo_link} target="_blank">
-            <h2>ReVanced {repo === 'cli' ? 'CLI' : repo.charAt(0).toUpperCase() + repo.slice(1)}</h2>
+    <div 
+        class="container" 
+        in:fly="{{ y: 10, easing: quintOut, duration: 700 }}"
+    >
+        <a href='https://github.com/{repo}' target="_blank">
+            <h2>{repo_name}</h2>
         </a>
+
         <div class="contrib-host">    
             {#each contribs as contrib}
                 {#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
@@ -39,6 +38,7 @@
                 {/if}
             {/each}
         </div>
+
     </div>
 {/if}
 
