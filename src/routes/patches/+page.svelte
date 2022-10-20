@@ -30,7 +30,7 @@
 </script>
 
 <section>
-    <div class="menu">
+    <aside class="menu">
         {#if pkg_list}
         <div in:fly="{{ y: 10, easing: quintOut, duration: 750 }}">
             <h5>PACKAGES</h5>
@@ -48,7 +48,7 @@
             </div>
         </div>
         {/if}
-    </div>
+    </aside>
 
     {#if patches}
         <div class="patches-list patches-container">
@@ -81,7 +81,8 @@
         width: min(95%, 100rem);
         display:grid;
         grid-template-columns: 300px 3fr;
-        gap: 2.5rem;
+        gap: 1.5rem;
+        padding-bottom: 3rem;
     }
 
     h5 {
@@ -94,22 +95,24 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        padding-bottom: 3rem;
-        overflow-y: scroll;
-        height: calc(100vh - 4.25rem);
         width:100%;
         padding-top: 3rem;
-        padding-right: 1rem;
+        position: sticky;
+        z-index:1;
+
     }
 
-    .menu {
-        height: calc(100vh - 10rem);
+    aside {
+        height: calc(100vh - 7.5rem);
         width:100%;
-        margin-top: 3rem;
-        padding: 0px 15px 0px 15px;
+        padding: 0px 10px 30px 10px;
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        position: sticky;
+        top: 7.5rem;
+        overflow-y: scroll;
+
     }
 
     hr {
