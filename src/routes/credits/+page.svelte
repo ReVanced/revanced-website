@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { APIOutput } from './+page';
-
+  import type { APIOutput } from '../+layout';
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
     import Footer from '$lib/components/molecules/Footer.svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
+  // From the layout hydration. See +layout.ts
 	export let data: APIOutput;
 </script>
 
