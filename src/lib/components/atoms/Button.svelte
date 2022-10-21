@@ -2,12 +2,12 @@
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
 	export let href = '#';
-	export let width = 'false';
+	export let maxWidth = 'false';
 	export let icon = '';
 </script>
 
 <a {href}>
-	<div class={type} style="width: {width ? '100%' : 'max-width'}">
+	<div class={type} style="width: {maxWidth ? '100%' : 'max-width'}">
 		<img src="icons/{icon}.svg" alt={icon} />
 		<slot />
 	</div>

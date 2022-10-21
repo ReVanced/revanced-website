@@ -33,7 +33,7 @@
 
         <div class="patches-list patches-container">
             {#each patches as patch, i}
-                <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: (80 * i)}}">
+                <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: -(300*(0.85**i))+300}}">
                     <Patch
                         name={patch.name
                             // im sorry

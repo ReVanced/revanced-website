@@ -1,19 +1,20 @@
 <script>
 	import Button from '$lib/components/atoms/Button.svelte';
-	import HeroTitle from '../atoms/HeroTitle.svelte';
 </script>
 
 <section class="hero">
 	<div class="hero-text">
-		<!-- <img class="hero-img" src="/manager.png" alt="Screenshot of ReVanced Manager" /> -->
-		<HeroTitle />
+		<h1>
+			<span>Re</span>Vanced
+		</h1>
+
 		<h2>
 			An extensible framework for building <br />application mods.
 		</h2>
 
 		<div class="hero-buttons">
-			<Button icon="download" kind="primary" href="download" width="100%">Download</Button>
-			<Button icon="docs" href="docs" width="true">Read The Docs</Button>
+			<Button icon="download" href="download" maxWidth="true" kind="primary">Download</Button>
+			<Button icon="docs" href="docs" maxWidth="true">Read The Docs</Button>
 		</div>
 	</div>
 </section>
@@ -36,6 +37,34 @@
 		display: flex;
 		user-select: none;
 		gap: 1rem;
+	}
+
+	span {
+		color: var(--accent-color);
+	}
+
+	h1 {
+		color: var(--white);
+		font-weight: 700;
+		font-size: 5rem;
+		letter-spacing: -0.04em;
+		line-height: 0.75em;
+	}
+
+	@media screen and (max-width: 1919px) {
+		h1 {
+			font-size: 5rem;
+		}
+	}
+	@media screen and (max-width: 1052px) {
+		h1 {
+			font-size: 4.5rem;
+		}
+	}
+	@media screen and (max-width: 768px) {
+		h1 {
+			font-size: 4rem;
+		}
 	}
 
 	@media (max-width: 768px) {
