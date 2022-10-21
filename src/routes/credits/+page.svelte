@@ -1,28 +1,20 @@
 <script lang="ts">
+  import type { APIOutput } from './+page';
+
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-	import ContributorsStore from '../../lib/stores/ContributorsStore.js';
     import Footer from '$lib/components/molecules/Footer.svelte';
-	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	let data;
-
-	onMount(() => {
-		ContributorsStore.subscribe(async (e) => {
-			data = await e;
-		});
-	});
+	export let data: APIOutput;
 </script>
 
 <div class="wrapper contrib-grid">
-	{#if data}
 		{#each data.repositories as { contributors, name }}
 			<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 				<ContributorHost contribs={contributors} repo={name} />
 			</div>
 		{/each}
-	{/if}
 </div>
 
 <style>

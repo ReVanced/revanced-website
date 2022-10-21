@@ -1,7 +1,8 @@
 <script lang="ts">
+  import type { Contributor } from '$lib/types';
 	import ContributorButton from '../atoms/ContributorPerson.svelte';
 
-	export let contribs;
+	export let contribs: Contributor[];
 	export let repo: string;
 
 	let repo_name = repo

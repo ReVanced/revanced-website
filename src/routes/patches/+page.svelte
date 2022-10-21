@@ -1,43 +1,24 @@
 <script lang="ts">
+    import type { Output } from "./+page";
     import Patch from "$lib/components/atoms/Patch.svelte";
-    import PatchesStore from "$lib/stores/PatchesStore";
     import Footer from "$lib/components/molecules/Footer.svelte";
-    import { onMount } from "svelte";
     import { fly } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
 
-    let patches: any;
-    let pkg_list: Object[] = [];
+    export let data: Output;
+
+    let { patches, packages } = data;
 
     let current: boolean | Object = false;
-
-    onMount (async () => {
-        PatchesStore.subscribe(async (e) => {
-            patches = await e;
-            console.log(patches);
-
-            for (let i = 0; i < patches.length; i++) {
-                patches[i].compatiblePackages.forEach(pkg => {
-                    let index = pkg_list.findIndex(x => x == pkg.name); 
-                    if (index === -1) {
-                        pkg_list.push(pkg.name);
-                        pkg_list = pkg_list;
-                    };
-                });
-            };
-        })
-    });
-    
 </script>
 
 <section>
     <aside class="menu">
-        {#if pkg_list}
         <div in:fly="{{ y: 10, easing: quintOut, duration: 750 }}">
             <h5>PACKAGES</h5>
             <hr/>
             <div class="package-list">
-                {#each pkg_list as pkg}
+                {#each packages as pkg}
                     <div 
                         class="package"
                         class:selected={ current === pkg }
@@ -48,10 +29,8 @@
                 {/each}
             </div>
         </div>
-        {/if}
     </aside>
 
-    {#if patches}
         <div class="patches-list patches-container">
             {#each patches as patch, i}
                 <div in:fly="{{ x: 10, easing: quintOut, duration: 750, delay: (80 * i)}}">
@@ -72,7 +51,6 @@
                 </div>
             {/each}
         </div>
-    {/if}
 </section>
 
 <Footer/>
