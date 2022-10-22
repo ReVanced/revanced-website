@@ -3,7 +3,9 @@ import type { Patch } from 'src/data/types';
 
 export type PatchesData = { patches: Patch[]; packages: string[] };
 
-const fetchPatches = async (): Promise<PatchesData> => {
+export async function load({
+  fetch
+}): Promise<PatchesData> {
 	const response = await fetch('https://releases.rvcd.win/patches');
 	const patches = await response.json();
 	let packages: string[] = [];
@@ -19,5 +21,3 @@ const fetchPatches = async (): Promise<PatchesData> => {
 	}
 	return { patches, packages };
 };
-
-export const PatchesStore = readable(fetchPatches());

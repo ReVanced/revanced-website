@@ -1,16 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+  import type { Contributor } from 'src/data/types';
 
-	import type { ContribData } from '../../../data/ContributorsStore';
-	import { ContributorsStore } from '../../../data/ContributorsStore';
-
-	let data: ContribData;
-
-	onMount(() => {
-		ContributorsStore.subscribe(async (e: Promise<ContribData>) => {
-			data = await e;
-		});
-	});
+	export let repositories: Contributor[];
 </script>
 
 <hr />
@@ -37,8 +28,7 @@
 		</div>
 		<div class="link-column">
 			<h5>Repos</h5>
-			{#if data}
-				{#each data.repositories as { name }}
+				{#each repositories as { name }}
 					<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 						<div>
 							<h6>
@@ -52,7 +42,6 @@
 						</div>
 					</a>
 				{/each}
-			{/if}
 		</div>
 		<div class="link-column">
 			<!-- to replace -->

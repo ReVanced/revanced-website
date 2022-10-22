@@ -1,33 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import type { ContribData } from '../../data/ContributorsStore';
-	import { ContributorsStore } from '../../data/ContributorsStore';
-	
+	import type { ContribData } from '../+layout';
+
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-    import Footer from '$lib/components/molecules/Footer.svelte';
-	
+  import Footer from '$lib/components/molecules/Footer.svelte';
 
-	let data: ContribData;
-
-	onMount(() => {
-		ContributorsStore.subscribe(async (e: Promise<ContribData>) => {
-			data = await e;
-		});
-	});
-	
+  // From the layout hydration. See +layout.ts
+	export let data: ContribData;
 </script>
 
 <div class="wrapper contrib-grid">
-	{#if data}
-		{#each data.repositories as { contributors, name }}
-			<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-				<ContributorHost contribs={contributors} repo={name} />
-			</div>
-		{/each}
-	{/if}
+	{#each data.repositories as { contributors, name }}
+		<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			<ContributorHost contribs={contributors} repo={name} />
+		</div>
+	{/each}
 </div>
 
 <style>
@@ -39,4 +28,4 @@
 	}
 </style>
 
-<Footer />
+<Footer {...data} />
