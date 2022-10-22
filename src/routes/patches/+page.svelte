@@ -1,26 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+  import type { PatchesData } from './+page';
+  import type { ContribData } from '../+layout';
+
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
 	import type { CompatiblePackage, Patch } from 'src/data/types';
-	import type { PatchesData } from '../../data/PatchesStore';
-	import { PatchesStore } from '../../data/PatchesStore';
 
 	import TreeMenu from '$lib/components/molecules/TreeMenu.svelte';
 	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
 	import PatchCell from '$lib/components/atoms/PatchCell.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-	let patches: Patch[];
-	let packages: string[];
-	let current: boolean = false;
+  export let data: PatchesData & ContribData;
 
-	onMount(() => {
-		PatchesStore.subscribe(async (e: Promise<PatchesData>) => {
-			({ patches, packages } = await e);
-		});
-	});
+  let { patches, packages } = data;
+
+	let current: boolean = false;
 
 	function search(findTerm: string | boolean, array: CompatiblePackage[]) {
 		for (let i = 0; i < array.length; i++) {
@@ -41,27 +37,23 @@
 <section>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<TreeMenu title="packages">
-			{#if packages}
-				{#each packages as pkg}
-					<TreeMenuButton bind:current name={pkg} />
-				{/each}
-			{/if}
+			{#each packages as pkg}
+				<TreeMenuButton bind:current name={pkg} />
+			{/each}
 		</TreeMenu>
 	</aside>
 
 	<div class="patches-container">
-		{#if patches}
-			{#each patches as patch, i}
-				{#if search(current, patch.compatiblePackages) || !current}
-					<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: -(300 * 0.85 ** i) + 300 }}>
-						<PatchCell bind:current {patch} />
-					</div>
-				{/if}
-			{/each}
-		{/if}
+		{#each patches as patch, i}
+			{#if search(current, patch.compatiblePackages) || !current}
+				<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: -(300 * 0.85 ** i) + 300 }}>
+					<PatchCell bind:current {patch} />
+				</div>
+			{/if}
+		{/each}
 	</div>
 </section>
-<Footer />
+<Footer repositories={data.repositories} />
 
 <style>
 	section {
