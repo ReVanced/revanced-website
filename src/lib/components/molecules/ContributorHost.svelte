@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Contributor } from '$lib/types';
+	import type { Contributor } from 'src/data/types';
 	import ContributorButton from '../atoms/ContributorPerson.svelte';
 
 	export let contribs: Contributor[];

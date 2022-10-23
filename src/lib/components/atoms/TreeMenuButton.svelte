@@ -1,17 +1,17 @@
 <script lang="ts">
-    export let current: string | boolean;
-    export let name: string;
+	export let current: string | boolean;
+	export let name: string;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="package"
-	class:selected = {current === name} 
-	on:click={() => (current = (current === name) ? false : name) && window.scrollTo({ top: 0, behavior: 'smooth' })}
+	class:selected={current === name}
+	on:click={() =>
+		(current = current === name ? false : name) && window.scrollTo({ top: 0, behavior: 'smooth' })}
 >
-    <h3>{name}</h3>
+	<h3>{name}</h3>
 </div>
-
 
 <style>
 	.package {
@@ -42,9 +42,9 @@
 		opacity: 1;
 	}
 
-    h3 {
-        font-size: 0.9rem;
-    }
+	h3 {
+		font-size: 0.9rem;
+	}
 
 	.package > h3 {
 		color: var(--grey-five);

@@ -1,5 +1,5 @@
 import { readable } from 'svelte/store';
-import type { Patch } from '$lib/types';
+import type { Patch } from 'src/data/types';
 
 export type PatchesData = { patches: Patch[]; packages: string[] };
 

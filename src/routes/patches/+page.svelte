@@ -3,7 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import type { Patch } from '$lib/types';
+	import type { CompatiblePackage, Patch } from 'src/data/types';
 	import type { PatchesData } from '../../data/PatchesStore';
 	import { PatchesStore } from '../../data/PatchesStore';
 
@@ -12,8 +12,8 @@
 	import PatchCell from '$lib/components/atoms/PatchCell.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-	let patches: Patch[]
-    let packages: string[];
+	let patches: Patch[];
+	let packages: string[];
 	let current: boolean = false;
 
 	onMount(() => {
@@ -22,14 +22,14 @@
 		});
 	});
 
-    function search(findTerm, array){
-        for (let i = 0; i < array.length; i++) {
-            if (array[i].name === findTerm) {
-                return true;
-            };
-        };
-        return false;
-    };
+	function search(findTerm: string | boolean, array: CompatiblePackage[]) {
+		for (let i = 0; i < array.length; i++) {
+			if (array[i].name === findTerm) {
+				return true;
+			}
+		}
+		return false;
+	}
 </script>
 
 <svelte:head>
@@ -51,20 +51,12 @@
 
 	<div class="patches-container">
 		{#if patches}
-			{#each patches as { name, description, version, options, compatiblePackages }, i}
-                {#if search(current, compatiblePackages) || !current}
-                    <div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: -(300 * 0.85 ** i) + 300 }}>
-                        <PatchCell
-                            bind:current
-                            {name}
-                            {description}
-                            {version}
-                            {options}
-                            {compatiblePackages}
-                            hasPatchOptions={!!options.length}
-                        />
-                    </div>
-                {/if}
+			{#each patches as patch, i}
+				{#if search(current, patch.compatiblePackages) || !current}
+					<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: -(300 * 0.85 ** i) + 300 }}>
+						<PatchCell bind:current {patch} />
+					</div>
+				{/if}
 			{/each}
 		{/if}
 	</div>
@@ -89,7 +81,7 @@
 		width: 100%;
 		position: sticky;
 		z-index: 1;
-        min-height: calc(100vh - 7.5rem);
+		min-height: calc(100vh - 7.5rem);
 	}
 
 	/* 

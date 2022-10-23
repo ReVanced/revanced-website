@@ -3,7 +3,7 @@
 
 	import type { ContribData } from '../../../data/ContributorsStore';
 	import { ContributorsStore } from '../../../data/ContributorsStore';
-	
+
 	let data: ContribData;
 
 	onMount(() => {
@@ -20,8 +20,8 @@
 		<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 		<div>
 			<h1>
-                <span>Re</span>Vanced
-            </h1>
+				<span>Re</span>Vanced
+			</h1>
 			<h6>Copyright © 2022, we are very legal</h6>
 		</div>
 	</section>
@@ -39,17 +39,18 @@
 			<h5>Repos</h5>
 			{#if data}
 				{#each data.repositories as { name }}
-				<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
-					<div>
-						<h6>{name
-							.replace(/-/g, ' ')
-							.replace(/revanced\/revanced/g, '')
-							.replace(/cli/g, 'CLI')
-							.replace(/api/g, 'API')
-							.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase())}
-						</h6>
-					</div>
-				</a>
+					<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
+						<div>
+							<h6>
+								{name
+									.replace(/-/g, ' ')
+									.replace(/revanced\/revanced/g, '')
+									.replace(/cli/g, 'CLI')
+									.replace(/api/g, 'API')
+									.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase())}
+							</h6>
+						</div>
+					</a>
 				{/each}
 			{/if}
 		</div>
@@ -67,7 +68,6 @@
 </footer>
 
 <style>
-
 	footer {
 		margin: 4rem 0 5rem 0;
 		margin-inline: auto;
@@ -81,14 +81,14 @@
 		gap: 1rem;
 	}
 
-    .main-content span {
-        color: var(--accent-color);
-    }
+	.main-content span {
+		color: var(--accent-color);
+	}
 
-    .main-content h1 {
-        letter-spacing: -0.04rem;
-        margin-bottom: 0.5rem;
-    }
+	.main-content h1 {
+		letter-spacing: -0.04rem;
+		margin-bottom: 0.5rem;
+	}
 
 	img {
 		height: 3rem;

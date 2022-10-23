@@ -1,29 +1,25 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import type { CompatiblePackage, PatchOption } from '$lib/types';
+	import type { CompatiblePackage, Patch } from 'src/data/types';
 
-	export let name: string;
-	export let description: string;
-	export let version: string;
-	export let options: PatchOption[];
-	export let compatiblePackages: CompatiblePackage[];
-	export let hasPatchOptions: boolean;
+	export let patch: Patch;
 	export let current: boolean;
-
+	const hasPatchOptions = !!patch.options.length;
 	let expanded: boolean = false;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	class="patch-container {hasPatchOptions ? 'expanded' : ''}"
-	class:rotate={expanded === true}
+	class="patch-container"
+	class:expanded={hasPatchOptions}
+	class:rotate={expanded}
 	on:click={() => (expanded = !expanded)}
 >
 	<div class="things">
 		<div class="title">
 			<h1>
-				{name
+				{patch.name
 					// im sorry
 					.replace(/-/g, ' ')
 					.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase())
@@ -40,25 +36,30 @@
 	</div>
 
 	<div class="info-container">
-		{#each compatiblePackages as pkg, i}
+		{#each patch.compatiblePackages as pkg, i}
 			{#if current === false}
-				<h2>{pkg.name}</h2>
+				<h2>📦 {pkg.name}</h2>
 			{/if}
-			<!-- gets only the last supported version (cant get 'any' to work without duplicates help) -->
+			<!-- gets only the lastest supported version (cant get 'any' to work without duplicates help) -->
 			{#if i < pkg.versions.length - 1}
 				<h2>
-					Target Package Version: {pkg.versions.slice(-1)[0] || 'Any'}
+					🎯 {pkg.versions.slice(-1)[0] || 'Any'}
 				</h2>
 			{/if}
 		{/each}
-		<h2>Patch Version: {version}</h2>
+
+		<h2>🧩 {patch.version}</h2>
+
+		{#if hasPatchOptions}
+			<h2>⚙️ Patch Options</h2>
+		{/if}
 	</div>
-	<h4>{description}</h4>
+	<h4>{patch.description}</h4>
 
 	{#if expanded && hasPatchOptions}
 		<span transition:fade|local={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide|local={{ easing: quintOut, duration: 500 }}>
-				{#each options as option}
+				{#each patch.options as option}
 					<div class="option">
 						<h3>{option.title}</h3>
 						<h4>{option.description}</h4>
@@ -116,7 +117,6 @@
 		padding: 1.5rem;
 		border-radius: 12px;
 	}
-
 
 	.patch-container:active {
 		background-color: var(--grey-three);
