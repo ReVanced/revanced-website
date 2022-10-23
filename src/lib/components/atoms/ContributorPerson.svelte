@@ -5,7 +5,7 @@
 	let alt = `${name}'s profile picture`;
 </script>
 
-<a href={url} target="_blank">
+<a href={url} rel="noreferrer" target="_blank">
 	<button tabindex="-1">
 		<img src={pfp} {alt} />
 	</button>

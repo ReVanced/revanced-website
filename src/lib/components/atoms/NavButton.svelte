@@ -41,7 +41,7 @@
 	}
 
 	li.selected {
-		background-color: var(--grey-three);
+		background-color: var(--grey-two);
 		color: var(--accent-color);
 	}
 </style>

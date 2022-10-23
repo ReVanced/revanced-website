@@ -1,5 +1,5 @@
 <script lang="ts">
-	import NavHost from "$lib/components/molecules/Navigation.svelte";
+	import NavHost from "$lib/components/molecules/NavHost.svelte";
 	import '../app.css';
 </script>
 

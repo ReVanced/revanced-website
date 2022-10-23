@@ -37,13 +37,14 @@ body {
 :root {
     --white: #fff;
     --accent-color: #8bc3f4;
+    --accent-color-two: hsl(207, 65%, 90%);
     --bg-color: #1a1c1e;
     --grey-one: #252b31;
     --grey-two: #28313b;
-    --grey-three: #3c4759c3;
+    --grey-three: #373E4D;
     --grey-four: #1b1e29;
     --grey-five: hsl(208, 30%, 75%);
-    --grey-six: #23282da7;
+    --grey-six: hsla(223, 17%, 16%, 0.655);
     --grey-seven: #535563;
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

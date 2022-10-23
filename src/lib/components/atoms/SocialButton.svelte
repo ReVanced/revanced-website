@@ -3,7 +3,7 @@
 	export let href = '#';
 </script>
 
-<a {href} target="_blank">
+<a {href} rel="noreferrer" target="_blank">
 	<div>
 		<img src="socials/{src}.svg" alt={src} />
 	</div>
