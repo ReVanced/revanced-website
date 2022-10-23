@@ -1,10 +1,20 @@
 <script>
-	import { page } from '$app/stores';
+	import { page, navigating } from '$app/stores';
 	export let href = '/';
-	$: current = href === $page.url.pathname;
+  let nav = null;
+
+  $: current_page = $page.url.pathname;
+  $: {
+    nav = $navigating;
+    if (nav != null && nav.to != null) {
+      current_page = nav.to.url.pathname;
+    }
+  }
+
+	$: current = href === current_page;
 </script>
 
-<a {href}>
+<a data-sveltekit-prefetch {href}>
 	<li class:selected={current === true}>
 		<slot />
 	</li>
