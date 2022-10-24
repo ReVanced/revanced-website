@@ -36,12 +36,12 @@ body {
 
 :root {
     --white: #fff;
-    --accent-color: #8bc3f4;
+    --accent-color: #9fd5ff;
     --accent-color-two: hsl(207, 65%, 90%);
     --bg-color: #1a1c1e;
     --grey-one: #252b31;
     --grey-two: #28313b;
-    --grey-three: #373E4D;
+    --grey-three: #373e4d;
     --grey-four: #1b1e29;
     --grey-five: hsl(208, 30%, 75%);
     --grey-six: hsla(223, 17%, 16%, 0.655);
@@ -50,7 +50,8 @@ body {
 }
 
 ::selection {
-    background: var(--grey-three);
+    background: var(--grey-six);
+    color: var(--white);
 }
 
 /*-----headings-----*/
@@ -58,7 +59,7 @@ body {
 h1 {
     color: var(--white);
     font-weight: 700;
-    line-height: 1.5rem;
+
     font-size: 1.5rem;
 }
 
@@ -107,4 +108,11 @@ h6 {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: var(--grey-three);
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--grey-three);
 }

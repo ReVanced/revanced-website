@@ -80,7 +80,7 @@
 
 	h2 {
 		color: var(--accent-color);
-		font-size: 0.75rem;
+		font-size: 0.8rem;
 		font-weight: 500;
 		border-radius: 8px;
 		background-color: var(--grey-two);
@@ -100,14 +100,14 @@
 
 	h3 {
 		color: var(--accent-color);
-		font-size: 0.85rem;
+		font-size: 0.9rem;
 		margin-bottom: 0.1rem;
 		font-weight: 500;
 	}
 
 	h4 {
 		color: var(--grey-five);
-		font-size: 0.8rem;
+		font-size: 0.9rem;
 		font-weight: 400;
 	}
 

@@ -9,7 +9,7 @@
 
 	import TreeMenu from '$lib/components/molecules/TreeMenu.svelte';
 	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
-	import PatchCell from '$lib/components/atoms/PatchCell.svelte';
+	import PatchCell from '$lib/components/molecules/PatchCell.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
   export let data: PatchesData & ContribData;
@@ -53,7 +53,7 @@
 		{/each}
 	</div>
 </section>
-<Footer repositories={data.repositories} />
+<Footer {...data} />
 
 <style>
 	section {
@@ -69,7 +69,7 @@
 		margin-top: 7.5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.75rem;
 		width: 100%;
 		position: sticky;
 		z-index: 1;

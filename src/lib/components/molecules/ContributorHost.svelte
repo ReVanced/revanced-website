@@ -15,28 +15,42 @@
 	let usersIwantToExplodeSoBadly = ['semantic-release-bot'];
 </script>
 
-<div class="container">
+<div class="title">
 	<a href="https://github.com/{repo}" rel="noreferrer" target="_blank">
 		<h2>{repo_name}</h2>
 	</a>
+</div>
 
-	<div class="contrib-host">
-		{#each contribs as contrib}
-			{#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
-				<ContributorButton name={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
-			{/if}
-		{/each}
-	</div>
+<hr/>
+
+<div class="contrib-host">
+	{#each contribs as contrib}
+		{#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
+			<ContributorButton name={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
+		{/if}
+	{/each}
 </div>
 
 <style>
+	.title {
+		display: flex;
+		align-items: center;
+		border-radius: 4px;
+		transform: translateX(-6px);
+	}
 	h2 {
-		margin-bottom: 1rem;
+		text-align: center;
+		font-size: 1.25rem;
 	}
 
+	hr {
+		margin-top: 0.5rem;
+		margin-bottom: 1rem;
+		border-top: 1px solid var(--grey-two);
+	}
 	a {
 		transition: all 0.3s var(--bezier-one);
-		display: block;
+		display: flex;
 		text-decoration: none;
 		width: max-content;
 		border-radius: 8px;
@@ -46,7 +60,7 @@
 		transition: all 0.3s var(--bezier-one);
 		width: max-content;
 		padding: 0rem 0.4rem;
-		border-radius: 8px;
+		border-radius: 4px;
 	}
 
 	a:hover > h2 {
@@ -56,12 +70,9 @@
 	}
 
 	.contrib-host {
-		gap: 1.5rem;
+		gap: 0.5rem;
 		display: grid;
 		justify-items: center;
-		grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-		background-color: var(--grey-six);
-		padding: 1.5rem;
-		border-radius: 16px;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	}
 </style>

@@ -5,19 +5,27 @@
 	import type { ContribData } from '../+layout';
 
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-  import Footer from '$lib/components/molecules/Footer.svelte';
+	import Footer from '$lib/components/molecules/Footer.svelte';
 
-  // From the layout hydration. See +layout.ts
+	// From the layout hydration. See +layout.ts
 	export let data: ContribData;
 </script>
 
-<div class="wrapper contrib-grid">
-	{#each data.repositories as { contributors, name }}
-		<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-			<ContributorHost contribs={contributors} repo={name} />
-		</div>
-	{/each}
+<div class="wrapper">
+	<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		<h1>Made possible by the community.</h1>
+		<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
+	</div>
+	<div class="contrib-grid">
+		{#each data.repositories as { contributors, name }}
+			<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+				<ContributorHost contribs={contributors} repo={name} />
+			</div>
+		{/each}
+	</div>
 </div>
+
+<Footer {...data} />
 
 <style>
 	.contrib-grid {
@@ -26,6 +34,42 @@
 		gap: 3rem;
 		margin-bottom: 3rem;
 	}
-</style>
 
-<Footer {...data} />
+	h1 {
+		font-size: 2.25rem;
+		font-weight: 600;
+		text-align: center;
+		color: var(--grey-four);
+	}
+	h2 {
+		font-size: 1rem;
+		color: var(--grey-four);
+	}
+
+	.text-container {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		background-color: var(--accent-color);
+		padding: 2rem;
+		border-radius: 8px;
+	}
+
+	a {
+		text-decoration: none;
+		color: var(--grey-four);
+	}
+
+	a::after {
+		padding-left: 5px;
+		content: '->';
+		position: absolute;
+		transition: all 0.3s var(--bezier-one);
+	}
+
+	a:hover::after {
+		transform: translateX(5px);
+	}
+</style>

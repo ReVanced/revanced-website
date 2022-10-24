@@ -17,10 +17,15 @@
 		color: var(--white);
 		text-decoration: none;
 		text-align: center;
-		padding: 0.5rem 0.1rem;
-		border-radius: 12px;
-		width: 100px;
+		padding: 0.5rem 0.5rem;
+		width: 100%;
 		transition: all 0.3s var(--bezier-one);
+		border: 1px solid var(--grey-three);
+		border-radius: 4px;
+		display:flex;
+		gap: 1rem;
+		align-items: center;
+		background-color: var(--grey-six)
 	}
 
 	button {
@@ -28,27 +33,26 @@
 		border-radius: 50%;
 		overflow: hidden;
 		border: 0;
-		width: 45px;
-		height: 45px;
-		max-height: 86px;
-		max-width: 86px;
+		height: 30px;
+		width: 30px;
+		min-width: 30px;
+		min-height: 30px;
 		cursor: pointer;
 		background-color: transparent;
 		transition: transform 0.4s var(--bezier-one);
-		margin-bottom: 1rem;
 		user-select: none;
 	}
 
 	a:hover {
-		background-color: var(--grey-three);
+		background-color: var(--accent-color);
 	}
 
 	a:hover > h2 {
-		color: var(--accent-color);
+		color: var(--grey-four);
 	}
 
 	h2 {
-		font-size: 1rem;
+		font-size: 0.95rem;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;

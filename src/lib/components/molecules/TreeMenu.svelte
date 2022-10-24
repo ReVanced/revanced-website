@@ -27,11 +27,7 @@
 	}
 
 	hr {
-		margin-top: 0.75rem;
-		display: block;
-		height: 1px;
-		border: 0;
-		border-top: 1px solid var(--grey-three);
+		margin-top: 0.5rem;
 	}
 
 	.package-list {

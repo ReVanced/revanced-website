@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Contributor } from 'src/data/types';
+  import type { Contributor, Repository } from 'src/data/types';
 
-	export let repositories: Contributor[];
+	export let repositories: Repository[];
 </script>
 
 <hr />
@@ -57,6 +57,8 @@
 </footer>
 
 <style>
+
+
 	footer {
 		margin: 4rem 0 5rem 0;
 		margin-inline: auto;
@@ -87,6 +89,10 @@
 		text-decoration: none;
 	}
 
+	h6 {
+		font-size: 0.9rem;
+	}
+
 	.links-container {
 		display: flex;
 		gap: 5rem;
@@ -96,13 +102,5 @@
 		display: flex;
 		gap: 0.5rem;
 		flex-direction: column;
-	}
-
-	hr {
-		display: block;
-		height: 1px;
-		border: 0;
-		border-top: 1px solid var(--grey-three);
-		margin-top: 1rem;
 	}
 </style>
