@@ -15,21 +15,19 @@
 	let usersIwantToExplodeSoBadly = ['semantic-release-bot'];
 </script>
 
-{#if contribs}
-	<div class="container">
-		<a href="https://github.com/{repo}" rel="noreferrer" target="_blank">
-			<h2>{repo_name}</h2>
-		</a>
+<div class="container">
+	<a href="https://github.com/{repo}" rel="noreferrer" target="_blank">
+		<h2>{repo_name}</h2>
+	</a>
 
-		<div class="contrib-host">
-			{#each contribs as contrib}
-				{#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
-					<ContributorButton name={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
-				{/if}
-			{/each}
-		</div>
+	<div class="contrib-host">
+		{#each contribs as contrib}
+			{#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
+				<ContributorButton name={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
+			{/if}
+		{/each}
 	</div>
-{/if}
+</div>
 
 <style>
 	h2 {
