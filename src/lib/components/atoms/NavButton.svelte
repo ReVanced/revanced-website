@@ -1,21 +1,10 @@
 <script>
-	import { page, navigating } from '$app/stores';
+  import RouterEvents from '../../../data/RouterEvents';
 	export let href = '/';
-  let nav = null;
-
-  $: current_page = $page.url.pathname;
-  $: {
-    nav = $navigating;
-    if (nav != null && nav.to != null) {
-      current_page = nav.to.url.pathname;
-    }
-  }
-
-	$: current = href === current_page;
 </script>
 
 <a data-sveltekit-prefetch {href}>
-	<li class:selected={current === true}>
+	<li class:selected={href === $RouterEvents.target_url.pathname}>
 		<slot />
 	</li>
 </a>

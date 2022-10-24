@@ -1,31 +1,21 @@
 <script lang="ts">
+  import { derived } from "svelte/store";
+
 	import NavHost from "$lib/components/molecules/NavHost.svelte";
+  import Spinner from '$lib/components/atoms/Spinner.svelte';
+  import RouterEvents from '../data/RouterEvents';
 	import '../app.css';
 
-  import { navigating } from '$app/stores'
-  import { onMount } from "svelte";
-  import Spinner from '$lib/components/atoms/Spinner.svelte';
-
-  let timeout = 0;
-
-  let is_navigating = false;
-
-  onMount(() => {
-    // Show spinner if we are still waiting for navigation after 150ms
-    navigating.subscribe(nav => {
-      // cancel current timer, if any
-      clearTimeout(timeout);
-      // null after navigation finishes
-      if (nav != null) {
-        timeout = setTimeout(() => {
-          is_navigating = true;
-        }, 150);
-      } else {
-        // navigation finished
-        is_navigating = false;
-      }
-    });
-  });
+  // Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
+  const show_loading_animation = derived(RouterEvents, ($event, set) => {
+    if ($event.navigating) {
+      // Wait 300 ms before showing the animation.
+      const timeout = setTimeout(() => set(true), 300);
+      return () => clearTimeout(timeout);
+    } else {
+      set(false)
+    }
+  }, false);
 </script>
 
 <svelte:head>
@@ -42,7 +32,7 @@
 </svelte:head>
 
 <NavHost/>
-{#if is_navigating}
+{#if $show_loading_animation}
   <Spinner />
 {:else}
   <slot />
