@@ -1,23 +1,26 @@
-<div class="spin-container">
-	<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-</div>
+<script>
+  import { fade } from "svelte/transition";
+</script>
+<div class="spinner" transition:fade={{duration: 250}}/>
 
 <style>
-.spin-container {
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  z-index: 1000;
-}
-.logo-image {
-  animation: rotate 2s linear infinite;
-  width: 75vmin;
-  height: 75vmin;
-}
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
-}
+	@keyframes spinner {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.spinner:before {
+		content: '';
+		box-sizing: border-box;
+		position: fixed;
+		top: 48.25%;
+		left: 48.25%;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		border: 4.5px solid transparent;
+		border-top-color: var(--accent-color);
+		animation: spinner 0.6s linear infinite;
+	}
 </style>

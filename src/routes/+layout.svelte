@@ -9,8 +9,8 @@
   // Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
   const show_loading_animation = derived(RouterEvents, ($event, set) => {
     if ($event.navigating) {
-      // Wait 300 ms before showing the animation.
-      const timeout = setTimeout(() => set(true), 300);
+      // Wait 250 ms before showing the animation.
+      const timeout = setTimeout(() => set(true), 250);
       return () => clearTimeout(timeout);
     } else {
       set(false)
