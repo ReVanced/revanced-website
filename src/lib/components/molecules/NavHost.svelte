@@ -28,17 +28,17 @@
 		</a>
 		<ul>
 			<Navigation href="/">Home</Navigation>
-			<Navigation href="/download/">Download</Navigation>
-			<Navigation href="/docs/">Docs</Navigation>
-			<Navigation href="/patches/">Patches</Navigation>
+			<Navigation href="/download">Download</Navigation>
+			<Navigation is_selected={target => target.startsWith("/docs")} href="/docs">Docs</Navigation>
+			<Navigation href="/patches">Patches</Navigation>
 		</ul>
 	</div>
 	<ul>
 		<Navigation href="/contributors/">
-			<img src="../icons/contrib.svg" alt="Contributors"/>
+			<img src="/icons/contrib.svg" alt="Contributors"/>
 		</Navigation>
 		<Navigation href="/api-settings/">
-			<img src="../icons/settings.svg" alt="Settings"/>
+			<img src="/icons/settings.svg" alt="Settings"/>
 		</Navigation>
 	</ul>
 	<div class="menu-btn" class:open={menuOpen} bind:this={menuBtn}>
