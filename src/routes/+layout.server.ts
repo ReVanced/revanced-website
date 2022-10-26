@@ -2,6 +2,8 @@ import type { Repository } from 'src/data/types';
 
 export type ContribData = { repositories: Repository[] };
 
+export const prerender = true;
+
 export async function load({
   fetch
 }): Promise<ContribData> {

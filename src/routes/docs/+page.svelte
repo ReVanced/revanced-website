@@ -48,8 +48,7 @@
 		<br />
 		<br />
 		<div class="button-wrapper">
-			<Button kind="secondary">Using ReVanced CLI and installing ReVanced -></Button
-			>
+			Using ReVanced CLI and installing ReVanced (Docs will be overhauled anyways)
 		</div>
 	</div>
 </main>
