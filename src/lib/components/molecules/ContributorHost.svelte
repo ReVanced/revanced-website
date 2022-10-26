@@ -21,12 +21,12 @@
 	</a>
 </div>
 
-<hr/>
+<hr />
 
 <div class="contrib-host">
-	{#each contribs as contrib}
-		{#if !usersIwantToExplodeSoBadly.includes(contrib.login)}
-			<ContributorButton name={contrib.login} pfp={contrib.avatar_url} url={contrib.html_url} />
+	{#each contribs as { login, avatar_url, html_url }}
+		{#if !usersIwantToExplodeSoBadly.includes(login)}
+			<ContributorButton name={login} pfp={avatar_url} url={html_url} />
 		{/if}
 	{/each}
 </div>

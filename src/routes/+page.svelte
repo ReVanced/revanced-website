@@ -5,13 +5,15 @@
 	import Wave from '$lib/components/atoms/Wave.svelte';
 </script>
 
-<div class="wrap">
-	<div class="wrappezoid">
-		<Home />
-		<div id="heroimg"><HeroImage /></div>
+<main>
+	<div class="wrap">
+		<div class="wrappezoid">
+			<Home />
+			<div id="heroimg"><HeroImage /></div>
+		</div>
 	</div>
-</div>
-<SocialHost />
+	<SocialHost />
+</main>
 <Wave />
 
 <style>

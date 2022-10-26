@@ -38,15 +38,21 @@
 	<div class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
 			{#if current === false}
-				<h2>📦 {pkg.name}</h2>
-			{/if}
-			<!-- gets only the lastest supported version (cant get 'any' to work without duplicates help) -->
-			{#if i < pkg.versions.length - 1}
-				<h2>
-					🎯 {pkg.versions.slice(-1)[0] || 'Any'}
-				</h2>
+				<a
+					href="https://play.google.com/store/apps/details?id={pkg.name}"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<h2>📦 {pkg.name}</h2>
+				</a>
 			{/if}
 		{/each}
+		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
+		{#if patch.compatiblePackages[0].versions.length}
+			<h2>
+				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+			</h2>
+		{/if}
 
 		<h2>🧩 {patch.version}</h2>
 
@@ -88,6 +94,10 @@
 		display: flex;
 	}
 
+	a {
+		text-decoration: none;
+	}
+
 	.info-container {
 		display: flex;
 		flex-wrap: wrap;
@@ -115,7 +125,7 @@
 		transition: all 2s var(--bezier-one);
 		background-color: var(--grey-six);
 		padding: 1.5rem;
-		border-radius: 12px;
+		border-radius: 8px;
 	}
 
 	.patch-container:active {

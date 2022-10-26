@@ -1,10 +1,11 @@
 <script>
-	import Button from '$lib/components/atoms/Button.svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+
+	import Button from '$lib/components/atoms/Button.svelte';
 </script>
 
-<section in:fly={{ y: 10, easing: quintOut, duration: 700 }}>
+<main in:fly={{ y: 10, easing: quintOut, duration: 700 }}>
 	<div class="menu">
 		<div class="doc-section-selected">
 			<h3>Prerequisites</h3>
@@ -51,10 +52,10 @@
 			>
 		</div>
 	</div>
-</section>
+</main>
 
 <style>
-	section {
+	main {
 		display: grid;
 		grid-template-columns: 300px 3fr;
 	}

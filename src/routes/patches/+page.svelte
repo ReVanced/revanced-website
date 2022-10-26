@@ -1,20 +1,20 @@
 <script lang="ts">
-  import type { PatchesData } from './+page';
-  import type { ContribData } from '../+layout';
+	import type { PatchesData } from './+page';
+	import type { ContribData } from '../+layout';
 
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import type { CompatiblePackage, Patch } from 'src/data/types';
+	import type { CompatiblePackage } from 'src/data/types';
 
 	import TreeMenu from '$lib/components/molecules/TreeMenu.svelte';
 	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
 	import PatchCell from '$lib/components/molecules/PatchCell.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-  export let data: PatchesData & ContribData;
+	export let data: PatchesData & ContribData;
 
-  let { patches, packages } = data;
+	let { patches, packages } = data;
 
 	let current: boolean = false;
 
@@ -34,7 +34,7 @@
 	<meta content="Revanced - Patches" name="twitter:title" />
 </svelte:head>
 
-<section>
+<main>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<TreeMenu title="packages">
 			{#each packages as pkg}
@@ -52,11 +52,11 @@
 			{/if}
 		{/each}
 	</div>
-</section>
+</main>
 <Footer {...data} />
 
 <style>
-	section {
+	main {
 		margin-inline: auto;
 		width: min(95%, 100rem);
 		display: grid;
@@ -69,25 +69,10 @@
 		margin-top: 7.5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: 0.5rem;
 		width: 100%;
 		position: sticky;
 		z-index: 1;
 		min-height: calc(100vh - 7.5rem);
 	}
-
-	/* 
-    pulsing todo:
-	@keyframes pulse {
-		0% {
-			background-position: right; 
-        }
-    }
-	.loading {
-		height: 50px;
-		background: linear-gradient(90deg, var(--grey-six) 33%, var(--grey-one) 50%, var(--grey-six) 66%) var(--grey-six);
-		background-size: 300% 100%;
-		animation: pulse 2s infinite;
-        margin-bottom: 0.5rem;
-	} */
 </style>

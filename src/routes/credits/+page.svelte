@@ -11,19 +11,21 @@
 	export let data: ContribData;
 </script>
 
-<div class="wrapper">
-	<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<h1>Made possible by the community.</h1>
-		<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
+<main>
+	<div class="wrapper">
+		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			<h1>Made possible by the community.</h1>
+			<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
+		</div>
+		<div class="contrib-grid">
+			{#each data.repositories as { contributors, name }}
+				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+					<ContributorHost contribs={contributors} repo={name} />
+				</div>
+			{/each}
+		</div>
 	</div>
-	<div class="contrib-grid">
-		{#each data.repositories as { contributors, name }}
-			<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-				<ContributorHost contribs={contributors} repo={name} />
-			</div>
-		{/each}
-	</div>
-</div>
+</main>
 
 <Footer {...data} />
 
