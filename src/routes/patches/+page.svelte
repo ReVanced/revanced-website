@@ -1,20 +1,22 @@
 <script lang="ts">
-	import type { PatchesData } from './+page';
-	import type { ContribData } from '../+layout';
+  import type { PageData } from './$types';
 
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
 	import type { CompatiblePackage } from 'src/data/types';
+  import { patches as api_patches } from '../../data/api';
 
 	import TreeMenu from '$lib/components/molecules/TreeMenu.svelte';
 	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
 	import PatchCell from '$lib/components/molecules/PatchCell.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-	export let data: PatchesData & ContribData;
+	export let data: PageData;
+  // Needed when someone navigates directly to the page.
+  api_patches.init(data);
 
-	let { patches, packages } = data;
+	$: ({ patches, packages } = $api_patches);
 
 	let current: boolean = false;
 

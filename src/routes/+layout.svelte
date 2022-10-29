@@ -6,6 +6,13 @@
   import RouterEvents from '../data/RouterEvents';
 	import '../app.css';
 
+  import type { PageData } from './$types';
+
+  import { contributors } from "../data/api";
+
+  export let data: PageData;
+  contributors.init(data);
+
   // Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
   const show_loading_animation = derived(RouterEvents, ($event, set) => {
     if ($event.navigating) {
