@@ -29,10 +29,11 @@
 	</a>
 	<ul>
 		<Navigation href="/">Home</Navigation>
-		<Navigation href="/download">Download</Navigation>
-		<Navigation href="/docs">Docs</Navigation>
-		<Navigation href="/patches">Patches</Navigation>
-		<Navigation href="/credits">Credits</Navigation>
+		<Navigation href="/download/">Download</Navigation>
+		<Navigation href="/docs/">Docs</Navigation>
+		<Navigation href="/patches/">Patches</Navigation>
+		<Navigation href="/credits/">Credits</Navigation>
+		<Navigation href="/api-settings/">API Settings</Navigation>
 	</ul>
 	<div class="menu-btn" class:open={menuOpen} bind:this={menuBtn}>
 		<div class="menu-btn__burger" />

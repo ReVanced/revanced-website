@@ -1,11 +1,7 @@
-import type { Repository } from 'src/data/types';
+import type { PageLoad } from './$types';
 
-export type ContribData = { repositories: Repository[] };
+import { contributors } from '../data/api';
 
-export async function load({
-  fetch
-}): Promise<ContribData> {
-	const response = await fetch('https://releases.rvcd.win/contributors');
-	const data = await response.json();
-	return data;
-};
+export const prerender = true;
+
+export const load: PageLoad = contributors.page_load_impl();

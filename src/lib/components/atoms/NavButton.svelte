@@ -1,10 +1,11 @@
 <script>
   import RouterEvents from '../../../data/RouterEvents';
 	export let href = '/';
+  export let is_selected = target_url => href === target_url;
 </script>
 
 <a data-sveltekit-prefetch {href}>
-	<li class:selected={href === $RouterEvents.target_url.pathname}>
+	<li class:selected={is_selected($RouterEvents.target_url.pathname)}>
 		<slot />
 	</li>
 </a>

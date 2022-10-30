@@ -2,13 +2,14 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import type { ContribData } from '../+layout';
-
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-	// From the layout hydration. See +layout.ts
-	export let data: ContribData;
+  // Handled by `+layout.ts`.
+  import { contributors } from '../../data/api';
+
+  import type { PageData } from './$types';
+  export let data: PageData;
 </script>
 
 <main>
@@ -18,9 +19,9 @@
 			<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
 		</div>
 		<div class="contrib-grid">
-			{#each data.repositories as { contributors, name }}
+			{#each $contributors.repositories as { contributors: contribs, name }}
 				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorHost contribs={contributors} repo={name} />
+					<ContributorHost {contribs} repo={name} />
 				</div>
 			{/each}
 		</div>
