@@ -8,8 +8,11 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
+		// adapter-static has vercel detection, but that does not let you set a custom 404 page easily.
+		// Instead, we have to disable it and set trailing slash to always.
 		adapter: adapter({
-			pages: 'public',
+			pages: "public",
+			fallback: "404.html"
 		}),
 
 		trailingSlash: 'always'
