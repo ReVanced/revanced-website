@@ -14,8 +14,8 @@
 		content: '';
 		box-sizing: border-box;
 		position: fixed;
-		top: 48.25%;
-		left: 48.25%;
+		top: 50%;
+		left: 50%;
 		width: 50px;
 		height: 50px;
 		border-radius: 50%;

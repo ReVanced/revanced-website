@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+	import type { PageData } from './$types';
 
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
 	import type { CompatiblePackage } from 'src/data/types';
-  import { patches as api_patches } from '../../data/api';
+	import { patches as api_patches } from '../../data/api';
 
 	import TreeMenu from '$lib/components/molecules/TreeMenu.svelte';
 	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
@@ -13,8 +13,8 @@
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
 	export let data: PageData;
-  // Needed when someone navigates directly to the page.
-  api_patches.init(data);
+	// Needed when someone navigates directly to the page.
+	api_patches.init(data);
 
 	$: ({ patches, packages } = $api_patches);
 
@@ -31,9 +31,9 @@
 </script>
 
 <svelte:head>
-	<title>Revanced - Patches</title>
-	<meta content="Revanced - Patches" name="og:title" />
-	<meta content="Revanced - Patches" name="twitter:title" />
+	<title>ReVanced | Patches</title>
+	<meta content="ReVanced | Patches" name="og:title" />
+	<meta content="ReVanced | Patches" name="twitter:title" />
 </svelte:head>
 
 <main>

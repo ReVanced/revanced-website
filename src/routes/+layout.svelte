@@ -38,7 +38,6 @@
 	<meta name="twitter:image" itemprop="image" content="/embed.png" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="theme-color" content="#0f111a" />
-	<title>ReVanced</title>
 </svelte:head>
 
 <NavHost />

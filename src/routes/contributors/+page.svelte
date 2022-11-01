@@ -12,6 +12,12 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>ReVanced | Contributors</title>
+	<meta content="ReVanced | Contributors" name="og:title" />
+	<meta content="ReVanced | Contributors" name="twitter:title" />
+</svelte:head>
+
 <main>
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>

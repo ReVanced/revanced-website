@@ -5,6 +5,12 @@
 	import Button from '$lib/components/atoms/Button.svelte';
 </script>
 
+<svelte:head>
+	<title>ReVanced | Docs</title>
+	<meta content="ReVanced | Docs" name="og:title" />
+	<meta content="ReVanced | Docs" name="twitter:title" />
+</svelte:head>
+
 <main in:fly={{ y: 10, easing: quintOut, duration: 700 }}>
 	<div class="menu">
 		<div class="doc-section-selected">

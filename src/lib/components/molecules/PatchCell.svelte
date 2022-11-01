@@ -26,7 +26,8 @@
 					.replace(/Microg/g, 'MicroG')
 					.replace(/Hdr/g, 'HDR')
 					.replace(/Sponsorblock/g, 'SponsorBlock')
-					.replace(/Tiktok/g, 'TikTok')}
+					.replace(/Tiktok/g, 'TikTok')
+					.replace(/Vr/g, 'VR')}
 			</h1>
 		</div>
 

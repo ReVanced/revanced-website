@@ -5,6 +5,12 @@
 	import Wave from '$lib/components/atoms/Wave.svelte';
 </script>
 
+<svelte:head>
+	<title>ReVanced</title>
+	<meta content="ReVanced" name="og:title" />
+	<meta content="ReVanced" name="twitter:title" />
+</svelte:head>
+
 <main>
 	<div class="wrap">
 		<div class="wrappezoid">

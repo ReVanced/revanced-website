@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Contributor, Repository } from 'src/data/types';
+	import type { Repository } from 'src/data/types';
 
 	export let repositories: Repository[];
 </script>
@@ -24,10 +24,11 @@
 			<a href="/download"><h6>Download</h6></a>
 			<a href="/docs"><h6>Docs</h6></a>
 			<a href="/patches"><h6>Patches</h6></a>
-			<a href="/credits"><h6>Credits</h6></a>
+			<a href="/contributors"><h6>Contributors</h6></a>
 		</div>
-		<div class="link-column">
-			<h5>Repos</h5>
+		{#if repositories.length}
+			<div class="link-column">
+				<h5>Repos</h5>
 				{#each repositories as { name }}
 					<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 						<div>
@@ -42,7 +43,8 @@
 						</div>
 					</a>
 				{/each}
-		</div>
+			</div>
+		{/if}
 		<div class="link-column">
 			<!-- to replace -->
 			<h5>Socials</h5>
@@ -57,8 +59,6 @@
 </footer>
 
 <style>
-
-
 	footer {
 		margin: 4rem 0 5rem 0;
 		margin-inline: auto;
@@ -95,7 +95,7 @@
 
 	.links-container {
 		display: flex;
-		gap: 5rem;
+		gap: 4rem;
 	}
 
 	.link-column {
