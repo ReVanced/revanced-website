@@ -2,6 +2,7 @@
 	import Navigation from '../atoms/NavButton.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import Button from '../atoms/Button.svelte';
 
 	let menuBtn: HTMLElement;
 	let menuOpen = false;
@@ -19,21 +20,26 @@
 </script>
 
 <nav>
-	<a href="/">
-		<div class="logo">
-			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-			{#if $page.url.pathname !== '/'}
-				<h1><span>Re</span>Vanced</h1>
-			{/if}
-		</div>
-	</a>
+	<div class="left-side">
+		<a href="/">
+			<div class="logo">
+				<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
+			</div>
+		</a>
+		<ul>
+			<Navigation href="/">Home</Navigation>
+			<Navigation href="/download/">Download</Navigation>
+			<Navigation href="/docs/">Docs</Navigation>
+			<Navigation href="/patches/">Patches</Navigation>
+		</ul>
+	</div>
 	<ul>
-		<Navigation href="/">Home</Navigation>
-		<Navigation href="/download/">Download</Navigation>
-		<Navigation href="/docs/">Docs</Navigation>
-		<Navigation href="/patches/">Patches</Navigation>
-		<Navigation href="/credits/">Credits</Navigation>
-		<Navigation href="/api-settings/">API Settings</Navigation>
+		<Navigation href="/contributors/">
+			<img src="../icons/contrib.svg" alt="Contributors"/>
+		</Navigation>
+		<Navigation href="/api-settings/">
+			<img src="../icons/settings.svg" alt="Settings"/>
+		</Navigation>
 	</ul>
 	<div class="menu-btn" class:open={menuOpen} bind:this={menuBtn}>
 		<div class="menu-btn__burger" />
@@ -77,22 +83,16 @@
 		align-items: center;
 	}
 
-	h1 {
-		display: inline-block;
-		margin-left: 1rem;
-		font-size: 1.75rem;
-		letter-spacing: -0.04em;
-		height: 90%;
+	.left-side {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 2.5rem;
 	}
 
-	h1 span {
-		color: var(--accent-color);
-	}
 
-	@media screen and (max-width: 400px) {
-		h1 {
-			display: none;
-		}
+	img {
+		height: 20px;
 	}
 
 	@media screen and (max-width: 768px) {

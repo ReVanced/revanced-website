@@ -15,7 +15,6 @@
 		border: var(--grey-six);
 		text-align: center;
 		list-style: none;
-		display: inline-block;
 		position: relative;
 		font-weight: 500;
 		font-size: 0.9rem;
@@ -25,6 +24,9 @@
 		transition-duration: 0.25s;
 		padding: 10px 25px;
 		border-radius: 200px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	a {
