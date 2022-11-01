@@ -32,3 +32,13 @@ export interface PatchOption {
   required:    boolean;
   choices:     string[];
 }
+
+export interface Tool {
+  repository: string
+  version: string
+  timestamp: string
+  name: string
+  size?: string
+  browser_download_url: string
+  content_type: string
+}

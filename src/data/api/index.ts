@@ -120,13 +120,15 @@ export class API<T> implements Readable<T> {
 }
 
 // API Endpoints
-import type { Patch, Repository } from '../types';
+import type { Patch, Repository, Tool } from '../types';
 import { dev_log } from "$lib/utils";
 
 export type ContribData = { repositories: Repository[] };
 export type PatchesData = { patches: Patch[]; packages: string[] };
+export type ToolsData = { tools: Tool[] };
 
 export const contributors = new API<ContribData>("contributors", undefined, { repositories: [] });
+export const tools = new API<ToolsData>("tools", undefined, { tools: [] } )
 
 export const patches = new API<PatchesData>("patches", patches => {
 	let packages: string[] = [];
