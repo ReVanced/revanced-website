@@ -1,0 +1,13 @@
+name: refresh
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Refresh the site prerender with the latest API data
+        run: |
+          curl -X POST '${{ secrets.DEPLOY_HOOK }}'
