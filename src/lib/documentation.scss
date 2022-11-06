@@ -1,0 +1,45 @@
+#markup-content {
+    /* Defaults for text */
+    color: var(--white);
+    font-weight: 300;
+    font-size: 1rem;
+    letter-spacing: 0.02rem;
+    padding: 100px 30px 0px 30px;
+
+    a {
+        text-decoration: none;
+        color: var(--white);
+        border-bottom: 1.5px solid var(--accent-color);
+        padding: 0px 5px;
+        transition: all 0.4s var(--bezier-one);
+    }
+
+    a:hover {
+        background-color: var(--accent-color);
+        border-radius: 6px;
+        color: var(--grey-four);
+    }
+
+    code {
+        background-color: var(--grey-six);
+        border-radius: 4px;
+        padding: 2px;
+    }
+
+    h4 {
+        margin-bottom: 0.5rem;
+    }
+
+    h5 {
+        color: var(--accent-color);
+    }
+
+    /* Markup processors output this for bold text, but css spec is goofy aah */
+    strong {
+        font-weight: bold;
+    }
+
+    ul {
+        padding-left: 2rem;
+    }
+}

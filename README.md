@@ -1,22 +1,18 @@
-# create-svelte
+# ReVanced Website
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The official ReVanced Website.
 
-## Creating a project
+## Documentation
 
-If you're seeing this, you've probably already done this step. Congrats!
+The documentation you see on the live website is generated from a collection of markup files found in [this git repository](https://github.com/revanced/revanced-documentation). The documentation "generator" currently supports asciidoc and markdown.
 
-```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
-```
+It looks for markup files in the `testing-docs` folder by default, but you can specify a different path by changing the `REVANCED_DOCS_FOLDER` environment variable.
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies with `npm install` (or `pnpm install`).
+
+Start a development server by running:
 
 ```bash
 npm run dev
@@ -27,12 +23,10 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
+To create a production build, run:
 
 ```bash
 npm run build
 ```
 
 You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
