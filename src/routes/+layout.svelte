@@ -30,14 +30,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="og:title" content="ReVanced" />
-	<meta name="og:image" itemprop="image" content="/embed.png" />
-	<meta
-		property="og:description"
-		content="An extensible framework for building application mods."
-	/>
+	<meta content="/embed.png" property="og:image" />
+	<meta property="og:description" content="Continuing the legacy of Vanced." />
 	<meta name="twitter:image" itemprop="image" content="/embed.png" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="theme-color" content="#0f111a" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="theme-color" content="#9FD5FF" />
 </svelte:head>
 
 <NavHost />
