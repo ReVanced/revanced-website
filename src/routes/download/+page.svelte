@@ -6,13 +6,14 @@
 
 	export let data: PageData;
 	api_tools.init(data);
-	$: tools = data.tools;
+
+  $: manager = $api_tools.tools["revanced/revanced-manager"];
 </script>
 
 <div class="wrapper">
 	<h1>ReVanced Manager</h1>
 	<h6>Patch your favourite apps, on-device.</h6>
-	<Button kind="primary" icon="download" href={tools[5].browser_download_url}>{tools[5].version}</Button>
+	<Button kind="primary" icon="download" href={manager.assets[0].url}>{manager.version}</Button>
 	<img src="../manager_two.png" alt="Manager Screenshot"/>
 </div>
 

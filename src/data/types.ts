@@ -33,12 +33,17 @@ export interface PatchOption {
   choices:     string[];
 }
 
+export interface Asset {
+  name: string;
+  size: string|null;
+  url: string;
+  content_type: string;
+};
+
 export interface Tool {
-  repository: string
-  version: string
-  timestamp: string
-  name: string
-  size?: string
-  browser_download_url: string
-  content_type: string
-}
+  repository: string;
+  version: string;
+  timestamp: string;
+  assets: Asset[];
+};
+

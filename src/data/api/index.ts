@@ -125,10 +125,38 @@ import { dev_log } from "$lib/utils";
 
 export type ContribData = { repositories: Repository[] };
 export type PatchesData = { patches: Patch[]; packages: string[] };
-export type ToolsData = { tools: Tool[] };
+export type ToolsData = { tools: { [repo: string]: Tool } };
 
 export const contributors = new API<ContribData>("contributors", undefined, { repositories: [] });
-export const tools = new API<ToolsData>("tools", undefined, { tools: [] } )
+export const tools = new API<ToolsData>("tools", json => {
+  // The API returns data in a weird shape. Make it easier to work with.
+  let map: Map<string, Tool> = new Map();
+  for (const tool of json["tools"]) {
+    const repo: string = tool.repository;
+
+    if (!map.has(repo)) {
+      map.set(repo, {
+        version: tool.version,
+        repository: repo,
+        // Just use the timestamp of the first one we find.
+        timestamp: tool.timestamp,
+        assets: []
+      });
+    }
+
+    let value = map.get(repo);
+    value.assets.push({
+      name: tool.name,
+      size: tool.size,
+      url: tool.browser_download_url,
+      content_type: tool.content_type
+    });
+
+    map.set(repo, value);
+  }
+
+  return { tools: Object.fromEntries(map) };
+});
 
 export const patches = new API<PatchesData>("patches", patches => {
 	let packages: string[] = [];
