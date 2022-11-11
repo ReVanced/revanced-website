@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -11,10 +9,6 @@
 	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
 	import PatchCell from '$lib/components/molecules/PatchCell.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
-
-	export let data: PageData;
-	// Needed when someone navigates directly to the page.
-	api_patches.init(data);
 
 	$: ({ patches, packages } = $api_patches);
 
@@ -55,7 +49,7 @@
 		{/each}
 	</div>
 </main>
-<Footer {...data} />
+<Footer />
 
 <style>
 	main {

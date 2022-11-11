@@ -5,11 +5,7 @@
 	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-  // Handled by `+layout.ts`.
-  import { contributors } from '../../data/api';
-
-  import type { PageData } from './$types';
-  export let data: PageData;
+  import { repositories } from '../../data/api';
 </script>
 
 <svelte:head>
@@ -25,7 +21,7 @@
 			<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
 		</div>
 		<div class="contrib-grid">
-			{#each $contributors.repositories as { contributors: contribs, name }}
+			{#each $repositories as { contributors: contribs, name }}
 				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 					<ContributorHost {contribs} repo={name} />
 				</div>
@@ -34,7 +30,7 @@
 	</div>
 </main>
 
-<Footer {...data} />
+<Footer />
 
 <style>
 	.contrib-grid {
