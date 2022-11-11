@@ -1,13 +1,9 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { tools as api_tools } from '../../data/api';
+	import { tools } from '../../data/api';
 	import Button from '$lib/components/atoms/Button.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
 
-	export let data: PageData;
-	api_tools.init(data);
-
-  $: manager = $api_tools.tools["revanced/revanced-manager"];
+  $: manager = $tools["revanced/revanced-manager"];
 </script>
 
 <div class="wrapper">
@@ -17,7 +13,7 @@
 	<img src="../manager_two.png" alt="Manager Screenshot"/>
 </div>
 
-<Footer {...data}/>
+<Footer />
 
 <style>
 

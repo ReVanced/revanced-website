@@ -2,73 +2,31 @@ import type { Readable, Subscriber, Unsubscriber, Writable } from "svelte/store"
 import { writable } from "svelte/store";
 import { error } from "@sveltejs/kit";
 
-import { prerendering, browser } from "$app/environment";
+import { prerendering, browser, dev } from "$app/environment";
 
 import * as settings from "./settings";
 import * as cache from "./cache";
 
-
 export class API<T> implements Readable<T> {
   private store: Writable<T>;
-  // Note: transform function will not be called on cache hit.
-  private transform: (v: any) => T;
-  // True if we have or are about to request data from the possibly user-specified API.
-  private requested_from_api = false;
+  // True if we have or are about to request data from the API.
+  has_requested: boolean;
 
-  // If `transform_fn_or_key` is unspecified, the data will be returned from the API as is.
-  // If `transform_fn_or_key` is a function, the JSON data will pass through it.
-  // If `transform_fn_or_key` is a string, the JSON data will be assigned to a prop on an object.
-  // If `load_fn_fallback` is not specified, the load function will instead cause HTTP error 500 if the API request fails (it will always throw if prerendering).
-  constructor(public readonly endpoint: string, transform_fn_or_key?: ((v: any) => T) | string, private load_fn_fallback?: T) {
-    if (transform_fn_or_key === undefined) {
-      this.transform = (v) => v as T;
-    } else if (typeof transform_fn_or_key != "string") {
-      // `transform_fn_or_key` is function.
-      this.transform = transform_fn_or_key;
-    } else {
-      // `transform_fn_or_key` is string.
-      this.transform = (v) => {
-        let data = {};
-        data[transform_fn_or_key] = v;
-        return data as T;
-      };
-    }
+  // `transform` will transform the data received from the API.
+  constructor(public readonly endpoint: string, private readonly default_value: T, private readonly transform: ((v: any) => T) = (v) => v as T) {
+    // Initialize with cached data if possible.
+    const cached_data = cache.get(this.endpoint);
+    this.has_requested = cached_data !== null;
+
+    this.store = writable(cached_data || this.default_value);
   }
 
-  private url(): string {
-    let url = `${settings.api_base_url()}/${this.endpoint}`;
-
-    if (prerendering) {
-      url += '?cacheBypass=';
-      // Just add some random stuff to the string. Doesn't really matter what we add.
-      // This is here to make sure we bypass the cache while prerendering.
-      for (let i = 0; i < 6; i++) {
-        url += Math.floor(Math.random() * 10).toString();
-      }
-    }
-
-    return url;
+  private url() {
+    return `${settings.api_base_url()}/${this.endpoint}`;
   }
 
-  initialized() {
-    return this.store !== undefined;
-  }
-
-  // Initialize if needed
-  init(data: T) {
-    if (this.initialized()) {
-      return;
-    }
-
-    this.store = writable(data);
-  }
-
-  // Request data, transform, cache and initialize if necessary.
-  async request(fetch_fn = fetch): Promise<T> {
-    if (browser) {
-      this.requested_from_api = true;
-    }
-
+  // Please don't call this directly
+  private async _update(fetch_fn: typeof fetch) {
     // Try to get data from the cache.
     let data = cache.get(this.endpoint);
 
@@ -81,38 +39,51 @@ export class API<T> implements Readable<T> {
       cache.update(this.endpoint, data);
     }
 
-    // Initialize with the data. Applicable when page load function runs on client.
-    this.init(data);
+    this.store.set(data);
+  }
 
-    // store_in_cache(data)...
+  // Retrieve data and update.
+  private update(fetch_fn = fetch) {
+    // Make sure we set this immediately outside of the async function to avoid JS event loop weirdness.
+    this.has_requested = true;
+    return this._update(fetch_fn);
+  }
 
-    return data;
+  // Start retrieving data if needed.
+  retrieve_if_needed() {
+    if (!this.has_requested) {
+      return this.update();
+    }
+    return Promise.resolve()
   }
 
   // Implements the load function found in `+page/layout.ts` files.
   page_load_impl() {
     return async ({ fetch }) => {
+      if (prerendering) {
+        return {};
+      }
+
+      // Might be better to actually return some data from the load function and use that on the client.
+      if (!(dev || browser || prerendering)) {
+        throw new Error("The API client is not optimized for production server-side rendering. Please change that :)");
+      }
+
       try {
-        return await this.request(fetch);
+        await this.update(fetch);
+        return {};
       } catch(e) {
         console.error(e);
-        if (this.load_fn_fallback !== undefined && !prerendering) {
-          return this.load_fn_fallback;
-        }
-        throw error(500, "API Request Error");
+        throw error(504, "API Request Error");
       }
     };
   }
 
   // Implement Svelte store.
   subscribe(run: Subscriber<T>, invalidate?: any): Unsubscriber {
-    if (!this.initialized()) {
-      // Make sure you call <api>.init() with data from the load() function of the page you are working on or a layout above it.
-      throw Error(`API "${this.endpoint}" has not been initialized yet.`);
-    }
     // Make sure we have up-to-date data from the API.
-    if (!this.requested_from_api && browser) {
-      this.request().then(this.store.set);
+    if (browser) {
+      this.retrieve_if_needed();
     }
 
     return this.store.subscribe(run, invalidate);
@@ -123,12 +94,28 @@ export class API<T> implements Readable<T> {
 import type { Patch, Repository, Tool } from '../types';
 import { dev_log } from "$lib/utils";
 
-export type ContribData = { repositories: Repository[] };
+export type ReposData = Repository[];
 export type PatchesData = { patches: Patch[]; packages: string[] };
-export type ToolsData = { tools: { [repo: string]: Tool } };
+export type ToolsData = { [repo: string]: Tool };
 
-export const contributors = new API<ContribData>("contributors", undefined, { repositories: [] });
-export const tools = new API<ToolsData>("tools", json => {
+export const repositories = new API<ReposData>("contributors", [], json => json.repositories);
+
+// It needs to look this way to not break everything.
+const tools_placeholder: ToolsData = {
+  "revanced/revanced-manager": {
+    version: "v0.0.0",
+    timestamp: "",
+    repository: "",
+    assets: [{
+      url: "",
+      name: "",
+      content_type: "",
+      size: null,
+    }]
+  }
+}
+
+export const tools = new API<ToolsData>("tools", tools_placeholder, json => {
   // The API returns data in a weird shape. Make it easier to work with.
   let map: Map<string, Tool> = new Map();
   for (const tool of json["tools"]) {
@@ -155,10 +142,10 @@ export const tools = new API<ToolsData>("tools", json => {
     map.set(repo, value);
   }
 
-  return { tools: Object.fromEntries(map) };
+  return Object.fromEntries(map);
 });
 
-export const patches = new API<PatchesData>("patches", patches => {
+export const patches = new API<PatchesData>("patches", { patches: [], packages: [] }, patches => {
 	let packages: string[] = [];
 
 	// gets packages

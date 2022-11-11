@@ -1,7 +1,5 @@
 <script lang="ts">
-	import type { Repository } from 'src/data/types';
-
-	export let repositories: Repository[];
+import { repositories } from "../../../data/api";
 </script>
 
 <hr />
@@ -26,25 +24,23 @@
 			<a href="/patches"><h6>Patches</h6></a>
 			<a href="/contributors"><h6>Contributors</h6></a>
 		</div>
-		{#if repositories.length}
-			<div class="link-column">
-				<h5>Repos</h5>
-				{#each repositories as { name }}
-					<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
-						<div>
-							<h6>
-								{name
-									.replace(/-/g, ' ')
-									.replace(/revanced\/revanced/g, '')
-									.replace(/cli/g, 'CLI')
-									.replace(/api/g, 'API')
-									.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase())}
-							</h6>
-						</div>
-					</a>
-				{/each}
-			</div>
-		{/if}
+		<div class="link-column">
+			<h5>Repos</h5>
+			{#each $repositories as { name }}
+				<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
+					<div>
+						<h6>
+							{name
+								.replace(/-/g, ' ')
+								.replace(/revanced\/revanced/g, '')
+								.replace(/cli/g, 'CLI')
+								.replace(/api/g, 'API')
+								.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase())}
+						</h6>
+					</div>
+				</a>
+			{/each}
+		</div>
 		<div class="link-column">
 			<!-- to replace -->
 			<h5>Socials</h5>
