@@ -14,7 +14,7 @@
 
 	let current: boolean = false;
 
-	function search(findTerm: string | boolean, array: CompatiblePackage[]) {
+	function search(findTerm: string | boolean, array: any) {
 		for (let i = 0; i < array.length; i++) {
 			if (array[i].name === findTerm) {
 				return true;
@@ -39,10 +39,10 @@
 		</TreeMenu>
 	</aside>
 
-	<div class="patches-container">
-		{#each patches as patch, i}
+	<div class="patches-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		{#each patches as patch}
 			{#if search(current, patch.compatiblePackages) || !current}
-				<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: -(300 * 0.85 ** i) + 300 }}>
+				<div>
 					<PatchCell bind:current {patch} />
 				</div>
 			{/if}
@@ -54,7 +54,7 @@
 <style>
 	main {
 		margin-inline: auto;
-		width: min(95%, 100rem);
+		padding: 0 2rem;
 		display: grid;
 		grid-template-columns: 300px 3fr;
 		gap: 1.5rem;

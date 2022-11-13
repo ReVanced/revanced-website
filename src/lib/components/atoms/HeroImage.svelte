@@ -2,12 +2,14 @@
 </script>
 
 <div class="hero-img">
-	<img src="/manager.png" alt="Screenshot of ReVanced Manager" />
+	<img src="/manager_two.png" alt="Screenshot of ReVanced Manager" />
 </div>
 
 <style>
 	img {
 		height: 100%;
+		border-radius: 2rem;
+
 	}
 	.hero-img {
 		overflow: hidden;
@@ -16,19 +18,21 @@
 		z-index: -1;
 		width: auto;
 		float: right;
-		border-radius: 2rem;
-		transform: rotate(3.7deg);
-		box-shadow: 0 1rem 5rem 0 #0f111ad4;
+		padding: 0.75rem 0.75rem;
+		border-radius: 2.5rem;
+		background-color: var(--grey-two);
+		backdrop-filter: blur(15px);
+		-webkit-backdrop-filter: blur(15px);
+		box-shadow:0 50px 100px -20px rgba(16, 22, 31, 0.25), 0 30px 60px -30px rgba(18, 19, 22, 0.767), inset 0 -2px 20px 0 rgba(20, 21, 23, 0.598);
 		user-select: none;
+		
 	}
 	@media (max-width: 1700px) {
 		.hero-img {
-			border-radius: 3vh;
 			position: fixed;
-			height: 90vh;
-			top: 90px;
-			right: 7.5%;
-			transform: rotate(3.7deg) translateY(5%);
+			height: 100vh;
+			top: 115px;
+			right: 6rem;
 		}
 	}
 </style>

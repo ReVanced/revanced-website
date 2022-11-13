@@ -29,7 +29,7 @@
 		<ul>
 			<Navigation href="/">Home</Navigation>
 			<Navigation href="/download">Download</Navigation>
-			<Navigation is_selected={target => target.startsWith("/docs")} href="/docs">Docs</Navigation>
+			<!-- <Navigation is_selected={target => target.startsWith("/docs")} href="/docs">Docs</Navigation> -->
 			<Navigation href="/patches">Patches</Navigation>
 		</ul>
 	</div>
@@ -116,26 +116,24 @@
 		width: 80px;
 		height: 60px;
 		cursor: pointer;
-		transition: all 0.5s ease-in-out;
-		background: var(--grey-one);
-		border-radius: 3rem;
+		transition: all 0.5s var(--bezier-one);
 	}
 	.menu-btn__burger {
-		width: 30px;
-		height: 3px;
-		background: #fff;
-		border-radius: 5px;
-		transition: all 0.5s ease-in-out;
+		width: 25px;
+		height: 2px;
+		border-radius: 50px;
+		background: var(--grey-five);
+		transition: all 0.5s var(--bezier-one);
 	}
 	.menu-btn__burger::before,
 	.menu-btn__burger::after {
 		content: '';
 		position: absolute;
-		width: 30px;
-		height: 3px;
-		background: #fff;
-		border-radius: 5px;
-		transition: all 0.5s ease-in-out;
+		width: 25px;
+		height: 2px;
+		border-radius: 50px;
+		background: var(--grey-five);
+		transition: all 0.5s var(--bezier-one);
 	}
 	.menu-btn__burger::before {
 		transform: translateY(-8px);
@@ -145,14 +143,14 @@
 	}
 	/* ANIMATION */
 	.menu-btn.open .menu-btn__burger {
-		transform: translateX(-50px);
+		transform: translateX(-20px);
 		background: transparent;
 		box-shadow: none;
 	}
 	.menu-btn.open .menu-btn__burger::before {
-		transform: rotate(45deg) translate(35px, -35px);
+		transform: rotate(45deg) translate(15px, -15px);
 	}
 	.menu-btn.open .menu-btn__burger::after {
-		transform: rotate(-45deg) translate(35px, 35px);
+		transform: rotate(-45deg) translate(15px, 15px);
 	}
 </style>

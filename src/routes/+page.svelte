@@ -3,6 +3,7 @@
 	import Home from '$lib/components/organisms/Home.svelte';
 	import SocialHost from '$lib/components/molecules/SocialHost.svelte';
 	import Wave from '$lib/components/atoms/Wave.svelte';
+	import TerminalWindow from '$lib/components/atoms/TerminalWindow.svelte';
 </script>
 
 <svelte:head>
@@ -16,6 +17,7 @@
 		<div class="wrappezoid">
 			<Home />
 			<div id="heroimg"><HeroImage /></div>
+			<!-- <TerminalWindow/> -->
 		</div>
 	</div>
 	<SocialHost />

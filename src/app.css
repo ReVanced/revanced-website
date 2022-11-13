@@ -19,7 +19,6 @@ html {
 body {
     margin: 0;
     padding: 0;
-    line-height: 1.4;
     background-color: var(--bg-color);
 }
 
@@ -38,20 +37,19 @@ body {
     --white: #fff;
     --accent-color: #9fd5ff;
     --accent-color-two: hsl(207, 65%, 90%);
-    --bg-color: hsl(240, 5%, 11%);
+    --bg-color: hsl(240, 2%, 11%);
     --grey-one: #252b31;
     --grey-two: #28313b;
     --grey-three: #373e4d;
     --grey-four: #182244;
     --grey-five: hsl(208, 30%, 75%);
-    --grey-six: hsla(223, 14%, 15%, 0.655);
+    --grey-six: hsla(220, 12%, 15%, 0.655);
     --grey-seven: #535563;
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 ::selection {
     background: var(--grey-six);
-    color: var(--white);
 }
 
 /*-----headings-----*/
@@ -59,14 +57,16 @@ body {
 h1 {
     color: var(--white);
     font-weight: 700;
-
     font-size: 1.5rem;
+    color: var(--white);
+    font-weight: 700;
+    letter-spacing: -0.04em;
 }
 
 h2 {
     color: var(--grey-five);
     font-weight: 400;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 h3 {

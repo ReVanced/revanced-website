@@ -4,7 +4,7 @@
 	import type { CompatiblePackage, Patch } from 'src/data/types';
 
 	export let patch: Patch;
-	export let current: boolean;
+	export let current;
 	const hasPatchOptions = !!patch.options.length;
 	let expanded: boolean = false;
 </script>
@@ -38,15 +38,13 @@
 
 	<div class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
-			{#if current === false}
-				<a
-					href="https://play.google.com/store/apps/details?id={pkg.name}"
-					target="_blank"
-					rel="noreferrer"
-				>
-					<h2>📦 {pkg.name}</h2>
-				</a>
-			{/if}
+			<a
+				href="https://play.google.com/store/apps/details?id={pkg.name}"
+				target="_blank"
+				rel="noreferrer"
+			>
+				<h2>📦 {pkg.name}</h2>
+			</a>
 		{/each}
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages[0].versions.length}
@@ -83,6 +81,7 @@
 		margin-right: 0.5rem;
 		font-size: 1.25rem;
 		color: var(--accent-color-two);
+		letter-spacing: normal;
 	}
 
 	h2 {
@@ -103,9 +102,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.25rem;
-		margin-bottom: 0.5rem;
-		margin-left: -0.2rem;
-		margin-top: 0.5rem;
+		margin: 0.3rem 0rem;
 		width: 100%;
 	}
 
@@ -125,7 +122,7 @@
 	.patch-container {
 		transition: all 2s var(--bezier-one);
 		background-color: var(--grey-six);
-		padding: 1.5rem;
+		padding: 1.25rem;
 		border-radius: 8px;
 	}
 
@@ -161,6 +158,7 @@
 		padding: 1rem;
 	}
 
+	/* thanks piknik */
 	.option + .option {
 		border-top: 1px solid var(--grey-three);
 	}

@@ -4,9 +4,10 @@
 	export let href = '#';
 	export let maxWidth = false;
 	export let icon = '';
+	export let target = '';
 </script>
 
-<a {href} rel="noreferrer">
+<a {href} {target}>
 	<div class={type} style="width: {maxWidth ? '100%' : 'max-content'}">
 		<img src="../icons/{icon}.svg" alt={icon} />
 		<slot />
@@ -21,13 +22,13 @@
 
 	div,
 	.button-secondary {
-		font-size: 1.1rem;
-		height: 60px;
+		min-width: max-content;
+		font-size: 1rem;
 		color: var(--white);
 		font-weight: 600;
 		border: none;
-		border-radius: 16px;
-		padding: 16px 40px;
+		border-radius: 12px;
+		padding: 1rem 1.75rem;
 		display: block;
 		cursor: pointer;
 		background-color: var(--grey-two);
@@ -42,9 +43,10 @@
 	}
 
 	div:hover {
-		transform: translateY(-4%);
-		filter: brightness(90%);
+		filter: brightness(85%);
 	}
+
+
 
 	div,
 	.button-secondary {

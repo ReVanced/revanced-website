@@ -49,6 +49,7 @@
 	h2 {
 		font-size: 1rem;
 		color: var(--grey-four);
+		text-align: center;
 	}
 
 	.text-container {
@@ -76,5 +77,11 @@
 
 	a:hover::after {
 		transform: translateX(5px);
+	}
+
+	@media screen and (max-width: 768px) {
+		h1 {
+			font-size: 2rem;
+		}
 	}
 </style>

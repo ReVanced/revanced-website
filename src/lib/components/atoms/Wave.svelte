@@ -9,7 +9,7 @@
 <style>
 	svg {
 		position: fixed;
-		z-index: -2;
+		z-index: -999;
 		bottom: 0;
 		height: 35vh;
 		width: 100%;

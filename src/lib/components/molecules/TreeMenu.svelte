@@ -38,7 +38,4 @@
 		word-break: break-all;
 	}
 
-	/* .package-list:has(.loading) {
-        padding-top: 7.5rem;
-    } */
 </style>

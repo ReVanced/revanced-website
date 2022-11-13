@@ -11,7 +11,7 @@ import { repositories } from "../../../data/api";
 			<h1>
 				<span>Re</span>Vanced
 			</h1>
-			<h6>Copyright © 2022, we are very legal</h6>
+			<h6>Copyright © 2022</h6>
 		</div>
 	</section>
 
@@ -20,7 +20,7 @@ import { repositories } from "../../../data/api";
 			<h5>Pages</h5>
 			<a href="/"><h6>Home</h6></a>
 			<a href="/download"><h6>Download</h6></a>
-			<a href="/docs"><h6>Docs</h6></a>
+			<!-- <a href="/docs"><h6>Docs</h6></a> -->
 			<a href="/patches"><h6>Patches</h6></a>
 			<a href="/contributors"><h6>Contributors</h6></a>
 		</div>
@@ -44,7 +44,7 @@ import { repositories } from "../../../data/api";
 		<div class="link-column">
 			<!-- to replace -->
 			<h5>Socials</h5>
-			<a href="/"><h6>Github</h6></a>
+			<a href="/"><h6>GitHub</h6></a>
 			<a href="/"><h6>Discord</h6></a>
 			<a href="/"><h6>Reddit</h6></a>
 			<a href="/"><h6>Twitter</h6></a>
@@ -59,6 +59,7 @@ import { repositories } from "../../../data/api";
 		margin: 4rem 0 5rem 0;
 		margin-inline: auto;
 		display: flex;
+		gap: 2rem;
 		justify-content: space-between;
 		width: min(85%, 90rem);
 	}
@@ -91,12 +92,28 @@ import { repositories } from "../../../data/api";
 
 	.links-container {
 		display: flex;
-		gap: 4rem;
+		gap: 5rem;
+
 	}
 
 	.link-column {
 		display: flex;
 		gap: 0.5rem;
 		flex-direction: column;
+	}
+
+
+	@media screen and (max-width: 700px) {
+		footer {
+			flex-direction: column;
+		}
+
+		.links-container {
+			display: grid;
+			gap: 3rem;
+			grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+
+		}
+
 	}
 </style>
