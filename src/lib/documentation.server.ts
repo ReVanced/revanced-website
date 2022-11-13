@@ -58,7 +58,7 @@ if (docs_folder === undefined) {
   docs_folder = "testing-docs";
 }
 
-const ignored_items = ["assets", "README.md"];
+const ignored_items = ["assets"];
 
 /// Utility functions
 
@@ -84,9 +84,9 @@ function get_slug_of_node(node: DocsTreeNode): string {
 // Get a document. Returns null if it does not exist.
 export function get(slug: string): Document|null {
   let target = path.join(docs_folder, slug);
-  // Handle index file for folder.
+  // Handle index (readme) file for folder.
   if (exists(target) && is_directory(target)) {
-    target += "/index";
+    target += "/README";
   }
 
   const dir = path.dirname(target);
@@ -129,9 +129,9 @@ function process_file(fname: string): DocumentInfo {
     .substring(`${docs_folder}/`.length, fname.length - (get_ext(fname).length + 1))
     .split("/");
 
-  // Remove `index` suffix if present.
-  const last_index = parts.length - 1;
-  if (parts[last_index] == "index") {
+  // Remove `README` suffix if present.
+  const last_part_index = parts.length - 1;
+  if (parts[last_part_index] == "README") {
     parts.pop();
   }
 
@@ -142,7 +142,7 @@ function process_file(fname: string): DocumentInfo {
 }
 
 // Returns a document tree.
-function process_folder(dir: string): DocsTree {
+function process_folder(dir: string): DocsTree|null {
   let tree: DocsTree = {
     index: null,
     nodes: []
@@ -168,13 +168,17 @@ function process_folder(dir: string): DocsTree {
       }
 
       for (const ext of supported_filetypes) {
-        if (item == `index.${ext}`) {
+        if (item == `README.${ext}`) {
           is_index_file = true;
         }
       }
     }
 
     const node = is_dir ? process_folder(itemPath) : process_file(itemPath);
+    if (node === null) {
+      console.error(`The ${itemPath} directory does not have a README/index file! ignoring...`)
+      continue;
+    }
 
     if (is_index_file) {
       tree.index = node;
@@ -184,7 +188,7 @@ function process_folder(dir: string): DocsTree {
   }
 
   if (tree.index === null) {
-    throw Error(`${dir} has no index file.`);
+    return null;
   }
 
   // `numeric: true` because we want to be able to specify
@@ -198,5 +202,9 @@ function process_folder(dir: string): DocsTree {
 
 // Returns the document tree.
 export function index_content(): DocsTree {
-  return process_folder(docs_folder);
+  const tree = process_folder(docs_folder);
+  if (tree === null) {
+    throw new Error("Root must have index (README) file.")
+  }
+  return tree;
 }
