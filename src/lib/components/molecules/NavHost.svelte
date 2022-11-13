@@ -29,7 +29,10 @@
 		<ul>
 			<Navigation href="/">Home</Navigation>
 			<Navigation href="/download">Download</Navigation>
-			<!-- <Navigation is_selected={target => target.startsWith("/docs")} href="/docs">Docs</Navigation> -->
+      <div hidden>
+        <!-- This is just temporary so the build doesn't fail -->
+			  <Navigation is_selected={target => target.startsWith("/docs")} href="/docs">Docs</Navigation>
+      </div>
 			<Navigation href="/patches">Patches</Navigation>
 		</ul>
 	</div>
