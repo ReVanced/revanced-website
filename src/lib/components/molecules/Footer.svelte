@@ -48,12 +48,12 @@
 		<div class="link-column">
 			<!-- to replace -->
 			<h5>Socials</h5>
-			<a href="/"><h6>Github</h6></a>
-			<a href="/"><h6>Discord</h6></a>
-			<a href="/"><h6>Reddit</h6></a>
-			<a href="/"><h6>Twitter</h6></a>
-			<a href="/"><h6>Telegram</h6></a>
-			<a href="/"><h6>Video Site</h6></a>
+			<a href="https://github.com/revanced" target="_blank"><h6>Github</h6></a>
+			<a href="https://revanced.app/discord" target="_blank"><h6>Discord</h6></a>
+			<a href="https://reddit.com/r/revancedapp" target="_blank"><h6>Reddit</h6></a>
+			<a href="https://twitter.com/revancedapp" target="_blank"><h6>Twitter</h6></a>
+			<a href="https://t.me/app_revanced" target="_blank"><h6>Telegram</h6></a>
+			<a href="https://www.youtube.com/c/ReVanced" target="_blank"><h6>YouTube</h6></a>
 		</div>
 	</section>
 </footer>
