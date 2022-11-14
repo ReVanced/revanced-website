@@ -8,7 +8,7 @@
 <section class="error">
 	<h1>{status}</h1>
 	{#if status == 404}
-		<p>That page received a cease and desist letter from a multi-billion dollar tech company.</p>
+		<p>ReVanced Website is still a work in progress.</p>
 		<br />
 		<Navigation href="/" is_selected={() => true}>Home</Navigation>
 	{:else}

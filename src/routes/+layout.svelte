@@ -30,8 +30,6 @@
 	<meta name="theme-color" content="#9FD5FF" />
 </svelte:head>
 
-<NavHost />
-
 {#if $show_loading_animation}
 	<Spinner />
 {:else}

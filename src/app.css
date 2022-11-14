@@ -30,8 +30,12 @@ body {
 .wrapper {
     margin-inline: auto;
     width: min(90%, 100rem);
-    margin-top: 7rem;
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
 
 :root {
     --white: #fff;
