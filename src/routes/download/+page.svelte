@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { tools } from '../../data/api';
+
 	import Button from '$lib/components/atoms/Button.svelte';
 	import Footer from '$lib/components/molecules/Footer.svelte';
+  import Picture from '$lib/components/atoms/Picture.svelte';
+
+  import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
 	$: manager = $tools['revanced/revanced-manager'];
 </script>
@@ -10,7 +14,9 @@
 	<h1>ReVanced <span>Manager</span></h1>
 	<h6>Patch your favourite apps, on-device.</h6>
 	<Button kind="primary" icon="download" target="_blank" href={manager.assets[0].url}>{manager.version}</Button>
-	<img src="../manager_two.png" alt="Manager Screenshot" />
+  <div class="screenshot">
+    <Picture data={manager_screenshot} alt="Manager Screenshot" />
+  </div>
 </div>
 
 <Footer />
@@ -33,7 +39,7 @@
 		margin-bottom: 1.5rem;
 	}
 
-	img {
+	.screenshot :global(img) {
 		margin-top: 2.5rem;
 		margin-bottom: 2.5rem;
 		height: 50rem;
