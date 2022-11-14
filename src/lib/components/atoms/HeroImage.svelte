@@ -1,16 +1,18 @@
 <script>
+  import Picture from './Picture.svelte';
+  import manager_screenshot from '$images/manager_two.png?w=1233;822;411&format=avif;webp;png&picture';
 </script>
 
 <div class="hero-img">
-	<img src="/manager_two.png" alt="Screenshot of ReVanced Manager" />
+  <Picture data={manager_screenshot} alt="Screenshot of ReVanced Manager" />
 </div>
 
 <style>
-	img {
-		height: 100%;
-		border-radius: 2rem;
+  .hero-img :global(img) {
+	  height: 100%;
+	  border-radius: 2rem;
+  }
 
-	}
 	.hero-img {
 		overflow: hidden;
 		height: 70vh;
