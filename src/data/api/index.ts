@@ -54,7 +54,7 @@ export class API<T> implements Readable<T> {
     if (!this.has_requested) {
       return this.update();
     }
-    return Promise.resolve()
+    return Promise.resolve();
   }
 
   // Implements the load function found in `+page/layout.ts` files.
