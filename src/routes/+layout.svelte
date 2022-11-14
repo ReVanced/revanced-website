@@ -1,7 +1,6 @@
 <script lang="ts">
   import { derived } from "svelte/store";
 
-	import NavHost from "$lib/components/molecules/NavHost.svelte";
   import Spinner from '$lib/components/atoms/Spinner.svelte';
   import RouterEvents from '../data/RouterEvents';
 	import '../app.css';

@@ -5,7 +5,7 @@
 <section class="hero">
 	<div class="hero-text">
 		<h1>
-			Your favourite <br />apps, <span class="flicker">ad</span><span class="blue">vanced.</span>
+			Nothing <br />apps, <span class="flicker">ad</span><span class="blue">vanced.</span>
 		</h1>
 
 		<h2>
