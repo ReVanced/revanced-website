@@ -4,8 +4,20 @@
 
 	import ContributorPerson from '$lib/components/atoms/ContributorPerson.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
+  import { onMount } from 'svelte';
 
 	let selected = [];
+  let logos = [];
+  onMount(async () => {
+    const response = await fetch('https://poll.revanced.app/logos');
+    const json = await response.json();
+    // guh
+    for (const name of Object.keys(json)) {
+      logos.push({ name, ...json[name] });
+    }
+    // update ui
+    logos = logos;
+  });
 </script>
 
 <svelte:head>
@@ -20,10 +32,16 @@
 			<h1>Page 1/5</h1>
 		</div>
 		<div class="contrib-grid">
-			<ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="afn" />
-			<ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="afn 2" />
-			<ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="afn 3" />
-			<ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="yes" />
+      {#if logos.length != 0}
+        <ContributorPerson pfp={logos[0].gdrive_direct_url} name={logos[0].name} />
+        <ContributorPerson pfp={logos[1].gdrive_direct_url} name={logos[1].name} />
+        <ContributorPerson pfp={logos[2].gdrive_direct_url} name={logos[2].name} />
+        <ContributorPerson pfp={logos[3].gdrive_direct_url} name={logos[3].name} />
+			  <!-- <ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="afn" />
+			       <ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="afn 2" />
+			       <ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="afn 3" />
+			       <ContributorPerson pfp = "https://cdn.discordapp.com/emojis/267559535919497217.webp?size=48&quality=lossless" name="yes" /> -->
+      {/if}
 		</div>
 
 		<div class="buttons-container">
@@ -36,7 +54,7 @@
 <style>
 	.contrib-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));;
+		grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
 		flex-direction: column;
 		gap: 1rem;
 		margin-bottom: 3rem;
