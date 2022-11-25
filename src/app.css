@@ -31,11 +31,17 @@ body {
     margin-inline: auto;
     width: min(90%, 95rem);
     margin-top: 4rem;
+    padding-bottom: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
+@media screen and (max-width: 768px) {
+    .wrapper {
+        margin-top: 2rem;
+    }
+}
 
 :root {
     --white: #fff;

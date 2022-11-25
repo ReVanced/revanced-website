@@ -1,9 +1,10 @@
 <script lang="ts">
 	export let name: string;
 	export let logo: string;
-	export let file: string;
+	export let filename: string;
 	export let id: string;
 	export let selected: Array<string>;
+	export let clicked = false;
 
 	const handleClick = () => {
 		clicked = !clicked;
@@ -15,16 +16,16 @@
 			// the Updater
 			selected = selected;
 		}
+		console.log(selected)
 	};
 
-	let clicked = false;
 </script>
 
 <div on:click={handleClick} class:clicked>
-	<img src={logo} alt={file} />
+	<img src={logo} alt={filename} />
 	<span class="text">
 		<h2>{name}</h2>
-		<h6>{file}</h6>
+		<h6>{filename}</h6>
 	</span>
 </div>
 
@@ -69,8 +70,8 @@
 		color: var(--accent-color);
 	}
 
-	div:hover:not(.clicked) {
-		background-color: var(--grey-two);
+	div:hover {
+		filter: brightness(0.85);
 	}
 
 	img {
