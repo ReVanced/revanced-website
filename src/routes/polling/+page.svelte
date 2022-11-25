@@ -21,8 +21,13 @@
 	onMount(async () => {
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
-		currentPage = localStorage.getItem('currentPage');
-		selected = JSON.parse(localStorage.getItem('selected'));
+		if (localStorage.getItem('currentPage') !== null) {
+			currentPage = localStorage.getItem('currentPage')
+		};
+
+		if (localStorage.getItem('selected') !== null) {
+			selected = JSON.parse(localStorage.getItem('selected'));
+		}
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
