@@ -30,7 +30,7 @@ function vercel_routes(builder) {
 	for (const [src, page] of builder.prerendered.pages) {
 		routes.push({
 			src,
-			dest: `${builder.config.kit.appDir}/prerendered/${page.file}`
+			dest: `__revanced/prerendered/${page.file}`
 		});
 	}
 
@@ -60,8 +60,8 @@ export function wrap(adapter, opts) {
 		return adapter(opts);
 	}
 
-	// Not exactly what adapter-static does, but it works.
-	opts.pages = '.vercel/output/static';
+	opts.pages = `.vercel/output/static/__revanced/prerendered`
+	opts.assets = '.vercel/output/static';
 
 	adapter = adapter(opts);
 
