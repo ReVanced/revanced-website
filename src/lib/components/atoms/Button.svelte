@@ -1,7 +1,7 @@
 <script>
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
-	export let href = '#';
+	export let href = '';
 	export let maxWidth = false;
 	export let icon = '';
 	export let target = '';
@@ -21,11 +21,12 @@
 	a {
 		text-decoration: none;
 		border-radius: 16px;
+		transition: all 0.2s var(--bezier-one);
 	}
 
 	.unclickable {
-		pointer-events: none;
-		cursor:not-allowed;
+		cursor: not-allowed;
+		opacity: 0.4;
 	}
 	div,
 	.button-secondary {
@@ -37,7 +38,6 @@
 		border-radius: 12px;
 		padding: 1rem 1.75rem;
 		display: block;
-		cursor: pointer;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
 		user-select: none;

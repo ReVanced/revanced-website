@@ -1,38 +1,54 @@
 <script lang="ts">
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
+
 	import { onMount } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import { expoOut } from 'svelte/easing';
 
 	let selected: Array<string> = [];
 	let logos = [];
+	let logoAmount = 4;
 	let currentPage = 1;
 	let maxPages = 1;
-	let logoAmount = 4;
 	let min = 0;
-	let max = logoAmount;
+	let max = 4;
+	let transitionDirection = 5;
 
+	// you will never see shittier code tm
+	// will refactor later maybe idk
 	onMount(async () => {
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
+		currentPage = localStorage.getItem("currentPage");
+		min = (currentPage - 1) * logoAmount;
+		max = min + logoAmount;
+		selected = JSON.parse(localStorage.getItem("selected"));
 		// guh
 		for (const name of Object.keys(json)) {
 			logos.push({ name, ...json[name] });
 		}
+		maxPages = Math.floor(logos.length / logoAmount);
 		// update ui
 		logos = logos;
-		maxPages = Math.floor(logos.length / logoAmount);
 	});
 
 	function previousPage() {
-		min -= logoAmount;
-		max -= logoAmount;
+		if (currentPage <= 1) return null;
 		currentPage--;
+		min = (currentPage - 1) * logoAmount;
+		max = min + logoAmount;
+		localStorage.setItem("currentPage", currentPage.toString());
+		transitionDirection = -5;
 	}
 
 	function nextPage() {
-		min += logoAmount;
-		max += logoAmount;
+		if (currentPage >= maxPages) return null;
 		currentPage++;
+		min = (currentPage - 1) * logoAmount;
+		max = min + logoAmount;
+		localStorage.setItem("currentPage", currentPage.toString());
+		transitionDirection = 5;
 	}
 </script>
 
@@ -46,16 +62,26 @@
 	<div class="wrapper">
 		<div class="top-container">
 			<h1>ReVanced Logo Poll</h1>
-			<h2>{selected.length}/4 selected· Page {currentPage}/{maxPages}</h2>
+			<h2>{selected.length}/{logos.length} selected · Page {currentPage}/{maxPages}</h2>
 			<div class="top-custom-button-container">
 				<a href="https://hhh.com" target="_blank" rel="noreferrer"><button>Help</button></a>
 				<a href="https://revanced.app" target="_blank" rel="noreferrer"><button>Website</button></a>
 			</div>
 		</div>
+
 		<div class="options-grid">
 			{#each logos.slice(min, max) as { id, gdrive_direct_url, name, filename }}
 				{#key currentPage}
-					<LogoOption bind:selected clicked={selected.includes(id)} {id} logo={gdrive_direct_url} {name} {filename} />
+					<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+						<LogoOption
+							bind:selected
+							clicked={selected.includes(id)}
+							{id}
+							logo={gdrive_direct_url}
+							{name}
+							{filename}
+						/>
+					</span>
 				{/key}
 			{/each}
 		</div>
@@ -126,7 +152,7 @@
 	}
 	@media screen and (max-width: 768px) {
 		h1 {
-			font-size: 1.5rem;
+			font-size: 1.75rem;
 		}
 
 		.options-grid {

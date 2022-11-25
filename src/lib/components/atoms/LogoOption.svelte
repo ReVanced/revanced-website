@@ -16,9 +16,9 @@
 			// the Updater
 			selected = selected;
 		}
-		console.log(selected)
+		console.log(selected);
+		localStorage.setItem("selected", JSON.stringify(selected));
 	};
-
 </script>
 
 <div on:click={handleClick} class:clicked>
@@ -33,28 +33,34 @@
 	div {
 		color: var(--white);
 		text-decoration: none;
-		padding: 1rem;
+		padding: 1.5rem;
 		width: 100%;
 		transition: all 0.3s var(--bezier-one);
-		border-radius: 8px;
+		border-radius: 4px;
 		display: flex;
 		gap: 1.5rem;
-		align-items: center;
 		background-color: var(--grey-six);
 		border: 1px solid var(--grey-three);
 		cursor: pointer;
+		align-items: center;
 	}
+
 
 	h2 {
 		font-size: 1rem;
 		font-weight: 500;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		
 	}
 
 	h6 {
 		font-size: 0.9rem;
+	}
+
+	h2, h6 {
+		display: block;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.text {
