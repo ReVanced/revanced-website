@@ -35,7 +35,7 @@
 {#if $show_loading_animation}
 	<Spinner />
 {:else}
-	<slot />
+  <slot />
 {/if}
 <!--
      afn if you are moving the footer here, please make it not use the repositories store directly and instead use component props :) -->

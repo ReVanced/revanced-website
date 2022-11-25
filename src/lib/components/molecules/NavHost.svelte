@@ -70,15 +70,21 @@
 </nav>
 
 <style>
+  nav {
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
   .navbar {
 	  padding: 0 1rem 0 2rem;
-	  top: 0;
-	  position: fixed;
+
 	  display: flex;
 	  align-items: center;
 	  justify-content: space-between;
 	  min-height: 70px;
-	  width: 100vw;
+	  width: 100%;
 	  z-index: 999;
 	  background-color: var(--grey-six);
 	  backdrop-filter: blur(15px);
