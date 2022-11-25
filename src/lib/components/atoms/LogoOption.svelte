@@ -36,7 +36,7 @@
 		padding: 1.5rem;
 		width: 100%;
 		transition: all 0.3s var(--bezier-one);
-		border-radius: 4px;
+		border-radius: 8px;
 		display: flex;
 		gap: 1.5rem;
 		background-color: var(--grey-six);

@@ -1,29 +1,31 @@
 <script lang="ts">
-	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
-	import Button from '$lib/components/atoms/Button.svelte';
-
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
+	
+	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
+	import Button from '$lib/components/atoms/Button.svelte';
 
 	let selected: Array<string> = [];
 	let logos = [];
 	let logoAmount = 4;
-	let currentPage = 1;
+	let transitionDirection = 5;
+
+	let currentPage = 0;
 	let maxPages = 1;
 	let min = 0;
-	let max = 4;
-	let transitionDirection = 5;
+	let max = logoAmount;
 
 	// you will never see shittier code tm
 	// will refactor later maybe idk
 	onMount(async () => {
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
-		currentPage = localStorage.getItem("currentPage");
-		min = (currentPage - 1) * logoAmount;
+		currentPage = localStorage.getItem('currentPage');
+		selected = JSON.parse(localStorage.getItem('selected'));
+
+		min = currentPage * logoAmount;
 		max = min + logoAmount;
-		selected = JSON.parse(localStorage.getItem("selected"));
 		// guh
 		for (const name of Object.keys(json)) {
 			logos.push({ name, ...json[name] });
@@ -34,20 +36,20 @@
 	});
 
 	function previousPage() {
-		if (currentPage <= 1) return null;
+		if (currentPage <= 0) return null;
 		currentPage--;
-		min = (currentPage - 1) * logoAmount;
+		min = currentPage * logoAmount;
 		max = min + logoAmount;
-		localStorage.setItem("currentPage", currentPage.toString());
+		localStorage.setItem('currentPage', currentPage.toString());
 		transitionDirection = -5;
 	}
 
 	function nextPage() {
-		if (currentPage >= maxPages) return null;
+		if (currentPage + 1 >= maxPages) return null;
 		currentPage++;
-		min = (currentPage - 1) * logoAmount;
+		min = currentPage * logoAmount;
 		max = min + logoAmount;
-		localStorage.setItem("currentPage", currentPage.toString());
+		localStorage.setItem('currentPage', currentPage.toString());
 		transitionDirection = 5;
 	}
 </script>
@@ -62,7 +64,7 @@
 	<div class="wrapper">
 		<div class="top-container">
 			<h1>ReVanced Logo Poll</h1>
-			<h2>{selected.length}/{logos.length} selected · Page {currentPage}/{maxPages}</h2>
+			<h2>{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages}</h2>
 			<div class="top-custom-button-container">
 				<a href="https://hhh.com" target="_blank" rel="noreferrer"><button>Help</button></a>
 				<a href="https://revanced.app" target="_blank" rel="noreferrer"><button>Website</button></a>
@@ -87,8 +89,10 @@
 		</div>
 
 		<div class="buttons-container">
-			<Button on:click={previousPage} unclickable={currentPage <= 1}>Previous</Button>
-			<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages}>Next</Button>
+			<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
+			<Button kind="primary" on:click={nextPage} unclickable={currentPage + 1 >= maxPages}
+				>Next</Button
+			>
 		</div>
 	</div>
 </main>
