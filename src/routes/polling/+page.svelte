@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
-	
+
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
 
@@ -10,28 +10,31 @@
 	let logos = [];
 	let logoAmount = 4;
 	let transitionDirection = 5;
-
-	let currentPage = 0;
 	let maxPages = 1;
 	let min = 0;
 	let max = logoAmount;
+	let currentPage = 0;
+
+	try {
+		if (localStorage.getItem('currentPage') !== null) {
+			currentPage = localStorage.getItem('currentPage');
+		}
+
+		if (localStorage.getItem('selected') !== null) {
+			selected = JSON.parse(localStorage.getItem('selected'));
+		}
+	} catch (err) {
+		console.log(err);
+	}
 
 	// you will never see shittier code tm
 	// will refactor later maybe idk
 	onMount(async () => {
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
-		if (localStorage.getItem('currentPage') !== null) {
-			currentPage = localStorage.getItem('currentPage')
-		};
-
-		if (localStorage.getItem('selected') !== null) {
-			selected = JSON.parse(localStorage.getItem('selected'));
-		}
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
-		// guh
 		for (const name of Object.keys(json)) {
 			logos.push({ name, ...json[name] });
 		}
@@ -43,18 +46,20 @@
 	function previousPage() {
 		if (currentPage <= 0) return null;
 		currentPage--;
+		localStorage.setItem('currentPage', currentPage.toString());
+
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
-		localStorage.setItem('currentPage', currentPage.toString());
 		transitionDirection = -5;
 	}
 
 	function nextPage() {
-		if (currentPage + 1 >= maxPages) return null;
+		if (currentPage >= maxPages - 1) return null;
 		currentPage++;
+		localStorage.setItem('currentPage', currentPage.toString());
+
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
-		localStorage.setItem('currentPage', currentPage.toString());
 		transitionDirection = 5;
 	}
 </script>
@@ -95,7 +100,7 @@
 
 		<div class="buttons-container">
 			<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
-			<Button kind="primary" on:click={nextPage} unclickable={currentPage + 1 >= maxPages}
+			<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages - 1}
 				>Next</Button
 			>
 		</div>
