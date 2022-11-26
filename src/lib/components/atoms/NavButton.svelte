@@ -46,4 +46,24 @@
 		background-color: var(--grey-two);
 		color: var(--accent-color);
 	}
+
+	@media (max-width: 768px) {
+		li {
+			padding: 1rem 1.5rem;
+			text-align: left;
+			justify-content: left;
+			border-radius: 16px;
+			font-size: 1.2rem;
+		}
+
+		li.selected {
+			background-color: var(--accent-color);
+		}
+
+		li.selected {
+			color: var(--grey-four)
+		}
+
+	}
+
 </style>

@@ -5,7 +5,7 @@
 <section class="hero">
 	<div class="hero-text">
 		<h1>
-			Your favourite <br />apps, <span class="flicker">ad</span><span class="blue">vanced.</span>
+			<span>Re</span>Vanced
 		</h1>
 
 		<h2>
@@ -21,7 +21,7 @@
 
 <style>
 	h2 {
-		margin-top: 1.75\rem;
+		margin-top: 1rem;
 		margin-bottom: 2rem;
 	}
 
@@ -39,52 +39,13 @@
 		gap: 1rem;
 	}
 
-	.blue {
+	span {
 		color: var(--accent-color);
 	}
-
-	@keyframes flicker {
-		0% {
-			color: var(--grey-two);
-		}
-		10% {
-			color: var(--accent-color);
-		}
-		15% {
-			color: var(--grey-two);
-		}
-		35% {
-			color: var(--accent-color);
-		}
-		45% {
-			color: var(--accent-color);
-		}
-		50% {
-			color: var(--grey-two);
-		}
-		52.5% {
-			color: var(--accent-color);
-		}
-		85% {
-			color: var(--accent-color);
-		}
-		100% {
-			color: var(--grey-two);
-		}
-	}
-
-	.flicker {
-		color: var(--accent-color);
-		/* animation: flicker 2s forwards;
-		animation-timing-function: var(--bezier-one);
-		animation-delay: 1.5s;
-		animation-iteration-count: 1; */
-	}
-
 
 	h1 {
 		line-height: 1em;
-		font-size: 4rem;
+		font-size: 5rem;
 	}
 
 	@media (max-width: 768px) {

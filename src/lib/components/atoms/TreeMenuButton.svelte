@@ -15,7 +15,7 @@
 
 <style>
 	.package {
-		padding: 0.6rem;
+		padding: 0.6rem 1rem;
 		border-radius: 8px;
 		cursor: pointer;
 		display: flex;
@@ -23,23 +23,7 @@
 		gap: 0.6rem;
 		width: 100%;
 		user-select: none;
-		transition: all 0.4s var(--bezier-one);
-	}
-
-	.package::before {
-		content: '';
-		height: 5px;
-		inline-size: 4px;
-		border-radius: 200px;
-		background-color: var(--accent-color);
-		transition: all 0.2s var(--bezier-one);
-		opacity: 0;
-	}
-
-	.selected::before {
-		height: 20px;
-		transition: all 0.3s var(--bezier-one);
-		opacity: 1;
+		transition: background-color 0.4s var(--bezier-one);
 	}
 
 	h3 {
@@ -48,16 +32,18 @@
 
 	.package > h3 {
 		color: var(--grey-five);
-		transition: all 0.3s var(--bezier-one);
+		transition: color 0.3s var(--bezier-one);
 	}
 
 	.selected > h3 {
-		color: var(--accent-color);
-		transition: all 0.3s var(--bezier-one);
+		color: var(--grey-four);
+		transition: color 0.3s var(--bezier-one);
 	}
 
-	.package:hover,
 	.selected {
+		background-color: var(--accent-color);
+	}
+	.package:hover:not(.selected) {
 		background-color: var(--grey-six);
 	}
 

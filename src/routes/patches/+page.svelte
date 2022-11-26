@@ -31,7 +31,7 @@
 </svelte:head>
 
 <main>
-	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	<aside in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
 		<TreeMenu title="packages">
 			{#each packages as pkg}
 				<TreeMenuButton bind:current name={pkg} />
@@ -39,13 +39,15 @@
 		</TreeMenu>
 	</aside>
 
-	<div class="patches-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	<div class="patches-container">
 		{#each patches as patch}
-			{#if search(current, patch.compatiblePackages) || !current}
-				<div>
-					<PatchCell bind:current {patch} />
-				</div>
-			{/if}
+			{#key current}
+				{#if search(current, patch.compatiblePackages) || !current}
+					<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: 100 }}>
+						<PatchCell bind:current {patch} />
+					</div>
+				{/if}
+			{/key}
 		{/each}
 	</div>
 </main>
@@ -62,13 +64,13 @@
 	}
 
 	.patches-container {
-		margin-top: 7.5rem;
+		margin-top: 7rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
 		width: 100%;
 		position: sticky;
 		z-index: 1;
-		min-height: calc(100vh - 7.5rem);
+		min-height: calc(100vh - 7rem);
 	}
 </style>

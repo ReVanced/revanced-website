@@ -127,7 +127,7 @@
 	}
 
 	.patch-container:active {
-		background-color: var(--grey-three);
+		filter: brightness(1.5);
 	}
 
 	.title {
@@ -171,4 +171,6 @@
 		display: flex;
 		flex-direction: column;
 	}
+
+
 </style>

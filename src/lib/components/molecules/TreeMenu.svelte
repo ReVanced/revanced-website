@@ -12,13 +12,13 @@
 
 <style>
 	.menu {
-		height: calc(100vh - 7.5rem);
+		height: calc(100vh - 7rem);
 		width: 100%;
-		padding: 0px 10px 30px 10px;
+		padding: 0px 30px 30px 10px;
 		display: flex;
 		flex-direction: column;
 		position: sticky;
-		top: 7.5rem;
+		top: 7rem;
 		overflow-y: scroll;
 	}
 
