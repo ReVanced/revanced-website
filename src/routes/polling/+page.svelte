@@ -127,6 +127,12 @@
 				{/each}
 			{/if}
 		</div>
+		
+		{#if currentPage >= maxPages && !selected.length}
+			<div class="warning"  in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+				<h6>No logos have been selected.</h6>
+			</div>
+		{/if}
 	</div>
 	<div class="buttons-container">
 		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
@@ -209,6 +215,15 @@
 		flex-direction: row;
 		gap: 0.5rem;
 	}
+
+	.warning {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+		color: var(--accent-color);	
+	}
+
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 1.75rem;
