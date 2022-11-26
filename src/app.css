@@ -35,9 +35,9 @@ body {
 
 :root {
     --white: #fff;
-    --accent-low-opacity: #9ed7ff50;
     --accent-color: #9fd5ff;
     --accent-color-two: hsl(207, 65%, 90%);
+    --accent-low-opacity: #9ed7ff50;
     --bg-color: hsl(240, 2%, 11%);
     --grey-one: #252b31;
     --grey-two: #28313b;

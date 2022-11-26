@@ -15,9 +15,13 @@
 
 	let current: boolean = false;
 	let searchTerm: string;
+	$: searchTermLowerCase = searchTerm?.toLowerCase();
 
 	function search(patch: Patch) {
-		if (patch.name.includes(searchTerm) || patch.description.includes(searchTerm)) {
+		if (
+			patch.description.toLowerCase().includes(searchTermLowerCase) ||
+			patch.name.replace(/-/g, ' ').toLowerCase().includes(searchTermLowerCase)
+		) {
 			return true;
 		}
 		return false;
