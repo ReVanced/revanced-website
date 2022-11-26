@@ -102,7 +102,7 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--grey-six);
+    background-color: var(--grey-one);
     background-clip: content-box;
     border-radius: 100px;
 }

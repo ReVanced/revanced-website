@@ -12,14 +12,16 @@
 
 <style>
 	.menu {
-		height: calc(100vh - 7rem);
+		height: calc(100vh - 70px);
 		width: 100%;
 		padding: 0px 30px 30px 10px;
 		display: flex;
 		flex-direction: column;
 		position: sticky;
-		top: 7rem;
+		top: 70px;
+		padding-top: calc(7rem - 70px);
 		overflow-y: scroll;
+		border-right: 1px solid var(--grey-six);
 	}
 
 	h5 {
