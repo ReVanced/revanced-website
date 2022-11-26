@@ -33,7 +33,7 @@
 	div {
 		color: var(--white);
 		text-decoration: none;
-		padding: 1.5rem;
+		padding: 1.25rem;
 		width: 100%;
 		transition: all 0.3s var(--bezier-one);
 		border-radius: 8px;
@@ -43,6 +43,7 @@
 		border: 1px solid var(--grey-three);
 		cursor: pointer;
 		align-items: center;
+		overflow: hidden;
 	}
 
 
@@ -82,8 +83,8 @@
 
 	img {
 		border-radius: 8px;
-		height: 150px;
-		width: 150px;
+		height: 125px;
+		width: 125px;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;

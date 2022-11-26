@@ -36,7 +36,7 @@
 		font-weight: 600;
 		border: none;
 		border-radius: 12px;
-		padding: 1rem 1.75rem;
+		padding: 0.85rem 1.5rem;
 		display: block;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);

@@ -31,7 +31,7 @@ body {
     margin-inline: auto;
     width: min(90%, 95rem);
     margin-top: 4rem;
-    padding-bottom: 2rem;
+    padding-bottom: 6rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,7 +53,7 @@ body {
     --grey-three: #373e4d;
     --grey-four: #182244;
     --grey-five: hsl(208, 30%, 75%);
-    --grey-six: hsla(220, 12%, 15%, 0.655);
+    --grey-six: #202126;
     --grey-seven: #43698657;
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

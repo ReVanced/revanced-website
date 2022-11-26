@@ -83,9 +83,13 @@
 		<div class="top-container">
 			<h3>ReVanced</h3>
 			<h1>{currentPage >= maxPages ? 'Review selected logos' : 'Select logos'}</h1>
-			<h2>{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages+1}</h2>
+			<h2>
+				{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages + 1}
+			</h2>
 			<div class="top-custom-button-container">
-				<a href="https://hhh.com" target="_blank" rel="noreferrer"><button>Help</button></a>
+				<a href="https://hhh.com" target="_blank" rel="noreferrer"
+					><button>How does this work?</button></a
+				>
 				<button on:click={clearLogos}>Clear All</button>
 			</div>
 		</div>
@@ -105,7 +109,7 @@
 					</span>
 				{/key}
 			{/each}
-			
+
 			{#if currentPage >= maxPages}
 				{#each logos as { id, gdrive_direct_url, name, filename }}
 					{#if selected.includes(id)}
@@ -123,11 +127,12 @@
 				{/each}
 			{/if}
 		</div>
-
-		<div class="buttons-container">
-			<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
-			<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages}>{currentPage >= maxPages ? 'Submit' : 'Next'}</Button>
-		</div>
+	</div>
+	<div class="buttons-container">
+		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
+		<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages}
+			>{currentPage >= maxPages ? 'Submit' : 'Next'}</Button
+		>
 	</div>
 </main>
 
@@ -165,7 +170,16 @@
 		gap: 1rem;
 		justify-content: right;
 		float: bottom;
+		width: 100%;
+		z-index: 999;
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		background-color: var(--grey-six);
+		padding: 1rem 1.5rem;
+		border-top: 1px solid var(--grey-three);
 	}
+
 
 	button {
 		background-color: transparent;
@@ -185,7 +199,7 @@
 		gap: 0.5rem;
 		margin-bottom: 2rem;
 		background-color: var(--accent-color);
-		padding: 2rem;
+		padding: 1.75rem;
 		border-radius: 12px;
 	}
 
@@ -199,9 +213,8 @@
 		h1 {
 			font-size: 1.75rem;
 		}
-
 		.options-grid {
-			grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 		}
 	}
 </style>
