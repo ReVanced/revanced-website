@@ -4,7 +4,7 @@
 </script>
 
 <div>
-	<img src="../icons/search.svg" />
+	<img src="../icons/search.svg" alt="Search" />
 	<input type="text" placeholder={title} bind:value={searchTerm} />
 </div>
 
@@ -32,10 +32,5 @@
 
 	input:focus {
 		outline: 1px solid var(--accent-color);
-	}
-
-	h3 {
-		font-size: 0.9rem;
-		color: var(--grey-five);
 	}
 </style>
