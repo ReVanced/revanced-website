@@ -3,8 +3,6 @@
 </script>
 
 <div class="menu">
-	<h5>{title.toUpperCase()}</h5>
-	<hr />
 	<div class="package-list">
 		<slot />
 	</div>
@@ -19,22 +17,15 @@
 		flex-direction: column;
 		position: sticky;
 		top: 70px;
-		padding-top: calc(7rem - 70px);
+		padding-top: calc(6rem - 70px);
 		overflow-y: scroll;
-		border-right: 1px solid var(--grey-six);
-	}
 
-	h5 {
-		font-weight: 500;
-	}
-
-	hr {
-		margin-top: 0.5rem;
 	}
 
 	.package-list {
 		margin-top: 0.75rem;
 		display: flex;
+		gap: 1rem;
 		flex-direction: column;
 		white-space: normal;
 		word-break: break-all;

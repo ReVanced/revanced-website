@@ -44,7 +44,7 @@ body {
     --grey-four: #182244;
     --grey-five: hsl(208, 30%, 75%);
     --grey-six: #202126;
-    --grey-seven: #202126;
+    --grey-seven: #18191D;
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -83,7 +83,7 @@ h4 {
 }
 
 h5 {
-    color: var(--white);
+    color: var(--accent-color-two);
     font-weight: 300;
     font-size: 1rem;
     letter-spacing: 0.02rem;
@@ -102,7 +102,7 @@ h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--grey-one);
+    background-color: var(--accent-color);
     background-clip: content-box;
     border-radius: 100px;
 }

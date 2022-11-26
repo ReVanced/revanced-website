@@ -36,6 +36,7 @@
 		{/if}
 	</div>
 
+	<h4>{patch.description}</h4>
 	<div class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
 			<a
@@ -59,7 +60,6 @@
 			<h2>⚙️ Patch Options</h2>
 		{/if}
 	</div>
-	<h4>{patch.description}</h4>
 
 	{#if expanded && hasPatchOptions}
 		<span transition:fade|local={{ easing: quintOut, duration: 1000 }}>
@@ -127,7 +127,7 @@
 	}
 
 	.patch-container:active {
-		filter: brightness(1.5);
+		filter: brightness(1.75);
 	}
 
 	.title {
@@ -171,6 +171,4 @@
 		display: flex;
 		flex-direction: column;
 	}
-
-
 </style>

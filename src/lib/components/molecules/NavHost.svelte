@@ -71,7 +71,7 @@
 						<Navigation href="/download">Download</Navigation>
 						<Navigation href="/patches">Patches</Navigation>
 					</div>
-					
+
 					<div class="bottom-mobile-container">
 						<Navigation href="/contributors/">
 							<img src="/icons/contrib.svg" alt="Contributors" />
@@ -103,7 +103,7 @@
 		min-height: 70px;
 		width: 100%;
 		z-index: 999;
-		background-color: var(--grey-seven);
+		background-color: var(--grey-six);
 	}
 
 	.desktop {
@@ -158,8 +158,6 @@
 		img {
 			height: 25px;
 		}
-
-		
 	}
 
 	.bottom-mobile-container {
