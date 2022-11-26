@@ -11,7 +11,7 @@
 	let transitionDirection = 5;
 	let logoAmount = 4;
 	let currentPage = 0;
-	let maxPages = 1;
+	let logoPages = 1;
 	let min = 0;
 	let max = logoAmount;
 
@@ -38,10 +38,20 @@
 			logos.push({ name, ...json[name] });
 		}
 
+		// randomize the order of the logos to minimize bias
+		for (let i = logos.length - 1; i > 0; i--) {
+			let j = Math.floor(Math.random() * i);
+			let k = logos[i];
+			logos[i] = logos[j];
+			logos[j] = k;
+		}
+
+		// min is the lowest index of the logos on a page, max is the highest index
+		// max will be determined based on min and the amount of logos we want on each page (4)
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
 
-		maxPages = Math.floor(logos.length / logoAmount);
+		logoPages = Math.floor(logos.length / logoAmount);
 		// update ui
 		logos = logos;
 	});
@@ -57,7 +67,7 @@
 	}
 
 	function nextPage() {
-		if (currentPage >= maxPages) return null;
+		if (currentPage >= logoPages) return null;
 		currentPage++;
 		localStorage.setItem('currentPage', currentPage.toString());
 
@@ -82,14 +92,14 @@
 	<div class="wrapper">
 		<div class="top-container">
 			<h3>ReVanced</h3>
-			<h1>{currentPage >= maxPages ? 'Review selected logos' : 'Select logos'}</h1>
+			<h1>{currentPage >= logoPages ? 'Review selected logos' : 'Select logos'}</h1>
 			<h2>
-				{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages + 1}
+				{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{logoPages + 1}
 			</h2>
 			<div class="top-custom-button-container">
-				<a href="https://hhh.com" target="_blank" rel="noreferrer"
-					><button>How does this work?</button></a
-				>
+				<a href="https://hhh.com" target="_blank" rel="noreferrer">
+					<button>How does this work?</button>
+				</a>
 				<button on:click={clearLogos}>Clear All</button>
 			</div>
 		</div>
@@ -110,7 +120,7 @@
 				{/key}
 			{/each}
 
-			{#if currentPage >= maxPages}
+			{#if currentPage >= logoPages}
 				{#each logos as { id, gdrive_direct_url, name, filename }}
 					{#if selected.includes(id)}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
@@ -127,17 +137,17 @@
 				{/each}
 			{/if}
 		</div>
-		
-		{#if currentPage >= maxPages && !selected.length}
-			<div class="warning"  in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+
+		{#if currentPage >= logoPages && !selected.length}
+			<div class="warning" in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 				<h6>No logos have been selected.</h6>
 			</div>
 		{/if}
 	</div>
 	<div class="buttons-container">
 		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
-		<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages}
-			>{currentPage >= maxPages ? 'Submit' : 'Next'}</Button
+		<Button kind="primary" on:click={nextPage} unclickable={currentPage >= logoPages}
+			>{currentPage >= logoPages ? 'Submit' : 'Next'}</Button
 		>
 	</div>
 </main>
@@ -172,10 +182,8 @@
 
 	.buttons-container {
 		display: flex;
-		flex-direction: row;
 		gap: 1rem;
 		justify-content: right;
-		float: bottom;
 		width: 100%;
 		z-index: 999;
 		position: fixed;
@@ -185,7 +193,6 @@
 		padding: 1rem 1.5rem;
 		border-top: 1px solid var(--grey-three);
 	}
-
 
 	button {
 		background-color: transparent;
@@ -217,11 +224,8 @@
 	}
 
 	.warning {
-		width: 100%;
 		display: flex;
 		justify-content: center;
-		text-align: center;
-		color: var(--accent-color);	
 	}
 
 	@media screen and (max-width: 768px) {
