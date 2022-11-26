@@ -7,13 +7,13 @@
 	import Button from '$lib/components/atoms/Button.svelte';
 
 	let selected: Array<string> = [];
-	let logos = [];
-	let logoAmount = 4;
+	let logos: Array<any> = [];
 	let transitionDirection = 5;
+	let logoAmount = 4;
+	let currentPage = 0;
 	let maxPages = 1;
 	let min = 0;
 	let max = logoAmount;
-	let currentPage = 0;
 
 	try {
 		if (localStorage.getItem('currentPage') !== null) {
@@ -33,11 +33,14 @@
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
 
-		min = currentPage * logoAmount;
-		max = min + logoAmount;
+		// make better json
 		for (const name of Object.keys(json)) {
 			logos.push({ name, ...json[name] });
 		}
+
+		min = currentPage * logoAmount;
+		max = min + logoAmount;
+
 		maxPages = Math.floor(logos.length / logoAmount);
 		// update ui
 		logos = logos;
@@ -62,6 +65,12 @@
 		max = min + logoAmount;
 		transitionDirection = 5;
 	}
+
+	function clearLogos() {
+		selected = [];
+		localStorage.setItem("selected", JSON.stringify(selected));
+	}
+	
 </script>
 
 <svelte:head>
@@ -77,7 +86,7 @@
 			<h2>{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages}</h2>
 			<div class="top-custom-button-container">
 				<a href="https://hhh.com" target="_blank" rel="noreferrer"><button>Help</button></a>
-				<a href="https://revanced.app" target="_blank" rel="noreferrer"><button>Website</button></a>
+				<button on:click={clearLogos}>Clear All</button>
 			</div>
 		</div>
 
