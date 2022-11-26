@@ -57,7 +57,7 @@
 	}
 
 	function nextPage() {
-		if (currentPage >= maxPages - 1) return null;
+		if (currentPage >= maxPages) return null;
 		currentPage++;
 		localStorage.setItem('currentPage', currentPage.toString());
 
@@ -68,9 +68,8 @@
 
 	function clearLogos() {
 		selected = [];
-		localStorage.setItem("selected", JSON.stringify(selected));
+		localStorage.setItem('selected', JSON.stringify(selected));
 	}
-	
 </script>
 
 <svelte:head>
@@ -82,8 +81,9 @@
 <main>
 	<div class="wrapper">
 		<div class="top-container">
-			<h1>ReVanced Logo Poll</h1>
-			<h2>{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages}</h2>
+			<h3>ReVanced</h3>
+			<h1>{currentPage >= maxPages ? 'Review selected logos' : 'Select logos'}</h1>
+			<h2>{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{maxPages+1}</h2>
 			<div class="top-custom-button-container">
 				<a href="https://hhh.com" target="_blank" rel="noreferrer"><button>Help</button></a>
 				<button on:click={clearLogos}>Clear All</button>
@@ -105,13 +105,28 @@
 					</span>
 				{/key}
 			{/each}
+			
+			{#if currentPage >= maxPages}
+				{#each logos as { id, gdrive_direct_url, name, filename }}
+					{#if selected.includes(id)}
+						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+							<LogoOption
+								bind:selected
+								clicked={selected.includes(id)}
+								{id}
+								logo={gdrive_direct_url}
+								{name}
+								{filename}
+							/>
+						</span>
+					{/if}
+				{/each}
+			{/if}
 		</div>
 
 		<div class="buttons-container">
 			<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
-			<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages - 1}
-				>Next</Button
-			>
+			<Button kind="primary" on:click={nextPage} unclickable={currentPage >= maxPages}>{currentPage >= maxPages ? 'Submit' : 'Next'}</Button>
 		</div>
 	</div>
 </main>
@@ -133,9 +148,15 @@
 	}
 
 	h2 {
-		font-size: 1rem;
+		font-size: 1.25rem;
 		color: var(--grey-three);
 		text-align: center;
+	}
+
+	h3 {
+		font-weight: 500;
+		color: var(--grey-three);
+		margin-bottom: -0.5rem;
 	}
 
 	.buttons-container {
@@ -154,6 +175,7 @@
 		padding: 0.5rem 1.25rem;
 		border-radius: 12px;
 		cursor: pointer;
+		font-weight: 500;
 	}
 
 	.top-container {
