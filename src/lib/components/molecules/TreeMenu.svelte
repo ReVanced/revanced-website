@@ -6,7 +6,7 @@
 
 <style>
 	.menu {
-		height: calc(100vh - 70px);
+		height: calc(100vh - 60px);
 		width: 100%;
 		padding: 0px 30px 30px 10px;
 		display: flex;
@@ -15,6 +15,13 @@
 		top: 70px;
 		padding-top: calc(6rem - 70px);
 		overflow-y: scroll;
+	}
+
+	.menu::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+	.menu:hover::-webkit-scrollbar-thumb {
+		background-color: var(--accent-color);
 	}
 
 	.package-list {

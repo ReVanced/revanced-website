@@ -3,7 +3,18 @@
 	export let searchTerm: string | null;
 	import { fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	// import { onMount } from 'svelte';
+
+	// let search: HTMLInputElement;
+
+	// function handleKeydown(event) {
+	// 	if (event.code === 'Slash') {
+	// 		search.focus;
+	// 	}
+	// }
 </script>
+
+<!-- <svelte:window on:keydown={handleKeydown} /> -->
 
 <div>
 	<img src="../icons/search.svg" id="search" alt="Search" />
@@ -17,7 +28,13 @@
 			transition:fade|local={{ easing: quintOut, duration: 250 }}
 		/>
 	{/if}
-	<input type="text" class:clear={searchTerm} placeholder={title} bind:value={searchTerm} />
+	<input
+		type="text"
+		class:clear={searchTerm}
+		placeholder={title}
+		bind:value={searchTerm}
+		on:keyup
+	/>
 </div>
 
 <style>
@@ -46,7 +63,7 @@
 		border-radius: 12px;
 		border: 1px solid var(--grey-three);
 		background-color: transparent;
-		color: var(--grey-five);
+		color: var(--accent-color);
 		padding-left: 2.5rem;
 		width: 100%;
 	}

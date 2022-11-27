@@ -15,21 +15,30 @@
 
 	let current: boolean = false;
 	let searchTerm: string;
-	$: searchTermLowerCase = searchTerm?.toLowerCase();
+	let searchTermFiltered: string;
+	let timeout: any = null;
+
+	const debounce = () => {
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			searchTermFiltered = searchTerm?.replace(/\./g, '').replace(/\s/g, '').replace(/-/g, '').toLowerCase()
+		}, 500);
+	}
+
 
 	function search(patch: Patch) {
 		function checkPkgName(findTerm: string | boolean, array: any) {
 			for (let i = 0; i < array.length; i++) {
-				if (array[i].name.includes(findTerm)) {
+				if (array[i].name.replace(/\./g, '').includes(findTerm)) {
 					return true;
 				}
 			}
 		}
 
 		return (
-			patch.description.toLowerCase().includes(searchTermLowerCase) ||
-			patch.name.replace(/-/g, ' ').toLowerCase().includes(searchTermLowerCase) ||
-			checkPkgName(searchTermLowerCase, patch.compatiblePackages)
+			patch.description.toLowerCase().replace(/\s/g, '').includes(searchTermFiltered) ||
+			patch.name.replace(/-/g, '').toLowerCase().includes(searchTermFiltered) ||
+			checkPkgName(searchTermFiltered, patch.compatiblePackages)
 		);
 	}
 
@@ -52,7 +61,7 @@
 <main>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
 		<TreeMenu title="Search patches...">
-			<Search bind:searchTerm title="Search patches" />
+			<Search bind:searchTerm title="Search patches" on:keyup={debounce} />
 			<span>
 				{#each packages as pkg}
 					<TreeMenuButton bind:current name={pkg} />
@@ -63,7 +72,7 @@
 
 	<div class="patches-container">
 		{#each patches as patch}
-			{#key current || searchTerm}
+			{#key current || searchTermFiltered}
 				{#if filterByPackage(current, patch.compatiblePackages) || !current}
 					{#if search(patch) || !searchTerm}
 						<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: 100 }}>
@@ -91,7 +100,7 @@
 	}
 
 	.patches-container {
-		margin-top: 6rem;
+		margin-top: 6.7rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
