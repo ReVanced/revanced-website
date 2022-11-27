@@ -21,10 +21,13 @@
 	const debounce = () => {
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
-			searchTermFiltered = searchTerm?.replace(/\./g, '').replace(/\s/g, '').replace(/-/g, '').toLowerCase()
+			searchTermFiltered = searchTerm
+				?.replace(/\./g, '')
+				.replace(/\s/g, '')
+				.replace(/-/g, '')
+				.toLowerCase();
 		}, 500);
-	}
-
+	};
 
 	function search(patch: Patch) {
 		function checkPkgName(findTerm: string | boolean, array: any) {
@@ -60,8 +63,8 @@
 
 <main>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
-		<TreeMenu title="Search patches...">
-			<Search bind:searchTerm title="Search patches" on:keyup={debounce} />
+		<TreeMenu>
+			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" on:keyup={debounce} />
 			<span>
 				{#each packages as pkg}
 					<TreeMenuButton bind:current name={pkg} />
@@ -74,7 +77,7 @@
 		{#each patches as patch}
 			{#key current || searchTermFiltered}
 				{#if filterByPackage(current, patch.compatiblePackages) || !current}
-					{#if search(patch) || !searchTerm}
+					{#if search(patch) || !searchTermFiltered}
 						<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: 100 }}>
 							<PatchCell bind:current {patch} />
 						</div>

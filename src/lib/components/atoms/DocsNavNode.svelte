@@ -5,25 +5,51 @@
 
 <!-- Always part of a list -->
 <li>
-  <div class="doc-section">
-    <a href="/docs/{info.slug}">{info.title}</a>
+  <div class="doc-section item">
+    <a href="/docs/{info.slug}"><h5>{info.title}</h5></a>
   </div>
 </li>
 
+
 <style>
-a {
-  text-decoration: none;
-  background-color: inherit;
-  color: var(--white);
-}
 
-.doc-section {
-	background-color: var(--grey-one);
-	border-radius: 12px;
-	padding: 15px 20px;
-}
+  a {
+    text-decoration: none;
+  }
 
-li {
-  padding-bottom: 0.5rem;
-}
+  li {
+    list-style: none;
+  }
+	.item {
+		padding: 0.6rem 1rem;
+		border-radius: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		width: 100%;
+		user-select: none;
+		transition: background-color 0.4s var(--bezier-one);
+	}
+
+	.item h5 {
+		color: var(--grey-five);
+		transition: color 0.3s var(--bezier-one);
+	}
+
+	.selected h5 {
+		color: var(--grey-four);
+		transition: color 0.3s var(--bezier-one);
+	}
+
+	.selected {
+		background-color: var(--accent-color);
+	}
+	.item:hover:not(.selected) {
+		background-color: var(--grey-six);
+	}
+
+	.item:not(.selected):hover h5 {
+		color: var(--white);
+	}
 </style>

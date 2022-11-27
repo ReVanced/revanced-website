@@ -16,14 +16,6 @@
 </svelte:head>
 
 <div id="markup-content">
-  <h2 class="title">{data.title}</h2>
-
+  <h1 class="title">{data.title}</h1>
   {@html data.content}
 </div>
-
-<style>
-  h2 {
-    color: var(--white);
-    line-height: 1.6;
-  }
-</style>

@@ -1,20 +1,16 @@
 <script lang="ts">
 	export let title: string;
 	export let searchTerm: string | null;
+	export let searchTermFiltered: string | null
 	import { fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	// import { onMount } from 'svelte';
 
-	// let search: HTMLInputElement;
+	function clear() {
+		searchTerm = null;
+		searchTermFiltered = null;
+	}
 
-	// function handleKeydown(event) {
-	// 	if (event.code === 'Slash') {
-	// 		search.focus;
-	// 	}
-	// }
 </script>
-
-<!-- <svelte:window on:keydown={handleKeydown} /> -->
 
 <div>
 	<img src="../icons/search.svg" id="search" alt="Search" />
@@ -22,9 +18,9 @@
 		<img
 			src="../icons/close.svg"
 			id="clear"
-			alt="Close"
-			on:click={() => (searchTerm = null)}
-			on:keypress={() => (searchTerm = null)}
+			alt="Clear"
+			on:click={clear}
+			on:keypress={clear}
 			transition:fade|local={{ easing: quintOut, duration: 250 }}
 		/>
 	{/if}
