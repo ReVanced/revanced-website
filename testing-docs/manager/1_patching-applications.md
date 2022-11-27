@@ -17,5 +17,3 @@
 
 ## ⏭️ Whats next
 The next section will guide you through managing your installed patched applications.
-
-Continue: [🧰 Managing patched applications](2_managing-patched-applications.md)

@@ -241,5 +241,3 @@ The following properties are utilized by bytecode patches:
 ## ⏭️ Whats next
 
 The next section will give a suggestion on coding conventions and on the file structure of a patch.
-
-Continue: [📜 Patch file structure and conventions](4_structure_and_conventions.md)
