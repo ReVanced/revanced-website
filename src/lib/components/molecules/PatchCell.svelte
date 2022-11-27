@@ -18,7 +18,7 @@
 >
 	<div class="things">
 		<div class="title">
-			<h1>
+			<h3>
 				{patch.name
 					// im sorry
 					.replace(/-/g, ' ')
@@ -28,7 +28,7 @@
 					.replace(/Sponsorblock/g, 'SponsorBlock')
 					.replace(/Tiktok/g, 'TikTok')
 					.replace(/Vr/g, 'VR')}
-			</h1>
+			</h3>
 		</div>
 
 		{#if hasPatchOptions}
@@ -36,7 +36,8 @@
 		{/if}
 	</div>
 
-	<h4>{patch.description}</h4>
+	<h5>{patch.description}</h5>
+
 	<div class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
 			<a
@@ -44,20 +45,20 @@
 				target="_blank"
 				rel="noreferrer"
 			>
-				<h2>📦 {pkg.name}</h2>
+				<h6 class="boxed">📦 {pkg.name}</h6>
 			</a>
 		{/each}
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages[0].versions.length}
-			<h2>
+			<h6 class="boxed">
 				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-			</h2>
+			</h6>
 		{/if}
 
-		<h2>🧩 {patch.version}</h2>
+		<h6 class="boxed">🧩 {patch.version}</h6>
 
 		{#if hasPatchOptions}
-			<h2>⚙️ Patch Options</h2>
+			<h6 class="boxed">⚙️ Patch Options</h6>
 		{/if}
 	</div>
 
@@ -66,8 +67,8 @@
 			<div class="options" transition:slide|local={{ easing: quintOut, duration: 500 }}>
 				{#each patch.options as option}
 					<div class="option">
-						<h3>{option.title}</h3>
-						<h4>{option.description}</h4>
+						<h5 id="option-title">{option.title}</h5>
+						<h5>{option.description}</h5>
 					</div>
 				{/each}
 			</div>
@@ -76,22 +77,20 @@
 </div>
 
 <style>
-	h1 {
-		font-weight: 600;
+	h3 {
 		margin-right: 0.5rem;
-		font-size: 1.25rem;
-		color: var(--accent-color-two);
-		letter-spacing: normal;
 	}
 
-	h2 {
-		color: var(--accent-color);
-		font-size: 0.8rem;
-		font-weight: 500;
+	h6 {
 		border-radius: 8px;
+		color: var(--accent-color);
 		background-color: var(--grey-two);
 		padding: 0.2rem 0.4rem;
 		display: flex;
+	}
+
+	#option-title {
+		color: var(--accent-color);
 	}
 
 	a {
@@ -104,19 +103,6 @@
 		gap: 0.25rem;
 		margin: 0.3rem 0rem;
 		width: 100%;
-	}
-
-	h3 {
-		color: var(--accent-color);
-		font-size: 0.9rem;
-		margin-bottom: 0.1rem;
-		font-weight: 500;
-	}
-
-	h4 {
-		color: var(--grey-five);
-		font-size: 0.9rem;
-		font-weight: 400;
 	}
 
 	.patch-container {

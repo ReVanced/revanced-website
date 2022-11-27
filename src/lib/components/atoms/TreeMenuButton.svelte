@@ -10,7 +10,7 @@
 	on:click={() =>
 		(current = current === name ? false : name) && window.scrollTo({ top: 0, behavior: 'smooth' })}
 >
-	<h3>{name}</h3>
+	<h5>{name}</h5>
 </div>
 
 <style>
@@ -26,16 +26,12 @@
 		transition: background-color 0.4s var(--bezier-one);
 	}
 
-	h3 {
-		font-size: 0.9rem;
-	}
-
-	.package > h3 {
+	.package h5 {
 		color: var(--grey-five);
 		transition: color 0.3s var(--bezier-one);
 	}
 
-	.selected > h3 {
+	.selected h5 {
 		color: var(--grey-four);
 		transition: color 0.3s var(--bezier-one);
 	}
@@ -47,7 +43,7 @@
 		background-color: var(--grey-six);
 	}
 
-	.package:not(.selected):hover > h3 {
+	.package:not(.selected):hover h5 {
 		color: var(--white);
 	}
 </style>

@@ -7,7 +7,7 @@
 
 <a href={url} rel="noreferrer" target="_blank">
 	<img src={pfp} {alt} />
-	<h2>{name}</h2>
+	<h5>{name}</h5>
 </a>
 
 <style>
@@ -25,17 +25,15 @@
 		border: 1px solid var(--grey-three);
 	}
 
-
 	a:hover {
 		background-color: var(--accent-color);
 	}
 
-	a:hover > h2 {
+	a:hover > h5 {
 		color: var(--grey-four);
 	}
 
-	h2 {
-		font-size: 0.95rem;
+	h5 {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
