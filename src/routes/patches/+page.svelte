@@ -52,7 +52,7 @@
 <main>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
 		<TreeMenu title="Search patches...">
-			<Search bind:searchTerm title="Search patches..." />
+			<Search bind:searchTerm title="Search patches" />
 			<span>
 				{#each packages as pkg}
 					<TreeMenuButton bind:current name={pkg} />

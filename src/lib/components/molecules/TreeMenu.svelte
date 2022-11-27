@@ -1,7 +1,3 @@
-<script lang="ts">
-	export let title: string;
-</script>
-
 <div class="menu">
 	<div class="package-list">
 		<slot />
@@ -19,7 +15,6 @@
 		top: 70px;
 		padding-top: calc(6rem - 70px);
 		overflow-y: scroll;
-
 	}
 
 	.package-list {
@@ -30,5 +25,4 @@
 		white-space: normal;
 		word-break: break-all;
 	}
-
 </style>
