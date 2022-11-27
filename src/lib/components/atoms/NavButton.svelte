@@ -17,7 +17,7 @@
 		list-style: none;
 		position: relative;
 		font-weight: 500;
-		font-size: 0.9rem;
+		font-size: 1rem;
 		align-items: center;
 		border: var(--grey-six);
 		transition-timing-function: var(--bezier-one);

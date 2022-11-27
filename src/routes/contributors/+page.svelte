@@ -17,8 +17,8 @@
 <main>
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-			<h1>Made possible by the community.</h1>
-			<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
+			<h2>Made possible by the community.</h2>
+			<h3>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h3>
 		</div>
 		<div class="contrib-grid">
 			{#each $repositories as { contributors: contribs, name }}
@@ -40,14 +40,12 @@
 		margin-bottom: 3rem;
 	}
 
-	h1 {
-		font-size: 2.25rem;
-		font-weight: 600;
+	h2 {
 		text-align: center;
 		color: var(--grey-four);
 	}
-	h2 {
-		font-size: 1rem;
+	
+	h3 {
 		color: var(--grey-four);
 		text-align: center;
 	}

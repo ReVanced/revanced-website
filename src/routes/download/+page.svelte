@@ -12,7 +12,7 @@
 
 <div class="wrapper">
 	<h1>ReVanced <span>Manager</span></h1>
-	<h6>Patch your favourite apps, on-device.</h6>
+	<h3>Patch your favourite apps, on-device.</h3>
 	<Button kind="primary" icon="download" target="_blank" href={manager.assets[0].url}>{manager.version}</Button>
   <div class="screenshot">
     <Picture data={manager_screenshot} alt="Manager Screenshot" />
@@ -27,14 +27,14 @@
 		flex-direction: column;
 		align-items: center;
 	}
+
 	h1 {
-		font-size: 3rem;
 		text-align: center;
 		color: var(--white);
-
+		margin-bottom: 1.1rem;
 	}
 
-	h6 {
+	h3 {
 		text-align: center;
 		margin-bottom: 1.5rem;
 	}
