@@ -18,13 +18,19 @@
 	$: searchTermLowerCase = searchTerm?.toLowerCase();
 
 	function search(patch: Patch) {
-		if (
-			patch.description.toLowerCase().includes(searchTermLowerCase) ||
-			patch.name.replace(/-/g, ' ').toLowerCase().includes(searchTermLowerCase)
-		) {
-			return true;
+		function checkPkgName(findTerm: string | boolean, array: any) {
+			for (let i = 0; i < array.length; i++) {
+				if (array[i].name.includes(findTerm)) {
+					return true;
+				}
+			}
 		}
-		return false;
+
+		return (
+			patch.description.toLowerCase().includes(searchTermLowerCase) ||
+			patch.name.replace(/-/g, ' ').toLowerCase().includes(searchTermLowerCase) ||
+			checkPkgName(searchTermLowerCase, patch.compatiblePackages)
+		);
 	}
 
 	function filterByPackage(findTerm: string | boolean, array: any) {
