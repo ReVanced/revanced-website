@@ -36,7 +36,7 @@
 		{/if}
 	</div>
 
-	<h4>{patch.description}</h4>
+	<h5>{patch.description}</h5>
 
 	<div class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
@@ -45,20 +45,20 @@
 				target="_blank"
 				rel="noreferrer"
 			>
-				<h5 class="boxed">📦 {pkg.name}</h5>
+				<h6 class="boxed">📦 {pkg.name}</h6>
 			</a>
 		{/each}
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages[0].versions.length}
-			<h5 class="boxed">
+			<h6 class="boxed">
 				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-			</h5>
+			</h6>
 		{/if}
 
-		<h5 class="boxed">🧩 {patch.version}</h5>
+		<h6 class="boxed">🧩 {patch.version}</h6>
 
 		{#if hasPatchOptions}
-			<h5 class="boxed">⚙️ Patch Options</h5>
+			<h6 class="boxed">⚙️ Patch Options</h6>
 		{/if}
 	</div>
 
@@ -67,7 +67,7 @@
 			<div class="options" transition:slide|local={{ easing: quintOut, duration: 500 }}>
 				{#each patch.options as option}
 					<div class="option">
-						<h4>{option.title}</h4>
+						<h5 id="option-title">{option.title}</h5>
 						<h5>{option.description}</h5>
 					</div>
 				{/each}
@@ -78,25 +78,19 @@
 
 <style>
 	h3 {
-		color: var(--accent-color-two);
-		font-weight: 600;
 		margin-right: 0.5rem;
 	}
 
-	h4 {
-		line-height: 1.5;
-		color: var(--accent-color);
-	}
-	
-	h5 {
-		line-height: 1.5;
-	}
-
-	h5.boxed {
+	h6 {
 		border-radius: 8px;
+		color: var(--accent-color);
 		background-color: var(--grey-two);
 		padding: 0.2rem 0.4rem;
 		display: flex;
+	}
+
+	#option-title {
+		color: var(--accent-color);
 	}
 
 	a {

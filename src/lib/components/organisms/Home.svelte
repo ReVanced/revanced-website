@@ -8,9 +8,9 @@
 			<span>Re</span>Vanced
 		</h1>
 
-		<h3>
+		<h4>
 			ReVanced is an extensible framework for building <br /> Android application mods.
-		</h3>
+		</h4>
 
 		<div class="hero-buttons">
 			<Button icon="download" href="download" kind="primary">Download Manager</Button>
@@ -27,7 +27,7 @@
 		font-weight: 700;
 	}
 
-	h3 {
+	h4 {
 		margin-top: 1rem;
 		margin-bottom: 2rem;
 	}
@@ -57,10 +57,10 @@
 		}
 
 		h1 {
-			font-size: clamp(2.25rem, 4.2rem, 4.5rem);
+			font-size: clamp(3rem, 10vw, 4.5rem);
 		}
 
-		h3 {
+		h4 {
 			font-size: clamp(1rem, 1.2rem, 1.5rem);
 		}
 

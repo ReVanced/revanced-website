@@ -1,12 +1,14 @@
 <script>
-  import RouterEvents from '../../../data/RouterEvents';
+	import RouterEvents from '../../../data/RouterEvents';
 	export let href = '/';
-  export let is_selected = target_url => href === target_url;
+	export let is_selected = (target_url) => href === target_url;
 </script>
 
 <a data-sveltekit-prefetch {href}>
 	<li class:selected={is_selected($RouterEvents.target_url.pathname)}>
-		<slot />
+		<h5>
+			<slot />
+		</h5>
 	</li>
 </a>
 
@@ -29,8 +31,9 @@
 		justify-content: center;
 	}
 
+
+
 	a {
-		color: var(--grey-five);
 		text-decoration: none;
 		font-size: 1rem;
 		user-select: none;
@@ -47,6 +50,10 @@
 		color: var(--accent-color);
 	}
 
+	li.selected h5 {
+		color: var(--accent-color);
+	}
+
 	@media (max-width: 768px) {
 		li {
 			padding: 1rem 1.5rem;
@@ -60,10 +67,8 @@
 			background-color: var(--accent-color);
 		}
 
-		li.selected {
-			color: var(--grey-four)
+		li.selected h5 {
+			color: var(--grey-four);
 		}
-
 	}
-
 </style>

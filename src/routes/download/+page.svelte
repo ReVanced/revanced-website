@@ -12,7 +12,7 @@
 
 <div class="wrapper">
 	<h1>ReVanced <span>Manager</span></h1>
-	<h3>Patch your favourite apps, on-device.</h3>
+	<h4>Patch your favourite apps, on-device.</h4>
 	<Button kind="primary" icon="download" target="_blank" href={manager.assets[0].url}>{manager.version}</Button>
   <div class="screenshot">
     <Picture data={manager_screenshot} alt="Manager Screenshot" />
@@ -31,10 +31,10 @@
 	h1 {
 		text-align: center;
 		color: var(--white);
-		margin-bottom: 1.1rem;
+		margin-bottom: 0.5rem;
 	}
 
-	h3 {
+	h4 {
 		text-align: center;
 		margin-bottom: 1.5rem;
 	}

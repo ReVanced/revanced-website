@@ -26,12 +26,12 @@
 		transition: background-color 0.4s var(--bezier-one);
 	}
 
-	.package > h5 {
+	.package h5 {
 		color: var(--grey-five);
 		transition: color 0.3s var(--bezier-one);
 	}
 
-	.selected > h5 {
+	.selected h5 {
 		color: var(--grey-four);
 		transition: color 0.3s var(--bezier-one);
 	}
@@ -43,7 +43,7 @@
 		background-color: var(--grey-six);
 	}
 
-	.package:not(.selected):hover > h5 {
+	.package:not(.selected):hover h5 {
 		color: var(--white);
 	}
 </style>

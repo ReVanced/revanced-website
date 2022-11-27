@@ -17,7 +17,7 @@
 
 <div class="title">
 	<a href="https://github.com/{repo}" rel="noreferrer" target="_blank">
-		<h3>{repo_name}</h3>
+		<h4>{repo_name}</h4>
 	</a>
 </div>
 
@@ -39,8 +39,7 @@
 		transform: translateX(-6px);
 	}
 
-	h3 {
-		font-weight: 500;
+	h4 {
 		text-align: center;
 	}
 
@@ -57,14 +56,14 @@
 		border-radius: 8px;
 	}
 
-	a > h3 {
+	a > h4 {
 		transition: all 0.3s var(--bezier-one);
 		width: max-content;
 		padding: 0rem 0.4rem;
 		border-radius: 4px;
 	}
 
-	a:hover > h3 {
+	a:hover > h4 {
 		width: max-content;
 		background-color: var(--grey-three);
 		color: var(--accent-color);

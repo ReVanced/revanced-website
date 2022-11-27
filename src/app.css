@@ -45,13 +45,13 @@ body {
     --grey-four: #182244;
     --grey-five: hsl(208, 30%, 75%);
     --grey-six: #202126;
-    --grey-seven: #18191D;
+    --grey-seven: #18191d;
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 ::selection {
-	background-color: var(--accent-low-opacity);
-	color: var(--accent-color);
+    background-color: var(--accent-low-opacity);
+    color: var(--accent-color);
 }
 
 /*-----headings-----*/
@@ -59,42 +59,43 @@ body {
 h1 {
     color: var(--white);
     line-height: 1em;
-	font-size: 3rem;
+    font-size: 3rem;
     font-weight: 700;
+    letter-spacing: -0.04em;
 }
 
 h2 {
     color: var(--grey-five);
     line-height: 1em;
-	font-size: 2.25rem;
-    font-weight: 700;
+    font-size: 2.25rem;
+    letter-spacing: -0.075rem;
+    font-weight: 600;
 }
 
 h3 {
-    color: var(--grey-five);
-    font-weight: 400;
     font-size: 1.25rem;
+    color: var(--accent-color-two);
+    font-weight: 600;
 }
 
 h4 {
     color: var(--grey-five);
-    font-weight: 500;
-    font-size: 1rem;
-    letter-spacing: normal;
+    font-weight: 400;
+    font-size: 1.1rem;
+    letter-spacing: 0.02rem;
 }
 
 h5 {
     color: var(--grey-five);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 0.9rem;
-    letter-spacing: normal;
+    letter-spacing: 0.02rem;
 }
 
 h6 {
     color: var(--grey-five);
-    font-weight: 400;
+    font-weight: 500;
     font-size: 0.8rem;
-    letter-spacing: normal;
 }
 
 /*---------------*/
