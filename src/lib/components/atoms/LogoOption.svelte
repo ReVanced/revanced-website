@@ -17,55 +17,54 @@
 			selected = selected;
 		}
 		console.log(selected);
-		localStorage.setItem("selected", JSON.stringify(selected));
+		localStorage.setItem('selected', JSON.stringify(selected));
 	};
 </script>
 
-<div on:click={handleClick} class:clicked>
+<!-- SHUT UP -->
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<div class="option" on:click={handleClick} on:keypress={handleClick} tabindex="0" class:clicked>
 	<img src={logo} alt={filename} />
-	<span class="text">
+	<div class="text">
 		<h2>{name}</h2>
 		<h6>{filename}</h6>
-	</span>
+	</div>
 </div>
 
 <style>
-	div {
+
+	.option {
 		color: var(--white);
 		text-decoration: none;
 		padding: 1.25rem;
 		width: 100%;
 		transition: all 0.3s var(--bezier-one);
-		border-radius: 8px;
+		border-radius: 12px;
 		display: flex;
 		gap: 1.5rem;
 		background-color: var(--grey-six);
 		border: 1px solid var(--grey-three);
 		cursor: pointer;
 		align-items: center;
-		overflow: hidden;
 	}
-
 
 	h2 {
 		font-size: 1rem;
 		font-weight: 500;
-		
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	h6 {
 		font-size: 0.9rem;
-	}
-
-	h2, h6 {
-		display: block;
 		overflow: hidden;
-		white-space: nowrap;
 		text-overflow: ellipsis;
-	}
 
+	}
 	.text {
-		flex-direction: column;
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 
 	.clicked {
