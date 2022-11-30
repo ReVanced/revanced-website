@@ -4,7 +4,6 @@
 	import type { CompatiblePackage, Patch } from 'src/data/types';
 
 	export let patch: Patch;
-	export let current;
 	const hasPatchOptions = !!patch.options.length;
 	let expanded: boolean = false;
 </script>
@@ -109,7 +108,7 @@
 		transition: all 2s var(--bezier-one);
 		background-color: var(--grey-six);
 		padding: 1.25rem;
-		border-radius: 8px;
+		border-radius: 12px;
 	}
 
 	.patch-container:active {

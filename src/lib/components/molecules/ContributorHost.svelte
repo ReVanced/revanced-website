@@ -2,7 +2,7 @@
 	import type { Contributor } from 'src/data/types';
 	import ContributorButton from '../atoms/ContributorPerson.svelte';
 
-	export let contribs: Contributor[];
+	export let contributors: Contributor[];
 	export let repo: string;
 
 	let repo_name = repo
@@ -12,6 +12,7 @@
 		.replace(/api/g, 'API')
 		.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase());
 
+	// Yes
 	let usersIwantToExplodeSoBadly = ['semantic-release-bot'];
 </script>
 
@@ -24,7 +25,7 @@
 <hr />
 
 <div class="contrib-host">
-	{#each contribs as { login, avatar_url, html_url }}
+	{#each contributors as { login, avatar_url, html_url }}
 		{#if !usersIwantToExplodeSoBadly.includes(login)}
 			<ContributorButton name={login} pfp={avatar_url} url={html_url} />
 		{/if}

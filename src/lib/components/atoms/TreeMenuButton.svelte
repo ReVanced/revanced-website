@@ -1,14 +1,15 @@
 <script lang="ts">
-	export let current: string | boolean;
+	export let selectedPkg: string | boolean;
 	export let name: string;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="package"
-	class:selected={current === name}
+	class:selected={selectedPkg === name}
 	on:click={() =>
-		(current = current === name ? false : name) && window.scrollTo({ top: 0, behavior: 'smooth' })}
+		(selectedPkg = selectedPkg === name ? false : name) &&
+		window.scrollTo({ top: 0, behavior: 'smooth' })}
 >
 	<h5>{name}</h5>
 </div>

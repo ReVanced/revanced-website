@@ -21,9 +21,9 @@
 			<h4>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h4>
 		</div>
 		<div class="contrib-grid">
-			{#each $repositories as { contributors: contribs, name }}
+			{#each $repositories as { contributors, name: repo }}
 				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorHost {contribs} repo={name} />
+					<ContributorHost {contributors} {repo} />
 				</div>
 			{/each}
 		</div>

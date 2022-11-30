@@ -13,26 +13,24 @@
 
 	$: ({ patches, packages } = $api_patches);
 
-	let current: boolean = false;
+	let selectedPkg: boolean = false;
 	let searchTerm: string;
 	let searchTermFiltered: string;
 	let timeout: any = null;
 
-	const debounce = () => {
-		clearTimeout(timeout);
-		timeout = setTimeout(() => {
-			searchTermFiltered = searchTerm
-				?.replace(/\./g, '')
-				.replace(/\s/g, '')
-				.replace(/-/g, '')
-				.toLowerCase();
-		}, 500);
-	};
+	function filterByPackage(selectedPkg: string | boolean, packageList: any) {
+		for (let i = 0; i < packageList.length; i++) {
+			if (packageList[i].name === selectedPkg) {
+				return true;
+			}
+		}
+	}
 
 	function search(patch: Patch) {
-		function checkPkgName(findTerm: string | boolean, array: any) {
-			for (let i = 0; i < array.length; i++) {
-				if (array[i].name.replace(/\./g, '').includes(findTerm)) {
+		function checkPkgName(selectedPkg: string | boolean, packageList: any) {
+			// Basically the same function as before lol
+			for (let i = 0; i < packageList.length; i++) {
+				if (packageList[i].name.replace(/\./g, '').includes(selectedPkg)) {
 					return true;
 				}
 			}
@@ -45,14 +43,18 @@
 		);
 	}
 
-	function filterByPackage(findTerm: string | boolean, array: any) {
-		for (let i = 0; i < array.length; i++) {
-			if (array[i].name === findTerm) {
-				return true;
-			}
-		}
-		return false;
-	}
+	// Make sure we don't have filter the patches after every key press
+	const debounce = () => {
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			// Filter search term for better results (i.e. "  Unl O-ck" and "unlock" gives the same results)
+			searchTermFiltered = searchTerm
+				?.replace(/\./g, '')
+				.replace(/\s/g, '')
+				.replace(/-/g, '')
+				.toLowerCase();
+		}, 500);
+	};
 </script>
 
 <svelte:head>
@@ -64,10 +66,12 @@
 <main>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
 		<TreeMenu>
+			<!-- Must bind both variables: we get searchTerm from the text input, -->
+			<!-- and searchTermFiltered gets cleared with the clear button -->
 			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" on:keyup={debounce} />
 			<span>
 				{#each packages as pkg}
-					<TreeMenuButton bind:current name={pkg} />
+					<TreeMenuButton bind:selectedPkg name={pkg} />
 				{/each}
 			</span>
 		</TreeMenu>
@@ -75,11 +79,14 @@
 
 	<div class="patches-container">
 		{#each patches as patch}
-			{#key current || searchTermFiltered}
-				{#if filterByPackage(current, patch.compatiblePackages) || !current}
+			<!-- Trigger new animations when package or search changes (I love Svelte) -->
+			{#key selectedPkg || searchTermFiltered}
+				<!-- Show patch if it supports the selected package, or if no package has been selected -->
+				{#if filterByPackage(selectedPkg, patch.compatiblePackages) || !selectedPkg}
+					<!-- ...same with search -->
 					{#if search(patch) || !searchTermFiltered}
 						<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: 100 }}>
-							<PatchCell bind:current {patch} />
+							<PatchCell {patch} />
 						</div>
 					{/if}
 				{/if}
@@ -94,7 +101,7 @@
 		margin-inline: auto;
 		display: grid;
 		grid-template-columns: 300px 3fr;
-		width: min(98%, 90rem);
+		width: min(98%, 82rem);
 		gap: 1.5rem;
 	}
 
