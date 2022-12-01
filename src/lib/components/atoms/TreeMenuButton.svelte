@@ -1,15 +1,18 @@
 <script lang="ts">
 	export let selectedPkg: string | boolean;
 	export let name: string;
+
+	function handleClick() {
+		selectedPkg = selectedPkg === name ? false : name
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="package"
 	class:selected={selectedPkg === name}
-	on:click={() =>
-		(selectedPkg = selectedPkg === name ? false : name) &&
-		window.scrollTo({ top: 0, behavior: 'smooth' })}
+	on:click={handleClick}
 >
 	<h5>{name}</h5>
 </div>
@@ -46,5 +49,26 @@
 
 	.package:not(.selected):hover h5 {
 		color: var(--white);
+	}
+
+	@media (max-width: 768px) {
+		.package {
+			border-radius: 12px;
+			width: max-content;
+			background-color: transparent;
+			border: 1px solid var(--grey-three);
+		}
+
+		.package h5 {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.selected {
+			background-color: var(--accent-color);
+		}
+		.package:not(.selected):hover h5 {
+			color: var(--grey-five);
+		}
 	}
 </style>

@@ -1,25 +1,26 @@
 <script lang="ts">
-  import type { DocumentInfo } from '$lib/documentation.shared';
-  export let info: DocumentInfo;
+	import type { DocumentInfo } from '$lib/documentation.shared';
+	export let info: DocumentInfo;
+	import { page } from '$app/stores';
 </script>
 
 <!-- Always part of a list -->
 <li>
-  <div class="doc-section item">
-    <a href="/docs/{info.slug}"><h5>{info.title}</h5></a>
-  </div>
+	<a href="/docs/{info.slug}">
+		<div class="doc-section item" class:selected={$page.url.pathname === `/docs/${info.slug}`}>
+			<h5>{info.title}</h5>
+		</div>
+	</a>
 </li>
 
-
 <style>
+	a {
+		text-decoration: none;
+	}
 
-  a {
-    text-decoration: none;
-  }
-
-  li {
-    list-style: none;
-  }
+	li {
+		list-style: none;
+	}
 	.item {
 		padding: 0.6rem 1rem;
 		border-radius: 8px;

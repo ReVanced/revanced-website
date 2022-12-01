@@ -1,5 +1,5 @@
 <div class="menu">
-	<div class="package-list">
+	<div class="slot">
 		<slot />
 	</div>
 </div>
@@ -24,12 +24,20 @@
 		background-color: var(--accent-color);
 	}
 
-	.package-list {
+	.slot {
 		margin-top: 0.75rem;
 		display: flex;
 		gap: 1rem;
 		flex-direction: column;
 		white-space: normal;
 		word-break: break-all;
+	}
+
+	@media (max-width: 768px) {
+
+		.menu {
+			padding: 0.75rem;
+			height: unset;
+		}
 	}
 </style>

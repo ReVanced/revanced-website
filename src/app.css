@@ -48,6 +48,7 @@ body {
     --grey-five: hsl(208, 30%, 75%);
     --grey-six: #202126;
     --grey-seven: #18191d;
+    --grey-eight: hsla(207, 30%, 75%, 0.577);
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -97,7 +98,7 @@ h5 {
 h6 {
     color: var(--grey-five);
     font-weight: 500;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 }
 
 /*---------------*/

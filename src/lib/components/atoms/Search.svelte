@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let title: string;
 	export let searchTerm: string | null;
-	export let searchTermFiltered: string | null
+	export let searchTermFiltered: string | null;
 	import { fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -9,7 +9,6 @@
 		searchTerm = null;
 		searchTermFiltered = null;
 	}
-
 </script>
 
 <div>
@@ -35,17 +34,21 @@
 
 <style>
 	#search {
+		/* umm dont ask */
 		position: absolute;
-		height: 20px;
-		transform: translate(60%, 60%);
+		z-index: 1;
+		left: 23px;
+		top: 52px;
+		height: 24px;
 	}
 
 	#clear {
 		position: absolute;
+		right: 42px;
+		top: 52px;
 		z-index: 1;
-		height: 20px;
+		height: 24px;
 		cursor: pointer;
-		transform: translate(1060%, 60%);
 	}
 
 	.clear {
@@ -55,19 +58,43 @@
 	input {
 		position: relative;
 		display: flex;
-		padding: 0.75rem 1rem;
+		padding: 1rem 3rem;
 		border-radius: 12px;
 		border: 1px solid var(--grey-three);
 		background-color: transparent;
-		color: var(--accent-color);
-		padding-left: 2.5rem;
+		color: var(--grey-five);
 		width: 100%;
 	}
 	input::placeholder {
-		color: var(--grey-five);
+		color: var(--grey-eight);
+		font-size: 0.9rem;
 	}
 
 	input:focus {
 		outline: 1px solid var(--accent-color);
+	}
+
+	@media (max-width: 768px) {
+		#search {
+			left: 26px;
+			top: 38px;
+		}
+
+		#clear {
+			right: 26px;
+			top: 38px;
+		}
+
+	
+		input {
+			background-color: transparent;
+			border: none;
+			border-radius: 0;
+			border-bottom: 1px solid var(--grey-one);
+		}	
+
+		input:focus {
+			border-radius: 8px;
+		}
 	}
 </style>

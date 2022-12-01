@@ -68,8 +68,8 @@
 		<TreeMenu>
 			<!-- Must bind both variables: we get searchTerm from the text input, -->
 			<!-- and searchTermFiltered gets cleared with the clear button -->
-			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" on:keyup={debounce} />
-			<span>
+			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" sticky={true} on:keyup={debounce} />
+			<span class="packages">
 				{#each packages as pkg}
 					<TreeMenuButton bind:selectedPkg name={pkg} />
 				{/each}
@@ -85,7 +85,7 @@
 				{#if filterByPackage(selectedPkg, patch.compatiblePackages) || !selectedPkg}
 					<!-- ...same with search -->
 					{#if search(patch) || !searchTermFiltered}
-						<div in:fly={{ x: 10, easing: quintOut, duration: 750, delay: 100 }}>
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
 							<PatchCell {patch} />
 						</div>
 					{/if}
@@ -105,10 +105,6 @@
 		gap: 1.5rem;
 	}
 
-	aside {
-		padding-left: 0.75rem;
-	}
-
 	.patches-container {
 		margin-top: 6.7rem;
 		display: flex;
@@ -120,5 +116,34 @@
 		min-height: calc(100vh - 6rem);
 		padding-bottom: 3rem;
 		padding-right: 0.75rem;
+	}
+
+	@media (max-width: 768px) {
+		main {
+			grid-template-columns: none;
+			flex-direction: column;
+			margin-top: 4rem;
+			gap: 0;
+		}
+
+		.patches-container {
+			padding-left: 0.75rem;
+			padding-bottom: 1.25rem;
+			margin-top: 0;
+			gap: 0.75rem;
+		}
+
+		.packages {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			height: 2.75rem;
+			gap: 0.5rem;
+			overflow-x: scroll;
+		}
+
+		.packages::-webkit-scrollbar {
+			display: none;
+		}
 	}
 </style>

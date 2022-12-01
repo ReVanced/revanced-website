@@ -86,6 +86,7 @@
 		background-color: var(--grey-two);
 		padding: 0.2rem 0.4rem;
 		display: flex;
+		word-break: break-all;
 	}
 
 	#option-title {
@@ -155,5 +156,11 @@
 		margin-top: 1rem;
 		display: flex;
 		flex-direction: column;
+	}
+
+	@media (max-width: 768px) {
+		.patch-container {
+			border-radius: 16px;
+		}
 	}
 </style>
