@@ -76,4 +76,11 @@
 		justify-items: center;
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	}
+
+	@media (max-width: 768px) {
+		.contrib-host {
+			gap: 0.25rem;
+			grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+		}
+	}
 </style>

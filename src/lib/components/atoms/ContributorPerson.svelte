@@ -16,7 +16,7 @@
 		text-decoration: none;
 		padding: 0.5rem;
 		width: 100%;
-		transition: all 0.3s var(--bezier-one);
+		transition: background-color 0.3s var(--bezier-one);
 		border-radius: 4px;
 		display: flex;
 		gap: 1rem;
@@ -46,5 +46,23 @@
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
+	}
+
+	@media (max-width: 768px) {
+		h5 {
+			display: none;
+		}
+
+		img {
+			height: 48px;
+			width: 48px;
+		}
+		a {
+			border-radius: 16px;
+			width: max-content;
+			background-color: transparent;
+			border: none;
+		}
+
 	}
 </style>
