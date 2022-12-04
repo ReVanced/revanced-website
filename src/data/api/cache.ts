@@ -48,4 +48,5 @@ export function clear() {
       localStorage.removeItem(key);
     }
   }
+  location.reload();
 }

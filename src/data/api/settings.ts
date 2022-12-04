@@ -2,9 +2,10 @@ import { browser } from "$app/environment";
 
 const URL_KEY = "revanced_api_url";
 
+export const default_base_url = "https://releases.revanced.app";
+
 // Get base URL
 export function api_base_url(): string {
-  const default_base_url = "https://releases.revanced.app";
   if (browser) {
     return localStorage.getItem(URL_KEY) || default_base_url;
   }
