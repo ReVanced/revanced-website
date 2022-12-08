@@ -25,7 +25,7 @@
 			<a href="/contributors"><h5>Contributors</h5></a>
 		</div>
 		<div class="link-column">
-			<h4>Sources</h4>
+			<h4>Repositories</h4>
 			{#each $repositories as { name }}
 				<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 					<div>
