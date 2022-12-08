@@ -9,7 +9,7 @@
 		</h1>
 
 		<h4>
-			ReVanced is a modular patcher for <br /> Android applications.
+			ReVanced is a modular patcher for Android applications.
 		</h4>
 
 		<div class="hero-buttons">
