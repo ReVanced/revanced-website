@@ -9,12 +9,12 @@
 		</h1>
 
 		<h4>
-			ReVanced is an extensible framework for building <br /> Android application mods.
+			ReVanced is a modular patcher for <br /> Android applications.
 		</h4>
 
 		<div class="hero-buttons">
 			<Button icon="download" href="download" kind="primary">Download Manager</Button>
-			<Button icon="docs" href="patches">View Patches</Button>
+			<Button icon="docs" href="patches">View patches</Button>
 		</div>
 	</div>
 </section>
