@@ -48,7 +48,7 @@
 
 			<!-- Should probably be moved to its own component. -->
 			<button
-				class="menu-btn mobile"
+				class="menu-btn button-reset mobile"
 				class:open={menuOpen}
 				on:click={() => {
 					menuOpen = !menuOpen;
@@ -168,6 +168,7 @@
 			display: none !important;
 		}
 	}
+
 	.menu-btn {
 		user-select: none;
 		position: relative;
@@ -178,17 +179,8 @@
 		height: 60px;
 		cursor: pointer;
 		transition: all 0.5s var(--bezier-one);
-
-		/* We don't want it to look like a normal button. */
-		background-color: transparent;
-		border: none;
-		font-family: inherit;
-		font-size: inherit;
-		font-style: inherit;
-		font-weight: inherit;
-		line-height: inherit;
-		padding: 0;
 	}
+
 	.menu-btn__burger {
 		width: 25px;
 		height: 2px;

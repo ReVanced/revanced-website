@@ -1,16 +1,18 @@
 <script lang="ts">
 	import * as settings from '../../../data/api/settings';
-	import { clear } from '../../../data/api/cache';
+	import Modal from '$lib/components/atoms/Modal.svelte';
+	import { clear_and_reload } from '../../../data/api/cache';
+
 	let url = settings.api_base_url();
-	function handler() {
-		clear();
+
+	function save() {
 		settings.set_api_base_url(url);
-		location.reload();
+		clear_and_reload();
 	}
+
 	function reset() {
 		url = settings.default_base_url;
 	}
-	import Modal from '$lib/components/atoms/Modal.svelte';
 </script>
 
 <Modal icon="/icons/settings.svg">
@@ -20,14 +22,16 @@
 			<h4>API URL:</h4>
 			<div class="input-wrapper">
 				<input name="api-url" type="text" bind:value={url} />
-				<img on:click={reset} src="/icons/reset.svg" alt="Reset" />
+				<button class="button-reset" on:click={reset}>
+					<img src="/icons/reset.svg" alt="Reset" />
+				</button>
 			</div>
 		</div>
 		<div class="btns">
-			<button class="save-url-btn" on:click={handler}>
+			<button class="save-url-btn" on:click={save}>
 				<h4>Save</h4>
 			</button>
-			<button class="clear-cache-btn" on:click={clear}>
+			<button class="clear-cache-btn" on:click={clear_and_reload}>
 				<h4>Clear cache</h4>
 			</button>
 		</div>
@@ -56,11 +60,10 @@
 		box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
 	}
 
-
 	div.btns {
 		display: flex;
 		gap: 1rem;
-        text-align: center;
+		text-align: center;
 		flex-wrap: wrap;
 	}
 

@@ -33,6 +33,17 @@ body {
     margin-top: 7rem;
 }
 
+.button-reset {
+		background-color: transparent;
+		border: none;
+		font-family: inherit;
+		font-size: inherit;
+		font-style: inherit;
+		font-weight: inherit;
+		line-height: inherit;
+		padding: 0;
+}
+
 :root {
     --main-font: "Manrope", sans-serif;
     --mono-font: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
