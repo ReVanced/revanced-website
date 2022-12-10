@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Navigation from '../atoms/NavButton.svelte';
 	import { page } from '$app/stores';
-	import Button from '../atoms/Button.svelte';
 	import MobileDropdown from './MobileDropdown.svelte';
 	import { onMount } from 'svelte';
 	import RouterEvents from '../../../data/RouterEvents';
+	import ApiSettingsButton from '$lib/components/atoms/ApiSettingsButton.svelte';
 
 	let menuOpen = false;
 
@@ -25,7 +25,6 @@
 					<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 				</span>
 			</a>
-
 			<span class="desktop">
 				<Navigation href="/">Home</Navigation>
 				<Navigation href="/download">Download</Navigation>
@@ -44,14 +43,12 @@
 				<Navigation href="/contributors/">
 					<img src="/icons/contrib.svg" alt="Contributors" />
 				</Navigation>
-				<Navigation href="/api-settings/">
-					<img src="/icons/settings.svg" alt="Settings" />
-				</Navigation>
+				<ApiSettingsButton />
 			</span>
 
 			<!-- Should probably be moved to its own component. -->
 			<button
-				class="menu-btn mobile"
+				class="menu-btn button-reset mobile"
 				class:open={menuOpen}
 				on:click={() => {
 					menuOpen = !menuOpen;
@@ -76,9 +73,9 @@
 						<Navigation href="/contributors/">
 							<img src="/icons/contrib.svg" alt="Contributors" />
 						</Navigation>
-						<Navigation href="/api-settings/">
-							<img src="/icons/settings.svg" alt="Settings" />
-						</Navigation>
+						<ApiSettingsButton on:click={() => {
+							menuOpen = false;
+						}}/>
 					</div>
 				</div>
 			</MobileDropdown>
@@ -171,6 +168,7 @@
 			display: none !important;
 		}
 	}
+
 	.menu-btn {
 		user-select: none;
 		position: relative;
@@ -181,17 +179,8 @@
 		height: 60px;
 		cursor: pointer;
 		transition: all 0.5s var(--bezier-one);
-
-		/* We don't want it to look like a normal button. */
-		background-color: transparent;
-		border: none;
-		font-family: inherit;
-		font-size: inherit;
-		font-style: inherit;
-		font-weight: inherit;
-		line-height: inherit;
-		padding: 0;
 	}
+
 	.menu-btn__burger {
 		width: 25px;
 		height: 2px;
