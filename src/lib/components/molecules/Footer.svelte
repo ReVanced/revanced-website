@@ -20,12 +20,12 @@
 			<h4>Pages</h4>
 			<a href="/"><h5>Home</h5></a>
 			<a href="/download"><h5>Download</h5></a>
-			<!-- <a href="/docs"><h5>Docs</h5></a> -->
+			<!-- <a href="/docs"><h5>Documentation</h5></a> -->
 			<a href="/patches"><h5>Patches</h5></a>
 			<a href="/contributors"><h5>Contributors</h5></a>
 		</div>
 		<div class="link-column">
-			<h4>Repos</h4>
+			<h4>Repositories</h4>
 			{#each $repositories as { name }}
 				<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 					<div>
