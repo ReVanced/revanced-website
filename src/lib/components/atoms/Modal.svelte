@@ -4,11 +4,12 @@
 
 	let modalOpen = false;
 	export let icon: string;
+	export let alt: string;
 </script>
 
 <div>
 	<button class="modal-btn" on:click={() => (modalOpen = !modalOpen)}>
-		<img src={icon} alt="icon" />
+		<img src={icon} {alt} />
 	</button>
 	{#if modalOpen}
 		<div class="overlay" />

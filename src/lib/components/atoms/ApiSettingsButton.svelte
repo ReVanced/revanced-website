@@ -15,7 +15,7 @@
 	}
 </script>
 
-<Modal icon="/icons/settings.svg">
+<Modal icon="/icons/settings.svg" alt="Settings">
 	<div class="settings-menu">
 		<h3>Configure the backend</h3>
 		<div class="url-stuff">
