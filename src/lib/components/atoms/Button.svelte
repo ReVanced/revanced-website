@@ -11,7 +11,7 @@
 	<div class={type} style="width: {maxWidth ? '100%' : 'max-content'}">
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
-        {/if}
+		{/if}
 		<slot />
 	</div>
 </a>
@@ -47,8 +47,6 @@
 	div:hover {
 		filter: brightness(85%);
 	}
-
-
 
 	div,
 	.button-secondary {
