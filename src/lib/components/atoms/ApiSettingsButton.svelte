@@ -17,10 +17,10 @@
 	<div class="settings-menu">
 		<h3>Configure the backend</h3>
 		<div class="url-stuff">
-			<h4>Api URL:</h4>
+			<h4>API URL:</h4>
 			<div class="input-wrapper">
 				<input name="api-url" type="text" bind:value={url} />
-				<img on:click={reset} src="/icons/reset.svg" alt="tes" />
+				<img on:click={reset} src="/icons/reset.svg" alt="Reset" />
 			</div>
 		</div>
 		<div class="btns">
