@@ -1,6 +1,6 @@
 <script>
 	import HeroImage from '$lib/components/atoms/HeroImage.svelte';
-	import Home from '$lib/components/organisms/Home.svelte';
+	import Home from '$lib/components/organisms/Hero.svelte';
 	import SocialHost from '$lib/components/molecules/SocialHost.svelte';
 	import Wave from '$lib/components/atoms/Wave.svelte';
 </script>

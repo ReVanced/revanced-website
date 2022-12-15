@@ -17,7 +17,7 @@
 		padding: 0.5rem;
 		width: 100%;
 		transition: background-color 0.3s var(--bezier-one);
-		border-radius: 4px;
+		border-radius: 6px;
 		display: flex;
 		gap: 1rem;
 		align-items: center;

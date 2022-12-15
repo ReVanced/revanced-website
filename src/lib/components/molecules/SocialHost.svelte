@@ -12,7 +12,6 @@
 <style>
 	.social-host {
 		width: min(87%, 100rem);
-		/* same as margin-inline: auto on .wrapper */
 		padding: 0 max(6.5%, calc(50vw - 50rem));
 		align-items: center;
 		user-select: none;

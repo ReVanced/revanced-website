@@ -46,14 +46,10 @@
 			<h4>Socials</h4>
 			<a href="https://github.com/revanced" target="_blank" rel="noreferrer"><h5>GitHub</h5></a>
 			<a href="https://revanced.app/discord" target="_blank" rel="noreferrer"><h5>Discord</h5></a>
-			<a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer"><h5>Reddit</h5></a
-			>
+			<a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer"><h5>Reddit</h5></a>
 			<a href="https://t.me/app_revanced" target="_blank" rel="noreferrer"><h5>Telegram</h5></a>
-			<a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer"><h5>Twitter</h5></a
-			>
-			<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer"
-				><h5>YouTube</h5></a
-			>
+			<a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer"><h5>Twitter</h5></a>
+			<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer"><h5>YouTube</h5></a>
 		</div>
 	</section>
 </footer>
@@ -65,7 +61,7 @@
 		display: flex;
 		gap: 2rem;
 		justify-content: space-between;
-		width: min(85%, 90rem);
+		width: min(90%, 80rem);
 	}
 
 	h2 {

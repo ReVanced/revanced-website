@@ -25,7 +25,7 @@
 					.replace(/Microg/g, 'MicroG')
 					.replace(/Hdr/g, 'HDR')
 					.replace(/Sponsorblock/g, 'SponsorBlock')
-					.replace(/Tiktok/g, 'TikTok')
+					.replace(/ktok/g, 'kTok')
 					.replace(/Vr/g, 'VR')}
 			</h3>
 		</div>
@@ -47,11 +47,14 @@
 				<h6 class="boxed">📦 {pkg.name}</h6>
 			</a>
 		{/each}
+		
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
-		{#if patch.compatiblePackages[0].versions.length}
-			<h6 class="boxed">
-				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-			</h6>
+		{#if patch.compatiblePackages.length}
+			{#if patch.compatiblePackages[0].versions.length}
+				<h6 class="boxed">
+					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+				</h6>
+			{/if}
 		{/if}
 
 		<h6 class="boxed">🧩 {patch.version}</h6>

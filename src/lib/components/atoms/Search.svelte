@@ -59,19 +59,11 @@
 		position: relative;
 		display: flex;
 		padding: 1rem 3rem;
-		border-radius: 12px;
-		border: 1px solid var(--grey-three);
-		background-color: transparent;
-		color: var(--grey-five);
 		width: 100%;
 	}
 	input::placeholder {
 		color: var(--grey-eight);
 		font-size: 0.9rem;
-	}
-
-	input:focus {
-		outline: 1px solid var(--accent-color);
 	}
 
 	@media (max-width: 768px) {

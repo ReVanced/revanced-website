@@ -55,7 +55,6 @@
 		display: flex;
 		align-items: center;
 		flex-direction: column;
-		gap: 0.5rem;
 		margin-bottom: 2rem;
 		background-color: var(--accent-color);
 		padding: 2.4rem;
@@ -69,7 +68,7 @@
 
 	a::after {
 		padding-left: 5px;
-		content: '->';
+		content: '→';
 		position: absolute;
 		transition: all 0.3s var(--bezier-one);
 	}

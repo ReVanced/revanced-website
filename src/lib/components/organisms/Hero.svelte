@@ -4,17 +4,19 @@
 
 <section class="hero">
 	<div class="hero-text">
+		<h5>ANDROID APP PATCHER</h5>
 		<h1>
-			<span>Re</span>Vanced
+			Continuing the <br />legacy of <span>Vanced.</span>
 		</h1>
-
 		<h4>
-			ReVanced is an extensible framework for building <br /> Android applications.
+			Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
 		</h4>
 
 		<div class="hero-buttons">
-			<Button icon="download" href="download" kind="primary">Download Manager</Button>
-			<Button icon="docs" href="patches">View patches</Button>
+			<Button icon="download" kind="primary" capitalize={true} href="download"
+				>Download Manager</Button
+			>
+			<Button icon="docs" href="patches" capitalize={true}>View patches</Button>
 		</div>
 	</div>
 </section>
@@ -22,13 +24,14 @@
 <style>
 	h1 {
 		color: var(--white);
-		line-height: 1em;
-		font-size: 5rem;
 		font-weight: 700;
+		margin-bottom: 1.5rem;
 	}
 
+	h5 {
+		margin-bottom: 0.5rem;
+	}
 	h4 {
-		margin-top: 1rem;
 		margin-bottom: 2rem;
 	}
 
@@ -53,11 +56,10 @@
 	@media (max-width: 768px) {
 		.hero {
 			padding-bottom: 0;
-			text-align: center;
 		}
 
 		h1 {
-			font-size: clamp(3rem, 10vw, 4.5rem);
+			font-size: clamp(3rem, 10vw, 3rem);
 		}
 
 		h4 {
@@ -67,16 +69,11 @@
 		br {
 			content: ' ';
 		}
-
-		.hero-buttons {
-			justify-content: center;
-		}
 	}
 
 	@media screen and (max-width: 600px) {
 		.hero-buttons {
 			flex-direction: column;
-			align-items: center;
 		}
 	}
 </style>
