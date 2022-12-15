@@ -5,7 +5,7 @@
 <section class="hero">
 	<div class="hero-text">
 		<h1>
-			<span>Re</span>Vanced
+			<span>Re</span>vemched
 		</h1>
 
 		<h4>
