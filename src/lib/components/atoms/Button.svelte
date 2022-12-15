@@ -1,41 +1,65 @@
 <script>
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
-	export let href = '#';
 	export let maxWidth = false;
 	export let icon = '';
+	export let href = '';
+	export let capitalize = false;
 	export let target = '';
 </script>
 
-<a {href} {target}>
-	<div class={type} style="width: {maxWidth ? '100%' : 'max-content'}">
-		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
-		{/if}
-		<slot />
-	</div>
-</a>
+<button on:click>
+	{#if href}
+		<a {href} {target}>
+			<div class={type} class:capitalize style="width: {maxWidth ? '100%' : 'max-content'}">
+				{#if icon}
+					<img src="../icons/{icon}.svg" alt={icon} />
+				{/if}
+				<slot />
+			</div>
+		</a>
+	{:else}
+		<div class={type} class:capitalize style="width: {maxWidth ? '100%' : 'max-content'}">
+			{#if icon}
+				<img src="../icons/{icon}.svg" alt={icon} />
+			{/if}
+			<slot />
+		</div>
+	{/if}
+</button>
 
 <style>
+	button {
+		border: none;
+		background-color: transparent;
+	}
+
 	a {
 		text-decoration: none;
-		border-radius: 16px;
 	}
 
 	div,
 	.button-secondary {
 		min-width: max-content;
-		font-size: 1rem;
+		min-height: 52px;
+		font-size: 0.9rem;
 		color: var(--white);
 		font-weight: 600;
 		border: none;
 		border-radius: 12px;
-		padding: 1rem 1.75rem;
+		padding: 1rem 1.5rem;
 		display: block;
 		cursor: pointer;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
 		user-select: none;
+	}
+
+	.capitalize {
+		text-transform: uppercase;
+		letter-spacing: 0.03rem;
+		font-weight: 700;
+		font-size: 0.8rem;
 	}
 
 	.button-primary {

@@ -24,20 +24,18 @@
 		border: var(--grey-six);
 		transition-timing-function: var(--bezier-one);
 		transition-duration: 0.25s;
-		padding: 10px 25px;
-		border-radius: 200px;
+		padding: 10px 16px;
+		border-radius: 10px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-
-
 	a {
 		text-decoration: none;
 		font-size: 1rem;
 		user-select: none;
-		border-radius: 200px;
+		border-radius: 10px;
 	}
 
 	li:hover {
@@ -46,7 +44,7 @@
 	}
 
 	li.selected {
-		background-color: var(--grey-two);
+		background-color: var(--grey-one);
 		color: var(--accent-color);
 	}
 

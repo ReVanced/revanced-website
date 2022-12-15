@@ -1,71 +1,47 @@
 <script lang="ts">
-	import { click_outside } from '$lib/utils';
 	import { fade } from 'svelte/transition';
-
-	let modalOpen = false;
-	export let icon: string;
-	export let alt: string;
+	import { quadInOut } from 'svelte/easing';
+	export let modalOpen = false;
 </script>
 
-<div>
-	<button class="modal-btn" on:click={() => (modalOpen = !modalOpen)}>
-		<img src={icon} {alt} />
-	</button>
-	{#if modalOpen}
-		<div class="overlay" />
-		<div
-			class="modal-container"
-			role="dialog"
-			aria-modal="true"
-			use:click_outside
-			on:click_outside={() => (modalOpen = false)}
-			transition:fade={{ duration: 125 }}
-		>
+{#if modalOpen}
+	<div class="modal-container" transition:fade={{ easing: quadInOut, duration: 150 }}>
+		<div class="modal">
 			<slot />
 		</div>
-	{/if}
-</div>
+		<div class="overlay" on:click={() => (modalOpen = !modalOpen)} />
+	</div>
+{/if}
 
 <style>
-	button.modal-btn {
-		border: 0;
-		background-color: transparent;
-		transition-timing-function: var(--bezier-one);
-		transition-duration: 0.25s;
-		padding: 10px 25px;
-		border-radius: 200px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	button.modal-btn:hover {
-		color: var(--white);
-		background-color: var(--grey-one);
-	}
-
-	img {
-		height: 1.75rem;
-		width: auto;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-	}
-
 	.overlay {
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100%;
-		height: 100%;
+		width: 100vw;
+		height: 100vh;
 		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 1;
+		z-index: 1000;
 	}
 
-	@media (max-width: 768px) {
-		button.modal-btn {
-			padding: 1rem 1.5rem;
-			border-radius: 16px;
-		}
+	.modal {
+		position: fixed;
+		width: min(95%, 500px);
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		padding: 42px;
+		border-radius: 16px;
+		background-color: var(--grey-six);
+		display: flex;
+		user-select: none;
+		gap: 5%;
+		white-space: normal;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		z-index: 1001;
+		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
 	}
 </style>
