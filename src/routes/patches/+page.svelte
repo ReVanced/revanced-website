@@ -68,7 +68,7 @@
 		<TreeMenu>
 			<!-- Must bind both variables: we get searchTerm from the text input, -->
 			<!-- and searchTermFiltered gets cleared with the clear button -->
-			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" sticky={true} on:keyup={debounce} />
+			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" on:keyup={debounce} />
 			<span class="packages">
 				{#each packages as pkg}
 					<TreeMenuButton bind:selectedPkg name={pkg} />

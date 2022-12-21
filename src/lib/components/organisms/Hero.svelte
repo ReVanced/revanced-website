@@ -13,10 +13,8 @@
 		</h4>
 
 		<div class="hero-buttons">
-			<Button icon="download" kind="primary" capitalize={true} href="download"
-				>Download Manager</Button
-			>
-			<Button icon="docs" href="patches" capitalize={true}>View patches</Button>
+			<Button icon="download" kind="primary" capitalize href="download">Download Manager</Button>
+			<Button icon="docs" href="patches" capitalize>View patches</Button>
 		</div>
 	</div>
 </section>

@@ -1,7 +1,6 @@
 <script>
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
-	export let maxWidth = false;
 	export let icon = '';
 	export let href = '';
 	export let capitalize = false;
@@ -9,23 +8,18 @@
 </script>
 
 <button on:click>
-	{#if href}
-		<a {href} {target}>
-			<div class={type} class:capitalize style="width: {maxWidth ? '100%' : 'max-content'}">
-				{#if icon}
-					<img src="../icons/{icon}.svg" alt={icon} />
-				{/if}
-				<slot />
-			</div>
-		</a>
-	{:else}
-		<div class={type} class:capitalize style="width: {maxWidth ? '100%' : 'max-content'}">
-			{#if icon}
-				<img src="../icons/{icon}.svg" alt={icon} />
-			{/if}
-			<slot />
-		</div>
-	{/if}
+	<svelte:element
+		this={href ? 'a' : 'div'}
+		{href}
+		{target}
+		class={type}
+		class:capitalize
+	>
+		{#if icon}
+			<img src="../icons/{icon}.svg" alt={icon} />
+		{/if}
+		<slot />
+	</svelte:element>
 </button>
 
 <style>
@@ -34,21 +28,22 @@
 		background-color: transparent;
 	}
 
-	a {
-		text-decoration: none;
-	}
 
-	div,
-	.button-secondary {
+	a,
+	div {
 		min-width: max-content;
-		min-height: 52px;
+		min-height: 57px;
 		font-size: 0.9rem;
+		text-decoration: none;
 		color: var(--white);
 		font-weight: 600;
 		border: none;
 		border-radius: 12px;
 		padding: 1rem 1.5rem;
-		display: block;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
 		cursor: pointer;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
@@ -70,14 +65,6 @@
 
 	div:hover {
 		filter: brightness(85%);
-	}
-
-	div,
-	.button-secondary {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 0.5rem;
 	}
 
 	img {
