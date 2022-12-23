@@ -136,6 +136,12 @@
 		background-color: var(--grey-seven);
 		width: 100%;
 	}
+	/* Creates overflow-x on the navigation menu on small screens */
+	@media screen and (min-width:300px) and (max-width:514px){
+		nav {
+			overflow-x: scroll;
+		}	
+	}
 
 	#left-side,
 	#right-side {
