@@ -14,6 +14,9 @@ const config = {
 			pages: "public",
 			fallback: "404.html"
 		}),
+		env: {
+			publicPrefix: "RV"
+		}
 	}
 };
 
