@@ -2,8 +2,7 @@
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
-	import { friendlyName } from '$lib/utils'
-
+	import { friendlyName } from '$lib/utils';
 
 	export let patch: Patch;
 	const hasPatchOptions = !!patch.options.length;
@@ -26,37 +25,34 @@
 		{/if}
 	</div>
 	<h5>{patch.description}</h5>
-	<div class="info-container">
+	<ul class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
 			<a
 				href="https://play.google.com/store/apps/details?id={pkg.name}"
 				target="_blank"
 				rel="noreferrer"
 			>
-				<h6 class="boxed">📦 {pkg.name}</h6>
+				<li class="patch-info">📦 {pkg.name} ·</li>
 			</a>
 		{/each}
 
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
-			<h6 class="boxed">
-				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-			</h6>
+			<li class="patch-info">
+				🎯 {patch.compatiblePackages[0].versions.slice(-1)} ·
+			</li>
 		{/if}
 
 		{#if !patch.compatiblePackages.length}
-		<h6 class="boxed">
-			🌎 Universal patch
-		</h6>
+			<li class="patch-info">🌎 Universal patch</li>
 		{/if}
 
-
-		<h6 class="boxed">🧩 {patch.version}</h6>
+		<li class="patch-info">🧩 {patch.version}</li>
 
 		{#if hasPatchOptions}
-			<h6 class="boxed">⚙️ Patch options</h6>
+			<li class="patch-info">· ⚙️ Patch options</li>
 		{/if}
-	</div>
+	</ul>
 
 	{#if expanded && hasPatchOptions}
 		<span transition:fade|local={{ easing: quintOut, duration: 1000 }}>
@@ -75,28 +71,30 @@
 <style>
 	h3 {
 		margin-right: 0.5rem;
-		margin-bottom: 0.3rem;
-	}
-
-	h5 {
-		margin-bottom: 0.5rem;
-	}
-
-	h6 {
-		border-radius: 8px;
+		margin-bottom: 0.2rem;
 		color: var(--accent-color);
-		background-color: var(--grey-two);
-		padding: 0.2rem 0.4rem;
-		display: flex;
-		word-break: break-all;
 	}
 
 	#option-title {
-		color: var(--accent-color);
+		color: var(--accent-color-two);
+	}
+
+	.patch-info {
+		list-style: none;
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--grey-five);
 	}
 
 	a {
 		text-decoration: none;
+	}
+
+	a .patch-info:hover {
+		text-decoration: underline;
+		color: var(--accent-color-two);
+		text-decoration-style: wavy;
+		text-decoration-color: var(--accent-color-two);
 	}
 
 	.info-container {
@@ -105,6 +103,7 @@
 		gap: 0.25rem;
 		margin: 0.3rem 0rem;
 		width: 100%;
+		margin-top: 0.5rem;
 	}
 
 	.patch-container {
@@ -158,11 +157,5 @@
 		margin-top: 1rem;
 		display: flex;
 		flex-direction: column;
-	}
-
-	@media (max-width: 768px) {
-		.patch-container {
-			border-radius: 16px;
-		}
 	}
 </style>

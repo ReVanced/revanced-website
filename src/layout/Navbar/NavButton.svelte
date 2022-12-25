@@ -59,7 +59,7 @@
 
 	@media (max-width: 768px) {
 		li {
-			padding: 1rem 1.25rem;
+			padding: 0.75rem 1.25rem;
 			text-align: left;
 			justify-content: left;
 			border-radius: 100px;

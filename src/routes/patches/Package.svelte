@@ -19,9 +19,10 @@
 
 <style>
 	.package {
-		padding: 0.6rem 1rem;
-		font-size: 0.9rem;
-		border-radius: 8px;
+		padding: 0.75rem 1rem;
+		font-size: 0.85rem;
+		font-weight: 500;
+		border-radius: 100px;
 		cursor: pointer;
 		display: flex;
 		align-items: center;
@@ -29,20 +30,14 @@
 		width: 100%;
 		user-select: none;
 		transition: background-color 0.4s var(--bezier-one);
-	}
-
-	.package{
 		color: var(--grey-five);
 		transition: color 0.3s var(--bezier-one);
 	}
 
 	.selected {
-		color: var(--grey-four);
+		color: var(--accent-color);
 		transition: color 0.3s var(--bezier-one);
-	}
-
-	.selected {
-		background-color: var(--accent-color);
+		background-color: var(--accent-low-opacity);
 	}
 	.package:hover:not(.selected) {
 		background-color: var(--grey-six);
@@ -54,22 +49,23 @@
 
 	@media (max-width: 768px) {
 		.package {
-			border-radius: 12px;
-			padding: 0.5rem 1rem;
-			width: max-content;
+			border-radius: 0px;
+			font-size: 0.9rem;
+			padding: 1rem 1rem;
+			width: 100%;
 			background-color: transparent;
-			border: 1px solid var(--grey-three);
-		}
-
-		.package{
+			word-break: break-all;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			color: var(--accent-color);
+			color: var(--grey-five);
+			border-bottom: 1px solid var(--grey-three);
 		}
-
+		
 		.selected {
+			color: var(--accent-color);
 			background-color: var(--accent-low-opacity);
 		}
+
 		.package:not(.selected):hover {
 			color: var(--grey-five);
 		}

@@ -11,7 +11,7 @@
 	}
 </script>
 
-<div>
+<div class="search-container">
 	<img src="../icons/search.svg" id="search" alt="Search" />
 	{#if searchTerm}
 		<img
@@ -37,50 +37,51 @@
 		/* umm dont ask */
 		position: absolute;
 		z-index: 1;
-		left: 23px;
-		top: 52px;
+		left: 16px;
+		top: 14px;
 		height: 24px;
 	}
 
 	#clear {
 		position: absolute;
-		right: 42px;
-		top: 52px;
+		right: 16px;
+		top: 14px;
 		z-index: 1;
 		height: 24px;
 		cursor: pointer;
 	}
 
-	.clear {
-		padding-right: 2.5rem;
+	.search-container {
+		position: relative;
 	}
 
 	input {
 		position: relative;
 		display: flex;
-		padding: 1rem 3rem;
+		padding: 1rem 3.25rem;
 		width: 100%;
+		color: var(--accent-color-two);
+		font-weight: 500;
+		font-size: 0.92rem;
+		border-radius: 100px;
+		border: none;
+		background-color: var(--grey-ten);
 	}
+
+
 	input::placeholder {
-		color: var(--grey-eight);
-		font-size: 0.9rem;
+		color: var(--grey-five);
+		font-size: 0.92rem;
+		font-weight: 500;
+		transition: all 0.2s var(--bezier-one);
 	}
 
-	@media (max-width: 768px) {
-		#search {
-			left: 26px;
-			top: 38px;
-		}
+	input:focus {
+		outline: none;
+	}
 
-		#clear {
-			right: 26px;
-			top: 38px;
-		}
-	
-		input {
-			background-color: var(--grey-ten);
-			border: none;
-			border-radius: 100px;
-		}	
+	input:focus::placeholder {
+		outline: none;
+		color: var(--accent-color)
 	}
 </style>

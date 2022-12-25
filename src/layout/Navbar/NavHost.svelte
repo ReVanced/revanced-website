@@ -97,31 +97,34 @@
 					</button>
 				</div>
 			</div>
-			<div class="overlay" transition:fade={{ duration: 350 }} />
+			<div
+				class="overlay"
+				transition:fade={{ duration: 350 }}
+				on:click={() => (menuOpen = !menuOpen)}
+				on:keypress={() => (menuOpen = !menuOpen)}
+			/>
 		</div>
 	{/if}
 </nav>
 
 <!-- settings -->
 <Modal bind:modalOpen>
-	<div class="settings-menu">
-		<h3>Settings</h3>
-		<p>Configure the website's API. Defaults to ReVanced.</p>
-		<div id="settings-content">
-			<div class="input-wrapper">
-				<input name="api-url" type="text" bind:value={url} />
-				<button id="button-reset" on:click={reset}>
-					<Svg viewBoxHeight={48} svgHeight={24}>
-						<path
-							d="M11.2 36.725C14.6667 40.2417 18.8833 42 23.85 42C26.35 42 28.7 41.525 30.9 40.575C33.1 39.625 35.025 38.3333 36.675 36.7C38.325 35.0667 39.625 33.15 40.575 30.95C41.525 28.75 42 26.4 42 23.9C42 21.4 41.525 19.0667 40.575 16.9C39.625 14.7333 38.325 12.8417 36.675 11.225C35.025 9.60833 33.1 8.33333 30.9 7.4C28.7 6.46667 26.35 6 23.85 6C21.1833 6 18.6583 6.58333 16.275 7.75C13.8917 8.91667 11.8333 10.5167 10.1 12.55V7.25H7.1V17.65H17.55V14.65H12.3C13.7667 12.95 15.4917 11.5833 17.475 10.55C19.4583 9.51667 21.5833 9 23.85 9C28.0167 9 31.5833 10.425 34.55 13.275C37.5167 16.125 39 19.6167 39 23.75C39 27.9833 37.5333 31.5833 34.6 34.55C31.6667 37.5167 28.0833 39 23.85 39C19.6833 39 16.1667 37.5333 13.3 34.6C10.4333 31.6667 9 28.1167 9 23.95H6C6 28.95 7.73333 33.2083 11.2 36.725Z"
-						/>
-					</Svg>
-				</button>
-			</div>
-			<div class="buttons">
-				<Button kind="tertiary" on:click={clear_and_reload}>Clear cache</Button>
-				<Button kind="tertiary" on:click={save}>Save</Button>
-			</div>
+	<svelte:fragment slot="title">Settings</svelte:fragment>
+	<svelte:fragment slot="description">Configure the website's API. Defaults to ReVanced.</svelte:fragment>
+	<div id="settings-content">
+		<div class="input-wrapper">
+			<input name="api-url" type="text" bind:value={url} />
+			<button id="button-reset" on:click={reset}>
+				<Svg viewBoxHeight={48} svgHeight={24}>
+					<path
+						d="M11.2 36.725C14.6667 40.2417 18.8833 42 23.85 42C26.35 42 28.7 41.525 30.9 40.575C33.1 39.625 35.025 38.3333 36.675 36.7C38.325 35.0667 39.625 33.15 40.575 30.95C41.525 28.75 42 26.4 42 23.9C42 21.4 41.525 19.0667 40.575 16.9C39.625 14.7333 38.325 12.8417 36.675 11.225C35.025 9.60833 33.1 8.33333 30.9 7.4C28.7 6.46667 26.35 6 23.85 6C21.1833 6 18.6583 6.58333 16.275 7.75C13.8917 8.91667 11.8333 10.5167 10.1 12.55V7.25H7.1V17.65H17.55V14.65H12.3C13.7667 12.95 15.4917 11.5833 17.475 10.55C19.4583 9.51667 21.5833 9 23.85 9C28.0167 9 31.5833 10.425 34.55 13.275C37.5167 16.125 39 19.6167 39 23.75C39 27.9833 37.5333 31.5833 34.6 34.55C31.6667 37.5167 28.0833 39 23.85 39C19.6833 39 16.1667 37.5333 13.3 34.6C10.4333 31.6667 9 28.1167 9 23.95H6C6 28.95 7.73333 33.2083 11.2 36.725Z"
+					/>
+				</Svg>
+			</button>
+		</div>
+		<div class="buttons">
+			<Button kind="tertiary" on:click={clear_and_reload}>Clear cache</Button>
+			<Button kind="tertiary" on:click={save}>Save</Button>
 		</div>
 	</div>
 </Modal>
@@ -142,14 +145,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-
-	.settings-menu h3 {
-		text-align: center;
-		margin-bottom: 1rem;
-	}
-	.settings-menu p {
-		margin-bottom: 1.25rem;
 	}
 
 	.input-wrapper {
@@ -207,7 +202,7 @@
 	a {
 		display: flex;
 	}
-	
+
 	img {
 		height: 22px;
 	}
@@ -228,7 +223,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.3);
+		background-color: rgba(0, 0, 0, 0.5);
 		z-index: 88;
 	}
 

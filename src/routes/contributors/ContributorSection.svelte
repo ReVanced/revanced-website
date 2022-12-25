@@ -48,6 +48,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		cursor: pointer;
 		background-color: var(--grey-six);
 		padding: 0.75rem 1.25rem;
 		border-bottom: 1px solid var(--grey-three);
@@ -97,7 +98,7 @@
 		.contrib-host {
 			padding: 0.75rem;
 			gap: 0.25rem;
-			grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
 		}
 	}
 </style>

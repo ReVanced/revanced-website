@@ -5,11 +5,13 @@
 	import type { Patch } from '$lib/types';
 	import { patches as api_patches } from '$data/api';
 
-	import TreeMenu from '$lib/components/TreeView/TreeMenu.svelte';
-	import TreeMenuButton from '$lib/components/TreeView/TreeMenuButton.svelte';
+	import PackageMenu from './PackageMenu.svelte';
+	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Search from '$lib/components/Search.svelte';
+	import FilterChip from '$lib/components/FilterChip.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 
 	$: ({ patches, packages } = $api_patches);
 
@@ -17,6 +19,7 @@
 	let searchTerm: string;
 	let searchTermFiltered: string;
 	let timeout: any = null;
+	let mobilePackages = false;
 
 	function filterByPackage(selectedPkg: string | boolean, packageList: any) {
 		for (let i = 0; i < packageList.length; i++) {
@@ -63,18 +66,57 @@
 	<meta content="ReVanced | Patches" name="twitter:title" />
 </svelte:head>
 
+<div class="search">
+	<div class="search-contain">
+		<!-- Must bind both variables: we get searchTerm from the text input, -->
+		<!-- and searchTermFiltered gets cleared with the clear button -->
+		<Search
+			bind:searchTerm
+			bind:searchTermFiltered
+			title="Search for patches"
+			on:keyup={debounce}
+		/>
+		<div class="filter-chips">
+			<FilterChip
+				selected={selectedPkg}
+				dropdown
+				on:click={() => (mobilePackages = !mobilePackages)}
+			>
+				{selectedPkg ? selectedPkg : 'Packages'}
+			</FilterChip>
+			<!-- <FilterChip check>Universal</FilterChip>
+			<FilterChip>Patch options</FilterChip> -->
+		</div>
+
+		<div class="mobile-packages-modal">
+			<Modal bind:modalOpen={mobilePackages}>
+				<svelte:fragment slot="title">Packages</svelte:fragment>
+				<div class="mobile-packages">
+					<!-- <span on:click={() => (mobilePackages = !mobilePackages)}>
+						<Package bind:selectedPkg name="All packages" />
+					</span> -->
+					{#each packages as pkg}
+						<span
+							on:click={() => (mobilePackages = !mobilePackages)}
+							on:keypress={() => (mobilePackages = !mobilePackages)}
+						>
+							<Package bind:selectedPkg name={pkg} />
+						</span>
+					{/each}
+				</div>
+			</Modal>
+		</div>
+	</div>
+</div>
 <main>
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<TreeMenu>
-			<!-- Must bind both variables: we get searchTerm from the text input, -->
-			<!-- and searchTermFiltered gets cleared with the clear button -->
-			<Search bind:searchTerm bind:searchTermFiltered title="Search patches" on:keyup={debounce} />
+		<PackageMenu>
 			<span class="packages">
 				{#each packages as pkg}
-					<TreeMenuButton bind:selectedPkg name={pkg} />
+					<Package bind:selectedPkg name={pkg} />
 				{/each}
 			</span>
-		</TreeMenu>
+		</PackageMenu>
 	</aside>
 
 	<div class="patches-container">
@@ -98,15 +140,28 @@
 
 <style>
 	main {
-		margin-inline: auto;
 		display: grid;
 		grid-template-columns: 300px 3fr;
-		width: min(98%, 82rem);
+		width: min(90%, 80rem);
+		margin-inline: auto;
 		gap: 1.5rem;
 	}
 
+	.search {
+		padding-top: 5rem;
+		padding-bottom: 1.25rem;
+		background-color: var(--grey-seven);
+	}
+
+	.search-contain {
+		width: min(90%, 80rem);
+		margin-inline: auto;
+	}
+
 	.patches-container {
-		margin-top: 6.7rem;
+		overflow: hidden;
+		border-radius: 20px;
+		margin-top: 1.5rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
@@ -114,36 +169,48 @@
 		position: sticky;
 		z-index: 1;
 		min-height: calc(100vh - 6rem);
-		padding-bottom: 3rem;
-		padding-right: 0.75rem;
+		margin-bottom: 3rem;
 	}
 
+	.filter-chips {
+		display: none;
+	}
+
+	.mobile-packages {
+		margin-bottom: -1px;
+		overflow: hidden;
+		border-radius: 12px;
+		border: 1px solid var(--grey-three);
+	}
+
+	@media (min-width: 768px) {
+		.mobile-packages-modal {
+			display: none;
+		}
+	}
 	@media (max-width: 768px) {
 		main {
 			grid-template-columns: none;
 			flex-direction: column;
-			margin-top: 4rem;
 			gap: 0;
 		}
 
+		aside {
+			display: none;
+		}
+
 		.patches-container {
-			padding-left: 0.75rem;
-			padding-bottom: 1.25rem;
-			margin-top: 0;
+			margin-top: 1.5rem;
+			margin-bottom: 1.5rem;
 			gap: 0.75rem;
 		}
 
-		.packages {
+		.filter-chips {
 			display: flex;
-			flex-direction: column;
 			flex-wrap: wrap;
-			height: 2.75rem;
-			gap: 0.5rem;
-			overflow-x: scroll;
-		}
-
-		.packages::-webkit-scrollbar {
-			display: none;
+			margin-top: 1rem;
+			gap: 0.75rem;
+			padding-bottom: 0rem;
 		}
 	}
 </style>

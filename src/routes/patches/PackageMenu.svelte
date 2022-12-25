@@ -1,4 +1,6 @@
 <div class="menu">
+	<h6>PACKAGES</h6>
+	<hr/>
 	<div class="slot">
 		<slot />
 	</div>
@@ -12,8 +14,8 @@
 		display: flex;
 		flex-direction: column;
 		position: sticky;
-		top: 70px;
-		padding-top: calc(6rem - 70px);
+		top: 60px;
+		padding-top: calc(6rem - 60px);
 		overflow-y: scroll;
 	}
 
@@ -33,11 +35,19 @@
 		word-break: break-all;
 	}
 
-	@media (max-width: 768px) {
+	h6 {
+		margin-bottom: 1rem;
+		color: var(--accent-color);
+	}
 
+	@media (max-width: 768px) {
 		.menu {
 			padding: 0.75rem;
 			height: unset;
+		}
+
+		h6, hr {
+			display: none;
 		}
 	}
 </style>

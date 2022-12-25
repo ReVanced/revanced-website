@@ -53,8 +53,8 @@
 		}
 
 		img {
-			height: 48px;
-			width: 48px;
+			height: 42px;
+			width: 42px;
 		}
 		a {
 			width: max-content;
