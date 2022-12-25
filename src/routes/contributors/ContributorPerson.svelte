@@ -14,23 +14,22 @@
 	a {
 		color: var(--white);
 		text-decoration: none;
-		padding: 0.5rem;
+		cursor: pointer;
+		padding: 0.9rem 1rem;
 		width: 100%;
 		transition: background-color 0.3s var(--bezier-one);
-		border-radius: 6px;
 		display: flex;
 		gap: 1rem;
 		align-items: center;
-		background-color: var(--grey-six);
-		border: 1px solid var(--grey-three);
+		border-right: 1px solid var(--grey-three);
+		border-bottom: 1px solid var(--grey-three);
 	}
 
 	a:hover {
-		background-color: var(--accent-color);
-	}
-
-	a:hover > h5 {
-		color: var(--grey-four);
+		text-decoration: underline;
+		text-decoration-style: wavy;
+		text-decoration-color: var(--accent-color);
+		color: var(--white);
 	}
 
 	h5 {
@@ -41,8 +40,8 @@
 
 	img {
 		border-radius: 50%;
-		height: 30px;
-		width: 30px;
+		height: 32px;
+		width: 32px;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
@@ -58,11 +57,9 @@
 			width: 48px;
 		}
 		a {
-			border-radius: 16px;
 			width: max-content;
 			background-color: transparent;
 			border: none;
 		}
-
 	}
 </style>

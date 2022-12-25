@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import type { CompatiblePackage, Patch } from 'src/data/types';
+	import type { Patch } from '$lib/types';
+	import { friendlyName } from '$lib/utils'
+
 
 	export let patch: Patch;
 	const hasPatchOptions = !!patch.options.length;
@@ -17,26 +19,13 @@
 >
 	<div class="things">
 		<div class="title">
-			<h3>
-				{patch.name
-					// im sorry
-					.replace(/-/g, ' ')
-					.replace(/(?:^|\s)\S/g, (x) => x.toUpperCase())
-					.replace(/Microg/g, 'MicroG')
-					.replace(/Hdr/g, 'HDR')
-					.replace(/Sponsorblock/g, 'SponsorBlock')
-					.replace(/ktok/g, 'kTok')
-					.replace(/Vr/g, 'VR')}
-			</h3>
+			<h3>{friendlyName(patch.name)}</h3>
 		</div>
-
 		{#if hasPatchOptions}
 			<img id="arrow" src="/icons/arrow.svg" alt="dropdown" />
 		{/if}
 	</div>
-
 	<h5>{patch.description}</h5>
-
 	<div class="info-container">
 		{#each patch.compatiblePackages as pkg, i}
 			<a
@@ -47,20 +36,25 @@
 				<h6 class="boxed">📦 {pkg.name}</h6>
 			</a>
 		{/each}
-		
+
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
-		{#if patch.compatiblePackages.length}
-			{#if patch.compatiblePackages[0].versions.length}
-				<h6 class="boxed">
-					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-				</h6>
-			{/if}
+		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
+			<h6 class="boxed">
+				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+			</h6>
 		{/if}
+
+		{#if !patch.compatiblePackages.length}
+		<h6 class="boxed">
+			🌎 Universal patch
+		</h6>
+		{/if}
+
 
 		<h6 class="boxed">🧩 {patch.version}</h6>
 
 		{#if hasPatchOptions}
-			<h6 class="boxed">⚙️ Patch Options</h6>
+			<h6 class="boxed">⚙️ Patch options</h6>
 		{/if}
 	</div>
 
@@ -81,6 +75,11 @@
 <style>
 	h3 {
 		margin-right: 0.5rem;
+		margin-bottom: 0.3rem;
+	}
+
+	h5 {
+		margin-bottom: 0.5rem;
 	}
 
 	h6 {

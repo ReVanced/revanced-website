@@ -76,17 +76,11 @@
 			right: 26px;
 			top: 38px;
 		}
-
 	
 		input {
-			background-color: transparent;
+			background-color: var(--grey-ten);
 			border: none;
-			border-radius: 0;
-			border-bottom: 1px solid var(--grey-one);
+			border-radius: 100px;
 		}	
-
-		input:focus {
-			border-radius: 8px;
-		}
 	}
 </style>

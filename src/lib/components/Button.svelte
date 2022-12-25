@@ -3,7 +3,6 @@
 	$: type = 'button-' + kind;
 	export let icon = '';
 	export let href = '';
-	export let capitalize = false;
 	export let target = '';
 </script>
 
@@ -13,7 +12,6 @@
 		{href}
 		{target}
 		class={type}
-		class:capitalize
 	>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
@@ -26,41 +24,45 @@
 	button {
 		border: none;
 		background-color: transparent;
+		padding: 0;
+		margin: 0;
 	}
-
 
 	a,
 	div {
 		min-width: max-content;
-		min-height: 57px;
-		font-size: 0.9rem;
+		font-size: 0.95rem;
 		text-decoration: none;
 		color: var(--white);
 		font-weight: 600;
 		border: none;
 		border-radius: 12px;
-		padding: 1rem 1.5rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
-		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
 		user-select: none;
 	}
 
-	.capitalize {
-		text-transform: uppercase;
-		letter-spacing: 0.03rem;
-		font-weight: 700;
-		font-size: 0.8rem;
-	}
-
 	.button-primary {
 		background-color: var(--accent-color);
-		box-shadow: 0px 0px 32px 1px var(--accent-color-glow);
 		color: var(--grey-four);
+	}
+	.button-secondary {
+		background-color: var(--grey-two);
+	}
+
+	.button-primary, .button-secondary {
+		padding: 16px 24px;
+	}
+
+	.button-tertiary {
+		background-color: transparent;
+		color: var(--accent-color);
+		font-weight: 500;
+		letter-spacing: 0.01rem;
 	}
 
 	div:hover {
@@ -68,6 +70,6 @@
 	}
 
 	img {
-		height: 25px;
+		height: 20px;
 	}
 </style>

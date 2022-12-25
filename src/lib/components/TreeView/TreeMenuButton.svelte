@@ -14,12 +14,13 @@
 	class:selected={selectedPkg === name}
 	on:click={handleClick}
 >
-	<h5>{name}</h5>
+	{name}
 </div>
 
 <style>
 	.package {
 		padding: 0.6rem 1rem;
+		font-size: 0.9rem;
 		border-radius: 8px;
 		cursor: pointer;
 		display: flex;
@@ -30,12 +31,12 @@
 		transition: background-color 0.4s var(--bezier-one);
 	}
 
-	.package h5 {
+	.package{
 		color: var(--grey-five);
 		transition: color 0.3s var(--bezier-one);
 	}
 
-	.selected h5 {
+	.selected {
 		color: var(--grey-four);
 		transition: color 0.3s var(--bezier-one);
 	}
@@ -47,27 +48,29 @@
 		background-color: var(--grey-six);
 	}
 
-	.package:not(.selected):hover h5 {
+	.package:not(.selected):hover {
 		color: var(--white);
 	}
 
 	@media (max-width: 768px) {
 		.package {
 			border-radius: 12px;
+			padding: 0.5rem 1rem;
 			width: max-content;
 			background-color: transparent;
 			border: 1px solid var(--grey-three);
 		}
 
-		.package h5 {
+		.package{
 			overflow: hidden;
 			text-overflow: ellipsis;
+			color: var(--accent-color);
 		}
 
 		.selected {
-			background-color: var(--accent-color);
+			background-color: var(--accent-low-opacity);
 		}
-		.package:not(.selected):hover h5 {
+		.package:not(.selected):hover {
 			color: var(--grey-five);
 		}
 	}

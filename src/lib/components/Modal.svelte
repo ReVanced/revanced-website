@@ -5,11 +5,19 @@
 </script>
 
 {#if modalOpen}
-	<div class="modal-container" transition:fade={{ easing: quadInOut, duration: 150 }}>
-		<div class="modal">
-			<slot />
-		</div>
-		<div class="overlay" on:click={() => (modalOpen = !modalOpen)} />
+	<div
+		class="overlay"
+		on:click={() => (modalOpen = !modalOpen)}
+		on:keypress={() => (modalOpen = !modalOpen)}
+		transition:fade={{ easing: quadInOut, duration: 150 }}
+	/>
+	<div
+		class="modal"
+		role="dialog"
+		aria-modal="true"
+		transition:fade={{ easing: quadInOut, duration: 250 }}
+	>
+		<slot />
 	</div>
 {/if}
 
@@ -18,20 +26,20 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100vw;
-		height: 100vh;
+		width: 100%;
+		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 1000;
+		z-index: 999;
 	}
 
 	.modal {
 		position: fixed;
-		width: min(95%, 500px);
+		width: min(85%, 425px);
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		padding: 42px;
-		border-radius: 16px;
+		padding: 46px 36px;
+		border-radius: 26px;
 		background-color: var(--grey-six);
 		display: flex;
 		user-select: none;
