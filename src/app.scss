@@ -4,7 +4,7 @@
     box-sizing: inherit;
     margin: 0;
     padding: 0;
-    font-family: "Manrope", sans-serif;
+    font-family: var(--main-font);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -29,7 +29,7 @@ body {
 
 .wrapper {
     margin-inline: auto;
-    width: min(95%, 80rem);
+    width: min(90%, 80rem);
     margin-top: 7rem;
 }
 
@@ -37,18 +37,20 @@ body {
     --main-font: "Manrope", sans-serif;
     --mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
     --white: hsl(206, 100%, 94%);
-    --accent-color: #9fd5ff;
-    --accent-color-two: hsl(208, 29%, 82%);
-    --accent-low-opacity: #9ed7ff50;
+    --accent-color: hsl(206, 100%, 81%);
+    --accent-color-two: hsl(208, 28%, 82%);
+    --accent-low-opacity: hsla(205, 100%, 81%, 0.1);
     --bg-color: hsl(252, 10%, 11%);
-    --grey-one: #252b31;
-    --grey-two: #28313b;
-    --grey-three: #373e4d;
-    --grey-four: #182244;
+    --grey-one: hsl(210, 14%, 17%);
+    --grey-two: hsl(212, 19%, 19%);
+    --grey-three: hsl(221, 17%, 26%);
+    --grey-four: hsl(226, 48%, 18%);
     --grey-five: hsl(208, 30%, 75%);
-    --grey-six: #202126;
+    --grey-six: hsl(230, 7%, 13%);
     --grey-seven: hsl(240, 9%, 13.5%);
     --grey-eight: hsla(207, 30%, 75%, 0.577);
+    --grey-nine: hsla(240, 6%, 7%, 0.3);
+    --grey-ten: hsl(230, 9.5%, 17%);
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -63,14 +65,13 @@ h1 {
     line-height: 4rem;
     font-size: 3.5rem;
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.025em;
 }
 
 h2 {
     color: var(--grey-five);
-
-    font-size: 2.25rem;
-    letter-spacing: -0.05rem;
+    font-size: 2.5rem;
+    letter-spacing: -0.04rem;
     font-weight: 600;
 }
 
@@ -104,7 +105,24 @@ h6 {
 p {
     color: var(--grey-five);
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.02rem;
+    line-height: 1.875rem;
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2.6rem;
+        line-height: 3.75rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 0.875rem;
+    }
 }
 
 /*---------------*/
@@ -138,7 +156,6 @@ input {
     background-color: transparent;
     color: var(--accent-color-two);
 }
-
 
 input:focus {
     outline: 1px solid var(--accent-color);

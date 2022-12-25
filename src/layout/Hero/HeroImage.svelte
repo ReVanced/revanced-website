@@ -1,5 +1,5 @@
 <script>
-  import Picture from './Picture.svelte';
+  import Picture from '$lib/components/Picture.svelte';
   import manager_screenshot from '$images/manager_two.png?w=1233;822;411&format=avif;webp;png&picture';
 </script>
 

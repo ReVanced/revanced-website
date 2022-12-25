@@ -1,16 +1,18 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { imagetools } from 'vite-imagetools'
+import { imagetools } from 'vite-imagetools';
 
 import path from 'path';
 
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [sveltekit(), imagetools()],
-  resolve: {
+  	resolve: {
     alias: {
-      '$images': path.resolve('./images'),
-    },
-  },
+			$images: path.resolve('./images'),
+			$data: path.resolve('./src/data'),
+			$layout: path.resolve('./src/layout')
+		}
+	}
 };
 
 export default config;

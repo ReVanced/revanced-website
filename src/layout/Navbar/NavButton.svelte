@@ -1,14 +1,12 @@
-<script>
-	import RouterEvents from '../../../data/RouterEvents';
-	export let href = '/';
-	export let is_selected = (target_url) => href === target_url;
+<script lang="ts">
+	import { page } from '$app/stores';
+	export let href: string;
 </script>
 
-<a data-sveltekit-prefetch {href}>
-	<li class:selected={is_selected($RouterEvents.target_url.pathname)}>
-		<h5>
-			<slot />
-		</h5>
+<a data-sveltekit-preload-data {href}>
+	<!-- Check if href is equal to the first path -->
+	<li class:selected={href === '/' + $page.url.pathname.split('/')[1]}>
+		<span><slot /></span>
 	</li>
 </a>
 
@@ -38,35 +36,38 @@
 		border-radius: 10px;
 	}
 
+	span {
+		font-weight: 400;
+		font-size: 0.9rem;
+		letter-spacing: 0.02rem;
+		color: var(--grey-five);
+	}
+
 	li:hover {
 		color: var(--white);
 		background-color: var(--grey-one);
 	}
 
 	li.selected {
-		background-color: var(--grey-one);
+		background-color: var(--accent-low-opacity);
 		color: var(--accent-color);
 	}
 
-	li.selected h5 {
+	li.selected span {
 		color: var(--accent-color);
 	}
 
 	@media (max-width: 768px) {
 		li {
-			padding: 1rem 1.5rem;
+			padding: 1rem 1.25rem;
 			text-align: left;
 			justify-content: left;
-			border-radius: 16px;
-			font-size: 1.2rem;
+			border-radius: 100px;
 		}
 
-		li.selected {
-			background-color: var(--accent-color);
-		}
-
-		li.selected h5 {
-			color: var(--grey-four);
+		span {
+			font-size: 1rem;
+			font-weight: 500;
 		}
 	}
 </style>

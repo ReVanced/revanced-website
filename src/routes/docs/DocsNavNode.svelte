@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { DocumentInfo } from '$lib/documentation.shared';
+	import type { DocumentInfo } from './documentation.shared';
 	export let info: DocumentInfo;
 	import { page } from '$app/stores';
 </script>

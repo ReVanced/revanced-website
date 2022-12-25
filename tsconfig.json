@@ -8,6 +8,13 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
-		"strict": true
+		"strict": true,
+		"types": ["node"],
+		"paths": {
+			"$data/*": ["./src/data/*"],
+			"$lib/*": ["./src/lib/*"],
+			"$layout/*": ["./src/layout/*"],
+			"$images/*": ["./images/*"],
+		},
 	}
 }

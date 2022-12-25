@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
-	import DocsNavTree from '$lib/components/molecules/DocsNavTree.svelte';
+	import DocsNavTree from './DocsNavTree.svelte';
 
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import Footer from '$lib/components/molecules/Footer.svelte';
+	import Footer from '$layout/Footer.svelte';
 
 	export let data: PageData;
 </script>

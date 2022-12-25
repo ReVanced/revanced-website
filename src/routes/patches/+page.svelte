@@ -2,14 +2,14 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import type { Patch } from 'src/data/types';
-	import { patches as api_patches } from '../../data/api';
+	import type { Patch } from '$lib/types';
+	import { patches as api_patches } from '$data/api';
 
-	import TreeMenu from '$lib/components/molecules/TreeMenu.svelte';
-	import TreeMenuButton from '$lib/components/atoms/TreeMenuButton.svelte';
-	import PatchCell from '$lib/components/molecules/PatchCell.svelte';
-	import Footer from '$lib/components/molecules/Footer.svelte';
-	import Search from '$lib/components/atoms/Search.svelte';
+	import TreeMenu from '$lib/components/TreeView/TreeMenu.svelte';
+	import TreeMenuButton from '$lib/components/TreeView/TreeMenuButton.svelte';
+	import PatchItem from './PatchItem.svelte';
+	import Footer from '$layout/Footer.svelte';
+	import Search from '$lib/components/Search.svelte';
 
 	$: ({ patches, packages } = $api_patches);
 
@@ -64,7 +64,7 @@
 </svelte:head>
 
 <main>
-	<aside in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
+	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<TreeMenu>
 			<!-- Must bind both variables: we get searchTerm from the text input, -->
 			<!-- and searchTermFiltered gets cleared with the clear button -->
@@ -85,8 +85,8 @@
 				{#if filterByPackage(selectedPkg, patch.compatiblePackages) || !selectedPkg}
 					<!-- ...same with search -->
 					{#if search(patch) || !searchTermFiltered}
-						<div in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 100 }}>
-							<PatchCell {patch} />
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+							<PatchItem {patch} />
 						</div>
 					{/if}
 				{/if}

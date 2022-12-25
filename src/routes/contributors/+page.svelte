@@ -2,10 +2,10 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-	import Footer from '$lib/components/molecules/Footer.svelte';
+	import { repositories } from '$data/api';
 
-  import { repositories } from '../../data/api';
+	import ContributorHost from './ContributorSection.svelte';
+	import Footer from '$layout/Footer.svelte';
 </script>
 
 <svelte:head>
@@ -18,9 +18,15 @@
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<h2>Made possible by the community.</h2>
-			<h4>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h4>
+			<h4>
+				Want to show up here? <span
+					><a href="https://github.com/revanced" target="_blank" rel="noreferrer"
+						>Become a contributor</a
+					></span
+				>
+			</h4>
 		</div>
-		<div class="contrib-grid">
+		<div class="repos">
 			{#each $repositories as { contributors, name: repo }}
 				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 					<ContributorHost {contributors} {repo} />
@@ -33,11 +39,11 @@
 <Footer />
 
 <style>
-	.contrib-grid {
+	.repos {
 		display: flex;
 		flex-direction: column;
-		gap: 3rem;
-		margin-bottom: 3rem;
+		gap: 2rem;
+		margin-bottom: 4rem;
 	}
 
 	h2 {
@@ -45,10 +51,10 @@
 		color: var(--grey-four);
 		margin-bottom: 0.3rem;
 	}
-	
+
 	h4 {
-		color: var(--grey-four);
 		text-align: center;
+		color: var(--grey-four);
 	}
 
 	.text-container {
@@ -57,8 +63,8 @@
 		flex-direction: column;
 		margin-bottom: 2rem;
 		background-color: var(--accent-color);
-		padding: 2.4rem;
-		border-radius: 8px;
+		padding: 2.5rem 1.75rem;
+		border-radius: 20px;
 	}
 
 	a {
@@ -76,10 +82,9 @@
 	a:hover::after {
 		transform: translateX(5px);
 	}
-
 	@media screen and (max-width: 768px) {
-		h1 {
-			font-size: 2rem;
+		.text-container {
+			margin-bottom: 2rem;
 		}
 	}
 </style>

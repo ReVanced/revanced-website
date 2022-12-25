@@ -6,7 +6,6 @@ import { browser, prerendering } from '$app/environment';
 import fs, { existsSync as exists } from 'fs';
 import path from 'path';
 
-
 import { parse as parse_md } from 'marked';
 import AsciiDocProcessor from 'asciidoctor'
 

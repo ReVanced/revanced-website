@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 
-import { index_content } from '$lib/documentation.server';
+import { index_content } from './documentation.server';
 
 // The load function here used to get data from a json file created by a (prerendered) server route.
 // This was because we could not prerender the documentation route before.

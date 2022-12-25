@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   // See: https://github.com/JonasKruckenberg/imagetools/blob/main/docs/directives.md#picture
   export let data;
-  export let alt;
+  export let alt: string;
 </script>
 
 <picture>

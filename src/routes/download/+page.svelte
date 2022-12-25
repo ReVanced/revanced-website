@@ -1,25 +1,29 @@
 <script lang="ts">
-	import { tools } from '../../data/api';
+	import { tools } from '$data/api';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	
+	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
-	import Button from '$lib/components/atoms/Button.svelte';
-	import Footer from '$lib/components/molecules/Footer.svelte';
-  import Picture from '$lib/components/atoms/Picture.svelte';
-
-  import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
+	import Button from '$lib/components/Button.svelte';
+	import Footer from '$layout/Footer.svelte';
+	import Picture from '$lib/components/Picture.svelte';
 
 	$: manager = $tools['revanced/revanced-manager'];
 </script>
 
-<div class="wrapper center">
-	<h1>ReVanced <span>Manager</span></h1>
+<div class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	<h2>ReVanced <span>Manager</span></h2>
 	<h4>Patch your favourite apps, right on your device.</h4>
 	<div class="buttons">
-		<Button kind="primary" icon="download" href={manager.assets[0].url} target="_blank">{manager.version}</Button>
+		<Button kind="primary" icon="download" href={manager.assets[0].url} target="_blank">
+			{manager.version}
+		</Button>
 		<Button href="https://github.com/revanced/revanced-manager" target="_blank">View Source</Button>
 	</div>
-  <div class="screenshot">
-    <Picture data={manager_screenshot} alt="Manager Screenshot" />
-  </div>
+	<div class="screenshot">
+		<Picture data={manager_screenshot} alt="Manager Screenshot" />
+	</div>
 </div>
 
 <Footer />
@@ -31,10 +35,9 @@
 		align-items: center;
 	}
 
-	h1 {
+	h2 {
 		text-align: center;
 		color: var(--white);
-
 	}
 
 	h4 {
@@ -58,8 +61,7 @@
 		gap: 1rem;
 	}
 
-	
 	span {
-		color: var(--accent-color)
+		color: var(--accent-color);
 	}
 </style>

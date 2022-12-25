@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { is_tree } from '$lib/documentation.shared';
-	import type { DocsTree } from '$lib/documentation.shared';
+	import { is_tree } from './documentation.shared';
+	import type { DocsTree } from './documentation.shared';
 
-	import DocsNavNode from '$lib/components/atoms/DocsNavNode.svelte';
+	import DocsNavNode from './DocsNavNode.svelte';
 
 	export let tree: DocsTree;
 	// How deeply nested this is.

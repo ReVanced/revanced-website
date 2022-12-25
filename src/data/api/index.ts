@@ -97,7 +97,7 @@ export class API<T> implements Readable<T> {
 }
 
 // API Endpoints
-import type { Patch, Repository, Tool } from '../types';
+import type { Patch, Repository, Tool } from '../../utils/types';
 import { dev_log } from '$lib/utils';
 
 export type ReposData = Repository[];

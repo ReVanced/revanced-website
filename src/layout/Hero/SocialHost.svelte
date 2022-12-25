@@ -1,5 +1,5 @@
 <script>
-	import SocialButton from '../atoms/SocialButton.svelte';
+	import SocialButton from './SocialButton.svelte';
 </script>
 
 <div class="social-host">

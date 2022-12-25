@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Navigation from '$lib/components/atoms/NavButton.svelte';
+	import Navigation from '$layout/Navbar/NavButton.svelte';
 	import { page } from '$app/stores';
 
 	$: status = $page.status;
