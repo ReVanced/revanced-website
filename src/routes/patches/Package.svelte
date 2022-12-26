@@ -3,15 +3,20 @@
 	export let name: string;
 
 	function handleClick() {
-		selectedPkg = selectedPkg === name ? false : name
-		window.scrollTo({ top: 0, behavior: 'smooth' })
+		// Assign the selected package, if already selected, make it false
+		if (selectedPkg === name || name === 'All packages') {
+			selectedPkg = false;
+		} else {
+			selectedPkg = name;
+		}
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="package"
-	class:selected={selectedPkg === name}
+	class:selected={selectedPkg === name || (name === 'All packages' && !selectedPkg)}
 	on:click={handleClick}
 >
 	{name}
@@ -60,7 +65,7 @@
 			color: var(--grey-five);
 			border-bottom: 1px solid var(--grey-three);
 		}
-		
+
 		.selected {
 			color: var(--accent-color);
 			background-color: var(--accent-low-opacity);

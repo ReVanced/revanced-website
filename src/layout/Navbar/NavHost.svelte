@@ -6,7 +6,7 @@
 
 	import Navigation from './NavButton.svelte';
 	import Svg from '$lib/components/Svg.svelte';
-	import Modal from '$lib/components/Modal.svelte';
+	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
 
 	import { clear_and_reload } from '$data/api/cache';

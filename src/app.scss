@@ -40,7 +40,7 @@ body {
     --white: hsl(206, 100%, 94%);
     --accent-color: hsl(206, 100%, 81%);
     --accent-color-two: hsl(208, 75%, 82%);
-    --accent-low-opacity: hsla(205, 100%, 81%, 0.15);
+    --accent-low-opacity: hsla(205, 91%, 69%, 0.15);
     --bg-color: hsl(252, 10%, 11%);
     --grey-one: hsl(210, 14%, 17%);
     --grey-two: hsl(212, 19%, 19%);
@@ -52,6 +52,7 @@ body {
     --grey-eight: hsla(207, 30%, 75%, 0.577);
     --grey-nine: hsla(240, 6%, 7%, 0.3);
     --grey-ten: hsl(230, 9.5%, 17.5%);
+    --grey-eleven: hsl(208, 10%, 40%);
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -84,8 +85,8 @@ h3 {
 
 h4 {
     color: var(--accent-color-two);
-    font-weight: 400;
-    font-size: 1.1rem;
+    font-weight: 500;
+    font-size: 1.2rem;
     letter-spacing: 0.02rem;
     line-height: 2rem;
 }
@@ -108,7 +109,7 @@ p {
     font-weight: 400;
     font-size: 0.95rem;
     letter-spacing: 0.02rem;
-    line-height: 1.875rem;
+    line-height: 1.75rem;
 }
 
 @media screen and (max-width: 768px) {
@@ -119,10 +120,6 @@ p {
 
     h2 {
         font-size: 2rem;
-    }
-
-    p {
-        font-size: 0.875rem;
     }
 }
 

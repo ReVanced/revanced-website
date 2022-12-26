@@ -2,6 +2,7 @@
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
 	export let modalOpen = false;
+	export let fullscreen = false;
 </script>
 
 {#if modalOpen}
@@ -11,23 +12,34 @@
 		on:keypress={() => (modalOpen = !modalOpen)}
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	/>
+
 	<div
 		class="modal"
 		role="dialog"
+		class:fullscreen
 		aria-modal="true"
-		transition:fade={{ easing: quadInOut, duration: 250 }}
+		transition:fade={{ easing: quadInOut, duration: 150 }}
 	>
-		<div class="title">
-			<h3>
-				<slot name="title" />
-			</h3>
-		</div>
+		<div class="top">
+			<div class="title">
+				{#if fullscreen}
+					<button on:click={() => (modalOpen = !modalOpen)}>
+						<img src="../icons/back.svg" id="back" alt="back" />
+					</button>
+				{/if}
+				{#if $$slots.title}
+					<h4>
+						<slot name="title" />
+					</h4>
+				{/if}
+			</div>
 
-		{#if $$slots.description}
-			<p>
-				<slot name="description" />
-			</p>
-		{/if}
+			{#if $$slots.description}
+				<p>
+					<slot name="description" />
+				</p>
+			{/if}
+		</div>
 
 		<div class="slot"><slot /></div>
 	</div>
@@ -44,20 +56,23 @@
 		z-index: 999;
 	}
 
-	h3 {
-		text-align: center;
+	.top {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 20px;
 	}
 
 	.title {
 		position: sticky;
-		padding-top: 46px;
-		padding-bottom: 20px;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
 		top: 0;
+		left: 0;
 		width: 100%;
 		background-color: var(--grey-six);
-	}
-	p {
-		margin-bottom: 1rem;
+		margin-bottom: 8px;
 	}
 
 	.modal {
@@ -78,12 +93,37 @@
 		flex-direction: column;
 		gap: 2px;
 		z-index: 1001;
+		padding: 32px;
 		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
 	}
 
+	button {
+		padding: 0;
+		margin: 0;
+		border: none;
+		background-color: transparent;
+		display: flex;
+		align-items: center;
+	}
+
+	#back {
+		height: 24px;
+	}
+
+	.fullscreen {
+		max-height: 100%;
+		width: 100%;
+		border-radius: 0;
+	}
+	.fullscreen .title {
+		justify-content: flex-start;
+	}
+
 	.slot {
-		padding: 0px 28px 36px 28px;
+		display: flex;
+		flex-direction: column;
+		align-content: center;
 	}
 
 	.modal::-webkit-scrollbar {

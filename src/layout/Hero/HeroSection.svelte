@@ -8,9 +8,9 @@
 <section class="hero">
 	<div class="hero-text">
 		<h1>Continuing the <br />legacy of <span>Vanced.</span></h1>
-		<h4>
+		<p>
 			Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
-		</h4>
+		</p>
 		<div class="hero-buttons">
 			<Button icon="download" kind="primary" href="download">Download Manager</Button>
 			<Button icon="docs" href="patches">View patches</Button>
@@ -24,7 +24,7 @@
 		margin-bottom: 1.5rem;
 	}
 
-	h4 {
+	p {
 		margin-bottom: 2rem;
 	}
 

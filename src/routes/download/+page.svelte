@@ -14,7 +14,7 @@
 
 <div class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>ReVanced <span>Manager</span></h2>
-	<h4>Patch your favourite apps, right on your device.</h4>
+	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
 		<Button kind="primary" icon="download" href={manager.assets[0].url} target="_blank">
 			{manager.version}
@@ -40,7 +40,7 @@
 		color: var(--white);
 	}
 
-	h4 {
+	p {
 		text-align: center;
 		margin-bottom: 1.5rem;
 	}

@@ -11,7 +11,7 @@
 	import Footer from '$layout/Footer.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
-	import Modal from '$lib/components/Modal.svelte';
+	import Dialogue from '$lib/components/Dialogue.svelte';
 
 	$: ({ patches, packages } = $api_patches);
 
@@ -76,39 +76,39 @@
 			title="Search for patches"
 			on:keyup={debounce}
 		/>
-		<div class="filter-chips">
-			<FilterChip
-				selected={selectedPkg}
-				dropdown
-				on:click={() => (mobilePackages = !mobilePackages)}
-			>
-				{selectedPkg ? selectedPkg : 'Packages'}
-			</FilterChip>
-			<!-- <FilterChip check>Universal</FilterChip>
-			<FilterChip>Patch options</FilterChip> -->
-		</div>
-
-		<div class="mobile-packages-modal">
-			<Modal bind:modalOpen={mobilePackages}>
-				<svelte:fragment slot="title">Packages</svelte:fragment>
-				<div class="mobile-packages">
-					<!-- <span on:click={() => (mobilePackages = !mobilePackages)}>
-						<Package bind:selectedPkg name="All packages" />
-					</span> -->
-					{#each packages as pkg}
-						<span
-							on:click={() => (mobilePackages = !mobilePackages)}
-							on:keypress={() => (mobilePackages = !mobilePackages)}
-						>
-							<Package bind:selectedPkg name={pkg} />
-						</span>
-					{/each}
-				</div>
-			</Modal>
-		</div>
 	</div>
 </div>
 <main>
+	<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		<FilterChip selected={selectedPkg} dropdown on:click={() => (mobilePackages = !mobilePackages)}>
+			{selectedPkg ? selectedPkg : 'Packages'}
+		</FilterChip>
+		<!-- <FilterChip check>Universal</FilterChip>
+		<FilterChip>Patch options</FilterChip> -->
+	</div>
+
+	<div class="mobile-packages-Dialogue">
+		<Dialogue bind:modalOpen={mobilePackages} fullscreen>
+			<svelte:fragment slot="title">Packages</svelte:fragment>
+			<div class="mobile-packages">
+				<span
+					on:click={() => (mobilePackages = !mobilePackages)}
+					on:keypress={() => (mobilePackages = !mobilePackages)}
+				>
+					<Package bind:selectedPkg name="All packages" />
+				</span>
+				{#each packages as pkg}
+					<span
+						on:click={() => (mobilePackages = !mobilePackages)}
+						on:keypress={() => (mobilePackages = !mobilePackages)}
+					>
+						<Package bind:selectedPkg name={pkg} />
+					</span>
+				{/each}
+			</div>
+		</Dialogue>
+	</div>
+
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<PackageMenu>
 			<span class="packages">
@@ -155,7 +155,7 @@
 
 	.search-contain {
 		width: min(90%, 80rem);
-		margin-inline: auto;
+		margin-inline: auto;;
 	}
 
 	.patches-container {
@@ -184,7 +184,7 @@
 	}
 
 	@media (min-width: 768px) {
-		.mobile-packages-modal {
+		.mobile-packages-Dialogue {
 			display: none;
 		}
 	}
@@ -199,8 +199,12 @@
 			display: none;
 		}
 
+		.search {
+			padding-top: 4.5rem;
+		}
+
 		.patches-container {
-			margin-top: 1.5rem;
+			margin-top: 1rem;
 			margin-bottom: 1.5rem;
 			gap: 0.75rem;
 		}
