@@ -1,0 +1,10 @@
+/*
+	X-Frame-Options: DENY
+	X-XSS-Protection: 1; mode=block
+	Content-Security-Policy: default-src 'self' *.revanced.app;
+	X-Content-Type-Options: nosniff
+	Referrer-Policy: no-referrer
+	Cache-Control: public, max-age=604800, stale-while-revalidate=86400, stale-if-error=259200
+
+/_app/immutable
+	Cache-Control: public, max-age=2419200, stale-while-revalidate=86400, stale-if-error=259200
