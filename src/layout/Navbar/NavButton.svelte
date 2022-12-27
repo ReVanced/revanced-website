@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import RouterEvents from '$data/RouterEvents';
 	export let href: string;
 </script>
 
 <a data-sveltekit-preload-data {href}>
 	<!-- Check if href is equal to the first path -->
-	<li class:selected={href === '/' + $page.url.pathname.split('/')[1]}>
+	<li class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}>
 		<span><slot /></span>
 	</li>
 </a>
