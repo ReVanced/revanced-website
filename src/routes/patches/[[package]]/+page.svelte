@@ -2,13 +2,14 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
+	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
 	import { patches as api_patches } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
-	import PackageMenu from './PackageMenu.svelte';
-	import Package from './Package.svelte';
-	import PatchItem from './PatchItem.svelte';
+	import PackageMenu from '../PackageMenu.svelte';
+	import Package from '../Package.svelte';
+	import PatchItem from '../PatchItem.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
@@ -16,25 +17,27 @@
 
 	$: ({ patches, packages } = $api_patches);
 
-	let selectedPkg: boolean = false;
+	export let data: PageData;
+	$: ({ selectedPkg } = data);
+
 	let searchTerm: string;
 	let searchTermFiltered: string;
 	let timeout: any = null;
 	let mobilePackages = false;
 
-	function filterByPackage(selectedPkg: string | boolean, packageList: any) {
+	function filterByPackage(pkg: string | undefined, packageList: any) {
 		for (let i = 0; i < packageList.length; i++) {
-			if (packageList[i].name === selectedPkg) {
+			if (packageList[i].name === pkg) {
 				return true;
 			}
 		}
 	}
 
 	function search(patch: Patch) {
-		function checkPkgName(selectedPkg: string | boolean, packageList: any) {
+		function checkPkgName(pkg: string | undefined, packageList: any) {
 			// Basically the same function as before lol
 			for (let i = 0; i < packageList.length; i++) {
-				if (packageList[i].name.replace(/\./g, '').includes(selectedPkg)) {
+				if (packageList[i].name.replace(/\./g, '').includes(pkg)) {
 					return true;
 				}
 			}
@@ -77,8 +80,12 @@
 </div>
 <main>
 	<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<FilterChip selected={selectedPkg} dropdown on:click={() => (mobilePackages = !mobilePackages)}>
-			{selectedPkg ? selectedPkg : 'Packages'}
+		<FilterChip
+			selected={!!selectedPkg}
+			dropdown
+			on:click={() => (mobilePackages = !mobilePackages)}
+		>
+			{selectedPkg || 'Packages'}
 		</FilterChip>
 		<!-- <FilterChip check>Universal</FilterChip>
 		<FilterChip>Patch options</FilterChip> -->
@@ -92,14 +99,14 @@
 					on:click={() => (mobilePackages = !mobilePackages)}
 					on:keypress={() => (mobilePackages = !mobilePackages)}
 				>
-					<Package bind:selectedPkg name="All packages" />
+					<Package {selectedPkg} name="All packages" />
 				</span>
 				{#each packages as pkg}
 					<span
 						on:click={() => (mobilePackages = !mobilePackages)}
 						on:keypress={() => (mobilePackages = !mobilePackages)}
 					>
-						<Package bind:selectedPkg name={pkg} />
+						<Package {selectedPkg} name={pkg} />
 					</span>
 				{/each}
 			</div>
@@ -110,7 +117,7 @@
 		<PackageMenu>
 			<span class="packages">
 				{#each packages as pkg}
-					<Package bind:selectedPkg name={pkg} />
+					<Package {selectedPkg} name={pkg} />
 				{/each}
 			</span>
 		</PackageMenu>
@@ -152,7 +159,7 @@
 
 	.search-contain {
 		width: min(90%, 80rem);
-		margin-inline: auto;;
+		margin-inline: auto;
 	}
 
 	.patches-container {
