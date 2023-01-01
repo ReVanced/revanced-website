@@ -5,6 +5,7 @@
 	import type { Patch } from '$lib/types';
 	import { patches as api_patches } from '$data/api';
 
+	import Meta from '$lib/components/Meta.svelte';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
@@ -60,11 +61,7 @@
 	};
 </script>
 
-<svelte:head>
-	<title>ReVanced | Patches</title>
-	<meta content="ReVanced | Patches" name="og:title" />
-	<meta content="ReVanced | Patches" name="twitter:title" />
-</svelte:head>
+<Meta title="Patches" />
 
 <div class="search">
 	<div class="search-contain">

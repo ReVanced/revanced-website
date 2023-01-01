@@ -2,15 +2,18 @@
 	import { tools } from '$data/api';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	
+
 	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
+	import Meta from '$lib/components/Meta.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 
 	$: manager = $tools['revanced/revanced-manager'];
 </script>
+
+<Meta title="Download" />
 
 <div class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>ReVanced <span>Manager</span></h2>

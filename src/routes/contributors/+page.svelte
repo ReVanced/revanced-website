@@ -6,13 +6,10 @@
 
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer.svelte';
+	import Meta from '$lib/components/Meta.svelte';
 </script>
 
-<svelte:head>
-	<title>ReVanced | Contributors</title>
-	<meta content="ReVanced | Contributors" name="og:title" />
-	<meta content="ReVanced | Contributors" name="twitter:title" />
-</svelte:head>
+<Meta title="Contributors" />
 
 <main>
 	<div class="wrapper">

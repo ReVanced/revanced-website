@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Meta from '$lib/components/Meta.svelte';
 	import type { PageData } from './$types';
 
 	import '../documentation.scss';
@@ -8,11 +9,7 @@
 	export let data: PageData;
 </script>
 
-<svelte:head>
-	<title>ReVanced | Docs</title>
-	<meta content="ReVanced | Docs" name="og:title" />
-	<meta content="ReVanced | Docs" name="twitter:title" />
-</svelte:head>
+<Meta title="Docs" />
 
 <div id="markup-content">
 	<h1 class="title">{data.title}</h1>

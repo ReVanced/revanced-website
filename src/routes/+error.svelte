@@ -1,9 +1,12 @@
 <script lang="ts">
+	import Meta from '$lib/components/Meta.svelte';
 	import Navigation from '$layout/Navbar/NavButton.svelte';
 	import { page } from '$app/stores';
 
 	$: status = $page.status;
 </script>
+
+<Meta title="404" />
 
 <section class="error">
 	<h1>{status}</h1>
