@@ -2,7 +2,7 @@ import type { Readable, Subscriber, Unsubscriber, Writable } from 'svelte/store'
 import { writable } from 'svelte/store';
 import { error } from '@sveltejs/kit';
 
-import { prerendering, browser, dev } from '$app/environment';
+import { building, browser, dev } from '$app/environment';
 
 import * as settings from './settings';
 import * as cache from './cache';
@@ -64,12 +64,12 @@ export class API<T> implements Readable<T> {
 	// Implements the load function found in `+page/layout.ts` files.
 	page_load_impl() {
 		return async ({ fetch }) => {
-			if (prerendering) {
+			if (building) {
 				return {};
 			}
 
 			// Might be better to actually return some data from the load function and use that on the client.
-			if (!(dev || browser || prerendering)) {
+			if (!(dev || browser || building)) {
 				throw new Error(
 					'The API client is not optimized for production server-side rendering. Please change that :)'
 				);
