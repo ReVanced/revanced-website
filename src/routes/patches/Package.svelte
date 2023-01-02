@@ -1,14 +1,16 @@
 <script lang="ts">
-	export let selectedPkg: string | boolean;
+	import { goto } from '$app/navigation';
+
+	export let selectedPkg: string | undefined;
 	export let name: string;
 
 	function handleClick() {
-		// Assign the selected package, if already selected, make it false
-		if (selectedPkg === name || name === 'All packages') {
-			selectedPkg = false;
-		} else {
-			selectedPkg = name;
+		// Assign the selected package. If it's already selected, deselect it.
+		let path = '/patches';
+		if (selectedPkg !== name && name !== 'All packages') {
+			path += `/${name}`;
 		}
+		goto(path);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 </script>
