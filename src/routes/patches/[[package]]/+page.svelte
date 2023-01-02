@@ -116,6 +116,7 @@
 	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<PackageMenu>
 			<span class="packages">
+				<Package {selectedPkg} name="All packages" />
 				{#each packages as pkg}
 					<Package {selectedPkg} name={pkg} />
 				{/each}

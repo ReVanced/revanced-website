@@ -5,7 +5,7 @@
 	export let name: string;
 
 	function handleClick() {
-		// Assign the selected package, if already selected, deselect it.
+		// Assign the selected package. If it's already selected, deselect it.
 		let path = '/patches';
 		if (selectedPkg !== name && name !== 'All packages') {
 			path += `/${name}`;
