@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../app.scss';
 	import { derived } from 'svelte/store';
 
 	import NavHost from '$layout/Navbar/NavHost.svelte';
@@ -32,6 +33,3 @@
      afn if you are moving the footer here, please make it not use the repositories store directly and instead use component props :) -->
 
 <!-- <Footer repos={$repositories}> -->
-<style lang="scss" global>
-	@import '../app.scss';
-</style>
