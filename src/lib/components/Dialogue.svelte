@@ -27,6 +27,9 @@
 						<img src="../icons/back.svg" id="back" alt="back" />
 					</button>
 				{/if}
+				{#if $$slots.icon}
+					<slot name="icon" />
+				{/if}
 				{#if $$slots.title}
 					<h4>
 						<slot name="title" />
@@ -66,6 +69,7 @@
 	.title {
 		position: sticky;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
 		top: 0;
