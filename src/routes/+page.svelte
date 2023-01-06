@@ -14,13 +14,14 @@
 	let logoPages = 1;
 	let min = 0;
 	let max = logoAmount;
+  let token: string = "";
 
-	try {
-		currentPage = Number(localStorage.getItem('currentPage')) || 0;
-		selected = JSON.parse(localStorage.getItem('selected')) || [];
-	} catch (err) {
-		console.log(err);
-	}
+// try {
+// 		currentPage = Number(localStorage.getItem('currentPage')) || 0;
+// 		selected = JSON.parse(localStorage.getItem('selected')) || [];
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
 
 	// you will never see shittier code tm
 	// will refactor later maybe idk
@@ -49,6 +50,22 @@
 		logoPages = Math.floor(logos.length / logoAmount);
 		// update ui
 		logos = logos;
+
+    if (location.hash !== "") {
+      const response = await fetch('https://poll.revanced.app/auth/exchange', {
+        method: "POST",
+        headers: {
+          "Authorization": location.hash
+        }
+      });
+
+      const json = await response.json();
+
+      token = json.access_token;
+      console.log("super h: " + token);
+    } else {
+      alert("Warning: No token!");
+    }
 	});
 
 	function previousPage() {
