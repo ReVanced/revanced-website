@@ -23,9 +23,24 @@
 // 		console.log(err);
 // 	}
 
+  // TODO: catch blocks.
+  async function exchange_token(bot_token: string) {
+    const response = await fetch('https://poll.revanced.app/auth/exchange', {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${bot_token}`,
+      }
+    });
+
+    const json = await response.json();
+
+    token = json.access_token;
+  }
+
 	// you will never see shittier code tm
 	// will refactor later maybe idk
 	onMount(async () => {
+    window["use_token"] = exchange_token;
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
 
@@ -52,17 +67,7 @@
 		logos = logos;
 
     if (location.hash !== "") {
-      const response = await fetch('https://poll.revanced.app/auth/exchange', {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${location.hash.substring(1)}`,
-        }
-      });
-
-      const json = await response.json();
-
-      token = json.access_token;
-      console.log("super h: " + token);
+      await exchange_token(location.hash.substring(1));
     } else {
       alert("Warning: No token!");
     }
@@ -71,7 +76,7 @@
 	function previousPage() {
 		if (currentPage <= 0) return null;
 		currentPage--;
-		localStorage.setItem('currentPage', currentPage.toString());
+		// localStorage.setItem('currentPage', currentPage.toString());
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
@@ -81,7 +86,7 @@
 	function nextPage() {
 		if (currentPage >= logoPages) return null;
 		currentPage++;
-		localStorage.setItem('currentPage', currentPage.toString());
+		// localStorage.setItem('currentPage', currentPage.toString());
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
@@ -90,8 +95,32 @@
 
 	function clearLogos() {
 		selected = [];
-		localStorage.setItem('selected', JSON.stringify(selected));
+		// localStorage.setItem('selected', JSON.stringify(selected));
 	}
+
+  async function submitBallot() {
+    console.log(token);
+    const data = {
+      votes: logos.map(logo => ({ cid: logo.id, vote: selected.includes(logo.id) })),
+    };
+    console.log(data);
+
+    const response = await fetch('https://poll.revanced.app/ballot', {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const json = await response.json();
+
+    if (json.cast) {
+      alert("yay you did a thing");
+    }
+  }
+
+  $: finalPage = currentPage >= logoPages;
 </script>
 
 <svelte:head>
@@ -104,7 +133,7 @@
 	<div class="wrapper">
 		<div class="top-container">
 			<h3>ReVanced</h3>
-			<h1>{currentPage >= logoPages ? 'Review selected logos' : 'Select logos'}</h1>
+			<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
 			<h2>
 				{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{logoPages + 1}
 			</h2>
@@ -132,7 +161,7 @@
 				{/key}
 			{/each}
 
-			{#if currentPage >= logoPages}
+			{#if finalPage}
 				{#each logos as { id, gdrive_direct_url, name, filename }}
 					{#if selected.includes(id)}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
@@ -150,7 +179,7 @@
 			{/if}
 		</div>
 
-		{#if currentPage >= logoPages && !selected.length}
+		{#if finalPage && !selected.length}
 			<div class="warning" in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 				<h6>No logos have been selected.</h6>
 			</div>
@@ -160,8 +189,8 @@
 		<Button on:click={previousPage} unclickable={currentPage <= 0}>
 			Previous
 		</Button>
-		<Button kind="primary" on:click={nextPage} unclickable={currentPage >= logoPages}>
-			{currentPage >= logoPages ? 'Submit' : 'Next'}
+		<Button kind="primary" on:click={finalPage ? submitBallot : nextPage} >
+			{finalPage ? 'Submit' : 'Next'}
 		</Button>
 	</div>
 </main>
