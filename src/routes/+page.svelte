@@ -55,7 +55,7 @@
       const response = await fetch('https://poll.revanced.app/auth/exchange', {
         method: "POST",
         headers: {
-          "Authorization": location.hash
+          "Authorization": `Bearer ${location.hash.substring(1)}`,
         }
       });
 
