@@ -14,33 +14,39 @@
 	let logoPages = 1;
 	let min = 0;
 	let max = logoAmount;
-  let token: string = "";
+	let token: string = '';
 
-// try {
-// 		currentPage = Number(localStorage.getItem('currentPage')) || 0;
-// 		selected = JSON.parse(localStorage.getItem('selected')) || [];
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
+	let submit = false;
 
-  // TODO: catch blocks.
-  async function exchange_token(bot_token: string) {
-    const response = await fetch('https://poll.revanced.app/auth/exchange', {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${bot_token}`,
-      }
-    });
+	// try {
+	// 		currentPage = Number(localStorage.getItem('currentPage')) || 0;
+	// 		selected = JSON.parse(localStorage.getItem('selected')) || [];
+	// 	} catch (err) {
+	// 		console.log(err);
+	// 	}
 
-    const json = await response.json();
+	// TODO: catch blocks.
+	async function exchange_token(bot_token: string) {
+		const response = await fetch('https://poll.revanced.app/auth/exchange', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${bot_token}`
+			}
+		});
 
-    token = json.access_token;
-  }
+		if (!response.ok) {
+			throw Error(`Status Code ${response.status}: ${await response.text()}`);
+		}
+
+		const json = await response.json();
+
+		token = json.access_token;
+	}
 
 	// you will never see shittier code tm
 	// will refactor later maybe idk
 	onMount(async () => {
-    window["use_token"] = exchange_token;
+		window['use_token'] = exchange_token;
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
 
@@ -66,15 +72,19 @@
 		// update ui
 		logos = logos;
 
-    if (location.hash !== "") {
-      await exchange_token(location.hash.substring(1));
-    } else {
-      alert("Warning: No token!");
-    }
+		if (location.hash !== '') {
+			try {
+				await exchange_token(location.hash.substring(1));
+			} catch (err) {
+				alert(`Could not exchange the token: ${err}`);
+			}
+		} else {
+			alert('Warning: No token!');
+		}
 	});
 
 	function previousPage() {
-		if (currentPage <= 0) return null;
+		if (currentPage <= 0 || submit) return null;
 		currentPage--;
 		// localStorage.setItem('currentPage', currentPage.toString());
 
@@ -84,7 +94,7 @@
 	}
 
 	function nextPage() {
-		if (currentPage >= logoPages) return null;
+		if (currentPage >= logoPages || submit) return null;
 		currentPage++;
 		// localStorage.setItem('currentPage', currentPage.toString());
 
@@ -94,33 +104,39 @@
 	}
 
 	function clearLogos() {
+    if (submit) {
+      return;
+    }
 		selected = [];
 		// localStorage.setItem('selected', JSON.stringify(selected));
 	}
 
-  async function submitBallot() {
-    console.log(token);
-    const data = {
-      votes: logos.map(logo => ({ cid: logo.id, vote: selected.includes(logo.id) })),
-    };
-    console.log(data);
+	async function submitBallot() {
+		console.log(token);
+		const data = {
+			votes: logos.map((logo) => ({ cid: logo.id, vote: selected.includes(logo.id) }))
+		};
+		console.log(data);
 
-    const response = await fetch('https://poll.revanced.app/ballot', {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const json = await response.json();
+		const response = await fetch('https://poll.revanced.app/ballot', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+		if (!response.ok) {
+			throw Error(`Status Code ${response.status}: ${await response.text()}`);
+		}
+		const json = await response.json();
 
-    if (json.cast) {
-      alert("yay you did a thing");
-    }
-  }
+		if (!json.cast) {
+			throw Error('Vote not cast.');
+		}
+	}
 
-  $: finalPage = currentPage >= logoPages;
+	$: finalPage = currentPage >= logoPages;
 </script>
 
 <svelte:head>
@@ -186,13 +202,33 @@
 		{/if}
 	</div>
 	<div class="buttons-container">
-		<Button on:click={previousPage} unclickable={currentPage <= 0}>
-			Previous
-		</Button>
-		<Button kind="primary" on:click={finalPage ? submitBallot : nextPage} >
+		<Button on:click={previousPage} unclickable={currentPage <= 0 || submit}
+			>Previous</Button
+		>
+		<Button
+			kind="primary"
+			on:click={finalPage ? () => (submit = true) : nextPage}
+			unclickable={submit}
+		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
 	</div>
+
+	{#if submit}
+		<div style="text-align: center;">
+			{#await submitBallot()}
+				<h6>Submitting...</h6>
+			{:then _}
+				<h6>Your vote has been cast.</h6>
+			{:catch err}
+				<h6>
+					An error occured. Try again later.
+					<br />
+					{err}
+				</h6>
+			{/await}
+		</div>
+	{/if}
 </main>
 
 <style>
@@ -236,6 +272,19 @@
 		padding: 1rem 1.5rem;
 		border-top: 1px solid var(--grey-three);
 	}
+
+	/* This is better for large screens, but I am not entirely sure about the media query... */
+	/* @media screen and (orientation: landscape) and (min-width: 1500px) and (min-height: 950px) {
+	 .buttons-container {
+	 justify-content: center;
+	 z-index: unset;
+	 position: unset;
+	 bottom: unset;
+	 right: unset;
+	 border-top: unset;
+	 background-color: inherit;
+	 }
+	 } */
 
 	button {
 		background-color: transparent;
