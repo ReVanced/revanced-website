@@ -113,7 +113,7 @@
 	}
 
 	async function submitBallot() {
-		console.log(token);
+		// console.log(token);
 		const data = {
 			votes: logos.map((logo) => ({ cid: logo.id, vote: selected.includes(logo.id) }))
 		};
