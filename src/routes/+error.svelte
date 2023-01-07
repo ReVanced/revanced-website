@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Navigation from '$lib/components/atoms/NavButton.svelte';
 	import { page } from '$app/stores';
 
 	$: status = $page.status;
@@ -9,8 +8,6 @@
 	<h1>{status}</h1>
 	{#if status == 404}
 		<p>ReVanced Website is still a work in progress.</p>
-		<br />
-		<Navigation href="/" is_selected={() => true}>Home</Navigation>
 	{:else}
 		<p>
 			{$page.error.message}
