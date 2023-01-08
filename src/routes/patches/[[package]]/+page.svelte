@@ -25,27 +25,19 @@
 	let timeout: any = null;
 	let mobilePackages = false;
 
-	function filterByPackage(pkg: string | undefined, packageList: any) {
-		for (let i = 0; i < packageList.length; i++) {
-			if (packageList[i].name === pkg) {
-				return true;
-			}
-		}
+	function filterByPackage(pkg: string | undefined, packageList: any[]) {
+		return packageList.find((x: Package) => x.name === pkg);
+	}
+
+	function checkPkgName(pkg: string, packageList: any[]) {
+		// Basically the same function as before lol
+		return packageList.find((x: Package) => x.name.replace(/\./g, '').includes(pkg));
 	}
 
 	function search(patch: Patch) {
-		function checkPkgName(pkg: string | undefined, packageList: any) {
-			// Basically the same function as before lol
-			for (let i = 0; i < packageList.length; i++) {
-				if (packageList[i].name.replace(/\./g, '').includes(pkg)) {
-					return true;
-				}
-			}
-		}
-
 		return (
 			patch.description.toLowerCase().replace(/\s/g, '').includes(searchTermFiltered) ||
-			patch.name.replace(/-/g, '').toLowerCase().includes(searchTermFiltered) ||
+			patch.name.toLowerCase().replace(/-/g, '').includes(searchTermFiltered) ||
 			checkPkgName(searchTermFiltered, patch.compatiblePackages)
 		);
 	}
