@@ -15,15 +15,8 @@
 	let min = 0;
 	let max = logoAmount;
 	let token: string = '';
-
 	let submit = false;
-
-	// try {
-	// 		currentPage = Number(localStorage.getItem('currentPage')) || 0;
-	// 		selected = JSON.parse(localStorage.getItem('selected')) || [];
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
+	$: finalPage = currentPage >= logoPages;
 
 	// TODO: catch blocks.
 	async function exchange_token(bot_token: string) {
@@ -45,7 +38,7 @@
 
 	// you will never see shittier code tm
 	// will refactor later maybe idk
-  // Reply: don't think we need to refactor because nobody cares if this code is shit lol
+	// Reply: don't think we need to refactor because nobody cares if this code is shit lol
 	onMount(async () => {
 		window['use_token'] = exchange_token;
 		window['submit_poll'] = submitBallot;
@@ -87,9 +80,9 @@
 	});
 
 	function previousPage() {
-		if (currentPage <= 0 || submit) return null;
+		if (currentPage <= 0) return null;
 		currentPage--;
-		// localStorage.setItem('currentPage', currentPage.toString());
+		submit = false;
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
@@ -99,7 +92,6 @@
 	function nextPage() {
 		if (currentPage >= logoPages || submit) return null;
 		currentPage++;
-		// localStorage.setItem('currentPage', currentPage.toString());
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
@@ -107,11 +99,10 @@
 	}
 
 	function clearLogos() {
-    if (submit) {
-      return;
-    }
+		if (submit) {
+			return;
+		}
 		selected = [];
-		// localStorage.setItem('selected', JSON.stringify(selected));
 	}
 
 	async function submitBallot() {
@@ -138,8 +129,6 @@
 			throw Error('Vote not cast.');
 		}
 	}
-
-	$: finalPage = currentPage >= logoPages;
 </script>
 
 <svelte:head>
@@ -203,11 +192,29 @@
 				<h6>No logos have been selected.</h6>
 			</div>
 		{/if}
+
+		{#if submit}
+			<div style="text-align: center;">
+				{#await submitBallot()}
+					<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+						Submitting...
+					</h6>
+				{:then _}
+					<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+						Your vote has been cast.
+					</h6>
+				{:catch err}
+					<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+						An error occured. Try again later.
+						<br />
+						{err}
+					</h6>
+				{/await}
+			</div>
+		{/if}
 	</div>
 	<div class="buttons-container">
-		<Button on:click={previousPage} unclickable={currentPage <= 0 || submit}
-			>Previous</Button
-		>
+		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
 		<Button
 			kind="primary"
 			on:click={finalPage ? () => (submit = true) : nextPage}
@@ -216,22 +223,6 @@
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
 	</div>
-
-	{#if submit}
-		<div style="text-align: center;">
-			{#await submitBallot()}
-				<h6>Submitting...</h6>
-			{:then _}
-				<h6>Your vote has been cast.</h6>
-			{:catch err}
-				<h6>
-					An error occured. Try again later.
-					<br />
-					{err}
-				</h6>
-			{/await}
-		</div>
-	{/if}
 </main>
 
 <style>
@@ -276,18 +267,21 @@
 		border-top: 1px solid var(--grey-three);
 	}
 
-	/* This is better for large screens, but I am not entirely sure about the media query... */
-	/* @media screen and (orientation: landscape) and (min-width: 1500px) and (min-height: 950px) {
-	 .buttons-container {
-	 justify-content: center;
-	 z-index: unset;
-	 position: unset;
-	 bottom: unset;
-	 right: unset;
-	 border-top: unset;
-	 background-color: inherit;
-	 }
-	 } */
+	@media screen and (orientation: landscape) and (min-width: 1500px) and (min-height: 950px) {
+		.buttons-container {
+			justify-content: center;
+			z-index: unset;
+			position: unset;
+			bottom: unset;
+			right: unset;
+			border-top: none;
+			background-color: transparent;
+		}
+
+		:global(.wrapper) {
+			padding-bottom: 0;
+		}
+	}
 
 	button {
 		background-color: transparent;

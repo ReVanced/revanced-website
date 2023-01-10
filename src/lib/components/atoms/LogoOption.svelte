@@ -17,7 +17,6 @@
 			selected = selected;
 		}
 		console.log(selected);
-		localStorage.setItem('selected', JSON.stringify(selected));
 	};
 </script>
 
@@ -68,7 +67,7 @@
 	}
 
 	.clicked {
-		background-color: var(--grey-three);
+		background-color: var(--accent-low-opacity);
 	}
 
 	.clicked h2,
