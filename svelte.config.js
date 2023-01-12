@@ -14,6 +14,7 @@ const config = {
 			pages: 'public',
 			fallback: '404.html'
 		}),
+		trailingSlash: 'always',
 	}
 };
 
