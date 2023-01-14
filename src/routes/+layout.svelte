@@ -26,7 +26,7 @@
 	<meta property="og:description" content="Continuing the legacy of Vanced." />
 	<meta name="twitter:image" itemprop="image" content="/embed.png" />
 	<meta name="twitter:card" content="summary" />
-	<meta name="theme-color" content="#9FD5FF" />
+	<meta name="theme-color" content="#8F0045" />
 </svelte:head>
 
 {#if $show_loading_animation}
