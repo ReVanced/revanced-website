@@ -236,20 +236,16 @@
 
 	h1 {
 		font-size: 2rem;
-		font-weight: 600;
-		text-align: center;
-		color: var(--grey-four);
+		color: var(--white);
 	}
 
 	h2 {
 		font-size: 1.25rem;
-		color: var(--grey-three);
-		text-align: center;
+		color: var(--white);
 	}
 
 	h3 {
-		font-weight: 500;
-		color: var(--grey-three);
+		color: var(--white);
 		margin-bottom: -0.5rem;
 	}
 
@@ -286,23 +282,22 @@
 	button {
 		background-color: transparent;
 		border: none;
-		border: 1px solid var(--grey-six);
-		color: var(--grey-four);
+		border: 1px solid #9E8C90;
+		color: #ECE0E1;
 		padding: 0.5rem 1.25rem;
-		border-radius: 12px;
+		border-radius: 8px;
 		cursor: pointer;
 		font-weight: 500;
 	}
 
 	.top-container {
 		display: flex;
-		align-items: center;
 		flex-direction: column;
 		gap: 0.5rem;
 		margin-bottom: 2rem;
 		background-color: var(--accent-color);
-		padding: 1.75rem;
-		border-radius: 12px;
+		padding: 2rem;
+		border-radius: 20px;
 	}
 
 	.top-custom-button-container {

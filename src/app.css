@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;600;700;800&display=swap");
 
 * {
     box-sizing: inherit;
     margin: 0;
     padding: 0;
-    font-family: "Manrope", sans-serif;
+    font-family: "Roboto", sans-serif;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -29,7 +29,7 @@ body {
 
 .wrapper {
     margin-inline: auto;
-    width: min(90%, 95rem);
+    width: min(90%, 65rem);
     margin-top: 4rem;
     padding-bottom: 6rem;
     display: flex;
@@ -44,17 +44,17 @@ body {
 }
 
 :root {
-    --white: #fff;
-    --accent-color: #9fd5ff;
+    --white: #FFD9E1;
+    --accent-color: #8F0045;
     --accent-color-two: hsl(207, 65%, 90%);
-    --accent-low-opacity: #4b5f798a;
-    --bg-color: hsl(240, 2%, 11%);
+    --accent-low-opacity: #5B3F46;
+    --bg-color: #201A1B;
     --grey-one: #252b31;
-    --grey-two: #28313b;
-    --grey-three: #373e4d;
+    --grey-two: #5B3F46;
+    --grey-three: #30312B;
     --grey-four: #182244;
     --grey-five: hsl(208, 30%, 75%);
-    --grey-six: #202126;
+    --grey-six: #2A2224;
     --grey-seven: #43698657;
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -67,22 +67,20 @@ body {
 
 h1 {
     color: var(--white);
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1.5rem;
     color: var(--white);
-    font-weight: 700;
-    letter-spacing: -0.04em;
 }
 
 h2 {
-    color: var(--grey-five);
+    color: var(--white);
     font-weight: 400;
     font-size: 1.2rem;
 }
 
 h3 {
     color: var(--white);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 1rem;
 }
 
@@ -90,21 +88,18 @@ h4 {
     color: var(--white);
     font-weight: 500;
     font-size: 1.25rem;
-    letter-spacing: 0.02rem;
 }
 
 h5 {
     color: var(--white);
     font-weight: 300;
     font-size: 1rem;
-    letter-spacing: 0.02rem;
 }
 
 h6 {
-    color: var(--grey-five);
+    color: var(--white);
     font-weight: 300;
     font-size: 1rem;
-    letter-spacing: 0.02rem;
 }
 
 ::-webkit-scrollbar {

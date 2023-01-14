@@ -32,11 +32,11 @@
 	.button-secondary {
 		min-width: max-content;
 		font-size: 1rem;
-		color: var(--white);
-		font-weight: 600;
+		color: #FFD9E1;
+		font-weight: 400;
 		border: none;
-		border-radius: 12px;
-		padding: 0.85rem 1.5rem;
+		border-radius: 1200px;
+		padding: 0.85rem 1.75rem;
 		display: block;
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
@@ -44,9 +44,9 @@
 	}
 
 	.button-primary {
-		background-color: var(--accent-color);
+		background-color: #FFB1C5;
 		box-shadow: 0px 0px 32px 1px var(--accent-color-glow);
-		color: var(--grey-four);
+		color: #65002F;
 	}
 
 	div:hover {

@@ -38,11 +38,10 @@
 		padding: 1.25rem;
 		width: 100%;
 		transition: all 0.3s var(--bezier-one);
-		border-radius: 12px;
+		border-radius: 16px;
 		display: flex;
 		gap: 1.5rem;
 		background-color: var(--grey-six);
-		border: 1px solid var(--grey-three);
 		cursor: pointer;
 		align-items: center;
 	}
@@ -72,7 +71,7 @@
 
 	.clicked h2,
 	.clicked h6 {
-		color: var(--accent-color);
+		color: var(--white);
 	}
 
 	div:hover {
