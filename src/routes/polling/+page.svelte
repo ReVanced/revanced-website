@@ -3,9 +3,11 @@
 	import { fly } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
 
+	import Modal from '$lib/components/atoms/Dialogue.svelte';
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
 
+	let modalOpen = false;
 	let selected: Array<string> = [];
 	let logos: Array<any> = [];
 	let transitionDirection = 5;
@@ -146,9 +148,7 @@
 				{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{logoPages + 1}
 			</h2>
 			<div class="top-custom-button-container">
-				<a href="https://hhh.com" target="_blank" tabindex="-1" rel="noreferrer">
-					<button>How does this work?</button>
-				</a>
+				<button on:click={() => (modalOpen = !modalOpen)}>How does this work?</button>
 				<button on:click={clearLogos}>Clear All</button>
 			</div>
 		</div>
@@ -225,6 +225,24 @@
 	</div>
 </main>
 
+<Modal bind:modalOpen>
+	<svelte:fragment slot="title">How does this work?</svelte:fragment>
+	<svelte:fragment slot="description"
+		>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+		labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+		laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+		voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+		non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</svelte:fragment
+	>
+	<div class="buttons">
+		<Button
+			on:click={() => {
+				modalOpen = false;
+			}}>Understood</Button
+		>
+	</div>
+</Modal>
+
 <style>
 	.options-grid {
 		display: grid;
@@ -261,6 +279,11 @@
 		background-color: var(--grey-six);
 		padding: 1rem 1.5rem;
 		border-top: 1px solid var(--grey-three);
+	}
+
+	.buttons {
+		display: flex;
+		justify-content: flex-end;
 	}
 
 	@media screen and (orientation: landscape) and (min-width: 1500px) and (min-height: 950px) {
