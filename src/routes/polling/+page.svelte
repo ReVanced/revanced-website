@@ -8,8 +8,26 @@
 	import Button from '$lib/components/atoms/Button.svelte';
 
 	let modalOpen = false;
-	let selected: Array<string> = [];
-	let logos: Array<any> = [];
+	let selected = {};
+function calc_ui_selected_count(v) {
+  let n = 0;
+  for (const item of Object.values(v)) {
+    if (item.length != 0) {
+      console.log(item);
+      n += 1;
+    }
+  }
+  return n;
+}
+function calc_selected_logo_ids(v) {
+  return [...Object.values(v)].map(data => data.variants).flat();
+}
+
+  // afn please don't do this lol this is shitty code
+  $: ui_selected_count = calc_ui_selected_count(selected);
+  $: selected_logo_ids = calc_selected_logo_ids(selected);
+	let logos = [];
+  let logo_ids = [];
 	let transitionDirection = 5;
 	let logoAmount = 4;
 	let currentPage = 0;
@@ -48,10 +66,16 @@
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
 
-		// make better json
-		for (const name of Object.keys(json)) {
-			logos.push({ name, ...json[name] });
-		}
+    for (const name of Object.keys(json)) {
+      // lol the performance
+      selected[name] = [];
+
+      logos.push({ name, variants: json[name].logos });
+      logo_ids = [...logo_ids, ...json[name].logos.map(v => v.id)];
+    }
+    console.log(logos);
+    console.log(logo_ids);
+    console.log(selected_logo_ids);
 
 		// randomize the order of the logos to minimize bias
 		for (let i = logos.length - 1; i > 0; i--) {
@@ -109,6 +133,7 @@
 
 	async function submitBallot() {
 		// console.log(token);
+    throw Error("This shit needs to be redone now hhhhhhh");
 		const data = {
 			votes: logos.map((logo) => ({ cid: logo.id, vote: selected.includes(logo.id) }))
 		};
@@ -145,7 +170,7 @@
 			<h3>ReVanced</h3>
 			<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
 			<h2>
-				{selected.length}/{logos.length} selected · Page {Number(currentPage) + 1}/{logoPages + 1}
+				{ui_selected_count}/{logos.length} selected · Page {Number(currentPage) + 1}/{logoPages + 1}
 			</h2>
 			<div class="top-custom-button-container">
 				<button on:click={() => (modalOpen = !modalOpen)}>How does this work?</button>
@@ -154,33 +179,29 @@
 		</div>
 
 		<div class="options-grid">
-			{#each logos.slice(min, max) as { id, gdrive_direct_url, name, filename }}
+			{#each logos.slice(min, max) as { variants, name }}
 				{#key currentPage}
 					<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 						<LogoOption
-							bind:selected
-							clicked={selected.includes(id)}
-							{id}
-							logo={gdrive_direct_url}
+							bind:selected={selected[name]}
+							clicked={selected[name].length != 0}
+              {variants}
 							{name}
-							{filename}
 						/>
 					</span>
 				{/key}
 			{/each}
 
 			{#if finalPage}
-				{#each logos as { id, gdrive_direct_url, name, filename }}
-					{#if selected.includes(id)}
+				{#each logos as { variants, name }}
+					{#if selected[name].length != 0}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							<LogoOption
-								bind:selected
-								clicked={selected.includes(id)}
-								{id}
-								logo={gdrive_direct_url}
-								{name}
-								{filename}
-							/>
+						  <LogoOption
+							  bind:selected
+							  clicked={selected[name].length != 0}
+                {variants}
+							  {name}
+						  />
 						</span>
 					{/if}
 				{/each}

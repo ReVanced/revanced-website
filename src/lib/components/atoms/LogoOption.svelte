@@ -1,14 +1,19 @@
 <script lang="ts">
+  import Modal from './Dialogue.svelte';
+  import Variants from './Variants.svelte';
 	export let name: string;
-	export let logo: string;
-	export let filename: string;
-	export let id: string;
 	export let selected: Array<string>;
+  export let variants;
 	export let clicked = false;
 
-	const handleClick = () => {
-		clicked = !clicked;
+  let has_variants = variants.length > 1;
+  let modalOpen = false;
 
+  // TODO: cycle between them.
+  let current = variants[0];
+
+  function select_logo(id) {
+		// clicked = !clicked;
 		if (selected.includes(id)) {
 			selected = selected.filter((e) => e !== id);
 		} else {
@@ -17,16 +22,36 @@
 			selected = selected;
 		}
 		console.log(selected);
+  }
+
+	const handleClick = () => {
+    if (!has_variants) {
+      select_logo(current.id);
+    } else {
+      modalOpen = !modalOpen;
+    }
 	};
 </script>
+
+
+<Modal bind:modalOpen>
+	<svelte:fragment slot="title">{name}</svelte:fragment>
+	<svelte:fragment slot="description">
+    guhhhhhhhhhhhhhhhhhhhhh
+	</svelte:fragment>
+  <Variants />
+</Modal>
 
 <!-- SHUT UP -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class="option" on:click={handleClick} on:keypress={handleClick} tabindex="0" class:clicked>
-	<img src={logo} alt={filename} />
+	<img src={current.gdrive_direct_url} alt={current.filename} />
 	<div class="text">
 		<h2>{name}</h2>
-		<h6>{filename}</h6>
+		<h6>{current.filename}</h6>
+    {#if has_variants}
+      <h4>This logo has variants</h4>
+    {/if}
 	</div>
 </div>
 
@@ -52,6 +77,10 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
+  h4 {
+    font-weight: 800;
+  }
 
 	h6 {
 		font-size: 0.9rem;
