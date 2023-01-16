@@ -1,7 +1,6 @@
 <script lang="ts">
   import Modal from './Dialogue.svelte';
-  import Variants from './Variants.svelte';
-	export let name: string;
+	export let name = "";
 	export let selected: Array<string>;
   export let variants;
 	export let clicked = false;
@@ -13,7 +12,7 @@
   let current = variants[0];
 
   function select_logo(id) {
-		// clicked = !clicked;
+		clicked = !clicked;
 		if (selected.includes(id)) {
 			selected = selected.filter((e) => e !== id);
 		} else {
@@ -34,13 +33,19 @@
 </script>
 
 
+{#if has_variants}
 <Modal bind:modalOpen>
 	<svelte:fragment slot="title">{name}</svelte:fragment>
 	<svelte:fragment slot="description">
     guhhhhhhhhhhhhhhhhhhhhh
 	</svelte:fragment>
-  <Variants />
+  {#each variants as variant}
+    <!-- Mega Trolley -->
+    <svelte:self bind:selected variants={[variant]} clicked={selected.includes(variant.id)}/>
+  {/each}
+  <!-- <Variants /> -->
 </Modal>
+{/if}
 
 <!-- SHUT UP -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->

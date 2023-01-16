@@ -128,14 +128,15 @@ function calc_selected_logo_ids(v) {
 		if (submit) {
 			return;
 		}
-		selected = [];
+
+    logos.forEach((v => {
+      selected[v.name] = [];
+    }))
 	}
 
 	async function submitBallot() {
-		// console.log(token);
-    throw Error("This shit needs to be redone now hhhhhhh");
 		const data = {
-			votes: logos.map((logo) => ({ cid: logo.id, vote: selected.includes(logo.id) }))
+			votes: logo_ids.map((id) => ({ cid: id, vote: selected_logo_ids.includes(id) }))
 		};
 		console.log(data);
 
@@ -197,7 +198,7 @@ function calc_selected_logo_ids(v) {
 					{#if selected[name].length != 0}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 						  <LogoOption
-							  bind:selected
+							  bind:selected={selected[name]}
 							  clicked={selected[name].length != 0}
                 {variants}
 							  {name}
@@ -208,7 +209,7 @@ function calc_selected_logo_ids(v) {
 			{/if}
 		</div>
 
-		{#if finalPage && !selected.length}
+		{#if finalPage && !selected_logo_ids.length}
 			<div class="warning" in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 				<h6>No logos have been selected.</h6>
 			</div>
