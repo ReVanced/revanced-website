@@ -39,9 +39,9 @@
 	<svelte:fragment slot="description">
     guhhhhhhhhhhhhhhhhhhhhh
 	</svelte:fragment>
-  {#each variants as variant}
+  {#each variants as variant, i}
     <!-- Mega Trolley -->
-    <svelte:self bind:selected variants={[variant]} clicked={selected.includes(variant.id)}/>
+    <svelte:self bind:selected variants={[{...variant, filename: (i + 1).toString()}]} clicked={selected.includes(variant.id)}/>
   {/each}
   <!-- <Variants /> -->
 </Modal>
