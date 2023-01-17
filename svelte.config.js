@@ -12,7 +12,7 @@ const config = {
 		// Instead, we have to use a wrapper that generates a vercel config if on vercel...
 		adapter: adapter({
 			pages: 'public',
-			fallback: '404.html'
+			fallback: 'ipfs-404.html'
 		}),
 		trailingSlash: 'always',
 	}
