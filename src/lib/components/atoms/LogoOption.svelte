@@ -92,16 +92,16 @@
 			<h2>{name}</h2>
 		</div>
 	</div>
-		<div class="actions">
-			<Button on:click={prevVariant} on:click={stopA} unclickable={i <= 0} icon="previous" />
-			{i + 1}/{variants.length}
-			<Button
-				on:click={nextVariant}
-				on:click={stopA}
-				unclickable={i + 1 >= variants.length}
-				icon="next"
-			/>
-		</div>
+	<div class="actions">
+		<Button on:click={prevVariant} on:click={stopA} unclickable={i <= 0} icon="previous" />
+		{i + 1}/{variants.length}
+		<Button
+			on:click={nextVariant}
+			on:click={stopA}
+			unclickable={i + 1 >= variants.length}
+			icon="next"
+		/>
+	</div>
 </div>
 
 <style>
