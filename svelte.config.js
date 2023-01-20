@@ -15,6 +15,9 @@ const config = {
 		env: {
 			publicPrefix: 'RV'
 		},
+		prerender: {
+			entries: ['*', '/docs']
+		},
 	}
 };
 
