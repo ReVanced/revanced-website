@@ -9,25 +9,25 @@
 
 	let modalOpen = false;
 	let selected = {};
-function calc_ui_selected_count(v) {
-  let n = 0;
-  for (const item of Object.values(v)) {
-    if (item.length != 0) {
-      console.log(item);
-      n += 1;
-    }
-  }
-  return n;
-}
-function calc_selected_logo_ids(v) {
-  return [...Object.values(v)].map(data => data.variants).flat();
-}
+	function calc_ui_selected_count(v) {
+		let n = 0;
+		for (const item of Object.values(v)) {
+			if (item.length != 0) {
+				console.log(item);
+				n += 1;
+			}
+		}
+		return n;
+	}
+	function calc_selected_logo_ids(v) {
+		return [...Object.values(v)].map((data) => data.variants).flat();
+	}
 
-  // afn please don't do this lol this is shitty code
-  $: ui_selected_count = calc_ui_selected_count(selected);
-  $: selected_logo_ids = calc_selected_logo_ids(selected);
+	// afn please don't do this lol this is shitty code
+	$: ui_selected_count = calc_ui_selected_count(selected);
+	$: selected_logo_ids = calc_selected_logo_ids(selected);
 	let logos = [];
-  let logo_ids = [];
+	let logo_ids = [];
 	let transitionDirection = 5;
 	let logoAmount = 4;
 	let currentPage = 0;
@@ -38,7 +38,6 @@ function calc_selected_logo_ids(v) {
 	let submit = false;
 	$: finalPage = currentPage >= logoPages;
 
-	// TODO: catch blocks.
 	async function exchange_token(bot_token: string) {
 		const response = await fetch('https://poll.revanced.app/auth/exchange', {
 			method: 'POST',
@@ -66,16 +65,16 @@ function calc_selected_logo_ids(v) {
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json = await response.json();
 
-    for (const name of Object.keys(json)) {
-      // lol the performance
-      selected[name] = [];
+		for (const name of Object.keys(json)) {
+			// lol the performance
+			selected[name] = [];
 
-      logos.push({ name, variants: json[name].logos });
-      logo_ids = [...logo_ids, ...json[name].logos.map(v => v.id)];
-    }
-    console.log(logos);
-    console.log(logo_ids);
-    console.log(selected_logo_ids);
+			logos.push({ name, variants: json[name].logos });
+			logo_ids = [...logo_ids, ...json[name].logos.map((v) => v.id)];
+		}
+		console.log(logos);
+		console.log(logo_ids);
+		console.log(selected_logo_ids);
 
 		// randomize the order of the logos to minimize bias
 		for (let i = logos.length - 1; i > 0; i--) {
@@ -129,9 +128,9 @@ function calc_selected_logo_ids(v) {
 			return;
 		}
 
-    logos.forEach((v => {
-      selected[v.name] = [];
-    }))
+		logos.forEach((v) => {
+			selected[v.name] = [];
+		});
 	}
 
 	async function submitBallot() {
@@ -186,7 +185,7 @@ function calc_selected_logo_ids(v) {
 						<LogoOption
 							bind:selected={selected[name]}
 							clicked={selected[name].length != 0}
-              {variants}
+							{variants}
 							{name}
 						/>
 					</span>
@@ -197,12 +196,12 @@ function calc_selected_logo_ids(v) {
 				{#each logos as { variants, name }}
 					{#if selected[name].length != 0}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-						  <LogoOption
-							  bind:selected={selected[name]}
-							  clicked={selected[name].length != 0}
-                {variants}
-							  {name}
-						  />
+							<LogoOption
+								bind:selected={selected[name]}
+								clicked={selected[name].length != 0}
+								{variants}
+								{name}
+							/>
 						</span>
 					{/if}
 				{/each}
@@ -249,13 +248,12 @@ function calc_selected_logo_ids(v) {
 
 <Modal bind:modalOpen>
 	<svelte:fragment slot="title">How does this work?</svelte:fragment>
-	<svelte:fragment slot="description"
-		>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-		laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-		voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-		non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</svelte:fragment
-	>
+	<svelte:fragment slot="description">Approval voting</svelte:fragment>
+  <div class="information">
+	  <h6>Voters can choose any number of logos. <br /> The logo that got selected the most wins.</h6>
+
+	  <b>Remember, you can only vote once!</b>
+  </div>
 	<div class="buttons">
 		<Button
 			on:click={() => {
@@ -289,6 +287,16 @@ function calc_selected_logo_ids(v) {
 		margin-bottom: -0.5rem;
 	}
 
+	h6 {
+		color: var(--white);
+		margin-bottom: 0.5rem;
+	}
+
+	b {
+		color: var(--white);
+		margin-bottom: 1rem;
+	}
+
 	.buttons-container {
 		display: flex;
 		gap: 1rem;
@@ -302,6 +310,11 @@ function calc_selected_logo_ids(v) {
 		padding: 1rem 1.5rem;
 		border-top: 1px solid var(--grey-three);
 	}
+
+  .information {
+    text-align: center;
+		margin-bottom: 1rem;
+  }
 
 	.buttons {
 		display: flex;
@@ -327,8 +340,8 @@ function calc_selected_logo_ids(v) {
 	button {
 		background-color: transparent;
 		border: none;
-		border: 1px solid #9E8C90;
-		color: #ECE0E1;
+		border: 1px solid #9e8c90;
+		color: #ece0e1;
 		padding: 0.5rem 1.25rem;
 		border-radius: 8px;
 		cursor: pointer;
