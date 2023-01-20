@@ -2,18 +2,17 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-import ContributorHost from './ContributorSection.svelte';
-import Footer from '$layout/Footer.svelte';
-import Meta from '$lib/components/Meta.svelte';
+	import ContributorHost from './ContributorSection.svelte';
+	import Footer from '$layout/Footer.svelte';
+	import Meta from '$lib/components/Meta.svelte';
 
 	import { repositories } from '$data/api';
-import { createQuery } from '@tanstack/svelte-query'
+	import { createQuery } from '@tanstack/svelte-query';
 
-const query = createQuery({
-  queryKey: ['repositories'],
-  queryFn: () => repositories(),
-});
-
+	const query = createQuery({
+		queryKey: ['repositories'],
+		queryFn: () => repositories()
+	});
 </script>
 
 <Meta title="Contributors" />
@@ -31,13 +30,13 @@ const query = createQuery({
 			</h4>
 		</div>
 		<div class="repos">
-      {#if $query.isSuccess}
-			{#each $query.data as { contributors, name: repo }}
-				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorHost {contributors} {repo} />
-				</div>
-			{/each}
-      {/if}
+			{#if $query.isSuccess}
+				{#each $query.data as { contributors, name: repo }}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<ContributorHost {contributors} {repo} />
+					</div>
+				{/each}
+			{/if}
 		</div>
 	</div>
 </main>

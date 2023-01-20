@@ -1,20 +1,20 @@
 <script lang="ts">
 	import '../app.scss';
 	import { derived } from 'svelte/store';
-import { browser } from '$app/environment'
-import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
+	import { browser } from '$app/environment';
+	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 
 	import NavHost from '$layout/Navbar/NavHost.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import RouterEvents from '$data/RouterEvents';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      enabled: browser,
-    },
-  },
-});
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				enabled: browser
+			}
+		}
+	});
 
 	// Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
 	const show_loading_animation = derived(
@@ -35,13 +35,11 @@ const queryClient = new QueryClient({
 <NavHost />
 
 <QueryClientProvider client={queryClient}>
-{#if $show_loading_animation}
-	<Spinner />
-{:else}
-	<slot />
-{/if}
-<!--
-     afn if you are moving the footer here, please make it not use the repositories store directly and instead use component props :) -->
-
-<!-- <Footer repos={$repositories}> -->
+	{#if $show_loading_animation}
+		<Spinner />
+	{:else}
+		<slot />
+	{/if}
+  <!-- guhh afn -->
+	<!-- <Footer> -->
 </QueryClientProvider>

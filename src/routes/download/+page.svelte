@@ -3,7 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-import { createQuery } from '@tanstack/svelte-query'
+	import { createQuery } from '@tanstack/svelte-query';
 
 	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
@@ -12,10 +12,10 @@ import { createQuery } from '@tanstack/svelte-query'
 	import Footer from '$layout/Footer.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 
-const query = createQuery({
-  queryKey: ['manager'],
-  queryFn: () => manager(),
-});
+	const query = createQuery({
+		queryKey: ['manager'],
+		queryFn: () => manager()
+	});
 </script>
 
 <Meta title="Download" />
@@ -24,11 +24,11 @@ const query = createQuery({
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
-    {#if $query.isSuccess}
-		<Button kind="primary" icon="download" href={$query.data.assets[0].url} target="_blank">
-			{$query.data.version}
-		</Button>
-    {/if}
+		{#if $query.isSuccess}
+			<Button kind="primary" icon="download" href={$query.data.assets[0].url} target="_blank">
+				{$query.data.version}
+			</Button>
+		{/if}
 		<Button href="https://github.com/revanced/revanced-manager" target="_blank">View Source</Button>
 	</div>
 	<div class="screenshot">

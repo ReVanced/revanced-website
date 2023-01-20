@@ -8,16 +8,16 @@ export type PatchesData = { patches: Patch[]; packages: string[] };
 export type ToolsData = { [repo: string]: Tool };
 
 async function get_json(endpoint: string) {
-    const url = `${settings.api_base_url()}/${endpoint}`;
-    return await fetch(url).then((r) => r.json());
+	const url = `${settings.api_base_url()}/${endpoint}`;
+	return await fetch(url).then((r) => r.json());
 }
 
 export function repositories(): Promise<ReposData> {
-    return get_json("contributors").then(json => json.repositories);
+	return get_json('contributors').then((json) => json.repositories);
 }
 
 async function tools(): Promise<ToolsData> {
-  const json = await get_json("tools");
+	const json = await get_json('tools');
 	// Make the data easier to work with.
 	let map: Map<string, Tool> = new Map();
 	for (const tool of json['tools']) {
@@ -48,11 +48,11 @@ async function tools(): Promise<ToolsData> {
 }
 
 export function manager(): Promise<Tool> {
-    return tools().then(data => data['revanced/revanced-manager']);
+	return tools().then((data) => data['revanced/revanced-manager']);
 }
 
 export async function patches(): Promise<PatchesData> {
-    const json = await get_json("patches");
+	const json = await get_json('patches');
 	const packagesWithCount: { [key: string]: number } = {};
 
 	// gets packages and patch count
@@ -67,5 +67,5 @@ export async function patches(): Promise<PatchesData> {
 		.sort((a, b) => b[1] - a[1])
 		.map((pkg) => pkg[0]);
 
-   return { patches: json, packages };
-};
+	return { patches: json, packages };
+}

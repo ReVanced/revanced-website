@@ -4,9 +4,9 @@
 
 	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
-	import { patches as get_patches } from '$data/api';
 
-import { createQuery } from '@tanstack/svelte-query'
+	import { createQuery } from '@tanstack/svelte-query';
+	import { patches as get_patches } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
 	import PackageMenu from '../PackageMenu.svelte';
@@ -17,25 +17,25 @@ import { createQuery } from '@tanstack/svelte-query'
 	import FilterChip from '$lib/components/FilterChip.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 
-const query = createQuery({
-  queryKey: ['patches'],
-  queryFn: () => get_patches(),
-});
+	const query = createQuery({
+		queryKey: ['patches'],
+		queryFn: () => get_patches()
+	});
 
-// TODO: type these
-let patches = [];
-let packages = [];
+	// TODO: type these
+	let patches = [];
+	let packages = [];
 
-// $: ({ patches, packages } = $api_patches);
-$: {
-  // Perhaps there is a better way to do this?
-  if ($query.isSuccess) {
-    const data = $query.data;
-    patches = data.patches;
-    packages = data.packages;
-    console.log(data);
-  }
-}
+	// $: ({ patches, packages } = $api_patches);
+	$: {
+		// Perhaps there is a better way to do this?
+		if ($query.isSuccess) {
+			const data = $query.data;
+			patches = data.patches;
+			packages = data.packages;
+			console.log(data);
+		}
+	}
 
 	export let data: PageData;
 	$: ({ selectedPkg } = data);
