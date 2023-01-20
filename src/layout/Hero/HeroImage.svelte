@@ -1,37 +1,25 @@
 <script>
-  import Picture from '$lib/components/Picture.svelte';
-  import manager_screenshot from '$images/manager_two.png?w=1233;822;411&format=avif;webp;png&picture';
+	import Picture from '$lib/components/Picture.svelte';
+	import manager_screenshot from '$images/manager_two.png?w=1233;822;411&format=avif;webp;png&picture';
 </script>
 
 <div class="hero-img">
-  <Picture data={manager_screenshot} alt="Screenshot of ReVanced Manager" />
+	<img src="src/lib/manager_two.png" alt="manager" />
 </div>
 
 <style>
-  .hero-img :global(img) {
-	  height: 100%;
-	  border-radius: 1.75rem;
-  }
+	.hero-img :global(img) {
+		height: 100%;
+		border-radius: 1.75rem;
+	}
 
 	.hero-img {
-		overflow: hidden;
-		height: 70vh;
-		max-height: 70rem;
-		z-index: -1;
+		height: clamp(30rem, 80vw, 40rem);
 		width: auto;
-		float: right;
+		z-index: -1;
 		padding: 0.5rem 0.5rem;
 		border-radius: 1.75rem;
-		background-color: var(--grey-six);
 		user-select: none;
-		
-	}
-	@media (max-width: 1700px) {
-		.hero-img {
-			position: fixed;
-			height: 100vh;
-			top: 115px;
-			right: 6rem;
-		}
+		--webkit-user-select: none;
 	}
 </style>

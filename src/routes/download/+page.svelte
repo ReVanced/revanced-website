@@ -19,10 +19,12 @@
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
-		<Button kind="primary" icon="download" href={manager.assets[0].url} target="_blank">
+		<Button kind="one" icon="download" href={manager.assets[0].url} target="_blank">
 			{manager.version}
 		</Button>
-		<Button href="https://github.com/revanced/revanced-manager" target="_blank">View Source</Button>
+		<Button kind="four" href="https://github.com/revanced/revanced-manager" target="_blank"
+			>View Source</Button
+		>
 	</div>
 	<div class="screenshot">
 		<Picture data={manager_screenshot} alt="Manager Screenshot" />
@@ -57,6 +59,7 @@
 		border-radius: 2rem;
 		background-color: var(--grey-six);
 		user-select: none;
+		--webkit-user-select: none;
 	}
 
 	.buttons {

@@ -131,6 +131,7 @@
 		height: 1.5rem;
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
+		--webkit-user-select: none;
 	}
 
 	.rotate #arrow {

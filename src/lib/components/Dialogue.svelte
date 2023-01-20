@@ -49,6 +49,30 @@
 {/if}
 
 <style>
+	.modal {
+		position: fixed;
+		width: min(85%, 19.5rem);
+		max-height: 75%;
+		overflow-y: scroll;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 1.75rem;
+		background-color: var(--grey-seven);
+		display: flex;
+		user-select: none;
+		--webkit-user-select: none;
+		gap: 5%;
+		white-space: normal;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		z-index: 1001;
+		padding: 24px;
+		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+	}
+
 	.overlay {
 		position: fixed;
 		top: 0;
@@ -62,8 +86,7 @@
 	.top {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		margin-bottom: 20px;
+		margin-bottom: 16px;
 	}
 
 	.title {
@@ -75,32 +98,9 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		background-color: var(--grey-six);
-		margin-bottom: 8px;
+		background-color: var(--grey-seven);
 	}
 
-	.modal {
-		position: fixed;
-		width: min(85%, 425px);
-		max-height: 75%;
-		overflow-y: scroll;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		border-radius: 26px;
-		background-color: var(--grey-six);
-		display: flex;
-		user-select: none;
-		gap: 5%;
-		white-space: normal;
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		z-index: 1001;
-		padding: 32px;
-		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
-			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
-	}
 
 	button {
 		padding: 0;

@@ -3,7 +3,7 @@
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Contributor } from '$lib/types';
-	import ContributorButton from './ContributorPerson.svelte';
+	import ContributorPerson from './ContributorPerson.svelte';
 
 	export let contributors: Contributor[];
 	export let repo: string;
@@ -34,9 +34,9 @@
 
 	{#if expanded}
 		<div class="contrib-host" transition:slide|local={{ easing: quintOut, duration: 500 }}>
-			{#each contributors as { login, avatar_url, html_url }}
-				{#if !usersIwantToExplodeSoBadly.includes(login)}
-					<ContributorButton name={login} pfp={avatar_url} url={html_url} />
+			{#each contributors as contributor}
+				{#if !usersIwantToExplodeSoBadly.filter((x) => x === contributor.login).length}
+					<ContributorPerson {contributor} />
 				{/if}
 			{/each}
 		</div>
@@ -63,6 +63,7 @@
 		height: 1.5rem;
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
+		--webkit-user-select: none;
 	}
 
 	.section-container {
@@ -91,14 +92,15 @@
 		margin-bottom: -1px;
 		display: grid;
 		justify-items: center;
-		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 	}
 
 	@media (max-width: 768px) {
 		.contrib-host {
 			padding: 0.75rem;
 			gap: 0.25rem;
-			grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+			height: 335px;
 		}
 	}
 </style>

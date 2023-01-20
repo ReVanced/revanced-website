@@ -33,13 +33,14 @@
 		text-decoration: none;
 		font-size: 1rem;
 		user-select: none;
+		--webkit-user-select: none;
 		border-radius: 10px;
 	}
 
 	span {
 		font-weight: 400;
 		font-size: 0.9rem;
-		letter-spacing: 0.02rem;
+		letter-spacing: -0.02rem;
 		color: var(--grey-five);
 	}
 
@@ -50,11 +51,11 @@
 
 	li.selected {
 		background-color: var(--accent-low-opacity);
-		color: var(--accent-color);
+		color: var(--accent-color-two);
 	}
 
 	li.selected span {
-		color: var(--accent-color);
+		color: var(--accent-color-two);
 	}
 
 	@media (max-width: 768px) {

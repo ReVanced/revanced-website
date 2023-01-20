@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800");
 
 * {
     box-sizing: inherit;
@@ -35,7 +35,8 @@ body {
 
 :root {
     /* TODO properly name these */
-    --main-font: "Manrope", sans-serif;
+    --main-font: "Plus Jakarta Sans", sans-serif;
+    --secondary-font: "Manrope", sans-serif;
     --mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
     --white: hsl(206, 100%, 94%);
     --accent-color: hsl(206, 100%, 81%);
@@ -47,12 +48,12 @@ body {
     --grey-three: hsl(221, 17%, 26%);
     --grey-four: hsl(226, 48%, 18%);
     --grey-five: hsl(208, 30%, 75%);
-    --grey-six: hsl(230, 9%, 13%);
+    --grey-six: hsl(230, 9%, 14%);
     --grey-seven: hsl(240, 9%, 13.5%);
     --grey-eight: hsla(207, 30%, 75%, 0.577);
     --grey-nine: hsla(240, 6%, 7%, 0.3);
     --grey-ten: hsl(230, 9.5%, 17.5%);
-    --grey-eleven: hsl(208, 10%, 40%);
+    --grey-eleven: hsl(209, 9%, 48%);
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -64,35 +65,39 @@ body {
 
 h1 {
     color: var(--white);
-    line-height: 4rem;
-    font-size: 3.5rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-family: var(--main-font);
+    line-height: 4.5rem;
+    font-size: 4rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
 }
 
 h2 {
-    color: var(--grey-five);
+    color: var(--white);
+    font-family: var(--main-font);
     font-size: 2.5rem;
-    letter-spacing: -0.04rem;
+    letter-spacing: -0.035em;
     font-weight: 600;
 }
 
 h3 {
     font-size: 1.25rem;
     color: var(--accent-color-two);
-    font-weight: 600;
+    font-family: var(--main-font);
+    font-weight: 500;
 }
 
 h4 {
     color: var(--accent-color-two);
+    font-family: var(--secondary-font);
     font-weight: 500;
-    font-size: 1.2rem;
-    letter-spacing: 0.02rem;
+    font-size: 1.1rem;
     line-height: 2rem;
 }
 
 h5 {
     color: var(--grey-five);
+    font-family: var(--secondary-font);
     font-weight: 400;
     font-size: 0.9rem;
     letter-spacing: 0.02rem;
@@ -100,21 +105,23 @@ h5 {
 
 h6 {
     color: var(--grey-five);
+    font-family: var(--secondary-font);
     font-weight: 500;
     font-size: 0.85rem;
 }
 
 p {
     color: var(--grey-five);
+    font-family: var(--secondary-font);
     font-weight: 400;
-    font-size: 0.95rem;
     letter-spacing: 0.02rem;
+    font-size: 14px;
     line-height: 1.75rem;
 }
 
 @media screen and (max-width: 768px) {
     h1 {
-        font-size: 2.6rem;
+        font-size: 3rem;
         line-height: 3.75rem;
     }
 
@@ -142,9 +149,9 @@ p {
 
 hr {
     display: block;
-    height: 2px;
+    height: 1px;
     border: 0;
-    border-top: 2px solid var(--grey-three);
+    border-top: 1px solid var(--grey-three);
 }
 
 input {

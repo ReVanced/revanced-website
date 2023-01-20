@@ -1,13 +1,17 @@
 <script lang="ts">
-	export let name: string;
-	export let pfp: string;
-	export let url: string;
-	let alt = `${name}'s profile picture`;
+	export let contributor: any;
+	let alt = `${contributor.login}'s profile picture`;
 </script>
 
-<a href={url} rel="noreferrer" target="_blank">
-	<img src={pfp} {alt} />
-	<h5>{name}</h5>
+<a href={contributor.html_url} rel="noreferrer" target="_blank">
+	<img src={contributor.avatar_url} {alt} />
+	<div class="text">
+		<h5>{contributor.login}</h5>
+		<h6>
+			{contributor.contributions}
+			{contributor.contributions > 1 ? 'contributions' : 'contribution'}
+		</h6>
+	</div>
 </a>
 
 <style>
@@ -38,6 +42,16 @@
 		text-overflow: ellipsis;
 	}
 
+	h6 {
+		color: var(--grey-eleven);
+	}
+
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
 	img {
 		border-radius: 50%;
 		height: 32px;
@@ -45,21 +59,17 @@
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
+		--webkit-user-select: none;
 	}
 
 	@media (max-width: 768px) {
-		h5 {
-			display: none;
-		}
-
 		img {
 			height: 42px;
 			width: 42px;
 		}
 		a {
-			width: max-content;
-			background-color: transparent;
 			border: none;
+			padding: 0.5rem;
 		}
 	}
 </style>

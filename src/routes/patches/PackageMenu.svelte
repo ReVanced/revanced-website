@@ -1,5 +1,5 @@
 <div class="menu">
-	<h6>PACKAGES</h6>
+	<h6>Packages</h6>
 	<hr/>
 	<div class="slot">
 		<slot />

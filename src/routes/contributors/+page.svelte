@@ -15,13 +15,13 @@
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<h2>Made possible by the community.</h2>
-			<h4>
-				Want to show up here? <span
+			<p>
+				ReVanced is a free and open-sourced project. Want to show up here? <span
 					><a href="https://github.com/revanced" target="_blank" rel="noreferrer"
 						>Become a contributor</a
 					></span
 				>
-			</h4>
+			</p>
 		</div>
 		<div class="repos">
 			{#each $repositories as { contributors, name: repo }}
@@ -49,7 +49,7 @@
 		margin-bottom: 0.3rem;
 	}
 
-	h4 {
+	p {
 		text-align: center;
 		color: var(--grey-four);
 	}
@@ -82,6 +82,12 @@
 	@media screen and (max-width: 768px) {
 		.text-container {
 			margin-bottom: 2rem;
+			border-radius: 12px;
+			align-items: flex-start;
+		}
+
+		h2, p {
+			text-align: left;
 		}
 	}
 </style>

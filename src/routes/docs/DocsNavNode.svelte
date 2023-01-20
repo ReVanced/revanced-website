@@ -30,6 +30,7 @@
 		gap: 0.6rem;
 		width: 100%;
 		user-select: none;
+		--webkit-user-select: none;
 		transition: background-color 0.4s var(--bezier-one);
 	}
 

@@ -20,24 +20,25 @@
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 			<div>
 				<p>
-					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the legacy
-					of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create long-lasting
-					patches for nearly any Android app. ReVanced's patching system is designed to allow patches
-					to work on new versions of the apps automatically with bare minimum maintenance.
+					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the
+					legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create
+					long-lasting patches for nearly any Android app. ReVanced's patching system is designed to
+					allow patches to work on new versions of the apps automatically with bare minimum
+					maintenance.
 				</p>
 			</div>
 		</section>
-	
+
 		<section class="links-container">
-			<div class="link-column">
+			<ul class="link-column">
 				<li>Pages</li>
 				<li><a href="/">Home</a></li>
 				<li><a href="/download">Download</a></li>
 				<li><a href="/docs">Documentation</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
-			</div>
-			<div class="link-column">
+			</ul>
+			<ul class="link-column">
 				<li>Repositories</li>
 				{#each $repositories as { name }}
 					<li>
@@ -46,26 +47,31 @@
 						</a>
 					</li>
 				{/each}
-			</div>
-			<div class="link-column">
+			</ul>
+			<ul class="link-column">
 				<!-- to replace -->
 				<li>Socials</li>
 				<li><a href="https://github.com/revanced" target="_blank" rel="noreferrer">GitHub</a></li>
 				<li><a href="https://revanced.app/discord" target="_blank" rel="noreferrer">Discord</a></li>
-				<li><a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a></li>
+				<li>
+					<a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a>
+				</li>
 				<li><a href="https://t.me/app_revanced" target="_blank" rel="noreferrer">Telegram</a></li>
-				<li><a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a></li>
-				<li><a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a></li>
-			</div>
+				<li>
+					<a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a>
+				</li>
+				<li>
+					<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a>
+				</li>
+			</ul>
 		</section>
 	</div>
-	<div class="footer-bottom">
+	<ul class="footer-bottom">
 		<div id="logo-name"><span>Re</span>Vanced</div>
-		<a href="https://liberapay.com/ReVanced/donate"><div>Donate</div></a>
-		<a href="mailto:contact@revanced.app"><div>Email</div></a>
-	</div>
+		<li><a href="https://liberapay.com/ReVanced/donate"><div>Donate</div></a></li>
+		<li><a href="mailto:contact@revanced.app"><div>Email</div></a></li>
+	</ul>
 </footer>
-
 
 <style>
 	footer {
@@ -95,7 +101,7 @@
 	}
 
 	#logo-name span {
-		color: var(--accent-color)
+		color: var(--accent-color);
 	}
 
 	.footer-bottom a {
