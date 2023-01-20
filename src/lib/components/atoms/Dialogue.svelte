@@ -31,9 +31,9 @@
 					<slot name="icon" />
 				{/if}
 				{#if $$slots.title}
-					<h1>
+					<h2>
 						<slot name="title" />
-					</h1>
+					</h2>
 				{/if}
 			</div>
 
@@ -78,9 +78,10 @@
 		gap: 1rem;
 		top: 0;
 		left: 0;
+
 		width: 100%;
 		background-color: var(--grey-six);
-		margin-bottom: 8px;
+		margin-bottom: 16px;
 	}
 
 	.modal {

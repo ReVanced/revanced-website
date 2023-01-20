@@ -53,9 +53,8 @@
 	<img src={current.gdrive_direct_url} alt={current.filename} />
 	<div class="text">
 		<h2>{name}</h2>
-		<h6>{current.filename}</h6>
     {#if has_variants}
-      <h4>This logo has variants</h4>
+      <h6>This logo has variants</h6>
     {/if}
 	</div>
 </div>

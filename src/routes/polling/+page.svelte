@@ -248,12 +248,12 @@
 
 <Modal bind:modalOpen>
 	<svelte:fragment slot="title">How does this work?</svelte:fragment>
-	<svelte:fragment slot="description">Approval voting</svelte:fragment>
-  <div class="information">
-	  <h6>Voters can choose any number of logos. <br /> The logo that got selected the most wins.</h6>
-
-	  <b>Remember, you can only vote once!</b>
-  </div>
+	<svelte:fragment slot="description">
+		<h6>
+			This is an approval voting system. Voters can choose any number of logos. The logo that is
+			selected the most wins. Note that you can only vote once!
+		</h6>
+	</svelte:fragment>
 	<div class="buttons">
 		<Button
 			on:click={() => {
@@ -311,10 +311,10 @@
 		border-top: 1px solid var(--grey-three);
 	}
 
-  .information {
-    text-align: center;
+	.information {
+		text-align: center;
 		margin-bottom: 1rem;
-  }
+	}
 
 	.buttons {
 		display: flex;
