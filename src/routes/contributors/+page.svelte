@@ -5,13 +5,14 @@
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Meta from '$lib/components/Meta.svelte';
+	import Query from '$lib/components/Query.svelte';
 
 	import { repositories } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
 	const query = createQuery({
 		queryKey: ['repositories'],
-		queryFn: () => repositories()
+		queryFn: repositories,
 	});
 </script>
 
@@ -30,13 +31,13 @@
 			</h4>
 		</div>
 		<div class="repos">
-			{#if $query.isSuccess}
-				{#each $query.data as { contributors, name: repo }}
+			<Query {query} let:data>
+				{#each data as { contributors, name: repo }}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<ContributorHost {contributors} {repo} />
 					</div>
 				{/each}
-			{/if}
+			</Query>
 		</div>
 	</div>
 </main>

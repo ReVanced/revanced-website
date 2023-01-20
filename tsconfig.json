@@ -10,8 +10,10 @@
 		"sourceMap": true,
 		"strict": true,
 		"types": ["node"],
+    "lib": ["ESNext"],
 		"paths": {
 			"$data/*": ["./src/data/*"],
+			"$lib": ["src/lib"],
 			"$lib/*": ["./src/lib/*"],
 			"$layout/*": ["./src/layout/*"],
 			"$images/*": ["./images/*"],
