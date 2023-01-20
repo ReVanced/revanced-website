@@ -3,10 +3,11 @@
 	import { friendlyName } from '$lib/utils';
 
 	import { createQuery } from '@tanstack/svelte-query';
+	import Query from '$lib/components/Query.svelte';
 
 	const query = createQuery({
 		queryKey: ['repositories'],
-		queryFn: () => repositories()
+		queryFn: repositories
 	});
 </script>
 
@@ -47,15 +48,15 @@
 			</div>
 			<div class="link-column">
 				<li>Repositories</li>
-				{#if $query.isSuccess}
-					{#each $query.data as { name }}
+				<Query {query} let:data>
+					{#each data as { name }}
 						<li>
 							<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 								{friendlyName(name)}
 							</a>
 						</li>
 					{/each}
-				{/if}
+				</Query>
 			</div>
 			<div class="link-column">
 				<!-- to replace -->
