@@ -8,13 +8,14 @@
 	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
 	import Meta from '$lib/components/Meta.svelte';
+	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 
 	const query = createQuery({
 		queryKey: ['manager'],
-		queryFn: () => manager()
+		queryFn: manager
 	});
 </script>
 
@@ -24,11 +25,11 @@
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
-		{#if $query.isSuccess}
-			<Button kind="primary" icon="download" href={$query.data.assets[0].url} target="_blank">
-				{$query.data.version}
+		<Query {query} let:data>
+			<Button kind="primary" icon="download" href={data.assets[0].url} target="_blank">
+				{data.version}
 			</Button>
-		{/if}
+		</Query>
 		<Button href="https://github.com/revanced/revanced-manager" target="_blank">View Source</Button>
 	</div>
 	<div class="screenshot">
