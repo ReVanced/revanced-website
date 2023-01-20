@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { repositories } from '$data/api';
 	import { friendlyName } from '$lib/utils';
+
+import { createQuery } from '@tanstack/svelte-query'
+
+const query = createQuery({
+  queryKey: ['repositories'],
+  queryFn: () => repositories(),
+})
 </script>
 
 <svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,13 +46,15 @@
 			</div>
 			<div class="link-column">
 				<li>Repositories</li>
-				{#each $repositories as { name }}
+        {#if $query.isSuccess}
+				{#each $query.data as { name }}
 					<li>
 						<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 							{friendlyName(name)}
 						</a>
 					</li>
 				{/each}
+        {/if}
 			</div>
 			<div class="link-column">
 				<!-- to replace -->

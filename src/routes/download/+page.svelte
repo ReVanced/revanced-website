@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { tools } from '$data/api';
+	import { manager } from '$data/api';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+
+import { createQuery } from '@tanstack/svelte-query'
 
 	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
@@ -10,7 +12,10 @@
 	import Footer from '$layout/Footer.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 
-	$: manager = $tools['revanced/revanced-manager'];
+const query = createQuery({
+  queryKey: ['manager'],
+  queryFn: () => manager(),
+});
 </script>
 
 <Meta title="Download" />
@@ -19,9 +24,11 @@
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
-		<Button kind="primary" icon="download" href={manager.assets[0].url} target="_blank">
-			{manager.version}
+    {#if $query.isSuccess}
+		<Button kind="primary" icon="download" href={$query.data.assets[0].url} target="_blank">
+			{$query.data.version}
 		</Button>
+    {/if}
 		<Button href="https://github.com/revanced/revanced-manager" target="_blank">View Source</Button>
 	</div>
 	<div class="screenshot">

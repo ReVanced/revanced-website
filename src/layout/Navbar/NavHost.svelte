@@ -9,9 +9,13 @@
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
 
-	import { clear_and_reload } from '$data/api/cache';
+// import { clear_and_reload } from '$data/api/cache';
 	import * as settings from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
+
+function clear_and_reload() {
+  throw new Error("guhhhhh");
+}
 
 	let url = settings.api_base_url();
 
