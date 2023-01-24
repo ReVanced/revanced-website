@@ -7,8 +7,9 @@
 	export let selected: Array<string>;
 	export let variants;
 	export let clicked = false;
+	export let hideDetails = false;
 
-	let has_variants = variants.length > 1;
+	let hasVariants = variants.length > 1;
 	let modalOpen = false;
 
 	let i = 0;
@@ -50,12 +51,12 @@
 		i--;
 	}
 
-	function stopA() {
+	function stopAutoScroll() {
 		clearInterval(interval);
 	}
 
 	const handleClick = () => {
-		if (!has_variants) {
+		if (!hasVariants) {
 			select_logo(current.id);
 		} else {
 			modalOpen = !modalOpen;
@@ -65,10 +66,9 @@
 	};
 </script>
 
-{#if has_variants}
+{#if hasVariants}
 	<Modal bind:modalOpen>
 		<svelte:fragment slot="title">{name}</svelte:fragment>
-		<svelte:fragment slot="description">guhhhhhhhhhhhhhhhhhhhhh</svelte:fragment>
 		<div class="variants">
 			{#each variants as variant}
 				<!-- Mega Trolley -->
@@ -76,6 +76,7 @@
 					bind:selected
 					variants={[{ ...variant, filename: (i + 1).toString() }]}
 					clicked={selected.includes(variant.id)}
+					hideDetails={true}
 				/>
 			{/each}
 		</div>
@@ -88,20 +89,29 @@
 <div class="option" tabindex="0" class:clicked>
 	<div class="row" on:click={handleClick} on:keypress={handleClick}>
 		<img src={current.gdrive_direct_url} alt={current.filename} />
-		<div class="text">
-			<h2>{name}</h2>
+		{#if !hideDetails}
+			<div class="text">
+				<h2>{name}</h2>
+			</div>
+		{/if}
+	</div>
+	{#if !hideDetails}
+		<div class="actions">
+			<Button
+				on:click={prevVariant}
+				on:click={stopAutoScroll}
+				unclickable={i <= 0}
+				icon="previous"
+			/>
+			<h4>{i + 1}/{variants.length}</h4>
+			<Button
+				on:click={nextVariant}
+				on:click={stopAutoScroll}
+				unclickable={i + 1 >= variants.length}
+				icon="next"
+			/>
 		</div>
-	</div>
-	<div class="actions">
-		<Button on:click={prevVariant} on:click={stopA} unclickable={i <= 0} icon="previous" />
-		{i + 1}/{variants.length}
-		<Button
-			on:click={nextVariant}
-			on:click={stopA}
-			unclickable={i + 1 >= variants.length}
-			icon="next"
-		/>
-	</div>
+	{/if}
 </div>
 
 <style>
