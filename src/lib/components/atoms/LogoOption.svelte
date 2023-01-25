@@ -1,17 +1,33 @@
 <script lang="ts">
-  import Modal from './Dialogue.svelte';
-	export let name = "";
+	import { onMount } from 'svelte';
+	import Modal from './Dialogue.svelte';
+	import Button from './Button.svelte';
+
+	export let name = '';
 	export let selected: Array<string>;
-  export let variants;
+	export let variants;
 	export let clicked = false;
+	export let hideDetails = false;
 
-  let has_variants = variants.length > 1;
-  let modalOpen = false;
+	let hasVariants = variants.length > 1;
+	let modalOpen = false;
 
-  // TODO: cycle between them.
-  let current = variants[0];
+	let i = 0;
+	$: current = variants[i];
+	let interval = null;
+	onMount(() => {
+		interval = setInterval(() => {
+			if (i === variants.length - 1) {
+				i = 0;
+			} else {
+				i += 1;
+			}
+		}, 2500);
 
-  function select_logo(id) {
+		return () => clearInterval(interval);
+	});
+
+	function select_logo(id) {
 		clicked = !clicked;
 		if (selected.includes(id)) {
 			selected = selected.filter((e) => e !== id);
@@ -21,58 +37,113 @@
 			selected = selected;
 		}
 		console.log(selected);
-  }
+	}
+
+	function nextVariant() {
+		if (i >= variants.length) return null;
+		console.log('next');
+		i++;
+	}
+
+	function prevVariant() {
+		if (i <= 0) return null;
+		console.log('previous');
+		i--;
+	}
+
+	function stopAutoScroll() {
+		clearInterval(interval);
+	}
 
 	const handleClick = () => {
-    if (!has_variants) {
-      select_logo(current.id);
-    } else {
-      modalOpen = !modalOpen;
-    }
+		if (!hasVariants) {
+			select_logo(current.id);
+		} else {
+			modalOpen = !modalOpen;
+			clearInterval(interval);
+			i = 0;
+		}
 	};
 </script>
 
-
-{#if has_variants}
-<Modal bind:modalOpen>
-	<svelte:fragment slot="title">{name}</svelte:fragment>
-	<svelte:fragment slot="description">
-    guhhhhhhhhhhhhhhhhhhhhh
-	</svelte:fragment>
-  {#each variants as variant, i}
-    <!-- Mega Trolley -->
-    <svelte:self bind:selected variants={[{...variant, filename: (i + 1).toString()}]} clicked={selected.includes(variant.id)}/>
-  {/each}
-  <!-- <Variants /> -->
-</Modal>
+{#if hasVariants}
+	<Modal bind:modalOpen>
+		<svelte:fragment slot="title">{name}</svelte:fragment>
+		<div class="variants">
+			{#each variants as variant}
+				<!-- Mega Trolley -->
+				<svelte:self
+					bind:selected
+					variants={[{ ...variant, filename: (i + 1).toString() }]}
+					clicked={selected.includes(variant.id)}
+					hideDetails={true}
+				/>
+			{/each}
+		</div>
+		<!-- <Variants /> -->
+	</Modal>
 {/if}
 
 <!-- SHUT UP -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<div class="option" on:click={handleClick} on:keypress={handleClick} tabindex="0" class:clicked>
-	<img src={current.gdrive_direct_url} alt={current.filename} />
-	<div class="text">
-		<h2>{name}</h2>
-    {#if has_variants}
-      <h6>This logo has variants</h6>
-    {/if}
+<div class="option" tabindex="0" class:clicked>
+	<div class="row" on:click={handleClick} on:keypress={handleClick}>
+		<img src={current.gdrive_direct_url} alt={current.filename} />
+		{#if !hideDetails}
+			<div class="text">
+				<h2>{name}</h2>
+			</div>
+		{/if}
 	</div>
+	{#if !hideDetails}
+		<div class="actions">
+			<Button
+				on:click={prevVariant}
+				on:click={stopAutoScroll}
+				unclickable={i <= 0}
+				icon="previous"
+			/>
+			<h4>{i + 1}/{variants.length}</h4>
+			<Button
+				on:click={nextVariant}
+				on:click={stopAutoScroll}
+				unclickable={i + 1 >= variants.length}
+				icon="next"
+			/>
+		</div>
+	{/if}
 </div>
 
 <style>
-
 	.option {
-		color: var(--white);
-		text-decoration: none;
-		padding: 1.25rem;
 		width: 100%;
+		color: var(--white);
 		transition: all 0.3s var(--bezier-one);
 		border-radius: 16px;
-		display: flex;
-		gap: 1.5rem;
 		background-color: var(--grey-six);
-		cursor: pointer;
+		text-decoration: none;
+	}
+
+	.row {
+		display: flex;
 		align-items: center;
+		padding: 1.25rem;
+		gap: 1.5rem;
+		cursor: pointer;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: row;
+		padding: 0 1.25rem 1.25rem 1.25rem;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.variants {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.5rem;
 	}
 
 	h2 {
@@ -82,15 +153,14 @@
 		text-overflow: ellipsis;
 	}
 
-  h4 {
-    font-weight: 800;
-  }
+	h4 {
+		font-weight: 800;
+	}
 
 	h6 {
 		font-size: 0.9rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
-
 	}
 	.text {
 		width: 100%;
@@ -107,7 +177,7 @@
 		color: var(--white);
 	}
 
-	div:hover {
+	.option:hover {
 		filter: brightness(0.85);
 	}
 
@@ -115,7 +185,7 @@
 		border-radius: 8px;
 		height: 125px;
 		width: 125px;
-		background-color: var(--grey-two);
+		/* background-color: var(--grey-two); */
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
 	}
@@ -127,6 +197,10 @@
 
 		.text {
 			text-align: center;
+		}
+
+		.variants {
+			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 		}
 	}
 </style>
