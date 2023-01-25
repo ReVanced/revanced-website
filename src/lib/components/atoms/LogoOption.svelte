@@ -74,7 +74,7 @@
 				<!-- Mega Trolley -->
 				<svelte:self
 					bind:selected
-					variants={[{ ...variant, filename: (i + 1).toString() }]}
+					variants={[variant]}
 					clicked={selected.includes(variant.id)}
 					hideDetails={true}
 				/>
@@ -88,7 +88,8 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class="option" tabindex="0" class:clicked>
 	<div class="row" on:click={handleClick} on:keypress={handleClick}>
-		<img src={current.gdrive_direct_url} alt={current.filename} />
+    <!-- Screenreader compatibility does not make sense in this context. -->
+		<img src={current.gdrive_direct_url} alt="" />
 		{#if !hideDetails}
 			<div class="text">
 				<h2>{name}</h2>
