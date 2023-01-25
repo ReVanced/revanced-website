@@ -114,12 +114,26 @@
 		transitionDirection = -5;
 	}
 
+function preloadImage(url: string) {
+  var img=new Image();
+  img.src=url;
+}
+
 	function nextPage() {
 		if (currentPage >= logoPages || submit) return null;
 		currentPage++;
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
+
+    if (currentPage < logoPages) {
+      const nextPage = currentPage + 1;
+      const nextMin = nextPage * logoAmount;
+      const nextMax = nextMin + logoAmount;
+      logos.slice(nextMin, nextMax).forEach(({ variants }) => {
+        variants.forEach(variant => preloadImage(variant.gdrive_direct_url));
+      });
+    }
 		transitionDirection = 5;
 	}
 

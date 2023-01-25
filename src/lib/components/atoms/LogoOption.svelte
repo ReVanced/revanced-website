@@ -16,6 +16,9 @@
 	$: current = variants[i];
 	let interval = null;
 	onMount(() => {
+		if (!hasVariants) {
+			return;
+		}
 		interval = setInterval(() => {
 			if (i === variants.length - 1) {
 				i = 0;
@@ -40,13 +43,17 @@
 	}
 
 	function nextVariant() {
-		if (i >= variants.length) return null;
+		if (i >= variants.length - 1) {
+			return;
+		}
 		console.log('next');
 		i++;
 	}
 
 	function prevVariant() {
-		if (i <= 0) return null;
+		if (i == 0) {
+			return;
+		}
 		console.log('previous');
 		i--;
 	}
@@ -88,7 +95,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class="option" tabindex="0" class:clicked>
 	<div class="row" on:click={handleClick} on:keypress={handleClick}>
-    <!-- Screenreader compatibility does not make sense in this context. -->
+		<!-- Screenreader compatibility does not make sense in this context. -->
 		<img src={current.gdrive_direct_url} alt="" />
 		{#if !hideDetails}
 			<div class="text">
