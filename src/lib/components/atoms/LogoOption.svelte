@@ -3,6 +3,9 @@
 	import Modal from './Dialogue.svelte';
 	import Button from './Button.svelte';
 
+  import next from '$lib/assets/icons/next.svg';
+  import previous from '$lib/assets/icons/previous.svg';
+
 	export let name = '';
 	export let selected: Array<string>;
 	export let variants;
@@ -109,14 +112,16 @@
 				on:click={prevVariant}
 				on:click={stopAutoScroll}
 				unclickable={i <= 0}
-				icon="previous"
+				icon={previous}
+				alt="previous"
 			/>
 			<h4>{i + 1}/{variants.length}</h4>
 			<Button
 				on:click={nextVariant}
 				on:click={stopAutoScroll}
 				unclickable={i + 1 >= variants.length}
-				icon="next"
+				icon={next}
+				alt="next"
 			/>
 		</div>
 	{/if}

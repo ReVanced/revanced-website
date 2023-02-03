@@ -4,6 +4,7 @@
 	export let href = '';
 	export let maxWidth = false;
 	export let icon = '';
+  export let alt = '';
 	export let target = '';
 	export let unclickable = false;
 </script>
@@ -11,7 +12,7 @@
 <a {href} {target} on:click class:unclickable>
 	<div class={type} style="width: {maxWidth ? '100%' : 'max-content'}">
 		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
+			<img src={icon} {alt} />
 		{/if}
 		<slot />
 	</div>

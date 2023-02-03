@@ -1,5 +1,7 @@
 <script lang="ts">
   import { derived } from "svelte/store";
+  import logo from '$lib/assets/logo.svg'
+  import embed from '$lib/assets/embed.png'
 
   import Spinner from '$lib/components/atoms/Spinner.svelte';
   import RouterEvents from '../data/RouterEvents';
@@ -22,11 +24,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="og:title" content="ReVanced" />
-	<meta content="/embed.png" property="og:image" />
+	<meta content={embed} property="og:image" />
 	<meta property="og:description" content="Continuing the legacy of Vanced." />
-	<meta name="twitter:image" itemprop="image" content="/embed.png" />
+	<meta name="twitter:image" itemprop="image" content={embed} />
 	<meta name="twitter:card" content="summary" />
 	<meta name="theme-color" content="#8F0045" />
+	<link rel="icon" href={logo} />
 </svelte:head>
 
 {#if $show_loading_animation}
