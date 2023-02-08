@@ -19,13 +19,9 @@
 		}
 		return n;
 	}
-	function calc_selected_logo_ids(v) {
-		return [...Object.values(v)].map((data) => data.variants).flat();
-	}
 
 	// afn please don't do this lol this is shitty code
 	$: ui_selected_count = calc_ui_selected_count(selected);
-	$: selected_logo_ids = calc_selected_logo_ids(selected);
 	let logos = [];
 	let logo_ids = [];
 	let transitionDirection = 5;
@@ -74,7 +70,6 @@
 		}
 		console.log(logos);
 		console.log(logo_ids);
-		console.log(selected_logo_ids);
 
 		// randomize the order of the logos to minimize bias
 		for (let i = logos.length - 1; i > 0; i--) {
@@ -148,8 +143,10 @@ function preloadImage(url: string) {
 	}
 
 	async function submitBallot() {
+    const selected_ids = [...Object.values(v)].flat();
+    console.log("selected ids", selected_ids);
 		const data = {
-			votes: logo_ids.map((id) => ({ cid: id, vote: selected_logo_ids.includes(id) }))
+			votes: logo_ids.map((id) => ({ cid: id, vote: selected_ids.includes(id) }))
 		};
 		console.log(data);
 
@@ -222,7 +219,7 @@ function preloadImage(url: string) {
 			{/if}
 		</div>
 
-		{#if finalPage && !selected_logo_ids.length}
+		{#if finalPage && ui_selected_count < 1}
 			<div class="warning" in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 				<h6>No logos have been selected.</h6>
 			</div>
