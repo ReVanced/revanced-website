@@ -3,16 +3,16 @@
 	$: type = 'button-' + kind;
 	export let maxWidth = false;
 	export let icon = '';
-  export let alt = '';
+	export let alt = '';
 	export let unclickable = false;
 </script>
 
-	<button class={type} class:unclickable on:click style="width: {maxWidth ? '100%' : 'max-content'}">
-		{#if icon}
-			<img src={icon} {alt} />
-		{/if}
-		<slot />
-	</button>
+<button class={type} class:unclickable on:click style="width: {maxWidth ? '100%' : 'max-content'}">
+	{#if icon}
+		<img src={icon} {alt} />
+	{/if}
+	<slot />
+</button>
 
 <style>
 	button {
@@ -29,7 +29,7 @@
 	.button-secondary {
 		min-width: max-content;
 		font-size: 1rem;
-		color: #FFD9E1;
+		color: #ffd9e1;
 		font-weight: 400;
 		border: none;
 		border-radius: 1200px;
@@ -41,9 +41,9 @@
 	}
 
 	.button-primary {
-		background-color: #FFB1C5;
+		background-color: #ffb1c5;
 		box-shadow: 0px 0px 32px 1px var(--accent-color-glow);
-		color: #65002F;
+		color: #65002f;
 	}
 
 	button:hover {

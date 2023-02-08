@@ -109,10 +109,10 @@
 		transitionDirection = -5;
 	}
 
-function preloadImage(url: string) {
-  var img=new Image();
-  img.src=url;
-}
+	function preloadImage(url: string) {
+		var img = new Image();
+		img.src = url;
+	}
 
 	function nextPage() {
 		if (currentPage >= logoPages || submit) return null;
@@ -121,14 +121,14 @@ function preloadImage(url: string) {
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
 
-    if (currentPage < logoPages) {
-      const nextPage = currentPage + 1;
-      const nextMin = nextPage * logoAmount;
-      const nextMax = nextMin + logoAmount;
-      logos.slice(nextMin, nextMax).forEach(({ variants }) => {
-        variants.forEach(variant => preloadImage(variant.gdrive_direct_url));
-      });
-    }
+		if (currentPage < logoPages) {
+			const nextPage = currentPage + 1;
+			const nextMin = nextPage * logoAmount;
+			const nextMax = nextMin + logoAmount;
+			logos.slice(nextMin, nextMax).forEach(({ variants }) => {
+				variants.forEach((variant) => preloadImage(variant.gdrive_direct_url));
+			});
+		}
 		transitionDirection = 5;
 	}
 
@@ -143,8 +143,8 @@ function preloadImage(url: string) {
 	}
 
 	async function submitBallot() {
-    const selected_ids = [...Object.values(selected)].flat();
-    console.log("selected ids", selected_ids);
+		const selected_ids = [...Object.values(selected)].flat();
+		console.log('selected ids', selected_ids);
 		const data = {
 			votes: logo_ids.map((id) => ({ cid: id, vote: selected_ids.includes(id) }))
 		};
@@ -260,10 +260,12 @@ function preloadImage(url: string) {
 <Modal bind:modalOpen>
 	<svelte:fragment slot="title">How does this work?</svelte:fragment>
 	<svelte:fragment slot="description">
-		<h6>
-			This is an approval voting system. Voters can choose any number of logos. The logo that is
-			selected the most wins. Note that you can only vote once!
-		</h6>
+		<div class="desc">
+			<h6>
+				This is an approval voting system. Voters can choose any number of logos. The logo that is
+				selected the most wins. Note that you can only vote once!
+			</h6>
+		</div>
 	</svelte:fragment>
 	<div class="buttons">
 		<Button
@@ -298,6 +300,7 @@ function preloadImage(url: string) {
 		margin-bottom: -0.5rem;
 	}
 
+	/* "How does this work?" Modal */
 	h6 {
 		color: var(--white);
 		margin-bottom: 0.5rem;
@@ -387,7 +390,11 @@ function preloadImage(url: string) {
 		}
 		.options-grid {
 			/* The magic number, teef */
-			grid-template-columns: repeat(auto-fill, minmax(16.628645896rem, 1fr))
+			grid-template-columns: repeat(auto-fill, minmax(16.628645896rem, 1fr));
+		}
+
+		.desc {
+			min-width: min(20rem, 90vw);
 		}
 	}
 </style>
