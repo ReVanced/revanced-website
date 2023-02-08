@@ -143,7 +143,7 @@ function preloadImage(url: string) {
 	}
 
 	async function submitBallot() {
-    const selected_ids = [...Object.values(v)].flat();
+    const selected_ids = [...Object.values(selected)].flat();
     console.log("selected ids", selected_ids);
 		const data = {
 			votes: logo_ids.map((id) => ({ cid: id, vote: selected_ids.includes(id) }))
