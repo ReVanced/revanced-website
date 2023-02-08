@@ -1,25 +1,21 @@
 <script>
 	export let kind = 'secondary';
 	$: type = 'button-' + kind;
-	export let href = '';
 	export let maxWidth = false;
 	export let icon = '';
   export let alt = '';
-	export let target = '';
 	export let unclickable = false;
 </script>
 
-<a {href} {target} on:click class:unclickable>
-	<div class={type} style="width: {maxWidth ? '100%' : 'max-content'}">
+	<button class={type} class:unclickable on:click style="width: {maxWidth ? '100%' : 'max-content'}">
 		{#if icon}
 			<img src={icon} {alt} />
 		{/if}
 		<slot />
-	</div>
-</a>
+	</button>
 
 <style>
-	a {
+	button {
 		text-decoration: none;
 		border-radius: 16px;
 		transition: all 0.2s var(--bezier-one);
@@ -29,7 +25,7 @@
 		cursor: not-allowed;
 		opacity: 0.4;
 	}
-	div,
+	button,
 	.button-secondary {
 		min-width: max-content;
 		font-size: 1rem;
@@ -50,11 +46,11 @@
 		color: #65002F;
 	}
 
-	div:hover {
+	button:hover {
 		filter: brightness(85%);
 	}
 
-	div,
+	button,
 	.button-secondary {
 		display: flex;
 		justify-content: center;
