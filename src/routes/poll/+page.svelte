@@ -389,7 +389,8 @@ function preloadImage(url: string) {
 			font-size: 1.75rem;
 		}
 		.options-grid {
-			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+			/* The magic number, teef */
+			grid-template-columns: repeat(auto-fill, minmax(16.628645896rem, 1fr))
 		}
 	}
 </style>
