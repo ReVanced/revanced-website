@@ -9,7 +9,8 @@ const config = {
 		// adapter-static has vercel detection, but that does not let you set a custom 404 page easily.
 		// Instead, we have to use a wrapper that generates a vercel config if on vercel...
 		adapter: adapter({
-			pages: 'public'
+			pages: 'public',
+			fallback: '404.html'
 		}),
 		env: {
 			publicPrefix: 'RV'
