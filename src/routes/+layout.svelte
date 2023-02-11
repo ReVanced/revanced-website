@@ -1,10 +1,43 @@
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+	// There might be a better place to put this, but I am not entirely sure...
+	export const isRestoring = writable(false);
+</script>
+
 <script lang="ts">
 	import '../app.scss';
 	import { derived } from 'svelte/store';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+
+	import { QueryClient } from '@tanstack/query-core';
+	import { persistQueryClient } from '@tanstack/query-persist-client-core';
+	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 
 	import NavHost from '$layout/Navbar/NavHost.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
+	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				enabled: browser,
+				cacheTime: staleTime
+			}
+		}
+	});
+
+	onMount(() => {
+		isRestoring.set(true);
+		const [unsubscribe, promise] = persistQueryClient({
+			queryClient,
+			persister: createSyncStoragePersister({ storage: localStorage })
+		});
+		promise.then(() => isRestoring.set(false));
+		return unsubscribe;
+	});
 
 	// Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
 	const show_loading_animation = derived(
@@ -22,14 +55,14 @@
 	);
 </script>
 
-<NavHost />
+<QueryClientProvider client={queryClient}>
+	<NavHost />
 
-{#if $show_loading_animation}
-	<Spinner />
-{:else}
-	<slot />
-{/if}
-<!--
-     afn if you are moving the footer here, please make it not use the repositories store directly and instead use component props :) -->
-
-<!-- <Footer repos={$repositories}> -->
+	{#if $show_loading_animation}
+		<Spinner />
+	{:else}
+		<slot />
+	{/if}
+	<!-- guhh afn -->
+	<!-- <Footer> -->
+</QueryClientProvider>

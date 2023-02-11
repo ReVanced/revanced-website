@@ -2,11 +2,15 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import { repositories } from '$data/api';
-
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Meta from '$lib/components/Meta.svelte';
+	import Query from '$lib/components/Query.svelte';
+
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
+
+	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
 <Meta title="Contributors" />
@@ -24,11 +28,13 @@
 			</h4>
 		</div>
 		<div class="repos">
-			{#each $repositories as { contributors, name: repo }}
-				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorHost {contributors} {repo} />
-				</div>
-			{/each}
+			<Query {query} let:data>
+				{#each data as { contributors, name: repo }}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<ContributorHost {contributors} {repo} />
+					</div>
+				{/each}
+			</Query>
 		</div>
 	</div>
 </main>

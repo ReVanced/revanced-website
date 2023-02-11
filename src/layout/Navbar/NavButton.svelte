@@ -1,9 +1,24 @@
 <script lang="ts">
+	import { queries } from '$data/api';
+	import { dev_log } from '$lib/utils';
+
 	import RouterEvents from '$data/RouterEvents';
+	import { useQueryClient } from '@tanstack/svelte-query';
+	const client = useQueryClient();
+
 	export let href: string;
+	export let queryKey: null | keyof typeof queries = null;
+
+	function prefetch() {
+		if (queryKey !== null) {
+			const query = queries[queryKey];
+			dev_log('Prefetching', query);
+			client.prefetchQuery(query as any);
+		}
+	}
 </script>
 
-<a data-sveltekit-preload-data {href}>
+<a data-sveltekit-preload-data on:mouseenter={prefetch} {href}>
 	<!-- Check if href is equal to the first path -->
 	<li class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}>
 		<span><slot /></span>

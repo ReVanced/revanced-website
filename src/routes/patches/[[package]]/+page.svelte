@@ -4,7 +4,9 @@
 
 	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
-	import { patches as api_patches } from '$data/api';
+
+	import { createQuery } from '@tanstack/svelte-query';
+	import { queries } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
 	import PackageMenu from '../PackageMenu.svelte';
@@ -14,8 +16,9 @@
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
+	import Query from '$lib/components/Query.svelte';
 
-	$: ({ patches, packages } = $api_patches);
+	const query = createQuery(['patches'], queries.patches);
 
 	export let data: PageData;
 	$: ({ selectedPkg } = data);
@@ -25,24 +28,44 @@
 	let timeout: any = null;
 	let mobilePackages = false;
 
-	function filterByPackage(pkg: string | undefined, packageList: any[]) {
-		return packageList.find((x: Package) => x.name === pkg);
+	function checkCompatibility(patch: Patch, pkg: string, cmp: (a: string, b: string) => boolean) {
+		if (pkg === '') {
+			return false;
+		}
+		return !!patch.compatiblePackages.find((compat) => cmp(compat.name, pkg));
 	}
 
-	function checkPkgName(pkg: string, packageList: any[]) {
-		// Basically the same function as before lol
-		return packageList.find((x: Package) => x.name.replace(/\./g, '').includes(pkg));
+	function searchString(str: string, term: string, replacement_regex: RegExp) {
+		return str
+			.toLowerCase()
+			.replace(replacement_regex, '')
+			.includes(term || '');
 	}
 
-	function search(patch: Patch) {
-		return (
-			patch.description.toLowerCase().replace(/\s/g, '').includes(searchTermFiltered) ||
-			patch.name.toLowerCase().replace(/-/g, '').includes(searchTermFiltered) ||
-			checkPkgName(searchTermFiltered, patch.compatiblePackages)
-		);
+	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
+		if (search === undefined && pkg === '') {
+			return patches;
+		}
+
+		return patches.filter((patch) => {
+			// Don't show if the patch doesn't support the selected package
+			if (pkg && !checkCompatibility(patch, pkg, (a, b) => a === b)) {
+				return false;
+			}
+
+			// Filter based on the search term.
+			if (search !== undefined) {
+				return (
+					searchString(patch.description, search, /\s/g) ||
+					searchString(patch.name, search, /-/g) ||
+					checkCompatibility(patch, pkg, (a, b) => searchString(a, b, /\./g))
+				);
+			}
+			return true;
+		});
 	}
 
-	// Make sure we don't have filter the patches after every key press
+	// Make sure we don't have to filter the patches after every key press
 	const debounce = () => {
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
@@ -83,55 +106,51 @@
 		<FilterChip>Patch options</FilterChip> -->
 	</div>
 
-	<div class="mobile-packages-Dialogue">
-		<Dialogue bind:modalOpen={mobilePackages} fullscreen>
-			<svelte:fragment slot="title">Packages</svelte:fragment>
-			<div class="mobile-packages">
-				<span
-					on:click={() => (mobilePackages = !mobilePackages)}
-					on:keypress={() => (mobilePackages = !mobilePackages)}
-				>
-					<Package {selectedPkg} name="All packages" />
-				</span>
-				{#each packages as pkg}
+	<Query {query} let:data>
+		<div class="mobile-packages-Dialogue">
+			<Dialogue bind:modalOpen={mobilePackages} fullscreen>
+				<svelte:fragment slot="title">Packages</svelte:fragment>
+				<div class="mobile-packages">
 					<span
 						on:click={() => (mobilePackages = !mobilePackages)}
 						on:keypress={() => (mobilePackages = !mobilePackages)}
 					>
-						<Package {selectedPkg} name={pkg} />
+						<Package {selectedPkg} name="All packages" />
 					</span>
-				{/each}
-			</div>
-		</Dialogue>
-	</div>
+					{#each data.packages as pkg}
+						<span
+							on:click={() => (mobilePackages = !mobilePackages)}
+							on:keypress={() => (mobilePackages = !mobilePackages)}
+						>
+							<Package {selectedPkg} name={pkg} />
+						</span>
+					{/each}
+				</div>
+			</Dialogue>
+		</div>
 
-	<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<PackageMenu>
-			<span class="packages">
-				<Package {selectedPkg} name="All packages" />
-				{#each packages as pkg}
-					<Package {selectedPkg} name={pkg} />
-				{/each}
-			</span>
-		</PackageMenu>
-	</aside>
+		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			<PackageMenu>
+				<span class="packages">
+					<Package {selectedPkg} name="All packages" />
+					{#each data.packages as pkg}
+						<Package {selectedPkg} name={pkg} />
+					{/each}
+				</span>
+			</PackageMenu>
+		</aside>
 
-	<div class="patches-container">
-		{#each patches as patch}
-			<!-- Trigger new animations when package or search changes (I love Svelte) -->
-			{#key selectedPkg || searchTermFiltered}
-				<!-- Show patch if it supports the selected package, or if no package has been selected -->
-				{#if filterByPackage(selectedPkg, patch.compatiblePackages) || !selectedPkg}
-					<!-- ...same with search -->
-					{#if search(patch) || !searchTermFiltered}
-						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-							<PatchItem {patch} />
-						</div>
-					{/if}
-				{/if}
-			{/key}
-		{/each}
-	</div>
+		<div class="patches-container">
+			{#each filter(data.patches, selectedPkg || '', searchTermFiltered) as patch}
+				<!-- Trigger new animations when package or search changes (I love Svelte) -->
+				{#key selectedPkg || searchTermFiltered}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<PatchItem {patch} />
+					</div>
+				{/key}
+			{/each}
+		</div>
+	</Query>
 </main>
 <Footer />
 

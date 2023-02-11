@@ -1,6 +1,11 @@
 <script lang="ts">
-	import { repositories } from '$data/api';
+	import { queries } from '$data/api';
 	import { friendlyName } from '$lib/utils';
+
+	import { createQuery } from '@tanstack/svelte-query';
+	import Query from '$lib/components/Query.svelte';
+
+	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
 <svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,14 +25,15 @@
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 			<div>
 				<p>
-					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the legacy
-					of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create long-lasting
-					patches for nearly any Android app. ReVanced's patching system is designed to allow patches
-					to work on new versions of the apps automatically with bare minimum maintenance.
+					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the
+					legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create
+					long-lasting patches for nearly any Android app. ReVanced's patching system is designed to
+					allow patches to work on new versions of the apps automatically with bare minimum
+					maintenance.
 				</p>
 			</div>
 		</section>
-	
+
 		<section class="links-container">
 			<div class="link-column">
 				<li>Pages</li>
@@ -39,23 +45,31 @@
 			</div>
 			<div class="link-column">
 				<li>Repositories</li>
-				{#each $repositories as { name }}
-					<li>
-						<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
-							{friendlyName(name)}
-						</a>
-					</li>
-				{/each}
+				<Query {query} let:data>
+					{#each data as { name }}
+						<li>
+							<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
+								{friendlyName(name)}
+							</a>
+						</li>
+					{/each}
+				</Query>
 			</div>
 			<div class="link-column">
 				<!-- to replace -->
 				<li>Socials</li>
 				<li><a href="https://github.com/revanced" target="_blank" rel="noreferrer">GitHub</a></li>
 				<li><a href="https://revanced.app/discord" target="_blank" rel="noreferrer">Discord</a></li>
-				<li><a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a></li>
+				<li>
+					<a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a>
+				</li>
 				<li><a href="https://t.me/app_revanced" target="_blank" rel="noreferrer">Telegram</a></li>
-				<li><a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a></li>
-				<li><a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a></li>
+				<li>
+					<a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a>
+				</li>
+				<li>
+					<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a>
+				</li>
 			</div>
 		</section>
 	</div>
@@ -65,7 +79,6 @@
 		<a href="mailto:contact@revanced.app"><div>Email</div></a>
 	</div>
 </footer>
-
 
 <style>
 	footer {
@@ -95,7 +108,7 @@
 	}
 
 	#logo-name span {
-		color: var(--accent-color)
+		color: var(--accent-color);
 	}
 
 	.footer-bottom a {
