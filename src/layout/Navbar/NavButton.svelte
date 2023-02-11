@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { queries } from '$data/api';
-  import { dev_log } from '$lib/utils';
+	import { dev_log } from '$lib/utils';
 
 	import RouterEvents from '$data/RouterEvents';
 	import { useQueryClient } from '@tanstack/svelte-query';
@@ -11,8 +11,8 @@
 
 	function prefetch() {
 		if (queryKey !== null) {
-      const query = queries[queryKey];
-      dev_log("Prefetching", query);
+			const query = queries[queryKey];
+			dev_log('Prefetching', query);
 			client.prefetchQuery(query as any);
 		}
 	}

@@ -18,10 +18,10 @@
 
 	function clear_and_reload() {
 		client.clear();
-    // `client.clear()` does technically do this for us, but it takes a while.
-    localStorage.clear();
+		// `client.clear()` does technically do this for us, but it takes a while.
+		localStorage.clear();
 
-    location.reload();
+		location.reload();
 	}
 
 	let url = settings.api_base_url();

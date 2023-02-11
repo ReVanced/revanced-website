@@ -53,12 +53,12 @@
 				return false;
 			}
 
-		  // Filter based on the search term.
+			// Filter based on the search term.
 			if (search !== undefined) {
 				return (
 					searchString(patch.description, search, /\s/g) ||
 					searchString(patch.name, search, /-/g) ||
-          checkCompatibility(patch, pkg, (a, b) => searchString(a, b, /\./g))
+					checkCompatibility(patch, pkg, (a, b) => searchString(a, b, /\./g))
 				);
 			}
 			return true;
