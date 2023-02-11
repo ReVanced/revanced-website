@@ -6,7 +6,7 @@
 	import type { Patch } from '$lib/types';
 
 	import { createQuery } from '@tanstack/svelte-query';
-	import { patches as get_patches } from '$data/api';
+	import { queries } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
 	import PackageMenu from '../PackageMenu.svelte';
@@ -18,10 +18,7 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Query from '$lib/components/Query.svelte';
 
-	const query = createQuery({
-		queryKey: ['patches'],
-		queryFn: get_patches
-	});
+	const query = createQuery(['patches'], queries.patches);
 
 	export let data: PageData;
 	$: ({ selectedPkg } = data);

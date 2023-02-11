@@ -1,7 +1,7 @@
 import * as settings from './settings';
 
 // API Endpoints
-import type { Patch, Repository, Tool } from '../../utils/types';
+import type { Patch, Repository, Tool } from '$lib/types';
 
 export type ReposData = Repository[];
 export type PatchesData = { patches: Patch[]; packages: string[] };
@@ -12,8 +12,8 @@ async function get_json(endpoint: string) {
 	return await fetch(url).then((r) => r.json());
 }
 
-export function repositories(): Promise<ReposData> {
-	return get_json('contributors').then((json) => json.repositories);
+async function repositories(): Promise<ReposData> {
+	return await get_json('contributors').then((json) => json.repositories);
 }
 
 async function tools(): Promise<ToolsData> {
@@ -33,7 +33,7 @@ async function tools(): Promise<ToolsData> {
 			});
 		}
 
-		let value = map.get(repo);
+		let value = map.get(repo)!!;
 		value.assets.push({
 			name: tool.name,
 			size: tool.size,
@@ -47,11 +47,11 @@ async function tools(): Promise<ToolsData> {
 	return Object.fromEntries(map);
 }
 
-export function manager(): Promise<Tool> {
-	return tools().then((data) => data['revanced/revanced-manager']);
+async function manager(): Promise<Tool> {
+	return await tools().then((data) => data['revanced/revanced-manager']);
 }
 
-export async function patches(): Promise<PatchesData> {
+async function patches(): Promise<PatchesData> {
 	const json = await get_json('patches');
 	const packagesWithCount: { [key: string]: number } = {};
 
@@ -69,3 +69,22 @@ export async function patches(): Promise<PatchesData> {
 
 	return { patches: json, packages };
 }
+
+export const staleTime = 5 * 60 * 1000;
+export const queries = {
+	manager: {
+		queryKey: ['manager'],
+		queryFn: manager,
+		staleTime
+	},
+	patches: {
+		queryKey: ['patches'],
+		queryFn: patches,
+		staleTime
+	},
+	repositories: {
+		queryKey: ['repositories'],
+		queryFn: repositories,
+		staleTime
+	}
+};

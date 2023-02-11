@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CreateQueryResult } from '@tanstack/svelte-query';
+	import { isRestoring } from '../../routes/+layout.svelte';
 	// I will try to get this merged into tanstack query.
 
 	// So basically, this is how you do generics here.
@@ -12,13 +13,15 @@
 		};
 	}
 
-// TODO: errors
+	// TODO: errors
 
-	export let query: CreateQueryResult<T, any>;
+	export let query: CreateQueryResult<T, Error>;
 </script>
 
-{#if $query.isSuccess}
-  <slot data={$query.data} />
-{:else if $query.isError}
-  <slot name="error" />
+{#if !$isRestoring}
+	{#if $query.isSuccess}
+		<slot data={$query.data} />
+	{:else if $query.isError}
+		<slot name="error" />
+	{/if}
 {/if}

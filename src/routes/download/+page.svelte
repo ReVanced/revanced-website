@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { manager } from '$data/api';
+	import { queries } from '$data/api';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -13,10 +13,7 @@
 	import Footer from '$layout/Footer.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 
-	const query = createQuery({
-		queryKey: ['manager'],
-		queryFn: manager
-	});
+	const query = createQuery(['manager'], queries.manager);
 </script>
 
 <Meta title="Download" />

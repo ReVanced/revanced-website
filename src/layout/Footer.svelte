@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { repositories } from '$data/api';
+	import { queries } from '$data/api';
 	import { friendlyName } from '$lib/utils';
 
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 
-	const query = createQuery({
-		queryKey: ['repositories'],
-		queryFn: repositories
-	});
+	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
 <svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">

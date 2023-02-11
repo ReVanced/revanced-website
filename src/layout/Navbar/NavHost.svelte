@@ -9,12 +9,19 @@
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
 
-	// import { clear_and_reload } from '$data/api/cache';
 	import * as settings from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
 
+	import { useQueryClient } from '@tanstack/svelte-query';
+
+	const client = useQueryClient();
+
 	function clear_and_reload() {
-		throw new Error('guhhhhh');
+		client.clear();
+    // `client.clear()` does technically do this for us, but it takes a while.
+    localStorage.clear();
+
+    location.reload();
 	}
 
 	let url = settings.api_base_url();
@@ -62,13 +69,13 @@
 			<div id="main-navigation">
 				<div class="nav-buttons">
 					<Navigation href="/">Home</Navigation>
-					<Navigation href="/download">Download</Navigation>
-					<Navigation href="/patches">Patches</Navigation>
+					<Navigation queryKey="manager" href="/download">Download</Navigation>
+					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
 					<div hidden>
 						<!-- This is just temporary so the build doesn't fail -->
 						<Navigation href="/docs">Docs</Navigation>
 					</div>
-					<Navigation href="/contributors">Contributors</Navigation>
+					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
 				</div>
 			</div>
 			<div id="secondary-navigation">

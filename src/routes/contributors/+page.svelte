@@ -7,13 +7,10 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import Query from '$lib/components/Query.svelte';
 
-	import { repositories } from '$data/api';
+	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	const query = createQuery({
-		queryKey: ['repositories'],
-		queryFn: repositories,
-	});
+	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
 <Meta title="Contributors" />
