@@ -15,7 +15,7 @@
 
 	// TODO: errors
 
-	export let query: CreateQueryResult<T, Error>;
+	export let query: CreateQueryResult<T, any>;
 </script>
 
 {#if !$isRestoring}
