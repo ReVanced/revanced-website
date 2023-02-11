@@ -14,7 +14,7 @@ const config = {
 		}),
 		env: {
 			publicPrefix: 'RV'
-		},
+		}
 	}
 };
 
