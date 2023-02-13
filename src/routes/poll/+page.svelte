@@ -2,14 +2,19 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
+  import type { Logo, LogoAPIResponse } from '$lib/types';
 
 	import Modal from '$lib/components/atoms/Dialogue.svelte';
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
 
+  interface Selected {
+    [key: string] : string[];
+  }
+
 	let modalOpen = false;
-	let selected = {};
-	function calc_ui_selected_count(v) {
+	let selected: Selected = {};
+	function calc_ui_selected_count(v: Selected) {
 		let n = 0;
 		for (const item of Object.values(v)) {
 			if (item.length != 0) {
@@ -22,15 +27,15 @@
 
 	// afn please don't do this lol this is shitty code
 	$: ui_selected_count = calc_ui_selected_count(selected);
-	let logos = [];
-	let logo_ids = [];
+	let logos: Logo[] = [];
+	let logo_ids: string[] = [];
 	let transitionDirection = 5;
 	let logoAmount = 4;
 	let currentPage = 0;
 	let logoPages = 1;
 	let min = 0;
 	let max = logoAmount;
-	let token: string = '';
+	let token = '';
 	let submit = false;
 	$: finalPage = currentPage >= logoPages;
 
@@ -59,7 +64,7 @@
 		window['submit_poll'] = submitBallot;
 
 		const response = await fetch('https://poll.revanced.app/logos');
-		const json = await response.json();
+		const json: LogoAPIResponse = await response.json();
 
 		for (const name of Object.keys(json)) {
 			// lol the performance

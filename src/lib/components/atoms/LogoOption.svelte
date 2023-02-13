@@ -5,10 +5,11 @@
 
   import next from '$lib/assets/icons/next.svg';
   import previous from '$lib/assets/icons/previous.svg';
+  import type { APILogo } from '$lib/types';
 
 	export let name = '';
-	export let selected: Array<string>;
-	export let variants;
+	export let selected: string[];
+	export let variants: APILogo[];
 	export let clicked = false;
 	export let hideDetails = false;
 
@@ -17,7 +18,7 @@
 
 	let i = 0;
 	$: current = variants[i];
-	let interval = null;
+	let interval = 0;
 	onMount(() => {
 		if (!hasVariants) {
 			return;
@@ -28,12 +29,12 @@
 			} else {
 				i += 1;
 			}
-		}, 2500);
+		}, 2500) as unknown as number; // stfu typescript
 
 		return () => clearInterval(interval);
 	});
 
-	function select_logo(id) {
+	function select_logo(id: string) {
 		clicked = !clicked;
 		if (selected.includes(id)) {
 			selected = selected.filter((e) => e !== id);
