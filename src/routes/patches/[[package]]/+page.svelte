@@ -28,18 +28,15 @@
 	let timeout: any = null;
 	let mobilePackages = false;
 
-	function checkCompatibility(patch: Patch, pkg: string, cmp: (a: string, b: string) => boolean) {
+	function checkCompatibility(patch: Patch, pkg: string) {
 		if (pkg === '') {
 			return false;
 		}
-		return !!patch.compatiblePackages.find((compat) => cmp(compat.name, pkg));
+		return !!patch.compatiblePackages.find((compat) => compat.name === pkg);
 	}
 
-	function searchString(str: string, term: string, replacement_regex: RegExp) {
-		return str
-			.toLowerCase()
-			.replace(replacement_regex, '')
-			.includes(term || '');
+	function searchString(str: string, term: string, filter: RegExp) {
+		return str.toLowerCase().replace(filter, '').includes(term);
 	}
 
 	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
@@ -49,7 +46,7 @@
 
 		return patches.filter((patch) => {
 			// Don't show if the patch doesn't support the selected package
-			if (pkg && !checkCompatibility(patch, pkg, (a, b) => a === b)) {
+			if (pkg && !checkCompatibility(patch, pkg)) {
 				return false;
 			}
 
@@ -58,7 +55,7 @@
 				return (
 					searchString(patch.description, search, /\s/g) ||
 					searchString(patch.name, search, /-/g) ||
-					checkCompatibility(patch, pkg, (a, b) => searchString(a, b, /\./g))
+					patch.compatiblePackages.find((x) => searchString(x.name, search, /\./g))
 				);
 			}
 			return true;
