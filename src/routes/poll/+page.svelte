@@ -226,7 +226,7 @@
 
 		{#if finalPage && ui_selected_count < 1}
 			<div class="warning" in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-				<h6>No logo selected.</h6>
+				<h6>No logos selected.</h6>
 			</div>
 		{/if}
 
