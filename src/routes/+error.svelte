@@ -13,10 +13,10 @@
 	{#if status == 404}
 		<p>This page received a cease and desist letter from a multi-billion dollar tech company.</p>
 		<br />
-		<Navigation href="/" is_selected={() => true}>Home</Navigation>
+		<Navigation href="/">Home</Navigation>
 	{:else}
 		<p>
-			{$page.error.message}
+			{$page.error?.message}
 		</p>
 	{/if}
 </section>

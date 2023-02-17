@@ -16,7 +16,8 @@
 			"$lib": ["src/lib"],
 			"$lib/*": ["./src/lib/*"],
 			"$layout/*": ["./src/layout/*"],
-			"$images/*": ["./images/*"]
+			"$images/*": ["./images/*"],
+			"$util/*": ["./src/util/*"]
 		}
 	}
 }

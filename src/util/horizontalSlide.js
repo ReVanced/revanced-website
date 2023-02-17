@@ -1,27 +1,5 @@
-import { dev } from '$app/environment';
+// @ts-nocheck
 import { cubicOut } from 'svelte/easing';
-
-// console.log, but only if in dev environment.
-export function dev_log(part: string, ...args) {
-	if (dev) {
-		console.log(`[${part}]:`, ...args);
-	}
-}
-
-export function friendlyName(text: string): string {
-	return text
-		.replace(/-/g, ' ')
-		.replace(/revanced\/revanced/g, '')
-		.replace(/revanced/g, 'ReVanced')
-		.replace(/\bcli\b/g, 'CLI')
-		.replace(/api/g, 'API')
-		.replace(/microg/g, 'MicroG')
-		.replace(/hdr/g, 'HDR')
-		.replace(/sponsorblock/g, 'SponsorBlock')
-		.replace(/tiktok/g, 'TikTok')
-		.replace(/vr/g, 'VR')
-		.replace(/(?:^|\s)\S/g, (x: string) => x.toUpperCase());
-}
 
 // stolen from https://svelte.dev/repl/6d5239f09b0b4dc6aafeb70606a0fe94?version=3.46.4
 // please add this svelte thanks ily <3

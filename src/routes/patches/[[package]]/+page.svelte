@@ -25,7 +25,7 @@
 
 	let searchTerm: string;
 	let searchTermFiltered: string;
-	let timeout: any = null;
+	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
 
 	function checkCompatibility(patch: Patch, pkg: string) {

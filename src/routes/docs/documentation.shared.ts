@@ -24,5 +24,5 @@ export type DocsTreeNode = DocsTree | DocumentInfo;
 /// Functions
 
 export function is_tree(node: DocsTreeNode) {
-  return node.hasOwnProperty('nodes');
+  return Object.prototype.hasOwnProperty.call(node, 'nodes');
 }

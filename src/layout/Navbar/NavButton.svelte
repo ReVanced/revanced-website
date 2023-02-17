@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { queries } from '$data/api';
-	import { dev_log } from '$lib/utils';
+	import { dev_log } from '$util/dev';
 
 	import RouterEvents from '$data/RouterEvents';
 	import { useQueryClient } from '@tanstack/svelte-query';

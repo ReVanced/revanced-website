@@ -10,7 +10,8 @@ const config = {
     alias: {
 			$images: path.resolve('./images'),
 			$data: path.resolve('./src/data'),
-			$layout: path.resolve('./src/layout')
+			$layout: path.resolve('./src/layout'),
+			$util: path.resolve('./src/util')
 		}
 	}
 };

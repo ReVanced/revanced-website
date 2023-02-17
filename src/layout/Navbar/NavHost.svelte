@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { horizontalSlide } from '$lib/utils';
+	import { horizontalSlide } from '$util/horizontalSlide';
 	import { fade } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
 

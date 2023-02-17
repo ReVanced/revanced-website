@@ -2,7 +2,7 @@
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
-	import { friendlyName } from '$lib/utils';
+	import { friendlyName } from '$util/friendlyName';
 
 	export let patch: Patch;
 	const hasPatchOptions = !!patch.options.length;
@@ -26,7 +26,7 @@
 	</div>
 	<h5>{patch.description}</h5>
 	<ul class="info-container">
-		{#each patch.compatiblePackages as pkg, i}
+		{#each patch.compatiblePackages as pkg}
 			<a
 				href="https://play.google.com/store/apps/details?id={pkg.name}"
 				target="_blank"

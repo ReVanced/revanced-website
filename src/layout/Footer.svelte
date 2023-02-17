@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { queries } from '$data/api';
-	import { friendlyName } from '$lib/utils';
+	import { friendlyName } from '$util/friendlyName';
 
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
