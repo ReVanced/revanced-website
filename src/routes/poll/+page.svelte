@@ -226,7 +226,7 @@
 
 		{#if finalPage && ui_selected_count < 1}
 			<div class="warning" in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-				<h6>No logos have been selected.</h6>
+				<h6>No logo selected.</h6>
 			</div>
 		{/if}
 
@@ -236,11 +236,11 @@
 				<div style="text-align: center;">
 					{#await submitBallot()}
 						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							Submitting...
+							Submitting your vote...
 						</h6>
 					{:then _}
 						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							Your vote has been cast.
+							Your vote has been casted.
 						</h6>
 					{:catch err}
 						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
@@ -270,7 +270,7 @@
 	<svelte:fragment slot="description">
 		<div class="desc">
 			<h6>
-				This is an approval voting system. Voters can choose any number of logos. The logo that is
+				This is an approval voting system. Voters can choose any number of logo and variants. The logo that is
 				selected the most wins. Note that you can only vote once!
 			</h6>
 		</div>
