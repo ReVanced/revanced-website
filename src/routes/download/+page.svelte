@@ -23,7 +23,7 @@
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
 		<Query {query} let:data>
-			<Button kind="primary" icon="download" href={data.assets[0].url} target="_blank">
+			<Button kind="primary" icon="download" href={data.assets[0].url} download>
 				{data.version}
 			</Button>
 		</Query>
