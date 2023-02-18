@@ -21,7 +21,6 @@
 		</a>
 	{:else}
 		<div
-			{target}
 			{...$$restProps}
 			class={type}
 		>
