@@ -234,21 +234,27 @@
 			<Modal modalOpen={true}>
 				<svelte:fragment slot="title">Submit</svelte:fragment>
 				<div style="text-align: center;">
-					{#await submitBallot()}
+					{#if ui_selected_count < 1}
 						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							Submitting your vote...
+							No logos selected.
 						</h6>
-					{:then _}
-						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							Your vote has been casted.
-						</h6>
-					{:catch err}
-						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							An error occured. Try again later.
-							<br />
-							{err}
-						</h6>
-					{/await}
+					{:else}
+						{#await submitBallot()}
+							<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+								Submitting your vote...
+							</h6>
+						{:then _}
+							<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+								Your vote has been casted.
+							</h6>
+						{:catch err}
+							<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+								An error occured. Try again later.
+								<br />
+								{err}
+							</h6>
+						{/await}
+					{/if}
 				</div>
 			</Modal>
 		{/if}
