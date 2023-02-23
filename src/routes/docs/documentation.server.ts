@@ -1,12 +1,12 @@
 import { is_tree } from './documentation.shared';
 import type { Document, DocsTree, DocsTreeNode, DocumentInfo } from './documentation.shared';
 
-import { browser, building } from '$app/environment';
+import { browser } from '$app/environment';
 
 import fs, { existsSync as exists } from 'fs';
 import path from 'path';
 
-import { parse as parse_md } from 'marked';
+import { marked } from 'marked';
 import AsciiDocProcessor from 'asciidoctor';
 
 // This file does not work in a browser.
@@ -18,7 +18,7 @@ if (browser) {
 
 const supported_formats: Map<string, (markup: string) => Document> = new Map();
 
-supported_formats.set('md', (markup) => {
+supported_formats.set('md', (markup: string) => {
 	let lines = markup.split('\n');
 
 	// Get and remove the first line.
@@ -27,13 +27,13 @@ supported_formats.set('md', (markup) => {
 	const title = first_line.substring(2);
 
 	// Convert the rest to html
-	const content = parse_md(lines.join('\n'));
+	const content = marked(lines.join('\n'));
 
 	return { title, content };
 });
 
 const asciidoctor = AsciiDocProcessor();
-const adoc_fn = (markup) => {
+const adoc_fn = (markup: string) => {
 	// Get first line.
 	const first_line = markup.split('\n')[0];
 	// Remove `= `.
@@ -41,7 +41,7 @@ const adoc_fn = (markup) => {
 
 	// Convert it to html. Unlike markdown, we do not need to remove the first title heading.
 	// NOTE: Maybe consider change the safe mode value.
-	const content = asciidoctor.convert(markup, { doctype: 'book' });
+	const content = asciidoctor.convert(markup, { doctype: 'book' }) as string;
 
 	return { title, content };
 };
@@ -51,13 +51,7 @@ supported_formats.set('asciidoc', adoc_fn);
 
 const supported_filetypes = [...supported_formats.keys()];
 
-let docs_folder = process.env.REVANCED_DOCS_FOLDER;
-if (docs_folder === undefined) {
-	if (building) {
-		console.warn('Using testing docs in production build');
-	}
-	docs_folder = 'testing-docs';
-}
+let docs_folder = process.env.REVANCED_DOCS_FOLDER ?? 'testing-docs';
 
 const ignored_items = ['assets'];
 
@@ -74,10 +68,10 @@ function get_ext(fname: string) {
 
 function get_slug_of_node(node: DocsTreeNode): string {
 	if (is_tree(node)) {
-		return node.index.slug;
+		return (node as DocsTree).index.slug;
 	}
 
-	return node.slug;
+	return (node as DocumentInfo).slug;
 }
 
 /// Important functions
@@ -95,8 +89,8 @@ export function get(slug: string): Document | null {
 		return null;
 	}
 
-	let full_path,
-		ext,
+	let full_path: string,
+		ext: string,
 		found = false;
 	// We are looking for the file `${target}.(any_supported_extension)`. Try to find it.
 	for (const item of fs.readdirSync(dir)) {
@@ -122,7 +116,7 @@ export function get(slug: string): Document | null {
 	}
 
 	// Process the file and return.
-	return supported_formats.get(ext)(fs.readFileSync(full_path, 'utf-8'));
+	return supported_formats.get(ext!!)!!(fs.readFileSync(full_path!!, 'utf-8'));
 }
 
 // Get file information
@@ -139,7 +133,7 @@ function process_file(fname: string): DocumentInfo {
 	}
 
 	const slug = parts.join('/');
-	const title = get(slug).title;
+	const title = get(slug)!!.title;
 
 	return { slug, title };
 }
@@ -147,7 +141,7 @@ function process_file(fname: string): DocumentInfo {
 // Returns a document tree.
 function process_folder(dir: string): DocsTree | null {
 	let tree: DocsTree = {
-		index: null,
+		index: null as any,
 		nodes: []
 	};
 
@@ -184,7 +178,7 @@ function process_folder(dir: string): DocsTree | null {
 		}
 
 		if (is_index_file) {
-			tree.index = node;
+			tree.index = node as DocumentInfo;
 		} else {
 			tree.nodes.push(node);
 		}
