@@ -28,8 +28,8 @@ export function is_tree(node: DocsTreeNode) {
 }
 
 export function assert_is_info_node(v: DocsTreeNode) {
-	if (!is_tree(v)) {
-		throw new Error('Value is not a tree node.');
+	if (is_tree(v)) {
+		throw new Error('Value is not an info node.');
 	}
 	return v as DocumentInfo;
 }
