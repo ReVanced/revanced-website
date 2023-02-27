@@ -1,19 +1,12 @@
 <script lang="ts">
-	import { is_tree, type DocsTreeNode } from './documentation.shared';
-	import type { DocsTree, DocumentInfo } from './documentation.shared';
+	import { is_tree, assert_is_info_node } from './documentation.shared';
+	import type { DocsTree } from './documentation.shared';
 
 	import DocsNavNode from './DocsNavNode.svelte';
 
 	export let tree: DocsTree;
 	// How deeply nested this is.
 	export let nested = 0;
-
-  function assert_info_node(v: DocsTreeNode) {
-    if (!is_tree(v)) {
-      throw new Error("not tree aaa");
-    }
-    return v as DocumentInfo;
-  }
 </script>
 
 {#if nested}
@@ -32,7 +25,7 @@
 			<!-- Recursion here is fine. We are not dealing with a tree the size of a linux root file system. -->
 			<svelte:self tree={node} nested={nested + 1} />
 		{:else}
-			<DocsNavNode info={assert_info_node(node)} />
+			<DocsNavNode info={assert_is_info_node(node)} />
 		{/if}
 	{/each}
 </ul>
