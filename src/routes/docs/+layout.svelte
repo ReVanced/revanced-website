@@ -1,13 +1,10 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { LayoutData } from './$types';
 
 	import DocsNavTree from './DocsNavTree.svelte';
-
-	import { fly } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
 	import Footer from '$layout/Footer.svelte';
 
-	export let data: PageData;
+	export let data: LayoutData;
 </script>
 
 <section id="doc-section-main">

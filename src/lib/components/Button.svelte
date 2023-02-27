@@ -7,17 +7,29 @@
 </script>
 
 <button on:click>
-	<svelte:element
-		this={href ? 'a' : 'div'}
-		{href}
-		{target}
-		class={type}
-	>
-		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
-		{/if}
-		<slot />
-	</svelte:element>
+	{#if href}
+		<a
+			{href}
+			{target}
+			{...$$restProps}
+			class={type}
+		>
+			{#if icon}
+				<img src="../icons/{icon}.svg" alt={icon} />
+			{/if}
+			<slot />
+		</a>
+	{:else}
+		<div
+			{...$$restProps}
+			class={type}
+		>
+			{#if icon}
+				<img src="../icons/{icon}.svg" alt={icon} />
+			{/if}
+			<slot />
+		</div>
+	{/if}
 </button>
 
 <style>

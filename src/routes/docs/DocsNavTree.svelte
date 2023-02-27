@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { is_tree } from './documentation.shared';
+	import { is_tree, assert_is_info_node } from './documentation.shared';
 	import type { DocsTree } from './documentation.shared';
 
 	import DocsNavNode from './DocsNavNode.svelte';
@@ -25,7 +25,7 @@
 			<!-- Recursion here is fine. We are not dealing with a tree the size of a linux root file system. -->
 			<svelte:self tree={node} nested={nested + 1} />
 		{:else}
-			<DocsNavNode info={node} />
+			<DocsNavNode info={assert_is_info_node(node)} />
 		{/if}
 	{/each}
 </ul>

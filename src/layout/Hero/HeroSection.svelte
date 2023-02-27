@@ -1,7 +1,4 @@
 <script>
-	import { fly } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
-
 	import Button from '$lib/components/Button.svelte';
 </script>
 
@@ -49,10 +46,6 @@
 	@media (max-width: 768px) {
 		.hero {
 			padding-bottom: 0;
-		}
-
-		h4 {
-			font-size: clamp(1rem, 1.2rem, 1.5rem);
 		}
 
 		br {

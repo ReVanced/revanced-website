@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { friendlyName } from '$lib/utils';
-	import { slide, fade } from 'svelte/transition';
+	import { friendlyName } from '$util/friendlyName';
+	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Contributor } from '$lib/types';
 	import ContributorButton from './ContributorPerson.svelte';
