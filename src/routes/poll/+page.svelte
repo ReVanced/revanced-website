@@ -39,6 +39,8 @@
 	let submit = false;
 	let allowReviewSelections = false;
 	$: finalPage = false;
+	$: min = currentPage * logoAmount;
+	$: max = min + logoAmount;
 
 	async function exchange_token(bot_token: string) {
 		const response = await fetch('https://poll.revanced.app/auth/exchange', {
@@ -107,19 +109,19 @@
 
 	function previousPage() {
 		if (currentPage <= 0 && !allowReviewSelections) {
-			return;
-		} else if (currentPage <= 0 && allowReviewSelections) {
-			console.log(`Current page: ${currentPage}, Logo pages: ${logoPages}`);
-			currentPage = logoPages - 1;
-			return;
+			if (allowReviewSelections) {
+				// If the current page is 0 and the user has reached the final page beforehand, go to the final page
+				currentPage = logoPages - 1;
+			} else {
+				// If the current page is 0 and the user has not reached the final page beforehand, return
+				return;
+			}
+		} else {
+			// If the current page is not 0, go to the previous page
+			currentPage--;
 		}
-		currentPage--;
 		submit = false;
-
-		min = currentPage * logoAmount;
-		max = min + logoAmount;
 		transitionDirection = -5;
-		console.log(`Current page: ${currentPage}, Logo pages: ${logoPages}`);
 	}
 
 	function preloadImage(url: string) {
@@ -128,21 +130,21 @@
 	}
 
 	function nextPage() {
+		let nextPage = currentPage + 1;
+
+		// If the current page is the last page, set the current page to the first page
 		if (currentPage >= logoPages - 1) {
-			console.log('submitting ballot');
 			currentPage = 0;
-			return;
-		}
-		currentPage++;
-		if (currentPage >= logoPages - 1) {
-			allowReviewSelections = true;
+		} else {
+			currentPage++;
+
+			// If the current page is now the last page, allow review selections and set the current page to the first page
+			if (currentPage >= logoPages - 1) {
+				allowReviewSelections = true;
+				nextPage = 0;
+			}
 		}
 
-		min = currentPage * logoAmount;
-		max = min + logoAmount;
-		console.log(`MIN ${min}, MAX ${max}`);
-
-		const nextPage = currentPage + 1;
 		const nextMin = nextPage * logoAmount;
 		const nextMax = nextMin + logoAmount;
 
@@ -150,7 +152,6 @@
 			variants.forEach((variant) => preloadImage(variant.gdrive_direct_url));
 		});
 		transitionDirection = 5;
-		console.log(`Current page: ${currentPage}, Logo pages: ${logoPages}`);
 	}
 
 	function stopReview() {
