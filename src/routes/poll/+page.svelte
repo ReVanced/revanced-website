@@ -2,15 +2,15 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
-  import type { Logo, LogoAPIResponse } from '$lib/types';
+	import type { Logo, LogoAPIResponse } from '$lib/types';
 
 	import Modal from '$lib/components/atoms/Dialogue.svelte';
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
 
-  interface Selected {
-    [key: string] : string[];
-  }
+	interface Selected {
+		[key: string]: string[];
+	}
 
 	let modalOpen = false;
 	let selected: Selected = {};
@@ -37,7 +37,8 @@
 	let max = logoAmount;
 	let token = '';
 	let submit = false;
-	$: finalPage = currentPage >= logoPages;
+	let allowReviewSelections = false;
+	$: finalPage = false;
 
 	async function exchange_token(bot_token: string) {
 		const response = await fetch('https://poll.revanced.app/auth/exchange', {
@@ -93,25 +94,32 @@
 		// update ui
 		logos = logos;
 
-		if (location.hash !== '') {
-			try {
-				await exchange_token(location.hash.substring(1));
-			} catch (err) {
-				alert(`Could not exchange the token: ${err}`);
-			}
-		} else {
-			alert('Warning: No token!');
-		}
+		// if (location.hash !== '') {
+		// 	try {
+		// 		await exchange_token(location.hash.substring(1));
+		// 	} catch (err) {
+		// 		alert(`Could not exchange the token: ${err}`);
+		// 	}
+		// } else {
+		// 	alert('Warning: No token!');
+		// }
 	});
 
 	function previousPage() {
-		if (currentPage <= 0) return null;
+		if (currentPage <= 0 && !allowReviewSelections) {
+			return;
+		} else if (currentPage <= 0 && allowReviewSelections) {
+			console.log(`Current page: ${currentPage}, Logo pages: ${logoPages}`);
+			currentPage = logoPages - 1;
+			return;
+		}
 		currentPage--;
 		submit = false;
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
 		transitionDirection = -5;
+		console.log(`Current page: ${currentPage}, Logo pages: ${logoPages}`);
 	}
 
 	function preloadImage(url: string) {
@@ -120,21 +128,45 @@
 	}
 
 	function nextPage() {
-		if (currentPage >= logoPages || submit) return null;
+		if (currentPage >= logoPages - 1) {
+			console.log('submitting ballot');
+			currentPage = 0;
+			return;
+		}
 		currentPage++;
+		if (currentPage >= logoPages - 1) {
+			allowReviewSelections = true;
+		}
 
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
+		console.log(`MIN ${min}, MAX ${max}`);
 
-		if (currentPage < logoPages) {
-			const nextPage = currentPage + 1;
-			const nextMin = nextPage * logoAmount;
-			const nextMax = nextMin + logoAmount;
-			logos.slice(nextMin, nextMax).forEach(({ variants }) => {
-				variants.forEach((variant) => preloadImage(variant.gdrive_direct_url));
-			});
-		}
+		const nextPage = currentPage + 1;
+		const nextMin = nextPage * logoAmount;
+		const nextMax = nextMin + logoAmount;
+
+		logos.slice(nextMin, nextMax).forEach(({ variants }) => {
+			variants.forEach((variant) => preloadImage(variant.gdrive_direct_url));
+		});
 		transitionDirection = 5;
+		console.log(`Current page: ${currentPage}, Logo pages: ${logoPages}`);
+	}
+
+	function stopReview() {
+		finalPage = false;
+		submit = false;
+	}
+
+	function reviewSelections() {
+		if (allowReviewSelections) {
+			finalPage = true;
+		}
+	}
+
+	function submitSelection() {
+		if (ui_selected_count < 1) return null;
+		submit = true;
 	}
 
 	function clearLogos() {
@@ -186,7 +218,7 @@
 			<h3>ReVanced</h3>
 			<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
 			<h2>
-				{ui_selected_count}/{logos.length} selected · Page {Number(currentPage) + 1}/{logoPages + 1}
+				{ui_selected_count}/{logos.length} selected · Page {currentPage + 1}/{logoPages}
 			</h2>
 			<div class="top-custom-button-container">
 				<button on:click={() => (modalOpen = !modalOpen)}>How does this work?</button>
@@ -195,19 +227,6 @@
 		</div>
 
 		<div class="options-grid">
-			{#each logos.slice(min, max) as { variants, name }}
-				{#key currentPage}
-					<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-						<LogoOption
-							bind:selected={selected[name]}
-							clicked={selected[name].length != 0}
-							{variants}
-							{name}
-						/>
-					</span>
-				{/key}
-			{/each}
-
 			{#if finalPage}
 				{#each logos as { variants, name }}
 					{#if selected[name].length != 0}
@@ -220,6 +239,19 @@
 							/>
 						</span>
 					{/if}
+				{/each}
+			{:else}
+				{#each logos.slice(min, max) as { variants, name }}
+					{#key currentPage}
+						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+							<LogoOption
+								bind:selected={selected[name]}
+								clicked={selected[name].length != 0}
+								{variants}
+								{name}
+							/>
+						</span>
+					{/key}
 				{/each}
 			{/if}
 		</div>
@@ -234,37 +266,41 @@
 			<Modal modalOpen={true}>
 				<svelte:fragment slot="title">Submit</svelte:fragment>
 				<div style="text-align: center;">
-					{#if ui_selected_count < 1}
+					{#await submitBallot()}
 						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							No logos selected.
+							Submitting your vote...
 						</h6>
-					{:else}
-						{#await submitBallot()}
-							<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-								Submitting your vote...
-							</h6>
-						{:then _}
-							<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-								Your vote has been casted.
-							</h6>
-						{:catch err}
-							<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-								An error occured. Try again later.
-								<br />
-								{err}
-							</h6>
-						{/await}
-					{/if}
+					{:then _}
+						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+							Your vote has been casted.
+						</h6>
+					{:catch err}
+						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
+							An error occured. Try again later.
+							<br />
+							{err}
+						</h6>
+					{/await}
 				</div>
 			</Modal>
 		{/if}
 	</div>
 	<div class="buttons-container">
-		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
+		{#if finalPage == false}
+			<Button on:click={previousPage} unclickable={currentPage <= 0 && !allowReviewSelections}
+				>Previous</Button
+			>
+		{/if}
+		<Button
+			on:click={finalPage ? stopReview : reviewSelections}
+			unclickable={!allowReviewSelections}
+		>
+			{finalPage ? 'Go back' : 'Preview selection'}</Button
+		>
 		<Button
 			kind="primary"
-			on:click={finalPage ? () => (submit = true) : nextPage}
-			unclickable={submit}
+			on:click={finalPage ? submitSelection : nextPage}
+			unclickable={submit || (finalPage && ui_selected_count < 1)}
 		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
@@ -276,8 +312,8 @@
 	<svelte:fragment slot="description">
 		<div class="desc">
 			<h6>
-				This is an approval voting system. Voters can choose any number of logo and variants. The logo that is
-				selected the most wins. Note that you can only vote once!
+				This is an approval voting system. Voters can choose any number of logo and variants. The
+				logo that is selected the most wins. Note that you can only vote once!
 			</h6>
 		</div>
 	</svelte:fragment>
@@ -320,11 +356,6 @@
 		margin-bottom: 0.5rem;
 	}
 
-	b {
-		color: var(--white);
-		margin-bottom: 1rem;
-	}
-
 	.buttons-container {
 		display: flex;
 		gap: 1rem;
@@ -337,11 +368,6 @@
 		background-color: var(--grey-six);
 		padding: 1rem 1.5rem;
 		border-top: 1px solid var(--grey-three);
-	}
-
-	.information {
-		text-align: center;
-		margin-bottom: 1rem;
 	}
 
 	.buttons {
