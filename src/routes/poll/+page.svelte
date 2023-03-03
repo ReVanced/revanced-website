@@ -287,7 +287,7 @@
 		{/if}
 	</div>
 	<div class="buttons-container">
-		{#if finalPage == false}
+		{#if !finalPage}
 			<Button on:click={previousPage} unclickable={currentPage <= 0 && !allowReviewSelections}
 				>Previous</Button
 			>
