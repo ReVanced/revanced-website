@@ -96,15 +96,15 @@
 		// update ui
 		logos = logos;
 
-		// if (location.hash !== '') {
-		// 	try {
-		// 		await exchange_token(location.hash.substring(1));
-		// 	} catch (err) {
-		// 		alert(`Could not exchange the token: ${err}`);
-		// 	}
-		// } else {
-		// 	alert('Warning: No token!');
-		// }
+		if (location.hash !== '') {
+			try {
+				await exchange_token(location.hash.substring(1));
+			} catch (err) {
+				alert(`Could not exchange the token: ${err}`);
+			}
+		} else {
+			alert('Warning: No token!');
+		}
 	});
 
 	function previousPage() {
