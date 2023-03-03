@@ -3,9 +3,9 @@
 	import Modal from './Dialogue.svelte';
 	import Button from './Button.svelte';
 
-  import next from '$lib/assets/icons/next.svg';
-  import previous from '$lib/assets/icons/previous.svg';
-  import type { APILogo } from '$lib/types';
+	import next from '$lib/assets/icons/next.svg';
+	import previous from '$lib/assets/icons/previous.svg';
+	import type { APILogo } from '$lib/types';
 
 	export let name = '';
 	export let selected: string[];
@@ -171,11 +171,6 @@
 		font-weight: 800;
 	}
 
-	h6 {
-		font-size: 0.9rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
 	.text {
 		width: 100%;
 		white-space: nowrap;
@@ -186,8 +181,7 @@
 		background-color: var(--accent-low-opacity);
 	}
 
-	.clicked h2,
-	.clicked h6 {
+	.clicked h2 {
 		color: var(--white);
 	}
 
