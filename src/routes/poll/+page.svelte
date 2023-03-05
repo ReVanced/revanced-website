@@ -7,6 +7,7 @@
 	import Modal from '$lib/components/atoms/Dialogue.svelte';
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
+	import { goto } from '$app/navigation';
 
 	interface Selected {
 		[key: string]: string[];
@@ -102,8 +103,10 @@
 			} catch (err) {
 				alert(`Could not exchange the token: ${err}`);
 			}
+		} else if (localStorage.getItem('killswitch') === null) {
+			await goto('/poll/unauthorized/');
 		} else {
-			alert('Warning: No token!');
+			alert('Warning: no token!');
 		}
 	});
 
