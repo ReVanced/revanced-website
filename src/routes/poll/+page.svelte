@@ -111,7 +111,7 @@
 	});
 
 	function previousPage() {
-		if (currentPage <= 0 && !allowReviewSelections) {
+		if (currentPage <= 0) {
 			if (allowReviewSelections) {
 				// If the current page is 0 and the user has reached the final page beforehand, go to the final page
 				currentPage = logoPages - 1;

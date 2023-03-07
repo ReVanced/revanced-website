@@ -16,6 +16,7 @@
 
 <style>
 	button {
+		cursor: pointer;
 		text-decoration: none;
 		border-radius: 16px;
 		transition: all 0.2s var(--bezier-one);
@@ -25,8 +26,10 @@
 		cursor: not-allowed;
 		opacity: 0.4;
 	}
+
 	button,
-	.button-secondary {
+	.button-secondary,
+	.button-circle {
 		min-width: max-content;
 		font-size: 1rem;
 		color: #ffd9e1;
@@ -38,6 +41,10 @@
 		background-color: var(--grey-two);
 		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
 		user-select: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.button-primary {
@@ -50,15 +57,12 @@
 		filter: brightness(85%);
 	}
 
-	button,
-	.button-secondary {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
 	img {
 		height: 25px;
 	}
+
+	.button-circle {
+		padding: 0.85rem;
+	}
+
 </style>

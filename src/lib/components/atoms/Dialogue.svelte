@@ -78,14 +78,14 @@
 		gap: 1rem;
 		top: 0;
 		left: 0;
-
 		width: 100%;
 		background-color: var(--grey-six);
-		margin-bottom: 16px;
 	}
 
 	.modal {
 		position: fixed;
+		min-width: 17.5rem;
+		max-width: 35rem;
 		max-height: 75%;
 		overflow-y: scroll;
 		top: 50%;
@@ -101,7 +101,7 @@
 		flex-direction: column;
 		gap: 2px;
 		z-index: 1001;
-		padding: 1rem;
+		padding: 1.5rem;
 		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
 	}

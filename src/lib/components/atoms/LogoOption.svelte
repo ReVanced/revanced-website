@@ -109,27 +109,32 @@
 	</div>
 	{#if !hideDetails}
 		<div class="actions">
-			<Button
-				on:click={prevVariant}
-				on:click={stopAutoScroll}
-				unclickable={i <= 0}
-				icon={previous}
-				alt="previous"
-			/>
-			<h4>{i + 1}/{variants.length}</h4>
-			<Button
-				on:click={nextVariant}
-				on:click={stopAutoScroll}
-				unclickable={i + 1 >= variants.length}
-				icon={next}
-				alt="next"
-			/>
+			<h3>{i + 1}/{variants.length}</h3>
+			<div class="action-buttons">
+				<Button
+					on:click={prevVariant}
+					on:click={stopAutoScroll}
+					unclickable={i <= 0}
+					icon={previous}
+					alt="previous"
+					kind="circle"
+				/>
+				<Button
+					on:click={nextVariant}
+					on:click={stopAutoScroll}
+					unclickable={i + 1 >= variants.length}
+					icon={next}
+					alt="next"
+					kind="circle"
+				/>
+			</div>
 		</div>
 	{/if}
 </div>
 
 <style>
 	.option {
+		border: 1.5px solid var(--grey-three);
 		width: 100%;
 		color: var(--white);
 		transition: all 0.3s var(--bezier-one);
@@ -147,11 +152,21 @@
 	}
 
 	.actions {
+		border-top: 1px solid var(--grey-three);
 		display: flex;
 		flex-direction: row;
-		padding: 0 1.25rem 1.25rem 1.25rem;
+		padding: 1rem 1.25rem;
 		align-items: center;
+		border-radius: 0 0 16px 16px;
 		justify-content: space-between;
+		pointer-events: none;
+	}
+
+	.action-buttons {
+		display: flex;
+		gap: 1rem;
+		pointer-events: all;
+		width: max-content;
 	}
 
 	.variants {
@@ -199,9 +214,6 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		div {
-			flex-direction: column;
-		}
 
 		.text {
 			text-align: center;
