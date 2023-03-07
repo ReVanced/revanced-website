@@ -80,6 +80,7 @@
 		left: 0;
 		width: 100%;
 		background-color: var(--grey-six);
+		margin-bottom: 16px;
 	}
 
 	.modal {

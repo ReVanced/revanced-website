@@ -9,6 +9,9 @@
 	import Button from '$lib/components/atoms/Button.svelte';
 	import { goto } from '$app/navigation';
 
+	import questionMark from '$lib/assets/icons/help.svg';
+	import trash from '$lib/assets/icons/delete.svg';
+
 	interface Selected {
 		[key: string]: string[];
 	}
@@ -97,17 +100,17 @@
 		// update ui
 		logos = logos;
 
-		if (location.hash !== '') {
-			try {
-				await exchange_token(location.hash.substring(1));
-			} catch (err) {
-				alert(`Could not exchange the token: ${err}`);
-			}
-		} else if (localStorage.getItem('killswitch') === null) {
-			await goto('/poll/unauthorized/');
-		} else {
-			alert('Warning: no token!');
-		}
+		// if (location.hash !== '') {
+		// 	try {
+		// 		await exchange_token(location.hash.substring(1));
+		// 	} catch (err) {
+		// 		alert(`Could not exchange the token: ${err}`);
+		// 	}
+		// } else if (localStorage.getItem('killswitch') === null) {
+		// 	await goto('/poll/unauthorized/');
+		// } else {
+		// 	alert('Warning: no token!');
+		// }
 	});
 
 	function previousPage() {
@@ -219,14 +222,16 @@
 <main>
 	<div class="wrapper">
 		<div class="top-container">
-			<h3>ReVanced</h3>
-			<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
-			<h2>
-				{ui_selected_count}/{logos.length} selected · Page {currentPage + 1}/{logoPages}
-			</h2>
+			<div class="top-container-text">
+				<h3>ReVanced</h3>
+				<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
+				<h2>
+					{ui_selected_count}/{logos.length} selected · Page {currentPage + 1}/{logoPages}
+				</h2>
+			</div>
 			<div class="top-custom-button-container">
-				<button on:click={() => (modalOpen = !modalOpen)}>How does this work?</button>
-				<button on:click={clearLogos}>Clear All</button>
+				<Button on:click={() => (modalOpen = !modalOpen)} kind="icon" icon={questionMark}></Button>
+				<Button on:click={clearLogos} kind="icon" icon={trash}></Button>
 			</div>
 		</div>
 
@@ -407,20 +412,25 @@
 	}
 
 	.top-container {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
 		margin-bottom: 2rem;
 		background-color: var(--accent-color);
 		padding: 2rem;
 		border-radius: 20px;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.top-container-text{
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 	}
 
 	.top-custom-button-container {
 		margin-top: 0.5rem;
 		display: flex;
 		flex-direction: row;
-		gap: 0.5rem;
+		gap: 0.75rem;
 	}
 
 	.warning {

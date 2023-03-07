@@ -47,6 +47,13 @@
 		gap: 0.5rem;
 	}
 
+	.button-icon {
+		background-color: transparent;
+		height: 24px;
+		width: 24px;
+		padding: 0;
+	}
+
 	.button-primary {
 		background-color: #ffb1c5;
 		box-shadow: 0px 0px 32px 1px var(--accent-color-glow);
