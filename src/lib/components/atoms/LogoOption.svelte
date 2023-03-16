@@ -101,11 +101,6 @@
 	<div class="row" on:click={handleClick} on:keypress={handleClick}>
 		<!-- Screenreader compatibility does not make sense in this context. -->
 		<img src={current.gdrive_direct_url} alt="" />
-		{#if !hideDetails}
-			<div class="text">
-				<h2>{name}</h2>
-			</div>
-		{/if}
 	</div>
 	{#if !hideDetails}
 		<div class="actions">
@@ -146,6 +141,7 @@
 	.row {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		padding: 1.25rem;
 		gap: 1.5rem;
 		cursor: pointer;
@@ -160,7 +156,7 @@
 		border-radius: 0 0 16px 16px;
 		justify-content: space-between;
 		pointer-events: none;
-	}
+	}	
 
 	.action-buttons {
 		display: flex;

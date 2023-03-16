@@ -67,14 +67,13 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: 20px;
+		margin-bottom: 16px;
 	}
 
 	.title {
 		position: sticky;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: 1rem;
 		top: 0;
 		left: 0;

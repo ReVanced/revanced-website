@@ -29,7 +29,8 @@
 
 	button,
 	.button-secondary,
-	.button-circle {
+	.button-circle,
+	.button-text {
 		min-width: max-content;
 		font-size: 1rem;
 		color: #ffd9e1;
@@ -47,12 +48,19 @@
 		gap: 0.5rem;
 	}
 
+	.button-text {
+		background-color: transparent;
+		padding: 0;
+		color: #ef96ac;
+	}
+
 	.button-icon {
 		background-color: transparent;
 		height: 24px;
 		width: 24px;
 		padding: 0;
 	}
+
 
 	.button-primary {
 		background-color: #ffb1c5;
