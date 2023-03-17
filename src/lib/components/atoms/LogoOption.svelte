@@ -7,7 +7,6 @@
 	import previous from '$lib/assets/icons/previous.svg';
 	import type { APILogo } from '$lib/types';
 
-	export let name = '';
 	export let selected: string[];
 	export let variants: APILogo[];
 	export let clicked = false;
@@ -23,15 +22,6 @@
 		if (!hasVariants) {
 			return;
 		}
-		interval = setInterval(() => {
-			if (i === variants.length - 1) {
-				i = 0;
-			} else {
-				i += 1;
-			}
-		}, 2500) as unknown as number; // stfu typescript
-
-		return () => clearInterval(interval);
 	});
 
 	function select_logo(id: string) {
@@ -62,10 +52,6 @@
 		i--;
 	}
 
-	function stopAutoScroll() {
-		clearInterval(interval);
-	}
-
 	const handleClick = () => {
 		if (!hasVariants) {
 			select_logo(current.id);
@@ -79,7 +65,7 @@
 
 {#if hasVariants}
 	<Modal bind:modalOpen>
-		<svelte:fragment slot="title">{name}</svelte:fragment>
+		<svelte:fragment slot="title">Select a variant</svelte:fragment>
 		<div class="variants">
 			{#each variants as variant}
 				<!-- Mega Trolley -->
@@ -98,7 +84,7 @@
 <!-- SHUT UP -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div class="option" tabindex="0" class:clicked>
-	<div class="row" on:click={handleClick} on:keypress={handleClick}>
+	<div class="row" on:click|stopPropagation={handleClick} on:keypress={handleClick}>
 		<!-- Screenreader compatibility does not make sense in this context. -->
 		<img src={current.gdrive_direct_url} alt="" />
 	</div>
@@ -108,7 +94,6 @@
 			<div class="action-buttons">
 				<Button
 					on:click={prevVariant}
-					on:click={stopAutoScroll}
 					unclickable={i <= 0}
 					icon={previous}
 					alt="previous"
@@ -116,7 +101,6 @@
 				/>
 				<Button
 					on:click={nextVariant}
-					on:click={stopAutoScroll}
 					unclickable={i + 1 >= variants.length}
 					icon={next}
 					alt="next"
@@ -136,6 +120,7 @@
 		border-radius: 16px;
 		background-color: var(--grey-six);
 		text-decoration: none;
+		cursor: pointer;
 	}
 
 	.row {
@@ -156,7 +141,7 @@
 		border-radius: 0 0 16px 16px;
 		justify-content: space-between;
 		pointer-events: none;
-	}	
+	}
 
 	.action-buttons {
 		display: flex;
@@ -171,31 +156,9 @@
 		gap: 1.5rem;
 	}
 
-	h2 {
-		font-size: 1rem;
-		font-weight: 500;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	h4 {
-		font-weight: 800;
-	}
-
-	.text {
-		width: 100%;
-		white-space: nowrap;
-		overflow: hidden;
-	}
-
 	.clicked {
 		background-color: var(--accent-low-opacity);
 	}
-
-	.clicked h2 {
-		color: var(--white);
-	}
-
 	.option:hover {
 		filter: brightness(0.85);
 	}
@@ -204,19 +167,7 @@
 		border-radius: 8px;
 		height: 125px;
 		width: 125px;
-		/* background-color: var(--grey-two); */
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
-	}
-
-	@media screen and (max-width: 768px) {
-
-		.text {
-			text-align: center;
-		}
-
-		.variants {
-			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-		}
 	}
 </style>

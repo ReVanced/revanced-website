@@ -345,12 +345,6 @@
 		margin-bottom: -0.5rem;
 	}
 
-	/* "How does this work?" Modal */
-	h6 {
-		color: var(--white);
-		margin-bottom: 0.5rem;
-	}
-
 	.buttons-container {
 		display: flex;
 		gap: 1rem;
@@ -385,17 +379,6 @@
 		:global(.wrapper) {
 			padding-bottom: 0;
 		}
-	}
-
-	button {
-		background-color: transparent;
-		border: none;
-		border: 1px solid #9e8c90;
-		color: #ece0e1;
-		padding: 0.5rem 1.25rem;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 500;
 	}
 
 	.top-container {
