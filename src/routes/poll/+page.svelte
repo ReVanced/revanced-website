@@ -12,7 +12,7 @@
 	import trash from '$lib/assets/icons/delete.svg';
 
 	let selected: string[][] = [];
-  
+
 	let helpModal = false;
 	let clearModal = false;
 	let submitModal = false;
@@ -173,7 +173,7 @@
 	<div class="wrapper">
 		<div class="top-container">
 			<div class="top-container-text">
-				<h3>ReVanced</h3>
+				<h3>revensed</h3>
 				<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
 				<h2>
 					{ui_selected_count}/{logos.length} selected · Page {currentPage + 1}/{logoPages + 1}
