@@ -5,11 +5,10 @@
 
 	import next from '$lib/assets/icons/next.svg';
 	import previous from '$lib/assets/icons/previous.svg';
-	import type { APILogo } from '$lib/types';
+	import type { Logo } from '$lib/types';
 
-	export let name = '';
 	export let selected: string[];
-	export let variants: APILogo[];
+	export let variants: Logo[];
 	export let clicked = false;
 	export let hideDetails = false;
 
@@ -79,7 +78,7 @@
 
 {#if hasVariants}
 	<Modal bind:modalOpen>
-		<svelte:fragment slot="title">{name}</svelte:fragment>
+		<svelte:fragment slot="title">Logo</svelte:fragment>
 		<div class="variants">
 			{#each variants as variant}
 				<!-- Mega Trolley -->
@@ -100,7 +99,7 @@
 <div class="option" tabindex="0" class:clicked>
 	<div class="row" on:click={handleClick} on:keypress={handleClick}>
 		<!-- Screenreader compatibility does not make sense in this context. -->
-		<img src={current.gdrive_direct_url} alt="" />
+		<img src={current.optimized_direct_url ?? current.logo_direct_url} alt="" />
 	</div>
 	{#if !hideDetails}
 		<div class="actions">

@@ -12,26 +12,12 @@
 	import questionMark from '$lib/assets/icons/help.svg';
 	import trash from '$lib/assets/icons/delete.svg';
 
-	interface Selected {
-		[key: string]: string[];
-	}
-
 	let modalOpen = false;
-	let selected: Selected = {};
-	function calc_ui_selected_count(v: Selected) {
-		let n = 0;
-		for (const item of Object.values(v)) {
-			if (item.length != 0) {
-				console.log(item);
-				n += 1;
-			}
-		}
-		return n;
-	}
+	let selected: string[][] = [];
 
 	// afn please don't do this lol this is shitty code
-	$: ui_selected_count = calc_ui_selected_count(selected);
-	let logos: Logo[] = [];
+	$: ui_selected_count = selected.filter(x => x.length > 0).length;
+	let logos: Logo[][] = [];
 	let logo_ids: string[] = [];
 	let transitionDirection = 5;
 	let logoAmount = 4;
@@ -72,13 +58,11 @@
 
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json: LogoAPIResponse = await response.json();
+    logos = json;
 
-		for (const name of Object.keys(json)) {
-			// lol the performance
-			selected[name] = [];
-
-			logos.push({ name, variants: json[name].logos });
-			logo_ids = [...logo_ids, ...json[name].logos.map((v) => v.id)];
+		for (const logo_list of json) {
+      selected.push([]);
+			logo_ids = [...logo_ids, ...logo_list.map((v) => v.id)];
 		}
 		console.log(logos);
 		console.log(logo_ids);
@@ -154,8 +138,8 @@
 		const nextMin = nextPage * logoAmount;
 		const nextMax = nextMin + logoAmount;
 
-		logos.slice(nextMin, nextMax).forEach(({ variants }) => {
-			variants.forEach((variant) => preloadImage(variant.gdrive_direct_url));
+		logos.slice(nextMin, nextMax).forEach(variants => {
+			variants.forEach((variant) => preloadImage(variant.optimized_direct_url ?? variant.logo_direct_url));
 		});
 		transitionDirection = 5;
 	}
@@ -181,13 +165,16 @@
 			return;
 		}
 
-		logos.forEach((v) => {
-			selected[v.name] = [];
-		});
+    for (let i = 0; i < logos.length; i++) {
+      selected[i] = [];
+    }
+		// logos.forEach((v) => {
+    // 			selected[v.name] = [];
+    // 		});
 	}
 
 	async function submitBallot() {
-		const selected_ids = [...Object.values(selected)].flat();
+		const selected_ids = selected.flat();
 		console.log('selected ids', selected_ids);
 		const data = {
 			votes: logo_ids.map((id) => ({ cid: id, vote: selected_ids.includes(id) }))
@@ -237,27 +224,25 @@
 
 		<div class="options-grid">
 			{#if finalPage}
-				{#each logos as { variants, name }}
-					{#if selected[name].length != 0}
+				{#each logos as logo_set, i}
+					{#if selected[i].length != 0}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 							<LogoOption
-								bind:selected={selected[name]}
-								clicked={selected[name].length != 0}
-								{variants}
-								{name}
+								bind:selected={selected[i]}
+								clicked={selected[i].length != 0}
+								variants={logo_set}
 							/>
 						</span>
 					{/if}
 				{/each}
 			{:else}
-				{#each logos.slice(min, max) as { variants, name }}
+				{#each logos.slice(min, max) as logo_set, i}
 					{#key currentPage}
 						<span in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
 							<LogoOption
-								bind:selected={selected[name]}
-								clicked={selected[name].length != 0}
-								{variants}
-								{name}
+								bind:selected={selected[min + i]}
+								clicked={selected[min + i].length != 0}
+								variants={logo_set}
 							/>
 						</span>
 					{/key}
