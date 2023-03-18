@@ -12,8 +12,11 @@
 	import questionMark from '$lib/assets/icons/help.svg';
 	import trash from '$lib/assets/icons/delete.svg';
 
-	let modalOpen = false;
 	let selected: string[][] = [];
+  
+	let helpModal = false;
+	let clearModal = false;
+	let submitModal = false;
 
 	// afn please don't do this lol this is shitty code
 	$: ui_selected_count = selected.filter((x) => x.length > 0).length;
@@ -27,8 +30,7 @@
 	let max = logoAmount;
 	let token = '';
 	let submit = false;
-	let allowReviewSelections = false;
-	$: finalPage = false;
+	$: finalPage = currentPage >= logoPages;
 	$: min = currentPage * logoAmount;
 	$: max = min + logoAmount;
 
@@ -97,43 +99,22 @@
 		}
 	});
 
-	function previousPage() {
-		if (currentPage <= 0) {
-			if (allowReviewSelections) {
-				// If the current page is 0 and the user has reached the final page beforehand, go to the final page
-				currentPage = logoPages - 1;
-			} else {
-				// If the current page is 0 and the user has not reached the final page beforehand, return
-				return;
-			}
-		} else {
-			// If the current page is not 0, go to the previous page
-			currentPage--;
-		}
-		submit = false;
-		transitionDirection = -5;
-	}
-
 	function preloadImage(url: string) {
 		var img = new Image();
 		img.src = url;
 	}
 
+	function previousPage() {
+		if (currentPage <= 0) return null;
+		currentPage--;
+		submit = false;
+		transitionDirection = -5;
+	}
+
 	function nextPage() {
 		let nextPage = currentPage + 1;
-
-		// If the current page is the last page, set the current page to the first page
-		if (currentPage >= logoPages - 1) {
-			currentPage = 0;
-		} else {
-			currentPage++;
-
-			// If the current page is now the last page, allow review selections and set the current page to the first page
-			if (currentPage >= logoPages - 1) {
-				allowReviewSelections = true;
-				nextPage = 0;
-			}
-		}
+		if (currentPage >= logoPages || submit) return null;
+		currentPage++;
 
 		const nextMin = nextPage * logoAmount;
 		const nextMax = nextMin + logoAmount;
@@ -146,20 +127,9 @@
 		transitionDirection = 5;
 	}
 
-	function stopReview() {
-		finalPage = false;
-		submit = false;
-	}
-
-	function reviewSelections() {
-		if (allowReviewSelections) {
-			finalPage = true;
-		}
-	}
-
 	function submitSelection() {
 		if (ui_selected_count < 1) return null;
-		submit = true;
+		submitModal = true;
 	}
 
 	function clearLogos() {
@@ -212,12 +182,12 @@
 				<h3>ReVanced</h3>
 				<h1>{finalPage ? 'Review selected logos' : 'Select logos'}</h1>
 				<h2>
-					{ui_selected_count}/{logos.length} selected · Page {currentPage + 1}/{logoPages}
+					{ui_selected_count}/{logos.length} selected · Page {currentPage + 1}/{logoPages + 1}
 				</h2>
 			</div>
 			<div class="top-custom-button-container">
-				<Button on:click={() => (modalOpen = !modalOpen)} kind="icon" icon={questionMark} />
-				<Button on:click={clearLogos} kind="icon" icon={trash} />
+				<Button on:click={() => (helpModal = !helpModal)} kind="icon" icon={questionMark} />
+				<Button on:click={() => (clearModal = !clearModal)} kind="icon" icon={trash} />
 			</div>
 		</div>
 
@@ -255,66 +225,103 @@
 			</div>
 		{/if}
 
-		{#if submit}
-			<Modal modalOpen={true}>
-				<svelte:fragment slot="title">Submit</svelte:fragment>
-				<div style="text-align: center;">
-					{#await submitBallot()}
-						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							Submitting your vote...
-						</h6>
-					{:then _}
-						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							Your vote has been casted.
-						</h6>
-					{:catch err}
-						<h6 in:fly={{ x: transitionDirection, easing: expoOut, duration: 1000 }}>
-							An error occured. Try again later.
-							<br />
-							{err}
-						</h6>
-					{/await}
-				</div>
-			</Modal>
-		{/if}
+		<Modal bind:modalOpen={submitModal}>
+			<svelte:fragment slot="title">
+				{#if submit}
+					Submitting
+				{:else}
+					Confirm submission
+				{/if}
+			</svelte:fragment>
+			<svelte:fragment slot="description">
+				{#if submit}
+					<div>
+						{#await submitBallot()}
+							<h6>Submitting your vote...</h6>
+						{:then _}
+							<h6>Your vote has been casted.</h6>
+						{:catch err}
+							<h6>
+								An error occurred. Try again later.
+								<br />
+								{err}
+							</h6>
+						{/await}
+					</div>
+				{:else}
+					<div>
+						<h6>Do you want to cast your vote? You will not be able to vote again.</h6>
+					</div>
+				{/if}
+			</svelte:fragment>
+
+			<div class="buttons">
+				<Button
+					kind="text"
+					on:click={() => {
+						submitModal = false;
+					}}>Cancel</Button
+				>
+				<Button
+					kind="text"
+					on:click={() => {
+						submit = true;
+					}}>Submit</Button
+				>
+			</div>
+		</Modal>
 	</div>
 	<div class="buttons-container">
-		{#if !finalPage}
-			<Button on:click={previousPage} unclickable={currentPage <= 0 && !allowReviewSelections}
-				>Previous</Button
-			>
-		{/if}
-		<Button
-			on:click={finalPage ? stopReview : reviewSelections}
-			unclickable={!allowReviewSelections}
-		>
-			{finalPage ? 'Go back' : 'Preview selection'}</Button
-		>
+		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
 		<Button
 			kind="primary"
 			on:click={finalPage ? submitSelection : nextPage}
-			unclickable={submit || (finalPage && ui_selected_count < 1)}
+			unclickable={finalPage && ui_selected_count < 1}
 		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
 	</div>
 </main>
 
-<Modal bind:modalOpen>
+<Modal bind:modalOpen={helpModal}>
 	<svelte:fragment slot="title">How does this work?</svelte:fragment>
 	<svelte:fragment slot="description">
 		<div class="desc">
 			<h6>
-				This is an approval voting system. Voters can choose any number of logo and variants. The
-				logo that is selected the most wins. Note that you can only vote once!
+				This is an approval voting system. Voters can choose any number of logos (and its variants
+				if applicable). The logo that is selected the most wins. Note that you can only vote once.
 			</h6>
 		</div>
 	</svelte:fragment>
 	<div class="buttons">
 		<Button
+			kind="text"
 			on:click={() => {
-				modalOpen = false;
-			}}>Understood</Button
+				helpModal = false;
+			}}>OK</Button
+		>
+	</div>
+</Modal>
+
+<Modal bind:modalOpen={clearModal}>
+	<svelte:fragment slot="description">
+		<div class="desc">
+			<h6>Deselect all logos?</h6>
+		</div>
+	</svelte:fragment>
+	<div class="buttons">
+		<Button
+			kind="text"
+			on:click={() => {
+				clearModal = false;
+			}}>Cancel</Button
+		>
+		<Button
+			kind="text"
+			on:click={() => {
+				clearModal = false;
+				clearLogos();
+			}}>OK</Button
 		>
 	</div>
 </Modal>
@@ -343,18 +350,12 @@
 		margin-bottom: -0.5rem;
 	}
 
-	/* "How does this work?" Modal */
-	h6 {
-		color: var(--white);
-		margin-bottom: 0.5rem;
-	}
-
 	.buttons-container {
 		display: flex;
 		gap: 1rem;
 		justify-content: right;
 		width: 100%;
-		z-index: 999;
+		z-index: 99;
 		position: fixed;
 		bottom: 0;
 		right: 0;
@@ -366,6 +367,7 @@
 	.buttons {
 		display: flex;
 		justify-content: flex-end;
+		gap: 1.5rem;
 	}
 
 	@media screen and (orientation: landscape) and (min-width: 1500px) and (min-height: 950px) {
@@ -382,17 +384,6 @@
 		:global(.wrapper) {
 			padding-bottom: 0;
 		}
-	}
-
-	button {
-		background-color: transparent;
-		border: none;
-		border: 1px solid #9e8c90;
-		color: #ece0e1;
-		padding: 0.5rem 1.25rem;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 500;
 	}
 
 	.top-container {

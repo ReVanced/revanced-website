@@ -21,21 +21,23 @@
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	>
 		<div class="top">
-			<div class="title">
-				{#if fullscreen}
-					<button on:click={() => (modalOpen = !modalOpen)}>
-						<img src="../icons/back.svg" id="back" alt="back" />
-					</button>
-				{/if}
-				{#if $$slots.icon}
-					<slot name="icon" />
-				{/if}
-				{#if $$slots.title}
-					<h2>
-						<slot name="title" />
-					</h2>
-				{/if}
-			</div>
+			{#if $$slots.title || $$slots.icon}
+				<div class="title">
+					{#if fullscreen}
+						<button on:click={() => (modalOpen = !modalOpen)}>
+							<img src="../icons/back.svg" id="back" alt="back" />
+						</button>
+					{/if}
+					{#if $$slots.icon}
+						<slot name="icon" />
+					{/if}
+					{#if $$slots.title}
+						<h2>
+							<slot name="title" />
+						</h2>
+					{/if}
+				</div>
+			{/if}
 
 			{#if $$slots.description}
 				<p>
@@ -67,14 +69,13 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: 20px;
+		margin-bottom: 16px;
 	}
 
 	.title {
 		position: sticky;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		gap: 1rem;
 		top: 0;
 		left: 0;
