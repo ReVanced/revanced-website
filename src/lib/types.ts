@@ -1,19 +1,7 @@
-export interface APILogo {
-	id: string;
-	gdrive_direct_url: string;
-}
-
-export interface LogoAPIResponse {
-	[key: string]: {
-		logos: APILogo[];
-	};
-}
-
 export interface Logo {
-	name: string;
-	variants: APILogo[];
+	id: string;
+	optimized_direct_url: string | null;
+	logo_direct_url: string;
 }
 
-// export interface Selected {
-
-// }
+export type LogosResponse = Logo[][];
