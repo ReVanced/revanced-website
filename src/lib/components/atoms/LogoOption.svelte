@@ -65,7 +65,7 @@
 
 {#if hasVariants}
 	<Modal bind:modalOpen>
-		<svelte:fragment slot="title">Select a variant</svelte:fragment>
+		<svelte:fragment slot="title">Select logo variants</svelte:fragment>
 		<div class="variants">
 			{#each variants as variant}
 				<!-- Mega Trolley -->

@@ -18,6 +18,7 @@
 
 	let helpModal = false;
 	let clearModal = false;
+	let submitModal = false;
 	let selected: Selected = {};
 	function calc_ui_selected_count(v: Selected) {
 		let n = 0;
@@ -141,7 +142,7 @@
 
 	function submitSelection() {
 		if (ui_selected_count < 1) return null;
-		submit = true;
+		submitModal = true;
 	}
 
 	function clearLogos() {
@@ -239,19 +240,21 @@
 			</div>
 		{/if}
 
-		{#if submit}
-			<Modal modalOpen={true}>
-				<svelte:fragment slot="title">Submit</svelte:fragment>
-				<svelte:fragment slot="description">
+		<Modal bind:modalOpen={submitModal}>
+			<svelte:fragment slot="title">
+				{#if submit}
+					Submitting
+				{:else}
+					Confirm submission
+				{/if}
+			</svelte:fragment>
+			<svelte:fragment slot="description">
+				{#if submit}
 					<div>
 						{#await submitBallot()}
-							<h6>
-								Submitting your vote...
-							</h6>
+							<h6>Submitting your vote...</h6>
 						{:then _}
-							<h6>
-								Your vote has been casted.
-							</h6>
+							<h6>Your vote has been casted.</h6>
 						{:catch err}
 							<h6>
 								An error occurred. Try again later.
@@ -260,16 +263,35 @@
 							</h6>
 						{/await}
 					</div>
-				</svelte:fragment>
-			</Modal>
-		{/if}
+				{:else}
+					<div>
+						<h6>Do you want to cast your vote? You will not be able to vote again.</h6>
+					</div>
+				{/if}
+			</svelte:fragment>
+
+			<div class="buttons">
+				<Button
+					kind="text"
+					on:click={() => {
+						submitModal = false;
+					}}>Cancel</Button
+				>
+				<Button
+					kind="text"
+					on:click={() => {
+						submit = true;
+					}}>Submit</Button
+				>
+			</div>
+		</Modal>
 	</div>
 	<div class="buttons-container">
 		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
 		<Button
 			kind="primary"
 			on:click={finalPage ? submitSelection : nextPage}
-			unclickable={submit || (finalPage && ui_selected_count < 1)}
+			unclickable={finalPage && ui_selected_count < 1}
 		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
@@ -281,8 +303,8 @@
 	<svelte:fragment slot="description">
 		<div class="desc">
 			<h6>
-				This is an approval voting system. Voters can choose any number of logo and variants. The
-				logo that is selected the most wins. Note that you can only vote once!
+				This is an approval voting system. Voters can choose any number of logos (and its variants
+				if applicable). The logo that is selected the most wins. Note that you can only vote once.
 			</h6>
 		</div>
 	</svelte:fragment>
@@ -299,9 +321,7 @@
 <Modal bind:modalOpen={clearModal}>
 	<svelte:fragment slot="description">
 		<div class="desc">
-			<h6>
-				Deselect all logos?
-			</h6>
+			<h6>Deselect all logos?</h6>
 		</div>
 	</svelte:fragment>
 	<div class="buttons">
@@ -350,7 +370,7 @@
 		gap: 1rem;
 		justify-content: right;
 		width: 100%;
-		z-index: 999;
+		z-index: 99;
 		position: fixed;
 		bottom: 0;
 		right: 0;
