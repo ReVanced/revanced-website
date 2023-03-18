@@ -5,18 +5,3 @@ export interface Logo {
 }
 
 export type LogoAPIResponse = Logo[][];
-
-// export interface LogoAPIResponse {
-// 	[key: string]: {
-// 		logos: APILogo[];
-// 	};
-// }
-
-// export interface Logo {
-// 	name: string;
-// 	variants: APILogo[];
-// }
-
-// export interface Selected {
-
-// }

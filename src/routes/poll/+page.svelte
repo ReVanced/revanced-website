@@ -16,7 +16,7 @@
 	let selected: string[][] = [];
 
 	// afn please don't do this lol this is shitty code
-	$: ui_selected_count = selected.filter(x => x.length > 0).length;
+	$: ui_selected_count = selected.filter((x) => x.length > 0).length;
 	let logos: Logo[][] = [];
 	let logo_ids: string[] = [];
 	let transitionDirection = 5;
@@ -58,10 +58,10 @@
 
 		const response = await fetch('https://poll.revanced.app/logos');
 		const json: LogoAPIResponse = await response.json();
-    logos = json;
+		logos = json;
 
 		for (const logo_list of json) {
-      selected.push([]);
+			selected.push([]);
 			logo_ids = [...logo_ids, ...logo_list.map((v) => v.id)];
 		}
 		console.log(logos);
@@ -138,8 +138,10 @@
 		const nextMin = nextPage * logoAmount;
 		const nextMax = nextMin + logoAmount;
 
-		logos.slice(nextMin, nextMax).forEach(variants => {
-			variants.forEach((variant) => preloadImage(variant.optimized_direct_url ?? variant.logo_direct_url));
+		logos.slice(nextMin, nextMax).forEach((variants) => {
+			variants.forEach((variant) =>
+				preloadImage(variant.optimized_direct_url ?? variant.logo_direct_url)
+			);
 		});
 		transitionDirection = 5;
 	}
@@ -165,12 +167,9 @@
 			return;
 		}
 
-    for (let i = 0; i < logos.length; i++) {
-      selected[i] = [];
-    }
-		// logos.forEach((v) => {
-    // 			selected[v.name] = [];
-    // 		});
+		for (let i = 0; i < logos.length; i++) {
+			selected[i] = [];
+		}
 	}
 
 	async function submitBallot() {
@@ -217,8 +216,8 @@
 				</h2>
 			</div>
 			<div class="top-custom-button-container">
-				<Button on:click={() => (modalOpen = !modalOpen)} kind="icon" icon={questionMark}></Button>
-				<Button on:click={clearLogos} kind="icon" icon={trash}></Button>
+				<Button on:click={() => (modalOpen = !modalOpen)} kind="icon" icon={questionMark} />
+				<Button on:click={clearLogos} kind="icon" icon={trash} />
 			</div>
 		</div>
 
@@ -405,7 +404,7 @@
 		justify-content: space-between;
 	}
 
-	.top-container-text{
+	.top-container-text {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
