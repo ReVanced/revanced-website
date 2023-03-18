@@ -2,8 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
-	import type { Logo, LogoAPIResponse } from '$lib/types';
-
+	import type { Logo, LogosResponse } from '$lib/types';
 	import Modal from '$lib/components/atoms/Dialogue.svelte';
 	import LogoOption from '$lib/components/atoms/LogoOption.svelte';
 	import Button from '$lib/components/atoms/Button.svelte';
@@ -20,7 +19,7 @@
 
 	// afn please don't do this lol this is shitty code
 	$: ui_selected_count = selected.filter((x) => x.length > 0).length;
-	let logos: Logo[][] = [];
+	let logos: LogosResponse = [];
 	let logo_ids: string[] = [];
 	let transitionDirection = 5;
 	let logoAmount = 4;
@@ -59,15 +58,10 @@
 		window['submit_poll'] = submitBallot;
 
 		const response = await fetch('https://poll.revanced.app/logos');
-		const json: LogoAPIResponse = await response.json();
-		logos = json;
+		logos = await response.json();
 
-		for (const logo_list of json) {
-			selected.push([]);
-			logo_ids = [...logo_ids, ...logo_list.map((v) => v.id)];
-		}
-		console.log(logos);
-		console.log(logo_ids);
+		selected = logos.map(_ => []);
+		logos.flatMap(x => x).forEach(variants => logo_ids.push(variants.id));
 
 		// randomize the order of the logos to minimize bias
 		for (let i = logos.length - 1; i > 0; i--) {

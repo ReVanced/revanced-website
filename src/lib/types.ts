@@ -4,4 +4,4 @@ export interface Logo {
 	logo_direct_url: string;
 }
 
-export type LogoAPIResponse = Logo[][];
+export type LogosResponse = Logo[][];
