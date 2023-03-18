@@ -5,8 +5,8 @@
 </svelte:head>
 
 <main>
-	<h1>Unauthorized</h1>
-	<h2>Please follow the instructions in our Discord server to vote.</h2>
+	<h1>No access</h1>
+	<h2>You can only visit this page with a valid access token.</h2>
 </main>
 
 <style>
