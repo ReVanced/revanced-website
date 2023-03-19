@@ -57,6 +57,15 @@
 	// will refactor later maybe idk
 	// Reply: don't think we need to refactor because nobody cares if this code is shit lol
 	onMount(async () => {
+		setTimeout(async() => {
+			await goto('/poll/token-expired/');
+			localStorage.setItem("expired-token", token)
+		}, 300000)
+
+		if (localStorage.getItem("expired-token") === token) {
+			await goto('/poll/token-expired/');
+		}
+
 		window.use_token = exchange_token;
 		window.submit_poll = submitBallot;
 

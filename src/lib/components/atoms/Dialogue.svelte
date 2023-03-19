@@ -102,7 +102,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
-		z-index: 1001;
+		z-index: 999;
 		padding: 1.5rem;
 		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
