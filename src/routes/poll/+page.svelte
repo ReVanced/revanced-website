@@ -249,7 +249,7 @@
 						{#await submitBallot()}
 							<h6>Submitting your vote...</h6>
 						{:then _}
-							<h6>Your vote has been casted.</h6>
+							<h6>Thank you, your vote has been casted. You will not be able to vote again. You may now close this tab.</h6>
 						{:catch err}
 							<h6>
 								An error occurred. Try again later.
@@ -270,15 +270,14 @@
 					kind="text"
 					on:click={() => {
 						submitModal = false;
-					}}>Cancel</Button
+					}}>{submitted || erred ? 'Close' : 'Cancel'}</Button
 				>
-				{#if !erred}
+				{#if !erred ?? !submitted}
 					<Button
 						kind="text"
 						on:click={() => {
-							if (!submitted) submit = true;
-							else if (submitted) window.close();
-						}}>{submitted ? 'Close' : 'Submit'}</Button
+							submit = true;
+						}}>Submit</Button
 					>
 				{/if}
 			</div>
