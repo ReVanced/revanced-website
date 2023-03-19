@@ -76,7 +76,7 @@
 		min = currentPage * logoAmount;
 		max = min + logoAmount;
 
-		logoPages = Math.floor(logos.length / logoAmount);
+		logoPages = Math.ceil(logos.length / logoAmount);
 		// update ui
 		logos = logos;
 
