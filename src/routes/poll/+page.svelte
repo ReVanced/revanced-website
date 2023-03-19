@@ -54,8 +54,8 @@
 	// will refactor later maybe idk
 	// Reply: don't think we need to refactor because nobody cares if this code is shit lol
 	onMount(async () => {
-		window['use_token'] = exchange_token;
-		window['submit_poll'] = submitBallot;
+		window.use_token = exchange_token;
+		window.submit_poll = submitBallot;
 
 		const response = await fetch('https://poll.revanced.app/logos');
 		logos = await response.json();
