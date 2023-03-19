@@ -7,7 +7,7 @@
 	export let unclickable = false;
 </script>
 
-<button class={type} class:unclickable on:click style="width: {maxWidth ? '100%' : 'max-content'}">
+<button class={type} class:unclickable on:click|stopPropagation style="width: {maxWidth ? '100%' : 'max-content'}">
 	{#if icon}
 		<img src={icon} {alt} />
 	{/if}

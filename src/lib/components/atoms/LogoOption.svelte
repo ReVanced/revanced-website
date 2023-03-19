@@ -89,8 +89,8 @@
 
 <!-- SHUT UP -->
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-<div class="option" tabindex="0" class:clicked>
-	<div class="row" on:click|stopPropagation={handleClick} on:keypress={handleClick}>
+<div class="option" on:click={handleClick} on:keypress={handleClick} tabindex="0" class:clicked>
+	<div class="row">
 		<!-- Screenreader compatibility does not make sense in this context. -->
 		<img src={current.optimized_direct_url ?? current.logo_direct_url} alt="" />
 	</div>
