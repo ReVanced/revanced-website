@@ -280,7 +280,7 @@
 						submitModal = false;
 					}}>{submitted || erred ? 'Close' : 'Cancel'}</Button
 				>
-				{#if !erred ?? !submitted}
+				{#if !erred || !submitted}
 					<Button
 						kind="text"
 						on:click={() => {
