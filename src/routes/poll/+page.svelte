@@ -13,7 +13,7 @@
 	import trash from '$lib/assets/icons/delete.svg';
 
 	let selected: string[][] = [];
-  
+
 	let helpModal = true;
 	let clearModal = false;
 	let submitModal = false;
@@ -45,7 +45,9 @@
 		});
 
 		if (!response.ok) {
-			if (response.status === 401) goto('/poll/token-expired/');
+			if (response.status === 401 || response.status === 422) {
+				goto('/poll/token-expired/');
+			}
 			throw Error(`Status Code ${response.status}: ${await response.text()}`);
 		}
 
@@ -58,12 +60,12 @@
 	// will refactor later maybe idk
 	// Reply: don't think we need to refactor because nobody cares if this code is shit lol
 	onMount(async () => {
-		setTimeout(async() => {
+		setTimeout(async () => {
 			await goto('/poll/token-expired/');
-			localStorage.setItem("expired-token", token)
-		}, 300000)
+			localStorage.setItem('expired-token', token);
+		}, 300000);
 
-		if (localStorage.getItem("expired-token") === token) {
+		if (localStorage.getItem('expired-token') === token) {
 			await goto('/poll/token-expired/');
 		}
 
@@ -73,8 +75,8 @@
 		const response = await fetch('https://poll.revanced.app/logos');
 		logos = await response.json();
 
-		selected = logos.map(_ => []);
-		logos.flatMap(x => x).forEach(variants => logo_ids.push(variants.id));
+		selected = logos.map((_) => []);
+		logos.flatMap((x) => x).forEach((variants) => logo_ids.push(variants.id));
 
 		// randomize the order of the logos to minimize bias
 		for (let i = logos.length - 1; i > 0; i--) {
@@ -250,7 +252,10 @@
 						{#await submitBallot()}
 							<h6>Submitting your vote...</h6>
 						{:then _}
-							<h6>Thank you, your vote has been casted. You will not be able to vote again. You may now close this tab.</h6>
+							<h6>
+								Thank you, your vote has been casted. You will not be able to vote again. You may
+								now close this tab.
+							</h6>
 						{:catch err}
 							<h6>
 								An error occurred. Try again later.
@@ -289,7 +294,7 @@
 		<Button
 			kind="primary"
 			on:click={finalPage ? submitSelection : nextPage}
-			unclickable={finalPage && ui_selected_count < 1 || submitted}
+			unclickable={(finalPage && ui_selected_count < 1) || submitted}
 		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
