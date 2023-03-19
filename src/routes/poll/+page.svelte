@@ -80,17 +80,17 @@
 		// update ui
 		logos = logos;
 
-		// if (location.hash !== '') {
-		// 	try {
-		// 		await exchange_token(location.hash.substring(1));
-		// 	} catch (err) {
-		// 		alert(`Could not exchange the token: ${err}`);
-		// 	}
-		// } else if (localStorage.getItem('killswitch') === null) {
-		// 	await goto('/poll/unauthorized/');
-		// } else {
-		// 	alert('Warning: no token!');
-		// }
+		if (location.hash !== '') {
+			try {
+				await exchange_token(location.hash.substring(1));
+			} catch (err) {
+				alert(`Could not exchange the token: ${err}`);
+			}
+		} else if (localStorage.getItem('killswitch') === null) {
+			await goto('/poll/unauthorized/');
+		} else {
+			alert('Warning: no token!');
+		}
 	});
 
 	function preloadImage(url: string) {
