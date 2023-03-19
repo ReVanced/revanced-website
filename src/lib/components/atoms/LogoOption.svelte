@@ -33,14 +33,12 @@
 			// the Updater
 			selected = selected;
 		}
-		console.log(selected);
 	}
 
 	function nextVariant() {
 		if (i >= variants.length - 1) {
 			return;
 		}
-		console.log('next');
 		i++;
 	}
 
@@ -48,7 +46,6 @@
 		if (i == 0) {
 			return;
 		}
-		console.log('previous');
 		i--;
 	}
 
