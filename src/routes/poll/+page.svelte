@@ -14,7 +14,7 @@
 
 	let selected: string[][] = [];
   
-	let helpModal = false;
+	let helpModal = true;
 	let clearModal = false;
 	let submitModal = false;
 
