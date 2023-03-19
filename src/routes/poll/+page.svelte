@@ -31,6 +31,7 @@
 	let token = '';
 	let submit = false;
 	let submitted = false;
+	let erred = false;
 	$: finalPage = currentPage >= logoPages;
 	$: min = currentPage * logoAmount;
 	$: max = min + logoAmount;
@@ -155,6 +156,7 @@
 
 		if (response.ok) submitted = true;
 		else {
+			erred = true;
 			throw Error(`Status Code ${response.status}: ${await response.text()}`);
 		}
 
@@ -261,13 +263,15 @@
 						submitModal = false;
 					}}>Cancel</Button
 				>
-				<Button
-					kind="text"
-					on:click={() => {
-						if (!submitted) submit = true;
-						else window.close();
-					}}>{submitted ? 'Close' : 'Submit'}</Button
-				>
+				{#if !erred}
+					<Button
+						kind="text"
+						on:click={() => {
+							if (!submitted) submit = true;
+							else if (submitted) window.close();
+						}}>{submitted ? 'Close' : 'Submit'}</Button
+					>
+				{/if}
 			</div>
 		</Modal>
 	</div>
