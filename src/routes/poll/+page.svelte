@@ -137,12 +137,10 @@
 	}
 
 	async function submitBallot() {
-		const selected_ids = selected.flat();
-		console.log('selected ids', selected_ids);
+		const selected_ids = [...Object.values(selected)].flat();
 		const data = {
 			votes: logo_ids.map((id) => ({ cid: id, vote: selected_ids.includes(id) }))
 		};
-		console.log(data);
 
 		const response = await fetch('https://poll.revanced.app/ballot', {
 			method: 'POST',
