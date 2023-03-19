@@ -299,7 +299,7 @@
 <Modal bind:modalOpen={clearModal}>
 	<svelte:fragment slot="description">
 		<div class="desc">
-			<h6>Deselect all logos?</h6>
+			<h6>Reset selection?</h6>
 		</div>
 	</svelte:fragment>
 	<div class="buttons">
