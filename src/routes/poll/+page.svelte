@@ -32,6 +32,7 @@
 	let submit = false;
 	let submitted = false;
 	let erred = false;
+	let botToken: string;
 	$: finalPage = currentPage >= logoPages;
 	$: min = currentPage * logoAmount;
 	$: max = min + logoAmount;
@@ -62,12 +63,8 @@
 	onMount(async () => {
 		setTimeout(async () => {
 			await goto('/poll/token-expired/');
-			localStorage.setItem('expired-token', token);
+			localStorage.setItem('expired-token', botToken);
 		}, 300000);
-
-		if (localStorage.getItem('expired-token') === token) {
-			await goto('/poll/token-expired/');
-		}
 
 		window.use_token = exchange_token;
 		window.submit_poll = submitBallot;
@@ -96,15 +93,20 @@
 		logos = logos;
 
 		if (location.hash !== '') {
+			botToken = location.hash.substring(1)
 			try {
 				await exchange_token(location.hash.substring(1));
 			} catch (err) {
-				alert(`Could not exchange the token: ${err}`);
+				console.log(`Could not exchange the token: ${err}`);
 			}
 		} else if (!dev) {
 			await goto('/poll/unauthorized/');
 		} else {
 			alert('Warning: no token!');
+		}
+		
+		if (localStorage.getItem('expired-token') === botToken) {
+			await goto('/poll/token-expired/');
 		}
 	});
 
