@@ -30,6 +30,7 @@
 	let max = logoAmount;
 	let token = '';
 	let submit = false;
+	let submitted = false;
 	$: finalPage = currentPage >= logoPages;
 	$: min = currentPage * logoAmount;
 	$: max = min + logoAmount;
@@ -151,9 +152,12 @@
 			},
 			body: JSON.stringify(data)
 		});
-		if (!response.ok) {
+
+		if (response.ok) submitted = true;
+		else {
 			throw Error(`Status Code ${response.status}: ${await response.text()}`);
 		}
+
 		const json = await response.json();
 
 		if (!json.cast) {
@@ -222,6 +226,8 @@
 			<svelte:fragment slot="title">
 				{#if submit}
 					Submitting
+				{:else if submitted}
+					Vote casted
 				{:else}
 					Confirm submission
 				{/if}
@@ -258,18 +264,19 @@
 				<Button
 					kind="text"
 					on:click={() => {
-						submit = true;
-					}}>Submit</Button
+						if (!submitted) submit = true;
+						else window.close();
+					}}>{submitted ? 'Close' : 'Submit'}</Button
 				>
 			</div>
 		</Modal>
 	</div>
 	<div class="buttons-container">
-		<Button on:click={previousPage} unclickable={currentPage <= 0}>Previous</Button>
+		<Button on:click={previousPage} unclickable={currentPage <= 0 || submitted}>Previous</Button>
 		<Button
 			kind="primary"
 			on:click={finalPage ? submitSelection : nextPage}
-			unclickable={finalPage && ui_selected_count < 1}
+			unclickable={finalPage && ui_selected_count < 1 || submitted}
 		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
