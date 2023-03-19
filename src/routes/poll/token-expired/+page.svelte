@@ -6,7 +6,7 @@
 
 <main>
 	<h1>Token expired</h1>
-	<h2>Your access token has been revoked for inactivity. Please regenerate it.</h2>
+	<h2>Your access token has been revoked. Please regenerate it.</h2>
 </main>
 
 <style>

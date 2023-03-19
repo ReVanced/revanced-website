@@ -45,6 +45,7 @@
 		});
 
 		if (!response.ok) {
+			if (response.status === 401) goto('/poll/token-expired/');
 			throw Error(`Status Code ${response.status}: ${await response.text()}`);
 		}
 
