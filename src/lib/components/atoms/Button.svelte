@@ -24,7 +24,7 @@
 
 	.unclickable {
 		cursor: not-allowed;
-		opacity: 0.4;
+		opacity: 0.25;
 	}
 
 	button,

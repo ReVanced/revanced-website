@@ -71,6 +71,7 @@
 				<!-- Mega Trolley -->
 				<svelte:self
 					bind:selected
+					class="variant"
 					variants={[variant]}
 					clicked={selected.includes(variant.id)}
 					hideDetails={true}
@@ -78,6 +79,14 @@
 			{/each}
 		</div>
 		<!-- <Variants /> -->
+		<div class="buttons">
+			<Button
+				kind="text"
+				on:click={() => {
+					modalOpen = false;
+				}}>Close</Button
+			>
+		</div>
 	</Modal>
 {/if}
 
@@ -156,6 +165,12 @@
 		gap: 1.5rem;
 	}
 
+	@media screen and (max-width: 768px) {
+		.variants {
+			grid-template-columns: repeat(1, minmax(0, 1fr));
+		}
+	}
+
 	.clicked {
 		background-color: var(--accent-low-opacity);
 	}
@@ -166,8 +181,17 @@
 	img {
 		border-radius: 8px;
 		height: 125px;
-		width: 125px;
+		max-width: 125px;
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
 	}
+
+	.buttons {
+		display: flex;
+		justify-content: flex-end;
+		gap: 1.5rem;
+		margin-top: 16px;
+	}
+
+
 </style>
