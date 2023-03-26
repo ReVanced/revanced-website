@@ -83,6 +83,17 @@
 			logos[j] = k;
 		}
 
+		function preloadImage(url: string) {
+			let img = new Image();
+			img.src = url;
+		}
+
+		logos.forEach((variants) => {
+			variants.forEach((variant) =>
+				preloadImage(variant.optimized_direct_url ?? variant.logo_direct_url)
+			);
+		});
+
 		// min is the lowest index of the logos on a page, max is the highest index
 		// max will be determined based on min and the amount of logos we want on each page (4)
 		min = currentPage * logoAmount;
@@ -93,7 +104,7 @@
 		logos = logos;
 
 		if (location.hash !== '') {
-			botToken = location.hash.substring(1)
+			botToken = location.hash.substring(1);
 			try {
 				await exchange_token(location.hash.substring(1));
 			} catch (err) {
@@ -104,38 +115,25 @@
 		} else {
 			alert('Warning: no token!');
 		}
-		
+
 		if (localStorage.getItem('expired-token') === botToken) {
 			await goto('/poll/token-expired/');
 		}
 	});
-
-	function preloadImage(url: string) {
-		var img = new Image();
-		img.src = url;
-	}
 
 	function previousPage() {
 		if (currentPage <= 0) return null;
 		currentPage--;
 		submit = false;
 		transitionDirection = -5;
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}
 
 	function nextPage() {
-		let nextPage = currentPage + 1;
 		if (currentPage >= logoPages || submit) return null;
 		currentPage++;
-
-		const nextMin = nextPage * logoAmount;
-		const nextMax = nextMin + logoAmount;
-
-		logos.slice(nextMin, nextMax).forEach((variants) => {
-			variants.forEach((variant) =>
-				preloadImage(variant.optimized_direct_url ?? variant.logo_direct_url)
-			);
-		});
 		transitionDirection = 5;
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}
 
 	function submitSelection() {
