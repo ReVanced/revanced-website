@@ -220,7 +220,7 @@
 			</div>
 		{/if}
 
-		<Modal bind:modalOpen={`su`bmitModal}>
+		<Modal bind:modalOpen={submitModal}>
 			<svelte:fragment slot="title">
 				{#if submitted}
 					Vote casted
