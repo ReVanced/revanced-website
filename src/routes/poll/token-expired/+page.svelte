@@ -6,7 +6,10 @@
 
 <main>
 	<h1>Token expired</h1>
-	<h2>Your access token has been revoked. Please regenerate it.</h2>
+	<h2>
+		Your session has expired. Please regenerate it by clicking on the "Vote" button from the poll
+		announcement again.
+	</h2>
 </main>
 
 <style>
