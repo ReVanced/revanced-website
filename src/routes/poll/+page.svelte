@@ -32,6 +32,7 @@
 	let submit = false;
 	let submitted = false;
 	let erred = false;
+	let botToken: string;
 	$: finalPage = currentPage >= logoPages;
 	$: min = currentPage * logoAmount;
 	$: max = min + logoAmount;
