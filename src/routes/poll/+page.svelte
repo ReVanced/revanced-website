@@ -64,7 +64,7 @@
 		setTimeout(async () => {
 			await goto('/poll/token-expired/');
 			localStorage.setItem('expired-token', botToken);
-		}, 300000);
+		}, 600000);
 
 		window.use_token = exchange_token;
 		window.submit_poll = submitBallot;
