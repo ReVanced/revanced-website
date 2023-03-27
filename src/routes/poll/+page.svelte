@@ -63,7 +63,6 @@
 	onMount(async () => {
 		setTimeout(async () => {
 			await goto('/poll/token-expired/');
-			localStorage.setItem('expired-token', botToken);
 		}, 600000);
 
 		window.use_token = exchange_token;
@@ -83,30 +82,6 @@
 			logos[j] = k;
 		}
 		
-		let content = ''
-		logos.forEach((variants) => {
-			variants.forEach((variant) =>
-				content += `url(${variant.optimized_direct_url ?? variant.logo_direct_url}) `
-			);
-		});
-		
-		// can't use inline styles with ::after so here's this hack for a hack
-		let style = `
-			.wrapper::after {
-				position: absolute; 
-				width: 0; 
-				height: 0; 
-				overflow: hidden; 
-				z-index: -1;
-				content: ${content}; 
-			}
-
-		`
-
-		let styleSheet = document.createElement("style")
-		styleSheet.innerText = style
-		document.head.appendChild(styleSheet)
-
 		// min is the lowest index of the logos on a page, max is the highest index
 		// max will be determined based on min and the amount of logos we want on each page (4)
 		min = currentPage * logoAmount;
@@ -127,10 +102,6 @@
 			await goto('/poll/unauthorized/');
 		} else {
 			alert('Warning: no token!');
-		}
-
-		if (localStorage.getItem('expired-token') === botToken) {
-			await goto('/poll/token-expired/');
 		}
 	});
 
