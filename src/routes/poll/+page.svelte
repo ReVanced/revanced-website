@@ -106,7 +106,7 @@
 	});
 
 	function previousPage() {
-		if (currentPage <= 0) return null;
+		if (currentPage <= 0 || submitted) return null;
 		currentPage--;
 		submit = false;
 		transitionDirection = -5;
@@ -114,7 +114,7 @@
 	}
 
 	function nextPage() {
-		if (currentPage >= logoPages || submit) return null;
+		if (currentPage >= logoPages || submitted) return null;
 		currentPage++;
 		transitionDirection = 5;
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -220,7 +220,7 @@
 			</div>
 		{/if}
 
-		<Modal bind:modalOpen={submitModal}>
+		<Modal bind:modalOpen={`su`bmitModal}>
 			<svelte:fragment slot="title">
 				{#if submitted}
 					Vote casted
