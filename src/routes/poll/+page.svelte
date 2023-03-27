@@ -32,7 +32,6 @@
 	let submit = false;
 	let submitted = false;
 	let erred = false;
-	let botToken: string;
 	$: finalPage = currentPage >= logoPages;
 	$: min = currentPage * logoAmount;
 	$: max = min + logoAmount;
@@ -222,10 +221,10 @@
 
 		<Modal bind:modalOpen={submitModal}>
 			<svelte:fragment slot="title">
-				{#if submit}
-					Submitting
-				{:else if submitted}
+				{#if submitted}
 					Vote casted
+				{:else if submit}
+					Submitting
 				{:else}
 					Confirm submission
 				{/if}
