@@ -4,10 +4,11 @@
 	export let maxWidth = false;
 	export let icon = '';
 	export let alt = '';
-	export let unclickable = false;
+	export let disabled = false;
+
 </script>
 
-<button class={type} class:unclickable on:click|stopPropagation style="width: {maxWidth ? '100%' : 'max-content'}">
+<button class={type} {disabled} on:click|stopPropagation style="width: {maxWidth ? '100%' : 'max-content'}">
 	{#if icon}
 		<img src={icon} {alt} />
 	{/if}
@@ -22,7 +23,7 @@
 		transition: all 0.2s var(--bezier-one);
 	}
 
-	.unclickable {
+	button:disabled {
 		cursor: not-allowed;
 		opacity: 0.25;
 	}

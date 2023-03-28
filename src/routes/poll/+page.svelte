@@ -106,7 +106,6 @@
 	});
 
 	function previousPage() {
-		if (currentPage <= 0 || submitted) return null;
 		currentPage--;
 		submit = false;
 		transitionDirection = -5;
@@ -114,14 +113,12 @@
 	}
 
 	function nextPage() {
-		if (currentPage >= logoPages || submitted) return null;
 		currentPage++;
 		transitionDirection = 5;
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}
 
 	function submitSelection() {
-		if (ui_selected_count < 1) return null;
 		submitModal = true;
 	}
 
@@ -276,11 +273,11 @@
 		</Modal>
 	</div>
 	<div class="buttons-container">
-		<Button on:click={previousPage} unclickable={currentPage <= 0 || submitted}>Previous</Button>
+		<Button on:click={previousPage} disabled={currentPage <= 0 || submitted}>Previous</Button>
 		<Button
 			kind="primary"
 			on:click={finalPage ? submitSelection : nextPage}
-			unclickable={(finalPage && ui_selected_count < 1) || submitted}
+			disabled={(finalPage && ui_selected_count < 1) || submitted}
 		>
 			{finalPage ? 'Submit' : 'Next'}
 		</Button>
@@ -415,6 +412,7 @@
 	.warning {
 		display: flex;
 		justify-content: center;
+		margin-bottom: 2rem;
 	}
 
 	@media screen and (max-width: 768px) {
