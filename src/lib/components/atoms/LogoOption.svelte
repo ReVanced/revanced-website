@@ -100,14 +100,14 @@
 			<div class="action-buttons">
 				<Button
 					on:click={prevVariant}
-					unclickable={i <= 0}
+					disabled={i <= 0}
 					icon={previous}
 					alt="previous"
 					kind="circle"
 				/>
 				<Button
 					on:click={nextVariant}
-					unclickable={i + 1 >= variants.length}
+					disabled={i + 1 >= variants.length}
 					icon={next}
 					alt="next"
 					kind="circle"
