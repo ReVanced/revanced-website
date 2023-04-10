@@ -81,7 +81,7 @@
 			logos[i] = logos[j];
 			logos[j] = k;
 		}
-		
+
 		// min is the lowest index of the logos on a page, max is the highest index
 		// max will be determined based on min and the amount of logos we want on each page (4)
 		min = currentPage * logoAmount;

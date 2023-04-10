@@ -7,7 +7,7 @@
 	import previous from '$lib/assets/icons/previous.svg';
 	import type { Logo } from '$lib/types';
 
-	export let selected: string[];
+	export let selected: string[] = [];
 	export let variants: Logo[];
 	export let clicked = false;
 	export let hideDetails = false;
@@ -189,6 +189,4 @@
 		gap: 1.5rem;
 		margin-top: 16px;
 	}
-
-
 </style>
