@@ -82,11 +82,18 @@
 		transition: all 0.3s var(--bezier-one);
 	}
 
+	a:hover {
+		text-decoration: underline;
+		text-decoration-style: wavy;
+		text-decoration-color: var(--grey-four);
+	}
+
 	a:hover::after {
 		transform: translateX(5px);
 	}
 	@media screen and (max-width: 768px) {
 		.text-container {
+			padding: 2rem 1.75rem;
 			margin-bottom: 2rem;
 		}
 	}

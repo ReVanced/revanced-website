@@ -85,8 +85,8 @@ h3 {
 
 h4 {
     color: var(--accent-color-two);
-    font-weight: 500;
-    font-size: 1.2rem;
+    font-weight: 400;
+    font-size: 1rem;
     letter-spacing: 0.02rem;
     line-height: 2rem;
 }
@@ -107,7 +107,7 @@ h6 {
 p {
     color: var(--grey-five);
     font-weight: 400;
-    font-size: 0.95rem;
+    font-size: 1rem;
     letter-spacing: 0.02rem;
     line-height: 1.75rem;
 }
@@ -142,9 +142,9 @@ p {
 
 hr {
     display: block;
-    height: 2px;
+    height: 1px;
     border: 0;
-    border-top: 2px solid var(--grey-three);
+    border-top: 1px solid var(--grey-three);
 }
 
 input {

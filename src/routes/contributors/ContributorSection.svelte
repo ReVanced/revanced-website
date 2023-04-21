@@ -21,7 +21,7 @@
 		on:click={() => (expanded = !expanded)}
 		on:keypress={() => (expanded = !expanded)}
 	>
-		<a href="https://github.com/{repo}" rel="noreferrer" target="_blank">
+		<a href="https://github.com/{repo}" rel="noreferrer" target="_blank" on:click|stopPropagation>
 			<h4>{repo_name}</h4>
 		</a>
 		<img
@@ -72,7 +72,6 @@
 	}
 
 	a {
-		transition: all 0.3s var(--bezier-one);
 		display: flex;
 		text-decoration: none;
 		width: max-content;

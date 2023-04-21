@@ -21,7 +21,7 @@
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	>
 		<div class="top">
-			<div class="title">
+			<div class="title" class:hasIcon={$$slots.icon}>
 				{#if fullscreen}
 					<button on:click={() => (modalOpen = !modalOpen)}>
 						<img src="../icons/back.svg" id="back" alt="back" />
@@ -69,7 +69,6 @@
 	.title {
 		position: sticky;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
 		top: 0;
@@ -77,6 +76,10 @@
 		width: 100%;
 		background-color: var(--grey-six);
 		margin-bottom: 8px;
+	}
+
+	.hasIcon {
+		flex-direction: column;
 	}
 
 	.modal {

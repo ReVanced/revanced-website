@@ -32,14 +32,14 @@
 				target="_blank"
 				rel="noreferrer"
 			>
-				<li class="patch-info">📦 {pkg.name} ·</li>
+				<li class="patch-info">📦 {pkg.name}</li>
 			</a>
 		{/each}
 
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
 			<li class="patch-info">
-				🎯 {patch.compatiblePackages[0].versions.slice(-1)} ·
+				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
 			</li>
 		{/if}
 
@@ -47,10 +47,8 @@
 			<li class="patch-info">🌎 Universal patch</li>
 		{/if}
 
-		<li class="patch-info">🧩 {patch.version}</li>
-
 		{#if hasPatchOptions}
-			<li class="patch-info">· ⚙️ Patch options</li>
+			<li class="patch-info">⚙️ Patch options</li>
 		{/if}
 	</ul>
 
@@ -84,6 +82,9 @@
 		font-size: 0.8rem;
 		font-weight: 500;
 		color: var(--grey-five);
+		padding: 0.25rem 0.5rem;
+		border: 1px solid var(--grey-three);
+		border-radius: 8px;
 	}
 
 	a {

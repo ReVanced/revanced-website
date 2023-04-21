@@ -1,6 +1,6 @@
 <script lang="ts">
 let _title: string = "";
-$: title = _title === "" ? "ReVanced" : `ReVanced | ${_title}`;
+$: title = _title === "" ? "ReVanced" : `ReVanced · ${_title}`;
 
 export { _title as title };
 
