@@ -2,6 +2,7 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
@@ -78,7 +79,7 @@
 				.replace(/-/g, '')
 				.toLowerCase();
 				// Update search URL params
-				window.history.pushState(null, '', `${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`) 
+				goto(`${$page.url.pathname}${searchTerm ? '?s=' + searchTerm : ''}`)
 		}, 500);
 	};
 </script>

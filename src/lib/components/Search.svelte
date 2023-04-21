@@ -1,14 +1,17 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+
 	export let title: string;
 	export let searchTerm: string | null;
 	export let searchTermFiltered: string | undefined;
-	import { fade } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
 
 	function clear() {
 		searchTerm = '';
 		searchTermFiltered = '';
-		window.history.pushState(null, '', window.location.href.split('?')[0]) 
+		goto($page.url.pathname)
 	}
 </script>
 
