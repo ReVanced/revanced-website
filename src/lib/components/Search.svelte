@@ -1,13 +1,14 @@
 <script lang="ts">
 	export let title: string;
 	export let searchTerm: string | null;
-	export let searchTermFiltered: string | null;
+	export let searchTermFiltered: string | undefined;
 	import { fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
 	function clear() {
-		searchTerm = null;
-		searchTermFiltered = null;
+		searchTerm = '';
+		searchTermFiltered = '';
+		window.history.pushState(null, '', window.location.href.split('?')[0]) 
 	}
 </script>
 
@@ -68,10 +69,9 @@
 		background-color: var(--grey-ten);
 	}
 
-
 	input::placeholder {
 		color: var(--grey-five);
-		font-size: 0.92rem;
+		font-size: 0.9rem;
 		font-weight: 500;
 		transition: all 0.2s var(--bezier-one);
 	}

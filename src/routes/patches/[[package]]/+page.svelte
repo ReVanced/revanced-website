@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
@@ -23,8 +24,12 @@
 	export let data: PageData;
 	$: ({ selectedPkg } = data);
 
-	let searchTerm: string;
-	let searchTermFiltered: string;
+	let searchTerm = $page.url.searchParams.get('s');
+	let searchTermFiltered = searchTerm
+		?.replace(/\./g, '')
+		.replace(/\s/g, '')
+		.replace(/-/g, '')
+		.toLowerCase();
 	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
 
@@ -72,6 +77,8 @@
 				.replace(/\s/g, '')
 				.replace(/-/g, '')
 				.toLowerCase();
+				// Update search URL params
+				window.history.pushState(null, '', `${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`) 
 		}, 500);
 	};
 </script>
@@ -112,14 +119,14 @@
 						on:click={() => (mobilePackages = !mobilePackages)}
 						on:keypress={() => (mobilePackages = !mobilePackages)}
 					>
-						<Package {selectedPkg} name="All packages" />
+						<Package {selectedPkg} name="All packages" bind:searchTerm/>
 					</span>
 					{#each data.packages as pkg}
 						<span
 							on:click={() => (mobilePackages = !mobilePackages)}
 							on:keypress={() => (mobilePackages = !mobilePackages)}
 						>
-							<Package {selectedPkg} name={pkg} />
+							<Package {selectedPkg} name={pkg} bind:searchTerm/>
 						</span>
 					{/each}
 				</div>
@@ -129,9 +136,9 @@
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
 				<span class="packages">
-					<Package {selectedPkg} name="All packages" />
+					<Package {selectedPkg} name="All packages" bind:searchTerm/>
 					{#each data.packages as pkg}
-						<Package {selectedPkg} name={pkg} />
+						<Package {selectedPkg} name={pkg} bind:searchTerm />
 					{/each}
 				</span>
 			</PackageMenu>

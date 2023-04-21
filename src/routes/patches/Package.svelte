@@ -3,6 +3,7 @@
 
 	export let selectedPkg: string | undefined;
 	export let name: string;
+	export let searchTerm: string | null;
 
 	function handleClick() {
 		// Assign the selected package. If it's already selected, deselect it.
@@ -10,6 +11,9 @@
 		if (selectedPkg !== name && name !== 'All packages') {
 			path += `/${name}`;
 		}
+		if (searchTerm) {
+			path += `?s=${searchTerm}`
+		};
 		goto(path);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
