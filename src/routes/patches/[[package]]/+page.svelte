@@ -2,7 +2,6 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 
 	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
@@ -25,6 +24,7 @@
 	export let data: PageData;
 	$: ({ selectedPkg } = data);
 
+	// Search whatever the s query is from the url
 	let searchTerm = $page.url.searchParams.get('s');
 	let searchTermFiltered = searchTerm
 		?.replace(/\./g, '')
@@ -79,7 +79,8 @@
 				.replace(/-/g, '')
 				.toLowerCase();
 				// Update search URL params
-				goto(`${$page.url.pathname}${searchTerm ? '?s=' + searchTerm : ''}`)
+				// must use history.pushState instead of goto(), as goto() unselects the search bar
+				window.history.pushState(null, '', `${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`) 
 		}, 500);
 	};
 </script>
