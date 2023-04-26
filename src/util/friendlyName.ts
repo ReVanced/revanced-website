@@ -10,5 +10,6 @@ export function friendlyName(text: string): string {
 		.replace(/sponsorblock/g, 'SponsorBlock')
 		.replace(/tiktok/g, 'TikTok')
 		.replace(/vr/g, 'VR')
+		.replace(/url/g, 'URL')
 		.replace(/(?:^|\s)\S/g, (x: string) => x.toUpperCase());
 }

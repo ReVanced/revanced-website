@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+
 	import { queries } from '$data/api';
 	import { friendlyName } from '$util/friendlyName';
 
@@ -8,7 +11,8 @@
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
-<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- squiggly divider line -->
+<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
 		<g clip-path="url(#clip0_2426_11367)">
 			<path
@@ -19,7 +23,7 @@
 	</pattern>
 	<rect width="100%" height="100%" fill="url(#a)" />
 </svg>
-<footer>
+<footer in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="footer-top">
 		<section class="main-content">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
@@ -35,15 +39,15 @@
 		</section>
 
 		<section class="links-container">
-			<div class="link-column">
+			<ul>
 				<li>Pages</li>
 				<li><a href="/">Home</a></li>
 				<li><a href="/download">Download</a></li>
 				<li><a href="/docs">Documentation</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
-			</div>
-			<div class="link-column">
+			</ul>
+			<ul>
 				<li>Repositories</li>
 				<Query {query} let:data>
 					{#each data as { name }}
@@ -54,8 +58,8 @@
 						</li>
 					{/each}
 				</Query>
-			</div>
-			<div class="link-column">
+			</ul>
+			<ul>
 				<!-- to replace -->
 				<li>Socials</li>
 				<li><a href="https://github.com/revanced" target="_blank" rel="noreferrer">GitHub</a></li>
@@ -70,7 +74,7 @@
 				<li>
 					<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a>
 				</li>
-			</div>
+			</ul>
 		</section>
 	</div>
 	<div class="footer-bottom">
@@ -162,7 +166,7 @@
 		margin-top: 1rem;
 	}
 
-	.link-column {
+	ul {
 		display: flex;
 		gap: 1rem;
 		flex-direction: column;
