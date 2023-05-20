@@ -125,11 +125,12 @@
 				</Svg>
 			</button>
 		</div>
-		<div class="buttons">
-			<Button kind="tertiary" on:click={clear_and_reload}>Clear cache</Button>
-			<Button kind="tertiary" on:click={save}>Save</Button>
-		</div>
 	</div>
+
+	<svelte:fragment slot="buttons">
+		<Button type="text" on:click={clear_and_reload}>Clear cache</Button>
+		<Button type="text" on:click={save}>Save</Button>
+	</svelte:fragment>
 </Modal>
 
 <style>
@@ -157,22 +158,17 @@
 		position: relative;
 	}
 
-	.buttons {
-		display: flex;
-		justify-content: flex-end;
-		gap: 2rem;
-		margin-top: 2rem;
-	}
-
 	input {
 		width: 100%;
+		position: relative;
 		padding-right: 3rem;
+		margin-top: 1rem;
 	}
 
 	#button-reset {
 		position: absolute;
 		right: 12px;
-		top: 14px;
+		top: 30px;
 	}
 
 	nav {

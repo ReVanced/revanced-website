@@ -42,9 +42,16 @@
 					<slot name="description" />
 				</p>
 			{/if}
-		</div>
 
-		<div class="slot"><slot /></div>
+			<div class="slot"><slot /></div>
+
+			{#if $$slots.buttons}
+				<div class="buttons">
+					<slot name="buttons" />
+				</div>
+			{/if}
+		</div>
+		
 	</div>
 {/if}
 
@@ -63,7 +70,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: 20px;
+		margin-bottom: 0.75rem;
 	}
 
 	.title {
@@ -78,8 +85,17 @@
 		margin-bottom: 8px;
 	}
 
+	.buttons {
+		display: flex;
+		gap: 2rem;
+		margin-top: 1rem;
+		justify-content: flex-end;
+		width: 100%;
+	}
+
+
 	.hasIcon {
-		flex-direction: column;
+		flex-direction: column;	
 	}
 
 	.modal {
@@ -131,9 +147,12 @@
 		display: flex;
 		flex-direction: column;
 		align-content: center;
+		width: 100%;
 	}
 
 	.modal::-webkit-scrollbar {
 		display: none;
 	}
 </style>
+
+

@@ -12,22 +12,79 @@
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer.svelte';
 	import Picture from '$lib/components/Picture.svelte';
+	import Dialogue from '$lib/components/Dialogue.svelte';
+	import { onMount } from 'svelte';
 
 	const query = createQuery(['manager'], queries.manager);
+
+	let warning: string;
+	let warningDialogue = false;
+
+	let userAgent: string;
+	let isAndroid: boolean;
+	let androidVersionMatch: RegExpExecArray | null;
+	let androidVersion: number;
+
+	onMount(() => {
+		userAgent = navigator.userAgent;
+		androidVersionMatch = /Android\s([\d.]+)/i.exec(userAgent);
+		androidVersion = androidVersionMatch ? parseInt(androidVersionMatch[1]) : 0;
+		isAndroid = !!androidVersion;
+	});
+
+	function handleClick() {
+		if (!isAndroid) {
+			warning = 'Your device is not running Android.';
+			warningDialogue = true;
+		} else if (androidVersion < 8) {
+			warning = `Your device is running ${androidVersion}. ReVanced only supports Android versions 8 and above.`;
+			warningDialogue = true;
+		}
+	}
 </script>
 
 <Meta title="Download" />
+
+<Dialogue bind:modalOpen={warningDialogue}>
+	<svelte:fragment slot="title">Warning</svelte:fragment>
+	<svelte:fragment slot="description">{warning} Do you still want to download?</svelte:fragment>
+	<svelte:fragment slot="buttons">
+		<Query {query} let:data>
+			<Button
+				type="text"
+				href={data.assets[0].url}
+				download
+				on:click={() => (warningDialogue = false)}>Okay</Button
+			>
+		</Query>
+		<Button type="text" on:click={() => (warningDialogue = false)}>Cancel</Button>
+	</svelte:fragment>
+</Dialogue>
 
 <div class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
 		<Query {query} let:data>
-			<Button kind="primary" icon="download" href={data.assets[0].url} download>
-				{data.version}
-			</Button>
+			{#if !isAndroid || androidVersion < 8}
+				<Button on:click={handleClick} type="filled" icon="download">
+					{data.version}
+				</Button>
+			{:else}
+				<Button
+					on:click={handleClick}
+					type="filled"
+					icon="download"
+					href={data.assets[0].url}
+					download
+				>
+					{data.version}
+				</Button>
+			{/if}
 		</Query>
-		<Button href="https://github.com/revanced/revanced-manager" target="_blank">View Source</Button>
+		<Button type="tonal" href="https://github.com/revanced/revanced-manager" target="_blank">
+			View Source
+		</Button>
 	</div>
 	<div class="screenshot">
 		<Picture data={manager_screenshot} alt="Manager Screenshot" />

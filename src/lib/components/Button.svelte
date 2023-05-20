@@ -1,6 +1,5 @@
-<script>
-	export let kind = 'secondary';
-	$: type = 'button-' + kind;
+<script lang="ts">
+	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
 	export let icon = '';
 	export let href = '';
 	export let target = '';
@@ -8,22 +7,14 @@
 
 <button on:click>
 	{#if href}
-		<a
-			{href}
-			{target}
-			{...$$restProps}
-			class={type}
-		>
+		<a {href} {target} {...$$restProps} class={`button-${type}`}>
 			{#if icon}
 				<img src="../icons/{icon}.svg" alt={icon} />
 			{/if}
 			<slot />
 		</a>
 	{:else}
-		<div
-			{...$$restProps}
-			class={type}
-		>
+		<div {...$$restProps} class={`button-${type}`}>
 			{#if icon}
 				<img src="../icons/{icon}.svg" alt={icon} />
 			{/if}
@@ -58,19 +49,20 @@
 		user-select: none;
 	}
 
-	.button-primary {
+	.button-filled {
 		background-color: var(--accent-color);
 		color: var(--grey-four);
 	}
-	.button-secondary {
+	.button-tonal {
 		background-color: var(--grey-two);
 	}
 
-	.button-primary, .button-secondary {
+	.button-filled,
+	.button-tonal {
 		padding: 16px 24px;
 	}
 
-	.button-tertiary {
+	.button-text {
 		background-color: transparent;
 		color: var(--accent-color);
 		font-weight: 500;
