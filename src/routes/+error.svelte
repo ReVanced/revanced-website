@@ -14,7 +14,7 @@
 	{#if status == 404}
 		<p>This page received a cease and desist letter from a multi-billion dollar tech company.</p>
 		<br />
-		<Button kind="primary">Return Home</Button>	
+		<Button kind="primary" href="/">Return Home</Button>	
 	{:else}
 		<p>
 			{$page.error?.message}
