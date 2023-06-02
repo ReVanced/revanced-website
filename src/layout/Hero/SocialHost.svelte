@@ -4,7 +4,7 @@
 
 <div class="social-host">
 	<SocialButton src="github" href="https://revanced.app/github" />
-	<SocialButton src="discord" href="http://revanced.app/discord" />
+	<SocialButton src="discord" href="https://revanced.app/discord" />
 	<SocialButton src="reddit" href="https://revanced.app/reddit" />
 	<SocialButton src="telegram" href="https://revanced.app/telegram" />
 </div>
