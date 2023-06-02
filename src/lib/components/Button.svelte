@@ -69,7 +69,8 @@
 		letter-spacing: 0.01rem;
 	}
 
-	div:hover {
+	div:hover,
+	a:hover {
 		filter: brightness(85%);
 	}
 
