@@ -9,8 +9,8 @@
 			Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
 		</p>
 		<div class="hero-buttons">
-			<Button icon="download" kind="primary" href="download">Download Manager</Button>
-			<Button icon="docs" href="patches">View patches</Button>
+			<Button icon="download" type="filled" href="download">Download Manager</Button>
+			<Button icon="docs" type="tonal" href="patches">View patches</Button>
 		</div>
 	</div>
 </section>
