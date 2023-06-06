@@ -60,6 +60,12 @@
 		<span class="menu-btn__burger" />
 	</button>
 	<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
+	<div id="mobile-socials">
+		<SocialButton src="github" href="https://revanced.app/github" />
+		<SocialButton src="discord" href="https://revanced.app/discord" />
+		<SocialButton src="reddit" href="https://revanced.app/reddit" />
+		<SocialButton src="telegram" href="https://revanced.app/telegram" />
+	</div>
 
 	{#key menuOpen}
 		<div
@@ -238,6 +244,16 @@
 		.nav-wrapper {
 			align-items: center;
 		}
+		#mobile-socials {
+			display: none;
+		}
+	}
+
+	#mobile-socials {
+		justify-content: flex-end;
+		display: flex;
+		width: 100%;
+		gap: 1rem;
 	}
 
 	@media (max-width: 768px) {
