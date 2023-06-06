@@ -5,6 +5,7 @@
 	import { expoOut } from 'svelte/easing';
 
 	import Navigation from './NavButton.svelte';
+	import SocialButton from './SocialButton.svelte';
 	import Svg from '$lib/components/Svg.svelte';
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -79,6 +80,13 @@
 				</div>
 			</div>
 			<div id="secondary-navigation">
+				<SocialButton src="github" href="https://revanced.app/github" />
+				<SocialButton src="discord" href="https://revanced.app/discord" />
+				<SocialButton src="reddit" href="https://revanced.app/reddit" />
+				<SocialButton src="telegram" href="https://revanced.app/telegram" />
+
+				<div style="height: 1.25rem; border-right: 1px solid var(--grey-three);" />
+
 				<button on:click={() => (modalOpen = !modalOpen)}>
 					<Svg viewBoxHeight={24} svgHeight={20}>
 						<path
@@ -189,7 +197,7 @@
 	#secondary-navigation {
 		align-items: center;
 		display: flex;
-		gap: 2rem;
+		gap: 1rem;
 	}
 
 	a {

@@ -1,7 +1,6 @@
 <script>
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
-	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Meta from '$lib/components/Meta.svelte';
 </script>
@@ -15,7 +14,6 @@
 			<div id="heroimg"><HeroImage /></div>
 		</div>
 	</div>
-	<SocialHost />
 </main>
 <Wave />
 
