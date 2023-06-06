@@ -137,9 +137,14 @@
 	path {
 		fill: var(--grey-five);
 	}
-
+	button path {
+		transform-origin: center;
+		transition: fill 0.2s ease, rotate 0.2s ease;
+	}
 	button:hover path {
 		fill: var(--accent-color-two);
+		fill: var(--accent-color);
+		rotate: 90deg;
 	}
 
 	button {
