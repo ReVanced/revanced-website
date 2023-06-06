@@ -80,12 +80,12 @@ h2 {
 
 h3 {
 	font-size: 1.25rem;
-	color: var(--accent-color-two);
+	color: var(--accent-color);
 	font-weight: 600;
 }
 
 h4 {
-	color: var(--accent-color-two);
+	color: var(--accent-color);
 	font-weight: 400;
 	font-size: 1rem;
 	letter-spacing: 0.02rem;
@@ -153,9 +153,9 @@ input {
 	border-radius: 12px;
 	border: 1px solid var(--grey-three);
 	background-color: transparent;
-	color: var(--accent-color-two);
+	color: var(--accent-color);
 }
 
 input:focus {
-	outline: 1px solid var(--accent-color);
+	outline: 1px solid var(--grey-five);
 }
