@@ -8,7 +8,7 @@
 
 <div class="desktop-only">
 	<span>{title}</span>
-	<ul transition:slide|local={{ easing: quintOut, duration: 500 }}>
+	<ul>
 		<slot />
 	</ul>
 </div>
