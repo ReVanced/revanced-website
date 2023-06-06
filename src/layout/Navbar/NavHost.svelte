@@ -60,12 +60,12 @@
 		<span class="menu-btn__burger" />
 	</button>
 	<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
-	<div id="mobile-socials">
+	<!-- <div id="mobile-socials">
 		<SocialButton src="github" href="https://github.com/revanced" />
 		<SocialButton src="discord" href="https://revanced.app/discord" />
 		<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
 		<SocialButton src="telegram" href="https://t.me/app_revanced" />
-	</div>
+	</div> -->
 
 	{#key menuOpen}
 		<div

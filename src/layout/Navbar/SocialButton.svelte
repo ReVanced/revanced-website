@@ -1,12 +1,13 @@
 <script>
 	export let src = 'github';
 	export let href = '#';
+	export let size = 20;
 </script>
 
 <a {href} rel="noreferrer" target="_blank">
 	<svg
-		height="20"
-		width="20"
+		height={size}
+		width={size}
 		xmlns="http://www.w3.org/2000/svg"
 		preserveAspectRatio="none"
 		viewBox="0 0 407 407"
