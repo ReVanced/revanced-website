@@ -9,6 +9,7 @@
 	import { derived } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 
 	import { QueryClient } from '@tanstack/query-core';
 	import { persistQueryClient } from '@tanstack/query-persist-client-core';
@@ -54,6 +55,19 @@
 		false
 	);
 </script>
+
+<!-- telemetry good -->
+<svelte:head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLH0N9VQL5"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+		gtag('config', 'G-PLH0N9VQL5');
+	</script>
+</svelte:head>
 
 <QueryClientProvider client={queryClient}>
 	<NavHost />
