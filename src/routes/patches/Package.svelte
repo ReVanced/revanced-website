@@ -1,20 +1,25 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	export let selectedPkg: string | undefined;
+	export let selectedPkg: string | null;
 	export let name: string;
 	export let searchTerm: string | null;
 
 	function handleClick() {
 		// Assign the selected package. If it's already selected, deselect it.
-		let path = '/patches';
+		const url = new URL(window.location.href);
+		const params = new URLSearchParams();
+		url.pathname = '/patches';
+
 		if (selectedPkg !== name && name !== 'All packages') {
-			path += `/${name}`;
+			params.set('pkg', name);
 		}
 		if (searchTerm) {
-			path += `?s=${searchTerm}`
-		};
-		goto(path);
+			params.set('s', searchTerm);
+		}
+		url.search = params.toString();
+		goto(url.pathname + url.search);
+
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 </script>

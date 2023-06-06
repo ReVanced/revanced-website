@@ -3,16 +3,15 @@
 	import { quintOut } from 'svelte/easing';
 	import { page } from '$app/stores';
 
-	import type { PageData } from './$types';
 	import type { Patch } from '$lib/types';
 
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
-	import PackageMenu from '../PackageMenu.svelte';
-	import Package from '../Package.svelte';
-	import PatchItem from '../PatchItem.svelte';
+	import PackageMenu from './PackageMenu.svelte';
+	import Package from './Package.svelte';
+	import PatchItem from './PatchItem.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
@@ -21,16 +20,14 @@
 
 	const query = createQuery(['patches'], queries.patches);
 
-	export let data: PageData;
-	$: ({ selectedPkg } = data);
-
-	// Search whatever the s query is from the url
+	$: selectedPkg = $page.url.searchParams.get('pkg');
 	let searchTerm = $page.url.searchParams.get('s');
 	let searchTermFiltered = searchTerm
 		?.replace(/\./g, '')
 		.replace(/\s/g, '')
 		.replace(/-/g, '')
 		.toLowerCase();
+
 	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
 
@@ -80,11 +77,19 @@
 				.toLowerCase();
 			// Update search URL params
 			// must use history.pushState instead of goto(), as goto() unselects the search bar
-			window.history.pushState(
-				null,
-				'',
-				`${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`
-			);
+			const url = new URL(window.location.href);
+			url.pathname = '/patches';
+
+			const params = new URLSearchParams();
+			if (selectedPkg) {
+				params.set('pkg', selectedPkg);
+			}
+			if (searchTerm) {
+				params.set('s', searchTerm);
+			}
+
+			url.search = params.toString();
+			window.history.pushState(null, '', url.toString());
 		}, 500);
 	};
 </script>
