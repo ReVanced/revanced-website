@@ -166,6 +166,10 @@
 		padding: 0.5rem 0;
 	}
 
+	li:first-of-type {
+		padding-top: 0;
+	}
+
 	li:hover a {
 		text-decoration: underline;
 		text-decoration-style: wavy;
