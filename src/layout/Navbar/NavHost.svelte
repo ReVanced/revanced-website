@@ -61,10 +61,10 @@
 	</button>
 	<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
 	<div id="mobile-socials">
-		<SocialButton src="github" href="https://revanced.app/github" />
+		<SocialButton src="github" href="https://github.com/revanced" />
 		<SocialButton src="discord" href="https://revanced.app/discord" />
-		<SocialButton src="reddit" href="https://revanced.app/reddit" />
-		<SocialButton src="telegram" href="https://revanced.app/telegram" />
+		<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
+		<SocialButton src="telegram" href="https://t.me/app_revanced" />
 	</div>
 
 	{#key menuOpen}
@@ -86,10 +86,10 @@
 				</div>
 			</div>
 			<div id="secondary-navigation">
-				<SocialButton src="github" href="https://revanced.app/github" />
+				<SocialButton src="github" href="https://github.com/revanced" />
 				<SocialButton src="discord" href="https://revanced.app/discord" />
-				<SocialButton src="reddit" href="https://revanced.app/reddit" />
-				<SocialButton src="telegram" href="https://revanced.app/telegram" />
+				<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
+				<SocialButton src="telegram" href="https://t.me/app_revanced" />
 
 				<div style="height: 1.25rem; border-right: 1px solid var(--grey-three);" />
 
