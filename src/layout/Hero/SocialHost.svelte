@@ -2,11 +2,12 @@
 	import SocialButton from './SocialButton.svelte';
 </script>
 
+<!-- TODO: Use API social links -->
 <div class="social-host">
-	<SocialButton src="github" href="https://revanced.app/github" />
+	<SocialButton src="github" href="https://github.com/revanced" />
 	<SocialButton src="discord" href="https://revanced.app/discord" />
-	<SocialButton src="reddit" href="https://revanced.app/reddit" />
-	<SocialButton src="telegram" href="https://revanced.app/telegram" />
+	<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
+	<SocialButton src="telegram" href="https://t.me/app_revanced" />
 </div>
 
 <style>
