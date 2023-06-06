@@ -58,15 +58,6 @@
 
 <!-- telemetry good -->
 <svelte:head>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLH0N9VQL5"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() {
-			dataLayer.push(arguments);
-		}
-		gtag('js', new Date());
-		gtag('config', 'G-PLH0N9VQL5');
-	</script>
 	<script>
 		(function (w, d, s, l, i) {
 			w[l] = w[l] || [];
@@ -78,6 +69,22 @@
 			j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
 			f.parentNode.insertBefore(j, f);
 		})(window, document, 'script', 'dataLayer', 'GTM-MQ6K849');
+	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLH0N9VQL5"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+		gtag('config', 'G-PLH0N9VQL5');
+	</script>
+	<script type="text/javascript">
+	    (function(c,l,a,r,i,t,y){
+		c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+		t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+		y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+	    })(window, document, "clarity", "script", "hfh8dhfgus");
 	</script>
 </svelte:head>
 
