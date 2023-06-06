@@ -209,6 +209,21 @@
 	h3 {
 		display: none;
 		color: white;
+		width: 0rem;
+		overflow: hidden;
+		animation: woopin 0.5s 0.5s ease 1 forwards;
+		margin-left: -0.75rem;
+	}
+
+	@keyframes woopin {
+		0% {
+			width: 0rem;
+			margin-left: -0.75rem;
+		}
+		100% {
+			width: 6rem;
+			margin-left: 0rem;
+		}
 	}
 
 	#secondary-navigation {
