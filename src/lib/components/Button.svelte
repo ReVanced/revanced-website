@@ -50,13 +50,7 @@
 	}
 
 	.button-filled {
-		background-image: linear-gradient(
-			to bottom,
-			var(--accent-color-three),
-			var(--accent-color-two),
-			var(--accent-color)
-		);
-		font-weight: bold;
+		background-color: var(--accent-color);
 		color: var(--bg-color);
 	}
 	.button-tonal {
