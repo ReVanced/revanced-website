@@ -40,7 +40,15 @@
 	}
 
 	span {
-		color: var(--accent-color);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-image: linear-gradient(
+			to bottom,
+			var(--accent-color-three) 33%,
+			var(--accent-color-two),
+			var(--accent-color)
+		);
 	}
 
 	@media (max-width: 768px) {

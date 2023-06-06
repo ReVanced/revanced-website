@@ -50,8 +50,14 @@
 	}
 
 	.button-filled {
-		background-color: var(--accent-color);
-		color: var(--grey-four);
+		background-image: linear-gradient(
+			to bottom,
+			var(--accent-color-three),
+			var(--accent-color-two),
+			var(--accent-color)
+		);
+		font-weight: bold;
+		color: var(--bg-color);
 	}
 	.button-tonal {
 		background-color: var(--grey-two);
