@@ -23,10 +23,11 @@
 	.wrap {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 7rem;
 	}
 	.wrappezoid {
-		height: calc(100vh - 120px);
+		height: 100%;
+		padding-top: 2.5rem;
+		min-height: calc(100vh/10*7);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
@@ -48,7 +49,14 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: calc(65vh);
+			min-height: calc(65vh);
+		}
+	}
+
+	@media (max-height: 768px) {
+		.wrappezoid {
+			padding-top: 2rem;
+			padding-bottom: 8rem;
 		}
 	}
 </style>
