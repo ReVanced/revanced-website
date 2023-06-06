@@ -7,12 +7,20 @@
 
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
+	import FooterSection from './FooterSection.svelte';
 
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
 <!-- squiggly divider line -->
-<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+<svg
+	aria-hidden="true"
+	width="100%"
+	height="8"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	in:fly={{ y: 10, easing: quintOut, duration: 750 }}
+>
 	<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
 		<g clip-path="url(#clip0_2426_11367)">
 			<path
@@ -39,16 +47,14 @@
 		</section>
 
 		<section class="links-container">
-			<ul>
-				<li>Pages</li>
+			<FooterSection title="Pages">
 				<li><a href="/">Home</a></li>
 				<li><a href="/download">Download</a></li>
 				<li><a href="/docs">Documentation</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
-			</ul>
-			<ul>
-				<li>Repositories</li>
+			</FooterSection>
+			<FooterSection title="Repositories">
 				<Query {query} let:data>
 					{#each data as { name }}
 						<li>
@@ -58,23 +64,18 @@
 						</li>
 					{/each}
 				</Query>
-			</ul>
-			<ul>
-				<!-- to replace -->
-				<li>Socials</li>
-				<li><a href="https://github.com/revanced" target="_blank" rel="noreferrer">GitHub</a></li>
-				<li><a href="https://revanced.app/discord" target="_blank" rel="noreferrer">Discord</a></li>
-				<li>
-					<a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a>
-				</li>
-				<li><a href="https://t.me/app_revanced" target="_blank" rel="noreferrer">Telegram</a></li>
-				<li>
-					<a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a>
-				</li>
-				<li>
-					<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a>
-				</li>
-			</ul>
+			</FooterSection>
+			<FooterSection title="Socials">
+				<ul>
+					<!-- to replace -->
+					<li><a href="https://github.com/revanced" target="_blank" rel="noreferrer">GitHub</a></li>
+					<li><a href="https://revanced.app/discord" target="_blank" rel="noreferrer">Discord</a></li>
+					<li><a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a></li>
+					<li><a href="https://t.me/app_revanced" target="_blank" rel="noreferrer">Telegram</a></li>
+					<li><a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a></li>
+					<li><a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a></li>
+				</ul>
+			</FooterSection>
 		</section>
 	</div>
 	<div class="footer-bottom">
@@ -181,8 +182,17 @@
 
 		.links-container {
 			display: grid;
-			gap: 3rem;
+			gap: 2rem;
 			grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 		}
 	}
+
+	@media screen and (max-width: 768px) {
+		.links-container {
+			display: flex;
+			flex-direction: column;
+			gap: initial;
+		}
+	}
+
 </style>
