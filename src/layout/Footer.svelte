@@ -158,13 +158,21 @@
 
 	a {
 		text-decoration: none;
+		transition: all 0.2s ease;
+		text-underline-offset: 0rem;
 	}
 
-	a:hover {
+	li {
+		padding: 0.5rem 0;
+	}
+
+	li:hover a {
 		text-decoration: underline;
 		text-decoration-style: wavy;
+		text-underline-offset: 0.25rem;
 		text-decoration-color: var(--accent-color-two);
-		color: var(--white);
+		translate: 0.25rem 0;
+		color: var(--accent-color-two);
 	}
 
 	.links-container {
@@ -175,7 +183,6 @@
 
 	ul {
 		display: flex;
-		gap: 1rem;
 		flex-direction: column;
 		width: max-content;
 	}
