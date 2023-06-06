@@ -1,34 +1,37 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+	import type { LayoutData } from './$types';
 
-  import DocsNavTree from '$lib/components/molecules/DocsNavTree.svelte';
+	import DocsNavTree from './DocsNavTree.svelte';
+	import Footer from '$layout/Footer.svelte';
 
-  import { fly } from 'svelte/transition';
-  import { quintOut } from 'svelte/easing';
-
-  export let data: PageData;
+	export let data: LayoutData;
 </script>
 
-<section id="doc-section-main" in:fly={{ y: 10, easing: quintOut, duration: 700 }}>
+<section id="doc-section-main">
 	<div class="menu">
-    <DocsNavTree tree={data.tree} />
+		<DocsNavTree tree={data.tree} />
 	</div>
-  <slot></slot>
+	<slot />
 </section>
+<Footer />
 
 <style lang="scss">
-.menu {
-	padding: 90px 15px 0px 15px;
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-}
+	#doc-section-main {
+		margin-inline: auto;
+		width: min(90%, 90rem);
+		margin-top: 8rem;
+		margin-bottom: 5rem;
+	}
 
-#doc-section-main {
-	display: grid;
-  grid-template-columns: 300px 3fr;
+	.menu {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
 
-	height: 100vh;
-	width: 100%;
-}
+	#doc-section-main {
+		display: grid;
+		grid-template-columns: 320px 3fr;
+		gap: 3rem;
+	}
 </style>

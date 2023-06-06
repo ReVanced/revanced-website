@@ -2,56 +2,61 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import ContributorHost from '$lib/components/molecules/ContributorHost.svelte';
-	import Footer from '$lib/components/molecules/Footer.svelte';
+	import ContributorHost from './ContributorSection.svelte';
+	import Footer from '$layout/Footer.svelte';
+	import Meta from '$lib/components/Meta.svelte';
+	import Query from '$lib/components/Query.svelte';
 
-  // Handled by `+layout.ts`.
-  import { contributors } from '../../data/api';
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
 
-  import type { PageData } from './$types';
-  export let data: PageData;
+	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
-<svelte:head>
-	<title>ReVanced | Contributors</title>
-	<meta content="ReVanced | Contributors" name="og:title" />
-	<meta content="ReVanced | Contributors" name="twitter:title" />
-</svelte:head>
+<Meta title="Contributors" />
 
 <main>
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-			<h1>Made possible by the community.</h1>
-			<h2>Want to show up here? <span><a href="https://github.com/revanced" target="_blank" rel="noreferrer">Become a contributor</a></span></h2>
+			<h2>Made possible by the community.</h2>
+			<h4>
+				Want to show up here? <span
+					><a href="https://github.com/revanced" target="_blank" rel="noreferrer"
+						>Become a contributor</a
+					></span
+				>
+			</h4>
 		</div>
-		<div class="contrib-grid">
-			{#each $contributors.repositories as { contributors: contribs, name }}
-				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorHost {contribs} repo={name} />
-				</div>
-			{/each}
+		<div class="repos">
+			<Query {query} let:data>
+				{#each data as { contributors, name: repo }}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<ContributorHost {contributors} {repo} />
+					</div>
+				{/each}
+			</Query>
 		</div>
 	</div>
 </main>
 
-<Footer {...data} />
+<Footer />
 
 <style>
-	.contrib-grid {
+	.repos {
 		display: flex;
 		flex-direction: column;
-		gap: 3rem;
-		margin-bottom: 3rem;
+		gap: 2rem;
+		margin-bottom: 4rem;
 	}
 
-	h1 {
-		font-size: 2.25rem;
-		font-weight: 600;
+	h2 {
 		text-align: center;
 		color: var(--grey-four);
+		margin-bottom: 0.3rem;
 	}
-	h2 {
-		font-size: 1rem;
+
+	h4 {
+		text-align: center;
 		color: var(--grey-four);
 	}
 
@@ -59,11 +64,10 @@
 		display: flex;
 		align-items: center;
 		flex-direction: column;
-		gap: 0.5rem;
 		margin-bottom: 2rem;
 		background-color: var(--accent-color);
-		padding: 2rem;
-		border-radius: 8px;
+		padding: 2.5rem 1.75rem;
+		border-radius: 20px;
 	}
 
 	a {
@@ -73,12 +77,24 @@
 
 	a::after {
 		padding-left: 5px;
-		content: '->';
+		content: '→';
 		position: absolute;
 		transition: all 0.3s var(--bezier-one);
 	}
 
+	a:hover {
+		text-decoration: underline;
+		text-decoration-style: wavy;
+		text-decoration-color: var(--grey-four);
+	}
+
 	a:hover::after {
 		transform: translateX(5px);
+	}
+	@media screen and (max-width: 768px) {
+		.text-container {
+			padding: 2rem 1.75rem;
+			margin-bottom: 2rem;
+		}
 	}
 </style>

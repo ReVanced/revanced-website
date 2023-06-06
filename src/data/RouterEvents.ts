@@ -20,7 +20,7 @@ function makeStore(): Readable<RouterEvent> {
     });
   } else {
     // On client.
-    let current = new URL(location);
+    let current = new URL(location.href);
 
     // Return store that responds to navigation events.
     // The `navigating` store immediately "pushes" `null`.

@@ -1,0 +1,95 @@
+#markup-content {
+    /* Defaults for text */
+    color: var(--accent-color-two);
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    letter-spacing: 0.03rem !important;
+
+
+
+    a {
+        text-decoration: none;
+        color: var(--accent-color);
+        border-bottom: 1.5px solid var(--accent-low-opacity);
+        padding: 0px ;
+    }
+
+    
+
+    code {
+        background-color: var(--grey-one);
+        border-radius: 8px;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+        font-family: var(--mono-font);
+        font-weight: 300;
+        flex-wrap: wrap;
+        line-height: 1.25rem;
+    }
+
+
+
+    pre code {
+        font-size: 0.75rem;
+        background-color: var(--grey-six);
+        white-space: pre;
+        display: block;
+        flex-wrap: wrap;
+        padding: 0.5rem 1rem;
+        margin: 1rem 0;
+    }
+
+    h5 {
+        margin-bottom: 0.5rem;
+    }
+
+    h5 {
+        color: var(--accent-color);
+    }
+
+    h1, h2, h3, h4, h5 {
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+        font-weight: 600;
+        letter-spacing: -0.02rem;
+        color: var(--accent-color-two);
+        border-bottom: 1px solid var(--grey-three);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        letter-spacing: -0.02rem;
+        font-weight: 600;
+        color: var(--accent-color-two);
+        border-bottom: 1px solid var(--grey-three);
+        padding-bottom: 1rem;
+        margin-top: 2rem;
+    }
+
+    h3 {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    li {
+        margin-left: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Markup processors output this for bold text, but css spec is goofy aah */
+    strong {
+        font-weight: bold;
+        letter-spacing: 0.01rem;
+
+    }
+
+    ul {
+        padding-left: 2rem;
+    }
+}

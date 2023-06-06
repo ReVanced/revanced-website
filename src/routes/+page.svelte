@@ -1,15 +1,12 @@
 <script>
-	import HeroImage from '$lib/components/atoms/HeroImage.svelte';
-	import Home from '$lib/components/organisms/Home.svelte';
-	import SocialHost from '$lib/components/molecules/SocialHost.svelte';
-	import Wave from '$lib/components/atoms/Wave.svelte';
+	import HeroImage from '$layout/Hero/HeroImage.svelte';
+	import Home from '$layout/Hero/HeroSection.svelte';
+	import SocialHost from '$layout/Hero/SocialHost.svelte';
+	import Wave from '$lib/components/Wave.svelte';
+	import Meta from '$lib/components/Meta.svelte';
 </script>
 
-<svelte:head>
-	<title>ReVanced</title>
-	<meta content="ReVanced" name="og:title" />
-	<meta content="ReVanced" name="twitter:title" />
-</svelte:head>
+<Meta />
 
 <main>
 	<div class="wrap">
