@@ -78,9 +78,13 @@
 				.replace(/\s/g, '')
 				.replace(/-/g, '')
 				.toLowerCase();
-				// Update search URL params
-				// must use history.pushState instead of goto(), as goto() unselects the search bar
-				window.history.pushState(null, '', `${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`) 
+			// Update search URL params
+			// must use history.pushState instead of goto(), as goto() unselects the search bar
+			window.history.pushState(
+				null,
+				'',
+				`${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`
+			);
 		}, 500);
 	};
 </script>
@@ -121,14 +125,14 @@
 						on:click={() => (mobilePackages = !mobilePackages)}
 						on:keypress={() => (mobilePackages = !mobilePackages)}
 					>
-						<Package {selectedPkg} name="All packages" bind:searchTerm/>
+						<Package {selectedPkg} name="All packages" bind:searchTerm />
 					</span>
 					{#each data.packages as pkg}
 						<span
 							on:click={() => (mobilePackages = !mobilePackages)}
 							on:keypress={() => (mobilePackages = !mobilePackages)}
 						>
-							<Package {selectedPkg} name={pkg} bind:searchTerm/>
+							<Package {selectedPkg} name={pkg} bind:searchTerm />
 						</span>
 					{/each}
 				</div>
@@ -138,7 +142,7 @@
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
 				<span class="packages">
-					<Package {selectedPkg} name="All packages" bind:searchTerm/>
+					<Package {selectedPkg} name="All packages" bind:searchTerm />
 					{#each data.packages as pkg}
 						<Package {selectedPkg} name={pkg} bind:searchTerm />
 					{/each}
@@ -170,7 +174,7 @@
 	}
 
 	.search {
-		padding-top: 5rem;
+		padding-top: 6.5rem;
 		padding-bottom: 1.25rem;
 		background-color: var(--grey-seven);
 	}
@@ -219,10 +223,6 @@
 
 		aside {
 			display: none;
-		}
-
-		.search {
-			padding-top: 4.5rem;
 		}
 
 		.patches-container {

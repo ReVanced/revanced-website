@@ -59,7 +59,10 @@
 	>
 		<span class="menu-btn__burger" />
 	</button>
-	<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
+	<a href="/" id="logo">
+		<img src="/logo.svg" alt="ReVanced Logo" />
+		<h3>ReVanced</h3>
+	</a>
 
 	{#key menuOpen}
 		<div
@@ -79,24 +82,29 @@
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
 				</div>
 			</div>
-			<div id="secondary-navigation">
+			<div id="socials">
 				<SocialButton src="github" href="https://revanced.app/github" />
 				<SocialButton src="discord" href="https://revanced.app/discord" />
 				<SocialButton src="reddit" href="https://revanced.app/reddit" />
 				<SocialButton src="telegram" href="https://revanced.app/telegram" />
-
-				<div style="height: 1.25rem; border-right: 1px solid var(--grey-three);" />
-
-				<button on:click={() => (modalOpen = !modalOpen)}>
-					<Svg viewBoxHeight={24} svgHeight={20}>
-						<path
-							d="M 19.1 12.9 C 19.1 12.6 19.2 12.3 19.2 12 C 19.2 11.7 19.2 11.4 19.1 11.1 L 21.1 9.5 C 21.3 9.4 21.3 9.1 21.2 8.9 L 19.3 5.6 C 19.2 5.4 18.9 5.3 18.7 5.4 L 16.3 6.4 C 15.8 6 15.3 5.7 14.7 5.5 L 14.3 3 C 14.3 2.8 14.1 2.6 13.8 2.6 L 10 2.6 C 9.8 2.6 9.6 2.8 9.5 3 L 9.2 5.3 C 8.7 5.6 8.1 5.9 7.6 6.3 L 5.2 5.3 C 5 5.2 4.8 5.3 4.6 5.5 L 2.7 8.9 C 2.6 9.1 2.7 9.3 2.9 9.5 L 4.9 11.1 C 4.9 11.4 4.8 11.7 4.8 12 C 4.8 12.3 4.8 12.6 4.9 12.9 L 2.9 14.5 C 2.7 14.6 2.7 14.9 2.8 15.1 L 4.7 18.4 C 4.8 18.6 5.1 18.7 5.3 18.6 L 7.7 17.6 C 8.2 18 8.7 18.3 9.3 18.5 L 9.7 21 C 9.8 21.2 9.9 21.4 10.2 21.4 L 14 21.4 C 14.2 21.4 14.4 21.2 14.5 21 L 14.9 18.5 C 15.5 18.3 16 17.9 16.5 17.6 L 18.9 18.6 C 19.1 18.7 19.4 18.6 19.5 18.4 L 21.4 15.1 C 21.5 14.9 21.5 14.6 21.3 14.5 L 19.1 12.9 Z M 12 15.6 C 10 15.6 8.4 14 8.4 12 C 8.4 10 10 8.4 12 8.4 C 14 8.4 15.6 10 15.6 12 C 15.6 14 14 15.6 12 15.6 Z"
-						/>
-					</Svg>
-				</button>
 			</div>
 		</div>
 	{/key}
+	<div id="secondary-navigation">
+		<!-- <SocialButton src="github" href="https://revanced.app/github" />
+		<SocialButton src="discord" href="https://revanced.app/discord" />
+		<SocialButton src="reddit" href="https://revanced.app/reddit" />
+		<SocialButton src="telegram" href="https://revanced.app/telegram" />
+		<div style="height: 1.25rem; border-right: 1px solid var(--grey-three);" /> -->
+
+		<button on:click={() => (modalOpen = !modalOpen)}>
+			<Svg viewBoxHeight={24} svgHeight={20}>
+				<path
+					d="M 19.1 12.9 C 19.1 12.6 19.2 12.3 19.2 12 C 19.2 11.7 19.2 11.4 19.1 11.1 L 21.1 9.5 C 21.3 9.4 21.3 9.1 21.2 8.9 L 19.3 5.6 C 19.2 5.4 18.9 5.3 18.7 5.4 L 16.3 6.4 C 15.8 6 15.3 5.7 14.7 5.5 L 14.3 3 C 14.3 2.8 14.1 2.6 13.8 2.6 L 10 2.6 C 9.8 2.6 9.6 2.8 9.5 3 L 9.2 5.3 C 8.7 5.6 8.1 5.9 7.6 6.3 L 5.2 5.3 C 5 5.2 4.8 5.3 4.6 5.5 L 2.7 8.9 C 2.6 9.1 2.7 9.3 2.9 9.5 L 4.9 11.1 C 4.9 11.4 4.8 11.7 4.8 12 C 4.8 12.3 4.8 12.6 4.9 12.9 L 2.9 14.5 C 2.7 14.6 2.7 14.9 2.8 15.1 L 4.7 18.4 C 4.8 18.6 5.1 18.7 5.3 18.6 L 7.7 17.6 C 8.2 18 8.7 18.3 9.3 18.5 L 9.7 21 C 9.8 21.2 9.9 21.4 10.2 21.4 L 14 21.4 C 14.2 21.4 14.4 21.2 14.5 21 L 14.9 18.5 C 15.5 18.3 16 17.9 16.5 17.6 L 18.9 18.6 C 19.1 18.7 19.4 18.6 19.5 18.4 L 21.4 15.1 C 21.5 14.9 21.5 14.6 21.3 14.5 L 19.1 12.9 Z M 12 15.6 C 10 15.6 8.4 14 8.4 12 C 8.4 10 10 8.4 12 8.4 C 14 8.4 15.6 10 15.6 12 C 15.6 14 14 15.6 12 15.6 Z"
+				/>
+			</Svg>
+		</button>
+	</div>
 
 	{#if menuOpen}
 		<div
@@ -183,14 +191,48 @@
 		position: fixed;
 		top: 0;
 		display: flex;
-		gap: 2rem;
-		justify-content: space-between;
+		gap: 4rem;
+		justify-content: space-between !important;
 		align-items: center;
-		padding: 1rem 2rem;
+		padding: 1rem 1.5rem 1rem 1rem;
+		border-radius: 1.25rem;
+		margin: 1rem;
+		left: 50%;
+		transform: translateX(-50%);
 		z-index: 666;
 		height: 70px;
-		background-color: var(--grey-seven);
-		width: 100%;
+		background-color: hsla(240, 9%, 13.5%, 0.85);
+		backdrop-filter: blur(10px);
+		width: min-content;
+	}
+
+	h3 {
+		display: none;
+		color: white;
+	}
+
+	@media screen and (max-width: 768px) {
+		nav {
+			/* to match the contributors page */
+			width: min(90%, 80rem);
+			left: 0;
+			gap: 1rem;
+			transform: none;
+			padding: 1rem 1.5rem;
+			/* to match the margin-inline: auto; on contributors page */
+			margin: 1rem 5%;
+		}
+		#socials {
+			display: flex;
+			gap: 1rem;
+		}
+		h3 {
+			display: block;
+		}
+	}
+
+	#socials {
+		display: none;
 	}
 
 	#main-navigation,
@@ -200,12 +242,19 @@
 		gap: 1rem;
 	}
 
+	#secondary-navigation {
+		justify-content: flex-end;
+	}
+
 	a {
+		gap: 1rem;
 		display: flex;
+		align-items: center;
+		text-decoration: none;
 	}
 
 	img {
-		height: 22px;
+		height: 36px;
 	}
 
 	.nav-buttons {
@@ -237,6 +286,12 @@
 	@media (min-width: 768px) {
 		.nav-wrapper {
 			align-items: center;
+		}
+	}
+
+	@media (max-width: 330px) {
+		h3 {
+			display: none;
 		}
 	}
 
@@ -273,7 +328,6 @@
 
 		#secondary-navigation {
 			z-index: 100;
-			padding: 16px;
 		}
 	}
 
