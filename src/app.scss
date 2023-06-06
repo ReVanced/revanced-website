@@ -54,6 +54,8 @@ body {
     --grey-ten: hsl(230, 9.5%, 17.5%);
     --grey-eleven: hsl(208, 10%, 40%);
     --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 ::selection {
