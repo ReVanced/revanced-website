@@ -12,7 +12,14 @@
 </script>
 
 <!-- squiggly divider line -->
-<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+<svg
+	aria-hidden="true"
+	width="100%"
+	height="8"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	in:fly={{ y: 10, easing: quintOut, duration: 750 }}
+>
 	<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
 		<g clip-path="url(#clip0_2426_11367)">
 			<path

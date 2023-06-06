@@ -127,9 +127,9 @@
 		</Svg>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
-	<svelte:fragment slot="description"
-		>Configure the website's API. Defaults to ReVanced.</svelte:fragment
-	>
+	<svelte:fragment slot="description">
+		Configure the website's API. Defaults to ReVanced.
+	</svelte:fragment>
 	<div id="settings-content">
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />
@@ -154,8 +154,14 @@
 		fill: var(--grey-five);
 	}
 
+	button path {
+		transform-origin: center;
+		transition: fill 0.2s ease, rotate 0.2s ease;
+	}
+
 	button:hover path {
-		fill: var(--accent-color-two);
+		fill: var(--accent-color);
+		rotate: 90deg;
 	}
 
 	button {
@@ -309,6 +315,9 @@
 	@media (max-width: 330px) {
 		h3 {
 			display: none;
+		}
+		img {
+			margin-right: 0;
 		}
 	}
 
