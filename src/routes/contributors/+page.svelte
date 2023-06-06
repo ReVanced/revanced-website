@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	import ContributorHost from './ContributorSection.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Meta from '$lib/components/Meta.svelte';
 	import Query from '$lib/components/Query.svelte';
 

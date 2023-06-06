@@ -2,7 +2,7 @@
 	import type { LayoutData } from './$types';
 
 	import DocsNavTree from './DocsNavTree.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 
 	export let data: LayoutData;
 </script>

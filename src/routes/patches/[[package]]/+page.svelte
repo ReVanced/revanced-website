@@ -13,7 +13,7 @@
 	import PackageMenu from '../PackageMenu.svelte';
 	import Package from '../Package.svelte';
 	import PatchItem from '../PatchItem.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
@@ -78,9 +78,13 @@
 				.replace(/\s/g, '')
 				.replace(/-/g, '')
 				.toLowerCase();
-				// Update search URL params
-				// must use history.pushState instead of goto(), as goto() unselects the search bar
-				window.history.pushState(null, '', `${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`) 
+			// Update search URL params
+			// must use history.pushState instead of goto(), as goto() unselects the search bar
+			window.history.pushState(
+				null,
+				'',
+				`${window.location.href.split('?')[0]}${searchTerm ? '?s=' + searchTerm : ''}`
+			);
 		}, 500);
 	};
 </script>
@@ -121,14 +125,14 @@
 						on:click={() => (mobilePackages = !mobilePackages)}
 						on:keypress={() => (mobilePackages = !mobilePackages)}
 					>
-						<Package {selectedPkg} name="All packages" bind:searchTerm/>
+						<Package {selectedPkg} name="All packages" bind:searchTerm />
 					</span>
 					{#each data.packages as pkg}
 						<span
 							on:click={() => (mobilePackages = !mobilePackages)}
 							on:keypress={() => (mobilePackages = !mobilePackages)}
 						>
-							<Package {selectedPkg} name={pkg} bind:searchTerm/>
+							<Package {selectedPkg} name={pkg} bind:searchTerm />
 						</span>
 					{/each}
 				</div>
@@ -138,7 +142,7 @@
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
 				<span class="packages">
-					<Package {selectedPkg} name="All packages" bind:searchTerm/>
+					<Package {selectedPkg} name="All packages" bind:searchTerm />
 					{#each data.packages as pkg}
 						<Package {selectedPkg} name={pkg} bind:searchTerm />
 					{/each}
