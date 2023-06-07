@@ -5,6 +5,7 @@
 	import { expoOut } from 'svelte/easing';
 
 	import Navigation from './NavButton.svelte';
+	import SocialButton from './SocialButton.svelte';
 	import Svg from '$lib/components/Svg.svelte';
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -59,6 +60,12 @@
 		<span class="menu-btn__burger" />
 	</button>
 	<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
+	<!-- <div id="mobile-socials">
+		<SocialButton src="github" href="https://github.com/revanced" />
+		<SocialButton src="discord" href="https://revanced.app/discord" />
+		<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
+		<SocialButton src="telegram" href="https://t.me/app_revanced" />
+	</div> -->
 
 	{#key menuOpen}
 		<div
@@ -79,6 +86,13 @@
 				</div>
 			</div>
 			<div id="secondary-navigation">
+				<SocialButton src="github" href="https://github.com/revanced" />
+				<SocialButton src="discord" href="https://revanced.app/discord" />
+				<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
+				<SocialButton src="telegram" href="https://t.me/app_revanced" />
+
+				<div style="height: 1.25rem; border-right: 1px solid var(--grey-three);" />
+
 				<button on:click={() => (modalOpen = !modalOpen)}>
 					<Svg viewBoxHeight={24} svgHeight={20}>
 						<path
@@ -189,7 +203,7 @@
 	#secondary-navigation {
 		align-items: center;
 		display: flex;
-		gap: 2rem;
+		gap: 1rem;
 	}
 
 	a {
@@ -230,6 +244,16 @@
 		.nav-wrapper {
 			align-items: center;
 		}
+		#mobile-socials {
+			display: none;
+		}
+	}
+
+	#mobile-socials {
+		justify-content: flex-end;
+		display: flex;
+		width: 100%;
+		gap: 1rem;
 	}
 
 	@media (max-width: 768px) {

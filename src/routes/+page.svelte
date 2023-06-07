@@ -1,7 +1,7 @@
 <script>
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
+	import SocialButton from '$layout/Navbar/SocialButton.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
-	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Meta from '$lib/components/Meta.svelte';
 </script>
@@ -13,13 +13,37 @@
 		<div class="wrappezoid">
 			<Home />
 			<div id="heroimg"><HeroImage /></div>
+			<div class="social-host">
+				<SocialButton size={32} src="github" href="https://github.com/revanced" />
+				<SocialButton size={32} src="discord" href="https://revanced.app/discord" />
+				<SocialButton size={32} src="reddit" href="https://reddit.com/r/revancedapp" />
+				<SocialButton size={32} src="telegram" href="https://t.me/app_revanced" />
+			</div>
 		</div>
 	</div>
-	<SocialHost />
 </main>
 <Wave />
 
 <style>
+	.social-host {
+		background-color: var(--bg-color);
+		max-width: min-content;
+		padding: 1rem;
+		align-items: center;
+		user-select: none;
+		position: absolute;
+		border-radius: 2rem;
+		display: flex;
+		bottom: 1rem;
+		gap: 1.5rem;
+		left: 50%;
+		translate: -50% 0;
+	}
+	@media (min-width: 768px) {
+		.social-host {
+			display: none;
+		}
+	}
 	.wrap {
 		margin-inline: auto;
 		width: min(87%, 100rem);
