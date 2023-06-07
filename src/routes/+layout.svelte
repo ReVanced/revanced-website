@@ -137,8 +137,8 @@
 	<Dialogue bind:modalOpen={askCookieConsent} dismissible={false}>
 		<svelte:fragment slot="title">It's your choice</svelte:fragment>
 		<svelte:fragment slot="description">
-			This site uses analytics to understand better how you use it. Opting in is optional and won't
-			impact your experience.
+			This site uses analytics to understand better how you use it. Opting in is
+			optional and won't impact your experience.
 		</svelte:fragment>
 		<svelte:fragment slot="buttons">
 			<Button type="text" on:click={() => setPrivacySetting(false)}>Disallow all</Button>
