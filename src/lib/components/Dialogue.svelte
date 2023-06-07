@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
+	import { disableScrollHandling } from '$app/navigation';
 	export let modalOpen = false;
 	export let fullscreen = false;
+	export let dismissible = true;
 
 	let element: HTMLDivElement;
 	let y = 0;
@@ -15,8 +17,12 @@
 {#if modalOpen}
 	<div
 		class="overlay"
-		on:click={() => (modalOpen = !modalOpen)}
-		on:keypress={() => (modalOpen = !modalOpen)}
+		on:click={() => {
+			if (dismissible) modalOpen = !modalOpen;
+		}}
+		on:keypress={() => {
+			if (dismissible) modalOpen = !modalOpen;
+		}}
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	/>
 
