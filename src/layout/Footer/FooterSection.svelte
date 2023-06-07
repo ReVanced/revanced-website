@@ -39,7 +39,6 @@
 	ul {
 		margin: 1.25rem 0rem;
 		display: flex;
-		gap: 1rem;
 		flex-direction: column;
 		width: max-content;
 	}

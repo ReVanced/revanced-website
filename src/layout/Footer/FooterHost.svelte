@@ -5,7 +5,7 @@
 	import { queries } from '$data/api';
 	import { friendlyName } from '$util/friendlyName';
 	import { createQuery } from '@tanstack/svelte-query';
-	
+
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
@@ -69,11 +69,20 @@
 				<ul>
 					<!-- to replace -->
 					<li><a href="https://github.com/revanced" target="_blank" rel="noreferrer">GitHub</a></li>
-					<li><a href="https://revanced.app/discord" target="_blank" rel="noreferrer">Discord</a></li>
-					<li><a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a></li>
+					<li>
+						<a href="https://revanced.app/discord" target="_blank" rel="noreferrer">Discord</a>
+					</li>
+					<li>
+						<a href="https://reddit.com/r/revancedapp" target="_blank" rel="noreferrer">Reddit</a>
+					</li>
 					<li><a href="https://t.me/app_revanced" target="_blank" rel="noreferrer">Telegram</a></li>
-					<li><a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a></li>
-					<li><a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a></li>
+					<li>
+						<a href="https://twitter.com/revancedapp" target="_blank" rel="noreferrer">Twitter</a>
+					</li>
+					<li>
+						<a href="https://www.youtube.com/c/ReVanced" target="_blank" rel="noreferrer">YouTube</a
+						>
+					</li>
 				</ul>
 			</FooterSection>
 		</section>
@@ -151,14 +160,19 @@
 	}
 
 	a {
+		display: block;
+		padding: 0.5rem 0;
 		text-decoration: none;
+		transition: all 0.2s ease;
+		text-underline-offset: 0rem;
 	}
 
 	a:hover {
 		text-decoration: underline;
 		text-decoration-style: wavy;
+		text-underline-offset: 0.25rem;
 		text-decoration-color: var(--accent-color-two);
-		color: var(--white);
+		color: var(--accent-color-two);
 	}
 
 	.links-container {
@@ -169,7 +183,6 @@
 
 	ul {
 		display: flex;
-		gap: 1rem;
 		flex-direction: column;
 		width: max-content;
 	}
@@ -194,5 +207,4 @@
 			gap: initial;
 		}
 	}
-
 </style>
