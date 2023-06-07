@@ -158,12 +158,3 @@ input {
 input:focus {
     outline: 1px solid var(--accent-color);
 }
-
-.modal {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
