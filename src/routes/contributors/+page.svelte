@@ -91,7 +91,7 @@
 	a:hover::after {
 		transform: translateX(5px);
 	}
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 767px) {
 		.text-container {
 			padding: 2rem 1.75rem;
 			margin-bottom: 2rem;

@@ -23,7 +23,7 @@
 		left: 0;
 	}
 
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 767px) {
 		.social-host {
 			left: 0;
 			width: 100%;

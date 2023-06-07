@@ -1,6 +1,6 @@
 <div class="menu">
 	<h6>Packages</h6>
-	<hr/>
+	<hr />
 	<div class="slot">
 		<slot />
 	</div>
@@ -40,13 +40,14 @@
 		color: var(--accent-color);
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.menu {
 			padding: 0.75rem;
 			height: unset;
 		}
 
-		h6, hr {
+		h6,
+		hr {
 			display: none;
 		}
 	}

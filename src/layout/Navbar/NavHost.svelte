@@ -232,7 +232,7 @@
 		}
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.nav-wrapper {
 			flex-direction: column;
 			gap: 0.5rem;

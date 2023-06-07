@@ -219,7 +219,7 @@
 			display: none;
 		}
 	}
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		main {
 			grid-template-columns: none;
 			flex-direction: column;

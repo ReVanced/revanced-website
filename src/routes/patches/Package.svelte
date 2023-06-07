@@ -63,7 +63,7 @@
 		color: var(--white);
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.package {
 			border-radius: 0px;
 			font-size: 0.9rem;
