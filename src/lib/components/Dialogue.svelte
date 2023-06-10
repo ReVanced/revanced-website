@@ -1,15 +1,28 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
+	import { disableScrollHandling } from '$app/navigation';
 	export let modalOpen = false;
 	export let fullscreen = false;
+	export let notDismissible = false;
+
+	let element: HTMLDivElement;
+	let y = 0;
+
+	function parseScroll() {
+		y = element.scrollTop;
+	}
 </script>
 
 {#if modalOpen}
 	<div
 		class="overlay"
-		on:click={() => (modalOpen = !modalOpen)}
-		on:keypress={() => (modalOpen = !modalOpen)}
+		on:click={() => {
+			if (!notDismissible) modalOpen = !modalOpen;
+		}}
+		on:keypress={() => {
+			if (!notDismissible) modalOpen = !modalOpen;
+		}}
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	/>
 
@@ -17,13 +30,16 @@
 		class="modal"
 		role="dialog"
 		class:fullscreen
+		class:scrolled={y > 10}
 		aria-modal="true"
+		bind:this={element}
+		on:scroll={parseScroll}
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	>
 		<div class="top">
 			<div class="title" class:hasIcon={$$slots.icon}>
 				{#if fullscreen}
-					<button on:click={() => (modalOpen = !modalOpen)}>
+					<button id="back-button" on:click={() => (modalOpen = !modalOpen)}>
 						<img src="../icons/back.svg" id="back" alt="back" />
 					</button>
 				{/if}
@@ -51,7 +67,6 @@
 				</div>
 			{/if}
 		</div>
-		
 	</div>
 {/if}
 
@@ -74,12 +89,9 @@
 	}
 
 	.title {
-		position: sticky;
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		top: 0;
-		left: 0;
 		width: 100%;
 		background-color: var(--grey-six);
 		margin-bottom: 8px;
@@ -93,9 +105,12 @@
 		width: 100%;
 	}
 
+	#back-button {
+		cursor: pointer;
+	}
 
 	.hasIcon {
-		flex-direction: column;	
+		flex-direction: column;
 	}
 
 	.modal {
@@ -135,12 +150,27 @@
 	}
 
 	.fullscreen {
+		padding: 0;
 		max-height: 100%;
 		width: 100%;
 		border-radius: 0;
 	}
+
+	.fullscreen .slot {
+		padding: 0 32px 32px;
+	}
+
 	.fullscreen .title {
 		justify-content: flex-start;
+		position: sticky;
+		padding: 32px;
+		padding-bottom: 0.75rem;
+		top: 0;
+		left: 0;
+	}
+
+	.fullscreen.scrolled .title {
+		border-bottom: 1px solid var(--grey-three);
 	}
 
 	.slot {
@@ -154,5 +184,3 @@
 		display: none;
 	}
 </style>
-
-

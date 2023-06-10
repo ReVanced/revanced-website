@@ -232,11 +232,11 @@
 		}
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.nav-wrapper {
 			flex-direction: column;
 			gap: 0.5rem;
-			height: 100vh;
+			height: 100%;
 			margin: 0 auto;
 			position: fixed;
 			width: 20rem;

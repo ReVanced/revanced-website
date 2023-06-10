@@ -7,7 +7,7 @@
 	$: status = $page.status;
 </script>
 
-<Meta title="404" />
+<Meta title={status.toString()} />
 
 <section class="wrapper">
 	<h1>{status}</h1>

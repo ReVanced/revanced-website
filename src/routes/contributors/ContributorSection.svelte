@@ -93,7 +93,7 @@
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.contrib-host {
 			padding: 0.75rem;
 			gap: 0.25rem;

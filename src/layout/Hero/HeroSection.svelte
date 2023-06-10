@@ -43,7 +43,7 @@
 		color: var(--accent-color);
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.hero {
 			padding-bottom: 0;
 		}

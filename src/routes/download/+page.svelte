@@ -10,7 +10,7 @@
 	import Meta from '$lib/components/Meta.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';

@@ -11,7 +11,10 @@
 	function clear() {
 		searchTerm = '';
 		searchTermFiltered = '';
-		goto($page.url.pathname)
+		
+		const url = new URL($page.url);
+		url.searchParams.delete('s');
+		goto(url.pathname + url.search);
 	}
 </script>
 
@@ -85,6 +88,6 @@
 
 	input:focus::placeholder {
 		outline: none;
-		color: var(--accent-color)
+		color: var(--accent-color);
 	}
 </style>
