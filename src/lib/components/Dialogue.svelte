@@ -4,7 +4,7 @@
 	import { disableScrollHandling } from '$app/navigation';
 	export let modalOpen = false;
 	export let fullscreen = false;
-	export let dismissible = true;
+	export let notDismissible = false;
 
 	let element: HTMLDivElement;
 	let y = 0;
@@ -18,10 +18,10 @@
 	<div
 		class="overlay"
 		on:click={() => {
-			if (dismissible) modalOpen = !modalOpen;
+			if (!notDismissible) modalOpen = !modalOpen;
 		}}
 		on:keypress={() => {
-			if (dismissible) modalOpen = !modalOpen;
+			if (!notDismissible) modalOpen = !modalOpen;
 		}}
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	/>

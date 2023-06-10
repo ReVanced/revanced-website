@@ -36,17 +36,16 @@
 	let askCookieConsent = false;
 
 	// store a cookie to remember the user's preference
-	function setPrivacySetting(doCookie: boolean) {
-		localStorage.setItem('doCookie', doCookie.toString());
+	function setPrivacySetting(allowTelemetry: boolean) {
+		localStorage.setItem('allowTelemetry', allowTelemetry.toString());
 		askCookieConsent = false;
 		if (typeof telemetryInit !== 'undefined') {
-			//@ts-ignore don't worry about this, it will work
 			telemetryInit();
 		}
 	}
 
 	onMount(() => {
-		if (!localStorage.getItem('doCookie')) {
+		if (!localStorage.getItem('allowTelemetry')) {
 			askCookieConsent = true;
 		}
 
@@ -111,14 +110,9 @@
 			y.parentNode.insertBefore(t, y);
 		}
 
-		// read the cookie and set the initial state
-		function getPrivacySetting() {
-			return localStorage.getItem('doCookie') === 'true';
-		}
-
 		function telemetryInit() {
-			doCookie = getPrivacySetting();
-			if (!doCookie) {
+			allowTelemetry = (localStorage.getItem('allowTelemetry') === 'true');
+			if (!allowTelemetry) {
 				gtag('set', 'allow_google_signals', false);
 				return;
 			}
@@ -134,7 +128,7 @@
 <QueryClientProvider client={queryClient}>
 	<NavHost />
 	<!-- if cookie consent hasn't been set -->
-	<Dialogue bind:modalOpen={askCookieConsent} dismissible={false}>
+	<Dialogue bind:modalOpen={askCookieConsent} notDismissible>
 		<svelte:fragment slot="title">It's your choice</svelte:fragment>
 		<svelte:fragment slot="description">
 			This site uses analytics to understand better how you use it. Opting in is
