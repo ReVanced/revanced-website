@@ -135,7 +135,7 @@
 			optional and won't impact your experience.
 		</svelte:fragment>
 		<svelte:fragment slot="buttons">
-			<Button type="text" on:click={() => setPrivacySetting(false)}>Disallow all</Button>
+			<Button type="text" on:click={() => setPrivacySetting(false)}>Deny</Button>
 			<Button type="text" on:click={() => setPrivacySetting(true)}>Accept</Button>
 		</svelte:fragment>
 	</Dialogue>
