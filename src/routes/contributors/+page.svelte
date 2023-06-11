@@ -83,9 +83,7 @@
 	}
 
 	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--grey-four);
+		color: var(--white);
 	}
 
 	a:hover::after {

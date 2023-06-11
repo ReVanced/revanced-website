@@ -25,13 +25,6 @@
 		border-bottom: 1px solid var(--grey-three);
 	}
 
-	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color);
-		color: var(--white);
-	}
-
 	h5 {
 		white-space: nowrap;
 		overflow: hidden;

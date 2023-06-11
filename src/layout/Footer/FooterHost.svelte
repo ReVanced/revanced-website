@@ -155,9 +155,6 @@
 	}
 
 	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color-two);
 		color: var(--white);
 	}
 
