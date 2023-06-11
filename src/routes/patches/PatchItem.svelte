@@ -92,10 +92,8 @@
 	}
 
 	a .patch-info:hover {
-		text-decoration: underline;
+		text-decoration: underline var(--accent-color-two);
 		color: var(--accent-color-two);
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color-two);
 	}
 
 	.info-container {
