@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	import ContributorHost from './ContributorSection.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Meta from '$lib/components/Meta.svelte';
 	import Query from '$lib/components/Query.svelte';
 
@@ -91,7 +91,7 @@
 	a:hover::after {
 		transform: translateX(5px);
 	}
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 767px) {
 		.text-container {
 			padding: 2rem 1.75rem;
 			margin-bottom: 2rem;
