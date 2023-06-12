@@ -1,3 +1,5 @@
+name: Deploy PR Preview
+
 on: pull_request
 
 jobs:
@@ -7,21 +9,21 @@ jobs:
       contents: read
       deployments: write
       pull-requests: write 
-   name: Publish to Cloudflare Pages
+    name: Deploy PR Preview
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
-        id: publish
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
           directory: public
+        id: publish
 
-      - name: Comment
+      - name: Comment deployment URL
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PULL_REQUESTS_WRITE }}
