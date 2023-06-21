@@ -134,6 +134,10 @@
 </Modal>
 
 <style>
+	#logo {
+		padding: 0.5rem;
+	}
+
 	path {
 		fill: var(--grey-five);
 	}

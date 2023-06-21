@@ -66,7 +66,7 @@
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	h3 {
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
@@ -92,10 +92,8 @@
 	}
 
 	a .patch-info:hover {
-		text-decoration: underline;
+		text-decoration: underline var(--accent-color-two);
 		color: var(--accent-color-two);
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color-two);
 	}
 
 	.info-container {
@@ -108,14 +106,18 @@
 	}
 
 	.patch-container {
-		transition: all 2s var(--bezier-one);
+		transition: all 0.1s var(--bezier-one);
 		background-color: var(--grey-six);
 		padding: 1.25rem;
 		border-radius: 12px;
-	}
 
-	.patch-container:active {
-		filter: brightness(1.75);
+		&:active {
+			filter: brightness(1.15);
+		}
+
+		&:hover {
+			background-color: var(--grey-one);
+		}
 	}
 
 	.title {

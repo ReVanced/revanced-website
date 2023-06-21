@@ -47,9 +47,9 @@
 					<slot name="icon" />
 				{/if}
 				{#if $$slots.title}
-					<h4>
+					<h3>
 						<slot name="title" />
-					</h4>
+					</h3>
 				{/if}
 			</div>
 
@@ -85,7 +85,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: 0.75rem;
+		gap: 1rem;
 	}
 
 	.title {
@@ -94,13 +94,11 @@
 		gap: 1rem;
 		width: 100%;
 		background-color: var(--grey-six);
-		margin-bottom: 8px;
 	}
 
 	.buttons {
 		display: flex;
 		gap: 2rem;
-		margin-top: 1rem;
 		justify-content: flex-end;
 		width: 100%;
 	}
@@ -134,6 +132,8 @@
 		padding: 32px;
 		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+		scrollbar-width: none;
+		-ms-overflow-style: none;
 	}
 
 	button {
