@@ -26,6 +26,7 @@
 	}
 
 	a:hover {
+		background: var(--grey-one);
 		text-decoration: underline var(--accent-color);
 		color: var(--white);
 	}
