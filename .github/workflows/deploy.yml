@@ -1,6 +1,10 @@
-name: Deploy PR Preview
+name: Deploy
 
-on: pull_request
+on: 
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -9,7 +13,7 @@ jobs:
       contents: read
       deployments: write
       pull-requests: write 
-    name: Deploy PR Preview
+    name: Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,7 +28,8 @@ jobs:
         id: publish
 
       - name: Comment deployment URL
+        if: ${{ github.event_name == 'pull_request' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PULL_REQUESTS_WRITE }}
-          message: ${{ steps.publish.outputs.alias }}
+          message: Deployed at ${{ steps.publish.outputs.alias }}.
