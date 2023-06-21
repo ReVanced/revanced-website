@@ -32,4 +32,4 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PULL_REQUESTS_WRITE }}
-          message: ${{ steps.publish.outputs.alias }}
+          message: Deployed at ${{ steps.publish.outputs.alias }}.
