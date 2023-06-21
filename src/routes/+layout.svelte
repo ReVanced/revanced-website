@@ -96,12 +96,12 @@
 	<Dialogue bind:modalOpen={showConsentModal} notDismissible>
 		<svelte:fragment slot="title">It's your choice</svelte:fragment>
 		<svelte:fragment slot="description">
-			We use analytics to improve your experience on this site. By clicking "Accept" you allow us to
+			We use analytics to improve your experience on this site. By clicking "Allow", you allow us to
 			collect anonymous data about your visit.
 		</svelte:fragment>
 		<svelte:fragment slot="buttons">
 			<Button type="text" on:click={() => rememberChoice(false)}>Deny</Button>
-			<Button type="outlined" on:click={() => rememberChoice(true)}>Accept</Button>
+			<Button type="filled" on:click={() => rememberChoice(true)}>Allow</Button>
 		</svelte:fragment>
 	</Dialogue>
 
