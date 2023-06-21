@@ -47,9 +47,9 @@
 					<slot name="icon" />
 				{/if}
 				{#if $$slots.title}
-					<h4>
+					<h3>
 						<slot name="title" />
-					</h4>
+					</h3>
 				{/if}
 			</div>
 
@@ -85,7 +85,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: 0.75rem;
+		gap: 1rem;
 	}
 
 	.title {
@@ -94,13 +94,11 @@
 		gap: 1rem;
 		width: 100%;
 		background-color: var(--grey-six);
-		margin-bottom: 8px;
 	}
 
 	.buttons {
 		display: flex;
 		gap: 2rem;
-		margin-top: 1rem;
 		justify-content: flex-end;
 		width: 100%;
 	}
