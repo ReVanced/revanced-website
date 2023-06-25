@@ -112,7 +112,7 @@
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
 	<svelte:fragment slot="description"
-		>Configure the website's API. Defaults to ReVanced.</svelte:fragment
+		>Configure the API for this website.</svelte:fragment
 	>
 	<div id="settings-content">
 		<div class="input-wrapper">
