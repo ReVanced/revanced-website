@@ -85,6 +85,10 @@
 		padding: 0.25rem 0.5rem;
 		border: 1px solid var(--grey-three);
 		border-radius: 8px;
+
+		&:hover {
+			background-color: var(--grey-two);
+		}
 	}
 
 	a {
@@ -146,6 +150,10 @@
 
 	.option {
 		padding: 1rem;
+
+		&:hover {
+			background-color: var(--grey-two);
+		}
 	}
 
 	/* thanks piknik */
