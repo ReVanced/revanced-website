@@ -12,7 +12,7 @@
 	style:height={size + 'px'}
 	style:width={size + 'px'}
 >
-	<img src={foregroundImageUrl} />
+	<img src={foregroundImageUrl} {alt} />
 </div>
 
 <style lang="scss">
