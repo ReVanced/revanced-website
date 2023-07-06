@@ -82,6 +82,11 @@
 		<div id="logo-name"><span>Re</span>Vanced</div>
 		<a href="https://liberapay.com/ReVanced/donate"><div>Donate</div></a>
 		<a href="mailto:contact@revanced.app"><div>Email</div></a>
+		<!-- Example: Add more items to wrap child elements -->
+		<a href="/"><div>Privacy Policy</div></a>
+		<a href="/"><div>Terms of Service</div></a>
+		<a href="/"><div>Join research studies</div></a>
+		<a href="/"><div>Feedback</div></a>
 	</div>
 </footer>
 
@@ -106,6 +111,13 @@
 		align-items: center;
 	}
 
+	@media screen and (max-width: 768px) {
+		.footer-bottom {
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+	}
+
 	#logo-name {
 		font-size: 1.4rem;
 		color: var(--white);
@@ -119,7 +131,7 @@
 	.footer-bottom a {
 		text-decoration: none;
 		color: var(--grey-five);
-		font-weight: 500;
+		font-weight: 600;
 	}
 
 	li {
@@ -131,7 +143,7 @@
 
 	li a {
 		color: var(--accent-color);
-		font-weight: 500;
+		font-weight: 600;
 		font-size: 0.95rem;
 	}
 
@@ -193,4 +205,8 @@
 		}
 	}
 
+	svg {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 </style>
