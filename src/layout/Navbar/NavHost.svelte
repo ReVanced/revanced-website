@@ -51,6 +51,8 @@
 <svelte:window bind:scrollY={y} />
 
 <nav class:scrolled={y > 10}>
+	<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>
+
 	<button
 		class="menu-btn mobile-only"
 		on:click={() => (menuOpen = !menuOpen)}
@@ -111,9 +113,7 @@
 		</Svg>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
-	<svelte:fragment slot="description"
-		>Configure the API for this website.</svelte:fragment
-	>
+	<svelte:fragment slot="description">Configure the API for this website.</svelte:fragment>
 	<div id="settings-content">
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />
@@ -326,5 +326,19 @@
 	}
 	.menu-btn.open .menu-btn__burger::after {
 		transform: rotate(-45deg) translate(10px, 10px);
+	}
+
+	.skiptab-btn {
+		position: fixed;
+		left: -1000px;
+		transition: all 0.3s var(--bezier-one);
+		z-index: 10;
+		color: var(--accent-color-two);
+		background: var(--grey-seven);
+		padding-inline: 16px;
+	}
+
+	.skiptab-btn:focus {
+		left: 10px;
 	}
 </style>
