@@ -82,11 +82,6 @@
 		<div id="logo-name"><span>Re</span>Vanced</div>
 		<a href="https://liberapay.com/ReVanced/donate"><div>Donate</div></a>
 		<a href="mailto:contact@revanced.app"><div>Email</div></a>
-		<!-- Example: Add more items to wrap child elements -->
-		<a href="/"><div>Privacy Policy</div></a>
-		<a href="/"><div>Terms of Service</div></a>
-		<a href="/"><div>Join research studies</div></a>
-		<a href="/"><div>Feedback</div></a>
 	</div>
 </footer>
 
