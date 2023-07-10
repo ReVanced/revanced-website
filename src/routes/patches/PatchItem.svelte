@@ -18,7 +18,7 @@
 >
 	<div class="things">
 		<div class="title">
-			<h3>{friendlyName(patch.name)}</h3>
+			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
 			<img id="arrow" src="/icons/arrow.svg" alt="dropdown" />
