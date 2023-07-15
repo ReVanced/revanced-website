@@ -53,6 +53,7 @@
 				<li><a href="/docs">Documentation</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
+				<li><a href="/donate">Donate</a></li>
 			</FooterSection>
 			<FooterSection title="Repositories">
 				<Query {query} let:data>

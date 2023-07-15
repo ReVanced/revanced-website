@@ -47,3 +47,8 @@ export interface Tool {
   assets: Asset[];
 };
 
+export interface TeamMember {
+  name: string
+  github: string
+  message: string
+}

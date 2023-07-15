@@ -76,17 +76,10 @@
 						<Navigation href="/docs">Docs</Navigation>
 					</div>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
+					<Navigation href="/donate">Donate</Navigation>
 				</div>
 			</div>
 			<div id="secondary-navigation">
-				<a href="/donate">
-					<Svg viewBoxHeight={24} svgHeight={20}>
-						<path
-							style:fill="var(--red-one)"
-							d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-						/>
-					</Svg>
-				</a>
 				<button on:click={() => (modalOpen = !modalOpen)}>
 					<Svg viewBoxHeight={24} svgHeight={20}>
 						<path
@@ -214,8 +207,7 @@
 	}
 
 	.scrolled {
-		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
-			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--drop-shadow-one);
 	}
 
 	.overlay {
