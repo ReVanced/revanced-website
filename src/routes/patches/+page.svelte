@@ -9,6 +9,7 @@
 	import { queries } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
+	import { JsonLd } from 'svelte-meta-tags';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
@@ -95,6 +96,32 @@
 </script>
 
 <Meta title="Patches" />
+<JsonLd
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced Patches',
+		abstract: 'A list of ReVanced Patches',
+		breadcrumb: 'Home > Patches',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			},
+			sameAs: [
+				'https://github.com/revanced',
+				'https://twitter.com/revancedapp',
+				'https://revanced.app/discord',
+				'https://www.reddit.com/r/revancedapp',
+				'https://t.me/app_revanced',
+				'https://www.youtube.com/@ReVanced'
+			]
+		}
+	}}
+/>
 
 <div class="search">
 	<div class="search-contain">

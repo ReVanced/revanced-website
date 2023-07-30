@@ -4,9 +4,37 @@
 	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Meta from '$lib/components/Meta.svelte';
+	import { JsonLd } from 'svelte-meta-tags';
 </script>
 
 <Meta />
+
+<JsonLd
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced',
+		abstract: 'Continuing the legacy of Vanced',
+		breadcrumb: 'Home',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			},
+			sameAs: [
+				'https://github.com/revanced',
+				'https://twitter.com/revancedapp',
+				'https://revanced.app/discord',
+				'https://www.reddit.com/r/revancedapp',
+				'https://t.me/app_revanced',
+				'https://www.youtube.com/@ReVanced'
+			]
+		}
+	}}
+/>
 
 <main>
 	<div class="wrap">
