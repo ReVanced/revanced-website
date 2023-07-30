@@ -39,6 +39,7 @@
 
 	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
+	let showAllVersions = false;
 
 	function checkCompatibility(patch: Patch, pkg: string) {
 		if (pkg === '') {
@@ -169,7 +170,7 @@
 				<!-- Trigger new animations when package or search changes (I love Svelte) -->
 				{#key selectedPkg || searchTermFiltered}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<PatchItem {patch} />
+						<PatchItem {patch} bind:showAllVersions />
 					</div>
 				{/key}
 			{/each}

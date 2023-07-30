@@ -2,9 +2,9 @@
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
-	import { friendlyName } from '$util/friendlyName';
 
 	export let patch: Patch;
+	export let showAllVersions: boolean;
 	const hasPatchOptions = !!patch.options.length;
 	let expanded: boolean = false;
 </script>
@@ -38,8 +38,28 @@
 
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
-			<li class="patch-info">
-				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+			{#if showAllVersions}
+				{#each patch.compatiblePackages[0].versions as version}
+					<li class="patch-info">
+						🎯 {version}
+					</li>
+				{/each}
+				<li class="patch-info">
+					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+				</li>
+			{:else}
+				<li class="patch-info">
+					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+				</li>
+			{/if}
+			<li class="patch-info button">
+				<img
+					on:click={() => (showAllVersions = !showAllVersions)}
+					id="arrow"
+					style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
+					src="/icons/expand_more.svg"
+					alt="dropdown"
+				/>
 			</li>
 		{/if}
 
