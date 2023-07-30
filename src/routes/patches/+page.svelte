@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { building } from '$app/environment';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { derived, readable, type Readable } from 'svelte/store';
 	import { page } from '$app/stores';
 
 	import type { Patch } from '$lib/types';
@@ -20,8 +22,15 @@
 
 	const query = createQuery(['patches'], queries.patches);
 
-	$: selectedPkg = $page.url.searchParams.get('pkg');
-	let searchTerm = $page.url.searchParams.get('s');
+	let searchParams: Readable<URLSearchParams>;
+	if (building) {
+		searchParams = readable(new URLSearchParams());
+	} else {
+		searchParams = derived(page, ($page) => $page.url.searchParams);
+	}
+
+	$: selectedPkg = $searchParams.get('pkg');
+	let searchTerm = $searchParams.get('s');
 	let searchTermFiltered = searchTerm
 		?.replace(/\./g, '')
 		.replace(/\s/g, '')
