@@ -23,7 +23,7 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img class="expand-arrow" src="/icons/arrow.svg" alt="dropdown" />
+			<img class="expand-arrow" src="/icons/expand_more.svg" alt="dropdown" />
 		{/if}
 	</div>
 	<h5>{patch.description}</h5>
