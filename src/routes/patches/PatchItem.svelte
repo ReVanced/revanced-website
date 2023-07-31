@@ -57,15 +57,17 @@
 					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
 				</li>
 			{/if}
-			<li class="patch-info button" on:click={() => (showAllVersions = !showAllVersions)}>
-				<img
-					class="expand-arrow"
-					id="expand-versions"
-					style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
-					src="/icons/expand_more.svg"
-					alt="dropdown"
-				/>
-			</li>
+			{#if patch.compatiblePackages[0].versions.length > 1}
+				<li class="patch-info button" on:click={() => (showAllVersions = !showAllVersions)}>
+					<img
+						class="expand-arrow"
+						id="expand-versions"
+						style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
+						src="/icons/expand_more.svg"
+						alt="dropdown"
+					/>
+				</li>
+			{/if}
 		{/if}
 	</ul>
 
