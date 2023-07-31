@@ -3,6 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
 	import { compare, coerce } from 'semver';
+	import Button from '$lib/components/Button.svelte';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -68,7 +69,7 @@
 				</li>
 			{/if}
 			{#if patch.compatiblePackages[0].versions.length > 1}
-				<li class="patch-info button" on:click={() => (showAllVersions = !showAllVersions)}>
+				<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
 					<img
 						class="expand-arrow"
 						id="expand-versions"
@@ -76,7 +77,7 @@
 						src="/icons/expand_more.svg"
 						alt="dropdown"
 					/>
-				</li>
+				</Button>
 			{/if}
 		{/if}
 	</ul>
