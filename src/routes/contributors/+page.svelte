@@ -5,6 +5,7 @@
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Meta from '$lib/components/Meta.svelte';
+	import { JsonLd } from 'svelte-meta-tags';
 	import Query from '$lib/components/Query.svelte';
 
 	import { queries } from '$data/api';
@@ -14,6 +15,32 @@
 </script>
 
 <Meta title="Contributors" />
+<JsonLd
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced Contributors',
+		abstract: 'A list of everyone that has contributed to ReVanced',
+		breadcrumb: 'Home > Contributors',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			},
+			sameAs: [
+				'https://github.com/revanced',
+				'https://twitter.com/revancedapp',
+				'https://revanced.app/discord',
+				'https://www.reddit.com/r/revancedapp',
+				'https://t.me/app_revanced',
+				'https://www.youtube.com/@ReVanced'
+			]
+		}
+	}}
+/>
 
 <main>
 	<div class="wrapper">

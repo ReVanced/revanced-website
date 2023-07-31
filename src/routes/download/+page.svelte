@@ -8,6 +8,7 @@
 	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
 
 	import Meta from '$lib/components/Meta.svelte';
+	import { JsonLd } from 'svelte-meta-tags';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
@@ -44,6 +45,42 @@
 </script>
 
 <Meta title="Download" />
+<JsonLd
+	schema={{
+		'@type': 'MobileApplication',
+		name: 'ReVanced Manager',
+		description:
+			'ReVanced Manager is an Android application that uses ReVanced Patcher to add, remove, and modify existing functionalities in Android applications',
+		abstract: 'Continuing the legacy of Vanced',
+		applicationCategory: 'UtilitiesApplication',
+		applicationSuite: 'ReVanced',
+		downloadUrl: 'https://revanced.app/download',
+		maintainer: 'ReVanced',
+		thumbnailUrl: 'https://revanced.app/manager_two.png',
+		operatingSystem: 'Android 8',
+		offers: {
+			'@type': 'Offer',
+			price: '0'
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			},
+			sameAs: [
+				'https://github.com/revanced',
+				'https://twitter.com/revancedapp',
+				'https://revanced.app/discord',
+				'https://www.reddit.com/r/revancedapp',
+				'https://t.me/app_revanced',
+				'https://www.youtube.com/@ReVanced'
+			]
+		}
+	}}
+/>
 
 <Dialogue bind:modalOpen={warningDialogue}>
 	<svelte:fragment slot="title">Warning</svelte:fragment>
