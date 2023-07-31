@@ -61,9 +61,6 @@ devDependencies:
   sass:
     specifier: ^1.55.0
     version: 1.64.1
-  semver:
-    specifier: ^7.5.4
-    version: 7.5.4
   sirv-cli:
     specifier: ^2.0.2
     version: 2.0.2

@@ -71,6 +71,7 @@
 					<Navigation href="/">Home</Navigation>
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
+					<Navigation href="/docs">Docs</Navigation>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
 				</div>
 			</div>
@@ -107,9 +108,7 @@
 		</Svg>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
-	<svelte:fragment slot="description"
-		>Configure the API for this website.</svelte:fragment
-	>
+	<svelte:fragment slot="description">Configure the API for this website.</svelte:fragment>
 	<div id="settings-content">
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />
