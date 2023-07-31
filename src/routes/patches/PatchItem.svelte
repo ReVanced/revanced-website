@@ -3,6 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
 	import { compare, coerce } from 'semver';
+	import Button from '$lib/components/Button.svelte';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -22,7 +23,7 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img class="expand-arrow" id="expand-card" src="/icons/arrow.svg" alt="dropdown" />
+			<img class="expand-arrow" src="/icons/arrow.svg" alt="dropdown" />
 		{/if}
 	</div>
 	<h5>{patch.description}</h5>
@@ -68,15 +69,14 @@
 				</li>
 			{/if}
 			{#if patch.compatiblePackages[0].versions.length > 1}
-				<li class="patch-info button" on:click={() => (showAllVersions = !showAllVersions)}>
+				<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
 					<img
 						class="expand-arrow"
-						id="expand-versions"
 						style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
 						src="/icons/expand_more.svg"
 						alt="dropdown"
 					/>
-				</li>
+				</Button>
 			{/if}
 		{/if}
 	</ul>
@@ -169,12 +169,7 @@
 	.expand-arrow {
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
-		&#expand-versions {
-			height: 1.125rem;
-		}
-		&#expand-card {
-			height: 1.5rem;
-		}
+		height: 1.5rem;
 	}
 
 	.rotate .expand-arrow {
