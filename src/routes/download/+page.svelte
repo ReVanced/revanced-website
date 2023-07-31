@@ -52,7 +52,7 @@
 		<Query {query} let:data>
 			<Button
 				type="text"
-				href={data.assets[0].url}
+				href={data.assets[0].browser_download_url}
 				download
 				on:click={() => (warningDialogue = false)}>Okay</Button
 			>
@@ -68,17 +68,17 @@
 		<Query {query} let:data>
 			{#if !isAndroid || androidVersion < 8}
 				<Button on:click={handleClick} type="filled" icon="download">
-					{data.version}
+					{data.metadata.tag_name}
 				</Button>
 			{:else}
 				<Button
 					on:click={handleClick}
 					type="filled"
 					icon="download"
-					href={data.assets[0].url}
+					href={data.assets[0].browser_download_url}
 					download
 				>
-					{data.version}
+					{data.metadata.tag_name}
 				</Button>
 			{/if}
 		</Query>
