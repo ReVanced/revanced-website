@@ -71,10 +71,6 @@
 					<Navigation href="/">Home</Navigation>
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
-					<div hidden>
-						<!-- This is just temporary so the build doesn't fail -->
-						<Navigation href="/docs">Docs</Navigation>
-					</div>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
 				</div>
 			</div>
