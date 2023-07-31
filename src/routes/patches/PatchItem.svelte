@@ -23,7 +23,7 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img class="expand-arrow" id="expand-card" src="/icons/arrow.svg" alt="dropdown" />
+			<img class="expand-arrow" src="/icons/arrow.svg" alt="dropdown" />
 		{/if}
 	</div>
 	<h5>{patch.description}</h5>
@@ -72,7 +72,6 @@
 				<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
 					<img
 						class="expand-arrow"
-						id="expand-versions"
 						style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
 						src="/icons/expand_more.svg"
 						alt="dropdown"
@@ -170,12 +169,7 @@
 	.expand-arrow {
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
-		&#expand-versions {
-			height: 1.125rem;
-		}
-		&#expand-card {
-			height: 1.5rem;
-		}
+		height: 1.5rem;
 	}
 
 	.rotate .expand-arrow {
