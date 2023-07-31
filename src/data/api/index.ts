@@ -19,7 +19,7 @@ async function repositories(): Promise<ReposData> {
 async function tools(): Promise<ToolsData> {
 	const json = await get_json('tools');
 	// Make the data easier to work with.
-	let map: Map<string, Tool> = new Map();
+	const map: Map<string, Tool> = new Map();
 	for (const tool of json['tools']) {
 		const repo: string = tool.repository;
 
@@ -33,7 +33,7 @@ async function tools(): Promise<ToolsData> {
 			});
 		}
 
-		let value = map.get(repo)!!;
+		const value = map.get(repo)!!;
 		value.assets.push({
 			name: tool.name,
 			size: tool.size,
@@ -52,12 +52,12 @@ async function manager(): Promise<Tool> {
 }
 
 async function patches(): Promise<PatchesData> {
-	const json = await get_json('patches');
+	const json = await get_json('v2/patches/latest');
 	const packagesWithCount: { [key: string]: number } = {};
 
 	// gets packages and patch count
-	for (let i = 0; i < json.length; i++) {
-		json[i].compatiblePackages.forEach((pkg: Patch) => {
+	for (let i = 0; i < json.patches.length; i++) {
+		json.patches[i].compatiblePackages.forEach((pkg: Patch) => {
 			packagesWithCount[pkg.name] = (packagesWithCount[pkg.name] || 0) + 1;
 		});
 	}
@@ -67,7 +67,7 @@ async function patches(): Promise<PatchesData> {
 		.sort((a, b) => b[1] - a[1])
 		.map((pkg) => pkg[0]);
 
-	return { patches: json, packages };
+	return { patches: json.patches, packages };
 }
 
 export const staleTime = 5 * 60 * 1000;
