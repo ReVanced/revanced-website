@@ -44,9 +44,6 @@
 						🎯 {version}
 					</li>
 				{/each}
-				<li class="patch-info">
-					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-				</li>
 			{:else}
 				<li class="patch-info">
 					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
