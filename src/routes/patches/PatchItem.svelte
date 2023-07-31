@@ -2,6 +2,7 @@
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
+	import { compare, coerce } from 'semver';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -47,7 +48,16 @@
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
 			{#if showAllVersions}
-				{#each patch.compatiblePackages[0].versions as version}
+				{#each patch.compatiblePackages[0].versions
+					.slice()
+					.sort((a, b) => {
+						const coercedA = coerce(a);
+						const coercedB = coerce(b);
+						if (coercedA && coercedB) return compare(coercedA, coercedB);
+						else if (!coercedA && !coercedB) return 0;
+						else return !coercedA ? 1 : -1;
+					})
+					.reverse() as version}
 					<li class="patch-info">
 						🎯 {version}
 					</li>
