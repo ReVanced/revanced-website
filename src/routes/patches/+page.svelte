@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { building } from '$app/environment';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { derived, readable, type Readable } from 'svelte/store';
 	import { page } from '$app/stores';
 
 	import type { Patch } from '$lib/types';
@@ -9,6 +11,7 @@
 	import { queries } from '$data/api';
 
 	import Meta from '$lib/components/Meta.svelte';
+	import { JsonLd } from 'svelte-meta-tags';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
@@ -20,8 +23,15 @@
 
 	const query = createQuery(['patches'], queries.patches);
 
-	$: selectedPkg = $page.url.searchParams.get('pkg');
-	let searchTerm = $page.url.searchParams.get('s');
+	let searchParams: Readable<URLSearchParams>;
+	if (building) {
+		searchParams = readable(new URLSearchParams());
+	} else {
+		searchParams = derived(page, ($page) => $page.url.searchParams);
+	}
+
+	$: selectedPkg = $searchParams.get('pkg');
+	let searchTerm = $searchParams.get('s');
 	let searchTermFiltered = searchTerm
 		?.replace(/\./g, '')
 		.replace(/\s/g, '')
@@ -30,6 +40,7 @@
 
 	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
+	let showAllVersions = false;
 
 	function checkCompatibility(patch: Patch, pkg: string) {
 		if (pkg === '') {
@@ -95,6 +106,32 @@
 </script>
 
 <Meta title="Patches" />
+<JsonLd
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced Patches',
+		abstract: 'A list of ReVanced Patches',
+		breadcrumb: 'Home > Patches',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			},
+			sameAs: [
+				'https://github.com/revanced',
+				'https://twitter.com/revancedapp',
+				'https://revanced.app/discord',
+				'https://www.reddit.com/r/revancedapp',
+				'https://t.me/app_revanced',
+				'https://www.youtube.com/@ReVanced'
+			]
+		}
+	}}
+/>
 
 <div class="search">
 	<div class="search-contain">
@@ -160,7 +197,7 @@
 				<!-- Trigger new animations when package or search changes (I love Svelte) -->
 				{#key selectedPkg || searchTermFiltered}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<PatchItem {patch} />
+						<PatchItem {patch} bind:showAllVersions />
 					</div>
 				{/key}
 			{/each}

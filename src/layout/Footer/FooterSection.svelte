@@ -19,7 +19,10 @@
 		<span>
 			{title}
 		</span>
-		<span>{expanded ? '-' : '+'}</span>
+		<img
+			src="/icons/{expanded ? 'expand_less' : 'expand_more'}.svg"
+			alt={expanded ? 'Close' : 'Expand'}
+		/>
 	</button>
 	{#if expanded}
 		<ul transition:slide|local={{ easing: quintOut, duration: 500 }}>
@@ -33,7 +36,7 @@
 		list-style: none;
 		color: var(--grey-five);
 		font-size: 0.9rem;
-		font-weight: 500;
+		font-weight: 600;
 	}
 
 	ul {
@@ -69,5 +72,9 @@
 		.desktop-only {
 			display: none;
 		}
+	}
+
+	img {
+		height: 24px;
 	}
 </style>

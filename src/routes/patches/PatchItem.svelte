@@ -2,9 +2,11 @@
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$lib/types';
-	import { friendlyName } from '$util/friendlyName';
+	import { compare, coerce } from 'semver';
+	import Button from '$lib/components/Button.svelte';
 
 	export let patch: Patch;
+	export let showAllVersions: boolean;
 	const hasPatchOptions = !!patch.options.length;
 	let expanded: boolean = false;
 </script>
@@ -21,7 +23,7 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img id="arrow" src="/icons/arrow.svg" alt="dropdown" />
+			<img class="expand-arrow" src="/icons/expand_more.svg" alt="dropdown" />
 		{/if}
 	</div>
 	<h5>{patch.description}</h5>
@@ -36,19 +38,46 @@
 			</a>
 		{/each}
 
-		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
-		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
-			<li class="patch-info">
-				🎯 {patch.compatiblePackages[0].versions.slice(-1)}
-			</li>
-		{/if}
-
 		{#if !patch.compatiblePackages.length}
 			<li class="patch-info">🌎 Universal patch</li>
 		{/if}
 
 		{#if hasPatchOptions}
 			<li class="patch-info">⚙️ Patch options</li>
+		{/if}
+
+		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
+		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
+			{#if showAllVersions}
+				{#each patch.compatiblePackages[0].versions
+					.slice()
+					.sort((a, b) => {
+						const coercedA = coerce(a);
+						const coercedB = coerce(b);
+						if (coercedA && coercedB) return compare(coercedA, coercedB);
+						else if (!coercedA && !coercedB) return 0;
+						else return !coercedA ? 1 : -1;
+					})
+					.reverse() as version}
+					<li class="patch-info">
+						🎯 {version}
+					</li>
+				{/each}
+			{:else}
+				<li class="patch-info">
+					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
+				</li>
+			{/if}
+			{#if patch.compatiblePackages[0].versions.length > 1}
+				<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
+					<img
+						class="expand-arrow"
+						style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
+						src="/icons/expand_more.svg"
+						alt="dropdown"
+					/>
+				</Button>
+			{/if}
 		{/if}
 	</ul>
 
@@ -78,6 +107,9 @@
 	}
 
 	.patch-info {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		list-style: none;
 		font-size: 0.8rem;
 		font-weight: 500;
@@ -134,13 +166,13 @@
 		justify-content: space-between;
 	}
 
-	#arrow {
-		height: 1.5rem;
+	.expand-arrow {
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
+		height: 1.5rem;
 	}
 
-	.rotate #arrow {
+	.rotate .expand-arrow {
 		transform: rotate(180deg);
 	}
 

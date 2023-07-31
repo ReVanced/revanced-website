@@ -27,7 +27,7 @@
 		<img
 			id="arrow"
 			style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
-			src="/icons/arrow.svg"
+			src="/icons/expand_less.svg"
 			alt="dropdown"
 		/>
 	</div>
