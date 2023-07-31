@@ -21,7 +21,7 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img id="arrow" src="/icons/arrow.svg" alt="dropdown" />
+			<img class="expand-arrow" id="expand-card" src="/icons/arrow.svg" alt="dropdown" />
 		{/if}
 	</div>
 	<h5>{patch.description}</h5>
@@ -52,10 +52,10 @@
 					🎯 {patch.compatiblePackages[0].versions.slice(-1)}
 				</li>
 			{/if}
-			<li class="patch-info button">
+			<li class="patch-info button" on:click={() => (showAllVersions = !showAllVersions)}>
 				<img
-					on:click={() => (showAllVersions = !showAllVersions)}
-					id="arrow"
+					class="expand-arrow"
+					id="expand-versions"
 					style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
 					src="/icons/expand_more.svg"
 					alt="dropdown"
@@ -157,13 +157,18 @@
 		justify-content: space-between;
 	}
 
-	#arrow {
-		height: 1.5rem;
+	.expand-arrow {
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
+		&#expand-versions {
+			height: 1.125rem;
+		}
+		&#expand-card {
+			height: 1.5rem;
+		}
 	}
 
-	.rotate #arrow {
+	.rotate .expand-arrow {
 		transform: rotate(180deg);
 	}
 
