@@ -25,6 +25,7 @@
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"sass": "^1.55.0",
+		"semver": "^7.5.4",
 		"sirv-cli": "^2.0.2",
 		"svelte": "^3.54.0",
 		"svelte-check": "^2.9.2",
