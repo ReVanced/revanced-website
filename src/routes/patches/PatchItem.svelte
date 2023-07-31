@@ -36,6 +36,14 @@
 			</a>
 		{/each}
 
+		{#if !patch.compatiblePackages.length}
+			<li class="patch-info">🌎 Universal patch</li>
+		{/if}
+
+		{#if hasPatchOptions}
+			<li class="patch-info">⚙️ Patch options</li>
+		{/if}
+
 		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
 		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
 			{#if showAllVersions}
@@ -58,14 +66,6 @@
 					alt="dropdown"
 				/>
 			</li>
-		{/if}
-
-		{#if !patch.compatiblePackages.length}
-			<li class="patch-info">🌎 Universal patch</li>
-		{/if}
-
-		{#if hasPatchOptions}
-			<li class="patch-info">⚙️ Patch options</li>
 		{/if}
 	</ul>
 
