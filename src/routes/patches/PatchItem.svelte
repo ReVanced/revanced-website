@@ -98,6 +98,9 @@
 	}
 
 	.patch-info {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		list-style: none;
 		font-size: 0.8rem;
 		font-weight: 500;
