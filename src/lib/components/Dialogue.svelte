@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
+	import { disableScrollHandling } from '$app/navigation';
 	export let modalOpen = false;
 	export let fullscreen = false;
+	export let notDismissible = false;
 
 	let element: HTMLDivElement;
 	let y = 0;
@@ -15,8 +17,12 @@
 {#if modalOpen}
 	<div
 		class="overlay"
-		on:click={() => (modalOpen = !modalOpen)}
-		on:keypress={() => (modalOpen = !modalOpen)}
+		on:click={() => {
+			if (!notDismissible) modalOpen = !modalOpen;
+		}}
+		on:keypress={() => {
+			if (!notDismissible) modalOpen = !modalOpen;
+		}}
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	/>
 
@@ -41,9 +47,9 @@
 					<slot name="icon" />
 				{/if}
 				{#if $$slots.title}
-					<h4>
+					<h3>
 						<slot name="title" />
-					</h4>
+					</h3>
 				{/if}
 			</div>
 
@@ -79,7 +85,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: 0.75rem;
+		gap: 1rem;
 	}
 
 	.title {
@@ -88,13 +94,11 @@
 		gap: 1rem;
 		width: 100%;
 		background-color: var(--grey-six);
-		margin-bottom: 8px;
 	}
 
 	.buttons {
 		display: flex;
 		gap: 2rem;
-		margin-top: 1rem;
 		justify-content: flex-end;
 		width: 100%;
 	}
@@ -128,6 +132,8 @@
 		padding: 32px;
 		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+		scrollbar-width: none;
+		-ms-overflow-style: none;
 	}
 
 	button {

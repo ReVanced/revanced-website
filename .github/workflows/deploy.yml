@@ -1,4 +1,6 @@
-on: pull_request
+name: Deploy
+
+on: [pull_request, push]
 
 jobs:
   deploy:
@@ -7,22 +9,28 @@ jobs:
       contents: read
       deployments: write
       pull-requests: write 
-   name: Publish to Cloudflare Pages
+    name: Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Build
+        run: |
+         npm i
+         npm run build
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
-        id: publish
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
           directory: public
+        id: publish
 
-      - name: Comment
+      - name: Comment deployment URL
+        if: ${{ github.event_name == 'pull_request' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PULL_REQUESTS_WRITE }}
-          message: ${{ steps.publish.outputs.alias }}
+          message: Deployed at ${{ steps.publish.outputs.alias }}.

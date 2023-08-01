@@ -50,7 +50,6 @@
 			<FooterSection title="Pages">
 				<li><a href="/">Home</a></li>
 				<li><a href="/download">Download</a></li>
-				<li><a href="/docs">Documentation</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>
@@ -115,6 +114,13 @@
 		align-items: center;
 	}
 
+	@media screen and (max-width: 768px) {
+		.footer-bottom {
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+	}
+
 	#logo-name {
 		font-size: 1.4rem;
 		color: var(--white);
@@ -128,7 +134,7 @@
 	.footer-bottom a {
 		text-decoration: none;
 		color: var(--grey-five);
-		font-weight: 500;
+		font-weight: 600;
 	}
 
 	li {
@@ -140,7 +146,7 @@
 
 	li a {
 		color: var(--accent-color);
-		font-weight: 500;
+		font-weight: 600;
 		font-size: 0.95rem;
 	}
 
@@ -164,9 +170,7 @@
 	}
 
 	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color-two);
+		text-decoration: underline var(--accent-color-two);
 		color: var(--white);
 	}
 
@@ -202,5 +206,10 @@
 			flex-direction: column;
 			gap: initial;
 		}
+	}
+
+	svg {
+		padding-left: 15px;
+		padding-right: 15px;
 	}
 </style>

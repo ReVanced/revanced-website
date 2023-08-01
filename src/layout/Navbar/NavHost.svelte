@@ -71,10 +71,6 @@
 					<Navigation href="/">Home</Navigation>
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
-					<div hidden>
-						<!-- This is just temporary so the build doesn't fail -->
-						<Navigation href="/docs">Docs</Navigation>
-					</div>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
 					<Navigation href="/donate">Donate</Navigation>
 				</div>
@@ -113,7 +109,7 @@
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
 	<svelte:fragment slot="description"
-		>Configure the website's API. Defaults to ReVanced.</svelte:fragment
+		>Configure the API for this website.</svelte:fragment
 	>
 	<div id="settings-content">
 		<div class="input-wrapper">
@@ -135,6 +131,10 @@
 </Modal>
 
 <style>
+	#logo {
+		padding: 0.5rem;
+	}
+
 	path {
 		fill: var(--grey-five);
 	}
