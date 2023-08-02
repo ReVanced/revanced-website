@@ -58,6 +58,9 @@ devDependencies:
   prettier-plugin-svelte:
     specifier: ^2.8.1
     version: 2.10.1(prettier@2.8.8)(svelte@3.59.2)
+  qrcodejs:
+    specifier: ^1.0.0
+    version: 1.0.0
   sass:
     specifier: ^1.55.0
     version: 1.64.1
@@ -1682,6 +1685,10 @@ packages:
   /punycode@2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
+    dev: true
+
+  /qrcodejs@1.0.0:
+    resolution: {integrity: sha512-67rj3mMBhSBepaD57qENnltO+r8rSYlqM7HGThks/BiyDAkc86sLvkKqjkqPS5v13f7tvnt6dbEf3qt7zq+BCg==}
     dev: true
 
   /queue-microtask@1.2.3:

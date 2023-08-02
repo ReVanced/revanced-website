@@ -1,29 +1,26 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
-
-	import type { TeamMember } from '$lib/types';
-
 	import Meta from '$lib/components/Meta.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
+	import QRCode from '$lib/components/QRCode.svelte';
 
-	import team from './team.json';
-	import cryptocurrency from './cryptocurrency.json';
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
+	import Query from '$lib/components/Query.svelte';
+	import Dialogue from '$lib/components/Dialogue.svelte';
 
-	let teamShuffled: TeamMember[] = [];
+	let qrCodeDialogue = false;
+	let qrCodeValue = '';
+	const teamQuery = createQuery(['team'], queries.team);
+	const donateQuery = createQuery(['donate'], queries.donate);
 	let snackbarOpen = false;
 
-	onMount(async () => {
-		teamShuffled = team.sort(() => (Math.random() > 0.5 ? -1 : 1));
-	});
-
-	async function copyToClipboard(e) {
+	async function copyToClipboard(walletAddress: string) {
 		snackbarOpen = true;
 		try {
-			const walletAddress = e.target.innerText;
 			await navigator.clipboard.writeText(walletAddress);
 		} catch (error) {
 			console.error('failed to copy crypto wallet:', error);
@@ -33,6 +30,22 @@
 
 <Meta title="Donate" />
 
+<Dialogue bind:modalOpen={qrCodeDialogue}>
+	<svelte:fragment slot="title">QR Code</svelte:fragment>
+	<svelte:fragment slot="icon">
+		<img class="qr-code" src="/icons/qr_code.svg" alt="QR Code" />
+	</svelte:fragment>
+	<svelte:fragment slot="description">
+		<span style="max-width: 40px; overflow: break-word;">{qrCodeValue}</span>
+	</svelte:fragment>
+	<div class="qr-code">
+		<QRCode codeValue={qrCodeValue} squareSize="200" />
+	</div>
+	<svelte:fragment slot="buttons">
+		<Button type="text" on:click={() => (qrCodeDialogue = false)}>Done</Button>
+	</svelte:fragment>
+</Dialogue>
+
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
 	<p>
@@ -40,53 +53,74 @@
 		features. All of which is completely open source and free of charge. Donating will allow
 		ReVanced maintain our servers and develop new features.
 	</p>
-
-	<div class="buttons-container">
-		<Button type="filled" href="https://opencollective.com/revanced">Open Collective</Button>
-		<Button type="tonal" href="https://github.com/sponsors/ReVanced">GitHub Sponsors</Button>
-	</div>
-	<div class="table-container">
-		<table>
-			<thead>
-				<th colspan="3"><h4>Crypto</h4></th>
-			</thead>
-			<tbody>
-				{#each cryptocurrency as crypto}
-					<tr>
-						<td><h5>{crypto.name}</h5></td>
-						<td>
-							<button on:click={copyToClipboard}>
-								<h6>{crypto.address}</h6>
-							</button>
-						</td>
-					</tr>
+	<Query query={donateQuery} let:data>
+		{#if data.platforms.length > 0}
+			<div class="buttons-container">
+				{#each data.platforms as platform, i}
+					{#if i > 0}
+						<Button type="filled" href={platform.url}>{platform.name}</Button>
+					{:else}
+						<Button type="tonal" href={platform.url}>{platform.name}</Button>
+					{/if}
 				{/each}
-			</tbody>
-		</table>
-	</div>
+			</div>
+		{/if}
+		{#if data.wallets.length > 0}
+			<div class="table-container">
+				<table>
+					<thead>
+						<th colspan="3"><h4>Crypto</h4></th>
+					</thead>
+					<tbody>
+						{#each data.wallets as wallet}
+							<tr>
+								<td><h5>{wallet.name}</h5></td>
+								<td class="wallet-content">
+									<button on:click={() => copyToClipboard(wallet.address)}>
+										<h6>{wallet.address}</h6>
+									</button>
+									<Button
+										type="text"
+										on:click={() => {
+											qrCodeValue = wallet.address;
+											qrCodeDialogue = !qrCodeDialogue;
+										}}
+									>
+										<img class="qr-code-button" src="/icons/qr_code.svg" alt="QR Code" />
+									</Button>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{/if}
+	</Query>
+	<Query query={teamQuery} let:data>
+		<h3>Meet the team</h3>
+		{#if data.members.length > 0}
+			<section class="team">
+				{#each data.members.sort(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
+					<a
+						class="member"
+						href={member.html_url}
+						rel="noreferrer"
+						target="_blank"
+						in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
+					>
+						<img src={member.avatar_url} alt={`${member.login}'s profile picture.'`} />
 
-	<h3>Meet the team</h3>
-	<section class="team">
-		{#each teamShuffled as member, i}
-			<a
-				class="member"
-				href={`https://github.com/${member.github}`}
-				rel="noreferrer"
-				target="_blank"
-				in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
-			>
-				<img
-					src={`https://github.com/${member.github}.png`}
-					alt={`${member.name}'s profile picture.'`}
-				/>
-
-				<div class="member-text">
-					<h4>{member.name}</h4>
-					<h6>{member.message}</h6>
-				</div>
-			</a>
-		{/each}
-	</section>
+						<div class="member-text">
+							<h4>{member.login}</h4>
+							{#if !!member.bio}
+								<h6>{member.bio}</h6>
+							{/if}
+						</div>
+					</a>
+				{/each}
+			</section>
+		{/if}
+	</Query>
 </main>
 
 <Snackbar bind:open={snackbarOpen} closeIcon>
@@ -154,13 +188,33 @@
 	}
 
 	td {
+		text-align: center;
+		vertical-align: middle;
 		padding: 0.9rem 1rem;
 		border-right: 1px solid var(--grey-three);
 		border-bottom: 1px solid var(--grey-three);
+		&.wallet-content {
+			display: flex;
+			justify-content: space-between;
+			gap: 2rem;
+		}
 
 		&:not(:first-child) {
 			word-break: break-all;
 		}
+	}
+
+	.qr-code {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.qr-code-button {
+		color: var(--white);
+		transition: all 0.2s var(--bezier-one);
+		user-select: none;
+		height: 2rem;
 	}
 
 	.team {

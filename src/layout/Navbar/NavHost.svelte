@@ -72,7 +72,7 @@
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
-					<Navigation href="/donate">Donate</Navigation>
+					<Navigation queryKey="team" href="/donate">Donate</Navigation>
 				</div>
 			</div>
 			<div id="secondary-navigation">
@@ -108,9 +108,7 @@
 		</Svg>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
-	<svelte:fragment slot="description"
-		>Configure the API for this website.</svelte:fragment
-	>
+	<svelte:fragment slot="description">Configure the API for this website.</svelte:fragment>
 	<div id="settings-content">
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />

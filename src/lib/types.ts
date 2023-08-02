@@ -49,7 +49,18 @@ export interface Metadata {
 }
 
 export interface TeamMember {
+	login: string;
+	avatar_url: string;
+	html_url: string;
+	bio: string;
+}
+
+export interface CryptoWallet {
 	name: string;
-	github: string;
-	message: string;
+	address: string;
+}
+
+export interface DonationPlatform {
+	name: string;
+	url: string;
 }
