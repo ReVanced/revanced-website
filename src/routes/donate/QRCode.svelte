@@ -31,7 +31,7 @@
 		background-color: white;
 		padding: 10px;
 		width: 220px;
-		height: 200x;
-		margin-top: 15px;
+		height: 220px;
+		border-radius: 0.5rem;
 	}
 </style>

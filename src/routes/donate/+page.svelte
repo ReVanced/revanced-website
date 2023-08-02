@@ -5,7 +5,7 @@
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
-	import QRCode from '$lib/components/QRCode.svelte';
+	import QRCode from './QRCode.svelte';
 
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -14,6 +14,7 @@
 
 	let qrCodeDialogue = false;
 	let qrCodeValue = '';
+	let qrCodeDialogueName = '';
 	const teamQuery = createQuery(['team'], queries.team);
 	const donateQuery = createQuery(['donate'], queries.donate);
 	let snackbarOpen = false;
@@ -29,22 +30,6 @@
 </script>
 
 <Meta title="Donate" />
-
-<Dialogue bind:modalOpen={qrCodeDialogue}>
-	<svelte:fragment slot="title">QR Code</svelte:fragment>
-	<svelte:fragment slot="icon">
-		<img class="qr-code" src="/icons/qr_code.svg" alt="QR Code" />
-	</svelte:fragment>
-	<svelte:fragment slot="description">
-		<span style="max-width: 40px; overflow: break-word;">{qrCodeValue}</span>
-	</svelte:fragment>
-	<div class="qr-code">
-		<QRCode codeValue={qrCodeValue} squareSize="200" />
-	</div>
-	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={() => (qrCodeDialogue = false)}>Done</Button>
-	</svelte:fragment>
-</Dialogue>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
@@ -83,6 +68,7 @@
 										type="text"
 										on:click={() => {
 											qrCodeValue = wallet.address;
+											qrCodeDialogueName = wallet.name
 											qrCodeDialogue = !qrCodeDialogue;
 										}}
 									>
@@ -112,7 +98,7 @@
 
 						<div class="member-text">
 							<h4>{member.login}</h4>
-							{#if !!member.bio}
+							{#if member.bio}
 								<h6>{member.bio}</h6>
 							{/if}
 						</div>
@@ -122,6 +108,22 @@
 		{/if}
 	</Query>
 </main>
+
+<Dialogue bind:modalOpen={qrCodeDialogue}>
+	<svelte:fragment slot="icon">
+		<img class="qr-code" src="/icons/qr_code.svg" alt="QR Code" />
+	</svelte:fragment>
+	<svelte:fragment slot="title">Scan QR Code</svelte:fragment>
+	<svelte:fragment slot="description">
+		<div class="qr-code-body">
+			{qrCodeDialogueName} Wallet
+			<QRCode codeValue={qrCodeValue} squareSize="200" />
+		</div>
+	</svelte:fragment>
+	<svelte:fragment slot="buttons">
+		<Button type="filled" on:click={() => (qrCodeDialogue = false)}>Close</Button>
+	</svelte:fragment>
+</Dialogue>
 
 <Snackbar bind:open={snackbarOpen} closeIcon>
 	<svelte:fragment slot="text">Address copied to clipboard</svelte:fragment>
@@ -204,10 +206,13 @@
 		}
 	}
 
-	.qr-code {
+	.qr-code-body {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		align-items: center;
+		gap: 1rem;
+		word-break: break-word;
+		text-align: center;
 	}
 
 	.qr-code-button {
@@ -218,7 +223,7 @@
 	}
 
 	.team {
-		width: 50%;
+		width: 75%;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
@@ -227,7 +232,7 @@
 	}
 
 	.member {
-		width: 144px;
+		width: 300px;
 		color: var(--white);
 		border: 1px solid var(--grey-three);
 		text-decoration: none;
@@ -235,9 +240,8 @@
 		padding: 1rem;
 		border-radius: 12px;
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
+
+		gap: 1rem;
 		transition: 0.3s background-color var(--bezier-one);
 
 		img {
@@ -252,6 +256,7 @@
 		.member-text {
 			display: flex;
 			flex-direction: column;
+			word-break: break-word;
 		}
 
 		&:hover {
@@ -265,7 +270,7 @@
 		}
 
 		.team {
-			width: 75%;
+			width: 90%;
 		}
 	}
 
