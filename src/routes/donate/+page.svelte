@@ -223,7 +223,7 @@
 	}
 
 	.team {
-		width: 75%;
+		width: 85%;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
@@ -232,7 +232,7 @@
 	}
 
 	.member {
-		width: 300px;
+		width: 350px;
 		color: var(--white);
 		border: 1px solid var(--grey-three);
 		text-decoration: none;
@@ -264,12 +264,18 @@
 		}
 	}
 
-	@media screen and (max-width: 1000px) {
-		p {
-			width: 90%;
+	@media screen and (max-width: 1420px) {
+		.team {
+			width: 100%;
 		}
 
-		.team {
+		.member {
+			width: 325px;
+		}
+	}
+
+	@media screen and (max-width: 1000px) {
+		p {
 			width: 90%;
 		}
 	}
@@ -285,7 +291,6 @@
 
 		.member {
 			width: 100%;
-			flex-direction: row;
 			gap: 1rem;
 		}
 
@@ -293,10 +298,6 @@
 			margin-bottom: 0;
 			height: 48px;
 			width: 48px;
-		}
-
-		.member-text {
-			text-align: left;
 		}
 	}
 </style>
