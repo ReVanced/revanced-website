@@ -58,41 +58,9 @@ async function team(): Promise<TeamData> {
 }
 
 async function donate(): Promise<DonationData> {
-	// const json = await get_json('v2/donations');
-	// mockup response for now until api uses objects
+	const json = await get_json('v2/donations');
 
-	const json = JSON.parse(`{
-		"wallets": [
-			{
-				"name": "BTC",
-				"address": "bc1q4x8j6mt27y5gv0q625t8wkr87ruy8fprpy4v3f"
-			},
-			{
-				"name": "DOGE",
-				"address": "D8GH73rNjudgi6bS2krrXWEsU9KShedLXp"
-			},
-			{
-				"name": "ETH",
-				"address": "0x7ab4091e00363654bf84B34151225742cd92FCE5"
-			},
-			{
-				"name": "LTC",
-				"address": "LbJi8EuoDcwaZvykcKmcrM74jpjde23qJ2"
-			}
-		],
-		"links": [
-			{
-				"name": "OpenCollective",
-				"url": "https://opencollective.com/revanced"
-			},
-			{
-				"name": "Github Sponsors",
-				"url": "https://github.com/sponsors/ReVanced"
-			}
-		]
-	}`);
-
-	return { wallets: json.wallets, platforms: json.links };
+	return { wallets: json.donations.wallets, platforms: json.donations.links };
 }
 
 export const staleTime = 5 * 60 * 1000;
