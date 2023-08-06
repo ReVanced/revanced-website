@@ -3,7 +3,7 @@
 	import QRious from 'qrious/dist/qrious';
 
 	export let codeValue: string;
-	export let squareSize: number = 200;
+	export let squareSize: number = 150;
 
 	onMount(() => {
 		new QRious({
@@ -14,4 +14,12 @@
 	});
 </script>
 
-<canvas id="qrcode" style="border-radius: 0.5rem;" />
+<canvas id="qrcode"/>
+
+<style>
+	canvas {
+		border-radius: 0.5rem;
+		background-color: white;
+		padding: 0.25rem;
+	}
+</style>
