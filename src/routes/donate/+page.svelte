@@ -42,7 +42,7 @@
 		{#if data.platforms.length > 0}
 			<div class="buttons-container">
 				{#each data.platforms as platform, i}
-					{#if i > 0}
+					{#if i === 0}
 						<Button type="filled" href={platform.url}>{platform.name}</Button>
 					{:else}
 						<Button type="tonal" href={platform.url}>{platform.name}</Button>
