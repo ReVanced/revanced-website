@@ -53,7 +53,7 @@
 				<li><a href="/download">Download</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
-				<li><a href="{new URL($page.url).host}/docs/">Docs</a></li>
+				<li><a href="https://{new URL($page.url).host}/docs/">Docs</a></li>
 			</FooterSection>
 			<FooterSection title="Repositories">
 				<Query {query} let:data>
