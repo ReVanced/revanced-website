@@ -3,8 +3,8 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && pnpm run build-docusaurus",
-		"build-docusaurus": "cd docusaurus && pnpm build && npx ncp build ../public/docs",
+		"build": "vite build && npm run build-docusaurus",
+		"build-docusaurus": "cd docusaurus && npm build && npx ncp build ../public/docs",
 		"package": "svelte-kit package",
 		"preview": "sirv ./public --no-clear",
 		"vite:preview": "vite preview",
