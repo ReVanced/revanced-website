@@ -58,6 +58,7 @@ const config = {
         title: 'ReVanced',
         logo: {
           alt: 'ReVanced Logo',
+          target: '_self',
           src: 'img/logo.svg',
           width: 22
         },
@@ -92,5 +93,7 @@ const config = {
       },
     }),
 };
+
+config.themeConfig.navbar.logo.href = config.url;
 
 module.exports = config;
