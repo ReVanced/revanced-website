@@ -73,7 +73,7 @@
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
-					<Navigation href="{$page.url.toString().split('/')[0]}/docs/">Docs</Navigation>
+					<Navigation href="{new URL($page.url).hostname}/docs">Docs</Navigation>
 				</div>
 			</div>
 			<div id="secondary-navigation">
