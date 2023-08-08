@@ -11,7 +11,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import AnimatedImage from '$lib/components/AnimatedImage.svelte';
+	import PulsatingImage from '$lib/components/PulsatingImage.svelte';
 
 	let qrCodeDialogue = false;
 	let qrCodeValue = '';
@@ -35,7 +35,7 @@
 <Meta title="Donate" />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<AnimatedImage
+	<PulsatingImage
 		backgroundImageUrl="/revanced-logo-background.svg"
 		foregroundImageUrl="/icons/heart.svg"
 		alt="ReVanced Logo"
