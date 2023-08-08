@@ -50,8 +50,8 @@
 	<Query query={donateQuery} let:data>
 		{#if data.platforms}
 			<div class="buttons-container">
-				{#each data.platforms as platform, i}
-					{#if i === 0}
+				{#each data.platforms.sort((platform1, platform2) => Number(platform2.preferred) - Number(platform1.preferred)) as platform}
+					{#if platform.preferred}
 						<Button type="filled" href={platform.url}>{platform.name}</Button>
 					{:else}
 						<Button type="tonal" href={platform.url}>{platform.name}</Button>

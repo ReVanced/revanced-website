@@ -59,9 +59,11 @@ export interface CryptoWallet {
 	network: string;
 	currency_code: string;
 	address: string;
+	preferred: boolean;
 }
 
 export interface DonationPlatform {
 	name: string;
 	url: string;
+	preferred: boolean;
 }
