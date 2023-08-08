@@ -4,6 +4,8 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
+const siteUrl = "https://revanced.app"
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'ReVanced',
@@ -11,7 +13,7 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://revanced.app',
+  url: siteUrl,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/docs',
@@ -59,7 +61,7 @@ const config = {
         logo: {
           alt: 'ReVanced Logo',
           target: '_self',
-          src: 'img/logo.svg',
+          href: siteUrl,
           width: 22
         },
         items: [
@@ -93,7 +95,5 @@ const config = {
       },
     }),
 };
-
-config.themeConfig.navbar.logo.href = config.url;
 
 module.exports = config;
