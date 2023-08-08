@@ -11,6 +11,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
+	import AnimatedImage from '$lib/components/AnimatedImage.svelte';
 
 	let qrCodeDialogue = false;
 	let qrCodeValue = '';
@@ -34,6 +35,12 @@
 <Meta title="Donate" />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	<AnimatedImage
+		backgroundImageUrl="/revanced-logo-background.svg"
+		foregroundImageUrl="/icons/heart.svg"
+		alt="ReVanced Logo"
+		size={200}
+	/>
 	<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
 	<p>
 		ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
