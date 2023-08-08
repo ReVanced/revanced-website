@@ -80,7 +80,11 @@
 								}}
 							>
 								<div class="name">
-									<img src="/donate/{wallet.currency_code}.svg" alt={`${wallet.network} icon.'`} />
+									<img
+										src="/donate/{wallet.currency_code}.svg"
+										onerror="this.onerror=null; this.src='/donate/generic.svg'"
+										alt={`${wallet.network} icon.'`}
+									/>
 									{`${wallet.network} (${wallet.currency_code})`}
 								</div>
 								<img id="arrow" src="/icons/expand_less.svg" alt="dropdown" />
