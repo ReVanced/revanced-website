@@ -18,6 +18,7 @@
 	const teamQuery = createQuery(['team'], queries.team);
 	const donateQuery = createQuery(['donate'], queries.donate);
 	let snackbarOpen = false;
+	let expandCrypto = false;
 
 	async function copyToClipboard(walletAddress: string) {
 		snackbarOpen = true;
@@ -65,31 +66,44 @@
 		{/if}
 		{#if data.wallets}
 			<div class="crypto-card">
-				<div class="crypto-title">
+				<div
+					class="crypto-title"
+					class:closed={!expandCrypto}
+					on:click={() => (expandCrypto = !expandCrypto)}
+					on:keypress={() => (expandCrypto = !expandCrypto)}
+				>
 					<h4>Crypto</h4>
-				</div>
-				<hr />
-				<div class="wallets">
-					{#each data.wallets as wallet}
-						<button
-							on:click={() => {
-								qrCodeValue = wallet.address;
-								qrCodeDialogueName = wallet.name;
-								qrCodeDialogue = !qrCodeDialogue;
-							}}
-						>
-							<div class="name">
-								<img src="/donate/{wallet.name}.svg"/>
-								{`${coins[wallet.name]} (${wallet.name.toUpperCase()})`}
-							</div>
-							<img
-								id="arrow"
-								src="/icons/expand_less.svg"
-								alt="dropdown"
-							/>
-						</button>
-					{/each}
-				</div>
+				<img
+					id="arrow"
+					style:transform={expandCrypto ? 'rotate(0deg)' : 'rotate(-180deg)'}
+					src="/icons/expand_less.svg"
+					alt="dropdown"
+				/>
+			</div>
+				{#if expandCrypto}
+					<hr />
+					<div class="wallets">
+						{#each data.wallets as wallet}
+							<button
+								on:click={() => {
+									qrCodeValue = wallet.address;
+									qrCodeDialogueName = wallet.name;
+									qrCodeDialogue = !qrCodeDialogue;
+								}}
+							>
+								<div class="name">
+									<img src="/donate/{wallet.name}.svg"/>
+									{`${coins[wallet.name]} (${wallet.name.toUpperCase()})`}
+								</div>
+								<img
+									id="arrow"
+									src="/icons/expand_less.svg"
+									alt="dropdown"
+								/>
+							</button>
+						{/each}
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</Query>
@@ -179,9 +193,22 @@
 	}
 
 	.crypto-title {
-		padding: 0.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
 		background-color: var(--grey-six);
-		text-align: center;
+		padding: 0.75rem 1.25rem;
+		transition: all 0.2s var(--bezier-one);
+
+		&:hover {
+			background-color: var(--grey-one);
+		}
+		#arrow {
+		height: 1.5rem;
+		transition: all 0.2s var(--bezier-one);
+		user-select: none;
+		}
 	}
 
 	.wallets {
