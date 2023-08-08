@@ -57,6 +57,8 @@ const config = {
         },
       },
       navbar: {
+        /* because we can't add a .scrolled class to docusaurus on scroll, we're abusing hide on scroll */
+        hideOnScroll: true,
         logo: {
           alt: 'ReVanced Logo',
           target: '_self',
