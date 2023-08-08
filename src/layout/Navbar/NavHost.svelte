@@ -72,7 +72,7 @@
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
-					<Navigation queryKey="team" href="/donate">Donate</Navigation>
+					<Navigation queryKey={["donate", "team"]} href="/donate">Donate</Navigation>
 				</div>
 			</div>
 			<div id="secondary-navigation">
