@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import Meta from '$lib/components/Meta.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
@@ -82,7 +82,7 @@
 			</div>
 				{#if expandCrypto}
 					<hr />
-					<div class="wallets">
+					<div class="wallets"  transition:slide|local={{ easing: quintOut, duration: 500 }}>
 						{#each data.wallets as wallet}
 							<button
 								on:click={() => {
