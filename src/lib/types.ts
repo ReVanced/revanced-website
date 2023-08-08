@@ -56,7 +56,8 @@ export interface TeamMember {
 }
 
 export interface CryptoWallet {
-	name: string;
+	network: string;
+	currency_code: string;
 	address: string;
 }
 

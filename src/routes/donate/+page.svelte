@@ -29,19 +29,7 @@
 			console.error('Failed to copy crypto wallet:', error);
 		}
 	}
-
-
-	// pr to api laterrrrr 
-	const coins = {
-		"btc": "Bitcoin",
-		"doge": "Dogecoin",
-		"eth": "Ethereum",
-		"ltc": "Litecoin",
-		"xmr": "Monero"
-	}
 </script>
-
-
 
 <Meta title="Donate" />
 
@@ -73,33 +61,29 @@
 					on:keypress={() => (expandCrypto = !expandCrypto)}
 				>
 					<h4>Crypto</h4>
-				<img
-					id="arrow"
-					style:transform={expandCrypto ? 'rotate(0deg)' : 'rotate(-180deg)'}
-					src="/icons/expand_less.svg"
-					alt="dropdown"
-				/>
-			</div>
+					<img
+						id="arrow"
+						style:transform={expandCrypto ? 'rotate(0deg)' : 'rotate(-180deg)'}
+						src="/icons/expand_less.svg"
+						alt="dropdown"
+					/>
+				</div>
 				{#if expandCrypto}
 					<hr />
-					<div class="wallets"  transition:slide|local={{ easing: quintOut, duration: 500 }}>
+					<div class="wallets" transition:slide|local={{ easing: quintOut, duration: 500 }}>
 						{#each data.wallets as wallet}
 							<button
 								on:click={() => {
 									qrCodeValue = wallet.address;
-									qrCodeDialogueName = wallet.name;
+									qrCodeDialogueName = wallet.currency_code.toUpperCase();
 									qrCodeDialogue = !qrCodeDialogue;
 								}}
 							>
 								<div class="name">
-									<img src="/donate/{wallet.name}.svg"/>
-									{`${coins[wallet.name]} (${wallet.name.toUpperCase()})`}
+									<img src="/donate/{wallet.currency_code}.svg" alt={`${wallet.network} icon.'`} />
+									{`${wallet.network} (${wallet.currency_code.toUpperCase()})`}
 								</div>
-								<img
-									id="arrow"
-									src="/icons/expand_less.svg"
-									alt="dropdown"
-								/>
+								<img id="arrow" src="/icons/expand_less.svg" alt="dropdown" />
 							</button>
 						{/each}
 					</div>
@@ -138,11 +122,11 @@
 	<svelte:fragment slot="icon">
 		<img class="qr-code" src="/icons/wallet.svg" alt="QR Code" />
 	</svelte:fragment>
-	<svelte:fragment slot="title">{qrCodeDialogueName.toUpperCase()} Wallet</svelte:fragment>
+	<svelte:fragment slot="title">{qrCodeDialogueName} Wallet</svelte:fragment>
 	<svelte:fragment slot="description">
 		<div class="qr-code-body">
 			{qrCodeValue}
-			<QRCode codeValue={qrCodeValue}/>
+			<QRCode codeValue={qrCodeValue} />
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="buttons">
@@ -205,9 +189,9 @@
 			background-color: var(--grey-one);
 		}
 		#arrow {
-		height: 1.5rem;
-		transition: all 0.2s var(--bezier-one);
-		user-select: none;
+			height: 1.5rem;
+			transition: all 0.2s var(--bezier-one);
+			user-select: none;
 		}
 	}
 
@@ -237,7 +221,6 @@
 			}
 		}
 	}
-
 
 	.name {
 		display: flex;
