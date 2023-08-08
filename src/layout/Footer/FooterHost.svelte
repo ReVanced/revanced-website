@@ -89,6 +89,7 @@
 	</div>
 	<div class="footer-bottom">
 		<div id="logo-name"><span>Re</span>Vanced</div>
+		<a href="/donate"><div>Donate</div></a>
 		<a href="mailto:contact@revanced.app"><div>Email</div></a>
 	</div>
 </footer>
