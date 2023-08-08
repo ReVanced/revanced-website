@@ -75,13 +75,13 @@
 							<button
 								on:click={() => {
 									qrCodeValue = wallet.address;
-									qrCodeDialogueName = wallet.currency_code.toUpperCase();
+									qrCodeDialogueName = wallet.currency_code;
 									qrCodeDialogue = !qrCodeDialogue;
 								}}
 							>
 								<div class="name">
 									<img src="/donate/{wallet.currency_code}.svg" alt={`${wallet.network} icon.'`} />
-									{`${wallet.network} (${wallet.currency_code.toUpperCase()})`}
+									{`${wallet.network} (${wallet.currency_code})`}
 								</div>
 								<img id="arrow" src="/icons/expand_less.svg" alt="dropdown" />
 							</button>
