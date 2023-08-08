@@ -57,31 +57,57 @@ const config = {
         },
       },
       navbar: {
-        title: 'ReVanced',
         logo: {
           alt: 'ReVanced Logo',
           target: '_self',
           href: siteUrl,
+          src: 'img/logo.svg',
+          height: 22,
           width: 22
         },
         items: [
           {
-            to: '/category/revanced-manager',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Guide',
+            to: `${siteUrl}/download`,
+            label: 'Home',
+            target: '_self'
           },
           {
-            to: '/development/revanced-patches/apis',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'FAQ',
+            to: `${siteUrl}/download`,
+            label: 'Download',
+            target: '_self'
           },
           {
-            to: '/development/revanced-patches/skeleton',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Troubleshooting',
+            to: `${siteUrl}/patches`,
+            label: 'Patches',
+            target: '_self'
+          },
+          {
+            to: `${siteUrl}/contributors`,
+            label: 'Contributors',
+            target: '_self'
+          },
+          {
+            to: `${siteUrl}/donate`,
+            label: 'Donate',
+            target: '_self'
+          },
+          {
+            to: "/docs/",
+            items: [
+              {
+                to: '/category/revanced-manager',
+                label: 'Guide',
+              },
+              {
+                to: '/development/revanced-patches/apis',
+                label: 'FAQ',
+              },
+              {
+                to: '/development/revanced-patches/skeleton',
+                label: 'Troubleshooting',
+              },
+            ],
+            label: 'Docs'
           },
         ],
       },
