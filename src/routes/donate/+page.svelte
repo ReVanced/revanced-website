@@ -4,7 +4,7 @@
 
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
-	
+
 	import Meta from '$lib/components/Meta.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -170,7 +170,7 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		margin-top: 7rem;
+		margin-top: 5rem;
 
 		// support revanced and heart thingy
 		section {
