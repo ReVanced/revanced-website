@@ -1,13 +1,19 @@
 <script>
 	import SocialButton from './SocialButton.svelte';
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
+	import Query from '$lib/components/Query.svelte';
+
+	const query = createQuery(['socials'], queries.socials);
 </script>
 
-<!-- TODO: Use API social links -->
 <div class="social-host">
-	<SocialButton src="github" href="https://github.com/revanced" />
-	<SocialButton src="discord" href="https://revanced.app/discord" />
-	<SocialButton src="reddit" href="https://reddit.com/r/revancedapp" />
-	<SocialButton src="telegram" href="https://t.me/app_revanced" />
+	<Query {query} let:data>
+		<SocialButton social="github" {data}/>
+		<SocialButton social="discord" {data}/>
+		<SocialButton social="reddit" {data}/>
+		<SocialButton social="telegram" {data}/>
+	</Query>
 </div>
 
 <style>

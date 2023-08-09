@@ -8,7 +8,8 @@ import type {
 	Asset,
 	TeamMember,
 	DonationPlatform,
-	CryptoWallet
+	CryptoWallet,
+	Social
 } from '$lib/types';
 
 export type ReposData = Repository[];
@@ -16,6 +17,7 @@ export type PatchesData = { patches: Patch[]; packages: string[] };
 export type ReleaseData = { metadata: Metadata; assets: Asset[] };
 export type TeamData = { members: TeamMember[] };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
+export type SocialsData = Social[];
 
 async function get_json(endpoint: string) {
 	const url = `${settings.api_base_url()}/${endpoint}`;
@@ -59,8 +61,11 @@ async function team(): Promise<TeamData> {
 
 async function donate(): Promise<DonationData> {
 	const json = await get_json('v2/donations');
-
 	return { wallets: json.donations.wallets, platforms: json.donations.links };
+}
+
+async function socials(): Promise<SocialsData> {
+	return await get_json('v2/socials').then((json) => json.socials);
 }
 
 export const staleTime = 5 * 60 * 1000;
@@ -88,6 +93,11 @@ export const queries = {
 	donate: {
 		queryKey: ['donate'],
 		queryFn: donate,
+		staleTime
+	},
+	socials: {
+		queryKey: ['socials'],
+		queryFn: socials,
 		staleTime
 	}
 };
