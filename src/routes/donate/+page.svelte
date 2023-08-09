@@ -2,17 +2,17 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
+	
 	import Meta from '$lib/components/Meta.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
-	import QRCode from './QRCode.svelte';
-
-	import { queries } from '$data/api';
-	import { createQuery } from '@tanstack/svelte-query';
-
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
+
+	import QRCode from './QRCode.svelte';
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
 
@@ -21,12 +21,12 @@
 
 	let qrCodeDialogue = false;
 	let cryptoDialogue = false;
+	let addressSnackbar = false;
 	let qrCodeValue = '';
 	let qrCodeDialogueName = '';
-	let snackbarOpen = false;
 
 	async function copyToClipboard(walletAddress: string) {
-		snackbarOpen = true;
+		addressSnackbar = true;
 		qrCodeDialogue = false;
 
 		try {
@@ -63,6 +63,7 @@
 			{#if data.platforms}
 				{#each data.platforms as platform}
 					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
+						<!-- not using <img/> because we want the image height to always be 200px -->
 						<div
 							style="background-image: url('/donate/card-images/{platform.name}.png');"
 							role="img"
@@ -88,6 +89,7 @@
 		<h3>Meet the team</h3>
 		{#if data.members.length > 0}
 			<section class="team">
+				<!-- randomize team members because equality -->
 				{#each data.members.sort(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
 					<TeamMember {member} {i} />
 				{/each}
@@ -111,6 +113,8 @@
 							qrCodeValue = wallet.address;
 							qrCodeDialogueName = wallet.currency_code;
 							qrCodeDialogue = !qrCodeDialogue;
+							// when the user clicks a wallet the crypto wallet goes away
+							// because multi page dialogues aren't implemented yet oops
 							cryptoDialogue = false;
 						}}
 					>
@@ -122,7 +126,7 @@
 							/>
 							{`${wallet.network} (${wallet.currency_code})`}
 						</div>
-						<img id="arrow" src="/icons/expand_less.svg" alt="dropdown" />
+						<img id="arrow" src="/icons/expand_less.svg" alt="continue" />
 					</button>
 				{/each}
 			</Query>
@@ -156,7 +160,7 @@
 	</svelte:fragment>
 </Dialogue>
 
-<Snackbar bind:open={snackbarOpen} closeIcon>
+<Snackbar bind:open={addressSnackbar} closeIcon>
 	<svelte:fragment slot="text">Address copied to clipboard</svelte:fragment>
 </Snackbar>
 
@@ -168,6 +172,7 @@
 		flex-direction: column;
 		margin-top: 7rem;
 
+		// support revanced and heart thingy
 		section {
 			display: flex;
 			justify-content: center;
@@ -191,6 +196,14 @@
 	p {
 		margin-bottom: 2rem;
 		width: 60%;
+
+		@media screen and (max-width: 1200px) {
+			width: 90%;
+		}
+
+		@media screen and (max-width: 768px) {
+			width: 100%;
+		}
 	}
 
 	.donate-cards {
@@ -279,6 +292,7 @@
 		align-items: center;
 		gap: 0.5rem;
 
+		// crypto icon
 		img {
 			height: 24px;
 			width: 24px;
@@ -302,27 +316,5 @@
 		align-items: stretch;
 		gap: 1rem;
 		margin-bottom: 4rem;
-	}
-
-	@media screen and (max-width: 1420px) {
-		.team {
-			width: 100%;
-		}
-	}
-
-	@media screen and (max-width: 1000px) {
-		p {
-			width: 90%;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		p {
-			width: 100%;
-		}
-
-		.team {
-			width: 100%;
-		}
 	}
 </style>
