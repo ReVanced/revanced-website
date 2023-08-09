@@ -170,7 +170,7 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		margin-top: 5rem;
+		margin-top: 7rem;
 
 		// support revanced and heart thingy
 		section {
@@ -203,6 +203,14 @@
 
 		@media screen and (max-width: 768px) {
 			width: 100%;
+		}
+	}
+
+
+	// COPEEEE
+	@media screen and (max-width: 768px) {
+		#heart {
+			display: none;
 		}
 	}
 
@@ -247,7 +255,6 @@
 			height: 200px;
 			background-size: cover;
 			background-position: center;
-			border-radius: 1.5rem;
 			max-width: 100%;
 		}
 	}
