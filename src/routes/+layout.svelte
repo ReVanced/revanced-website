@@ -105,10 +105,12 @@
 		</svelte:fragment>
 	</Dialogue>
 
-	{#if $show_loading_animation}
-		<Spinner />
-	{:else}
-		<slot />
-	{/if}
+	<div id="skiptab">
+		{#if $show_loading_animation}
+			<Spinner />
+		{:else}
+			<slot />
+		{/if}
+	</div>
 	<!-- <Footer> -->
 </QueryClientProvider>

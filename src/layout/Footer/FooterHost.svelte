@@ -53,6 +53,7 @@
 				<li><a href="/download">Download</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
+				<li><a href="/donate">Donate</a></li>
 				<li><a href="{new URL($page.url).origin}/docs/">Docs</a></li>
 			</FooterSection>
 			<FooterSection title="Repositories">
@@ -90,7 +91,7 @@
 	</div>
 	<div class="footer-bottom">
 		<div id="logo-name"><span>Re</span>Vanced</div>
-		<a href="https://liberapay.com/ReVanced/donate"><div>Donate</div></a>
+		<a href="/donate"><div>Donate</div></a>
 		<a href="mailto:contact@revanced.app"><div>Email</div></a>
 	</div>
 </footer>

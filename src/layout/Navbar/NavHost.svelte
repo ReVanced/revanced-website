@@ -52,6 +52,8 @@
 <svelte:window bind:scrollY={y} />
 
 <nav class:scrolled={y > 10}>
+	<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>
+
 	<button
 		class="menu-btn mobile-only"
 		on:click={() => (menuOpen = !menuOpen)}
@@ -73,6 +75,7 @@
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
+					<Navigation queryKey={['donate', 'team']} href="/donate">Donate</Navigation>
 					<Navigation href="{new URL($page.url).origin}/docs">Docs</Navigation>
 				</div>
 			</div>
@@ -206,8 +209,7 @@
 	}
 
 	.scrolled {
-		box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
-			0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--drop-shadow-one);
 	}
 
 	.overlay {
@@ -322,5 +324,22 @@
 	}
 	.menu-btn.open .menu-btn__burger::after {
 		transform: rotate(-45deg) translate(10px, 10px);
+	}
+
+	.skiptab-btn {
+		position: fixed;
+		left: -300px;
+		border-radius: 100px;
+		text-decoration: none;
+		background-color: var(--accent-color);
+		z-index: 10;
+		color: var(--grey-four);
+		font-weight: 600;
+		font-size: 0.95rem;
+		padding: 16px 24px;
+	}
+
+	.skiptab-btn:focus {
+		left: 12px;
 	}
 </style>
