@@ -5,9 +5,10 @@
 	import { queries } from '$data/api';
 	import { friendlyName } from '$util/friendlyName';
 	import { createQuery } from '@tanstack/svelte-query';
-	
+
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
+	import { page } from '$app/stores';
 
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
@@ -53,6 +54,7 @@
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>
+				<li><a href="{new URL($page.url).origin}/docs/">Docs</a></li>
 			</FooterSection>
 			<FooterSection title="Repositories">
 				<Query {query} let:data>

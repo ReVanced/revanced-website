@@ -1,0 +1,350 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  font-family: 'Manrope', sans-serif;
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 87.5%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-background-color: var(--bg-color) !important;
+  --ifm-color-primary: hsl(206, 100%, 81%);
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-navbar-background-color: #1f1f26;
+  --ifm-menu-color-background-hover: #252b31;
+  --ifm-dropdown-background-color: var(--ifm-navbar-background-color);
+  --ifm-menu-color-background-active: #26313f;
+  --ifm-card-background-color: none;
+  --ifm-color-emphasis-200: hsl(221, 17%, 26%) !important;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-hr-background-color: var(--grey-three);
+  --ifm-menu-color-background-hover: var(--grey-six);
+  --ifm-breadcrumb-item-background-active: var(--grey-six);
+  --ifm-code-background: var(--grey-six) !important;
+  --ifm-pre-background: var(--grey-six) !important;
+  --ifm-pagination-nav-border-radius: 20px;
+}
+
+.navbar {
+  height: 70px;
+  padding: 0 2.5rem;
+}
+
+.navbar__items {
+  gap: 1rem;
+}
+
+.navbar__item.dropdown .navbar__link {
+  background-color: #2a3645;
+  color: #9ed5ff;
+
+  &:hover {
+    background-color: #2a3645;
+    color: #9ed5ff;
+  }
+
+  padding: 10px 16.6px;
+}
+
+.navbar__link {
+  font-weight: 400;
+  font-size: .9rem;
+  letter-spacing: .02rem;
+  color: #acc1d2;
+  border-radius: 10px;
+  padding: 7.63px 16px;
+  transition-timing-function: var(--bezier-one);
+  transition-duration: .25s;
+
+  &:hover {
+    border-color: hsl(221, 17%, 26%) !important;
+    background-color: #252b31;
+    color: #acc1d2;
+  }
+}
+
+.footnote-ref {
+  padding: 0.15rem;
+  font-weight: 700 !important;
+}
+
+
+.navbar__link--active {
+  background-color: #2a3645;
+  color: #9ed5ff;
+
+  &:hover {
+    background-color: #2a3645;
+    color: #9ed5ff;
+  }
+}
+
+.card {
+  border-radius: 1.5rem;
+  &:hover {
+    border-color: hsl(221, 17%, 26%) !important;
+    background-color: hsl(230, 9%, 13%);
+  }
+}
+
+.pagination-nav__link {
+  border-color: hsl(221, 17%, 26%) !important;
+
+  &:hover {
+    background-color: hsl(230, 9%, 13%);
+  }
+}
+
+.menu__caret:hover {
+  background-color: var(--ifm-menu-color-background-hover);
+  filter: brightness(125%);
+}
+
+.container {
+  padding: 2.5rem;
+}
+
+.menu__link, .menu__caret {
+  border-radius: 100px;
+  padding: 0.75rem 1rem;
+    font-size: .85rem;
+    font-weight: 600;
+    gap: 0.6rem;
+    user-select: none;
+    letter-spacing: -0.02em;
+}
+
+.menu__list-item-collapsible {
+  border-radius: 100px;
+}
+
+.menu__caret:before {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--ifm-menu-link-sublist-icon) 50% / 1.5rem 1.5rem;
+}
+
+pre code {
+  background-color: var(--grey-six);
+}
+
+[class*="backToTopButton"] {
+  border-radius: 0.75rem !important;
+  background-color: var(--accent-color) !important;
+}
+
+[class*="backToTopButton"]:after {
+  background-color: var(--grey-four) !important;
+}
+
+
+.table-of-contents__left-border {
+  border: none;
+}
+
+.table-of-contents__link--active, .table-of-contents__link--active code {
+  color: var(--white);
+  outline: 1px solid var(--grey-three);
+  border-radius: 100px;
+}
+
+.table-of-contents a {
+  padding: 0.5rem 0.75rem;
+}
+
+.pagination-nav__link{
+  background-color: var(--grey-six);
+  border: none;
+  transition: 0.3s background-color var(--bezier-one), 0.3s border-radius var(--bezier-one);
+  padding: 1.5rem;
+}
+
+.pagination-nav__link:hover {
+  background-color: var(--grey-one);
+}
+
+.pagination-nav__link:active {
+  border-radius: 2.75rem;
+}
+
+.pagination-nav__link--next{
+  text-align: left;
+}
+
+.pagination-nav__sublabel {
+  color: var(--grey-five);
+}
+
+.pagination-nav__label {
+  font-weight: 600;
+}
+.pagination-nav__label::before, .pagination-nav__label::after {
+  content: '' !important;
+}
+
+.pagination-nav__link--next > div::after {
+  content: ' →';
+}
+
+.pagination-nav__link--prev > div::before {
+  content: '← ';
+}
+
+.pagination-nav:has(a:only-child) {
+  display: flex;
+}
+
+.pagination-nav:has(a:only-child) a {
+  width: 100%;
+}
+/* guhhuhuhgugh */
+
+:root {
+	/* TODO properly name these */
+	--main-font: 'Manrope', sans-serif;
+	--mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+	--white: hsl(206, 100%, 94%);
+	--accent-color: hsl(206, 100%, 81%);
+	--accent-color-two: hsl(208, 75%, 82%);
+	--accent-low-opacity: hsla(205, 91%, 69%, 0.15);
+	--bg-color: hsl(252, 10%, 11%);
+	--grey-one: hsl(210, 14%, 17%);
+	--grey-two: hsl(212, 19%, 19%);
+	--grey-three: hsl(221, 17%, 26%);
+	--grey-four: hsl(226, 48%, 18%);
+	--grey-five: hsl(208, 30%, 75%);
+	--grey-six: hsl(230, 9%, 13%);
+	--grey-seven: hsl(240, 9%, 13.5%);
+	--grey-eight: hsla(207, 30%, 75%, 0.577);
+	--grey-nine: hsla(240, 6%, 7%, 0.3);
+	--grey-ten: hsl(230, 9.5%, 17.5%);
+	--grey-eleven: hsl(208, 10%, 40%);
+	--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	--drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+		0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+* {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+::selection {
+	background-color: var(--accent-low-opacity);
+}
+
+/*-----headings-----*/
+
+
+h1, h2, h3, h4, h5, h6, p {
+  font-family: 'Manrope', sans-serif;
+}
+
+h1 {
+	color: var(--white);
+	line-height: 4rem;
+	font-size: 3rem;
+	font-weight: 700;
+	letter-spacing: -0.025em;
+}
+
+h2 {
+	color: var(--grey-five);
+	font-size: 2.25rem;
+	letter-spacing: -0.04rem;
+	font-weight: 600;
+}
+
+h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+}
+
+h4 {
+	color: var(--accent-color-two);
+	font-weight: 400;
+	font-size: 1rem;
+	letter-spacing: 0.02rem;
+	line-height: 2rem;
+}
+
+h5 {
+	color: var(--grey-five);
+	font-weight: 400;
+	font-size: 0.9rem;
+	letter-spacing: 0.02rem;
+}
+
+h6 {
+	color: var(--grey-five);
+	font-weight: 500;
+	font-size: 0.85rem;
+}
+
+p, p li {
+	font-weight: 400;
+	font-size: 1rem;
+	letter-spacing: 0.01rem;
+	line-height: 1.75rem;
+}
+
+.footnotes li {
+  color: var(--grey-five);
+}
+
+
+
+@media screen and (max-width: 767px) {
+	h1 {
+		font-size: 2.6rem;
+		line-height: 3.75rem;
+	}
+
+	h2 {
+		font-size: 2rem;
+	}
+}
+
+/*---------------*/
+
+::-webkit-scrollbar {
+	width: 5px;
+	background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--accent-color);
+	background-clip: content-box;
+	border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: var(--grey-three);
+}
+
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid var(--grey-three);
+}

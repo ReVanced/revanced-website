@@ -13,6 +13,7 @@
 	import RouterEvents from '$data/RouterEvents';
 
 	import { useQueryClient } from '@tanstack/svelte-query';
+	import { page } from '$app/stores';
 
 	const client = useQueryClient();
 
@@ -74,7 +75,8 @@
 					<Navigation queryKey="manager" href="/download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors">Contributors</Navigation>
-					<Navigation queryKey={["donate", "team"]} href="/donate">Donate</Navigation>
+					<Navigation queryKey={['donate', 'team']} href="/donate">Donate</Navigation>
+					<Navigation href="{new URL($page.url).origin}/docs">Docs</Navigation>
 				</div>
 			</div>
 			<div id="secondary-navigation">
