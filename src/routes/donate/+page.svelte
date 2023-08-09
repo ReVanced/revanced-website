@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fly, slide } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
 	import Meta from '$lib/components/Meta.svelte';
@@ -10,9 +10,10 @@
 
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
+
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import PulsatingImage from './DonateHeartAnimation.svelte';
+	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
 
 	const teamQuery = createQuery(['team'], queries.team);
@@ -49,7 +50,7 @@
 			</p>
 		</div>
 		<div id="heart">
-			<PulsatingImage
+			<DonateHeartAnimation
 				backgroundImageUrl="/revanced-logo-background.svg"
 				foregroundImageUrl="/icons/heart.svg"
 				alt="ReVanced Logo"
@@ -60,10 +61,12 @@
 	<Query query={donateQuery} let:data>
 		<div class="donate-cards">
 			{#if data.platforms}
-				{#each data.platforms.sort((platform1, platform2) => Number(platform2.preferred) - Number(platform1.preferred)) as platform}
+				{#each data.platforms as platform}
 					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
 						<div
 							style="background-image: url('/donate/card-images/{platform.name}.png');"
+							role="img"
+							aria-label="{platform.name} preview image"
 						/>
 						<span>{platform.name}</span>
 					</a>
@@ -72,9 +75,11 @@
 			{#if data.wallets}
 				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
 					<div
-						style="background-image: url('/donate/card-images/Cryptocurrency.png');"
+						style="background-image: url('/donate/card-images/Cryptocurrencies.png');"
+						role="img"
+						aria-label="Cryptocurrencies preview image"
 					/>
-					<span>Cryptocurrency</span>
+					<span>Cryptocurrencies</span>
 				</button>
 			{/if}
 		</div>
@@ -93,7 +98,7 @@
 
 <Dialogue bind:modalOpen={cryptoDialogue}>
 	<svelte:fragment slot="icon">
-		<img class="qr-code" src="/icons/wallet.svg" alt="QR Code" />
+		<img class="qr-code" src="/icons/coins.svg" alt="Cryptocurrencies" />
 	</svelte:fragment>
 	<svelte:fragment slot="title">Crypto</svelte:fragment>
 	<svelte:fragment slot="description">
@@ -109,7 +114,7 @@
 							cryptoDialogue = false;
 						}}
 					>
-						<div class="name">
+						<div class="wallet-name">
 							<img
 								src="/donate/crypto/{wallet.currency_code}.svg"
 								onerror="this.onerror=null; this.src='/donate/generic.svg'"
@@ -179,98 +184,13 @@
 		color: var(--white);
 	}
 
-	p {
-		margin-bottom: 2rem;
-		width: 60%;
-	}
-
 	h3 {
 		margin-bottom: 1.5rem;
 	}
 
-	.wallets {
-		// i just guessed this
-		width: clamp(200px, 75vw, 375px);
-		#arrow {
-			height: 20px;
-			transform: rotate(90deg);
-		}
-
-		button {
-			width: 100%;
-			font-size: 0.9rem;
-			background-color: transparent;
-			border: none;
-			color: var(--grey-five);
-			cursor: pointer;
-			text-align: left;
-			display: flex;
-			justify-content: space-between;
-			background-color: var(--grey-six);
-			padding: 0.75rem 1.25rem;
-			transition: filter 0.4s var(--bezier-one);
-
-			&:hover {
-				filter: brightness(85%);
-			}
-		}
-	}
-
-	.name {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-	.name img {
-		height: 24px;
-		width: 24px;
-	}
-
-	.buttons-container {
-		display: flex;
-		gap: 1rem;
-		margin-bottom: 1.5rem;
-	}
-
-	.qr-code-body {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1rem;
-		word-break: break-word;
-		text-align: center;
-	}
-
-	.team {
-		width: 100%;
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
-		justify-content: space-between;
-		align-items: stretch;
-		gap: 1rem;
-		margin-bottom: 4rem;
-	}
-
-	@media screen and (max-width: 1420px) {
-		.team {
-			width: 100%;
-		}
-	}
-
-	@media screen and (max-width: 1000px) {
-		p {
-			width: 90%;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		p {
-			width: 100%;
-		}
-
-		.team {
-			width: 100%;
-		}
+	p {
+		margin-bottom: 2rem;
+		width: 60%;
 	}
 
 	.donate-cards {
@@ -319,9 +239,90 @@
 		}
 	}
 
+	// sorry ushie and cossale
 	@media screen and (max-width: 768px) {
 		#heart {
 			display: none;
+		}
+	}
+
+	.wallets {
+		// i just guessed this
+		width: clamp(200px, 75vw, 375px);
+		#arrow {
+			height: 20px;
+			transform: rotate(90deg);
+		}
+
+		button {
+			width: 100%;
+			font-size: 0.9rem;
+			background-color: transparent;
+			border: none;
+			color: var(--grey-five);
+			cursor: pointer;
+			text-align: left;
+			display: flex;
+			justify-content: space-between;
+			background-color: var(--grey-six);
+			padding: 0.75rem 1.25rem;
+			transition: filter 0.4s var(--bezier-one);
+
+			&:hover {
+				filter: brightness(85%);
+			}
+		}
+	}
+
+	.wallet-name {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+
+		img {
+			height: 24px;
+			width: 24px;
+		}
+	}
+
+	.qr-code-body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		word-break: break-word;
+		text-align: center;
+	}
+
+	.team {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+		justify-content: space-between;
+		align-items: stretch;
+		gap: 1rem;
+		margin-bottom: 4rem;
+	}
+
+	@media screen and (max-width: 1420px) {
+		.team {
+			width: 100%;
+		}
+	}
+
+	@media screen and (max-width: 1000px) {
+		p {
+			width: 90%;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		p {
+			width: 100%;
+		}
+
+		.team {
+			width: 100%;
 		}
 	}
 </style>
