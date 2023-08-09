@@ -48,9 +48,8 @@ async function patches(): Promise<PatchesData> {
 	}
 
 	// sort packages by patch count to get most relevant apps on top
-	const packages = Object.entries(packagesWithCount)
-		.sort((a, b) => b[1] - a[1])
-		.map((pkg) => pkg[0]);
+	const packages = Object.keys(packagesWithCount);
+  	packages.sort((a, b) => packagesWithCount[b] - packagesWithCount[a]);
 
 	return { patches: json.patches, packages };
 }
