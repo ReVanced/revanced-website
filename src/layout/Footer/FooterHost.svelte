@@ -59,7 +59,7 @@
 			<FooterSection title="Repositories">
 				<Query query={repoQuery} let:data>
 					{#if data}
-						{#each data as { name }}
+						{#each data.repositories as { name }}
 							<li>
 								<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
 									{friendlyName(name)}
@@ -72,7 +72,7 @@
 			<FooterSection title="Socials">
 				<Query query={socialsQuery} let:data>
 					{#if data}
-						{#each data as { name, url }}
+						{#each data.socials as { name, url }}
 							<li>
 								<a href={url} target="_blank" rel="noreferrer">{friendlyName(name)}</a>
 							</li>

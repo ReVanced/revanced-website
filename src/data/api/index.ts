@@ -12,12 +12,12 @@ import type {
 	Social
 } from '$lib/types';
 
-export type ReposData = Repository[];
+export type ReposData = { repositories: Repository[] };
 export type PatchesData = { patches: Patch[]; packages: string[] };
 export type ReleaseData = { metadata: Metadata; assets: Asset[] };
 export type TeamData = { members: TeamMember[] };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
-export type SocialsData = Social[];
+export type SocialsData = { socials: Social[] };
 
 async function get_json(endpoint: string) {
 	const url = `${settings.api_base_url()}/${endpoint}`;
@@ -25,7 +25,8 @@ async function get_json(endpoint: string) {
 }
 
 async function repositories(): Promise<ReposData> {
-	return await get_json('contributors').then((json) => json.repositories);
+	const json = await get_json('contributors');
+	return { repositories: json.repositories };
 }
 
 async function manager(): Promise<ReleaseData> {
@@ -65,7 +66,8 @@ async function donate(): Promise<DonationData> {
 }
 
 async function socials(): Promise<SocialsData> {
-	return await get_json('v2/socials').then((json) => json.socials);
+	const json = await get_json('v2/socials');
+	return { socials: json.socials };
 }
 
 export const staleTime = 5 * 60 * 1000;

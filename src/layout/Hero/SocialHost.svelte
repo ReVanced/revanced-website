@@ -10,10 +10,10 @@
 <div class="social-host">
 	<Query {query} let:data>
 		{#if data}
-			<SocialButton social="github" {data}/>
-			<SocialButton social="discord" {data}/>
-			<SocialButton social="reddit" {data}/>
-			<SocialButton social="telegram" {data}/>
+			<SocialButton social="github" data={data.socials}/>
+			<SocialButton social="discord" data={data.socials}/>
+			<SocialButton social="reddit" data={data.socials}/>
+			<SocialButton social="telegram" data={data.socials}/>
 		{/if}
 	</Query>
 </div>
