@@ -5,7 +5,7 @@
 
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
+	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
 
 	import Meta from '$lib/components/Meta.svelte';
 	import { JsonLd } from 'svelte-meta-tags';
@@ -56,7 +56,6 @@
 		applicationSuite: 'ReVanced',
 		downloadUrl: 'https://revanced.app/download',
 		maintainer: 'ReVanced',
-		thumbnailUrl: 'https://revanced.app/manager_two.png',
 		operatingSystem: 'Android 8',
 		offers: {
 			'@type': 'Offer',
