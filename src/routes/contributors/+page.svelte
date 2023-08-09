@@ -46,17 +46,17 @@
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<h2>Made possible by the community.</h2>
-			<h4>
+			<p>
 				Want to show up here? <span
 					><a href="https://github.com/revanced" target="_blank" rel="noreferrer"
 						>Become a contributor</a
 					></span
 				>
-			</h4>
+			</p>
 		</div>
 		<div class="repos">
 			<Query {query} let:data>
-				{#each data as { contributors, name: repo }}
+				{#each data.repositories as { contributors, name: repo }}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<ContributorHost {contributors} {repo} />
 					</div>
@@ -82,7 +82,7 @@
 		margin-bottom: 0.3rem;
 	}
 
-	h4 {
+	p {
 		text-align: center;
 		color: var(--grey-four);
 	}

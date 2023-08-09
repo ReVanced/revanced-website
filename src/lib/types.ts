@@ -47,3 +47,29 @@ export interface Metadata {
 	published_at: string;
 	body: string;
 }
+
+export interface TeamMember {
+	login: string;
+	avatar_url: string;
+	html_url: string;
+	bio?: string;
+}
+
+export interface CryptoWallet {
+	network: string;
+	currency_code: string;
+	address: string;
+	preferred: boolean;
+}
+
+export interface DonationPlatform {
+	name: string;
+	url: string;
+	preferred: boolean;
+}
+
+
+export interface Social {
+	name: string
+	url: string
+}

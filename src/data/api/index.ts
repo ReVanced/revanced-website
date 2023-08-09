@@ -1,11 +1,23 @@
 import * as settings from './settings';
 
 // API Endpoints
-import type { Patch, Repository, Metadata, Asset } from '$lib/types';
+import type {
+	Patch,
+	Repository,
+	Metadata,
+	Asset,
+	TeamMember,
+	DonationPlatform,
+	CryptoWallet,
+	Social
+} from '$lib/types';
 
-export type ReposData = Repository[];
+export type ReposData = { repositories: Repository[] };
 export type PatchesData = { patches: Patch[]; packages: string[] };
 export type ReleaseData = { metadata: Metadata; assets: Asset[] };
+export type TeamData = { members: TeamMember[] };
+export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
+export type SocialsData = { socials: Social[] };
 
 async function get_json(endpoint: string) {
 	const url = `${settings.api_base_url()}/${endpoint}`;
@@ -13,7 +25,8 @@ async function get_json(endpoint: string) {
 }
 
 async function repositories(): Promise<ReposData> {
-	return await get_json('contributors').then((json) => json.repositories);
+	const json = await get_json('contributors');
+	return { repositories: json.repositories };
 }
 
 async function manager(): Promise<ReleaseData> {
@@ -42,6 +55,21 @@ async function patches(): Promise<PatchesData> {
 	return { patches: json.patches, packages };
 }
 
+async function team(): Promise<TeamData> {
+	const json = await get_json('v2/team/members');
+	return { members: json.members };
+}
+
+async function donate(): Promise<DonationData> {
+	const json = await get_json('v2/donations');
+	return { wallets: json.donations.wallets, platforms: json.donations.links };
+}
+
+async function socials(): Promise<SocialsData> {
+	const json = await get_json('v2/socials');
+	return { socials: json.socials };
+}
+
 export const staleTime = 5 * 60 * 1000;
 export const queries = {
 	manager: {
@@ -57,6 +85,21 @@ export const queries = {
 	repositories: {
 		queryKey: ['repositories'],
 		queryFn: repositories,
+		staleTime
+	},
+	team: {
+		queryKey: ['team'],
+		queryFn: team,
+		staleTime
+	},
+	donate: {
+		queryKey: ['donate'],
+		queryFn: donate,
+		staleTime
+	},
+	socials: {
+		queryKey: ['socials'],
+		queryFn: socials,
 		staleTime
 	}
 };
