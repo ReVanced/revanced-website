@@ -100,7 +100,7 @@
 	<svelte:fragment slot="icon">
 		<img class="qr-code" src="/icons/coins.svg" alt="Cryptocurrencies" />
 	</svelte:fragment>
-	<svelte:fragment slot="title">Crypto</svelte:fragment>
+	<svelte:fragment slot="title">Cryptocurrencies</svelte:fragment>
 	<svelte:fragment slot="description">
 		<hr style="margin: 1rem 0;" />
 		<div class="wallets">
