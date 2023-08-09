@@ -122,7 +122,6 @@
 		border-radius: 26px;
 		background-color: var(--grey-six);
 		display: flex;
-		user-select: none;
 		gap: 5%;
 		white-space: normal;
 		display: flex;
