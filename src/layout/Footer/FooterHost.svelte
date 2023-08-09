@@ -58,22 +58,26 @@
 			</FooterSection>
 			<FooterSection title="Repositories">
 				<Query query={repoQuery} let:data>
-					{#each data as { name }}
-						<li>
-							<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
-								{friendlyName(name)}
-							</a>
-						</li>
-					{/each}
+					{#if data}
+						{#each data as { name }}
+							<li>
+								<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
+									{friendlyName(name)}
+								</a>
+							</li>
+						{/each}
+					{/if}
 				</Query>
 			</FooterSection>
 			<FooterSection title="Socials">
 				<Query query={socialsQuery} let:data>
-					{#each data as { name, url }}
-						<li>
-							<a href={url} target="_blank" rel="noreferrer">{friendlyName(name)}</a>
-						</li>
-					{/each}
+					{#if data}
+						{#each data as { name, url }}
+							<li>
+								<a href={url} target="_blank" rel="noreferrer">{friendlyName(name)}</a>
+							</li>
+						{/each}
+					{/if}
 				</Query>
 			</FooterSection>
 		</section>
