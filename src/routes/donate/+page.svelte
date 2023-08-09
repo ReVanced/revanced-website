@@ -16,6 +16,8 @@
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
 
+	import { supportsWebP } from '$util/supportsWebP';
+
 	const teamQuery = createQuery(['team'], queries.team);
 	const donateQuery = createQuery(['donate'], queries.donate);
 
@@ -65,10 +67,11 @@
 					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
 						<!-- not using <img/> because we want the image height to always be 200px -->
 						<div
-							style="background-image: url('/donate/card-images/{platform.name}.png'), url('/donate/card-images/fallback.png');"
+							style="background-image: url('/donate/card-images/{platform.name}.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.png');"
 							role="img"
 							aria-label="{platform.name} preview image"
-						/>
+							>
+						  </div>
 						<span>{platform.name}</span>
 					</a>
 				{/each}
@@ -76,7 +79,7 @@
 			{#if data.wallets}
 				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
 					<div
-						style="background-image: url('/donate/card-images/Cryptocurrencies.png'), url('/donate/card-images/fallback.png');"
+						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.png');"
 						role="img"
 						aria-label="Cryptocurrencies preview image"
 					/>
