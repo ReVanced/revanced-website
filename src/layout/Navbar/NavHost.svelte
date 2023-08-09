@@ -330,15 +330,18 @@
 
 	.skiptab-btn {
 		position: fixed;
-		left: -1000px;
-		transition: all 0.3s var(--bezier-one);
+		left: -300px;
+		border-radius: 100px;
+		text-decoration: none;
+		background-color: var(--accent-color);
 		z-index: 10;
-		color: var(--accent-color-two);
-		background: var(--grey-seven);
-		padding-inline: 16px;
+		color: var(--grey-four);
+		font-weight: 600;
+		font-size: 0.95rem;
+		padding: 16px 24px;
 	}
 
 	.skiptab-btn:focus {
-		left: 10px;
+		left: 12px;
 	}
 </style>
