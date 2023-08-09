@@ -51,6 +51,8 @@
 <svelte:window bind:scrollY={y} />
 
 <nav class:scrolled={y > 10}>
+	<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>
+
 	<button
 		class="menu-btn mobile-only"
 		on:click={() => (menuOpen = !menuOpen)}
@@ -320,5 +322,22 @@
 	}
 	.menu-btn.open .menu-btn__burger::after {
 		transform: rotate(-45deg) translate(10px, 10px);
+	}
+
+	.skiptab-btn {
+		position: fixed;
+		left: -300px;
+		border-radius: 100px;
+		text-decoration: none;
+		background-color: var(--accent-color);
+		z-index: 10;
+		color: var(--grey-four);
+		font-weight: 600;
+		font-size: 0.95rem;
+		padding: 16px 24px;
+	}
+
+	.skiptab-btn:focus {
+		left: 12px;
 	}
 </style>
