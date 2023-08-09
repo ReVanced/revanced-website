@@ -2,16 +2,12 @@
 	export let backgroundImageUrl: string;
 	export let foregroundImageUrl: string;
 	export let alt: string;
-
-	export let size: number = 400;
 </script>
 
 <div id="pulsating-image">
 	<div
 		id="background"
 		style:background-image="url({backgroundImageUrl})"
-		style:height={size + 'px'}
-		style:width={size + 'px'}
 	>
 		<img src={foregroundImageUrl} {alt} />
 	</div>
@@ -22,6 +18,9 @@
 		user-select: none;
 		cursor: pointer;
 		transition: all 0.2s ease;
+		height: 225px;
+		width: 225px;
+
 		&:hover {
 			transform: scale(1.05) rotate(5deg);
 		}
@@ -38,6 +37,8 @@
 		align-items: center;
 		animation: pulse-size 1.2s infinite;
 		will-change: transform;
+		height: 100%;
+		width: 100%;
 
 		img {
 			height: 50%;

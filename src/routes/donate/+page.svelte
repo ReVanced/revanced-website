@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fly, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+
 	import Meta from '$lib/components/Meta.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -11,19 +12,22 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import PulsatingImage from '$lib/components/PulsatingImage.svelte';
+	import PulsatingImage from './DonateHeartAnimation.svelte';
+	import TeamMember from './TeamMember.svelte';
 
-	let qrCodeDialogue = false;
-	let qrCodeValue = '';
-	let qrCodeDialogueName = '';
 	const teamQuery = createQuery(['team'], queries.team);
 	const donateQuery = createQuery(['donate'], queries.donate);
+
+	let qrCodeDialogue = false;
+	let cryptoDialogue = false;
+	let qrCodeValue = '';
+	let qrCodeDialogueName = '';
 	let snackbarOpen = false;
-	let expandCrypto = false;
 
 	async function copyToClipboard(walletAddress: string) {
 		snackbarOpen = true;
 		qrCodeDialogue = false;
+
 		try {
 			await navigator.clipboard.writeText(walletAddress);
 		} catch (error) {
@@ -35,99 +39,94 @@
 <Meta title="Donate" />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<PulsatingImage
-		backgroundImageUrl="/revanced-logo-background.svg"
-		foregroundImageUrl="/icons/heart.svg"
-		alt="ReVanced Logo"
-		size={200}
-	/>
-	<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
-	<p>
-		ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
-		features. All of which is completely open source and free of charge. Donating will allow
-		ReVanced maintain our servers and develop new features.
-	</p>
+	<section>
+		<div>
+			<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
+			<p>
+				ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
+				features. All of which is completely open source and free of charge. Donating will allow
+				ReVanced maintain our servers and develop new features.
+			</p>
+		</div>
+		<div id="heart">
+			<PulsatingImage
+				backgroundImageUrl="/revanced-logo-background.svg"
+				foregroundImageUrl="/icons/heart.svg"
+				alt="ReVanced Logo"
+			/>
+		</div>
+	</section>
+	<h3>Donate</h3>
 	<Query query={donateQuery} let:data>
-		{#if data.platforms}
-			<div class="buttons-container">
+		<div class="donate-cards">
+			{#if data.platforms}
 				{#each data.platforms.sort((platform1, platform2) => Number(platform2.preferred) - Number(platform1.preferred)) as platform}
-					{#if platform.preferred}
-						<Button type="filled" href={platform.url}>{platform.name}</Button>
-					{:else}
-						<Button type="tonal" href={platform.url}>{platform.name}</Button>
-					{/if}
+					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
+						<div
+							style="background-image: url('/donate/card-images/{platform.name}.png');"
+						/>
+						<span>{platform.name}</span>
+					</a>
 				{/each}
-			</div>
-		{/if}
-		{#if data.wallets}
-			<div class="crypto-card">
-				<div
-					class="crypto-title"
-					class:closed={!expandCrypto}
-					on:click={() => (expandCrypto = !expandCrypto)}
-					on:keypress={() => (expandCrypto = !expandCrypto)}
-				>
-					<h4>Crypto</h4>
-					<img
-						id="arrow"
-						style:transform={expandCrypto ? 'rotate(0deg)' : 'rotate(-180deg)'}
-						src="/icons/expand_less.svg"
-						alt="dropdown"
+			{/if}
+			{#if data.wallets}
+				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
+					<div
+						style="background-image: url('/donate/card-images/Cryptocurrency.png');"
 					/>
-				</div>
-				{#if expandCrypto}
-					<hr />
-					<div class="wallets" transition:slide|local={{ easing: quintOut, duration: 500 }}>
-						{#each data.wallets as wallet}
-							<button
-								on:click={() => {
-									qrCodeValue = wallet.address;
-									qrCodeDialogueName = wallet.currency_code;
-									qrCodeDialogue = !qrCodeDialogue;
-								}}
-							>
-								<div class="name">
-									<img
-										src="/donate/{wallet.currency_code}.svg"
-										onerror="this.onerror=null; this.src='/donate/generic.svg'"
-										alt={`${wallet.network} icon.'`}
-									/>
-									{`${wallet.network} (${wallet.currency_code})`}
-								</div>
-								<img id="arrow" src="/icons/expand_less.svg" alt="dropdown" />
-							</button>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		{/if}
+					<span>Cryptocurrency</span>
+				</button>
+			{/if}
+		</div>
 	</Query>
 	<Query query={teamQuery} let:data>
 		<h3>Meet the team</h3>
 		{#if data.members.length > 0}
 			<section class="team">
 				{#each data.members.sort(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
-					<a
-						class="member"
-						href={member.html_url}
-						rel="noreferrer"
-						target="_blank"
-						in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
-					>
-						<img src={member.avatar_url} alt={`${member.login}'s profile picture.'`} />
-
-						<div class="member-text">
-							<h4>{member.login}</h4>
-							{#if member.bio}
-								<h6>{member.bio}</h6>
-							{/if}
-						</div>
-					</a>
+					<TeamMember {member} {i} />
 				{/each}
 			</section>
 		{/if}
 	</Query>
 </main>
+
+<Dialogue bind:modalOpen={cryptoDialogue}>
+	<svelte:fragment slot="icon">
+		<img class="qr-code" src="/icons/wallet.svg" alt="QR Code" />
+	</svelte:fragment>
+	<svelte:fragment slot="title">Crypto</svelte:fragment>
+	<svelte:fragment slot="description">
+		<hr style="margin: 1rem 0;" />
+		<div class="wallets">
+			<Query query={donateQuery} let:data>
+				{#each data.wallets as wallet}
+					<button
+						on:click={() => {
+							qrCodeValue = wallet.address;
+							qrCodeDialogueName = wallet.currency_code;
+							qrCodeDialogue = !qrCodeDialogue;
+							cryptoDialogue = false;
+						}}
+					>
+						<div class="name">
+							<img
+								src="/donate/crypto/{wallet.currency_code}.svg"
+								onerror="this.onerror=null; this.src='/donate/generic.svg'"
+								alt={`${wallet.network} icon.'`}
+							/>
+							{`${wallet.network} (${wallet.currency_code})`}
+						</div>
+						<img id="arrow" src="/icons/expand_less.svg" alt="dropdown" />
+					</button>
+				{/each}
+			</Query>
+		</div>
+	</svelte:fragment>
+	<svelte:fragment slot="buttons">
+		<Button type="filled" on:click={() => (cryptoDialogue = false)}>Close</Button>
+	</svelte:fragment>
+</Dialogue>
 
 <Dialogue bind:modalOpen={qrCodeDialogue}>
 	<svelte:fragment slot="icon">
@@ -141,7 +140,13 @@
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={() => (qrCodeDialogue = false)}>Close</Button>
+		<Button
+			type="text"
+			on:click={() => {
+				qrCodeDialogue = false;
+				cryptoDialogue = true;
+			}}>Back</Button
+		>
 		<Button type="filled" on:click={() => copyToClipboard(qrCodeValue)}>Copy Address</Button>
 	</svelte:fragment>
 </Dialogue>
@@ -156,18 +161,25 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		margin-top: 5rem;
+		margin-top: 7rem;
+
+		section {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			@media screen and (max-width: 768px) {
+				flex-direction: column-reverse;
+			}
+		}
 	}
 
 	h2 {
-		text-align: center;
 		margin-bottom: 0.5rem;
 		color: var(--white);
 	}
 
 	p {
-		text-align: center;
 		margin-bottom: 2rem;
 		width: 60%;
 	}
@@ -176,39 +188,9 @@
 		margin-bottom: 1.5rem;
 	}
 
-	.crypto-card {
-		border-radius: 20px;
-		width: clamp(325px, 50vw, 375px);
-		margin-bottom: 2rem;
-		border: 1px solid var(--grey-three);
-		overflow: hidden;
-
-		hr {
-			opacity: 0.75;
-		}
-	}
-
-	.crypto-title {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		cursor: pointer;
-		background-color: var(--grey-six);
-		padding: 0.75rem 1.25rem;
-		transition: all 0.2s var(--bezier-one);
-
-		&:hover {
-			background-color: var(--grey-one);
-		}
-		#arrow {
-			height: 1.5rem;
-			transition: all 0.2s var(--bezier-one);
-			user-select: none;
-		}
-	}
-
 	.wallets {
-		padding: 0.5rem 0;
+		// i just guessed this
+		width: clamp(200px, 75vw, 375px);
 		#arrow {
 			height: 20px;
 			transform: rotate(90deg);
@@ -224,7 +206,7 @@
 			text-align: left;
 			display: flex;
 			justify-content: space-between;
-			background-color: var(--bg-color);
+			background-color: var(--grey-six);
 			padding: 0.75rem 1.25rem;
 			transition: filter 0.4s var(--bezier-one);
 
@@ -260,54 +242,18 @@
 	}
 
 	.team {
-		width: 85%;
-		display: flex;
-		flex-wrap: wrap;
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+		justify-content: space-between;
+		align-items: stretch;
 		gap: 1rem;
 		margin-bottom: 4rem;
-		justify-content: space-evenly;
-	}
-
-	.member {
-		width: 350px;
-		color: var(--white);
-		border: 1px solid var(--grey-three);
-		text-decoration: none;
-		cursor: pointer;
-		padding: 1rem;
-		border-radius: 12px;
-		display: flex;
-
-		gap: 1rem;
-		transition: 0.3s background-color var(--bezier-one);
-
-		img {
-			border-radius: 50%;
-			height: 64px;
-			width: 64px;
-			transition: transform 0.4s var(--bezier-one);
-			user-select: none;
-			margin-bottom: 1rem;
-		}
-
-		.member-text {
-			display: flex;
-			flex-direction: column;
-			word-break: break-word;
-		}
-
-		&:hover {
-			background-color: var(--grey-six);
-		}
 	}
 
 	@media screen and (max-width: 1420px) {
 		.team {
 			width: 100%;
-		}
-
-		.member {
-			width: 325px;
 		}
 	}
 
@@ -325,16 +271,57 @@
 		.team {
 			width: 100%;
 		}
+	}
 
-		.member {
-			width: 100%;
-			gap: 1rem;
+	.donate-cards {
+		display: flex;
+		gap: 1rem;
+		margin-bottom: 3rem;
+
+		@media screen and (max-width: 768px) {
+			flex-direction: column;
+		}
+	}
+
+	.donate-card {
+		text-decoration: none;
+		background-color: var(--grey-ten);
+		border-radius: 1.5rem;
+		width: 100%;
+		cursor: pointer;
+		text-align: left;
+		border: none;
+		overflow: hidden;
+		transition: 0.3s border-radius var(--bezier-one), 0.3s background-color var(--bezier-one);
+
+		&:hover {
+			background-color: var(--accent-low-opacity);
 		}
 
-		.member img {
-			margin-bottom: 0;
-			height: 48px;
-			width: 48px;
+		&:active {
+			border-radius: 2.75rem;
+		}
+
+		span {
+			display: block;
+			color: var(--grey-five);
+			font-size: 1.05rem;
+			font-weight: 500;
+			padding: 1.5rem;
+		}
+
+		div {
+			height: 200px;
+			background-size: cover;
+			background-position: center;
+			border-radius: 1.5rem;
+			max-width: 100%;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		#heart {
+			display: none;
 		}
 	}
 </style>

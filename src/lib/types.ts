@@ -52,7 +52,7 @@ export interface TeamMember {
 	login: string;
 	avatar_url: string;
 	html_url: string;
-	bio: string;
+	bio?: string;
 }
 
 export interface CryptoWallet {
