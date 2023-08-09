@@ -252,13 +252,6 @@
 		}
 	}
 
-	// sorry ushie and cossale
-	@media screen and (max-width: 768px) {
-		#heart {
-			display: none;
-		}
-	}
-
 	.wallets {
 		// i just guessed this
 		width: clamp(200px, 75vw, 375px);
