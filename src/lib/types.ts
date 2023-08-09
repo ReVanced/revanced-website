@@ -67,3 +67,9 @@ export interface DonationPlatform {
 	url: string;
 	preferred: boolean;
 }
+
+
+export interface Social {
+	name: string
+	url: string
+}

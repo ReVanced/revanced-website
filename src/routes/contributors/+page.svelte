@@ -56,7 +56,7 @@
 		</div>
 		<div class="repos">
 			<Query {query} let:data>
-				{#each data as { contributors, name: repo }}
+				{#each data.repositories as { contributors, name: repo }}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<ContributorHost {contributors} {repo} />
 					</div>
