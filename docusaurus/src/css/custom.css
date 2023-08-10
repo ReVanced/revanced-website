@@ -1,11 +1,3 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
-
-/* You can override the default Infima variables here. */
-
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 :root {
@@ -21,7 +13,6 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
   --ifm-background-color: var(--bg-color) !important;
   --ifm-color-primary: hsl(206, 100%, 81%);
@@ -49,6 +40,7 @@
   --ifm-code-border-radius: 1rem;
 }
 
+/* navigation */
 .navbar {
   height: 70px;
   padding: 0 2.5rem;
@@ -85,11 +77,6 @@
   }
 }
 
-.footnote-ref {
-  padding: 0.15rem;
-  font-weight: 700 !important;
-}
-
 .navbar__link--active {
   background-color: #2a3645;
   color: #9ed5ff;
@@ -108,19 +95,12 @@
   }
 }
 
-.pagination-nav__link {
-  border-color: hsl(221, 17%, 26%) !important;
-
-  &:hover {
-    background-color: hsl(230, 9%, 13%);
-  }
-}
-
 .dropdown__menu {
   padding: 0.5rem 0 !important;
   box-shadow: var(--drop-shadow-one);
 }
 
+/* dropdown menu under docs V */
 .dropdown__link {
   padding: 0.5rem 1rem;
 }
@@ -133,15 +113,16 @@
   background-color: var(--grey-eleven);
 }
 
-.menu__caret:hover {
-  background-color: var(--ifm-menu-color-background-hover);
-  filter: brightness(125%);
-}
 
 @media screen and (min-width: 768px) {
   .container {
     padding: 2.5rem;
   }
+}
+
+/* page side menu */
+.menu__list-item-collapsible {
+  border-radius: 100px;
 }
 
 .menu__link,
@@ -162,6 +143,18 @@
   }
 }
 
+.menu__caret:before {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--ifm-menu-link-sublist-icon) 50% / 1.5rem 1.5rem;
+}
+
+.menu__caret:hover {
+  background-color: var(--ifm-menu-color-background-hover);
+  filter: brightness(125%);
+}
+
+/* mobile nav menu */
 @media screen and (max-width: 768px) {
   .navbar-sidebar__item {
     padding: 1rem;
@@ -170,10 +163,6 @@
   .navbar-sidebar {
     border-radius: 0 24px 24px 0;
     width: 20rem !important;
-  }
-
-  .menu__list-item-collapsible {
-    border-radius: 100px;
   }
 
   .menu__list-item {
@@ -187,6 +176,7 @@
   .navbar__items {
     gap: 2rem;
   }
+
   .navbar--fixed-top {
     padding: 0 2rem;
   }
@@ -197,6 +187,7 @@
     background: var(--ifm-menu-link-sublist-icon) 50% 50% / 1.5rem 1.5rem no-repeat;
   }
 
+  /* custom hamburger menu */
   .navbar-sidebar .navbar__logo {
     display: none;
   }
@@ -223,6 +214,7 @@
     align-items: center;
     cursor: pointer;
   }
+  
   .navbar__toggle svg {
     display: flex;
     flex-wrap: wrap;
@@ -273,12 +265,7 @@
   font-size: 0.9rem;
 }
 
-.menu__caret:before {
-  width: 0.75rem;
-  height: 0.75rem;
-  background: var(--ifm-menu-link-sublist-icon) 50% / 1.5rem 1.5rem;
-}
-
+/* scroll to top fab */
 [class*="backToTopButton"] {
   border-radius: 0.75rem !important;
   background-color: var(--accent-color) !important;
@@ -294,21 +281,7 @@
   padding: 1rem;
 }
 
-.table-of-contents__left-border {
-  border: none;
-}
-
-.table-of-contents__link--active,
-.table-of-contents__link--active code {
-  color: var(--white);
-  outline: 1px solid var(--grey-three);
-  border-radius: 100px;
-}
-
-.table-of-contents a {
-  padding: 0.5rem 0.75rem;
-}
-
+/* previous and next page bottom buttons  */
 .pagination-nav__link {
   background-color: var(--grey-six);
   border: none;
@@ -376,11 +349,36 @@
   background-color: transparent !important;
 }
 
+/* breadcrumb container */
 [class*="breadcrumbsContainer"] {
   margin-bottom: 2rem !important;
   transform: translateX(-0.33rem);
 }
 
+/* table of contents */
+.table-of-contents__left-border {
+  border: none;
+}
+
+.table-of-contents__link {
+  color: var(--white);
+  border-radius: 100px;
+  transition: 0.3s background-color var(--bezier-one);
+}
+
+.table-of-contents__link--active {
+  outline: 1px solid var(--grey-three);
+}
+
+.table-of-contents__link:hover {
+  background-color: var(--grey-six);
+}
+
+.table-of-contents a {
+  padding: 0.5rem 0.75rem;
+}
+
+/* mobile table of contents button */
 [class*="tocCollapsible"] {
   margin: 0 !important;
   margin-bottom: 1rem !important;
