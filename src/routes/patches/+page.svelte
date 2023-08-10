@@ -10,8 +10,8 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 
-	import Meta from '$lib/components/Meta.svelte';
 	import { JsonLd } from 'svelte-meta-tags';
+	import Meta from '$lib/components/Meta.svelte';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
@@ -36,6 +36,7 @@
 		?.replace(/\./g, '')
 		.replace(/\s/g, '')
 		.replace(/-/g, '')
+		.replace(/_/g, '')
 		.toLowerCase();
 
 	let timeout: ReturnType<typeof setTimeout>;
@@ -68,7 +69,7 @@
 			if (search !== undefined) {
 				return (
 					searchString(patch.description, search, /\s/g) ||
-					searchString(patch.name, search, /-/g) ||
+					searchString(patch.name, search, /\s/g) ||
 					patch.compatiblePackages.find((x) => searchString(x.name, search, /\./g))
 				);
 			}
@@ -85,6 +86,7 @@
 				?.replace(/\./g, '')
 				.replace(/\s/g, '')
 				.replace(/-/g, '')
+				.replace(/_/g, '')
 				.toLowerCase();
 			// Update search URL params
 			// must use history.pushState instead of goto(), as goto() unselects the search bar
