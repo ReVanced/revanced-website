@@ -30,7 +30,7 @@
   --ifm-color-emphasis-200: hsl(221, 17%, 26%) !important;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --ifm-hr-background-color: var(--grey-three);
-  --ifm-menu-color-background-hover: var(--grey-six);
+  --ifm-menu-color-background-hover: var(--grey-one);
   --ifm-breadcrumb-item-background-active: var(--grey-six);
   --ifm-code-background: var(--grey-six) !important;
   --ifm-pre-background: var(--grey-six) !important;
@@ -43,12 +43,11 @@
 
 .card {
   border-radius: 1.5rem;
-  &:hover {
-    border-color: hsl(221, 17%, 26%) !important;
-    background-color: hsl(230, 9%, 13%);
-  }
 }
-
+.card:hover {
+  border-color: hsl(221, 17%, 26%) !important;
+  background-color: hsl(230, 9%, 13%);
+}
 
 .dropdown__menu {
   padding: 0.5rem 0 !important;
@@ -68,8 +67,7 @@
   background-color: var(--grey-eleven);
 }
 
-
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 996px) {
   .container {
     padding: 2.5rem;
   }
@@ -89,8 +87,11 @@
   gap: 0.6rem;
   user-select: none;
   letter-spacing: -0.02em;
+}
 
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 996px) {
+  .menu__link,
+  .menu__caret {
     padding: 0.75rem 1.25rem;
     font-size: 1rem;
     font-weight: 500;
@@ -128,11 +129,11 @@
   background-color: #2a3645;
   color: #9ed5ff;
   padding: 10px 16px;
+}
 
-  &:hover {
-    background-color: #2a3645;
-    color: #9ed5ff;
-  }
+.navbar__item.dropdown .navbar__link:hover {
+  background-color: #2a3645;
+  color: #9ed5ff;
 }
 
 .navbar__link {
@@ -143,22 +144,22 @@
   border-radius: 10px;
   padding: 10px 16px;
   transition: 0.3s background-color var(--bezier-one);
+}
 
-  &:hover {
-    border-color: hsl(221, 17%, 26%) !important;
-    background-color: #252b31;
-    color: #acc1d2;
-  }
+.navbar__link:hover {
+  border-color: hsl(221, 17%, 26%) !important;
+  background-color: #252b31;
+  color: #acc1d2;
 }
 
 .navbar__link--active {
   background-color: #2a3645;
   color: #9ed5ff;
+}
 
-  &:hover {
-    background-color: #2a3645;
-    color: #9ed5ff;
-  }
+.navbar__link--active:hover {
+  background-color: #2a3645;
+  color: #9ed5ff;
 }
 
 /* mobile nav menu */
@@ -171,20 +172,28 @@
     border-radius: 0 24px 24px 0;
   }
 
-  .menu__list-item {
+  .menu__list-item:not(:first) {
     margin-top: 0.5rem !important;
+  }
+
+  .menu__link {
+    transition: 0.3s background-color var(--bezier-one) !important;
   }
 
   .menu__list-item-collapsible:hover {
     background-color: var(--grey-one);
   }
 
-  .menu__list{
+  .menu__list {
     margin-top: 1.5rem;
   }
 
   .navbar__items {
     gap: 2rem;
+  }
+
+  .navbar-sidebar__brand {
+    box-shadow: none !important;
   }
 
   .navbar--fixed-top {
@@ -197,6 +206,16 @@
     background: var(--ifm-menu-link-sublist-icon) 50% 50% / 1.5rem 1.5rem no-repeat;
   }
 
+  .theme-doc-sidebar-menu.menu__list {
+    margin-top: 0rem;
+  }
+
+  .navbar-sidebar__back {
+    color: var(--grey-eight) !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
 
   /* custom hamburger menu */
   .navbar-sidebar .navbar__logo {
@@ -225,7 +244,7 @@
     align-items: center;
     cursor: pointer;
   }
-  
+
   .navbar__toggle svg {
     display: flex;
     flex-wrap: wrap;
@@ -237,7 +256,9 @@
     width: 24px;
     height: 2px;
     background: var(--grey-five);
-    transition: transform 0.3s var(--bezier-one), background-color 0.3s var(--bezier-one);
+    transition:
+      transform 0.3s var(--bezier-one),
+      background-color 0.3s var(--bezier-one);
   }
 
   .navbar__toggle::before,
@@ -274,11 +295,6 @@
   }
 }
 
-.navbar-sidebar__back {
-  color: var(--grey-eight) !important;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
 
 /* scroll to top fab */
 [class*="backToTopButton"] {
@@ -346,7 +362,7 @@
   width: 100%;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 996px) {
   .pagination-nav {
     display: flex;
     flex-direction: column;
@@ -419,7 +435,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 996px) {
   .table-of-contents__link {
     padding: 0.5rem 0 !important;
     font-size: 0.85rem;
