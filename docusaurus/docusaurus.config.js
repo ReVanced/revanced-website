@@ -67,7 +67,7 @@ const config = {
         },
         items: [
           {
-            to: `${siteUrl}/download`,
+            to: siteUrl,
             label: 'Home',
             target: '_self'
           },

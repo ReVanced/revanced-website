@@ -41,12 +41,20 @@
   --ifm-navbar-sidebar-width: 20rem;
 }
 
+/* toc page cards */
 .card {
   border-radius: 1.5rem;
 }
+
 .card:hover {
   border-color: hsl(221, 17%, 26%) !important;
   background-color: hsl(230, 9%, 13%);
+}
+
+@media screen and (max-width: 996px) {
+  .margin-bottom--lg {
+    margin-bottom: 0.5rem !important;
+  }
 }
 
 .dropdown__menu {
@@ -172,7 +180,7 @@
     border-radius: 0 24px 24px 0;
   }
 
-  .menu__list-item:not(:first) {
+  .menu__list-item {
     margin-top: 0.5rem !important;
   }
 
@@ -223,7 +231,7 @@
   }
 
   .navbar-sidebar--show .navbar-sidebar {
-    transition: 0.4s transform var(--bezier-one) !important;
+    transition: 0.5s transform cubic-bezier(0.19, 1, 0.22, 1) !important;
   }
 
   .navbar-sidebar__close {

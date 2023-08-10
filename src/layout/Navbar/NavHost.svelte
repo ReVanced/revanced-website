@@ -228,13 +228,13 @@
 		justify-content: space-between;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 996px) {
 		.nav-wrapper {
 			align-items: center;
 		}
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 996px) {
 		.nav-wrapper {
 			flex-direction: column;
 			gap: 0.5rem;
@@ -271,7 +271,7 @@
 		}
 	}
 
-	@media screen and (min-width: 768px) {
+	@media screen and (min-width: 997px) {
 		.mobile-only {
 			display: none !important;
 		}
