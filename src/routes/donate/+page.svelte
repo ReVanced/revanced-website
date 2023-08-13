@@ -67,7 +67,7 @@
 					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
 						<!-- not using <img/> because we want the image height to always be 200px -->
 						<div
-							style="background-image: url('/donate/card-images/{platform.name}.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.png');"
+							style="background-image: url('/donate/card-images/{platform.name}.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.svg');"
 							role="img"
 							aria-label="{platform.name} preview image"
 							>
@@ -79,7 +79,7 @@
 			{#if data.wallets}
 				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
 					<div
-						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.png');"
+						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.svg');"
 						role="img"
 						aria-label="Cryptocurrencies preview image"
 					/>
