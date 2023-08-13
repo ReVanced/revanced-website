@@ -228,7 +228,7 @@
 		justify-content: space-between;
 	}
 
-	@media (min-width: 996px) {
+	@media (min-width: 997px) {
 		.nav-wrapper {
 			align-items: center;
 		}

@@ -80,7 +80,7 @@
 		color: var(--accent-color);
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 996px) {
 		li {
 			padding: 0.75rem 1.25rem;
 			text-align: left;
