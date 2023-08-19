@@ -4,13 +4,14 @@
 
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
-	
+
 	import { friendlyName } from '$util/friendlyName';
 
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
 	const repoQuery = createQuery(['repositories'], queries.repositories);
+	const infoQuery = createQuery(['info'], queries.info);
 	const socialsQuery = createQuery(['socials'], queries.socials);
 </script>
 
@@ -37,15 +38,15 @@
 	<div class="footer-top">
 		<section class="main-content">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-			<div>
-				<p>
-					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the
-					legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create
-					long-lasting patches for nearly any Android app. ReVanced's patching system is designed to
-					allow patches to work on new versions of the apps automatically with bare minimum
-					maintenance.
-				</p>
-			</div>
+			<Query query={infoQuery} let:data>
+				{#if data}
+					<div>
+						<p>
+							{data.info.about}
+						</p>
+					</div>
+				{/if}
+			</Query>
 		</section>
 
 		<section class="links-container">
@@ -56,9 +57,9 @@
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>
 			</FooterSection>
-			<FooterSection title="Repositories">
-				<Query query={repoQuery} let:data>
-					{#if data}
+			<Query query={repoQuery} let:data>
+				{#if data}
+					<FooterSection title="Repositories">
 						{#each data.repositories as { name }}
 							<li>
 								<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
@@ -66,27 +67,31 @@
 								</a>
 							</li>
 						{/each}
-					{/if}
-				</Query>
-			</FooterSection>
-			<FooterSection title="Socials">
-				<Query query={socialsQuery} let:data>
-					{#if data}
+					</FooterSection>
+				{/if}
+			</Query>
+			<Query query={socialsQuery} let:data>
+				{#if data}
+					<FooterSection title="Socials">
 						{#each data.socials as { name, url }}
 							<li>
-								<a href={url} target="_blank" rel="noreferrer">{friendlyName(name)}</a>
+								<a href={url} target="_blank" rel="noreferrer">{name}</a>
 							</li>
 						{/each}
-					{/if}
-				</Query>
-			</FooterSection>
+					</FooterSection>
+				{/if}
+			</Query>
 		</section>
 	</div>
-	<div class="footer-bottom">
-		<div id="logo-name"><span>Re</span>Vanced</div>
-		<a href="/donate"><div>Donate</div></a>
-		<a href="mailto:contact@revanced.app"><div>Email</div></a>
-	</div>
+	<Query query={infoQuery} let:data>
+		{#if data}
+			<div class="footer-bottom">
+				<div id="logo-name"><span>Re</span>Vanced</div>
+				<a href="/donate"><div>Donate</div></a>
+				<a href="mailto:{data.info.contact.email}"><div>Email</div></a>
+			</div>
+		{/if}
+	</Query>
 </footer>
 
 <style>
