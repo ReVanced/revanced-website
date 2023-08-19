@@ -9,13 +9,15 @@ import type {
 	TeamMember,
 	DonationPlatform,
 	CryptoWallet,
-	Social
+	Social,
+	Info
 } from '$lib/types';
 
 export type ReposData = { repositories: Repository[] };
 export type PatchesData = { patches: Patch[]; packages: string[] };
 export type ReleaseData = { metadata: Metadata; assets: Asset[] };
 export type TeamData = { members: TeamMember[] };
+export type InfoData = { info: Info };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
 export type SocialsData = { socials: Social[] };
 
@@ -48,9 +50,8 @@ async function patches(): Promise<PatchesData> {
 	}
 
 	// sort packages by patch count to get most relevant apps on top
-	const packages = Object.entries(packagesWithCount)
-		.sort((a, b) => b[1] - a[1])
-		.map((pkg) => pkg[0]);
+	const packages = Object.keys(packagesWithCount);
+	packages.sort((a, b) => packagesWithCount[b] - packagesWithCount[a]);
 
 	return { patches: json.patches, packages };
 }
@@ -58,6 +59,11 @@ async function patches(): Promise<PatchesData> {
 async function team(): Promise<TeamData> {
 	const json = await get_json('v2/team/members');
 	return { members: json.members };
+}
+
+async function info(): Promise<InfoData> {
+	const json = await get_json('v2/info');
+	return { info: json.info };
 }
 
 async function donate(): Promise<DonationData> {
@@ -90,6 +96,11 @@ export const queries = {
 	team: {
 		queryKey: ['team'],
 		queryFn: team,
+		staleTime
+	},
+	info: {
+		queryKey: ['info'],
+		queryFn: info,
 		staleTime
 	},
 	donate: {
