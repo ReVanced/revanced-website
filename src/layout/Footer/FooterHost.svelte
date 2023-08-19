@@ -5,12 +5,9 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import { friendlyName } from '$util/friendlyName';
-
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
-	const repoQuery = createQuery(['repositories'], queries.repositories);
 	const infoQuery = createQuery(['info'], queries.info);
 	const socialsQuery = createQuery(['socials'], queries.socials);
 </script>
@@ -57,19 +54,6 @@
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>
 			</FooterSection>
-			<Query query={repoQuery} let:data>
-				{#if data}
-					<FooterSection title="Repositories">
-						{#each data.repositories as { name }}
-							<li>
-								<a href="https://github.com/{name}" target="_blank" rel="noreferrer">
-									{friendlyName(name)}
-								</a>
-							</li>
-						{/each}
-					</FooterSection>
-				{/if}
-			</Query>
 			<Query query={socialsQuery} let:data>
 				{#if data}
 					<FooterSection title="Socials">
