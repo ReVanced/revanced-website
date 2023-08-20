@@ -13,7 +13,9 @@
 			<SocialButton social="github" data={data.socials} />
 			<SocialButton social="discord" data={data.socials} />
 			<SocialButton social="reddit" data={data.socials} />
+			<SocialButton social="twitter" data={data.socials} />
 			<SocialButton social="telegram" data={data.socials} />
+			<SocialButton social="youtube" data={data.socials} />
 		{/if}
 	</Query>
 </div>
@@ -36,6 +38,7 @@
 			left: 0;
 			width: 100%;
 			display: flex;
+			flex-wrap: wrap;
 			justify-content: center;
 		}
 	}
