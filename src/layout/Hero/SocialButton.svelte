@@ -1,10 +1,14 @@
 <script lang="ts">
-	import type {Social} from '$lib/types';
+	import type { Social } from '$lib/types';
 	export let social = '';
 	export let data: Social[];
 </script>
 
-<a href={data.find(jsonSocial => jsonSocial.name === social)?.url} rel="noreferrer" target="_blank">
+<a
+	href={data.find((jsonSocial) => jsonSocial.name.toLowerCase() === social.toLowerCase())?.url}
+	rel="noreferrer"
+	target="_blank"
+>
 	<div>
 		<img src="socials/{social}.svg" alt={social} />
 	</div>
