@@ -5,7 +5,6 @@
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Meta from '$lib/components/Meta.svelte';
-	import { JsonLd } from 'svelte-meta-tags';
 	import Query from '$lib/components/Query.svelte';
 
 	import { queries } from '$data/api';
@@ -14,8 +13,8 @@
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
-<Meta title="Contributors" />
-<JsonLd
+<Meta
+	title="Contributors"
 	schema={{
 		'@context': 'https://schema.org',
 		'@type': 'WebPage',

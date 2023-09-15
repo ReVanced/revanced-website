@@ -107,8 +107,8 @@
 	};
 </script>
 
-<Meta title="Patches" />
-<JsonLd
+<Meta
+	title="Patches"
 	schema={{
 		'@context': 'https://schema.org',
 		'@type': 'WebPage',

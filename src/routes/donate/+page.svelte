@@ -39,7 +39,33 @@
 	}
 </script>
 
-<Meta title="Donate" />
+<Meta
+	title="Donate"
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced Donation',
+		abstract: 'Various ways to support ReVanced',
+		breadcrumb: 'Home > Donate',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			},
+			sameAs: [
+				'https://github.com/revanced',
+				'https://twitter.com/revancedapp',
+				'https://revanced.app/discord',
+				'https://www.reddit.com/r/revancedapp',
+				'https://t.me/app_revanced',
+				'https://www.youtube.com/@ReVanced'
+			]
+		}
+	}}
+/>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<section>
@@ -67,11 +93,12 @@
 					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
 						<!-- not using <img/> because we want the image height to always be 200px -->
 						<div
-							style="background-image: url('/donate/card-images/{platform.name}.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.svg');"
+							style="background-image: url('/donate/card-images/{platform.name}.{supportsWebP()
+								? 'webp'
+								: 'png'}'), url('/donate/card-images/fallback.svg');"
 							role="img"
 							aria-label="{platform.name} preview image"
-							>
-						  </div>
+						/>
 						<span>{platform.name}</span>
 					</a>
 				{/each}
@@ -79,7 +106,9 @@
 			{#if data.wallets}
 				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
 					<div
-						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP() ? 'webp' : 'png'}'), url('/donate/card-images/fallback.svg');"
+						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP()
+							? 'webp'
+							: 'png'}'), url('/donate/card-images/fallback.svg');"
 						role="img"
 						aria-label="Cryptocurrencies preview image"
 					/>
@@ -208,7 +237,6 @@
 			width: 100%;
 		}
 	}
-
 
 	// COPEEEE
 	@media screen and (max-width: 768px) {

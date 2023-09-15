@@ -4,12 +4,9 @@
 	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Meta from '$lib/components/Meta.svelte';
-	import { JsonLd } from 'svelte-meta-tags';
 </script>
 
-<Meta />
-
-<JsonLd
+<Meta
 	schema={{
 		'@context': 'https://schema.org',
 		'@type': 'WebPage',

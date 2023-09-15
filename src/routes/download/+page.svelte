@@ -8,7 +8,6 @@
 	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
 
 	import Meta from '$lib/components/Meta.svelte';
-	import { JsonLd } from 'svelte-meta-tags';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
@@ -44,8 +43,8 @@
 	}
 </script>
 
-<Meta title="Download" />
-<JsonLd
+<Meta
+	title="Download"
 	schema={{
 		'@type': 'MobileApplication',
 		name: 'ReVanced Manager',
