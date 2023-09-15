@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { JsonLd } from 'svelte-meta-tags';
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
 
 	let _title: string = '';
 	$: title = _title === '' ? 'ReVanced' : `ReVanced · ${_title}`;
@@ -9,6 +11,11 @@
 	export let description: string = 'Continuing the legacy of Vanced.';
 
 	export let schema: any | undefined;
+	
+	createQuery(['socials'], queries.socials).subscribe((query) => {
+		schema.publisher.sameAs = query.data?.socials?.map((social) => social.url);
+	});
+	
 </script>
 
 <svelte:head>

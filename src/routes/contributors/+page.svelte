@@ -28,15 +28,7 @@
 			logo: {
 				'@type': 'ImageObject',
 				url: 'https://revanced.app/embed.png'
-			},
-			sameAs: [
-				'https://github.com/revanced',
-				'https://twitter.com/revancedapp',
-				'https://revanced.app/discord',
-				'https://www.reddit.com/r/revancedapp',
-				'https://t.me/app_revanced',
-				'https://www.youtube.com/@ReVanced'
-			]
+			}
 		}
 	}}
 />
