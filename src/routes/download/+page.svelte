@@ -5,12 +5,12 @@
 
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import manager_screenshot from '$images/manager_two.png?format=avif;webp;png&picture';
+	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
 
 	import Meta from '$lib/components/Meta.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
@@ -43,7 +43,34 @@
 	}
 </script>
 
-<Meta title="Download" />
+<Meta
+	title="Download"
+	schema={{
+		'@type': 'MobileApplication',
+		name: 'ReVanced Manager',
+		description:
+			'ReVanced Manager is an Android application that uses ReVanced Patcher to add, remove, and modify existing functionalities in Android applications',
+		abstract: 'Continuing the legacy of Vanced',
+		applicationCategory: 'UtilitiesApplication',
+		applicationSuite: 'ReVanced',
+		downloadUrl: 'https://revanced.app/download',
+		maintainer: 'ReVanced',
+		operatingSystem: 'Android 8',
+		offers: {
+			'@type': 'Offer',
+			price: '0'
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			}
+		}
+	}}
+/>
 
 <Dialogue bind:modalOpen={warningDialogue}>
 	<svelte:fragment slot="title">Warning</svelte:fragment>
@@ -52,7 +79,7 @@
 		<Query {query} let:data>
 			<Button
 				type="text"
-				href={data.assets[0].url}
+				href={data.assets[0].browser_download_url}
 				download
 				on:click={() => (warningDialogue = false)}>Okay</Button
 			>
@@ -68,17 +95,17 @@
 		<Query {query} let:data>
 			{#if !isAndroid || androidVersion < 8}
 				<Button on:click={handleClick} type="filled" icon="download">
-					{data.version}
+					{data.metadata.tag_name}
 				</Button>
 			{:else}
 				<Button
 					on:click={handleClick}
 					type="filled"
 					icon="download"
-					href={data.assets[0].url}
+					href={data.assets[0].browser_download_url}
 					download
 				>
-					{data.version}
+					{data.metadata.tag_name}
 				</Button>
 			{/if}
 		</Query>

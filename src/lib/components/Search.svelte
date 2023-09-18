@@ -11,7 +11,10 @@
 	function clear() {
 		searchTerm = '';
 		searchTermFiltered = '';
-		goto($page.url.pathname)
+		
+		const url = new URL($page.url);
+		url.searchParams.delete('s');
+		goto(url.pathname + url.search);
 	}
 </script>
 
@@ -36,7 +39,7 @@
 	/>
 </div>
 
-<style>
+<style lang="scss">
 	#search {
 		/* umm dont ask */
 		position: absolute;
@@ -70,6 +73,19 @@
 		border-radius: 100px;
 		border: none;
 		background-color: var(--grey-ten);
+		outline: none;
+
+		transition: background-color 0.3s var(--bezier-one);
+		&:hover {
+			background-color: var(--grey-three);
+		}
+
+		&:focus::placeholder {
+			color: var(--accent-color);
+		}
+		&:focus {
+			background-color: var(--bg-color);
+		}
 	}
 
 	input::placeholder {
@@ -77,14 +93,5 @@
 		font-size: 0.9rem;
 		font-weight: 500;
 		transition: all 0.2s var(--bezier-one);
-	}
-
-	input:focus {
-		outline: none;
-	}
-
-	input:focus::placeholder {
-		outline: none;
-		color: var(--accent-color)
 	}
 </style>

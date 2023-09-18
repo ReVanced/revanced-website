@@ -1,16 +1,16 @@
 <script>
 	export let dropdown = false;
 	export let check = false;
-    export let selected = false;
+	export let selected = false;
 </script>
 
 <button class:selected on:click>
-    {#if check}
-        <img id="check" src="/icons/check.svg" alt="selected" />
-    {/if}
+	{#if check}
+		<img id="check" src="/icons/check.svg" alt="selected" />
+	{/if}
 	<slot />
 	{#if dropdown}
-		<img id="dropdown" src="/icons/arrow.svg" alt="dropdown" />
+		<img id="dropdown" src="/icons/expand_more.svg" alt="dropdown" />
 	{/if}
 </button>
 
@@ -31,20 +31,20 @@
 		gap: 8px;
 	}
 
-    .selected {
-        background-color: var(--accent-low-opacity);
-        color: var(--accent-color);
-    }
+	.selected {
+		background-color: var(--accent-low-opacity);
+		color: var(--accent-color);
+	}
 
 	img {
 		height: 18px;
 	}
 
-    #dropdown {
-        margin-right: -6px;
-    }
+	#dropdown {
+		margin-right: -6px;
+	}
 
-    #check {
-        margin-left: -6px;
-    }
+	#check {
+		margin-left: -6px;
+	}
 </style>

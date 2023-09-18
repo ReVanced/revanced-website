@@ -6,7 +6,24 @@
 	import Meta from '$lib/components/Meta.svelte';
 </script>
 
-<Meta />
+<Meta
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced',
+		abstract: 'Continuing the legacy of Vanced',
+		breadcrumb: 'Home',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			}
+		}
+	}}
+/>
 
 <main>
 	<div class="wrap">
@@ -44,7 +61,7 @@
 			display: none;
 		}
 	}
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.wrappezoid {
 			display: flex;
 			justify-content: center;

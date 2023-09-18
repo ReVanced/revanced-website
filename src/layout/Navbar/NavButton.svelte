@@ -7,13 +7,21 @@
 	const client = useQueryClient();
 
 	export let href: string;
-	export let queryKey: null | keyof typeof queries = null;
+	export let queryKey: null | keyof typeof queries | Array<keyof typeof queries> = null;
 
 	function prefetch() {
 		if (queryKey !== null) {
-			const query = queries[queryKey];
-			dev_log('Prefetching', query);
-			client.prefetchQuery(query as any);
+			if (Array.isArray(queryKey)) {
+				queryKey.forEach((key) => {
+					const query = queries[key];
+					dev_log('Prefetching', query);
+					client.prefetchQuery(query as any);
+				});
+			} else {
+				const query = queries[queryKey];
+				dev_log('Prefetching', query);
+				client.prefetchQuery(query as any);
+			}
 		}
 	}
 </script>
@@ -72,7 +80,7 @@
 		color: var(--accent-color);
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		li {
 			padding: 0.75rem 1.25rem;
 			text-align: left;

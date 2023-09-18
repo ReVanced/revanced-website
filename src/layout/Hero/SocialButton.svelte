@@ -1,11 +1,16 @@
-<script>
-	export let src = 'github';
-	export let href = '#';
+<script lang="ts">
+	import type { Social } from '$lib/types';
+	export let social = '';
+	export let data: Social[];
 </script>
 
-<a {href} rel="noreferrer" target="_blank">
+<a
+	href={data.find((jsonSocial) => jsonSocial.name.toLowerCase() === social.toLowerCase())?.url}
+	rel="noreferrer"
+	target="_blank"
+>
 	<div>
-		<img src="socials/{src}.svg" alt={src} />
+		<img src="socials/{social}.svg" alt={social} />
 	</div>
 </a>
 

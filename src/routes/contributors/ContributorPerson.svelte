@@ -26,9 +26,8 @@
 	}
 
 	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color);
+		background: var(--grey-one);
+		text-decoration: underline var(--accent-color);
 		color: var(--white);
 	}
 
@@ -48,7 +47,7 @@
 		user-select: none;
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		h5 {
 			display: none;
 		}

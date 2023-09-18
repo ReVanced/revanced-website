@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	import ContributorHost from './ContributorSection.svelte';
-	import Footer from '$layout/Footer.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Meta from '$lib/components/Meta.svelte';
 	import Query from '$lib/components/Query.svelte';
 
@@ -13,23 +13,41 @@
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
-<Meta title="Contributors" />
+<Meta
+	title="Contributors"
+	schema={{
+		'@context': 'https://schema.org',
+		'@type': 'WebPage',
+		name: 'ReVanced Contributors',
+		abstract: 'A list of everyone that has contributed to ReVanced',
+		breadcrumb: 'Home > Contributors',
+		publisher: {
+			'@type': 'Organization',
+			name: 'ReVanced',
+			url: 'https://revanced.app/',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://revanced.app/embed.png'
+			}
+		}
+	}}
+/>
 
 <main>
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<h2>Made possible by the community.</h2>
-			<h4>
+			<p>
 				Want to show up here? <span
 					><a href="https://github.com/revanced" target="_blank" rel="noreferrer"
 						>Become a contributor</a
 					></span
 				>
-			</h4>
+			</p>
 		</div>
 		<div class="repos">
 			<Query {query} let:data>
-				{#each data as { contributors, name: repo }}
+				{#each data.repositories as { contributors, name: repo }}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<ContributorHost {contributors} {repo} />
 					</div>
@@ -55,7 +73,7 @@
 		margin-bottom: 0.3rem;
 	}
 
-	h4 {
+	p {
 		text-align: center;
 		color: var(--grey-four);
 	}
@@ -83,15 +101,13 @@
 	}
 
 	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--grey-four);
+		text-decoration: underline var(--grey-four);
 	}
 
 	a:hover::after {
 		transform: translateX(5px);
 	}
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 767px) {
 		.text-container {
 			padding: 2rem 1.75rem;
 			margin-bottom: 2rem;

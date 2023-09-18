@@ -27,7 +27,7 @@
 		<img
 			id="arrow"
 			style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
-			src="/icons/arrow.svg"
+			src="/icons/expand_less.svg"
 			alt="dropdown"
 		/>
 	</div>
@@ -43,7 +43,7 @@
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	.title {
 		display: flex;
 		align-items: center;
@@ -53,6 +53,10 @@
 		padding: 0.75rem 1.25rem;
 		border-bottom: 1px solid var(--grey-three);
 		transition: all 0.2s var(--bezier-one);
+
+		&:hover {
+			background-color: var(--grey-one);
+		}
 	}
 
 	.closed {
@@ -79,9 +83,7 @@
 	}
 
 	a:hover {
-		text-decoration: underline;
-		text-decoration-style: wavy;
-		text-decoration-color: var(--accent-color);
+		text-decoration: underline var(--accent-color);
 		color: var(--white);
 	}
 
@@ -93,7 +95,7 @@
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		.contrib-host {
 			padding: 0.75rem;
 			gap: 0.25rem;

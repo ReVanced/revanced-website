@@ -1,12 +1,21 @@
 <script>
 	import SocialButton from './SocialButton.svelte';
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
+	import Query from '$lib/components/Query.svelte';
+
+	const query = createQuery(['socials'], queries.socials);
 </script>
 
 <div class="social-host">
-	<SocialButton src="github" href="https://revanced.app/github" />
-	<SocialButton src="discord" href="https://revanced.app/discord" />
-	<SocialButton src="reddit" href="https://revanced.app/reddit" />
-	<SocialButton src="telegram" href="https://revanced.app/telegram" />
+	<Query {query} let:data>
+		{#if data}
+			<SocialButton social="github" data={data.socials} />
+			<SocialButton social="discord" data={data.socials} />
+			<SocialButton social="reddit" data={data.socials} />
+			<SocialButton social="telegram" data={data.socials} />
+		{/if}
+	</Query>
 </div>
 
 <style>
@@ -22,7 +31,7 @@
 		left: 0;
 	}
 
-	@media screen and (max-width: 768px) {
+	@media screen and (max-width: 767px) {
 		.social-host {
 			left: 0;
 			width: 100%;
