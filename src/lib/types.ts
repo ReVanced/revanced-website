@@ -68,8 +68,24 @@ export interface DonationPlatform {
 	preferred: boolean;
 }
 
-
 export interface Social {
-	name: string
-	url: string
+	name: string;
+	url: string;
+}
+
+interface Donations {
+	wallets: CryptoWallet[];
+	links: DonationPlatform[];
+}
+
+interface Contact {
+	email: string;
+}
+
+export interface Info {
+	name: string;
+	about: string;
+	contact: Contact;
+	socials: Social[];
+	donations: Donations;
 }

@@ -8,7 +8,6 @@
 	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
 
 	import Meta from '$lib/components/Meta.svelte';
-	import { JsonLd } from 'svelte-meta-tags';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
@@ -44,8 +43,8 @@
 	}
 </script>
 
-<Meta title="Download" />
-<JsonLd
+<Meta
+	title="Download"
 	schema={{
 		'@type': 'MobileApplication',
 		name: 'ReVanced Manager',
@@ -68,15 +67,7 @@
 			logo: {
 				'@type': 'ImageObject',
 				url: 'https://revanced.app/embed.png'
-			},
-			sameAs: [
-				'https://github.com/revanced',
-				'https://twitter.com/revancedapp',
-				'https://revanced.app/discord',
-				'https://www.reddit.com/r/revancedapp',
-				'https://t.me/app_revanced',
-				'https://www.youtube.com/@ReVanced'
-			]
+			}
 		}
 	}}
 />

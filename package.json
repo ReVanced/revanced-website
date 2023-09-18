@@ -41,8 +41,6 @@
 		"@tanstack/query-core": "^4.24.4",
 		"@tanstack/query-persist-client-core": "^4.24.4",
 		"@tanstack/query-sync-storage-persister": "^4.24.4",
-		"@tanstack/svelte-query": "^4.24.4",
-		"asciidoctor": "^2.2.6",
-		"marked": "^4.1.1"
+		"@tanstack/svelte-query": "^4.24.4"
 	}
 }

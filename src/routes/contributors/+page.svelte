@@ -5,7 +5,6 @@
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Meta from '$lib/components/Meta.svelte';
-	import { JsonLd } from 'svelte-meta-tags';
 	import Query from '$lib/components/Query.svelte';
 
 	import { queries } from '$data/api';
@@ -14,8 +13,8 @@
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
-<Meta title="Contributors" />
-<JsonLd
+<Meta
+	title="Contributors"
 	schema={{
 		'@context': 'https://schema.org',
 		'@type': 'WebPage',
@@ -29,15 +28,7 @@
 			logo: {
 				'@type': 'ImageObject',
 				url: 'https://revanced.app/embed.png'
-			},
-			sameAs: [
-				'https://github.com/revanced',
-				'https://twitter.com/revancedapp',
-				'https://revanced.app/discord',
-				'https://www.reddit.com/r/revancedapp',
-				'https://t.me/app_revanced',
-				'https://www.youtube.com/@ReVanced'
-			]
+			}
 		}
 	}}
 />
