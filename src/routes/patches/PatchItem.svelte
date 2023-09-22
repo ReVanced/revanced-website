@@ -78,6 +78,8 @@
 					/>
 				</Button>
 			{/if}
+		{:else}
+			<li class="patch-info">🎯 Any</li>
 		{/if}
 	</ul>
 
