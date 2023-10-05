@@ -47,11 +47,11 @@
 		if (pkg === '') {
 			return false;
 		}
-		return !!patch.compatiblePackages.find((compat) => compat.name === pkg);
+		return !!patch.compatiblePackages?.find((compat) => compat.name === pkg);
 	}
 
-	function searchString(str: string, term: string, filter: RegExp) {
-		return str.toLowerCase().replace(filter, '').includes(term);
+	function searchString(str?: string, term: string, filter: RegExp) {
+		return str?.toLowerCase().replace(filter, '').includes(term);
 	}
 
 	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
@@ -70,7 +70,7 @@
 				return (
 					searchString(patch.description, search, /\s/g) ||
 					searchString(patch.name, search, /\s/g) ||
-					patch.compatiblePackages.find((x) => searchString(x.name, search, /\./g))
+					patch.compatiblePackages?.find((x) => searchString(x.name, search, /\./g))
 				);
 			}
 			return true;

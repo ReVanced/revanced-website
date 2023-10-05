@@ -12,11 +12,10 @@ export interface Repository {
 export interface Patch {
 	name: string;
 	description: string;
-	version: string;
-	excluded: boolean;
-	dependencies: string[];
-	options: PatchOption[];
 	compatiblePackages: CompatiblePackage[];
+	use: boolean;
+	requiresIntegrations: boolean;
+	options: PatchOption[];
 }
 
 export interface CompatiblePackage {
@@ -26,10 +25,10 @@ export interface CompatiblePackage {
 
 export interface PatchOption {
 	key: string;
+	default: any;
 	title: string;
 	description: string;
 	required: boolean;
-	choices: string[];
 }
 
 export interface Asset {
