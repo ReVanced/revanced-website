@@ -1,0 +1,42 @@
+name: Receive Dispatch and Pull Docs
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [docs]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pull-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Pull docs from rv-docs repository
+      run: | # cp -rfL docs/* ../docs fail? // cp -rf repositories/*/docs ../docs/* work but worse
+        git clone https://github.com/ReVanced/revanced-documentation rv-docs && cd rv-docs
+        git submodule update --init --recursive
+
+        cp -rf docs/revanced-development ../docs/revanced-development
+
+        for repo in repositories/*/; do
+          cp -rf "$repo/docs" "../docs/$(basename $repo)"
+        done
+
+        cd ..
+        rm -rf rv-docs
+
+    - name: Push changes to origin
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add .
+        git commit -m "Updated docs"
+        git push origin master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
