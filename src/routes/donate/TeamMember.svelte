@@ -41,11 +41,6 @@
 		&:hover {
 			background-color: var(--grey-six);
 		}
-
-		@media screen and (max-width: 768px) {
-			width: 100%;
-			gap: 1rem;
-		}
 	}
 
 	.member-text {
