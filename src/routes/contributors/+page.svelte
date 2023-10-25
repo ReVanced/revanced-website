@@ -110,7 +110,6 @@
 	@media screen and (max-width: 767px) {
 		.text-container {
 			padding: 2rem 1.75rem;
-			margin-bottom: 2rem;
 		}
 	}
 </style>
