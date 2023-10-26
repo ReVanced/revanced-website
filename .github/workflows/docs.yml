@@ -15,7 +15,9 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v4
-
+      # with:
+      #   submodules: 'recursive'
+        
     - name: Pull documentation
       run: | # cp -rfL docs/* ../docs fail? // cp -rf repositories/*/docs ../docs/* work but worse
         git clone https://github.com/ReVanced/revanced-documentation rv-docs && cd rv-docs
