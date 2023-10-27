@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
-	import { disableScrollHandling } from '$app/navigation';
 	export let modalOpen = false;
 	export let fullscreen = false;
 	export let notDismissible = false;

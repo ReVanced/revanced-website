@@ -88,3 +88,44 @@ export interface Info {
 	socials: Social[];
 	donations: Donations;
 }
+
+interface Content {
+	message: string | null;
+	attachment_urls: string[] | null;
+}
+
+export interface Announcement {
+	id: number;
+	author: string | null;
+	title: string;
+	content: Content | null;
+	channel: string;
+	created_at: string;
+	level: number | null;
+}
+
+export interface NoAnnouncements {
+	message: string;
+}
+
+export interface PostAnnouncement {
+	author: string | null;
+	title: string;
+	content: PostContent;
+	channel: string;
+	level: number | null;
+}
+
+interface PostContent {
+	message: string;
+	attachment_urls: string[];
+}
+
+export interface Login {
+	username: string;
+	password: string;
+}
+
+export interface LoginResponse {
+	access_token: string;
+}

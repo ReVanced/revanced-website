@@ -12,7 +12,7 @@
 
 	export let schema: any | undefined;
 	
-	createQuery(['socials'], queries.socials).subscribe((query) => {
+	createQuery(['socials'], queries.socials()).subscribe((query) => {
 		schema.publisher.sameAs = query.data?.socials?.map((social) => social.url);
 	});
 	

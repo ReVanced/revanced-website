@@ -21,7 +21,7 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Query from '$lib/components/Query.svelte';
 
-	const query = createQuery(['patches'], queries.patches);
+	const query = createQuery(['patches'], queries.patches());
 
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {

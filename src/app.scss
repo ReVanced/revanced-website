@@ -150,7 +150,8 @@ hr {
 	border-top: 1px solid var(--grey-three);
 }
 
-input {
+input,
+textarea {
 	padding: 1rem;
 	border-radius: 12px;
 	border: 1px solid var(--grey-three);
@@ -158,6 +159,7 @@ input {
 	color: var(--accent-color-two);
 }
 
-input:focus {
+input:focus,
+textarea:focus {
 	outline: 1px solid var(--accent-color);
 }

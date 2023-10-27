@@ -14,11 +14,29 @@ export function api_base_url(): string {
 	return default_base_url;
 }
 
-// (re)set base URL.
+// (Re)set base URL.
 export function set_api_base_url(url?: string) {
 	if (!url) {
 		localStorage.removeItem(URL_KEY);
 	} else {
 		localStorage.setItem(URL_KEY, url);
+	}
+}
+
+// Get access token.
+export function get_access_token(): string | null {
+	if (browser) {
+		return localStorage.getItem('revanced_api_access_token');
+	}
+
+	return null;
+}
+
+// Set access token.
+export function set_access_token(token?: string) {
+	if (!token) {
+		localStorage.removeItem('revanced_api_access_token');
+	} else {
+		localStorage.setItem('revanced_api_access_token', token);
 	}
 }

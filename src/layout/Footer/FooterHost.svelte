@@ -8,8 +8,8 @@
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
-	const infoQuery = createQuery(['info'], queries.info);
-	const socialsQuery = createQuery(['socials'], queries.socials);
+	const infoQuery = createQuery(['info'], queries.info());
+	const socialsQuery = createQuery(['socials'], queries.socials());
 </script>
 
 <!-- squiggly divider line -->
@@ -163,13 +163,6 @@
 		display: flex;
 		gap: 10rem;
 		margin-top: 1rem;
-	}
-
-	ul {
-		display: flex;
-		gap: 1rem;
-		flex-direction: column;
-		width: max-content;
 	}
 
 	@media screen and (max-width: 1050px) {

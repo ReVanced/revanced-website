@@ -10,7 +10,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	const query = createQuery(['repositories'], queries.repositories);
+	const query = createQuery(['repositories'], queries.repositories());
 </script>
 
 <Meta
