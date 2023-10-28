@@ -9,7 +9,6 @@
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Announcement from './Announcement.svelte';
-	import Announcement2 from './Announcement2.svelte';
 	import { get_access_token } from '$data/api/settings';
 	import PostAnnouncementDialogue from './PostAnnouncementDialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -73,7 +72,6 @@
 			<div class="announcements">
 				{#each data.announcements as announcement}
 					<Announcement {announcement} />
-					<Announcement2 {announcement} />
 				{/each}
 			</div>
 			<br />

@@ -20,18 +20,20 @@
 	<div class="header">
 		<div class="title-container">
 			<img src="/icons/{icon}.svg" alt="announcement" />
-			<h2>{announcement.title}</h2>
+			<div class="title-info">
+				<h3>{announcement.title}</h3>
+				<div class="author">
+					<p>{diffDays}</p>
+					{#if announcement.author}
+						<p class="dot">•</p>
+						<p>{announcement.author}</p>
+					{/if}
+				</div>
+			</div>
 		</div>
 		<div class="header-footer-container">
 			<div class="header-footer">
 				<p>{announcement.channel}</p>
-			</div>
-			<div class="header-footer">
-				<p>{diffDays}</p>
-				{#if announcement.author}
-					<p class="dot">•</p>
-					<p>{announcement.author}</p>
-				{/if}
 			</div>
 		</div>
 	</div>
@@ -54,16 +56,12 @@
 <style lang="scss">
 	.announcement {
 		border-radius: 1.5rem;
-		background-color: var(--grey-six);
 		display: flex;
 		width: 100%;
 		flex-direction: column;
 		color: var(--grey-five);
 		transition: all 0.2s var(--bezier-one);
-
-		&:hover {
-			transform: translateY(-0.25rem);
-		}
+		border: 1px solid var(--grey-three);
 
 		.attachments {
 			margin-top: 1rem;
@@ -91,14 +89,15 @@
 		}
 
 		.header {
-			padding: 1.5rem;
+			padding: 1.25rem;
 			border-radius: 1.5rem 1.5rem 0 0;
-			background-color: var(--grey-one);
+			background-color: var(--grey-six);
 			gap: 1rem;
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
 			justify-content: space-between;
+			border-bottom: 1px solid var(--grey-three);
 
 			.header-footer-container {
 				flex-wrap: wrap;
@@ -108,7 +107,7 @@
 				.header-footer {
 					gap: 0.25rem;
 					display: flex;
-					background: var(--grey-three);
+					background: var(--grey-two);
 					flex-wrap: wrap;
 					padding: 0.25rem 1rem;
 					border-radius: 0.5rem;
@@ -123,8 +122,15 @@
 		.title-container {
 			display: flex;
 			flex-wrap: wrap;
-			gap: 0.5rem;
+			justify-content: center;
+			align-items: center;
+			gap: 1.25rem;
 
+			.author {
+				display: flex;
+				gap: 0.25rem;
+				flex-wrap: wrap;
+			}
 			img {
 				color: red;
 				width: 2rem;
