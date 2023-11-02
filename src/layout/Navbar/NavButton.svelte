@@ -29,9 +29,11 @@
 
 <a data-sveltekit-preload-data on:mouseenter={prefetch} {href} aria-label={label}>
 	<!-- Check if href is equal to the first path -->
-	<li class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}>
-		<span><slot /></span>
-	</li>
+	<ul>
+		<li class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}>
+			<span><slot /></span>
+		</li>
+	</ul>	
 </a>
 
 <style>
