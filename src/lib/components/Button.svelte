@@ -3,18 +3,19 @@
 	export let icon = '';
 	export let href = '';
 	export let target = '';
+	export let label = '';
 </script>
 
 <button on:click>
 	{#if href}
-		<a {href} {target} {...$$restProps} class={`button-${type}`}>
+		<a {href} {target} {...$$restProps} class={`button-${type}`} aria-label={label}>
 			{#if icon}
 				<img src="../icons/{icon}.svg" alt={icon} />
 			{/if}
 			<slot />
 		</a>
 	{:else}
-		<div {...$$restProps} class={`button-${type}`}>
+		<div {...$$restProps} class={`button-${type}`} aria-label={label}>
 			{#if icon}
 				<img src="../icons/{icon}.svg" alt={icon} />
 			{/if}

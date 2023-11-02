@@ -8,6 +8,7 @@
 
 	export let href: string;
 	export let queryKey: null | keyof typeof queries | Array<keyof typeof queries> = null;
+	export let label: string;
 
 	function prefetch() {
 		if (queryKey !== null) {
@@ -26,7 +27,7 @@
 	}
 </script>
 
-<a data-sveltekit-preload-data on:mouseenter={prefetch} {href}>
+<a data-sveltekit-preload-data on:mouseenter={prefetch} {href} aria-label={label}>
 	<!-- Check if href is equal to the first path -->
 	<li class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}>
 		<span><slot /></span>
