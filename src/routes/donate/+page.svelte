@@ -41,8 +41,8 @@
 
 <Meta
 	title="Donate"
-	schemas={{
-	{
+	schemas={[
+		{
 			'@context': 'https://schema.org',
 			'@type': 'BreadcrumbList',
 			itemListElement: [
@@ -60,7 +60,7 @@
 				}
 			]
 		}
-	}}
+	]}
 />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
