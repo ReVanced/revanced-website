@@ -108,23 +108,26 @@
 </script>
 
 <Meta
-	title="Patches"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Patches',
-		abstract: 'A list of ReVanced Patches',
-		breadcrumb: 'Home > Patches',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Patches',
+					item: 'https://revanced.app/patches'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <div class="search">

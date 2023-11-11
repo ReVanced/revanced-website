@@ -44,32 +44,26 @@
 </script>
 
 <Meta
-	title="Download"
-	schema={{
-		'@type': 'MobileApplication',
-		name: 'ReVanced Manager',
-		description:
-			'ReVanced Manager is an Android application that uses ReVanced Patcher to add, remove, and modify existing functionalities in Android applications',
-		abstract: 'Continuing the legacy of Vanced',
-		applicationCategory: 'UtilitiesApplication',
-		applicationSuite: 'ReVanced',
-		downloadUrl: 'https://revanced.app/download',
-		maintainer: 'ReVanced',
-		operatingSystem: 'Android 8',
-		offers: {
-			'@type': 'Offer',
-			price: '0'
-		},
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Download',
+					item: 'https://revanced.app/download'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <Dialogue bind:modalOpen={warningDialogue}>
