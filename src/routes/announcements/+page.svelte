@@ -20,22 +20,26 @@
 
 <Meta
 	title="Announcements"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Announcements',
-		abstract: 'Control panel for ReVanced announcements',
-		breadcrumb: 'Home > Announcements',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Announcements',
+					item: 'https://revanced.app/announcements'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
