@@ -41,22 +41,26 @@
 
 <Meta
 	title="Donate"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Donation',
-		abstract: 'Various ways to support ReVanced',
-		breadcrumb: 'Home > Donate',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Download',
+					item: 'https://revanced.app/donate'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>

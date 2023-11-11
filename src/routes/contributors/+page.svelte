@@ -14,23 +14,26 @@
 </script>
 
 <Meta
-	title="Contributors"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Contributors',
-		abstract: 'A list of everyone that has contributed to ReVanced',
-		breadcrumb: 'Home > Contributors',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Contributors',
+					item: 'https://revanced.app/contributors'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <main>
@@ -110,7 +113,6 @@
 	@media screen and (max-width: 767px) {
 		.text-container {
 			padding: 2rem 1.75rem;
-			margin-bottom: 2rem;
 		}
 	}
 </style>
