@@ -5,7 +5,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
@@ -39,8 +39,9 @@
 	}
 </script>
 
-<Meta
-	title="Donate"
+<Head
+	title="Donate to ReVanced"
+	description="Donate to ReVanced with a variety of donation methods, including cryptocurrencies in order to allow us to maintain our servers and develop new features."
 	schemas={[
 		{
 			'@context': 'https://schema.org',
