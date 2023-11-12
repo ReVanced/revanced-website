@@ -3,10 +3,10 @@
 	import Home from '$layout/Hero/HeroSection.svelte';
 	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 </script>
 
-<Meta
+<Head
 	schemas={[
 		{
 			'@context': 'https://schema.org',

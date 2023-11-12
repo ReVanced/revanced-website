@@ -11,7 +11,7 @@
 	import { queries } from '$data/api';
 
 	import { JsonLd } from 'svelte-meta-tags';
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
@@ -107,7 +107,9 @@
 	};
 </script>
 
-<Meta
+<Head
+	title="Patches for ReVanced"
+	description="Browse our rich collection of patches for ReVanced you can use to patch your favourite apps."
 	schemas={[
 		{
 			'@context': 'https://schema.org',
