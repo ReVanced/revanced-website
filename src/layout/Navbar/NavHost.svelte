@@ -70,13 +70,13 @@
 			transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
 		>
 			<div id="main-navigation">
-				<div class="nav-buttons">
+				<ul class="nav-buttons">
 					<Navigation href="/" label="Home">Home</Navigation>
 					<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors" label="Contributors">Contributors</Navigation>
 					<Navigation queryKey={["donate", "team"]} href="/donate" label="Donate">Donate</Navigation>
-				</div>
+				</ul>
 			</div>
 			<div id="secondary-navigation">
 				<button on:click={() => (modalOpen = !modalOpen)} aria-label="Settings">
