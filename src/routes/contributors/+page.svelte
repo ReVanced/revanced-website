@@ -4,7 +4,7 @@
 
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 
 	import { queries } from '$data/api';
@@ -13,24 +13,29 @@
 	const query = createQuery(['repositories'], queries.repositories);
 </script>
 
-<Meta
-	title="Contributors"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Contributors',
-		abstract: 'A list of everyone that has contributed to ReVanced',
-		breadcrumb: 'Home > Contributors',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+<Head
+	title="Contributors of ReVanced"
+	description="ReVanced is made possible by the community. Check out the people who have contributed to the project and how you can contribute too."
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Contributors',
+					item: 'https://revanced.app/contributors'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <main>
@@ -110,7 +115,6 @@
 	@media screen and (max-width: 767px) {
 		.text-container {
 			padding: 2rem 1.75rem;
-			margin-bottom: 2rem;
 		}
 	}
 </style>

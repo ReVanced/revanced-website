@@ -7,7 +7,7 @@
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
-	const hasPatchOptions = !!patch.options.length;
+	const hasPatchOptions = !!patch.options?.length;
 	let expanded: boolean = false;
 </script>
 
@@ -26,28 +26,30 @@
 			<img class="expand-arrow" src="/icons/expand_more.svg" alt="dropdown" />
 		{/if}
 	</div>
-	<h5>{patch.description}</h5>
+	{#if patch.description}
+		<h5>{patch.description}</h5>
+	{/if}
 	<ul class="info-container">
-		{#each patch.compatiblePackages as pkg}
-			<a
-				href="https://play.google.com/store/apps/details?id={pkg.name}"
-				target="_blank"
-				rel="noreferrer"
-			>
-				<li class="patch-info">📦 {pkg.name}</li>
-			</a>
-		{/each}
-
-		{#if !patch.compatiblePackages.length}
+		{#if !patch.compatiblePackages?.length}
 			<li class="patch-info">🌎 Universal patch</li>
+		{:else}
+			{#each patch.compatiblePackages as pkg}
+				<a
+					href="https://play.google.com/store/apps/details?id={pkg.name}"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<li class="patch-info">📦 {pkg.name}</li>
+				</a>
+			{/each}
 		{/if}
 
 		{#if hasPatchOptions}
 			<li class="patch-info">⚙️ Patch options</li>
 		{/if}
 
-		<!-- should i hardcode this to get the version of the first package? idk you cant stop me -->
-		{#if patch.compatiblePackages.length && patch.compatiblePackages[0].versions.length}
+		<!-- Should this be hardcoded to get the version of the first package?  -->
+		{#if patch.compatiblePackages?.length && patch.compatiblePackages[0].versions?.length}
 			{#if showAllVersions}
 				{#each patch.compatiblePackages[0].versions
 					.slice()
@@ -78,6 +80,8 @@
 					/>
 				</Button>
 			{/if}
+		{:else}
+			<li class="patch-info">🎯 Any</li>
 		{/if}
 	</ul>
 
@@ -87,7 +91,9 @@
 				{#each patch.options as option}
 					<div class="option">
 						<h5 id="option-title">{option.title}</h5>
-						<h5>{option.description}</h5>
+						<h5>
+							<pre id="option-description">{option.description}</pre>
+						</h5>
 					</div>
 				{/each}
 			</div>
@@ -100,6 +106,11 @@
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
 		color: var(--accent-color);
+	}
+
+	#option-description {
+		white-space: pre-wrap;
+		word-break: break-all;
 	}
 
 	#option-title {

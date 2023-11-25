@@ -11,7 +11,7 @@
 	import { queries } from '$data/api';
 
 	import { JsonLd } from 'svelte-meta-tags';
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
@@ -47,11 +47,11 @@
 		if (pkg === '') {
 			return false;
 		}
-		return !!patch.compatiblePackages.find((compat) => compat.name === pkg);
+		return !!patch.compatiblePackages?.find((compat) => compat.name === pkg);
 	}
 
-	function searchString(str: string, term: string, filter: RegExp) {
-		return str.toLowerCase().replace(filter, '').includes(term);
+	function searchString(str?: string, term: string, filter: RegExp) {
+		return str?.toLowerCase().replace(filter, '').includes(term);
 	}
 
 	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
@@ -70,7 +70,7 @@
 				return (
 					searchString(patch.description, search, /\s/g) ||
 					searchString(patch.name, search, /\s/g) ||
-					patch.compatiblePackages.find((x) => searchString(x.name, search, /\./g))
+					patch.compatiblePackages?.find((x) => searchString(x.name, search, /\./g))
 				);
 			}
 			return true;
@@ -107,24 +107,29 @@
 	};
 </script>
 
-<Meta
-	title="Patches"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Patches',
-		abstract: 'A list of ReVanced Patches',
-		breadcrumb: 'Home > Patches',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+<Head
+	title="Patches for ReVanced"
+	description="Browse our rich collection of patches for ReVanced you can use to patch your favourite apps."
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Patches',
+					item: 'https://revanced.app/patches'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <div class="search">

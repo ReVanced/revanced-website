@@ -7,13 +7,14 @@
 
 	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
 
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
+	import ContributorPerson from '../contributors/ContributorPerson.svelte';
 
 	const query = createQuery(['manager'], queries.manager);
 
@@ -43,33 +44,29 @@
 	}
 </script>
 
-<Meta
-	title="Download"
-	schema={{
-		'@type': 'MobileApplication',
-		name: 'ReVanced Manager',
-		description:
-			'ReVanced Manager is an Android application that uses ReVanced Patcher to add, remove, and modify existing functionalities in Android applications',
-		abstract: 'Continuing the legacy of Vanced',
-		applicationCategory: 'UtilitiesApplication',
-		applicationSuite: 'ReVanced',
-		downloadUrl: 'https://revanced.app/download',
-		maintainer: 'ReVanced',
-		operatingSystem: 'Android 8',
-		offers: {
-			'@type': 'Offer',
-			price: '0'
-		},
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+<Head
+	title="Download ReVanced"
+	description="Download ReVanced Manager to patch your favourite apps, right on your device."
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Download',
+					item: 'https://revanced.app/download'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <Dialogue bind:modalOpen={warningDialogue}>

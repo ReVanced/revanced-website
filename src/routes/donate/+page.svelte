@@ -5,7 +5,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
@@ -39,24 +39,29 @@
 	}
 </script>
 
-<Meta
-	title="Donate"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Donation',
-		abstract: 'Various ways to support ReVanced',
-		breadcrumb: 'Home > Donate',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+<Head
+	title="Donate to ReVanced"
+	description="Donate to ReVanced with a variety of donation methods, including cryptocurrencies in order to allow us to maintain our servers and develop new features."
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Download',
+					item: 'https://revanced.app/donate'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
