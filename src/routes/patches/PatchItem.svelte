@@ -91,7 +91,9 @@
 				{#each patch.options as option}
 					<div class="option">
 						<h5 id="option-title">{option.title}</h5>
-						<h5>{option.description}</h5>
+						<h5>
+							<pre id="option-description">{option.description}</pre>
+						</h5>
 					</div>
 				{/each}
 			</div>
@@ -104,6 +106,11 @@
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
 		color: var(--accent-color);
+	}
+
+	#option-description {
+		white-space: pre-wrap;
+		word-break: break-all;
 	}
 
 	#option-title {
