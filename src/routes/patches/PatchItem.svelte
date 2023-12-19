@@ -34,13 +34,16 @@
 			<li class="patch-info">🌎 Universal patch</li>
 		{:else}
 			{#each patch.compatiblePackages as pkg}
+			<li class="patch-info">
 				<a
 					href="https://play.google.com/store/apps/details?id={pkg.name}"
 					target="_blank"
 					rel="noreferrer"
 				>
-					<li class="patch-info">📦 {pkg.name}</li>
+					📦 {pkg.name}
 				</a>
+			
+			</li>
 			{/each}
 		{/if}
 
@@ -71,6 +74,7 @@
 				</li>
 			{/if}
 			{#if patch.compatiblePackages[0].versions.length > 1}
+				<li class="button">
 				<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
 					<img
 						class="expand-arrow"
@@ -79,6 +83,7 @@
 						alt="dropdown"
 					/>
 				</Button>
+				</li>
 			{/if}
 		{:else}
 			<li class="patch-info">🎯 Any</li>
@@ -117,6 +122,10 @@
 		color: var(--accent-color-two);
 	}
 
+	.button{
+		display: flex;
+		align-items: center;
+	}
 	.patch-info {
 		display: flex;
 		justify-content: center;
@@ -136,12 +145,14 @@
 
 	a {
 		text-decoration: none;
-	}
+		color: var(--grey-five);
+	
 
-	a .patch-info:hover {
-		text-decoration: underline var(--accent-color-two);
-		color: var(--accent-color-two);
-	}
+		&:hover {
+			text-decoration: underline var(--accent-color-two);
+			color: var(--accent-color-two);
+		}
+	}	
 
 	.info-container {
 		display: flex;
