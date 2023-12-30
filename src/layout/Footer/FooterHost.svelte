@@ -133,7 +133,7 @@
 		font-size: 0.95rem;
 	}
 
-	g path {
+	path {
 		stroke: var(--grey-three);
 	}
 
