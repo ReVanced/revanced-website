@@ -75,14 +75,14 @@
 			{/if}
 			{#if patch.compatiblePackages[0].versions.length > 1}
 				<li class="button">
-				<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
-					<img
-						class="expand-arrow"
-						style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
-						src="/icons/expand_more.svg"
-						alt="dropdown"
-					/>
-				</Button>
+					<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
+						<img
+							class="expand-arrow"
+							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
+							src="/icons/expand_more.svg"
+							alt="dropdown"
+						/>
+					</Button>
 				</li>
 			{/if}
 		{:else}
