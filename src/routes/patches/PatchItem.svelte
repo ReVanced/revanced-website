@@ -125,6 +125,7 @@
 		display: flex;
 		align-items: center;
 	}
+	
 	.patch-info {
 		display: flex;
 		justify-content: center;
