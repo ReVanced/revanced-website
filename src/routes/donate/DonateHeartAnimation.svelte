@@ -17,7 +17,9 @@
 		user-select: none;
 		cursor: pointer;
 
-		transition: transform 0.4s ease, filter 0.2s ease;
+		transition:
+			transform 0.4s ease,
+			filter 0.2s ease;
 		&:hover {
 			transform: scale(1.05);
 		}
@@ -67,7 +69,9 @@
 
 				img {
 					height: 50%;
-					animation: double-pulse-size 1.2s infinite, pulse-glow 1.2s infinite;
+					animation:
+						double-pulse-size 1.2s infinite,
+						pulse-glow 1.2s infinite;
 					will-change: transform, box-shadow;
 
 					@keyframes double-pulse-size {

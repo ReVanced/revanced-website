@@ -11,7 +11,7 @@
 	function clear() {
 		searchTerm = '';
 		searchTermFiltered = '';
-		
+
 		const url = new URL($page.url);
 		url.searchParams.delete('s');
 		goto(url.pathname + url.search);

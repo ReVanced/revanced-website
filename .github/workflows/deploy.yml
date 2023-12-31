@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
-      pull-requests: write 
+      pull-requests: write
     name: Deploy
     steps:
       - name: Checkout
@@ -16,8 +16,8 @@ jobs:
 
       - name: Build
         run: |
-         npm i
-         npm run build
+          npm i
+          npm run build
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
