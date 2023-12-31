@@ -34,16 +34,15 @@
 			<li class="patch-info">🌎 Universal patch</li>
 		{:else}
 			{#each patch.compatiblePackages as pkg}
-			<li class="patch-info">
-				<a
-					href="https://play.google.com/store/apps/details?id={pkg.name}"
-					target="_blank"
-					rel="noreferrer"
-				>
-					📦 {pkg.name}
-				</a>
-			
-			</li>
+				<li class="patch-info">
+					<a
+						href="https://play.google.com/store/apps/details?id={pkg.name}"
+						target="_blank"
+						rel="noreferrer"
+					>
+						📦 {pkg.name}
+					</a>
+				</li>
 			{/each}
 		{/if}
 
@@ -122,7 +121,7 @@
 		color: var(--accent-color-two);
 	}
 
-	.button{
+	.button {
 		display: flex;
 		align-items: center;
 	}
@@ -146,13 +145,12 @@
 	a {
 		text-decoration: none;
 		color: var(--grey-five);
-	
 
 		&:hover {
 			text-decoration: underline var(--accent-color-two);
 			color: var(--accent-color-two);
 		}
-	}	
+	}
 
 	.info-container {
 		display: flex;
