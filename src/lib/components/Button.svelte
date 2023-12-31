@@ -46,7 +46,9 @@
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
-		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
+		transition:
+			transform 0.4s var(--bezier-one),
+			filter 0.4s var(--bezier-one);
 		user-select: none;
 	}
 

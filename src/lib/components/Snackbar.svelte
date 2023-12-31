@@ -50,12 +50,12 @@
 		bottom: 2rem;
 		background-color: var(--white);
 		transition: all 0.4s var(--bezier-one);
-        box-shadow: var(--drop-shadow-one);
+		box-shadow: var(--drop-shadow-one);
 	}
 
 	.text {
 		color: var(--grey-two);
-        font-weight: 500;
-        font-size: 14px;
+		font-weight: 500;
+		font-size: 14px;
 	}
 </style>
