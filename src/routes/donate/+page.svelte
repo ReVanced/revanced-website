@@ -261,7 +261,9 @@
 		text-align: left;
 		border: none;
 		overflow: hidden;
-		transition: 0.3s border-radius var(--bezier-one), 0.3s background-color var(--bezier-one);
+		transition:
+			0.3s border-radius var(--bezier-one),
+			0.3s background-color var(--bezier-one);
 
 		&:hover {
 			background-color: var(--accent-low-opacity);
