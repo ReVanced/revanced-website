@@ -10,7 +10,7 @@ declare namespace App {
 	// interface Stuff {}
 }
 
-declare module '*&picture' {
+declare module '*&as=picture' {
 	/**
 	 * actual types
 	 * taken from https://github.com/JonasKruckenberg/imagetools/issues/160#issuecomment-1009292026
