@@ -14,10 +14,10 @@
 	}
 
 	.hero-img {
-		overflow: hidden;
+		overflow:hidden;
 		height: 70vh;
 		max-height: 70rem;
-		z-index: -1;
+		z-index: -2;
 		width: auto;
 		float: right;
 		padding: 0.5rem 0.5rem;
@@ -27,10 +27,10 @@
 	}
 	@media (max-width: 1700px) {
 		.hero-img {
-			position: fixed;
-			height: 100vh;
-			top: 115px;
-			right: 6rem;
+			position: relative;
+			height: 85vh;
+			top: -5px;
+			right: 2rem;
 		}
 	}
 </style>
