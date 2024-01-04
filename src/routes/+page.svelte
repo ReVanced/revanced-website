@@ -2,9 +2,10 @@
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
 	import SocialHost from '$layout/Hero/SocialHost.svelte';
+	import FooterHost from '$layout/Footer/FooterHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Head from '$lib/components/Head.svelte';
-	import FooterHost from '$layout/Footer/FooterHost.svelte';
+	
 </script>
 
 <Head

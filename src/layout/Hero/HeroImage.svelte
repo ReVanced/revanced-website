@@ -14,7 +14,7 @@
 	}
 
 	.hero-img {
-		overflow:hidden;
+		overflow: hidden;
 		height: 70vh;
 		max-height: 70rem;
 		z-index: -2;
