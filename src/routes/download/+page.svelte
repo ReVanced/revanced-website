@@ -5,7 +5,7 @@
 
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
+	import manager_screenshot from '$images/manager.png?format=avif;webp;png&as=picture';
 
 	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
