@@ -1,6 +1,6 @@
 <script>
 	import Picture from '$lib/components/Picture.svelte';
-	import manager_screenshot from '$images/manager.png?w=1233;822;411&format=avif;webp;png&picture';
+	import manager_screenshot from '$images/manager.png?w=1233;822;411&format=avif;webp;png&as=picture';
 </script>
 
 <div class="hero-img">

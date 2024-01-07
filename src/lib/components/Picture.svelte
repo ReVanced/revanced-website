@@ -6,8 +6,8 @@
 </script>
 
 <picture>
-	{#each Object.entries(data.sources) as [format, images]}
-		<source srcset={images.map((img) => `${img.src} ${img.w}w`).join(', ')} type="image/{format}" />
+	{#each Object.entries(data.sources) as [format, srcset]}
+		<source {srcset} type="image/{format}" />
 	{/each}
-	<img {alt} src={data.fallback.src} />
+	<img {alt} src={data.img.src} />
 </picture>
