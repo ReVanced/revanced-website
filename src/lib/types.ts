@@ -52,6 +52,7 @@ export interface TeamMember {
 	avatar_url: string;
 	html_url: string;
 	bio?: string;
+	keys: string[];
 }
 
 export interface CryptoWallet {
