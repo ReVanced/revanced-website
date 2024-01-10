@@ -119,7 +119,7 @@
 		{#if data.members.length > 0}
 			<section class="team">
 				<!-- randomize team members because equality -->
-				{#each data.members.sort(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
+				{#each data.members.toSorted(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
 					<TeamMember {member} {i} />
 				{/each}
 			</section>
