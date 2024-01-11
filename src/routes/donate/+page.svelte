@@ -38,7 +38,7 @@
 		}
 	}
 
-	const shuffle = (array: unknown[]) =>
+	const shuffle = <T,>(array: T[]) =>
 		array
 			.map((value) => ({ value, sort: Math.random() }))
 			.sort((a, b) => a.sort - b.sort)
