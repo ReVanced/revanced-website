@@ -93,8 +93,11 @@
 				}
 			}
 			.verified-badge {
-				position: relative;
 				display: flex;
+				align-items: center;
+				gap: 8px;
+
+				position: relative;
 
 				.tooltip {
 					background-color: var(--grey-one);
