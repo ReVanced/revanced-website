@@ -33,7 +33,7 @@
 	</div>
 
 	{#if expanded}
-		<div class="contrib-host" transition:slide|local={{ easing: quintOut, duration: 500 }}>
+		<div class="contrib-host" transition:slide={{ easing: quintOut, duration: 500 }}>
 			{#each contributors as { login, avatar_url, html_url }}
 				{#if !usersIwantToExplodeSoBadly.includes(login)}
 					<ContributorButton name={login} pfp={avatar_url} url={html_url} />
