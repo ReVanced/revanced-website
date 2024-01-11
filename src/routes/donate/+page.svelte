@@ -195,7 +195,7 @@
 	</svelte:fragment>
 </Dialogue>
 
-<Snackbar bind:open={addressSnackbar} closeIcon>
+<Snackbar bind:open={addressSnackbar}>
 	<svelte:fragment slot="text">Address copied to clipboard</svelte:fragment>
 </Snackbar>
 
