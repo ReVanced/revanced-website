@@ -36,7 +36,7 @@
 							<b>
 								{member.login}
 							</b>
-							is verified with the following GPG key{#if member.keys.length > 1}s:{/if}
+							is verified with {member.keys.length == 1 ? 'this GPG key' : 'these GPG keys'}:
 						</p>
 						<ul>
 							{#each member.keys as key}
@@ -84,24 +84,30 @@
 
 			gap: 0.5rem;
 
+			@media screen and (width <= 768px) {
+				::after {
+					content: 'Verified';
+				}
+				.tooltip {
+					display: none;
+				}
+			}
 			.verified-badge {
 				position: relative;
 				display: flex;
 
 				.tooltip {
-					visibility: hidden;
-					background-color: var(--grey-three);
-					text-align: center;
-					padding: 0.5rem;
-					border-radius: 6px;
+					background-color: var(--grey-one);
+					box-shadow: var(--drop-shadow-one);
+					padding: 0.75rem 1rem;
+					border-radius: 12px;
 
 					position: absolute;
 					z-index: 1;
-					bottom: 125%;
-					left: 50%;
-					// TODO: Fix center alignment of tooltip.
-					margin-left: -240px;
+					bottom: 16px;
+					transform: translateX(-50%);
 
+					visibility: hidden;
 					opacity: 0;
 					transition: opacity 0.3s var(--bezier-one);
 
