@@ -13,9 +13,9 @@
 	href={member.html_url}
 	rel="noreferrer"
 	target="_blank"
-	in:fly={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
+	in:fly|global={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
 >
-	<img src={member.avatar_url} alt={`${member.login}'s profile picture.'`} />
+	<img src={member.avatar_url} alt="{member.login}'s profile picture." />
 
 	<div class="member-text">
 		<h4>{member.login}</h4>

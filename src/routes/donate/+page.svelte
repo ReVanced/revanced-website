@@ -37,6 +37,12 @@
 			console.error('Failed to copy crypto wallet:', error);
 		}
 	}
+
+	const shuffle = <T,>(array: T[]) =>
+		array
+			.map((value) => ({ value, sort: Math.random() }))
+			.sort((a, b) => a.sort - b.sort)
+			.map(({ value }) => value);
 </script>
 
 <Head
@@ -119,7 +125,7 @@
 		{#if data.members.length > 0}
 			<section class="team">
 				<!-- randomize team members because equality -->
-				{#each data.members.sort(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
+				{#each shuffle(data.members) as member, i}
 					<TeamMember {member} {i} />
 				{/each}
 			</section>
@@ -189,7 +195,7 @@
 	</svelte:fragment>
 </Dialogue>
 
-<Snackbar bind:open={addressSnackbar} closeIcon>
+<Snackbar bind:open={addressSnackbar}>
 	<svelte:fragment slot="text">Address copied to clipboard</svelte:fragment>
 </Snackbar>
 

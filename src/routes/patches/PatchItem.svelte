@@ -90,8 +90,8 @@
 	</ul>
 
 	{#if expanded && hasPatchOptions}
-		<span transition:fade|local={{ easing: quintOut, duration: 1000 }}>
-			<div class="options" transition:slide|local={{ easing: quintOut, duration: 500 }}>
+		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
+			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
 				{#each patch.options as option}
 					<div class="option">
 						<h5 id="option-title">{option.title}</h5>
@@ -125,7 +125,7 @@
 		display: flex;
 		align-items: center;
 	}
-	
+
 	.patch-info {
 		display: flex;
 		justify-content: center;

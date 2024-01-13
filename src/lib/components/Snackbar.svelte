@@ -3,7 +3,6 @@
 	import { expoOut } from 'svelte/easing';
 
 	export let open = false;
-	export let closeIcon = false;
 	export let dismissTime = 3000;
 
 	let timeout: ReturnType<typeof setTimeout>;
@@ -16,9 +15,8 @@
 {#if open}
 	<div
 		class="snackbar"
-		class:closeIcon
-		in:slide|local={{ duration: 400, easing: expoOut }}
-		out:fade|local={{ duration: 300, easing: expoOut }}
+		in:slide={{ duration: 400, easing: expoOut }}
+		out:fade={{ duration: 300, easing: expoOut }}
 	>
 		<div class="text">
 			<slot name="text" />
