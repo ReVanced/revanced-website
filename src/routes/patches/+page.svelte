@@ -22,8 +22,8 @@
 	import Query from '$lib/components/Query.svelte';
 
 	const query = createQuery(['patches'], queries.patches);
-	const sanitize = (str: string) =>
-	  str.replace(/\./g, '')
+	const sanitize = (str: string) => str
+			.replace(/\./g, '')
 			.replace(/\s/g, '')
 			.replace(/-/g, '')
 			.replace(/_/g, '')
@@ -69,8 +69,8 @@
 			// Filter based on the search term.
 			if (search !== undefined) {
 				return (
-					searchString(patch.description, search, /\s-/g) ||
-					searchString(patch.name, search, /\s-/g) ||
+					searchString(patch.description, search, /[\s-]/g) ||
+					searchString(patch.name, search, /[\s-]/g) ||
 					patch.compatiblePackages?.find((x) => searchString(x.name, search, /\./g))
 				);
 			}
