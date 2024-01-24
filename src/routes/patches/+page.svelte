@@ -22,6 +22,12 @@
 	import Query from '$lib/components/Query.svelte';
 
 	const query = createQuery(['patches'], queries.patches);
+	const sanitize = (str: string) =>
+	  str.replace(/\./g, '')
+			.replace(/\s/g, '')
+			.replace(/-/g, '')
+			.replace(/_/g, '')
+			.toLowerCase();
 
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {
@@ -32,12 +38,7 @@
 
 	$: selectedPkg = $searchParams.get('pkg');
 	let searchTerm = $searchParams.get('s');
-	let searchTermFiltered = searchTerm
-		?.replace(/\./g, '')
-		.replace(/\s/g, '')
-		.replace(/-/g, '')
-		.replace(/_/g, '')
-		.toLowerCase();
+	let searchTermFiltered = searchTerm && sanitize(searchTerm);
 
 	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
@@ -68,8 +69,8 @@
 			// Filter based on the search term.
 			if (search !== undefined) {
 				return (
-					searchString(patch.description, search, /\s/g) ||
-					searchString(patch.name, search, /\s/g) ||
+					searchString(patch.description, search, /\s-/g) ||
+					searchString(patch.name, search, /\s-/g) ||
 					patch.compatiblePackages?.find((x) => searchString(x.name, search, /\./g))
 				);
 			}
@@ -82,12 +83,7 @@
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
 			// Filter search term for better results (i.e. "  Unl O-ck" and "unlock" gives the same results)
-			searchTermFiltered = searchTerm
-				?.replace(/\./g, '')
-				.replace(/\s/g, '')
-				.replace(/-/g, '')
-				.replace(/_/g, '')
-				.toLowerCase();
+			searchTermFiltered = searchTerm && sanitize(searchTerm);
 			// Update search URL params
 			// must use history.pushState instead of goto(), as goto() unselects the search bar
 			const url = new URL(window.location.href);
