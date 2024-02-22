@@ -23,6 +23,11 @@
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
 
+	// @ts-ignore
+	import { DateTriggerEventsHandler, DateTriggerEvent } from 'datetrigger';
+	// @ts-ignore
+	import { DEFAULT_EVENTS } from 'datetrigger/presets';
+
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -70,6 +75,9 @@
 		},
 		false
 	);
+
+	// must be running in the browser to interact with the document
+	if (browser) new DateTriggerEventsHandler(DEFAULT_EVENTS);
 </script>
 
 <svelte:head>
