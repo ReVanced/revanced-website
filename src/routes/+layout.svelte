@@ -47,6 +47,9 @@
 	}
 
 	onMount(() => {
+		// must be running in the browser to interact with the document
+		new DateTriggerEventsHandler(DEFAULT_EVENTS);
+
 		// Check if the user has already decided.
 
 		const hasDecided = localStorage.getItem('analytics') !== null;
@@ -75,9 +78,6 @@
 		},
 		false
 	);
-
-	// must be running in the browser to interact with the document
-	if (browser) new DateTriggerEventsHandler(DEFAULT_EVENTS);
 </script>
 
 <svelte:head>
