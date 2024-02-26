@@ -23,11 +23,6 @@
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
 
-	// @ts-ignore
-	import { DateTriggerEventsHandler, DateTriggerEvent } from 'datetrigger';
-	// @ts-ignore
-	import { DEFAULT_EVENTS } from 'datetrigger/presets';
-
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -47,9 +42,6 @@
 	}
 
 	onMount(() => {
-		// must be running in the browser to interact with the document
-		new DateTriggerEventsHandler(DEFAULT_EVENTS);
-
 		// Check if the user has already decided.
 
 		const hasDecided = localStorage.getItem('analytics') !== null;
