@@ -15,6 +15,7 @@
 	import { persistQueryClient } from '@tanstack/query-persist-client-core';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+	import { DateTriggerEventHandler, DateTriggerEvent } from 'datetrigger';
 
 	import NavHost from '$layout/Navbar/NavHost.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
@@ -41,9 +42,12 @@
 		if (allow) location.reload();
 	}
 
-	onMount(() => {
-		// Check if the user has already decided.
+	const events: DateTriggerEvent[] = [];
 
+	onMount(() => {
+		new DateTriggerEventHandler(events);
+
+		// Check if the user has already decided.
 		const hasDecided = localStorage.getItem('analytics') !== null;
 		if (!hasDecided) showConsentModal = true;
 
