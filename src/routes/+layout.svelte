@@ -23,6 +23,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
+	import { applyCssVar } from '$util/applyCssVar'
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
