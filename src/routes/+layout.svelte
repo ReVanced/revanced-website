@@ -47,6 +47,7 @@
 		new DateTriggerEventHandler(themeEvents);
 
 		// Check if the user has already decided.
+
 		const hasDecided = localStorage.getItem('analytics') !== null;
 		if (!hasDecided) showConsentModal = true;
 
