@@ -1,7 +1,7 @@
 import { DateTriggerEvent, DAY_IN_MINUTES } from 'datetrigger';
 
 function applyCssVar(name: string, value: string): void {
-	if (!name.startsWith('--')) return console.error("A CSS variable must start with '--'");
+	if (!name.startsWith('--')) return console.error('A CSS variable must start with "--"');
 	document.documentElement.style.setProperty(name, value);
 }
 
