@@ -6,6 +6,7 @@
 	padding: 0;
 	font-family: var(--main-font);
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	transition: color .5s ease-in-out, background-color .5s ease-in-out, fill .5s ease-in-out;
 }
 
 html {
