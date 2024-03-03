@@ -77,7 +77,6 @@
 			<Button
 				type="text"
 				href={data.assets[0].browser_download_url}
-				download
 				on:click={() => (warningDialogue = false)}>Okay</Button
 			>
 		</Query>
@@ -100,7 +99,6 @@
 					type="filled"
 					icon="download"
 					href={data.assets[0].browser_download_url}
-					download
 				>
 					{data.metadata.tag_name}
 				</Button>
