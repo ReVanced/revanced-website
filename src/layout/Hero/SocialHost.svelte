@@ -10,12 +10,9 @@
 <div class="social-host">
 	<Query {query} let:data>
 		{#if data}
-			<SocialButton social="github" data={data.socials} />
-			<SocialButton social="discord" data={data.socials} />
-			<SocialButton social="reddit" data={data.socials} />
-			<SocialButton social="twitter" data={data.socials} />
-			<SocialButton social="telegram" data={data.socials} />
-			<SocialButton social="youtube" data={data.socials} />
+			{#each data.socials.filter((s) => s.name != 'Website') as social}
+				<SocialButton {social} />
+			{/each}
 		{/if}
 	</Query>
 </div>
