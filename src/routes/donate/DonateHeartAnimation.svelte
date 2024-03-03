@@ -61,8 +61,9 @@
 
 			interval = setTimeout(showHeartRandom, Math.random() * 300);
 		}
-
 		showHeartRandom();
+
+		return () => clearTimeout(interval);
 	});
 </script>
 
