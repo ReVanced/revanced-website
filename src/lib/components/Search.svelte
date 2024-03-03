@@ -11,7 +11,7 @@
 	function clear() {
 		searchTerm = '';
 		searchTermFiltered = '';
-		
+
 		const url = new URL($page.url);
 		url.searchParams.delete('s');
 		goto(url.pathname + url.search);
@@ -27,7 +27,7 @@
 			alt="Clear"
 			on:click={clear}
 			on:keypress={clear}
-			transition:fade|local={{ easing: quintOut, duration: 250 }}
+			transition:fade={{ easing: quintOut, duration: 250 }}
 		/>
 	{/if}
 	<input

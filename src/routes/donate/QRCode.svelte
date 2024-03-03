@@ -14,7 +14,7 @@
 	});
 </script>
 
-<canvas id="qrcode"/>
+<canvas id="qrcode" />
 
 <style>
 	canvas {

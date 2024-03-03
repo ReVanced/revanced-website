@@ -5,15 +5,16 @@
 
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import manager_screenshot from '$images/manager.png?format=avif;webp;png&picture';
+	import manager_screenshot from '$images/manager.png?format=avif;webp;png&as=picture';
 
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
+	import ContributorPerson from '../contributors/ContributorPerson.svelte';
 
 	const query = createQuery(['manager'], queries.manager());
 
@@ -43,7 +44,9 @@
 	}
 </script>
 
-<Meta
+<Head
+	title="Download ReVanced"
+	description="Download ReVanced Manager to patch your favourite apps, right on your device."
 	schemas={[
 		{
 			'@context': 'https://schema.org',
@@ -74,7 +77,6 @@
 			<Button
 				type="text"
 				href={data.assets[0].browser_download_url}
-				download
 				on:click={() => (warningDialogue = false)}>Okay</Button
 			>
 		</Query>
@@ -97,7 +99,6 @@
 					type="filled"
 					icon="download"
 					href={data.assets[0].browser_download_url}
-					download
 				>
 					{data.metadata.tag_name}
 				</Button>

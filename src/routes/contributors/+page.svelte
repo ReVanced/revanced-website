@@ -4,7 +4,7 @@
 
 	import ContributorHost from './ContributorSection.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 
 	import { queries } from '$data/api';
@@ -13,7 +13,9 @@
 	const query = createQuery(['repositories'], queries.repositories());
 </script>
 
-<Meta
+<Head
+	title="Contributors of ReVanced"
+	description="ReVanced is made possible by the community. Check out the people who have contributed to the project and how you can contribute too."
 	schemas={[
 		{
 			'@context': 'https://schema.org',

@@ -25,7 +25,7 @@
 		/>
 	</button>
 	{#if expanded}
-		<ul transition:slide|local={{ easing: quintOut, duration: 500 }}>
+		<ul transition:slide={{ easing: quintOut, duration: 500 }}>
 			<slot />
 		</ul>
 	{/if}
