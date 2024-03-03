@@ -41,6 +41,7 @@
 		"@tanstack/query-core": "^4.36.1",
 		"@tanstack/query-persist-client-core": "^4.36.1",
 		"@tanstack/query-sync-storage-persister": "^4.36.1",
-		"@tanstack/svelte-query": "^4.36.1"
+		"@tanstack/svelte-query": "^4.36.1",
+		"fuzzy-search": "^3.2.1"
 	}
 }
