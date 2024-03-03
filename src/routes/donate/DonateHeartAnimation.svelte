@@ -51,7 +51,7 @@
 			}, 1000);
 		};
 
-		let interval: NodeJS.Timeout | undefined;
+		let interval: number | undefined;
 		function showHeartRandom() {
 			const rect = background.getBoundingClientRect();
 
