@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Meta from '$lib/components/Meta.svelte';
+	import Meta from '$lib/components/Head.svelte';
 	import { page } from '$app/stores';
 	import Button from '$lib/components/Button.svelte';
 

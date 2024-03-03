@@ -5,7 +5,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
@@ -37,26 +37,37 @@
 			console.error('Failed to copy crypto wallet:', error);
 		}
 	}
+
+	const shuffle = <T,>(array: T[]) =>
+		array
+			.map((value) => ({ value, sort: Math.random() }))
+			.sort((a, b) => a.sort - b.sort)
+			.map(({ value }) => value);
 </script>
 
-<Meta
-	title="Donate"
-	schema={{
-		'@context': 'https://schema.org',
-		'@type': 'WebPage',
-		name: 'ReVanced Donation',
-		abstract: 'Various ways to support ReVanced',
-		breadcrumb: 'Home > Donate',
-		publisher: {
-			'@type': 'Organization',
-			name: 'ReVanced',
-			url: 'https://revanced.app/',
-			logo: {
-				'@type': 'ImageObject',
-				url: 'https://revanced.app/embed.png'
-			}
+<Head
+	title="Donate to ReVanced"
+	description="Donate to ReVanced with a variety of donation methods, including cryptocurrencies in order to allow us to maintain our servers and develop new features."
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Download',
+					item: 'https://revanced.app/donate'
+				}
+			]
 		}
-	}}
+	]}
 />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
@@ -114,7 +125,7 @@
 		{#if data.members.length > 0}
 			<section class="team">
 				<!-- randomize team members because equality -->
-				{#each data.members.sort(() => (Math.random() > 0.5 ? -1 : 1)) as member, i}
+				{#each shuffle(data.members) as member, i}
 					<TeamMember {member} {i} />
 				{/each}
 			</section>
@@ -184,7 +195,7 @@
 	</svelte:fragment>
 </Dialogue>
 
-<Snackbar bind:open={addressSnackbar} closeIcon>
+<Snackbar bind:open={addressSnackbar}>
 	<svelte:fragment slot="text">Address copied to clipboard</svelte:fragment>
 </Snackbar>
 
@@ -256,7 +267,9 @@
 		text-align: left;
 		border: none;
 		overflow: hidden;
-		transition: 0.3s border-radius var(--bezier-one), 0.3s background-color var(--bezier-one);
+		transition:
+			0.3s border-radius var(--bezier-one),
+			0.3s background-color var(--bezier-one);
 
 		&:hover {
 			background-color: var(--accent-low-opacity);

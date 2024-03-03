@@ -185,8 +185,9 @@
 		border-radius: 100%;
 		cursor: pointer;
 		filter: brightness(1);
-		transition: transform 0.4s ease, filter 0.2s ease;
-
+		transition:
+			transform 0.4s ease,
+			filter 0.2s ease;
 		&:hover {
 			transform: scale(1.05);
 		}

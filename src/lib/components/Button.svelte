@@ -3,25 +3,24 @@
 	export let icon = '';
 	export let href = '';
 	export let target = '';
+	export let label = '';
 </script>
 
-<button on:click>
-	{#if href}
-		<a {href} {target} {...$$restProps} class={`button-${type}`}>
-			{#if icon}
-				<img src="../icons/{icon}.svg" alt={icon} />
-			{/if}
-			<slot />
-		</a>
-	{:else}
-		<div {...$$restProps} class={`button-${type}`}>
-			{#if icon}
-				<img src="../icons/{icon}.svg" alt={icon} />
-			{/if}
-			<slot />
-		</div>
-	{/if}
-</button>
+{#if href}
+	<a {href} {target} class={`button-${type}`} aria-label={label}>
+		{#if icon}
+			<img src="../icons/{icon}.svg" alt={icon} />
+		{/if}
+		<slot />
+	</a>
+{:else}
+	<button on:click class={`button-${type}`} aria-label={label}>
+		{#if icon}
+			<img src="../icons/{icon}.svg" alt={icon} />
+		{/if}
+		<slot />
+	</button>
+{/if}
 
 <style>
 	button {
@@ -32,7 +31,7 @@
 	}
 
 	a,
-	div {
+	button {
 		min-width: max-content;
 		font-size: 0.95rem;
 		text-decoration: none;
@@ -45,7 +44,9 @@
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
-		transition: transform 0.4s var(--bezier-one), filter 0.4s var(--bezier-one);
+		transition:
+			transform 0.4s var(--bezier-one),
+			filter 0.4s var(--bezier-one);
 		user-select: none;
 	}
 
@@ -69,7 +70,7 @@
 		letter-spacing: 0.01rem;
 	}
 
-	div:hover,
+	button:hover,
 	a:hover {
 		filter: brightness(85%);
 	}

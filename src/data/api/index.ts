@@ -10,7 +10,8 @@ import type {
 	DonationPlatform,
 	CryptoWallet,
 	Social,
-	Info
+	Info,
+	CompatiblePackage
 } from '$lib/types';
 
 export type ReposData = { repositories: Repository[] };
@@ -44,7 +45,7 @@ async function patches(): Promise<PatchesData> {
 
 	// gets packages and patch count
 	for (let i = 0; i < json.patches.length; i++) {
-		json.patches[i].compatiblePackages.forEach((pkg: Patch) => {
+		json.patches[i].compatiblePackages?.forEach((pkg: CompatiblePackage) => {
 			packagesWithCount[pkg.name] = (packagesWithCount[pkg.name] || 0) + 1;
 		});
 	}

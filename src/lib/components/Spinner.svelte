@@ -1,8 +1,4 @@
-<script>
-	import { fade } from 'svelte/transition';
-</script>
-
-<div class="spinner" transition:fade={{ duration: 250 }} />
+<div class="spinner" />
 
 <style>
 	@keyframes spinner {

@@ -6,8 +6,8 @@ import path from 'path';
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [sveltekit(), imagetools()],
-  	resolve: {
-    alias: {
+	resolve: {
+		alias: {
 			$images: path.resolve('./images'),
 			$data: path.resolve('./src/data'),
 			$layout: path.resolve('./src/layout'),
