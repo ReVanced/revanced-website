@@ -23,7 +23,7 @@
 
 	const query = createQuery(['patches'], queries.patches);
 
-	let searcher: FuzzySearch | null;
+	let searcher: FuzzySearch | undefined;
 
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {
@@ -50,7 +50,7 @@
 			return patches;
 		}
 
-		if (searcher == null) {
+		if (!searcher) {
 			searcher = new FuzzySearch(patches, [
 				'name',
 				'description',
