@@ -84,11 +84,10 @@
 		const url = new URL(window.location.href);
 		url.pathname = '/patches';
 
-		if (selectedPkg) {
-			url.searchParams.set('pkg', selectedPkg);
-		}
 		if (searchTerm) {
 			url.searchParams.set('s', searchTerm);
+		} else {
+			url.searchParams.delete('s');
 		}
 
 		window.history.pushState(null, '', url);
