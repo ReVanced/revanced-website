@@ -1,7 +1,14 @@
 name: Deploy
 
-on: [pull_request, push]
-
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - dev
 jobs:
   deploy:
     runs-on: ubuntu-latest
