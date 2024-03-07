@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 	import ContributorPerson from '../contributors/ContributorPerson.svelte';
 
-	const query = createQuery(['manager'], queries.manager);
+	const query = createQuery(['manager'], queries.manager());
 
 	let warning: string;
 	let warningDialogue = false;

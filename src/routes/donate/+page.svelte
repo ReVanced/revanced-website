@@ -18,8 +18,8 @@
 
 	import { supportsWebP } from '$util/supportsWebP';
 
-	const teamQuery = createQuery(['team'], queries.team);
-	const donateQuery = createQuery(['donate'], queries.donate);
+	const teamQuery = createQuery(['team'], queries.team());
+	const donateQuery = createQuery(['donate'], queries.donate());
 
 	let qrCodeDialogue = false;
 	let cryptoDialogue = false;

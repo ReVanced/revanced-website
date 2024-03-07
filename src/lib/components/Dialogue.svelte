@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
-	import { disableScrollHandling } from '$app/navigation';
 	export let modalOpen = false;
 	export let fullscreen = false;
 	export let notDismissible = false;
@@ -113,8 +112,8 @@
 
 	.modal {
 		position: fixed;
-		width: min(85%, 425px);
-		max-height: 75%;
+		width: min(90%, 425px);
+		max-height: 95%;
 		overflow-y: scroll;
 		top: 50%;
 		left: 50%;

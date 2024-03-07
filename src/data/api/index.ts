@@ -11,7 +11,13 @@ import type {
 	CryptoWallet,
 	Social,
 	Info,
-	CompatiblePackage
+	CompatiblePackage,
+	Announcement,
+	NoAnnouncements,
+	PostAnnouncement,
+	Login as LoginRequest,
+	Login,
+	LoginResponse
 } from '$lib/types';
 
 export type ReposData = { repositories: Repository[] };
@@ -21,10 +27,38 @@ export type TeamData = { members: TeamMember[] };
 export type InfoData = { info: Info };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
 export type SocialsData = { socials: Social[] };
+export type AnnouncementsData = { announcements: Announcement[] | NoAnnouncements };
+
+function build_url(endpoint: string) {
+	return `${settings.api_base_url()}/${endpoint}`;
+}
 
 async function get_json(endpoint: string) {
-	const url = `${settings.api_base_url()}/${endpoint}`;
+	const url = build_url(endpoint);
 	return await fetch(url).then((r) => r.json());
+}
+
+async function post_json(endpoint: string, body: any) {
+	const url = build_url(endpoint);
+	const token = settings.get_access_token();
+	return await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: token ? `Bearer ${token}` : ''
+		},
+		body: JSON.stringify(body)
+	}).then((r) => r.json());
+}
+
+async function delete_json(endpoint: string) {
+	const url = build_url(endpoint);
+	return await fetch(url, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${settings.get_access_token()}`
+		}
+	}).then((r) => r.json());
 }
 
 async function repositories(): Promise<ReposData> {
@@ -77,41 +111,74 @@ async function socials(): Promise<SocialsData> {
 	return { socials: json.socials };
 }
 
+async function announcements(channel?: string): Promise<AnnouncementsData> {
+	const json = await get_json(channel ? `v2/announcements/${channel}` : 'v2/announcements');
+	return { announcements: json.reverse() };
+}
+
+async function postAnnouncement(channel: string, announcement: PostAnnouncement) {
+	await post_json(`v2/announcements/${channel}`, announcement);
+}
+
+async function deleteAnnouncement(announcementId: number) {
+	await delete_json(`v2/announcements/${announcementId}`);
+}
+
+async function login(login: Login): Promise<LoginResponse> {
+	return await post_json('v2/login', login);
+}
+
 export const staleTime = 5 * 60 * 1000;
 export const queries = {
-	manager: {
+	manager: () => ({
 		queryKey: ['manager'],
 		queryFn: manager,
 		staleTime
-	},
-	patches: {
+	}),
+	patches: () => ({
 		queryKey: ['patches'],
 		queryFn: patches,
 		staleTime
-	},
-	repositories: {
+	}),
+	repositories: () => ({
 		queryKey: ['repositories'],
 		queryFn: repositories,
 		staleTime
-	},
-	team: {
+	}),
+	team: () => ({
 		queryKey: ['team'],
 		queryFn: team,
 		staleTime
-	},
-	info: {
+	}),
+	info: () => ({
 		queryKey: ['info'],
 		queryFn: info,
 		staleTime
-	},
-	donate: {
+	}),
+	donate: () => ({
 		queryKey: ['donate'],
 		queryFn: donate,
 		staleTime
-	},
-	socials: {
+	}),
+	socials: () => ({
 		queryKey: ['socials'],
 		queryFn: socials,
 		staleTime
-	}
+	}),
+	announcements: (channel?: string) => ({
+		queryKey: ['announcements'],
+		queryFn: () => announcements(channel)
+	}),
+	postAnnouncement: (channel: string, announcement: PostAnnouncement) => ({
+		mutationKey: ['postAnnouncement'],
+		mutationFn: () => postAnnouncement(channel, announcement)
+	}),
+	deleteAnnouncement: (announcementId: number) => ({
+		mutationKey: ['deleteAnnouncement'],
+		mutationFn: () => deleteAnnouncement(announcementId)
+	}),
+	login: (loginRequest: LoginRequest) => ({
+		mutationKey: ['login'],
+		mutationFn: () => login(loginRequest)
+	})
 };

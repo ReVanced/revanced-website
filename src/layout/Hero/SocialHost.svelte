@@ -4,7 +4,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 
-	const query = createQuery(['socials'], queries.socials);
+	const query = createQuery(['socials'], queries.socials());
 </script>
 
 <div class="social-host">
