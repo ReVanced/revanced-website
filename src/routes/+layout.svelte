@@ -15,6 +15,7 @@
 	import { persistQueryClient } from '@tanstack/query-persist-client-core';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+	import { DateTriggerEventHandler } from 'datetrigger';
 
 	import NavHost from '$layout/Navbar/NavHost.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
@@ -22,6 +23,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
+	import { events as themeEvents } from '$util/themeEvents';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -42,6 +44,8 @@
 	}
 
 	onMount(() => {
+		new DateTriggerEventHandler(themeEvents);
+
 		// Check if the user has already decided.
 
 		const hasDecided = localStorage.getItem('analytics') !== null;
