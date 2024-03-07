@@ -132,10 +132,11 @@
 	.wrap {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 7rem;
 	}
 	.wrappezoid {
-		height: calc(100vh - 120px);
+		height: 100%;
+		padding-top: 2.5rem;
+		min-height: calc(100vh/10*7);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;

@@ -18,7 +18,10 @@ html {
 
 body {
 	margin: 0;
-	padding: 0;
+	min-height: 100dvh;
+	height: 100%;
+	padding-top: 70px;
+	position: relative;
 	background-color: var(--bg-color);
 }
 
@@ -30,7 +33,7 @@ body {
 .wrapper {
 	margin-inline: auto;
 	width: min(90%, 80rem);
-	margin-top: 7rem;
+	margin-top: 2.5rem;
 }
 
 :root {
