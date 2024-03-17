@@ -51,12 +51,13 @@
 		}
 
 		if (!searcher) {
-			searcher = new FuzzySearch(patches, [
-				'name',
-				'description',
-				'compatiblePackages.name',
-				'compatiblePackages.versions'
-			]);
+			searcher = new FuzzySearch(
+				patches,
+				['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions'],
+				{
+					sort: true
+				}
+			);
 		}
 
 		const result = searcher.search(search).filter((patch: Patch) => {
