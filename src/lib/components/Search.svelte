@@ -6,11 +6,11 @@
 
 	export let title: string;
 	export let searchTerm: string | null;
-	export let searchTermFiltered: string | undefined;
+	export let displayedTerm: string | undefined;
 
 	function clear() {
 		searchTerm = '';
-		searchTermFiltered = '';
+		displayedTerm = '';
 
 		const url = new URL($page.url);
 		url.searchParams.delete('s');

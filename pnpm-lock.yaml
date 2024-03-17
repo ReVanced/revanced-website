@@ -17,6 +17,9 @@ dependencies:
   '@tanstack/svelte-query':
     specifier: ^4.36.1
     version: 4.36.1(svelte@4.2.8)
+  fuzzy-search:
+    specifier: ^3.2.1
+    version: 3.2.1
 
 devDependencies:
   '@sveltejs/adapter-static':
@@ -1492,6 +1495,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /fuzzy-search@3.2.1:
+    resolution: {integrity: sha512-vAcPiyomt1ioKAsAL2uxSABHJ4Ju/e4UeDM+g1OlR0vV4YhLGMNsdLNvZTpEDY4JCSt0E4hASCNM5t2ETtsbyg==}
+    dev: false
 
   /get-port@3.2.0:
     resolution: {integrity: sha512-x5UJKlgeUiNT8nyo/AcnwLnZuZNcSjSw0kogRB+Whd1fjjFq4B1hySFxSFWWSn4mIBzg3sRNUDFYc4g5gjPoLg==}
