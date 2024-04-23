@@ -20,6 +20,7 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import FuzzySearch from 'fuzzy-search';
+	import { onMount } from 'svelte';
 
 	const query = createQuery(['patches'], queries.patches);
 
@@ -93,6 +94,8 @@
 
 		window.history.pushState(null, '', url);
 	};
+
+	onMount(update);
 </script>
 
 <Head
