@@ -10,7 +10,6 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 
-	import { JsonLd } from 'svelte-meta-tags';
 	import Head from '$lib/components/Head.svelte';
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
@@ -20,8 +19,12 @@
 	import FilterChip from '$lib/components/FilterChip.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Query from '$lib/components/Query.svelte';
+	import Fuse from 'fuse.js';
+	import { onMount } from 'svelte';
 
 	const query = createQuery(['patches'], queries.patches);
+
+	let searcher: Fuse<Patch> | undefined;
 
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {
@@ -31,15 +34,8 @@
 	}
 
 	$: selectedPkg = $searchParams.get('pkg');
-	let searchTerm = $searchParams.get('s');
-	let searchTermFiltered = searchTerm
-		?.replace(/\./g, '')
-		.replace(/\s/g, '')
-		.replace(/-/g, '')
-		.replace(/_/g, '')
-		.toLowerCase();
+	let searchTerm = $searchParams.get('s') || '';
 
-	let timeout: ReturnType<typeof setTimeout>;
 	let mobilePackages = false;
 	let showAllVersions = false;
 
@@ -50,61 +46,58 @@
 		return !!patch.compatiblePackages?.find((compat) => compat.name === pkg);
 	}
 
-	function searchString(str?: string, term: string, filter: RegExp) {
-		return str?.toLowerCase().replace(filter, '').includes(term);
-	}
-
 	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
-		if (search === undefined && pkg === '') {
-			return patches;
+		if (!search) {
+			if (pkg) return patches.filter((patch) => checkCompatibility(patch, pkg));
+			else return patches;
 		}
 
-		return patches.filter((patch) => {
-			// Don't show if the patch doesn't support the selected package
-			if (pkg && !checkCompatibility(patch, pkg)) {
-				return false;
-			}
+		if (!searcher) {
+			searcher = new Fuse(patches, {
+				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions'],
+				shouldSort: true,
+				threshold: 0.3
+			});
+		}
 
-			// Filter based on the search term.
-			if (search !== undefined) {
-				return (
-					searchString(patch.description, search, /\s/g) ||
-					searchString(patch.name, search, /\s/g) ||
-					patch.compatiblePackages?.find((x) => searchString(x.name, search, /\./g))
-				);
-			}
-			return true;
-		});
+		const result = searcher
+			.search(search)
+			.map(({ item }) => item)
+			.filter((item) => {
+				// Don't show if the patch doesn't support the selected package
+				if (pkg && !checkCompatibility(item, pkg)) {
+					return false;
+				}
+				return true;
+			});
+		return result;
 	}
 
 	// Make sure we don't have to filter the patches after every key press
-	const debounce = () => {
-		clearTimeout(timeout);
-		timeout = setTimeout(() => {
-			// Filter search term for better results (i.e. "  Unl O-ck" and "unlock" gives the same results)
-			searchTermFiltered = searchTerm
-				?.replace(/\./g, '')
-				.replace(/\s/g, '')
-				.replace(/-/g, '')
-				.replace(/_/g, '')
-				.toLowerCase();
-			// Update search URL params
-			// must use history.pushState instead of goto(), as goto() unselects the search bar
-			const url = new URL(window.location.href);
-			url.pathname = '/patches';
-
-			const params = new URLSearchParams();
-			if (selectedPkg) {
-				params.set('pkg', selectedPkg);
-			}
-			if (searchTerm) {
-				params.set('s', searchTerm);
-			}
-
-			url.search = params.toString();
-			window.history.pushState(null, '', url.toString());
-		}, 500);
+	let displayedTerm = '';
+	const debounce = <T extends any[]>(f: (...args: T) => void) => {
+		let timeout: number;
+		return (...args: T) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => f(...args), 350);
+		};
 	};
+	const update = () => {
+		displayedTerm = searchTerm;
+
+		const url = new URL(window.location.href);
+		url.pathname = '/patches';
+
+		if (searchTerm) {
+			url.searchParams.set('s', searchTerm);
+		} else {
+			url.searchParams.delete('s');
+		}
+
+		window.history.pushState(null, '', url);
+	};
+
+	onMount(update);
 </script>
 
 <Head
@@ -135,12 +128,11 @@
 <div class="search">
 	<div class="search-contain">
 		<!-- Must bind both variables: we get searchTerm from the text input, -->
-		<!-- and searchTermFiltered gets cleared with the clear button -->
 		<Search
 			bind:searchTerm
-			bind:searchTermFiltered
+			bind:displayedTerm
 			title="Search for patches"
-			on:keyup={debounce}
+			on:keyup={debounce(update)}
 		/>
 	</div>
 </div>
@@ -192,9 +184,9 @@
 		</aside>
 
 		<div class="patches-container">
-			{#each filter(data.patches, selectedPkg || '', searchTermFiltered) as patch}
+			{#each filter(data.patches, selectedPkg || '', displayedTerm) as patch}
 				<!-- Trigger new animations when package or search changes (I love Svelte) -->
-				{#key selectedPkg || searchTermFiltered}
+				{#key selectedPkg || displayedTerm}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<PatchItem {patch} bind:showAllVersions />
 					</div>
