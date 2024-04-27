@@ -19,12 +19,12 @@
 	import FilterChip from '$lib/components/FilterChip.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import FuzzySearch from 'fuzzy-search';
+	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
 
 	const query = createQuery(['patches'], queries.patches);
 
-	let searcher: FuzzySearch | undefined;
+	let searcher: Fuse<Patch> | undefined;
 
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {
@@ -47,27 +47,29 @@
 	}
 
 	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
-		if (search === undefined && pkg === '') {
-			return patches;
+		if (!search) {
+			if (pkg) return patches.filter((patch) => checkCompatibility(patch, pkg));
+			else return patches;
 		}
 
 		if (!searcher) {
-			searcher = new FuzzySearch(
-				patches,
-				['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions'],
-				{
-					sort: true
-				}
-			);
+			searcher = new Fuse(patches, {
+				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions'],
+				shouldSort: true,
+				threshold: 0.4
+			});
 		}
 
-		const result = searcher.search(search).filter((patch: Patch) => {
-			// Don't show if the patch doesn't support the selected package
-			if (pkg && !checkCompatibility(patch, pkg)) {
-				return false;
-			}
-			return true;
-		});
+		const result = searcher
+			.search(search)
+			.map(({ item }) => item)
+			.filter((item) => {
+				// Don't show if the patch doesn't support the selected package
+				if (pkg && !checkCompatibility(item, pkg)) {
+					return false;
+				}
+				return true;
+			});
 		return result;
 	}
 

@@ -21,6 +21,7 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"fuse.js": "^7.0.0",
 		"imagetools-core": "^6.0.3",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
@@ -41,7 +42,6 @@
 		"@tanstack/query-core": "^4.36.1",
 		"@tanstack/query-persist-client-core": "^4.36.1",
 		"@tanstack/query-sync-storage-persister": "^4.36.1",
-		"@tanstack/svelte-query": "^4.36.1",
-		"fuzzy-search": "^3.2.1"
+		"@tanstack/svelte-query": "^4.36.1"
 	}
 }
