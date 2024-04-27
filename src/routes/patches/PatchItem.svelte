@@ -11,10 +11,10 @@
 	let expanded: boolean = false;
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<svelte:element
+	this={hasPatchOptions ? 'button' : 'div'}
 	class="patch-container"
-	class:expanded={hasPatchOptions}
 	class:rotate={expanded}
 	on:click={() => (expanded = !expanded)}
 >
@@ -103,7 +103,7 @@
 			</div>
 		</span>
 	{/if}
-</div>
+</svelte:element>
 
 <style lang="scss">
 	h3 {
@@ -167,6 +167,13 @@
 		background-color: var(--grey-six);
 		padding: 1.25rem;
 		border-radius: 12px;
+	}
+	button.patch-container {
+		cursor: pointer;
+
+		display: block;
+		border: none;
+		text-align: left;
 
 		&:active {
 			filter: brightness(1.15);
@@ -195,10 +202,6 @@
 
 	.rotate .expand-arrow {
 		transform: rotate(180deg);
-	}
-
-	.expanded {
-		cursor: pointer;
 	}
 
 	.option {
