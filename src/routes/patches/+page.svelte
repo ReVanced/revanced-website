@@ -56,7 +56,7 @@
 			searcher = new Fuse(patches, {
 				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions'],
 				shouldSort: true,
-				threshold: 0.4
+				threshold: 0.3
 			});
 		}
 
