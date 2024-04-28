@@ -10,7 +10,7 @@
 	let expanded = true;
 
 	// Yes
-	let usersIwantToExplodeSoBadly = ['semantic-release-bot'];
+	let usersIwantToExplodeSoBadly = ['semantic-release-bot', 'revanced-bot'];
 	let repo_name = friendlyName(repo);
 </script>
 
