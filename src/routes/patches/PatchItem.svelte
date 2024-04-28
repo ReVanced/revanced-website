@@ -59,8 +59,6 @@
 						const coercedA = coerce(a);
 						const coercedB = coerce(b);
 						if (coercedA && coercedB) return compare(coercedA, coercedB);
-						else if (!coercedA && !coercedB) return 0;
-						else return !coercedA ? 1 : -1;
 					})
 					.reverse() as version}
 					<li class="patch-info">
