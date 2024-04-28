@@ -14,7 +14,6 @@
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
-	import ContributorPerson from '../contributors/ContributorPerson.svelte';
 
 	const query = createQuery(['manager'], queries.manager);
 
