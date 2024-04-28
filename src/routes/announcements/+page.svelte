@@ -5,7 +5,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Meta from '$lib/components/Meta.svelte';
+	import Head from '$lib/components/Head.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Announcement from './Announcement.svelte';
@@ -18,7 +18,7 @@
 	let showPostAnnouncementDialogue = false;
 </script>
 
-<Meta
+<Head
 	title="Announcements"
 	schemas={[
 		{
