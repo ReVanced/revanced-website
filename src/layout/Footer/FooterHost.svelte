@@ -163,13 +163,6 @@
 		margin-top: 1rem;
 	}
 
-	ul {
-		display: flex;
-		gap: 1rem;
-		flex-direction: column;
-		width: max-content;
-	}
-
 	@media screen and (max-width: 1050px) {
 		.footer-top {
 			flex-direction: column;
