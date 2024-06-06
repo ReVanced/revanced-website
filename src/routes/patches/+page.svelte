@@ -134,20 +134,20 @@
 			title="Search for patches"
 			on:keyup={debounce(update)}
 		/>
+		<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			<FilterChip
+				selected={!!selectedPkg}
+				dropdown
+				on:click={() => (mobilePackages = !mobilePackages)}
+			>
+				{selectedPkg || 'Packages'}
+			</FilterChip>
+			<!-- <FilterChip check>Universal</FilterChip>
+			<FilterChip>Patch options</FilterChip> -->
+		</div>
 	</div>
 </div>
 <main>
-	<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<FilterChip
-			selected={!!selectedPkg}
-			dropdown
-			on:click={() => (mobilePackages = !mobilePackages)}
-		>
-			{selectedPkg || 'Packages'}
-		</FilterChip>
-		<!-- <FilterChip check>Universal</FilterChip>
-		<FilterChip>Patch options</FilterChip> -->
-	</div>
 
 	<Query {query} let:data>
 		<div class="mobile-packages-Dialogue">
@@ -204,6 +204,8 @@
 		width: min(90%, 80rem);
 		margin-inline: auto;
 		gap: 1.5rem;
+		height: 100vh;
+		height: 100dvh;
 	}
 
 	.search {
@@ -218,7 +220,7 @@
 	}
 
 	.patches-container {
-		overflow: hidden;
+		overflow: auto;
 		border-radius: 20px;
 		margin-top: 1.5rem;
 		display: flex;
@@ -227,7 +229,7 @@
 		width: 100%;
 		position: sticky;
 		z-index: 1;
-		min-height: calc(100vh - 6rem);
+		height: calc(100vh - 12rem);
 		margin-bottom: 3rem;
 	}
 
@@ -252,6 +254,15 @@
 			grid-template-columns: none;
 			flex-direction: column;
 			gap: 0;
+		}
+
+		.patches-container {
+			height: calc(100vh - 14rem);
+		}
+
+		.mobile-packages-Dialogue {
+			/* CSS black magic made this have a weird gap, so this fixes it */
+			position: absolute;
 		}
 
 		aside {

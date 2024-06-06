@@ -1,6 +1,8 @@
 <div class="menu">
-	<h6>Packages</h6>
-	<hr />
+	<div class="header">
+		<h6>Packages</h6>
+		<hr />
+	</div>
 	<div class="slot">
 		<slot />
 	</div>
@@ -8,14 +10,11 @@
 
 <style>
 	.menu {
-		height: calc(100vh - 60px);
+		height: calc(100vh - 10.5rem);
 		width: 100%;
-		padding: 0px 30px 30px 10px;
+		padding: 0px 30px 0px 10px;
 		display: flex;
 		flex-direction: column;
-		position: sticky;
-		top: 60px;
-		padding-top: calc(6rem - 60px);
 		overflow-y: scroll;
 	}
 
@@ -24,6 +23,13 @@
 	}
 	.menu:hover::-webkit-scrollbar-thumb {
 		background-color: var(--accent-color);
+	}
+
+	.header {
+		padding-top: calc(6rem - 64px);
+		position: sticky;
+		top: 0;
+		background-color: var(--bg-color);
 	}
 
 	.slot {
