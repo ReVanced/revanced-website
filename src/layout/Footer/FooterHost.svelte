@@ -47,7 +47,6 @@
 		<section class="links-container">
 			<FooterSection title="Pages">
 				<li><a href="/">Home</a></li>
-				<li><a href="/download">Download</a></li>
 				<li><a href="/patches">Patches</a></li>
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>

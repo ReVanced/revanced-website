@@ -72,7 +72,6 @@
 			<div id="main-navigation">
 				<ul class="nav-buttons">
 					<Navigation href="/" label="Home">Home</Navigation>
-					<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
 					<Navigation queryKey="repositories" href="/contributors" label="Contributors">
 						Contributors
