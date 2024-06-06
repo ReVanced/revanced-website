@@ -167,14 +167,6 @@
 		background-color: var(--grey-six);
 		padding: 1.25rem;
 		border-radius: 12px;
-
-		&:active {
-			filter: brightness(1.15);
-		}
-
-		&:hover {
-			background-color: var(--grey-one);
-		}
 	}
 
 	.title {
@@ -199,14 +191,18 @@
 
 	.expanded {
 		cursor: pointer;
+
+		&:hover {
+			background-color: var(--grey-one);
+		}
+
+		&:active {
+			filter: brightness(1.15);
+		}
 	}
 
 	.option {
 		padding: 1rem;
-
-		&:hover {
-			background-color: var(--grey-two);
-		}
 	}
 
 	/* thanks piknik */
