@@ -137,6 +137,7 @@ p {
 	background-color: var(--accent-color);
 	background-clip: content-box;
 	border-radius: 100px;
+	min-height: 4rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
