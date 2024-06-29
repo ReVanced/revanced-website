@@ -53,16 +53,7 @@
 		<!-- Should this be hardcoded to get the version of the first package?  -->
 		{#if patch.compatiblePackages?.length && patch.compatiblePackages[0].versions?.length}
 			{#if showAllVersions}
-				{#each patch.compatiblePackages[0].versions
-					.slice()
-					.sort((a, b) => {
-						const coercedA = coerce(a);
-						const coercedB = coerce(b);
-						if (coercedA && coercedB) return compare(coercedA, coercedB);
-						else if (!coercedA && !coercedB) return 0;
-						else return !coercedA ? 1 : -1;
-					})
-					.reverse() as version}
+				{#each patch.compatiblePackages[0].versions.reverse() as version}
 					<li class="patch-info">
 						🎯 {version}
 					</li>
