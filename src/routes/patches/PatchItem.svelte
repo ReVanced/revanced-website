@@ -76,7 +76,7 @@
 				</li>
 			{/if}
 		{:else}
-			<li class="patch-info">🎯 Any</li>
+			<li class="patch-info">🎯 Any version</li>
 		{/if}
 	</ul>
 
