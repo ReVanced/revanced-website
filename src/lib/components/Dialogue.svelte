@@ -112,8 +112,8 @@
 
 	.modal {
 		position: fixed;
-		width: min(85%, 425px);
-		max-height: 75%;
+		width: min(90%, 425px);
+		max-height: 95%;
 		overflow-y: scroll;
 		top: 50%;
 		left: 50%;

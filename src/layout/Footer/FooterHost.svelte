@@ -8,8 +8,8 @@
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
-	const infoQuery = createQuery(['info'], queries.info);
-	const socialsQuery = createQuery(['socials'], queries.socials);
+	const infoQuery = createQuery(['info'], queries.info());
+	const socialsQuery = createQuery(['socials'], queries.socials());
 </script>
 
 <!-- squiggly divider line -->

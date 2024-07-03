@@ -14,7 +14,7 @@
 		if (queryKey !== null) {
 			if (Array.isArray(queryKey)) {
 				queryKey.forEach((key) => {
-					const query = queries[key];
+					const query = (queries[key] as Function)();
 					dev_log('Prefetching', query);
 					client.prefetchQuery(query as any);
 				});
