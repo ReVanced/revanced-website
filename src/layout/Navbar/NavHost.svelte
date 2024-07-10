@@ -134,7 +134,7 @@
 	</div>
 
 	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={clear_and_reload} label="Clear Cache Button">Clear cache</Button>
+		<Button type="text" on:click={clear_and_reload} label="Reset Button">Reset</Button>
 		<Button type="text" on:click={save} label="Save Button">Save</Button>
 	</svelte:fragment>
 </Modal>
