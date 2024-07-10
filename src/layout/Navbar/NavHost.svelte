@@ -16,19 +16,23 @@
 
 	const client = useQueryClient();
 
+	function reload() {
+		location.reload();
+	}
+
 	function clear_and_reload() {
 		client.clear();
 		// `client.clear()` does technically do this for us, but it takes a while.
 		localStorage.clear();
 
-		location.reload();
+		reload();
 	}
 
 	let url = settings.api_base_url();
 
 	function save() {
 		settings.set_api_base_url(url);
-		clear_and_reload();
+		reload();
 	}
 
 	function reset() {
