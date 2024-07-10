@@ -23,16 +23,12 @@
 		padding: 0 max(6.5%, calc(50vw - 50rem));
 		align-items: center;
 		user-select: none;
-		position: absolute;
 		display: flex;
-		bottom: 2rem;
 		gap: 1rem;
-		left: 0;
 	}
 
 	@media screen and (max-width: 767px) {
 		.social-host {
-			left: 0;
 			width: 100%;
 			display: flex;
 			flex-wrap: wrap;
