@@ -1,10 +1,11 @@
 export interface Contributor {
-	login: string;
+	name: string;
 	avatar_url: string;
-	html_url: string;
+	url: string;
+	contributions: number;
 }
 
-export interface Repository {
+export interface Contributable {
 	name: string;
 	contributors: Contributor[];
 }
@@ -33,24 +34,20 @@ export interface PatchOption {
 
 export interface Asset {
 	name: string;
-	content_type: string;
-	browser_download_url: string;
+	download_url: string;
 }
 
-export interface Metadata {
-	tag_name: string;
-	name: string;
-	draft: boolean;
-	prerelease: boolean;
+export interface Release {
+	version: string;
 	created_at: string;
-	published_at: string;
-	body: string;
+	description: string;
+	assets: Asset[];
 }
 
 export interface TeamMember {
-	login: string;
+	name: string;
 	avatar_url: string;
-	html_url: string;
+	url: string;
 	bio?: string;
 }
 
@@ -70,6 +67,7 @@ export interface DonationPlatform {
 export interface Social {
 	name: string;
 	url: string;
+	preferred: boolean;
 }
 
 interface Donations {
@@ -81,7 +79,7 @@ interface Contact {
 	email: string;
 }
 
-export interface Info {
+export interface About {
 	name: string;
 	about: string;
 	contact: Contact;
