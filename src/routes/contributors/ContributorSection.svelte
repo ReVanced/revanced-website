@@ -9,8 +9,7 @@
 	export let repo: string;
 	let expanded = true;
 
-	// Yes
-	let usersIwantToExplodeSoBadly = ['semantic-release-bot', 'revanced-bot'];
+	let bots = ['semantic-release-bot', 'revanced-bot'];
 	let repo_name = friendlyName(repo);
 </script>
 
@@ -34,9 +33,9 @@
 
 	{#if expanded}
 		<div class="contrib-host" transition:slide={{ easing: quintOut, duration: 500 }}>
-			{#each contributors as { login, avatar_url, html_url }}
-				{#if !usersIwantToExplodeSoBadly.includes(login)}
-					<ContributorButton name={login} pfp={avatar_url} url={html_url} />
+			{#each contributors as { name, avatar_url, url }}
+				{#if !bots.includes(name)}
+					<ContributorButton {name} pfp={avatar_url} {url} />
 				{/if}
 			{/each}
 		</div>

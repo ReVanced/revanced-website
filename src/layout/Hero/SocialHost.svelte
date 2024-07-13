@@ -4,13 +4,13 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 
-	const query = createQuery(['socials'], queries.socials);
+	const aboutQuery = createQuery(['about'], queries.about);
 </script>
 
 <div class="social-host">
-	<Query {query} let:data>
+	<Query query={aboutQuery} let:data>
 		{#if data}
-			{#each data.socials.filter((s) => s.name != 'Website') as social}
+			{#each data.about.socials.filter((s) => s.name != 'Website') as social}
 				<SocialButton {social} />
 			{/each}
 		{/if}

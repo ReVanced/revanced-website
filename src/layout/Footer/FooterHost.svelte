@@ -8,8 +8,7 @@
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
-	const infoQuery = createQuery(['info'], queries.info);
-	const socialsQuery = createQuery(['socials'], queries.socials);
+	const aboutQuery = createQuery(['about'], queries.about);
 </script>
 
 <!-- squiggly divider line -->
@@ -33,11 +32,11 @@
 	<div class="footer-top">
 		<section class="main-content">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-			<Query query={infoQuery} let:data>
+			<Query query={aboutQuery} let:data>
 				{#if data}
 					<div>
 						<p>
-							{data.info.about}
+							{data.about.about}
 						</p>
 					</div>
 				{/if}
@@ -52,10 +51,10 @@
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>
 			</FooterSection>
-			<Query query={socialsQuery} let:data>
+			<Query query={aboutQuery} let:data>
 				{#if data}
 					<FooterSection title="Socials">
-						{#each data.socials as { name, url }}
+						{#each data.about.socials as { name, url }}
 							<li>
 								<a href={url} target="_blank" rel="noreferrer">{name}</a>
 							</li>
@@ -65,12 +64,12 @@
 			</Query>
 		</section>
 	</div>
-	<Query query={infoQuery} let:data>
+	<Query query={aboutQuery} let:data>
 		{#if data}
 			<div class="footer-bottom">
 				<div id="logo-name"><span>Re</span>Vanced</div>
 				<a href="/donate"><div>Donate</div></a>
-				<a href="mailto:{data.info.contact.email}"><div>Email</div></a>
+				<a href="mailto:{data.about.contact.email}"><div>Email</div></a>
 			</div>
 		{/if}
 	</Query>

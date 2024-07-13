@@ -78,12 +78,10 @@
 					<Navigation href="/" label="Home">Home</Navigation>
 					<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
-					<Navigation queryKey="repositories" href="/contributors" label="Contributors">
+					<Navigation queryKey="contributors" href="/contributors" label="Contributors">
 						Contributors
 					</Navigation>
-					<Navigation queryKey={['donate', 'team']} href="/donate" label="Donate">
-						Donate
-					</Navigation>
+					<Navigation queryKey={['about', 'team']} href="/donate" label="Donate">Donate</Navigation>
 				</ul>
 			</div>
 			<div id="secondary-navigation">
