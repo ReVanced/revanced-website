@@ -54,5 +54,9 @@ export const events: DateTriggerEvent[] = [
 	// april fools
 	new DateTriggerEvent(new Date(currentYear, 3, 1), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '69');
+		document.documentElement.style.setProperty(
+			'--main-font',
+			'"Comic Sans MS", "Comic Sans", cursive'
+		);
 	})
 ];
