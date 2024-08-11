@@ -67,29 +67,29 @@
 		display: flex;
 		padding: 1rem 3.25rem;
 		width: 100%;
-		color: var(--accent-color-two);
+		color: var(--secondary);
 		font-weight: 500;
 		font-size: 0.92rem;
 		border-radius: 100px;
 		border: none;
-		background-color: var(--grey-ten);
+		background-color: var(--surface-nine);
 		outline: none;
 
 		transition: background-color 0.3s var(--bezier-one);
 		&:hover {
-			background-color: var(--grey-three);
+			background-color: var(--surface-five);
 		}
 
 		&:focus::placeholder {
-			color: var(--accent-color);
+			color: var(--primary);
 		}
 		&:focus {
-			background-color: var(--bg-color);
+			background-color: var(--surface-two);
 		}
 	}
 
 	input::placeholder {
-		color: var(--grey-five);
+		color: var(--text-four);
 		font-size: 0.9rem;
 		font-weight: 500;
 		transition: all 0.2s var(--bezier-one);

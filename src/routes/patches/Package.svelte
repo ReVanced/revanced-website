@@ -46,21 +46,21 @@
 		width: 100%;
 		user-select: none;
 		transition: background-color 0.4s var(--bezier-one);
-		color: var(--grey-five);
+		color: var(--text-four);
 		transition: color 0.3s var(--bezier-one);
 	}
 
 	.selected {
-		color: var(--accent-color);
+		color: var(--primary);
 		transition: color 0.3s var(--bezier-one);
-		background-color: var(--accent-low-opacity);
+		background-color: var(--tertiary);
 	}
 	.package:hover:not(.selected) {
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 	}
 
 	.package:not(.selected):hover {
-		color: var(--white);
+		color: var(--text-one);
 	}
 
 	@media (max-width: 767px) {
@@ -73,17 +73,17 @@
 			word-break: break-all;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			color: var(--grey-five);
-			border-bottom: 1px solid var(--grey-three);
+			color: var(--text-four);
+			border-bottom: 1px solid var(--border);
 		}
 
 		.selected {
-			color: var(--accent-color);
-			background-color: var(--accent-low-opacity);
+			color: var(--primary);
+			background-color: var(--tertiary);
 		}
 
 		.package:not(.selected):hover {
-			color: var(--grey-five);
+			color: var(--text-four);
 		}
 	}
 </style>

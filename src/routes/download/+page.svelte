@@ -124,7 +124,7 @@
 
 	h2 {
 		text-align: center;
-		color: var(--white);
+		color: var(--text-one);
 	}
 
 	p {
@@ -139,7 +139,7 @@
 		width: auto;
 		padding: 0.5rem 0.5rem;
 		border-radius: 2rem;
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		user-select: none;
 	}
 
@@ -149,6 +149,6 @@
 	}
 
 	span {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 </style>

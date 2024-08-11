@@ -15,7 +15,7 @@
 		animation: wave-anim 40s;
 		animation-timing-function: linear;
 		animation-iteration-count: infinite;
-		fill: var(--accent-color);
+		fill: var(--primary);
 	}
 
 	@keyframes wave-anim {

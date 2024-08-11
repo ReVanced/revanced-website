@@ -141,11 +141,11 @@
 	}
 
 	path {
-		fill: var(--grey-five);
+		fill: var(--surface-six);
 	}
 
 	button:hover path {
-		fill: var(--accent-color-two);
+		fill: var(--secondary);
 	}
 
 	button {
@@ -187,7 +187,7 @@
 		padding: 1rem 2rem;
 		z-index: 666;
 		height: 70px;
-		background-color: var(--grey-seven);
+		background-color: var(--surface-eight);
 		width: 100%;
 	}
 
@@ -248,7 +248,7 @@
 			top: 0px;
 			border-radius: 0px 24px 24px 0px;
 			left: 0px;
-			background-color: var(--grey-seven);
+			background-color: var(--surface-eight);
 			padding: 1rem;
 			padding-top: 6rem;
 			z-index: 100;
@@ -301,7 +301,7 @@
 	.menu-btn__burger::after {
 		width: 24px;
 		height: 2px;
-		background: var(--grey-five);
+		background: var(--surface-six);
 		transition: all 0.3s var(--bezier-one);
 	}
 
@@ -334,9 +334,9 @@
 		left: -300px;
 		border-radius: 100px;
 		text-decoration: none;
-		background-color: var(--accent-color);
+		background-color: var(--primary);
 		z-index: 10;
-		color: var(--grey-four);
+		color: var(--text-three);
 		font-weight: 600;
 		font-size: 0.95rem;
 		padding: 16px 24px;

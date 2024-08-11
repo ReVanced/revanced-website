@@ -217,7 +217,7 @@
 	.search {
 		padding-top: 5rem;
 		padding-bottom: 1.25rem;
-		background-color: var(--grey-seven);
+		background-color: var(--surface-eight);
 	}
 
 	.search-contain {
@@ -247,7 +247,7 @@
 		margin-bottom: -1px;
 		overflow: hidden;
 		border-radius: 12px;
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 	}
 
 	@media (min-width: 768px) {

@@ -93,7 +93,7 @@
 		align-items: center;
 		gap: 1rem;
 		width: 100%;
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 	}
 
 	.buttons {
@@ -120,7 +120,7 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		border-radius: 26px;
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		display: flex;
 		gap: 5%;
 		white-space: normal;
@@ -171,7 +171,7 @@
 	}
 
 	.fullscreen.scrolled .title {
-		border-bottom: 1px solid var(--grey-three);
+		border-bottom: 1px solid var(--border);
 	}
 
 	.slot {

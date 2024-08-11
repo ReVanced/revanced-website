@@ -28,8 +28,8 @@
 <style lang="scss">
 	.member {
 		width: 100%;
-		color: var(--white);
-		border: 1px solid var(--grey-three);
+		color: var(--text-one);
+		border: 1px solid var(--border);
 		text-decoration: none;
 		cursor: pointer;
 		padding: 1rem;
@@ -39,7 +39,7 @@
 		transition: 0.3s background-color var(--bezier-one);
 
 		&:hover {
-			background-color: var(--grey-six);
+			background-color: var(--surface-seven);
 		}
 	}
 

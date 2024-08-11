@@ -109,7 +109,7 @@
 	h3 {
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	#option-description {
@@ -118,7 +118,7 @@
 	}
 
 	#option-title {
-		color: var(--accent-color-two);
+		color: var(--secondary);
 	}
 
 	.button {
@@ -133,23 +133,23 @@
 		list-style: none;
 		font-size: 0.8rem;
 		font-weight: 500;
-		color: var(--grey-five);
+		color: var(--text-four);
 		padding: 0.25rem 0.5rem;
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 		border-radius: 8px;
 
 		&:hover {
-			background-color: var(--grey-two);
+			background-color: var(--surface-four);
 		}
 	}
 
 	a {
 		text-decoration: none;
-		color: var(--grey-five);
+		color: var(--text-four);
 
 		&:hover {
-			text-decoration: underline var(--accent-color-two);
-			color: var(--accent-color-two);
+			text-decoration: underline var(--secondary);
+			color: var(--secondary);
 		}
 	}
 
@@ -164,7 +164,7 @@
 
 	.patch-container {
 		transition: all 0.1s var(--bezier-one);
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		padding: 1.25rem;
 		border-radius: 12px;
 
@@ -173,7 +173,7 @@
 		}
 
 		&:hover {
-			background-color: var(--grey-one);
+			background-color: var(--surface-three);
 		}
 	}
 
@@ -205,17 +205,17 @@
 		padding: 1rem;
 
 		&:hover {
-			background-color: var(--grey-two);
+			background-color: var(--surface-four);
 		}
 	}
 
 	/* thanks piknik */
 	.option + .option {
-		border-top: 1px solid var(--grey-three);
+		border-top: 1px solid var(--border);
 	}
 
 	.options {
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 		overflow: hidden;
 		border-radius: 8px;
 		margin-top: 1rem;
