@@ -1,9 +1,6 @@
 import { DateTriggerEvent, DAY_IN_MINUTES } from 'datetrigger';
 
-function applyCssVar(name: string, value: string): void {
-	if (!name.startsWith('--')) return console.error('A CSS variable must start with "--"');
-	document.documentElement.style.setProperty(name, value);
-}
+const applyCssVar = document.documentElement.style.setProperty;
 
 /**
  * Get the date of when easter should happen based off a given year
@@ -54,9 +51,6 @@ export const events: DateTriggerEvent[] = [
 	// april fools
 	new DateTriggerEvent(new Date(currentYear, 3, 1), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '69');
-		document.documentElement.style.setProperty(
-			'--main-font',
-			'"Comic Sans MS", "Comic Sans", cursive'
-		);
+		applyCssVar('--main-font', '"Comic Sans MS", "Comic Sans", cursive');
 	})
 ];
