@@ -28,27 +28,27 @@ function getEaster(Y: number): Date {
 const currentYear = new Date().getFullYear();
 
 export const events: DateTriggerEvent[] = [
-	// new year
+	// New Year.
 	new DateTriggerEvent(new Date(currentYear, 0, 1), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '240');
 	}),
-	// christmas
+	// Christmas.
 	new DateTriggerEvent(new Date(currentYear, 11, 25), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '120');
 	}),
-	// valentine's day
+	// Valentine's day.
 	new DateTriggerEvent(new Date(currentYear, 1, 14), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '300');
 	}),
-	// halloween
+	// Halloween.
 	new DateTriggerEvent(new Date(currentYear, 9, 31), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '0');
 	}),
-	// easter
+	// Easter.
 	new DateTriggerEvent(getEaster(currentYear), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '100');
 	}),
-	// april fools
+	// April Fools.
 	new DateTriggerEvent(new Date(currentYear, 3, 1), DAY_IN_MINUTES, () => {
 		applyCssVar('--hue', '69');
 		applyCssVar('--main-font', '"Comic Sans MS", "Comic Sans", cursive');
