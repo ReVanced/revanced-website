@@ -53,16 +53,7 @@
 		<!-- Should this be hardcoded to get the version of the first package?  -->
 		{#if patch.compatiblePackages?.length && patch.compatiblePackages[0].versions?.length}
 			{#if showAllVersions}
-				{#each patch.compatiblePackages[0].versions
-					.slice()
-					.sort((a, b) => {
-						const coercedA = coerce(a);
-						const coercedB = coerce(b);
-						if (coercedA && coercedB) return compare(coercedA, coercedB);
-						else if (!coercedA && !coercedB) return 0;
-						else return !coercedA ? 1 : -1;
-					})
-					.reverse() as version}
+				{#each patch.compatiblePackages[0].versions.reverse() as version}
 					<li class="patch-info">
 						🎯 {version}
 					</li>
@@ -85,7 +76,7 @@
 				</li>
 			{/if}
 		{:else}
-			<li class="patch-info">🎯 Any</li>
+			<li class="patch-info">🎯 Any version</li>
 		{/if}
 	</ul>
 
@@ -167,14 +158,6 @@
 		background-color: var(--surface-seven);
 		padding: 1.25rem;
 		border-radius: 12px;
-
-		&:active {
-			filter: brightness(1.15);
-		}
-
-		&:hover {
-			background-color: var(--surface-three);
-		}
 	}
 
 	.title {
@@ -199,14 +182,18 @@
 
 	.expanded {
 		cursor: pointer;
+
+		&:hover {
+			background-color: var(--surface-three);
+		}
+
+		&:active {
+			filter: brightness(1.15);
+		}
 	}
 
 	.option {
 		padding: 1rem;
-
-		&:hover {
-			background-color: var(--surface-four);
-		}
 	}
 
 	/* thanks piknik */

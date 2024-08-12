@@ -9,7 +9,6 @@
 	import { derived } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
 
 	import { QueryClient } from '@tanstack/query-core';
 	import { persistQueryClient } from '@tanstack/query-persist-client-core';

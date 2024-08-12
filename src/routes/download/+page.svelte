@@ -14,7 +14,6 @@
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
-	import ContributorPerson from '../contributors/ContributorPerson.svelte';
 
 	const query = createQuery(['manager'], queries.manager);
 
@@ -76,7 +75,7 @@
 		<Query {query} let:data>
 			<Button
 				type="text"
-				href={data.assets[0].browser_download_url}
+				href={data.release.assets[0].download_url}
 				on:click={() => (warningDialogue = false)}>Okay</Button
 			>
 		</Query>
@@ -91,16 +90,16 @@
 		<Query {query} let:data>
 			{#if !isAndroid || androidVersion < 8}
 				<Button on:click={handleClick} type="filled" icon="download">
-					{data.metadata.tag_name}
+					{data.release.version}
 				</Button>
 			{:else}
 				<Button
 					on:click={handleClick}
 					type="filled"
 					icon="download"
-					href={data.assets[0].browser_download_url}
+					href={data.release.assets[0].download_url}
 				>
-					{data.metadata.tag_name}
+					{data.release.version}
 				</Button>
 			{/if}
 		</Query>
