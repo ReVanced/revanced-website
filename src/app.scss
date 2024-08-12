@@ -40,25 +40,40 @@ body {
 :root {
 	--main-font: 'Manrope', sans-serif;
 	--mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+
 	--text-one: hsl(calc(var(--hue, 206) + 0), 100%, 94%);
 	--surface-one: hsl(calc(var(--hue, 206) + 0), 100%, 94%);
+
 	--primary: hsl(calc(var(--hue, 206) + 0), 100%, 81%);
+
 	--secondary: hsl(calc(var(--hue, 206) + 2), 75%, 82%);
+
 	--tertiary: hsla(calc(var(--hue, 206) - 1), 91%, 69%, 0.15);
+
 	--background-one: hsl(calc(var(--hue, 206) + 46), 10%, 11%);
 	--surface-two: hsl(calc(var(--hue, 206) + 46), 10%, 11%);
+
 	--surface-three: hsl(calc(var(--hue, 206) + 4), 14%, 17%);
+
 	--surface-four: hsl(calc(var(--hue, 206) + 6), 19%, 19%);
 	--text-two: hsl(calc(var(--hue, 206) + 6), 19%, 19%);
+
 	--border: hsl(calc(var(--hue, 206) + 15), 17%, 26%);
 	--surface-five: hsl(calc(var(--hue, 206) + 15), 17%, 26%);
+
 	--text-three: hsl(calc(var(--hue, 206) + 20), 48%, 18%);
+
 	--text-four: hsl(calc(var(--hue, 206) + 2), 30%, 75%);
 	--surface-six: hsl(calc(var(--hue, 206) + 2), 30%, 75%);
+
 	--surface-seven: hsl(calc(var(--hue, 206) + 24), 9%, 13%);
+
 	--surface-eight: hsl(calc(var(--hue, 206) + 34), 9%, 13.5%);
+
 	--surface-nine: hsl(calc(var(--hue, 206) + 24), 9.5%, 17.5%);
+
 	--red-one: hsl(333, 84%, 62%);
+
 	--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	--drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 		0px 2px 4px -1px rgba(0, 0, 0, 0.2);
