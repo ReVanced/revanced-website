@@ -1,6 +1,6 @@
 import { DateTriggerEvent, DAY_IN_MINUTES } from 'datetrigger';
 
-const applyCssVar = document.documentElement.style.setProperty;
+const changeHue = (n: number) => document.documentElement.style.setProperty('--hue', n.toString());
 
 /**
  * Get the date of when easter should happen based off a given year
@@ -30,26 +30,26 @@ const currentYear = new Date().getFullYear();
 export const events: DateTriggerEvent[] = [
 	// New Year.
 	new DateTriggerEvent(new Date(currentYear, 0, 1), DAY_IN_MINUTES, () => {
-		applyCssVar('--hue', '240');
+		changeHue(240);
 	}),
 	// Christmas.
 	new DateTriggerEvent(new Date(currentYear, 11, 25), DAY_IN_MINUTES, () => {
-		applyCssVar('--hue', '120');
+		changeHue(120);
 	}),
 	// Valentine's day.
 	new DateTriggerEvent(new Date(currentYear, 1, 14), DAY_IN_MINUTES, () => {
-		applyCssVar('--hue', '300');
+		changeHue(300);
 	}),
 	// Halloween.
 	new DateTriggerEvent(new Date(currentYear, 9, 31), DAY_IN_MINUTES, () => {
-		applyCssVar('--hue', '0');
+		changeHue(0);
 	}),
 	// Easter.
 	new DateTriggerEvent(getEaster(currentYear), DAY_IN_MINUTES, () => {
-		applyCssVar('--hue', '100');
+		changeHue(100);
 	}),
 	// April Fools.
 	new DateTriggerEvent(new Date(currentYear, 3, 1), DAY_IN_MINUTES, () => {
-		applyCssVar('--hue', '69');
+		changeHue(69);
 	})
 ];
