@@ -18,8 +18,8 @@
 		cursor: pointer;
 		border-radius: 200px;
 		transition: transform 0.4s var(--bezier-one);
-		background-color: var(--grey-two);
-		color: var(--white);
+		background-color: var(--surface-four);
+		color: var(--text-one);
 		user-select: none;
 	}
 

@@ -105,35 +105,35 @@
 
 	#logo-name {
 		font-size: 1.4rem;
-		color: var(--white);
+		color: var(--text-one);
 		font-weight: 600;
 	}
 
 	#logo-name span {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	.footer-bottom a {
 		text-decoration: none;
-		color: var(--grey-five);
+		color: var(--text-four);
 		font-weight: 600;
 	}
 
 	li {
 		list-style: none;
-		color: var(--grey-five);
+		color: var(--text-four);
 		font-size: 0.9rem;
 		font-weight: 500;
 	}
 
 	li a {
-		color: var(--accent-color);
+		color: var(--primary);
 		font-weight: 600;
 		font-size: 0.95rem;
 	}
 
 	path {
-		stroke: var(--grey-three);
+		stroke: var(--border);
 	}
 
 	.main-content {
@@ -152,8 +152,8 @@
 	}
 
 	a:hover {
-		text-decoration: underline var(--accent-color-two);
-		color: var(--white);
+		text-decoration: underline var(--secondary);
+		color: var(--text-one);
 	}
 
 	.links-container {

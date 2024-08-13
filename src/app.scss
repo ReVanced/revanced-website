@@ -6,6 +6,10 @@
 	padding: 0;
 	font-family: var(--main-font);
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	transition:
+		color 0.5s ease-in-out,
+		background-color 0.5s ease-in-out,
+		fill 0.5s ease-in-out;
 }
 
 html {
@@ -19,7 +23,7 @@ html {
 body {
 	margin: 0;
 	padding: 0;
-	background-color: var(--bg-color);
+	background-color: var(--background-one);
 }
 
 html,
@@ -34,39 +38,55 @@ body {
 }
 
 :root {
-	/* TODO properly name these */
 	--main-font: 'Manrope', sans-serif;
 	--mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-	--white: hsl(206, 100%, 94%);
-	--accent-color: hsl(206, 100%, 81%);
-	--accent-color-two: hsl(208, 75%, 82%);
-	--accent-low-opacity: hsla(205, 91%, 69%, 0.15);
-	--bg-color: hsl(252, 10%, 11%);
-	--grey-one: hsl(210, 14%, 17%);
-	--grey-two: hsl(212, 19%, 19%);
-	--grey-three: hsl(221, 17%, 26%);
-	--grey-four: hsl(226, 48%, 18%);
-	--grey-five: hsl(208, 30%, 75%);
-	--grey-six: hsl(230, 9%, 13%);
-	--grey-seven: hsl(240, 9%, 13.5%);
-	--grey-eight: hsla(207, 30%, 75%, 0.577);
-	--grey-nine: hsla(240, 6%, 7%, 0.3);
-	--grey-ten: hsl(230, 9.5%, 17.5%);
-	--grey-eleven: hsl(208, 10%, 40%);
+
+	--text-one: hsl(calc(var(--hue, 206) + 0), 100%, 94%);
+	--surface-one: hsl(calc(var(--hue, 206) + 0), 100%, 94%);
+
+	--primary: hsl(calc(var(--hue, 206) + 0), 100%, 81%);
+
+	--secondary: hsl(calc(var(--hue, 206) + 2), 75%, 82%);
+
+	--tertiary: hsla(calc(var(--hue, 206) - 1), 91%, 69%, 0.15);
+
+	--background-one: hsl(calc(var(--hue, 206) + 46), 10%, 11%);
+	--surface-two: hsl(calc(var(--hue, 206) + 46), 10%, 11%);
+
+	--surface-three: hsl(calc(var(--hue, 206) + 4), 14%, 17%);
+
+	--surface-four: hsl(calc(var(--hue, 206) + 6), 19%, 19%);
+	--text-two: hsl(calc(var(--hue, 206) + 6), 19%, 19%);
+
+	--border: hsl(calc(var(--hue, 206) + 15), 17%, 26%);
+	--surface-five: hsl(calc(var(--hue, 206) + 15), 17%, 26%);
+
+	--text-three: hsl(calc(var(--hue, 206) + 20), 48%, 18%);
+
+	--text-four: hsl(calc(var(--hue, 206) + 2), 30%, 75%);
+	--surface-six: hsl(calc(var(--hue, 206) + 2), 30%, 75%);
+
+	--surface-seven: hsl(calc(var(--hue, 206) + 24), 9%, 13%);
+
+	--surface-eight: hsl(calc(var(--hue, 206) + 34), 9%, 13.5%);
+
+	--surface-nine: hsl(calc(var(--hue, 206) + 24), 9.5%, 17.5%);
+
 	--red-one: hsl(333, 84%, 62%);
+
 	--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	--drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
 		0px 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 ::selection {
-	background-color: var(--accent-low-opacity);
+	background-color: var(--tertiary);
 }
 
 /*-----headings-----*/
 
 h1 {
-	color: var(--white);
+	color: var(--text-one);
 	line-height: 4rem;
 	font-size: 3.5rem;
 	font-weight: 700;
@@ -74,7 +94,7 @@ h1 {
 }
 
 h2 {
-	color: var(--grey-five);
+	color: var(--text-four);
 	font-size: 2.5rem;
 	letter-spacing: -0.04rem;
 	font-weight: 600;
@@ -82,12 +102,12 @@ h2 {
 
 h3 {
 	font-size: 1.25rem;
-	color: var(--accent-color-two);
+	color: var(--secondary);
 	font-weight: 600;
 }
 
 h4 {
-	color: var(--accent-color-two);
+	color: var(--secondary);
 	font-weight: 400;
 	font-size: 1rem;
 	letter-spacing: 0.02rem;
@@ -95,20 +115,20 @@ h4 {
 }
 
 h5 {
-	color: var(--grey-five);
+	color: var(--text-four);
 	font-weight: 400;
 	font-size: 0.9rem;
 	letter-spacing: 0.02rem;
 }
 
 h6 {
-	color: var(--grey-five);
+	color: var(--text-four);
 	font-weight: 500;
 	font-size: 0.85rem;
 }
 
 p {
-	color: var(--grey-five);
+	color: var(--text-four);
 	font-weight: 400;
 	font-size: 1rem;
 	letter-spacing: 0.02rem;
@@ -134,30 +154,30 @@ p {
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: var(--accent-color);
+	background-color: var(--primary);
 	background-clip: content-box;
 	border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background-color: var(--grey-three);
+	background-color: var(--surface-five);
 }
 
 hr {
 	display: block;
 	height: 1px;
 	border: 0;
-	border-top: 1px solid var(--grey-three);
+	border-top: 1px solid var(--border);
 }
 
 input {
 	padding: 1rem;
 	border-radius: 12px;
-	border: 1px solid var(--grey-three);
+	border: 1px solid var(--border);
 	background-color: transparent;
-	color: var(--accent-color-two);
+	color: var(--secondary);
 }
 
 input:focus {
-	outline: 1px solid var(--accent-color);
+	outline: 1px solid var(--primary);
 }

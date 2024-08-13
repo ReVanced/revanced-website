@@ -28,6 +28,6 @@
 	}
 
 	h1 {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 </style>

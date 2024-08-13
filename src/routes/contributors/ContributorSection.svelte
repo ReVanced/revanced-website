@@ -48,13 +48,13 @@
 		align-items: center;
 		justify-content: space-between;
 		cursor: pointer;
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		padding: 0.75rem 1.25rem;
-		border-bottom: 1px solid var(--grey-three);
+		border-bottom: 1px solid var(--border);
 		transition: all 0.2s var(--bezier-one);
 
 		&:hover {
-			background-color: var(--grey-one);
+			background-color: var(--surface-three);
 		}
 	}
 
@@ -71,7 +71,7 @@
 	.section-container {
 		border-radius: 20px;
 		overflow: hidden;
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 	}
 
 	a {
@@ -82,8 +82,8 @@
 	}
 
 	a:hover {
-		text-decoration: underline var(--accent-color);
-		color: var(--white);
+		text-decoration: underline var(--primary);
+		color: var(--text-one);
 	}
 
 	.contrib-host {

@@ -73,7 +73,7 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<section>
 		<div>
-			<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
+			<h2>🎉 Support <span style="color: var(--primary);">ReVanced</span></h2>
 			<p>
 				ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
 				features. All of which is completely open source and free of charge. Donating will allow
@@ -221,7 +221,7 @@
 
 	h2 {
 		margin-bottom: 0.5rem;
-		color: var(--white);
+		color: var(--text-one);
 	}
 
 	h3 {
@@ -260,7 +260,7 @@
 
 	.donate-card {
 		text-decoration: none;
-		background-color: var(--grey-ten);
+		background-color: var(--surface-nine);
 		border-radius: 1.5rem;
 		width: 100%;
 		cursor: pointer;
@@ -272,7 +272,7 @@
 			0.3s background-color var(--bezier-one);
 
 		&:hover {
-			background-color: var(--accent-low-opacity);
+			background-color: var(--tertiary);
 		}
 
 		&:active {
@@ -281,7 +281,7 @@
 
 		span {
 			display: block;
-			color: var(--grey-five);
+			color: var(--text-four);
 			font-size: 1.05rem;
 			font-weight: 500;
 			padding: 1.5rem;
@@ -308,12 +308,12 @@
 			font-size: 0.9rem;
 			background-color: transparent;
 			border: none;
-			color: var(--grey-five);
+			color: var(--text-four);
 			cursor: pointer;
 			text-align: left;
 			display: flex;
 			justify-content: space-between;
-			background-color: var(--grey-six);
+			background-color: var(--surface-seven);
 			padding: 0.75rem 1.25rem;
 			transition: filter 0.4s var(--bezier-one);
 

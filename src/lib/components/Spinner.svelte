@@ -24,7 +24,7 @@
 		height: 100%;
 		border-radius: 50%;
 		border: 4.5px solid transparent;
-		border-top-color: var(--accent-color);
+		border-top-color: var(--primary);
 		animation: spinner 0.6s linear infinite;
 	}
 </style>

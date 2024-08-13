@@ -22,7 +22,7 @@
 		float: right;
 		padding: 0.5rem 0.5rem;
 		border-radius: 1.75rem;
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		user-select: none;
 	}
 	@media (max-width: 1700px) {
