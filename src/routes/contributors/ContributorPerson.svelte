@@ -12,7 +12,7 @@
 
 <style>
 	a {
-		color: var(--white);
+		color: var(--text-one);
 		text-decoration: none;
 		cursor: pointer;
 		padding: 0.9rem 1rem;
@@ -21,14 +21,14 @@
 		display: flex;
 		gap: 1rem;
 		align-items: center;
-		border-right: 1px solid var(--grey-three);
-		border-bottom: 1px solid var(--grey-three);
+		border-right: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
 	}
 
 	a:hover {
-		background: var(--grey-one);
-		text-decoration: underline var(--accent-color);
-		color: var(--white);
+		background: var(--surface-three);
+		text-decoration: underline var(--primary);
+		color: var(--text-one);
 	}
 
 	h5 {
@@ -42,7 +42,7 @@
 		border-radius: 50%;
 		height: 32px;
 		width: 32px;
-		background-color: var(--grey-two);
+		background-color: var(--surface-four);
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
 	}

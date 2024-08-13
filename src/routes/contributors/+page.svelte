@@ -74,13 +74,13 @@
 
 	h2 {
 		text-align: center;
-		color: var(--grey-four);
+		color: var(--text-three);
 		margin-bottom: 0.3rem;
 	}
 
 	p {
 		text-align: center;
-		color: var(--grey-four);
+		color: var(--text-three);
 	}
 
 	.text-container {
@@ -88,14 +88,14 @@
 		align-items: center;
 		flex-direction: column;
 		margin-bottom: 2rem;
-		background-color: var(--accent-color);
+		background-color: var(--primary);
 		padding: 2.5rem 1.75rem;
 		border-radius: 20px;
 	}
 
 	a {
 		text-decoration: none;
-		color: var(--grey-four);
+		color: var(--text-three);
 	}
 
 	a::after {
@@ -106,7 +106,7 @@
 	}
 
 	a:hover {
-		text-decoration: underline var(--grey-four);
+		text-decoration: underline var(--text-three);
 	}
 
 	a:hover::after {
