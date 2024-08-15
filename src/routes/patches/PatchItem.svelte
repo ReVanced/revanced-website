@@ -7,8 +7,13 @@
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
-	const hasPatchOptions = !!patch.options?.length;
 	let expanded: boolean = false;
+
+	const options = Object.entries(patch.options).map(([optionKey, option]) => ({
+		optionKey,
+		...option
+	}));
+	const hasPatchOptions = options.length > 0;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -83,7 +88,7 @@
 	{#if expanded && hasPatchOptions}
 		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
-				{#each patch.options as option}
+				{#each options as option}
 					<div class="option">
 						<h5 id="option-title">{option.title}</h5>
 						<h5>
