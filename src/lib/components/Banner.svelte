@@ -46,6 +46,7 @@
 		flex: 1;
 		padding: 0 2rem;
 		gap: 0.55rem;
+		word-wrap: break-word;
 	}
 
 	.banner-text > img {
