@@ -110,7 +110,7 @@
 
 	#option-description {
 		white-space: pre-wrap;
-		word-break: break-all;
+		word-break: break-word;
 	}
 
 	#option-title {
