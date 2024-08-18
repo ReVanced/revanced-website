@@ -18,7 +18,7 @@
 		<img src="../icons/{level}.svg" alt="{level}-icon" />
 		<span><slot /></span>
 	</div>
-	<Button type="text" icon="close" on:click={() => dismiss()}>Dismiss</Button>
+	<Button type="text" icon="close" on:click={dismiss}>Dismiss</Button>
 </div>
 
 <style>
