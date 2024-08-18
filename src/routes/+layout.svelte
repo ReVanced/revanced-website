@@ -20,6 +20,7 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Banner from '$lib/components/Banner.svelte';
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
 	import { events as themeEvents } from '$util/themeEvents';
