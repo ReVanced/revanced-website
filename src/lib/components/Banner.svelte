@@ -8,7 +8,8 @@
 
 <div class="banner-container {level}" bind:this={banner}>
 	<div class="banner-text">
-		<slot />
+		<img src="../icons/{level}.svg" alt="{level}-icon" />
+		<span><slot /></span>
 	</div>
 	<Button type="text" icon="close" on:click={() => banner.remove()}>Dismiss</Button>
 </div>
@@ -33,6 +34,13 @@
 		align-items: center;
 		justify-content: center;
 		flex: 1;
+		padding: 0 2rem;
+		gap: 0.55rem;
+	}
+
+	.banner-text > img {
+		height: 2rem;
+		width: auto;
 	}
 
 	.banner-container.info {
@@ -51,7 +59,8 @@
 		color: #000;
 	}
 
-	.banner-container.warning > :global(button img) {
+	.banner-container.warning > :global(button img),
+	.banner-container.warning > .banner-text > img {
 		filter: grayscale(1) brightness(0); /* Make the icon black */
 	}
 
@@ -65,7 +74,9 @@
 		color: #fff;
 	}
 
-	.banner-container.caution > :global(button img) {
+	.banner-container.caution > :global(button img),
+	.banner-container.caution > .banner-text > img,
+	.banner-container.info > .banner-text > img {
 		filter: grayscale(1) brightness(0) invert(1); /* Make the icon white */
 	}
 
