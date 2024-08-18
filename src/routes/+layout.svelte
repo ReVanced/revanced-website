@@ -98,13 +98,11 @@
 {#await fetch('https://api.revanced.app/v3/ping', { method: 'HEAD' }) then res}
 	{#if !res.ok}
 		<Banner level="caution">
-			<span
-				>The API is currently down! Most of our services will be affected. Check our <a
-					href="https://status.revanced.app/"
-					target="_blank"
-					rel="noopener noreferrer">status page</a
-				> for more info.</span
-			>
+			The API is currently down! Most of our services will be affected. Check our <a
+				href="https://status.revanced.app/"
+				target="_blank"
+				rel="noopener noreferrer">status page</a
+			> for more info.
 		</Banner>
 	{/if}
 {/await}
