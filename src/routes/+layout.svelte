@@ -43,8 +43,20 @@
 		if (allow) location.reload();
 	}
 
-	const fetchLatestAnnouncement = async () =>
-		await (await fetch('https://api.revanced.app/v2/announcements/latest')).json();
+	const fetchLatestAnnouncement = async () => {
+		const onlineAnn = await (
+			await fetch('https://api.revanced.app/v2/announcements/latest')
+		).json();
+
+		return {
+			is_new:
+				onlineAnn['id'] !==
+				// idk what else to put here to prevent a TS exception from trying to parse null
+				parseInt(localStorage.getItem('last_shown_announcement_id') || '69696969'),
+			data: onlineAnn,
+			store_id: () => localStorage.setItem('last_shown_announcement_id', String(onlineAnn['id']))
+		};
+	};
 
 	onMount(() => {
 		new DateTriggerEventHandler(themeEvents);
@@ -98,13 +110,10 @@
 	</script>
 </svelte:head>
 
-{#await fetchLatestAnnouncement() then data}
-	<!-- ====================================================================== idk what else to put here to prevent an exception from trying to parse null -->
-	{#if data['id'] !== parseInt(localStorage.getItem('last_shown_announcement_id') || '69696969')}
-		<Banner
-			on:dismissed={() => localStorage.setItem('last_shown_announcement_id', String(data['id']))}
-		>
-			{data['title']}
+{#await fetchLatestAnnouncement() then ann}
+	{#if ann.is_new}
+		<Banner on:dismissed={ann.store_id}>
+			{ann.data['title']}
 			<!-- TODO: change href to announcement page -->
 			<a href="." target="_blank" rel="noopener noreferrer">Read more</a>.
 		</Banner>
