@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import Button from './Button.svelte';
 
 	export let level: 'info' | 'warning' | 'caution' = 'info';
 
+	const dispatch = createEventDispatcher();
 	let banner: Element;
+
+	const dismiss = () => {
+		banner.remove();
+		dispatch('dismissed');
+	};
 </script>
 
 <div class="banner-container {level}" bind:this={banner}>
@@ -11,7 +18,7 @@
 		<img src="../icons/{level}.svg" alt="{level}-icon" />
 		<span><slot /></span>
 	</div>
-	<Button type="text" icon="close" on:click={() => banner.remove()}>Dismiss</Button>
+	<Button type="text" icon="close" on:click={() => dismiss()}>Dismiss</Button>
 </div>
 
 <style>
