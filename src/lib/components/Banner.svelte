@@ -15,6 +15,16 @@
 </div>
 
 <style>
+	.banner-text :global(a) {
+		color: inherit;
+		text-decoration: none;
+		font-weight: 700;
+	}
+
+	.banner-text :global(a:hover) {
+		text-decoration: underline;
+	}
+
 	.banner-container {
 		margin: 0;
 		padding: 1.5rem 1.7rem;
