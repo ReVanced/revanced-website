@@ -46,16 +46,14 @@
 		if (allow) location.reload();
 	}
 
-	const fetchLatestAnnouncement = async () => {
-		return {
-			is_new:
-				data.online_announcement['id'] !==
-				// idk what else to put here to prevent a TS exception from trying to parse null
-				parseInt(localStorage.getItem('last_shown_announcement_id') || '69696969'),
-			data: data.online_announcement,
-			store_id: () =>
-				localStorage.setItem('last_shown_announcement_id', String(data.online_announcement['id']))
-		};
+	const announcement = {
+		is_new:
+			data.online_announcement['id'] !==
+			// idk what else to put here to prevent a TS exception from trying to parse null
+			parseInt(localStorage.getItem('last_shown_announcement_id') || '69696969'),
+		data: data.online_announcement,
+		store_id: () =>
+			localStorage.setItem('last_shown_announcement_id', String(data.online_announcement['id']))
 	};
 
 	onMount(() => {
@@ -110,15 +108,13 @@
 	</script>
 </svelte:head>
 
-{#await fetchLatestAnnouncement() then ann}
-	{#if ann.is_new}
-		<Banner on:dismissed={ann.store_id}>
-			{ann.data['title']}
-			<!-- TODO: change href to announcement page -->
-			<a href="." target="_blank" rel="noopener noreferrer">Read more</a>.
-		</Banner>
-	{/if}
-{/await}
+{#if announcement.is_new}
+	<Banner on:dismissed={announcement.store_id}>
+		{announcement.data['title']}
+		<!-- TODO: change href to announcement page -->
+		<a href="." target="_blank" rel="noopener noreferrer">Read more</a>.
+	</Banner>
+{/if}
 
 {#if !data.ping.ok}
 	<Banner level="caution">
