@@ -68,13 +68,13 @@
 	}
 
 	.banner-container.warning {
-		background-color: var(--yellow-one);
-		border-bottom: 2px solid var(--yellow-two);
-		color: #000;
+		background-color: var(--red-four);
+		border-bottom: 2px solid var(--red-three);
+		color: var(--red-two);
 	}
 
 	.banner-container.warning > :global(button) {
-		color: #000;
+		color: var(--red-two);
 	}
 
 	.banner-container.warning > :global(button img),
@@ -85,11 +85,11 @@
 	.banner-container.caution {
 		background-color: var(--red-two);
 		border-bottom: 2px solid var(--red-three);
-		color: #fff;
+		color: var(--red-five);
 	}
 
 	.banner-container.caution > :global(button) {
-		color: #fff;
+		color: var(--red-five);
 	}
 
 	.banner-container.caution > :global(button img),
