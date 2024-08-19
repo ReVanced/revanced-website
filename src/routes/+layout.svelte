@@ -25,6 +25,9 @@
 	import RouterEvents from '$data/RouterEvents';
 	import { events as themeEvents } from '$util/themeEvents';
 
+	// https://kit.svelte.dev/docs/load#layout-data
+	export let data;
+
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -44,17 +47,14 @@
 	}
 
 	const fetchLatestAnnouncement = async () => {
-		const onlineAnn = await (
-			await fetch('https://api.revanced.app/v2/announcements/latest')
-		).json();
-
 		return {
 			is_new:
-				onlineAnn['id'] !==
+				data.online_announcement['id'] !==
 				// idk what else to put here to prevent a TS exception from trying to parse null
 				parseInt(localStorage.getItem('last_shown_announcement_id') || '69696969'),
-			data: onlineAnn,
-			store_id: () => localStorage.setItem('last_shown_announcement_id', String(onlineAnn['id']))
+			data: data.online_announcement,
+			store_id: () =>
+				localStorage.setItem('last_shown_announcement_id', String(data.online_announcement['id']))
 		};
 	};
 
@@ -120,17 +120,15 @@
 	{/if}
 {/await}
 
-{#await fetch('https://api.revanced.app/v3/ping', { method: 'HEAD' }) then res}
-	{#if !res.ok}
-		<Banner level="caution">
-			The API is currently down! Most of our services will be affected. Check our <a
-				href="https://status.revanced.app/"
-				target="_blank"
-				rel="noopener noreferrer">status page</a
-			> for more info.
-		</Banner>
-	{/if}
-{/await}
+{#if !data.ping.ok}
+	<Banner level="caution">
+		The API is currently down! Most of our services will be affected. Check our <a
+			href="https://status.revanced.app/"
+			target="_blank"
+			rel="noopener noreferrer">status page</a
+		> for more info.
+	</Banner>
+{/if}
 
 <QueryClientProvider client={queryClient}>
 	<NavHost />
