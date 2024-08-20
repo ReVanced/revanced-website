@@ -44,6 +44,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1.3rem;
 	}
 
 	.banner-text {
@@ -51,7 +52,6 @@
 		align-items: center;
 		justify-content: center;
 		flex: 1;
-		padding: 0 2rem;
 		gap: 0.55rem;
 		word-wrap: break-word;
 	}
@@ -100,5 +100,16 @@
 
 	.banner-container > :global(button):hover {
 		text-decoration: underline;
+	}
+
+	@media screen and (max-width: 767px) {
+		.banner-container {
+			flex-direction: column;
+			padding: 1.1rem 1.3rem;
+		}
+
+		.banner-container > :global(button) {
+			align-self: flex-end;
+		}
 	}
 </style>
