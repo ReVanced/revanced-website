@@ -22,6 +22,10 @@
 </div>
 
 <style>
+	* {
+		transition: none;
+	}
+
 	.banner-text :global(a) {
 		color: inherit;
 		text-decoration: none;
@@ -68,13 +72,13 @@
 	}
 
 	.banner-container.warning {
-		background-color: var(--red-four);
-		border-bottom: 2px solid var(--red-three);
-		color: var(--red-two);
+		background-color: var(--yellow-three);
+		border-bottom: 2px solid var(--yellow-four);
+		color: var(--yellow-one);
 	}
 
 	.banner-container.warning > :global(button) {
-		color: var(--red-two);
+		color: var(--yellow-one);
 	}
 
 	.banner-container.warning > :global(button img),
@@ -85,11 +89,11 @@
 	.banner-container.caution {
 		background-color: var(--red-two);
 		border-bottom: 2px solid var(--red-three);
-		color: var(--red-five);
+		color: var(--red-four);
 	}
 
 	.banner-container.caution > :global(button) {
-		color: var(--red-five);
+		color: var(--red-four);
 	}
 
 	.banner-container.caution > :global(button img),

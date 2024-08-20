@@ -73,11 +73,14 @@ body {
 	--surface-nine: hsl(calc(var(--hue, 206) + 24), 9.5%, 17.5%);
 
 	--red-one: hsl(333, 84%, 62%);
-
 	--red-two: hsl(357.14, 100%, 20.59%);
 	--red-three: hsl(355.92, 100%, 28.82%);
-	--red-four: hsl(6.43, 100%, 83.53%);
-	--red-five: hsl(5.85, 100%, 91.96%);
+	--red-four: hsl(5.85, 100%, 91.96%);
+
+	--yellow-one: hsl(0, 0%, 0%);
+	--yellow-two: hsl(49.57, 100%, 4.51%);
+	--yellow-three: hsl(50.3, 39.13%, 50.39%);
+	--yellow-four: hsl(49.64, 85.94%, 74.9%);
 
 	--bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	--drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
