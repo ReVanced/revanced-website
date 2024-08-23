@@ -100,11 +100,11 @@
 
 {#if !data.ping.ok}
 	<Banner level="caution">
-		The API is currently down! Most of our services will be affected. Check our <a
+		The API is currently not responding! Some services may not work correctly. Check the <a
 			href="https://status.revanced.app/"
 			target="_blank"
 			rel="noopener noreferrer">status page</a
-		> for more info.
+		> for updates.
 	</Banner>
 {/if}
 
