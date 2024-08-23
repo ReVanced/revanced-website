@@ -22,7 +22,9 @@
 </div>
 
 <style>
-	* {
+	.banner-container,
+	.banner-container *,
+	.banner-container :global(*) {
 		transition: none;
 	}
 
@@ -72,13 +74,13 @@
 	}
 
 	.banner-container.warning {
-		background-color: var(--yellow-three);
-		border-bottom: 2px solid var(--yellow-four);
-		color: var(--yellow-one);
+		background-color: var(--yellow-one);
+		border-bottom: 2px solid var(--yellow-two);
+		color: #000;
 	}
 
 	.banner-container.warning > :global(button) {
-		color: var(--yellow-one);
+		color: #000;
 	}
 
 	.banner-container.warning > :global(button img),
@@ -89,17 +91,17 @@
 	.banner-container.caution {
 		background-color: var(--red-two);
 		border-bottom: 2px solid var(--red-three);
-		color: var(--red-four);
+		color: #000;
 	}
 
 	.banner-container.caution > :global(button) {
-		color: var(--red-four);
+		color: #000;
 	}
 
 	.banner-container.caution > :global(button img),
 	.banner-container.caution > .banner-text > img,
 	.banner-container.info > .banner-text > img {
-		filter: grayscale(1) brightness(0) invert(1); /* Make the icon white */
+		filter: grayscale(1) brightness(0); /* Make the icon white */
 	}
 
 	.banner-container > :global(button):hover {
