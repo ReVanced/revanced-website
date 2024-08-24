@@ -7,19 +7,23 @@
 	const dispatch = createEventDispatcher();
 	let banner: Element;
 
-	const dismiss = () => {
-		banner.remove();
+	const removeElement = (e: AnimationEvent) => {
+		if (e.animationName.includes('swipeUp')) (e.target as Element).remove();
+	};
+
+	const dismissBanner = () => {
+		banner.classList.add('closed');
 		dispatch('dismissed');
 	};
 </script>
 
-<div class="banner-container" bind:this={banner}>
+<div class="banner-container" bind:this={banner} on:animationend={removeElement}>
 	<div class="banner {level}">
 		<div class="banner-text">
 			<img src="../icons/{level}.svg" alt="{level}-icon" />
 			<span><slot /></span>
 		</div>
-		<Button type="text" icon="close" on:click={dismiss}>Dismiss</Button>
+		<Button type="text" icon="close" on:click={dismissBanner}>Dismiss</Button>
 	</div>
 </div>
 
@@ -47,6 +51,10 @@
 		justify-content: center;
 		width: 100%;
 		animation: dropDown var(--bezier-one) 0.7s forwards;
+	}
+
+	.banner-container.closed {
+		animation: swipeUp var(--bezier-one) 1.5s forwards;
 	}
 
 	.banner {
@@ -130,6 +138,15 @@
 		}
 		100% {
 			top: 0;
+		}
+	}
+
+	@keyframes swipeUp {
+		0% {
+			top: 0;
+		}
+		100% {
+			top: -100%;
 		}
 	}
 </style>
