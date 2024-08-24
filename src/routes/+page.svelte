@@ -1,9 +1,16 @@
 <script>
+	import { createQuery } from '@tanstack/svelte-query';
+
+	import { queries } from '$data/api';
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
 	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import Query from '$lib/components/Query.svelte';
+	import Banner from '$lib/components/Banner.svelte';
+
+	const query = createQuery(['ping'], queries.ping);
 </script>
 
 <Head
@@ -118,6 +125,18 @@
 />
 
 <main>
+	<Query {query} let:data>
+		{#if !data}
+			<Banner level="caution">
+				The API is currently unresponsive, and some services may not work correctly. Check the <a
+					href="https://status.revanced.app/"
+					target="_blank"
+					rel="noopener noreferrer">status page</a
+				> for updates.
+			</Banner>
+		{/if}
+	</Query>
+
 	<div class="wrap">
 		<div class="wrappezoid">
 			<Home />
