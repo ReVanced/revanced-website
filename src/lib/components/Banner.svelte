@@ -69,13 +69,11 @@
 
 	.banner-container.info {
 		background-color: var(--surface-four);
-		border-bottom: 2px solid var(--primary);
 		color: var(--text-one);
 	}
 
 	.banner-container.warning {
 		background-color: var(--yellow-one);
-		border-bottom: 2px solid var(--yellow-two);
 		color: #000;
 	}
 
@@ -90,7 +88,6 @@
 
 	.banner-container.caution {
 		background-color: var(--red-two);
-		border-bottom: 2px solid var(--red-three);
 		color: #000;
 	}
 
