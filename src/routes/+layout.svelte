@@ -100,7 +100,7 @@
 
 {#if !data.ping.ok}
 	<Banner level="caution">
-		The API is currently not responding! Some services may not work correctly. Check the <a
+		The API is currently unresponsive, and some services may not work correctly. Check the <a
 			href="https://status.revanced.app/"
 			target="_blank"
 			rel="noopener noreferrer">status page</a
