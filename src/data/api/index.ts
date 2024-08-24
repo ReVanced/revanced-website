@@ -66,7 +66,7 @@ async function about(): Promise<AboutData> {
 }
 
 async function ping(): Promise<boolean> {
-	const res = await fetch('v3/ping', { method: 'HEAD' });
+	const res = await fetch(`${settings.api_base_url()}/v3/ping`, { method: 'HEAD' });
 	return res.ok;
 }
 
