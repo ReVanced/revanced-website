@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
+	import { createQuery } from '@tanstack/svelte-query';
 	import { QueryClient } from '@tanstack/query-core';
 	import { persistQueryClient } from '@tanstack/query-persist-client-core';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
@@ -21,12 +22,10 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Banner from '$lib/components/Banner.svelte';
-	import { staleTime } from '$data/api';
+	import Query from '$lib/components/Query.svelte';
+	import { staleTime, queries } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
 	import { events as themeEvents } from '$util/themeEvents';
-
-	// https://kit.svelte.dev/docs/load#layout-data
-	export let data;
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -77,6 +76,8 @@
 		},
 		false
 	);
+
+	const query = createQuery(['ping'], queries.ping);
 </script>
 
 <svelte:head>
@@ -98,18 +99,21 @@
 	</script>
 </svelte:head>
 
-{#if !data.ping.ok}
-	<Banner level="caution">
-		The API is currently unresponsive, and some services may not work correctly. Check the <a
-			href="https://status.revanced.app/"
-			target="_blank"
-			rel="noopener noreferrer">status page</a
-		> for updates.
-	</Banner>
-{/if}
-
 <QueryClientProvider client={queryClient}>
 	<NavHost />
+
+	<Query {query} let:data>
+		{#if !data}
+			<Banner level="caution">
+				The API is currently unresponsive, and some services may not work correctly. Check the <a
+					href="https://status.revanced.app/"
+					target="_blank"
+					rel="noopener noreferrer">status page</a
+				> for updates.
+			</Banner>
+		{/if}
+	</Query>
+
 	<Dialogue bind:modalOpen={showConsentModal} notDismissible>
 		<svelte:fragment slot="title">It's your choice</svelte:fragment>
 		<svelte:fragment slot="description">
