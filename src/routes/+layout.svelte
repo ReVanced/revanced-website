@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
+	import { createQuery } from '@tanstack/svelte-query';
 	import { QueryClient } from '@tanstack/query-core';
 	import { persistQueryClient } from '@tanstack/query-persist-client-core';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
@@ -20,7 +21,9 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import { staleTime } from '$data/api';
+	import Banner from '$lib/components/Banner.svelte';
+	import Query from '$lib/components/Query.svelte';
+	import { staleTime, queries } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
 	import { events as themeEvents } from '$util/themeEvents';
 
@@ -73,6 +76,8 @@
 		},
 		false
 	);
+
+	const pingQuery = () => createQuery(['ping'], queries.ping);
 </script>
 
 <svelte:head>
@@ -95,6 +100,18 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
+	<Query query={pingQuery()} let:data>
+		{#if !data}
+			<Banner level="caution">
+				The API is currently unresponsive, and some services may not work correctly. Check the <a
+					href="https://status.revanced.app/"
+					target="_blank"
+					rel="noopener noreferrer">status page</a
+				> for updates.
+			</Banner>
+		{/if}
+	</Query>
+
 	<NavHost />
 
 	<Dialogue bind:modalOpen={showConsentModal} notDismissible>
