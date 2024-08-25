@@ -49,6 +49,9 @@
 		display: flex;
 		justify-content: center;
 		width: 100%;
+	}
+
+	.banner-container:not(.permanent) {
 		animation: dropDown var(--bezier-one) 0.7s forwards;
 	}
 
