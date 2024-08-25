@@ -102,7 +102,7 @@
 <QueryClientProvider client={queryClient}>
 	<Query query={pingQuery()} let:data>
 		{#if !data}
-			<Banner level="caution">
+			<Banner level="caution" permanent>
 				The API is currently unresponsive and some services may not work correctly. Check the <a
 					href="https://status.revanced.app/"
 					target="_blank"

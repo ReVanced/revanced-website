@@ -5,15 +5,15 @@
 	export let level: 'info' | 'warning' | 'caution' = 'info';
 
 	const dispatch = createEventDispatcher();
-	let banner: Element;
+	let closed: boolean = false;
 
 	const dismissBanner = () => {
-		banner.classList.add('closed');
+		closed = true;
 		dispatch('dismissed');
 	};
 </script>
 
-<div class="banner-container" bind:this={banner}>
+<div class="banner-container" class:closed>
 	<div class="banner {level}">
 		<div class="banner-text">
 			<img src="../icons/{level}.svg" alt="{level}-icon" />
