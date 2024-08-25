@@ -3,6 +3,7 @@
 	import Button from './Button.svelte';
 
 	export let level: 'info' | 'warning' | 'caution' = 'info';
+	export let permanent: boolean = false;
 
 	const dispatch = createEventDispatcher();
 	let closed: boolean = false;
@@ -13,7 +14,7 @@
 	};
 </script>
 
-<div class="banner-container" class:closed>
+<div class="banner-container" class:closed class:permanent>
 	<div class="banner {level}">
 		<div class="banner-text">
 			<img src="../icons/{level}.svg" alt="{level}-icon" />
