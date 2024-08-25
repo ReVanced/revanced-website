@@ -44,6 +44,8 @@
 	}
 
 	.banner-container {
+		z-index: 999;
+		position: fixed;
 		display: flex;
 		justify-content: center;
 		width: 100%;
@@ -51,8 +53,6 @@
 
 	.banner-container:not(.permanent) {
 		animation: dropDown var(--bezier-one) 0.7s forwards;
-		position: fixed;
-		z-index: 999;
 	}
 
 	.banner-container.closed {

@@ -1,11 +1,9 @@
-<script lang="ts">
+<script>
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
 	import SocialHost from '$layout/Hero/SocialHost.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import Head from '$lib/components/Head.svelte';
-
-	let permanentBannerPresent: boolean = false;
 </script>
 
 <Head
@@ -119,7 +117,7 @@
 	]}
 />
 
-<main class={permanentBannerPresent ? 'permanent-banner' : ''}>
+<main>
 	<div class="wrap">
 		<div class="wrappezoid">
 			<Home />
@@ -139,10 +137,7 @@
 	.wrap {
 		margin-inline: auto;
 		width: min(87%, 100rem);
-		margin-top: 2.5rem;
-	}
-	main.permanent-banner .wrap {
-		margin-top: 4rem !important;
+		margin-top: 7rem;
 	}
 	.wrappezoid {
 		height: calc(100vh - 225px);
@@ -151,9 +146,6 @@
 		justify-content: center;
 		gap: 22rem;
 		align-items: center;
-	}
-	main.permanent-banner .wrappezoid {
-		height: calc(100vh - 265px) !important;
 	}
 	@media (max-width: 1700px) {
 		.wrappezoid {
