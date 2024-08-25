@@ -20,14 +20,16 @@
 			<img src="../icons/{level}.svg" alt="{level}-icon" />
 			<span><slot /></span>
 		</div>
-		<Button type="text" icon="close" on:click={dismissBanner}>Dismiss</Button>
+		{#if !permanent}
+			<Button type="text" icon="close" on:click={dismissBanner}>Dismiss</Button>
+		{/if}
 	</div>
 </div>
 
 <style>
-	.banner,
-	.banner *,
-	.banner :global(*) {
+	.banner-container,
+	.banner-container *,
+	.banner-container :global(*) {
 		transition: none;
 	}
 
@@ -54,6 +56,10 @@
 		animation: swipeUp var(--bezier-one) 1.5s forwards;
 	}
 
+	.banner-container.permanent {
+		font-size: 0.87rem;
+	}
+
 	.banner {
 		margin: 0;
 		padding: 1.5rem 1.7rem;
@@ -64,6 +70,13 @@
 		gap: 1.3rem;
 		margin: 0.7rem 1rem;
 		border-radius: 1rem;
+	}
+
+	.banner-container.permanent > .banner {
+		padding: 0.5rem 0.7rem;
+		margin: 0;
+		border-radius: 0;
+		width: 100%;
 	}
 
 	.banner-text {
@@ -78,6 +91,10 @@
 	.banner-text > img {
 		height: 2rem;
 		width: auto;
+	}
+
+	.banner-container.permanent .banner-text > img {
+		height: 1.4rem;
 	}
 
 	.banner.info {
