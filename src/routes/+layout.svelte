@@ -100,19 +100,21 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
-	<Query query={pingQuery()} let:data>
-		{#if !data}
-			<Banner level="caution" permanent>
-				The API is currently unresponsive and some services may not work correctly. Check the <a
-					href="https://status.revanced.app/"
-					target="_blank"
-					rel="noopener noreferrer">status page</a
-				> for updates.
-			</Banner>
-		{/if}
-	</Query>
+	<div id="top">
+		<Query query={pingQuery()} let:data>
+			{#if !data}
+				<Banner level="caution" permanent>
+					The API is currently unresponsive and some services may not work correctly. Check the <a
+						href="https://status.revanced.app/"
+						target="_blank"
+						rel="noopener noreferrer">status page</a
+					> for updates.
+				</Banner>
+			{/if}
+		</Query>
 
-	<NavHost />
+		<NavHost />
+	</div>
 
 	<Dialogue bind:modalOpen={showConsentModal} notDismissible>
 		<svelte:fragment slot="title">It's your choice</svelte:fragment>
@@ -135,3 +137,12 @@
 	</div>
 	<!-- <Footer> -->
 </QueryClientProvider>
+
+<style>
+	#top {
+		position: sticky;
+		top: 0;
+		width: 100%;
+		z-index: 600;
+	}
+</style>

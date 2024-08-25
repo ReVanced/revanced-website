@@ -207,7 +207,7 @@
 	}
 
 	.search {
-		padding-top: 5rem;
+		padding-top: 0.3rem;
 		padding-bottom: 1.25rem;
 		background-color: var(--surface-eight);
 	}

@@ -205,7 +205,7 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		margin-top: 7rem;
+		margin-top: 2.5rem;
 
 		// support revanced and heart thingy
 		section {

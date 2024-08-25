@@ -180,14 +180,14 @@
 	}
 
 	nav {
-		position: fixed;
-		top: 0;
+		/* position: fixed; */
+		/* top: 0; */
 		display: flex;
 		gap: 2rem;
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem 2rem;
-		z-index: 666;
+		/* z-index: 666; */
 		height: 70px;
 		background-color: var(--surface-eight);
 		width: 100%;
