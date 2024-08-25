@@ -7,17 +7,13 @@
 	const dispatch = createEventDispatcher();
 	let banner: Element;
 
-	const removeElement = (e: AnimationEvent) => {
-		if (e.animationName.includes('swipeUp')) (e.target as Element).remove();
-	};
-
 	const dismissBanner = () => {
 		banner.classList.add('closed');
 		dispatch('dismissed');
 	};
 </script>
 
-<div class="banner-container" bind:this={banner} on:animationend={removeElement}>
+<div class="banner-container" bind:this={banner}>
 	<div class="banner {level}">
 		<div class="banner-text">
 			<img src="../icons/{level}.svg" alt="{level}-icon" />
