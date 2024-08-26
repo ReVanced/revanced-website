@@ -44,8 +44,6 @@
 	}
 
 	.banner-container {
-		z-index: 999;
-		position: fixed;
 		display: flex;
 		justify-content: center;
 		width: 100%;
