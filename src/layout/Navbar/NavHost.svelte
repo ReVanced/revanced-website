@@ -217,6 +217,7 @@
 
 	#nav-container {
 		position: sticky;
+		top: 0;
 		z-index: 666;
 		width: 100%;
 	}
