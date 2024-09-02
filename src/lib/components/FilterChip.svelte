@@ -18,9 +18,9 @@
 	button {
 		font-family: var(--font-two);
 		border: none;
-		border: 1.5px solid var(--grey-three);
+		border: 1.5px solid var(--border);
 		background-color: transparent;
-		color: var(--grey-five);
+		color: var(--text-four);
 		height: 32px;
 		padding: 0 16px;
 		border-radius: 8px;
@@ -32,8 +32,8 @@
 	}
 
 	.selected {
-		background-color: var(--accent-low-opacity);
-		color: var(--accent-color);
+		background-color: var(--tertiary);
+		color: var(--primary);
 	}
 
 	img {

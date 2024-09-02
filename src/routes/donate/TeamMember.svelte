@@ -19,11 +19,11 @@
 	target="_blank"
 	in:fly|global={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
 >
-	<img src={member.avatar_url} alt="{member.login}'s profile picture." />
+	<img src={member.avatar_url} alt="{member.name}'s profile picture." />
 
 	<div class="member-text">
 		<div class="member-title">
-			<h4>{member.login}</h4>
+			<h4>{member.name}</h4>
 			{#if member.keys.length > 0}
 				<div class="verified-badge">
 					<svg height="16" width="16" class="verified-icon">
@@ -34,7 +34,7 @@
 					<div class="tooltip">
 						<p>
 							<b>
-								{member.login}
+								{member.name}
 							</b>
 							is verified with {member.keys.length == 1 ? 'this GPG key' : 'these GPG keys'}:
 						</p>

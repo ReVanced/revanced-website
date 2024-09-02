@@ -23,7 +23,7 @@
 		background-color: transparent;
 	}
 	.menu:hover::-webkit-scrollbar-thumb {
-		background-color: var(--accent-color);
+		background-color: var(--primary);
 	}
 
 	.slot {
@@ -37,7 +37,7 @@
 
 	h6 {
 		margin-bottom: 1rem;
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	@media (max-width: 767px) {

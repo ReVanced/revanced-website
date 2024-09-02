@@ -46,13 +46,13 @@
 		left: 0;
 		right: 0;
 		bottom: 2rem;
-		background-color: var(--white);
+		background-color: var(--surface-one);
 		transition: all 0.4s var(--bezier-one);
 		box-shadow: var(--drop-shadow-one);
 	}
 
 	.text {
-		color: var(--grey-two);
+		color: var(--text-two);
 		font-weight: 500;
 		font-size: 14px;
 	}

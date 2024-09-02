@@ -16,19 +16,23 @@
 
 	const client = useQueryClient();
 
+	function reload() {
+		location.reload();
+	}
+
 	function clear_and_reload() {
 		client.clear();
 		// `client.clear()` does technically do this for us, but it takes a while.
 		localStorage.clear();
 
-		location.reload();
+		reload();
 	}
 
 	let url = settings.api_base_url();
 
 	function save() {
 		settings.set_api_base_url(url);
-		clear_and_reload();
+		reload();
 	}
 
 	function reset() {
@@ -74,12 +78,10 @@
 					<Navigation href="/" label="Home">Home</Navigation>
 					<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
-					<Navigation queryKey="repositories" href="/contributors" label="Contributors">
+					<Navigation queryKey="contributors" href="/contributors" label="Contributors">
 						Contributors
 					</Navigation>
-					<Navigation queryKey={['donate', 'team']} href="/donate" label="Donate">
-						Donate
-					</Navigation>
+					<Navigation queryKey={['about', 'team']} href="/donate" label="Donate">Donate</Navigation>
 				</ul>
 			</div>
 			<div id="secondary-navigation">
@@ -130,7 +132,7 @@
 	</div>
 
 	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={clear_and_reload} label="Clear Cache Button">Clear cache</Button>
+		<Button type="text" on:click={clear_and_reload} label="Reset Button">Reset</Button>
 		<Button type="text" on:click={save} label="Save Button">Save</Button>
 	</svelte:fragment>
 </Modal>
@@ -141,11 +143,11 @@
 	}
 
 	path {
-		fill: var(--grey-five);
+		fill: var(--surface-six);
 	}
 
 	button:hover path {
-		fill: var(--accent-color-two);
+		fill: var(--secondary);
 	}
 
 	button {
@@ -187,7 +189,7 @@
 		padding: 1rem 2rem;
 		z-index: 666;
 		height: 70px;
-		background-color: var(--grey-seven);
+		background-color: var(--surface-eight);
 		width: 100%;
 	}
 
@@ -248,7 +250,7 @@
 			top: 0px;
 			border-radius: 0px 24px 24px 0px;
 			left: 0px;
-			background-color: var(--grey-seven);
+			background-color: var(--surface-eight);
 			padding: 1rem;
 			padding-top: 6rem;
 			z-index: 100;
@@ -301,7 +303,7 @@
 	.menu-btn__burger::after {
 		width: 24px;
 		height: 2px;
-		background: var(--grey-five);
+		background: var(--surface-six);
 		transition: all 0.3s var(--bezier-one);
 	}
 
@@ -334,9 +336,9 @@
 		left: -300px;
 		border-radius: 100px;
 		text-decoration: none;
-		background-color: var(--accent-color);
+		background-color: var(--primary);
 		z-index: 10;
-		color: var(--grey-four);
+		color: var(--text-three);
 		font-weight: 600;
 		font-size: 0.95rem;
 		padding: 16px 24px;
