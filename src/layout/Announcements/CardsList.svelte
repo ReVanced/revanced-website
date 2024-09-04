@@ -1,18 +1,21 @@
-<script>
+<script lang="ts">
 	import { createQuery } from '@tanstack/svelte-query';
-	import { onMount } from 'svelte';
+	import { derived, readable, type Readable } from 'svelte/store';
+	import { building } from '$app/environment';
+	import { page } from '$app/stores';
 
 	import Query from '$lib/components/Query.svelte';
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
 	import ChannelChip from './ChannelChip.svelte';
 
-	$: query = createQuery(queries.announcements());
+	let searchParams: Readable<URLSearchParams>;
 
-	// onMount(() => {
-	// 	const channel = new URLSearchParams(window.location.search).get('channel');
-	// 	if (channel) query = createQuery(queries.announcements(channel));
-	// });
+	if (building) searchParams = readable(new URLSearchParams());
+	else searchParams = derived(page, ($page) => $page.url.searchParams);
+
+	$: query = createQuery(queries.announcements());
+	$: channel = $searchParams.get('channel');
 </script>
 
 <div class="announcements-list">
