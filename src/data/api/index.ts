@@ -10,7 +10,8 @@ import type {
 	CryptoWallet,
 	Social,
 	About,
-	CompatiblePackage
+	CompatiblePackage,
+	Announcement
 } from '$lib/types';
 
 export type ContributorsData = { contributables: Contributable[] };
@@ -20,10 +21,14 @@ export type TeamData = { members: TeamMember[] };
 export type AboutData = { about: About };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
 export type SocialsData = { socials: Social[] };
+export type AnnouncementsData = { announcements: Announcement[] };
+
+function build_url(endpoint: string) {
+	return `${settings.api_base_url()}/${endpoint}`;
+}
 
 async function get_json(endpoint: string) {
-	const url = `${settings.api_base_url()}/${endpoint}`;
-	return await fetch(url).then((r) => r.json());
+	return await fetch(build_url(endpoint)).then((r) => r.json());
 }
 
 async function contributors(): Promise<ContributorsData> {
@@ -65,31 +70,67 @@ async function about(): Promise<AboutData> {
 	return { about: json };
 }
 
+async function announcements(channel?: string): Promise<AnnouncementsData> {
+	// const json = await get_json(channel ? `v3/announcements/${channel}` : 'v3/announcements');
+	// return { announcements: json.reverse() };
+	return {
+		announcements: [
+			{
+				author: 'madkarmaa',
+				channel: 'test',
+				content: 'test content',
+				createdAt: {
+					value: '2024-09-03T15:53:01.532Z'
+				},
+				id: 69,
+				level: 69,
+				title: 'test title'
+			},
+			{
+				author: 'balls',
+				channel: 'test2',
+				content: 'test content 2',
+				createdAt: {
+					value: '2024-09-03T15:54:31.912Z'
+				},
+				id: 420,
+				level: 420,
+				title: 'test title 2'
+			}
+		]
+	};
+}
+
 export const staleTime = 5 * 60 * 1000;
 export const queries = {
-	manager: {
+	manager: () => ({
 		queryKey: ['manager'],
 		queryFn: manager,
 		staleTime
-	},
-	patches: {
+	}),
+	patches: () => ({
 		queryKey: ['patches'],
 		queryFn: patches,
 		staleTime
-	},
-	contributors: {
+	}),
+	contributors: () => ({
 		queryKey: ['contributors'],
 		queryFn: contributors,
 		staleTime
-	},
-	team: {
+	}),
+	team: () => ({
 		queryKey: ['team'],
 		queryFn: team,
 		staleTime
-	},
-	about: {
+	}),
+	about: () => ({
 		queryKey: ['info'],
 		queryFn: about,
 		staleTime
-	}
+	}),
+	announcements: (channel?: string) => ({
+		queryKey: ['announcements'],
+		queryFn: () => announcements(channel),
+		staleTime
+	})
 };

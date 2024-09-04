@@ -4,7 +4,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
 
-	const aboutQuery = createQuery(['about'], queries.about);
+	const aboutQuery = createQuery(queries.about());
 </script>
 
 <div class="social-host">

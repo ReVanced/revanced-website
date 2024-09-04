@@ -1,3 +1,17 @@
+export interface Announcement {
+	archivedAt?: string;
+	attachmentUrls?: string[];
+	author: string;
+	channel: string;
+	content: string;
+	createdAt: {
+		value: string;
+	};
+	id: number;
+	level: number;
+	title: string;
+}
+
 export interface Contributor {
 	name: string;
 	avatar_url: string;
