@@ -20,7 +20,7 @@
 
 <div class="announcements-list">
 	<Query {query} let:data>
-		{#each data.announcements as ann (ann.id)}
+		{#each channel ? data.announcements.filter((a) => a.channel === channel) : data.announcements as ann (ann.id)}
 			<AnnouncementCard title={ann.title} author={ann.author} created_at={ann.createdAt.value}>
 				<svelte:fragment slot="channel">
 					<ChannelChip channel={ann.channel} />
