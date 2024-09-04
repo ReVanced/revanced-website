@@ -78,7 +78,7 @@ async function announcements(channel?: string): Promise<AnnouncementsData> {
 			{
 				author: 'madkarmaa',
 				channel: 'test',
-				content: 'test content',
+				content: 'short content',
 				createdAt: {
 					value: '2024-09-03T15:53:01.532Z'
 				},
@@ -89,7 +89,8 @@ async function announcements(channel?: string): Promise<AnnouncementsData> {
 			{
 				author: 'balls',
 				channel: 'test2',
-				content: 'test content 2',
+				content:
+					'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis.',
 				createdAt: {
 					value: '2024-09-03T15:54:31.912Z'
 				},

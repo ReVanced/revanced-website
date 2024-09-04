@@ -25,6 +25,10 @@
 				<svelte:fragment slot="channel">
 					<ChannelChip channel={ann.channel} />
 				</svelte:fragment>
+				<svelte:fragment slot="content">
+					<!-- @html since some if not most announcements contain HTML -->
+					{@html ann.content}
+				</svelte:fragment>
 			</AnnouncementCard>
 		{/each}
 	</Query>
