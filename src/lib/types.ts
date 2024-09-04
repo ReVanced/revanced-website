@@ -49,7 +49,12 @@ export interface TeamMember {
 	avatar_url: string;
 	url: string;
 	bio?: string;
-	keys: string[];
+	gpg_key: GpgKey;
+}
+
+expose interface GpgKey {
+	id: string;
+	url: string;
 }
 
 export interface CryptoWallet {
