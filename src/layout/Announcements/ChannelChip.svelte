@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { derived, readable, type Readable } from 'svelte/store';
+	import { building } from '$app/environment';
+	import { page } from '$app/stores';
 
 	export let channel: string;
+	let searchParams: Readable<URLSearchParams>;
 
-	$: selected = false;
+	if (building) searchParams = readable(new URLSearchParams());
+	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
-	onMount(() => {
-		const params = new URLSearchParams(window.location.search);
-		if (params.get('channel') === channel) selected = true;
-	});
+	$: selected = $searchParams.get('channel') === channel;
 
 	const handleClick = () => {
 		const url = new URL(window.location.href);
