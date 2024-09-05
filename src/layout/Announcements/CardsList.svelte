@@ -16,10 +16,20 @@
 
 	$: query = createQuery(queries.announcements());
 	$: channel = $searchParams.get('channel');
+
+	function uniqueObjArrayByKey<T extends object>(array: T[], key: keyof T) {
+		return array.filter((obj, index, self) => index === self.findIndex((t) => t[key] === obj[key]));
+	}
 </script>
 
 <div class="announcements-list">
 	<Query {query} let:data>
+		<div class="channels-selection">
+			{#each uniqueObjArrayByKey(data.announcements, 'channel') as ann (ann.id)}
+				<ChannelChip channel={ann.channel} />
+			{/each}
+		</div>
+
 		{#each channel ? data.announcements.filter((a) => a.channel === channel) : data.announcements as ann (ann.id)}
 			<AnnouncementCard title={ann.title} author={ann.author} created_at={ann.createdAt.value}>
 				<svelte:fragment slot="channel">
