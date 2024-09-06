@@ -8,6 +8,7 @@
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
 	import ChannelChip from './ChannelChip.svelte';
+	import Gallery from '$lib/components/Gallery.svelte';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -36,8 +37,13 @@
 					<ChannelChip channel={ann.channel} />
 				</svelte:fragment>
 				<svelte:fragment slot="content">
-					<!-- @html since some if not most announcements contain HTML -->
-					{@html ann.content}
+					<div class="content-container">
+						<!-- @html since some if not most announcements contain HTML -->
+						{@html ann.content}
+					</div>
+					{#if ann.attachmentUrls && Array.isArray(ann.attachmentUrls) && ann.attachmentUrls.length > 0}
+						<Gallery imageUrls={ann.attachmentUrls} />
+					{/if}
 				</svelte:fragment>
 			</AnnouncementCard>
 		{/each}

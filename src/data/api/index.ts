@@ -84,7 +84,12 @@ async function announcements(channel?: string): Promise<AnnouncementsData> {
 				},
 				id: 69,
 				level: 69,
-				title: 'test title'
+				title: 'test title',
+				attachmentUrls: [
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65'
+				]
 			},
 			{
 				author: 'balls',

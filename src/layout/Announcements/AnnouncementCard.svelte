@@ -3,8 +3,6 @@
 
 	import Dialogue from '$lib/components/Dialogue.svelte';
 
-	export let thumbnail_url: string =
-		'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65';
 	export let title: string;
 	export let author: string;
 	export let created_at: string | Date;
@@ -13,7 +11,6 @@
 </script>
 
 <div class="announcement-card">
-	<img src={thumbnail_url} alt="thumbnail" />
 	<h2>{title}</h2>
 	<h3>
 		by
