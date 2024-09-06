@@ -1,0 +1,11 @@
+@use 'svooltip/styles.scss' as SvoolTip;
+
+.svooltip a {
+	text-decoration: none;
+	color: var(--text-four);
+
+	&:hover {
+		text-decoration: underline var(--secondary);
+		color: var(--secondary);
+	}
+}

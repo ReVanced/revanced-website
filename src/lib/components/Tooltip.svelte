@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tooltip } from 'svooltip';
-	import 'svooltip/styles.css';
+	import '../styles/ToolTip.scss';
 
 	export let content: string;
 	export let html: boolean = false;
