@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	import type { TeamMember } from '$lib/types';
-	import Tooltip from '$lib/components/Tooltip.svelte';
+	import ToolTip from '$lib/components/ToolTip.svelte';
 	import Svg from '$lib/components/Svg.svelte';
 
 	export let member: TeamMember;
@@ -30,7 +30,7 @@
 				<h4>{member.name}</h4>
 			</a>
 			<div class="verified-badge">
-				<Tooltip
+				<ToolTip
 					content="<p><b>{member.name}</b> is verified with this GPG Key ID:</p> <a class='gpg-url' href={member
 						.gpg_key.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
 					html={true}
@@ -48,7 +48,7 @@
 						</Svg>
 						<h5>Verified</h5>
 					</div>
-				</Tooltip>
+				</ToolTip>
 			</div>
 		</div>
 		{#if member.bio}
