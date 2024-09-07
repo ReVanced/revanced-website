@@ -84,6 +84,10 @@
 </div>
 
 <style lang="scss">
+	:root {
+		overflow-x: hidden;
+	}
+
 	:global(.float) {
 		pointer-events: none;
 		opacity: 0;
