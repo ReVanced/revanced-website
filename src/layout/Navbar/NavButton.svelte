@@ -68,6 +68,7 @@
 	li.selected {
 		background-color: var(--tertiary);
 		color: var(--primary);
+		pointer-events: none;
 	}
 
 	li.selected span {
