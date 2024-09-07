@@ -35,7 +35,7 @@
 		min-width: max-content;
 		font-size: 0.95rem;
 		text-decoration: none;
-		color: var(--white);
+		color: var(--text-one);
 		font-weight: 600;
 		border: none;
 		border-radius: 100px;
@@ -51,11 +51,11 @@
 	}
 
 	.button-filled {
-		background-color: var(--accent-color);
-		color: var(--grey-four);
+		background-color: var(--primary);
+		color: var(--text-three);
 	}
 	.button-tonal {
-		background-color: var(--grey-two);
+		background-color: var(--surface-four);
 	}
 
 	.button-filled,
@@ -65,7 +65,7 @@
 
 	.button-text {
 		background-color: transparent;
-		color: var(--accent-color);
+		color: var(--primary);
 		font-weight: 500;
 		letter-spacing: 0.01rem;
 	}

@@ -7,8 +7,13 @@
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
-	const hasPatchOptions = !!patch.options?.length;
 	let expanded: boolean = false;
+
+	const options = Object.entries(patch.options).map(([optionKey, option]) => ({
+		optionKey,
+		...option
+	}));
+	const hasPatchOptions = options.length > 0;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -53,16 +58,7 @@
 		<!-- Should this be hardcoded to get the version of the first package?  -->
 		{#if patch.compatiblePackages?.length && patch.compatiblePackages[0].versions?.length}
 			{#if showAllVersions}
-				{#each patch.compatiblePackages[0].versions
-					.slice()
-					.sort((a, b) => {
-						const coercedA = coerce(a);
-						const coercedB = coerce(b);
-						if (coercedA && coercedB) return compare(coercedA, coercedB);
-						else if (!coercedA && !coercedB) return 0;
-						else return !coercedA ? 1 : -1;
-					})
-					.reverse() as version}
+				{#each patch.compatiblePackages[0].versions.reverse() as version}
 					<li class="patch-info">
 						🎯 {version}
 					</li>
@@ -85,14 +81,14 @@
 				</li>
 			{/if}
 		{:else}
-			<li class="patch-info">🎯 Any</li>
+			<li class="patch-info">🎯 Any version</li>
 		{/if}
 	</ul>
 
 	{#if expanded && hasPatchOptions}
 		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
-				{#each patch.options as option}
+				{#each options as option}
 					<div class="option">
 						<h5 id="option-title">{option.title}</h5>
 						<h5>
@@ -109,16 +105,16 @@
 	h3 {
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	#option-description {
 		white-space: pre-wrap;
-		word-break: break-all;
+		word-break: break-word;
 	}
 
 	#option-title {
-		color: var(--accent-color-two);
+		color: var(--secondary);
 	}
 
 	.button {
@@ -133,23 +129,23 @@
 		list-style: none;
 		font-size: 0.8rem;
 		font-weight: 500;
-		color: var(--grey-five);
+		color: var(--text-four);
 		padding: 0.25rem 0.5rem;
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 		border-radius: 8px;
 
 		&:hover {
-			background-color: var(--grey-two);
+			background-color: var(--surface-four);
 		}
 	}
 
 	a {
 		text-decoration: none;
-		color: var(--grey-five);
+		color: var(--text-four);
 
 		&:hover {
-			text-decoration: underline var(--accent-color-two);
-			color: var(--accent-color-two);
+			text-decoration: underline var(--secondary);
+			color: var(--secondary);
 		}
 	}
 
@@ -164,17 +160,9 @@
 
 	.patch-container {
 		transition: all 0.1s var(--bezier-one);
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		padding: 1.25rem;
 		border-radius: 12px;
-
-		&:active {
-			filter: brightness(1.15);
-		}
-
-		&:hover {
-			background-color: var(--grey-one);
-		}
 	}
 
 	.title {
@@ -199,23 +187,27 @@
 
 	.expanded {
 		cursor: pointer;
+
+		&:hover {
+			background-color: var(--surface-three);
+		}
+
+		&:active {
+			filter: brightness(1.15);
+		}
 	}
 
 	.option {
 		padding: 1rem;
-
-		&:hover {
-			background-color: var(--grey-two);
-		}
 	}
 
 	/* thanks piknik */
 	.option + .option {
-		border-top: 1px solid var(--grey-three);
+		border-top: 1px solid var(--border);
 	}
 
 	.options {
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 		overflow: hidden;
 		border-radius: 8px;
 		margin-top: 1rem;

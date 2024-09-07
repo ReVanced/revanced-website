@@ -1,16 +1,11 @@
 <script lang="ts">
 	import type { Social } from '$lib/types';
-	export let social = '';
-	export let data: Social[];
+	export let social: Social;
 </script>
 
-<a
-	href={data.find((jsonSocial) => jsonSocial.name.toLowerCase() === social.toLowerCase())?.url}
-	rel="noreferrer"
-	target="_blank"
->
+<a href={social.url} rel="noreferrer" target="_blank">
 	<div>
-		<img src="socials/{social}.svg" alt={social} />
+		<img src="socials/{social.name.toLowerCase()}.svg" alt={social.name} />
 	</div>
 </a>
 
@@ -23,8 +18,8 @@
 		cursor: pointer;
 		border-radius: 200px;
 		transition: transform 0.4s var(--bezier-one);
-		background-color: var(--grey-two);
-		color: var(--white);
+		background-color: var(--surface-four);
+		color: var(--text-one);
 		user-select: none;
 	}
 

@@ -19,7 +19,7 @@
 	import { supportsWebP } from '$util/supportsWebP';
 
 	const teamQuery = createQuery(['team'], queries.team);
-	const donateQuery = createQuery(['donate'], queries.donate);
+	const aboutQuery = createQuery(['about'], queries.about);
 
 	let qrCodeDialogue = false;
 	let cryptoDialogue = false;
@@ -73,7 +73,7 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<section>
 		<div>
-			<h2>🎉 Support <span style="color: var(--accent-color);">ReVanced</span></h2>
+			<h2>🎉 Support <span style="color: var(--primary);">ReVanced</span></h2>
 			<p>
 				ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
 				features. All of which is completely open source and free of charge. Donating will allow
@@ -89,24 +89,24 @@
 		</div>
 	</section>
 	<h3>Donate</h3>
-	<Query query={donateQuery} let:data>
+	<Query query={aboutQuery} let:data>
 		<div class="donate-cards">
-			{#if data.platforms}
-				{#each data.platforms as platform}
-					<a class="donate-card" target="_blank" rel="noreferrer" href={platform.url}>
+			{#if data.about.donations.links}
+				{#each data.about.donations.links as link}
+					<a class="donate-card" target="_blank" rel="noreferrer" href={link.url}>
 						<!-- not using <img/> because we want the image height to always be 200px -->
 						<div
-							style="background-image: url('/donate/card-images/{platform.name}.{supportsWebP()
+							style="background-image: url('/donate/card-images/{link.name}.{supportsWebP()
 								? 'webp'
 								: 'png'}'), url('/donate/card-images/fallback.svg');"
 							role="img"
-							aria-label="{platform.name} preview image"
+							aria-label="{link.name} preview image"
 						/>
-						<span>{platform.name}</span>
+						<span>{link.name}</span>
 					</a>
 				{/each}
 			{/if}
-			{#if data.wallets}
+			{#if data.about.donations.wallets}
 				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
 					<div
 						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP()
@@ -141,8 +141,8 @@
 	<svelte:fragment slot="description">
 		<hr style="margin: 1rem 0;" />
 		<div class="wallets">
-			<Query query={donateQuery} let:data>
-				{#each data.wallets as wallet}
+			<Query query={aboutQuery} let:data>
+				{#each data.about.donations.wallets as wallet}
 					<button
 						on:click={() => {
 							qrCodeValue = wallet.address;
@@ -221,7 +221,7 @@
 
 	h2 {
 		margin-bottom: 0.5rem;
-		color: var(--white);
+		color: var(--text-one);
 	}
 
 	h3 {
@@ -260,7 +260,7 @@
 
 	.donate-card {
 		text-decoration: none;
-		background-color: var(--grey-ten);
+		background-color: var(--surface-nine);
 		border-radius: 1.5rem;
 		width: 100%;
 		cursor: pointer;
@@ -272,7 +272,7 @@
 			0.3s background-color var(--bezier-one);
 
 		&:hover {
-			background-color: var(--accent-low-opacity);
+			background-color: var(--tertiary);
 		}
 
 		&:active {
@@ -281,7 +281,7 @@
 
 		span {
 			display: block;
-			color: var(--grey-five);
+			color: var(--text-four);
 			font-size: 1.05rem;
 			font-weight: 500;
 			padding: 1.5rem;
@@ -308,12 +308,12 @@
 			font-size: 0.9rem;
 			background-color: transparent;
 			border: none;
-			color: var(--grey-five);
+			color: var(--text-four);
 			cursor: pointer;
 			text-align: left;
 			display: flex;
 			justify-content: space-between;
-			background-color: var(--grey-six);
+			background-color: var(--surface-seven);
 			padding: 0.75rem 1.25rem;
 			transition: filter 0.4s var(--bezier-one);
 

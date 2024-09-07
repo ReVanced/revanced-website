@@ -34,7 +34,7 @@
 <style lang="scss">
 	span {
 		list-style: none;
-		color: var(--grey-five);
+		color: var(--text-four);
 		font-size: 0.9rem;
 		font-weight: 600;
 	}
@@ -58,7 +58,7 @@
 	}
 
 	.mobile-only:not(:last-child) {
-		border-bottom: 1px solid var(--grey-three);
+		border-bottom: 1px solid var(--border);
 	}
 
 	.mobile-only {

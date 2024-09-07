@@ -9,8 +9,7 @@
 	export let repo: string;
 	let expanded = true;
 
-	// Yes
-	let usersIwantToExplodeSoBadly = ['semantic-release-bot'];
+	let bots = ['semantic-release-bot', 'revanced-bot'];
 	let repo_name = friendlyName(repo);
 </script>
 
@@ -34,9 +33,9 @@
 
 	{#if expanded}
 		<div class="contrib-host" transition:slide={{ easing: quintOut, duration: 500 }}>
-			{#each contributors as { login, avatar_url, html_url }}
-				{#if !usersIwantToExplodeSoBadly.includes(login)}
-					<ContributorButton name={login} pfp={avatar_url} url={html_url} />
+			{#each contributors as { name, avatar_url, url }}
+				{#if !bots.includes(name)}
+					<ContributorButton {name} pfp={avatar_url} {url} />
 				{/if}
 			{/each}
 		</div>
@@ -49,13 +48,13 @@
 		align-items: center;
 		justify-content: space-between;
 		cursor: pointer;
-		background-color: var(--grey-six);
+		background-color: var(--surface-seven);
 		padding: 0.75rem 1.25rem;
-		border-bottom: 1px solid var(--grey-three);
+		border-bottom: 1px solid var(--border);
 		transition: all 0.2s var(--bezier-one);
 
 		&:hover {
-			background-color: var(--grey-one);
+			background-color: var(--surface-three);
 		}
 	}
 
@@ -72,7 +71,7 @@
 	.section-container {
 		border-radius: 20px;
 		overflow: hidden;
-		border: 1px solid var(--grey-three);
+		border: 1px solid var(--border);
 	}
 
 	a {
@@ -83,8 +82,8 @@
 	}
 
 	a:hover {
-		text-decoration: underline var(--accent-color);
-		color: var(--white);
+		text-decoration: underline var(--primary);
+		color: var(--text-one);
 	}
 
 	.contrib-host {

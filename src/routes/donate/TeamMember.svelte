@@ -10,15 +10,15 @@
 
 <a
 	class="member"
-	href={member.html_url}
+	href={member.url}
 	rel="noreferrer"
 	target="_blank"
 	in:fly|global={{ y: 10, easing: quintOut, duration: 750, delay: 50 * i }}
 >
-	<img src={member.avatar_url} alt="{member.login}'s profile picture." />
+	<img src={member.avatar_url} alt="{member.name}'s profile picture." />
 
 	<div class="member-text">
-		<h4>{member.login}</h4>
+		<h4>{member.name}</h4>
 		{#if member.bio}
 			<h6>{member.bio}</h6>
 		{/if}
@@ -28,8 +28,8 @@
 <style lang="scss">
 	.member {
 		width: 100%;
-		color: var(--white);
-		border: 1px solid var(--grey-three);
+		color: var(--text-one);
+		border: 1px solid var(--border);
 		text-decoration: none;
 		cursor: pointer;
 		padding: 1rem;
@@ -39,7 +39,7 @@
 		transition: 0.3s background-color var(--bezier-one);
 
 		&:hover {
-			background-color: var(--grey-six);
+			background-color: var(--surface-seven);
 		}
 	}
 

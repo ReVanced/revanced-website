@@ -17,7 +17,7 @@
 
 <style>
 	h1 {
-		color: var(--white);
+		color: var(--text-one);
 		margin-bottom: 1.5rem;
 	}
 
@@ -40,7 +40,7 @@
 	}
 
 	span {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	@media (max-width: 767px) {

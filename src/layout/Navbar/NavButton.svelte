@@ -57,21 +57,21 @@
 		font-weight: 400;
 		font-size: 0.9rem;
 		letter-spacing: 0.02rem;
-		color: var(--grey-five);
+		color: var(--text-four);
 	}
 
 	li:hover {
-		color: var(--white);
-		background-color: var(--grey-one);
+		color: var(--text-one);
+		background-color: var(--surface-three);
 	}
 
 	li.selected {
-		background-color: var(--accent-low-opacity);
-		color: var(--accent-color);
+		background-color: var(--tertiary);
+		color: var(--primary);
 	}
 
 	li.selected span {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	@media (max-width: 767px) {

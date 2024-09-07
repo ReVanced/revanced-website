@@ -129,13 +129,18 @@
 <Wave />
 
 <style>
+	main {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
 	.wrap {
 		margin-inline: auto;
 		width: min(87%, 100rem);
 		margin-top: 7rem;
 	}
 	.wrappezoid {
-		height: calc(100vh - 120px);
+		height: calc(100vh - 225px);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
