@@ -32,13 +32,13 @@ async function contributors(): Promise<ContributorsData> {
 }
 
 async function manager(): Promise<ReleaseData> {
-	const json = await get_json('v3/manager/latest');
+	const json = await get_json('v3/manager');
 
 	return { release: json };
 }
 
 async function patches(): Promise<PatchesData> {
-	const json = await get_json('v3/patches/latest/list');
+	const json = await get_json('v3/patches/list');
 	const packagesWithCount: { [key: string]: number } = {};
 
 	// gets packages and patch count
