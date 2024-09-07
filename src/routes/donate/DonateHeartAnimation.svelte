@@ -276,7 +276,9 @@
 						}
 					}
 					#heart-primary {
-						animation: double-pulse-size 1.25s infinite, pulse-glow 1.25s infinite;
+						animation:
+							double-pulse-size 1.25s infinite,
+							pulse-glow 1.25s infinite;
 						@keyframes double-pulse-size {
 							0% {
 								transform: scale(0.7) rotate(0);
@@ -299,7 +301,10 @@
 							}
 						}
 
-						filter: drop-shadow(0 0 0 var(--red-one));
+						& {
+							filter: drop-shadow(0 0 0 var(--red-one));
+						}
+
 						@keyframes pulse-glow {
 							33% {
 								filter: drop-shadow(0 0 0rem var(--red-one));
@@ -318,7 +323,10 @@
 						height: 50%;
 						will-change: transform, box-shadow;
 					}
-					box-shadow: 0 0 0 0 #000000;
+
+					& {
+						box-shadow: 0 0 0 0 #000000;
+					}
 
 					@keyframes pulse-size {
 						0% {
