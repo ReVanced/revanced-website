@@ -13,8 +13,23 @@
 	let showContent = false;
 	let read: boolean;
 
+	function isAnnouncementRead(): boolean {
+		return (localStorage.getItem('read_announcements') ?? '').split(',').includes(String(id));
+	}
+
+	function setAnnouncementRead() {
+		const ids = (localStorage.getItem('read_announcements') ?? '').split(',').filter((id) => !!id);
+		if (!ids.includes(String(id)))
+			localStorage.setItem('read_announcements', ids.concat(String(id)).join(','));
+	}
+
+	const showAnnouncement = () => {
+		showContent = true;
+		setAnnouncementRead();
+	};
+
 	onMount(() => {
-		read = (localStorage.getItem('read_announcements') as string).split(',').includes(String(id));
+		read = isAnnouncementRead();
 	});
 </script>
 
@@ -35,7 +50,7 @@
 	{#if $$slots.channel}
 		<div class="channel"><slot name="channel" /></div>
 	{/if}
-	<button class="read-more" on:click={() => (showContent = true)}>Read more</button>
+	<button class="read-more" on:click={showAnnouncement}>Read more</button>
 </div>
 
 <Dialogue bind:modalOpen={showContent} fullscreen>
