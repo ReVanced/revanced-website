@@ -97,7 +97,7 @@ async function announcements(channel?: string): Promise<AnnouncementsData> {
 				content:
 					'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis.',
 				createdAt: {
-					value: '2024-09-03T15:54:31.912Z'
+					value: '2024-09-11T07:32:38.849Z'
 				},
 				id: 420,
 				level: 420,

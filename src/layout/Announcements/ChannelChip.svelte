@@ -31,9 +31,21 @@
 	};
 </script>
 
-<button class:selected on:click={handleClick}>
-	{selected ? 'x ' : ''}{channel}
-</button>
+<button class:selected on:click={handleClick}>{channel}</button>
 
 <style>
+	button {
+		padding: 0.3rem 0.75rem;
+		background: none;
+		border: 1px solid var(--primary);
+		border-radius: 0.6rem;
+		color: var(--text-one);
+		cursor: pointer;
+		transition: all 0.2s var(--bezier-one);
+	}
+
+	button:hover,
+	button.selected {
+		background: var(--tertiary);
+	}
 </style>
