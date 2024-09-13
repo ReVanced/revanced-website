@@ -1,16 +1,14 @@
-<script>
+<script lang="ts">
 	import { onMount, onDestroy, getContext, setContext, tick } from 'svelte';
 	export let stretchFirst = false,
 		gridGap = '0.5em',
 		colWidth = 'minmax(Min(20em, 100%), 1fr)',
-		items = []; // pass in data if it's dynamically updated
-	let grids = [],
-		masonryElement;
+		items: any[] = []; // pass in data if it's dynamically updated
+	let grids: any[] = [],
+		masonryElement: any;
 
 	export let reset;
-	$: if (reset) {
-		masonryElement = masonryElement;
-	}
+	$: if (reset) masonryElement = masonryElement;
 
 	export const refreshLayout = async () => {
 		// console.log("REFRESHING LAYOUT")
@@ -18,11 +16,11 @@
 			/* get the post relayout number of columns */
 			let ncol = getComputedStyle(grid._el).gridTemplateColumns.split(' ').length;
 
-			grid.items.forEach((c) => {
-				let new_h = c.getBoundingClientRect().height;
+			grid.items.forEach((item: any) => {
+				let new_h = item.getBoundingClientRect().height;
 
-				if (new_h !== +c.dataset.h) {
-					c.dataset.h = new_h;
+				if (new_h !== +item.dataset.h) {
+					item.dataset.h = new_h;
 					grid.mod++;
 				}
 			});
@@ -32,15 +30,15 @@
 				/* update number of columns */
 				grid.ncol = ncol;
 				/* revert to initial positioning, no margin */
-				grid.items.forEach((c) => c.style.removeProperty('margin-top'));
+				grid.items.forEach((item: any) => item.style.removeProperty('margin-top'));
 				/* if we have more than one column */
 				if (grid.ncol > 1) {
-					grid.items.slice(ncol).forEach((c, i) => {
+					grid.items.slice(ncol).forEach((item: any, i: number) => {
 						let prev_fin =
 								grid.items[i].getBoundingClientRect().bottom /* bottom edge of item above */,
-							curr_ini = c.getBoundingClientRect().top; /* top edge of current item */
+							curr_ini = item.getBoundingClientRect().top; /* top edge of current item */
 
-						c.style.marginTop = `${prev_fin + grid.gap - curr_ini}px`;
+						item.style.marginTop = `${prev_fin + grid.gap - curr_ini}px`;
 					});
 				}
 
@@ -49,15 +47,15 @@
 		});
 	};
 
-	const calcGrid = async (_masonryArr) => {
+	const calcGrid = async (_masonryArr: Array<HTMLElement>) => {
 		await tick();
 		if (_masonryArr.length && getComputedStyle(_masonryArr[0]).gridTemplateRows !== 'masonry') {
 			grids = _masonryArr.map((grid) => {
 				return {
 					_el: grid,
-					gap: parseFloat(getComputedStyle(grid).gridRowGap),
-					items: [...grid.childNodes].filter(
-						(c) => c.nodeType === 1 && +getComputedStyle(c).gridColumnEnd !== -1
+					gap: parseFloat(getComputedStyle(grid).rowGap),
+					items: [...Array.from(grid.childNodes)].filter(
+						(item: any) => item.nodeType === 1 && +getComputedStyle(item).gridColumnEnd !== -1
 					),
 					ncol: 0,
 					mod: 0
@@ -67,20 +65,16 @@
 		}
 	};
 
-	let _window;
+	let _window: Window;
 	onMount(() => {
 		_window = window;
 		_window.addEventListener('resize', refreshLayout, false); /* on resize */
 	});
 	onDestroy(() => {
-		if (_window) {
-			_window.removeEventListener('resize', refreshLayout, false); /* on resize */
-		}
+		if (_window) _window.removeEventListener('resize', refreshLayout, false); /* on resize */
 	});
 
-	$: if (masonryElement) {
-		calcGrid([masonryElement]);
-	}
+	$: if (masonryElement) calcGrid([masonryElement]);
 
 	$: if (items) {
 		// update if items are changed
@@ -88,9 +82,9 @@
 	}
 </script>
 
-<!-- 
+<!--
   An almost direct copy and paste of: https://css-tricks.com/a-lightweight-masonry-solution
-  
+
   Usage:
     - stretchFirst stretches the first item across the top
 
@@ -102,7 +96,7 @@
           <h3>{o.name}</h3>
         </header>
         <section>
-          <p>{o.text}</p> 
+          <p>{o.text}</p>
         </section>
       </div>
     {/each}
@@ -117,7 +111,7 @@
 	<slot></slot>
 </div>
 
-<!-- 
+<!--
 $w: var(--col-width); // minmax(Min(20em, 100%), 1fr);
 $s: var(--grid-gap); // .5em;
 -->

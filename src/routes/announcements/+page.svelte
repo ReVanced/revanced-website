@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CardsList from '$layout/Announcements/CardsList.svelte';
+	import CardsList from './CardsList.svelte';
 </script>
 
 <main class="wrapper">
