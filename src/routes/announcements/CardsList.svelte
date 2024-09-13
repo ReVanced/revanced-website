@@ -8,7 +8,7 @@
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
 	import ChannelChip from './ChannelChip.svelte';
-	import Gallery from '$lib/components/Gallery.svelte';
+	import Masonry from '$lib/components/Masonry.svelte';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -31,29 +31,20 @@
 			{/each}
 		</div>
 
-		{#each channel ? data.announcements.filter((a) => a.channel === channel) : data.announcements as ann (ann.id)}
-			<AnnouncementCard
-				id={ann.id}
-				title={ann.title}
-				author={ann.author}
-				created_at={ann.createdAt.value}
-			>
-				<svelte:fragment slot="channel">
-					<ChannelChip channel={ann.channel} />
-				</svelte:fragment>
-				<svelte:fragment slot="content">
-					<div class="content-container">
-						<!-- @html since some if not most announcements contain HTML -->
-						{@html ann.content}
-					</div>
-					{#if ann.attachmentUrls && Array.isArray(ann.attachmentUrls) && ann.attachmentUrls.length > 0}
-						<Gallery imageUrls={ann.attachmentUrls} />
-					{/if}
-				</svelte:fragment>
-			</AnnouncementCard>
-		{/each}
+		<!-- <div class="announcements"> -->
+		<Masonry items={data.announcements}>
+			{#each channel ? data.announcements.filter((a) => a.channel === channel) : data.announcements as announcement (announcement.id)}
+				<AnnouncementCard {announcement} />
+			{/each}
+		</Masonry>
+		<!-- </div> -->
 	</Query>
 </div>
 
 <style>
+	.announcements {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1rem;
+	}
 </style>
