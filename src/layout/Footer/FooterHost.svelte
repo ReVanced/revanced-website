@@ -8,7 +8,7 @@
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
-	const aboutQuery = createQuery(['about'], queries.about);
+	const aboutQuery = createQuery(queries.about());
 </script>
 
 <!-- squiggly divider line -->
