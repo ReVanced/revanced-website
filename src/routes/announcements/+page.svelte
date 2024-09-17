@@ -8,6 +8,7 @@
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
 	import ChannelChip from './ChannelChip.svelte';
+	import Masonry from '$lib/components/Masonry.svelte';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -32,7 +33,7 @@
 			</div>
 
 			<Masonry items={data.announcements.filter((a) => a.channel === channel)} let:item>
-				<AnnouncementCard {item} />
+				<AnnouncementCard announcement={item} />
 			</Masonry>
 		</Query>
 	</div>

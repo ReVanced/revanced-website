@@ -1,26 +1,30 @@
 <script lang="ts">
-	import { onMount, onDestroy, getContext, setContext, tick } from 'svelte';
-	export let stretchFirst = false,
-		gridGap = '0.5em',
-		colWidth = 'minmax(Min(20em, 100%), 1fr)',
-		items: any[] = []; // pass in data if it's dynamically updated
-	let grids: any[] = [],
-		masonryElement: any;
+	import { onMount, onDestroy, tick } from 'svelte';
 
-	export let reset;
+	export let stretchFirst: boolean = false,
+		gridGap: string = '0.5em',
+		colWidth: string = 'minmax(Min(20em, 100%), 1fr)',
+		items: any[] = []; // pass in data if it's dynamically updated
+
+	type Grid = { _el: HTMLElement; gap: number; items: HTMLElement[]; ncol: number; mod: number };
+
+	let grids: Grid[] = [],
+		masonryElement: HTMLElement;
+
+	export let reset: boolean = false;
 	$: if (reset) masonryElement = masonryElement;
 
 	export const refreshLayout = async () => {
 		// console.log("REFRESHING LAYOUT")
 		grids.forEach(async (grid) => {
 			/* get the post relayout number of columns */
-			let ncol = getComputedStyle(grid._el).gridTemplateColumns.split(' ').length;
+			const ncol = getComputedStyle(grid._el).gridTemplateColumns.split(' ').length;
 
-			grid.items.forEach((item: any) => {
-				let new_h = item.getBoundingClientRect().height;
+			grid.items.forEach((item) => {
+				const new_h = item.getBoundingClientRect().height;
 
-				if (new_h !== +item.dataset.h) {
-					item.dataset.h = new_h;
+				if (new_h !== +parseInt(item.dataset.h!)) {
+					item.dataset.h = new_h.toString();
 					grid.mod++;
 				}
 			});
@@ -30,17 +34,16 @@
 				/* update number of columns */
 				grid.ncol = ncol;
 				/* revert to initial positioning, no margin */
-				grid.items.forEach((item: any) => item.style.removeProperty('margin-top'));
+				grid.items.forEach((item) => item.style.removeProperty('margin-top'));
 				/* if we have more than one column */
-				if (grid.ncol > 1) {
-					grid.items.slice(ncol).forEach((item: any, i: number) => {
+				if (grid.ncol > 1)
+					grid.items.slice(ncol).forEach((item, i) => {
 						let prev_fin =
 								grid.items[i].getBoundingClientRect().bottom /* bottom edge of item above */,
 							curr_ini = item.getBoundingClientRect().top; /* top edge of current item */
 
 						item.style.marginTop = `${prev_fin + grid.gap - curr_ini}px`;
 					});
-				}
 
 				grid.mod = 0;
 			}
@@ -56,7 +59,7 @@
 					gap: parseFloat(getComputedStyle(grid).rowGap),
 					items: [...Array.from(grid.childNodes)].filter(
 						(item: any) => item.nodeType === 1 && +getComputedStyle(item).gridColumnEnd !== -1
-					),
+					) as HTMLElement[],
 					ncol: 0,
 					mod: 0
 				};
