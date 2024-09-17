@@ -8,7 +8,6 @@
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
 	import ChannelChip from './ChannelChip.svelte';
-	import Masonry from 'svelte-bricks';
 
 	let searchParams: Readable<URLSearchParams>;
 
