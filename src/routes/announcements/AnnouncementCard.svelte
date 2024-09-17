@@ -1,30 +1,26 @@
 <script lang="ts">
 	import moment from 'moment';
-	import Svg from '$lib/components/Svg.svelte';
+	import { onMount } from 'svelte';
 
+	import Svg from '$lib/components/Svg.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import type { Announcement } from '$lib/types';
 
 	export let announcement: Announcement;
 
-	import { onMount } from 'svelte';
-
-	export let id: number;
-	export let title: string;
-	export let author: string;
-	export let created_at: string | Date;
-
 	let showContent = false;
 	let read: boolean;
 
 	function isAnnouncementRead(): boolean {
-		return (localStorage.getItem('read_announcements') ?? '').split(',').includes(String(id));
+		return (localStorage.getItem('read_announcements') ?? '')
+			.split(',')
+			.includes(String(announcement.id));
 	}
 
 	function setAnnouncementRead() {
 		const ids = (localStorage.getItem('read_announcements') ?? '').split(',').filter((id) => !!id);
-		if (!ids.includes(String(id)))
-			localStorage.setItem('read_announcements', ids.concat(String(id)).join(','));
+		if (!ids.includes(String(announcement.id)))
+			localStorage.setItem('read_announcements', ids.concat(String(announcement.id)).join(','));
 	}
 
 	const showAnnouncement = () => {
@@ -37,9 +33,11 @@
 	});
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="announcement-card" on:click={showAnnouncement}>
 	{#if announcement.attachmentUrls}
-		<img src={announcement.attachmentUrls[0]} />
+		<img src={announcement.attachmentUrls[0]} alt="Banner" />
 	{/if}
 	<div class="content">
 		<div class="text">
@@ -47,7 +45,7 @@
 			<div class="description">
 				{announcement.content}
 			</div>
-			<span class="date">{moment(announcement.createdAt).fromNow()}</span>
+			<span class="date">{moment(announcement.createdAt.value).fromNow()}</span>
 		</div>
 		<div class="action">
 			<button on:click={showAnnouncement} aria-label="Settings">
