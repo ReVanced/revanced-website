@@ -99,9 +99,71 @@ async function announcements(channel?: string): Promise<AnnouncementsData> {
 				createdAt: {
 					value: '2024-09-11T07:32:38.849Z'
 				},
-				id: 420,
-				level: 420,
+				attachmentUrls: [
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65'
+				],
+				id: 874,
+				level: 874,
 				title: 'test title 2'
+			},
+			{
+				author: 'balls',
+				channel: 'test2',
+				content:
+					'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis.',
+				createdAt: {
+					value: '2024-09-03T15:54:31.912Z'
+				},
+				id: 510,
+				level: 510,
+				title: 'test title 2'
+			},
+			{
+				author: 'balls',
+				channel: 'test2',
+				content:
+					'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis.',
+				createdAt: {
+					value: '2024-09-03T15:54:31.912Z'
+				},
+				attachmentUrls: [
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65'
+				],
+				id: 87,
+				level: 87,
+				title: 'test title 2'
+			},
+			{
+				author: 'balls',
+				channel: 'test2',
+				content:
+					'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit dignissimos reiciendis quo alias, nihil error eaque consectetur nam quaerat accusamus iste fugit, ad, atque placeat perferendis commodi culpa sequi nobis.',
+				createdAt: {
+					value: '2024-09-03T15:54:31.912Z'
+				},
+				id: 8,
+				level: 8,
+				title: 'test title 2'
+			},
+			{
+				author: 'madkarmaa',
+				channel: 'test',
+				content: 'short content',
+				createdAt: {
+					value: '2024-09-03T15:53:01.532Z'
+				},
+				id: 984,
+				level: 984,
+				title: 'test title',
+				attachmentUrls: [
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65',
+					'https://repository-images.githubusercontent.com/731390704/b0ddaf49-d868-4bb5-866c-417a86ebbf65'
+				]
 			}
 		]
 	};
