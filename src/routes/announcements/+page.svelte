@@ -32,8 +32,10 @@
 				{/each}
 			</div>
 
-			<Masonry items={data.announcements.filter((a) => a.channel === channel)} let:item>
-				<AnnouncementCard announcement={item} />
+			<Masonry>
+				{#each channel ? data.announcements.filter((a) => a.channel === channel) : data.announcements as announcement (announcement.id)}
+					<AnnouncementCard {announcement} />
+				{/each}
 			</Masonry>
 		</Query>
 	</div>
