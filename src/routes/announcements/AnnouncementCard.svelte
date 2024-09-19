@@ -5,6 +5,7 @@
 	import Svg from '$lib/components/Svg.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import type { Announcement } from '$lib/types';
+	import UnreadDot from './UnreadDot.svelte';
 
 	export let announcement: Announcement;
 
@@ -21,6 +22,7 @@
 		const ids = (localStorage.getItem('read_announcements') ?? '').split(',').filter((id) => !!id);
 		if (!ids.includes(String(announcement.id)))
 			localStorage.setItem('read_announcements', ids.concat(String(announcement.id)).join(','));
+		read = true;
 	}
 
 	const showAnnouncement = () => {
@@ -36,6 +38,9 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="announcement-card" on:click={showAnnouncement}>
+	{#if read !== undefined && !read}
+		<UnreadDot animated />
+	{/if}
 	{#if announcement.attachmentUrls}
 		<img src={announcement.attachmentUrls[0]} alt="Banner" />
 	{/if}
