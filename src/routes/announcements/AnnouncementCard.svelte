@@ -10,10 +10,10 @@
 	export let announcement: Announcement;
 
 	let showContent = false;
-	let read: boolean;
+	let isRead: boolean;
 
 	function isAnnouncementRead() {
-		read = (localStorage.getItem('read_announcements') ?? '')
+		isRead = (localStorage.getItem('read_announcements') ?? '')
 			.split(',')
 			.includes(String(announcement.id));
 	}
@@ -22,7 +22,7 @@
 		const ids = (localStorage.getItem('read_announcements') ?? '').split(',').filter((id) => !!id);
 		if (!ids.includes(String(announcement.id)))
 			localStorage.setItem('read_announcements', ids.concat(String(announcement.id)).join(','));
-		read = true;
+		isRead = true;
 	}
 
 	const showAnnouncement = () => {
@@ -36,7 +36,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="announcement-card" on:click={showAnnouncement}>
-	{#if read !== undefined && !read}
+	{#if isRead !== undefined && !isRead}
 		<UnreadDot animated />
 	{/if}
 	{#if announcement.attachmentUrls}
