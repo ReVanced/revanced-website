@@ -12,8 +12,8 @@
 	let showContent = false;
 	let read: boolean;
 
-	function isAnnouncementRead(): boolean {
-		return (localStorage.getItem('read_announcements') ?? '')
+	function isAnnouncementRead() {
+		read = (localStorage.getItem('read_announcements') ?? '')
 			.split(',')
 			.includes(String(announcement.id));
 	}
@@ -30,9 +30,7 @@
 		setAnnouncementRead();
 	};
 
-	onMount(() => {
-		read = isAnnouncementRead();
-	});
+	onMount(isAnnouncementRead);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
