@@ -131,8 +131,8 @@
 
 		.description {
 			display: -webkit-box;
-			line-clamp: 4;
-			-webkit-line-clamp: 4;
+			line-clamp: 2;
+			-webkit-line-clamp: 2;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
 		}
