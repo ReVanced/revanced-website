@@ -1,4 +1,4 @@
-import { get_access_token } from '$data/api/settings';
+import { browser } from '$app/environment';
 
 export type AuthToken = {
 	token: string;
@@ -10,6 +10,26 @@ type JwtPayload = {
 	iss: string;
 };
 
+export class UnauthenticatedError extends Error {
+	constructor() {
+		super('Unauthenticated. Cannot perform admin operations.');
+	}
+}
+
+// Get access token.
+export function get_access_token(): AuthToken | null {
+	const data = localStorage.getItem('revanced_api_access_token');
+	if (browser && data) return JSON.parse(data) as AuthToken;
+	return null;
+}
+
+// (Re)set access token.
+export function set_access_token(token?: AuthToken) {
+	if (!token) localStorage.removeItem('revanced_api_access_token');
+	else localStorage.setItem('revanced_api_access_token', JSON.stringify(token));
+}
+
+// Parse a JWT token
 export function parseJwt(token: string): JwtPayload {
 	const base64Url = token.split('.')[1];
 	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -22,6 +42,7 @@ export function parseJwt(token: string): JwtPayload {
 	return JSON.parse(jsonPayload) as JwtPayload;
 }
 
+// Check if the admin is authenticated
 export function is_logged_in(): boolean {
 	const token = get_access_token();
 	if (!token) return false;

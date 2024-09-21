@@ -13,6 +13,7 @@ import type {
 	CompatiblePackage,
 	Announcement
 } from '$lib/types';
+import { get_access_token, is_logged_in, UnauthenticatedError } from '$lib/auth';
 
 export type ContributorsData = { contributables: Contributable[] };
 export type PatchesData = { patches: Patch[]; packages: string[] };
@@ -27,8 +28,34 @@ function build_url(endpoint: string) {
 	return `${settings.api_base_url()}/${endpoint}`;
 }
 
+function build_headers() {
+	const access_token_data = get_access_token();
+	return {
+		'Content-Type': 'application/json',
+		Authorization: access_token_data ? `Bearer ${access_token_data.token}` : ''
+	};
+}
+
 async function get_json(endpoint: string) {
 	return await fetch(build_url(endpoint)).then((r) => r.json());
+}
+
+async function post_json(endpoint: string) {
+	if (!is_logged_in()) throw new UnauthenticatedError();
+	const headers = build_headers();
+	return await fetch(build_url(endpoint), { method: 'POST', headers }).then((r) => r.json());
+}
+
+async function patch_json(endpoint: string) {
+	if (!is_logged_in()) throw new UnauthenticatedError();
+	const headers = build_headers();
+	return await fetch(build_url(endpoint), { method: 'PATCH', headers }).then((r) => r.json());
+}
+
+async function delete_json(endpoint: string) {
+	if (!is_logged_in()) throw new UnauthenticatedError();
+	const headers = build_headers();
+	return await fetch(build_url(endpoint), { method: 'DELETE', headers }).then((r) => r.json());
 }
 
 async function contributors(): Promise<ContributorsData> {
