@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { RV_API_URL } from '$env/static/public';
+import { type AuthToken } from '$lib/auth';
 
 const URL_KEY = 'revanced_api_url';
 
@@ -18,13 +19,14 @@ export function set_api_base_url(url?: string) {
 }
 
 // Get access token.
-export function get_access_token(): string | null {
-	if (browser) return localStorage.getItem('revanced_api_access_token');
+export function get_access_token(): AuthToken | null {
+	const data = localStorage.getItem('revanced_api_access_token');
+	if (browser && data) return JSON.parse(data) as AuthToken;
 	return null;
 }
 
 // (Re)set access token.
-export function set_access_token(token?: string) {
+export function set_access_token(token?: AuthToken) {
 	if (!token) localStorage.removeItem('revanced_api_access_token');
-	else localStorage.setItem('revanced_api_access_token', token);
+	else localStorage.setItem('revanced_api_access_token', JSON.stringify(token));
 }
