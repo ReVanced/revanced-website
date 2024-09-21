@@ -38,7 +38,6 @@ async function contributors(): Promise<ContributorsData> {
 
 async function manager(): Promise<ReleaseData> {
 	const json = await get_json('v3/manager/latest');
-
 	return { release: json };
 }
 
