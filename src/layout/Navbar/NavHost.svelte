@@ -13,6 +13,7 @@
 	import RouterEvents from '$data/RouterEvents';
 
 	import { useQueryClient } from '@tanstack/svelte-query';
+	import { login } from '$lib/auth';
 
 	const client = useQueryClient();
 
@@ -121,10 +122,10 @@
 		</Svg>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
-	<svelte:fragment slot="description">Configure the API for this website.</svelte:fragment>
+	<!-- <svelte:fragment slot="description">Configure the API for this website.</svelte:fragment> -->
 	<div id="settings-content">
 		<div class="input-wrapper">
-			<input name="api-url" type="text" bind:value={url} />
+			<input name="api-url" id="api-url" type="text" bind:value={url} />
 			<button id="button-reset" on:click={reset} aria-label="Reset Button">
 				<Svg viewBoxHeight={48} svgHeight={24}>
 					<path
@@ -133,6 +134,7 @@
 				</Svg>
 			</button>
 		</div>
+		<Button type="filled" on:click={login}>Admin login</Button>
 	</div>
 
 	<svelte:fragment slot="buttons">
