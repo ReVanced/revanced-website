@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { build_url } from '$data/api';
 
 export type AuthToken = {
 	token: string;
@@ -47,4 +48,10 @@ export function is_logged_in(): boolean {
 	const token = get_access_token();
 	if (!token) return false;
 	return Date.now() < token.expires;
+}
+
+export async function login() {
+	const token = await fetch(build_url('v3/token')).then((r) => r.text());
+	const payload = parseJwt(token);
+	set_access_token({ token, expires: payload.exp });
 }

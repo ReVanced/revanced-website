@@ -24,7 +24,7 @@ export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatfor
 export type SocialsData = { socials: Social[] };
 export type AnnouncementsData = { announcements: Announcement[] };
 
-function build_url(endpoint: string) {
+export function build_url(endpoint: string) {
 	return `${settings.api_base_url()}/${endpoint}`;
 }
 
