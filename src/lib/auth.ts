@@ -52,7 +52,8 @@ export function is_logged_in(): boolean {
 
 export async function login(username: string, password: string) {
 	const token = await fetch(build_url('v3/token'), {
-		headers: { Authorization: `Basic ${btoa(username + ':' + password)}` }
+		headers: { Authorization: `Basic ${btoa(username + ':' + password)}` },
+		method: 'GET'
 	}).then((r) => r.text());
 	const payload = parseJwt(token);
 	set_access_token({ token, expires: payload.exp });

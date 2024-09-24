@@ -43,9 +43,9 @@
 	function handleLogin(e: SubmitEvent) {
 		const { username, password } = e.target as HTMLFormElement;
 		console.log(username, password);
-		// 	login(username.value, password.value).then(() => {
-		// 		loginModalOpen = false;
-		// 	});
+		login(username.value, password.value).then(() => {
+			loginModalOpen = false;
+		});
 	}
 
 	let menuOpen = false;
