@@ -51,6 +51,7 @@ export function is_logged_in(): boolean {
 }
 
 export async function login() {
+	// FIXME: auth popup doesn't appear
 	const token = await fetch(build_url('v3/token')).then((r) => r.text());
 	const payload = parseJwt(token);
 	set_access_token({ token, expires: payload.exp });
