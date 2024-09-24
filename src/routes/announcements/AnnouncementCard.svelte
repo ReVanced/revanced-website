@@ -40,9 +40,9 @@
 	{#if isRead !== undefined && !isRead}
 		<UnreadDot animated />
 	{/if}
-	{#if announcement.attachmentUrls}
+	<!-- {#if announcement.attachmentUrls}
 		<img src={announcement.attachmentUrls[0]} alt="Banner" />
-	{/if}
+	{/if} -->
 	<div class="content">
 		<div class="text">
 			<h3>{announcement.title}</h3>
@@ -110,10 +110,10 @@
 			}
 		}
 
-		img {
+		/* img {
 			width: 100%;
 			border-radius: 12px 12px 0px 0px;
-		}
+		} */
 
 		button {
 			background-color: transparent;
