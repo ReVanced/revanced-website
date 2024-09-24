@@ -40,17 +40,8 @@
 		url = settings.default_base_url;
 	}
 
-	function handleLogin(e: SubmitEvent) {
-		const { username, password } = e.target as HTMLFormElement;
-		console.log(username, password);
-		login(username.value, password.value).then(() => {
-			loginModalOpen = false;
-		});
-	}
-
 	let menuOpen = false;
 	let modalOpen = false;
-	let loginModalOpen = false;
 	let y: number;
 
 	onMount(() => {
@@ -143,25 +134,13 @@
 				</Svg>
 			</button>
 		</div>
-		<Button type="filled" on:click={() => ((loginModalOpen = true), (modalOpen = false))}>
-			Admin login
-		</Button>
+		<Button type="filled" on:click={login}>Admin login</Button>
 	</div>
 
 	<svelte:fragment slot="buttons">
 		<Button type="text" on:click={clear_and_reload} label="Reset Button">Reset</Button>
 		<Button type="text" on:click={save} label="Save Button">Save</Button>
 	</svelte:fragment>
-</Modal>
-
-<Modal bind:modalOpen={loginModalOpen}>
-	<div class="login-modal-content">
-		<form on:submit|preventDefault={handleLogin}>
-			<input type="text" placeholder="Username" name="username" required />
-			<input type="password" placeholder="Password" name="password" required />
-			<button type="submit">Login</button>
-		</form>
-	</div>
 </Modal>
 
 <style>
