@@ -9,6 +9,7 @@ export type AuthToken = {
 type JwtPayload = {
 	exp: number;
 	iss: string;
+	iat: number;
 };
 
 export class UnauthenticatedError extends Error {
@@ -19,8 +20,9 @@ export class UnauthenticatedError extends Error {
 
 // Get access token.
 export function get_access_token(): AuthToken | null {
+	if (!browser) return null;
 	const data = localStorage.getItem('revanced_api_access_token');
-	if (browser && data) return JSON.parse(data) as AuthToken;
+	if (data) return JSON.parse(data) as AuthToken;
 	return null;
 }
 
@@ -50,9 +52,82 @@ export function is_logged_in(): boolean {
 	return Date.now() < token.expires;
 }
 
+// async function digest_fetch(
+// 	url: string,
+// 	username: string,
+// 	password: string,
+// 	options: RequestInit = {}
+// ): Promise<Response> {
+// 	// Helper function to convert ArrayBuffer to Hex string
+// 	function bufferToHex(buffer: ArrayBuffer): string {
+// 		return Array.from(new Uint8Array(buffer))
+// 			.map((b) => b.toString(16).padStart(2, '0'))
+// 			.join('');
+// 	}
+
+// 	// Generate SHA-256 digest
+// 	async function sha256(message: string): Promise<string> {
+// 		const encoder = new TextEncoder();
+// 		const data = encoder.encode(message);
+// 		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+// 		return bufferToHex(hashBuffer);
+// 	}
+
+// 	// Perform an initial request to get the `WWW-Authenticate` header
+// 	const initialResponse = await fetch(url, {
+// 		method: options.method || 'GET',
+// 		headers: options.headers || {}
+// 	});
+
+// 	if (!initialResponse.ok && initialResponse.status !== 401)
+// 		throw new Error(`Initial request failed with status: ${initialResponse.status}`);
+
+// 	const authHeader = initialResponse.headers.get('Www-Authenticate');
+// 	if (!authHeader || !authHeader.startsWith('Digest '))
+// 		throw new Error('No Digest authentication header found');
+
+// 	// Parse the `WWW-Authenticate` header to extract fields like realm, nonce, qop, etc.
+// 	const authParams = authHeader
+// 		.replace('Digest ', '')
+// 		.split(',')
+// 		.reduce((acc: Record<string, string>, item) => {
+// 			const [key, value] = item.trim().split('=');
+// 			acc[key] = value.replace(/"/g, '');
+// 			return acc;
+// 		}, {});
+
+// 	const { realm, nonce } = authParams;
+// 	const method = options.method || 'GET';
+// 	const uri = new URL(url).pathname;
+
+// 	// Create HA1, HA2, and response hashes according to the Digest authentication scheme
+// 	// https://ktor.io/docs/server-digest-auth.html#flow
+// 	const HA1 = await sha256(`${username}:${realm}:${password}`);
+// 	const HA2 = await sha256(`${method}:${uri}`);
+
+// 	const responseHash = await sha256(`${HA1}:${nonce}:${HA2}`);
+
+// 	// Build the Authorization header
+// 	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${responseHash}"`;
+
+// 	// Perform the final request with the Authorization header
+// 	const finalResponse = await fetch(url, {
+// 		...options,
+// 		headers: {
+// 			...options.headers,
+// 			Authorization: authHeaderDigest
+// 		}
+// 	});
+
+// 	return finalResponse;
+// }
+
 export async function login() {
-	// FIXME: auth popup doesn't appear
-	const token = await fetch(build_url('v3/token')).then((r) => r.text());
-	const payload = parseJwt(token);
-	set_access_token({ token, expires: payload.exp });
+	const res = await fetch(build_url('v3/token'));
+	if (!res.ok) return false;
+
+	const data = await res.json();
+	const payload = parseJwt(data.token);
+	set_access_token({ token: data.token, expires: payload.exp * 1000 });
+	return true;
 }

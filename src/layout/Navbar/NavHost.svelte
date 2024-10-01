@@ -13,7 +13,8 @@
 	import RouterEvents from '$data/RouterEvents';
 
 	import { useQueryClient } from '@tanstack/svelte-query';
-	import { login } from '$lib/auth';
+	import { get_access_token, is_logged_in, login } from '$lib/auth';
+	import moment from 'moment';
 
 	const client = useQueryClient();
 
@@ -40,15 +41,20 @@
 		url = settings.default_base_url;
 	}
 
+	$: passed_login = is_logged_in();
+	$: session_exp_date = passed_login ? moment(get_access_token()!.expires).fromNow() : undefined;
+
+	async function handle_login() {
+		passed_login = await login();
+	}
+
 	let menuOpen = false;
 	let modalOpen = false;
 	let y: number;
 
 	onMount(() => {
 		return RouterEvents.subscribe((event) => {
-			if (event.navigating) {
-				menuOpen = false;
-			}
+			if (event.navigating) menuOpen = false;
 		});
 	});
 </script>
@@ -122,8 +128,8 @@
 		</Svg>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
-	<!-- <svelte:fragment slot="description">Configure the API for this website.</svelte:fragment> -->
 	<div id="settings-content">
+		<p>Configure the API for this website.</p>
 		<div class="input-wrapper">
 			<input name="api-url" id="api-url" type="text" bind:value={url} />
 			<button id="button-reset" on:click={reset} aria-label="Reset Button">
@@ -134,7 +140,12 @@
 				</Svg>
 			</button>
 		</div>
-		<Button type="filled" on:click={login}>Admin login</Button>
+		<div class="admin-wrapper">
+			<Button type="filled" on:click={handle_login}>Admin login</Button>
+			{#if passed_login}
+				<span>Session will expire <span class="exp-date">{session_exp_date}</span></span>
+			{/if}
+		</div>
 	</div>
 
 	<svelte:fragment slot="buttons">
@@ -144,6 +155,17 @@
 </Modal>
 
 <style>
+	.admin-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		color: var(--text-one);
+	}
+
+	.admin-wrapper span > .exp-date {
+		color: var(--primary);
+	}
+
 	#logo {
 		padding: 0.5rem;
 	}
