@@ -82,6 +82,8 @@ async function digest_fetch(
 	if (!initialResponse.ok && initialResponse.status !== 401)
 		throw new Error(`Initial request failed with status: ${initialResponse.status}`);
 
+	if (initialResponse.ok && initialResponse.status === 200) return initialResponse;
+
 	const authHeader = initialResponse.headers.get('Www-Authenticate');
 	if (!authHeader || !authHeader.startsWith('Digest '))
 		throw new Error('No Digest authentication header found');
@@ -109,6 +111,7 @@ async function digest_fetch(
 
 	// Build the Authorization header
 	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${responseHash}"`;
+	console.log(authHeaderDigest);
 
 	// Perform the final request with the Authorization header
 	const finalResponse = await fetch(url, {
