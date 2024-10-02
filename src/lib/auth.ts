@@ -52,78 +52,78 @@ export function is_logged_in(): boolean {
 	return Date.now() < token.expires;
 }
 
-// async function digest_fetch(
-// 	url: string,
-// 	username: string,
-// 	password: string,
-// 	options: RequestInit = {}
-// ): Promise<Response> {
-// 	// Helper function to convert ArrayBuffer to Hex string
-// 	function bufferToHex(buffer: ArrayBuffer): string {
-// 		return Array.from(new Uint8Array(buffer))
-// 			.map((b) => b.toString(16).padStart(2, '0'))
-// 			.join('');
-// 	}
+async function digest_fetch(
+	url: string,
+	username: string,
+	password: string,
+	options: RequestInit = {}
+): Promise<Response> {
+	// Helper function to convert ArrayBuffer to Hex string
+	function bufferToHex(buffer: ArrayBuffer): string {
+		return Array.from(new Uint8Array(buffer))
+			.map((b) => b.toString(16).padStart(2, '0'))
+			.join('');
+	}
 
-// 	// Generate SHA-256 digest
-// 	async function sha256(message: string): Promise<string> {
-// 		const encoder = new TextEncoder();
-// 		const data = encoder.encode(message);
-// 		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-// 		return bufferToHex(hashBuffer);
-// 	}
+	// Generate SHA-256 digest
+	async function sha256(message: string): Promise<string> {
+		const encoder = new TextEncoder();
+		const data = encoder.encode(message);
+		const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+		return bufferToHex(hashBuffer);
+	}
 
-// 	// Perform an initial request to get the `WWW-Authenticate` header
-// 	const initialResponse = await fetch(url, {
-// 		method: options.method || 'GET',
-// 		headers: options.headers || {}
-// 	});
+	// Perform an initial request to get the `WWW-Authenticate` header
+	const initialResponse = await fetch(url, {
+		method: options.method || 'GET',
+		headers: options.headers || {}
+	});
 
-// 	if (!initialResponse.ok && initialResponse.status !== 401)
-// 		throw new Error(`Initial request failed with status: ${initialResponse.status}`);
+	if (!initialResponse.ok && initialResponse.status !== 401)
+		throw new Error(`Initial request failed with status: ${initialResponse.status}`);
 
-// 	const authHeader = initialResponse.headers.get('Www-Authenticate');
-// 	if (!authHeader || !authHeader.startsWith('Digest '))
-// 		throw new Error('No Digest authentication header found');
+	const authHeader = initialResponse.headers.get('Www-Authenticate');
+	if (!authHeader || !authHeader.startsWith('Digest '))
+		throw new Error('No Digest authentication header found');
 
-// 	// Parse the `WWW-Authenticate` header to extract fields like realm, nonce, qop, etc.
-// 	const authParams = authHeader
-// 		.replace('Digest ', '')
-// 		.split(',')
-// 		.reduce((acc: Record<string, string>, item) => {
-// 			const [key, value] = item.trim().split('=');
-// 			acc[key] = value.replace(/"/g, '');
-// 			return acc;
-// 		}, {});
+	// Parse the `WWW-Authenticate` header to extract fields like realm, nonce, qop, etc.
+	const authParams = authHeader
+		.replace('Digest ', '')
+		.split(',')
+		.reduce((acc: Record<string, string>, item) => {
+			const [key, value] = item.trim().split('=');
+			acc[key] = value.replace(/"/g, '');
+			return acc;
+		}, {});
 
-// 	const { realm, nonce } = authParams;
-// 	const method = options.method || 'GET';
-// 	const uri = new URL(url).pathname;
+	const { realm, nonce } = authParams;
+	const method = options.method || 'GET';
+	const uri = new URL(url).pathname;
 
-// 	// Create HA1, HA2, and response hashes according to the Digest authentication scheme
-// 	// https://ktor.io/docs/server-digest-auth.html#flow
-// 	const HA1 = await sha256(`${username}:${realm}:${password}`);
-// 	const HA2 = await sha256(`${method}:${uri}`);
+	// Create HA1, HA2, and response hashes according to the Digest authentication scheme
+	// https://ktor.io/docs/server-digest-auth.html#flow
+	const HA1 = await sha256(`${username}:${realm}:${password}`);
+	const HA2 = await sha256(`${method}:${uri}`);
 
-// 	const responseHash = await sha256(`${HA1}:${nonce}:${HA2}`);
+	const responseHash = await sha256(`${HA1}:${nonce}:${HA2}`);
 
-// 	// Build the Authorization header
-// 	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${responseHash}"`;
+	// Build the Authorization header
+	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${responseHash}"`;
 
-// 	// Perform the final request with the Authorization header
-// 	const finalResponse = await fetch(url, {
-// 		...options,
-// 		headers: {
-// 			...options.headers,
-// 			Authorization: authHeaderDigest
-// 		}
-// 	});
+	// Perform the final request with the Authorization header
+	const finalResponse = await fetch(url, {
+		...options,
+		headers: {
+			...options.headers,
+			Authorization: authHeaderDigest
+		}
+	});
 
-// 	return finalResponse;
-// }
+	return finalResponse;
+}
 
 export async function login() {
-	const res = await fetch(build_url('v3/token'));
+	const res = await digest_fetch(build_url('v3/token'), 'ReVanced', 'ReVanced'); // hardcoded for development
 	if (!res.ok) return false;
 
 	const data = await res.json();
