@@ -111,7 +111,6 @@ async function digest_fetch(
 
 	// Build the Authorization header
 	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${responseHash}"`;
-	console.log(authHeaderDigest);
 
 	// Perform the final request with the Authorization header
 	const finalResponse = await fetch(url, {
