@@ -44,13 +44,19 @@
 	$: passed_login = is_logged_in();
 	$: session_exp_date = passed_login ? moment(get_access_token()!.expires).fromNow() : undefined;
 
-	async function handle_login() {
-		passed_login = await login();
+	async function handle_login(e: SubmitEvent) {
+		const data = new FormData(e.target as HTMLFormElement);
+
+		const username = data.get('username') as string;
+		const password = data.get('password') as string;
+
+		passed_login = await login(username, password);
 	}
 
 	let menuOpen = false;
 	let modalOpen = false;
 	let y: number;
+	let loginOpen = false;
 
 	onMount(() => {
 		return RouterEvents.subscribe((event) => {
@@ -141,7 +147,7 @@
 			</button>
 		</div>
 		<div class="admin-wrapper">
-			<Button type="filled" on:click={handle_login}>Admin login</Button>
+			<Button type="filled" on:click={() => (loginOpen = !loginOpen)}>Sudo login</Button>
 			{#if passed_login}
 				<span>Session will expire <span class="exp-date">{session_exp_date}</span></span>
 			{/if}
@@ -154,6 +160,32 @@
 	</svelte:fragment>
 </Modal>
 
+<!-- login -->
+<Modal bind:modalOpen={loginOpen}>
+	<div class="admin-modal-content">
+		<h2>Sudo login</h2>
+		<p>
+			This panel is reserved for administrators at ReVanced, this is not what you should be looking
+			for, go back!
+		</p>
+		<form on:submit|preventDefault={handle_login}>
+			<div class="input-wrapper">
+				<label for="username">Username</label>
+				<input type="text" id="username" name="username" required />
+			</div>
+			<div class="input-wrapper">
+				<label for="password">Password</label>
+				<input type="password" id="password" name="password" required />
+			</div>
+			<div>
+				<img src="icons/encrypted.svg" alt="Encrypted icon" />
+				<button type="button">Cancel</button>
+				<button type="submit">Login</button>
+			</div>
+		</form>
+	</div>
+</Modal>
+
 <style>
 	.admin-wrapper {
 		display: flex;
@@ -164,6 +196,23 @@
 
 	.admin-wrapper span > .exp-date {
 		color: var(--primary);
+	}
+
+	.admin-modal-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.admin-modal-content > h2 {
+		color: var(--primary);
+	}
+
+	.admin-modal-content > p {
+		color: var(--red-one);
+	}
+
+	.admin-modal-content > form {
 	}
 
 	#logo {

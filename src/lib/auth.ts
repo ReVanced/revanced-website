@@ -124,8 +124,8 @@ async function digest_fetch(
 	return finalResponse;
 }
 
-export async function login() {
-	const res = await digest_fetch(build_url('v3/token'), 'ReVanced', 'ReVanced'); // hardcoded for development
+export async function login(username: string, password: string) {
+	const res = await digest_fetch(build_url('v3/token'), username, password); // hardcoded for development
 	if (!res.ok) return false;
 
 	const data = await res.json();
