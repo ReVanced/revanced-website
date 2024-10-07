@@ -169,18 +169,22 @@
 			for, go back!
 		</p>
 		<form on:submit|preventDefault={handle_login}>
-			<div class="input-wrapper">
-				<label for="username">Username</label>
-				<input type="text" id="username" name="username" required />
-			</div>
-			<div class="input-wrapper">
-				<label for="password">Password</label>
-				<input type="password" id="password" name="password" required />
+			<div>
+				<div class="input-wrapper">
+					<label for="username">Username</label>
+					<input type="text" id="username" name="username" required />
+				</div>
+				<div class="input-wrapper">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" required />
+				</div>
 			</div>
 			<div>
 				<img src="icons/encrypted.svg" alt="Encrypted icon" />
-				<button type="button">Cancel</button>
-				<button type="submit">Login</button>
+				<div>
+					<Button type="outlined" functionType="button">Cancel</Button>
+					<Button type="filled" functionType="submit">Login</Button>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -213,6 +217,26 @@
 	}
 
 	.admin-modal-content > form {
+		display: flex;
+		gap: 0.2rem;
+	}
+
+	.admin-modal-content > form > div:has(> div > input) {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.admin-modal-content > form > div:has(img) {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		justify-content: space-between;
+	}
+
+	.admin-modal-content > form > div:has(img) > div {
+		display: flex;
+		gap: 1rem;
 	}
 
 	#logo {

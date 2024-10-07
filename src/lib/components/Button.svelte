@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
+	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
 	export let icon = '';
 	export let href = '';
 	export let target = '';
@@ -14,7 +15,7 @@
 		<slot />
 	</a>
 {:else}
-	<button on:click class={`button-${type}`} aria-label={label}>
+	<button on:click class={`button-${type}`} aria-label={label} type={functionType}>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
