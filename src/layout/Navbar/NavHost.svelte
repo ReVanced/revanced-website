@@ -51,6 +51,7 @@
 		const password = data.get('password') as string;
 
 		passed_login = await login(username, password);
+		loginOpen = !passed_login;
 	}
 
 	let menuOpen = false;
@@ -182,7 +183,9 @@
 			<div>
 				<img src="icons/encrypted.svg" alt="Encrypted icon" />
 				<div>
-					<Button type="outlined" functionType="button">Cancel</Button>
+					<Button type="outlined" functionType="button" on:click={() => (loginOpen = !loginOpen)}>
+						Cancel
+					</Button>
 					<Button type="filled" functionType="submit">Login</Button>
 				</div>
 			</div>
