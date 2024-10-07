@@ -98,7 +98,7 @@ async function digest_fetch(
 			return acc;
 		}, {});
 
-	const { realm, nonce } = authParams;
+	const { realm, nonce, algorithm } = authParams;
 	const method = options.method || 'GET';
 	const uri = new URL(url).pathname;
 
@@ -110,7 +110,7 @@ async function digest_fetch(
 	const responseHash = await sha256(`${HA1}:${nonce}:${HA2}`);
 
 	// Build the Authorization header
-	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", response="${responseHash}"`;
+	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", algorithm=${algorithm}, response="${responseHash}"`;
 
 	// Perform the final request with the Authorization header
 	const finalResponse = await fetch(url, {
