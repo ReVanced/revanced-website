@@ -172,12 +172,12 @@
 		<form on:submit|preventDefault={handle_login}>
 			<div>
 				<div class="input-wrapper">
-					<label for="username">Username</label>
 					<input type="text" id="username" name="username" required />
+					<label for="username">Username</label>
 				</div>
 				<div class="input-wrapper">
-					<label for="password">Password</label>
 					<input type="password" id="password" name="password" required />
+					<label for="password">Password</label>
 				</div>
 			</div>
 			<div>
@@ -209,6 +209,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		position: relative;
 	}
 
 	.admin-modal-content > h2 {
@@ -228,6 +229,26 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.2rem;
+	}
+
+	.admin-modal-content label {
+		position: absolute;
+		top: 47%;
+		left: 1rem;
+		transition: all 0.2s ease-in-out;
+		color: var(--surface-six);
+		pointer-events: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.admin-modal-content input:focus + label,
+	input:valid + label {
+		top: 2px;
+		font-size: 0.85rem;
+		background-color: var(--surface-seven);
+		color: var(--text-one);
+		padding: 0.3rem;
 	}
 
 	.admin-modal-content > form > div:has(img) {
