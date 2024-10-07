@@ -181,7 +181,17 @@
 				</div>
 			</div>
 			<div>
-				<img src="icons/encrypted.svg" alt="Encrypted icon" />
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					height="24px"
+					viewBox="0 -960 960 960"
+					width="24px"
+					fill="currentColor"
+				>
+					<path
+						d="M404-346h152l-24-136q19-13 30.5-33.5T574-560q0-39.29-27.3-66.64Q519.41-654 480.2-654q-39.2 0-66.7 27.36Q386-599.29 386-560q0 24 11.5 44.5T428-482l-24 136Zm76.13 314Q321-70 217.5-209T114-516.16v-274.82L480-928l366 137.02v274.82Q846-348 742.63-209 639.25-70 480.13-32Z"
+					/>
+				</svg>
 				<div>
 					<Button type="outlined" functionType="button" on:click={() => (loginOpen = !loginOpen)}>
 						Cancel
@@ -222,13 +232,18 @@
 
 	.admin-modal-content > form {
 		display: flex;
-		gap: 0.2rem;
+		gap: 1rem;
 	}
 
 	.admin-modal-content > form > div:has(> div > input) {
 		display: flex;
 		flex-direction: column;
 		gap: 0.2rem;
+		margin-bottom: 5rem;
+	}
+
+	.admin-modal-content input {
+		min-width: 130%;
 	}
 
 	.admin-modal-content label {
@@ -251,16 +266,24 @@
 		padding: 0.3rem;
 	}
 
-	.admin-modal-content > form > div:has(img) {
+	.admin-modal-content > form > div:has(svg) {
 		display: flex;
 		flex-direction: column;
 		gap: 0.2rem;
 		justify-content: space-between;
 	}
 
-	.admin-modal-content > form > div:has(img) > div {
+	.admin-modal-content > form > div:has(svg) > div {
 		display: flex;
 		gap: 1rem;
+	}
+
+	.admin-modal-content svg {
+		flex: 1;
+		justify-self: center;
+		align-self: center;
+		width: 50%;
+		height: auto;
 	}
 
 	#logo {
