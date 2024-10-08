@@ -25,12 +25,12 @@ export type SocialsData = { socials: Social[] };
 export type AnnouncementsData = { announcements: Announcement[] };
 
 type ApiAnnouncementCreate = {
-	archivedAt: string | undefined;
-	attachmentUrls: string[] | undefined;
-	author: string | undefined;
-	channel: string | undefined;
-	content: string | undefined;
-	level: number | undefined;
+	archivedAt?: string;
+	attachmentUrls?: string[];
+	author?: string;
+	channel?: string;
+	content?: string;
+	level?: number;
 	title: string;
 };
 
