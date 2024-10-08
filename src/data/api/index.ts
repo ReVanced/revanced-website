@@ -24,6 +24,16 @@ export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatfor
 export type SocialsData = { socials: Social[] };
 export type AnnouncementsData = { announcements: Announcement[] };
 
+type ApiAnnouncementCreate = {
+	archivedAt: string | undefined;
+	attachmentUrls: string[] | undefined;
+	author: string | undefined;
+	channel: string | undefined;
+	content: string | undefined;
+	level: number | undefined;
+	title: string;
+};
+
 export function build_url(endpoint: string) {
 	return `${settings.api_base_url()}/${endpoint}`;
 }
@@ -40,33 +50,33 @@ async function get_json(endpoint: string) {
 	return await fetch(build_url(endpoint)).then((r) => r.json());
 }
 
-async function post_json(endpoint: string, body: any) {
+async function post_json(endpoint: string, body?: any) {
 	if (!is_logged_in()) throw new UnauthenticatedError();
 	const headers = build_headers();
 	return await fetch(build_url(endpoint), {
 		method: 'POST',
 		headers,
-		body: JSON.stringify(body)
+		body: body ? JSON.stringify(body) : ''
 	}).then((r) => r.json());
 }
 
-async function patch_json(endpoint: string, body: any) {
+async function patch_json(endpoint: string, body?: any) {
 	if (!is_logged_in()) throw new UnauthenticatedError();
 	const headers = build_headers();
 	return await fetch(build_url(endpoint), {
 		method: 'PATCH',
 		headers,
-		body: JSON.stringify(body)
+		body: body ? JSON.stringify(body) : ''
 	}).then((r) => r.json());
 }
 
-async function delete_json(endpoint: string, body: any) {
+async function delete_json(endpoint: string, body?: any) {
 	if (!is_logged_in()) throw new UnauthenticatedError();
 	const headers = build_headers();
 	return await fetch(build_url(endpoint), {
 		method: 'DELETE',
 		headers,
-		body: JSON.stringify(body)
+		body: body ? JSON.stringify(body) : ''
 	}).then((r) => r.json());
 }
 
@@ -205,6 +215,26 @@ async function announcements(channel?: string): Promise<AnnouncementsData> {
 			}
 		]
 	};
+}
+
+async function create_announcement(announcement: ApiAnnouncementCreate) {
+	await post_json('v3/announcements', announcement);
+}
+
+async function update_announcement(announcement: ApiAnnouncementCreate) {
+	await patch_json('v3/announcements', announcement);
+}
+
+async function delete_announcement(id: number) {
+	await delete_json(`v3/announcements/${id}`);
+}
+
+async function archive_announcement(id: number) {
+	await post_json(`v3/announcements/${id}/archive`);
+}
+
+async function unarchive_announcement(id: number) {
+	await post_json(`v3/announcements/${id}/unarchive`);
 }
 
 export const staleTime = 5 * 60 * 1000;
