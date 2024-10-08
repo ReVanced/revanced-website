@@ -40,22 +40,34 @@ async function get_json(endpoint: string) {
 	return await fetch(build_url(endpoint)).then((r) => r.json());
 }
 
-async function post_json(endpoint: string) {
+async function post_json(endpoint: string, body: any) {
 	if (!is_logged_in()) throw new UnauthenticatedError();
 	const headers = build_headers();
-	return await fetch(build_url(endpoint), { method: 'POST', headers }).then((r) => r.json());
+	return await fetch(build_url(endpoint), {
+		method: 'POST',
+		headers,
+		body: JSON.stringify(body)
+	}).then((r) => r.json());
 }
 
-async function patch_json(endpoint: string) {
+async function patch_json(endpoint: string, body: any) {
 	if (!is_logged_in()) throw new UnauthenticatedError();
 	const headers = build_headers();
-	return await fetch(build_url(endpoint), { method: 'PATCH', headers }).then((r) => r.json());
+	return await fetch(build_url(endpoint), {
+		method: 'PATCH',
+		headers,
+		body: JSON.stringify(body)
+	}).then((r) => r.json());
 }
 
-async function delete_json(endpoint: string) {
+async function delete_json(endpoint: string, body: any) {
 	if (!is_logged_in()) throw new UnauthenticatedError();
 	const headers = build_headers();
-	return await fetch(build_url(endpoint), { method: 'DELETE', headers }).then((r) => r.json());
+	return await fetch(build_url(endpoint), {
+		method: 'DELETE',
+		headers,
+		body: JSON.stringify(body)
+	}).then((r) => r.json());
 }
 
 async function contributors(): Promise<ContributorsData> {
