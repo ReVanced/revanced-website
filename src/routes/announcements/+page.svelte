@@ -3,12 +3,14 @@
 	import { derived, readable, type Readable } from 'svelte/store';
 	import { building } from '$app/environment';
 	import { page } from '$app/stores';
+	import Footer from '$layout/Footer/FooterHost.svelte';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 
 	import Query from '$lib/components/Query.svelte';
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
-	import ChannelChip from './ChannelChip.svelte';
-	import Masonry from '$lib/components/Masonry.svelte';
+	import ChannelsHost from './ChannelsHost.svelte';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -16,35 +18,39 @@
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
 	$: query = createQuery(queries.announcements());
-	$: channel = $searchParams.get('channel');
-
-	function uniqueObjArrayByKey<T extends object>(array: T[], key: keyof T) {
-		return array.filter((obj, index, self) => index === self.findIndex((t) => t[key] === obj[key]));
-	}
+	$: channels = $searchParams.getAll('channel');
 </script>
 
-<main class="wrapper">
+<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="announcements-list">
 		<Query {query} let:data>
-			<div class="channels-selection">
-				{#each uniqueObjArrayByKey(data.announcements, 'channel') as ann (ann.id)}
-					<ChannelChip channel={ann.channel} />
-				{/each}
-			</div>
+			<ChannelsHost announcements={data.announcements.values()} />
 
-			<Masonry>
-				{#each channel ? data.announcements.filter((a) => a.channel === channel) : data.announcements as announcement (announcement.id)}
+			<div class="cards">
+				{#each channels.length > 0 ? data.announcements
+							.values()
+							.filter( (a) => channels.includes(a.channel) ) : data.announcements.values() as announcement (announcement.id)}
 					<AnnouncementCard {announcement} />
 				{/each}
-			</Masonry>
+			</div>
 		</Query>
 	</div>
 </main>
+<Footer />
 
 <style>
-	.channels-selection {
-		display: flex;
-		align-items: center;
-		gap: 0.3rem;
+	.cards {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		padding: 16px 0px;
+		width: 100%;
+		gap: 16px;
+	}
+
+	@media (max-width: 767px) {
+		.cards {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 </style>
