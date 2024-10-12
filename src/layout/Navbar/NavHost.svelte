@@ -55,6 +55,18 @@
 
 		passed_login = passed_login_with_creds = await login(username, password);
 		loginOpen = !passed_login;
+		sessionInterval = new_session_interval();
+	}
+
+	function new_session_interval() {
+		clearInterval(sessionInterval);
+		return setInterval(() => {
+			sessionExpired = !is_logged_in();
+			passed_login = !sessionExpired;
+			session_exp_date = passed_login
+				? moment(get_access_token()!.expires).fromNow(true)
+				: undefined;
+		}, 50);
 	}
 
 	let menuOpen = false;
@@ -63,6 +75,8 @@
 	let loginOpen = false;
 	let passed_login_with_creds = false; // will only change when the user INPUTS the credentials, not if the session is just valid
 	let loginForm: HTMLFormElement;
+	let sessionInterval: number;
+	let sessionExpired: boolean;
 
 	onMount(() => {
 		return RouterEvents.subscribe((event) => {
@@ -214,7 +228,28 @@
 	</svelte:fragment>
 </Modal>
 
+<!-- session expired -->
+<Modal modalOpen={sessionExpired}>
+	<svelte:fragment slot="title">Expired session</svelte:fragment>
+	<div class="session-expired">
+		This session has expired, log in again to renew or lose all access to administrative power.
+	</div>
+	<svelte:fragment slot="buttons">
+		<Button
+			type="outlined"
+			on:click={() => (clearInterval(sessionInterval), (sessionExpired = !sessionExpired))}
+		>
+			OK
+		</Button>
+		<Button type="filled" on:click={() => (loginOpen = !loginOpen)}>Login</Button>
+	</svelte:fragment>
+</Modal>
+
 <style>
+	.session-expired {
+		color: var(--red-one);
+	}
+
 	.login-success {
 		color: var(--text-one);
 	}
