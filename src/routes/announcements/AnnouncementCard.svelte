@@ -37,11 +37,15 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <a href="/announcements/{announcement.id}">
-	<div class="card {announcement.attachmentUrls?.length > 0 ? 'attachment' : 'no-attachment'}">
+	<div
+		class="card {announcement.attachmentUrls?.length && announcement.attachmentUrls.length > 0
+			? 'attachment'
+			: 'no-attachment'}"
+	>
 		{#if isRead !== undefined && !isRead}
 			<UnreadDot animated />
 		{/if}
-		{#if announcement.attachmentUrls?.length > 0}
+		{#if announcement.attachmentUrls?.length && announcement.attachmentUrls.length > 0}
 			<img src={announcement.attachmentUrls[0]} alt="Banner" onerror="this.style.display='none'" />
 		{/if}
 		<div class="content">
