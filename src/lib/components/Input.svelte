@@ -24,6 +24,11 @@
 		pointer-events: none;
 		padding: 0;
 		margin: 0;
+		font-size: 1rem;
+	}
+
+	input {
+		font-size: 1rem;
 	}
 
 	input:focus + label,
