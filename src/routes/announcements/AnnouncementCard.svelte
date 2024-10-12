@@ -54,9 +54,7 @@
 			<div class="footer">
 				<hr />
 				<span class="date">
-					{new Date(announcement.createdAt.value).toLocaleString('en-US', {
-						dateStyle: 'long'
-					})}
+					{moment(announcement.createdAt.value).format('MMMM DD, YYYY')}
 				</span>
 			</div>
 		</div>
