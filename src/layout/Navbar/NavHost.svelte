@@ -181,7 +181,7 @@
 				<Input placeholder="Username" required />
 				<Input placeholder="Password" required />
 			</div>
-			<div>
+			<div class="desktop-only">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					height="24px"
@@ -406,6 +406,10 @@
 		#secondary-navigation {
 			z-index: 100;
 			padding: 16px;
+		}
+
+		.admin-modal-content > form > div:has(input) {
+			width: 100%;
 		}
 	}
 
