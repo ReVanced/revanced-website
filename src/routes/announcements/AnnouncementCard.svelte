@@ -9,7 +9,6 @@
 
 	export let announcement: Announcement;
 
-	let showContent = false;
 	let isRead: boolean;
 	let isUserAdmin: boolean = true; // TODO: add logic later
 
@@ -26,17 +25,12 @@
 		isRead = true;
 	}
 
-	const showAnnouncement = () => {
-		showContent = true;
-		setAnnouncementRead();
-	};
-
 	onMount(isAnnouncementRead);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<a href="/announcements/{announcement.id}">
+<a href="/announcements/{announcement.id}" on:click={setAnnouncementRead}>
 	<div
 		class="card {announcement.attachmentUrls?.length && announcement.attachmentUrls.length > 0
 			? 'attachment'
