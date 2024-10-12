@@ -18,6 +18,22 @@ export class UnauthenticatedError extends Error {
 	}
 }
 
+class Session {
+	static set(id: string, value: any): void {
+		if (typeof value === 'object') value = JSON.stringify(value);
+		sessionStorage.setItem(id, value);
+	}
+
+	static get(id: string): any | undefined {
+		const value: any = sessionStorage.getItem(id);
+		try {
+			return JSON.parse(value);
+		} catch (e) {
+			return value;
+		}
+	}
+}
+
 // Get access token.
 export function get_access_token(): AuthToken | null {
 	if (!browser) return null;
@@ -104,7 +120,13 @@ async function digest_fetch(
 
 	// Create HA1, HA2, and response hashes according to the Digest authentication scheme
 	// https://ktor.io/docs/server-digest-auth.html#flow
-	const HA1 = await sha256(`${username}:${realm}:${password}`);
+	let HA1: string;
+	if (Session.get('ha1')) HA1 = Session.get('ha1');
+	else {
+		HA1 = await sha256(`${username}:${realm}:${password}`);
+		Session.set('ha1', HA1);
+	}
+
 	const HA2 = await sha256(`${method}:${uri}`);
 
 	const responseHash = await sha256(`${HA1}:${nonce}:${HA2}`);
