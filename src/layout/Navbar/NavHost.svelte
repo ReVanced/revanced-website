@@ -15,6 +15,7 @@
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import { get_access_token, is_logged_in, login } from '$lib/auth';
 	import moment from 'moment';
+	import Input from '$lib/components/Input.svelte';
 
 	const client = useQueryClient();
 
@@ -171,14 +172,8 @@
 		</p>
 		<form on:submit|preventDefault={handle_login}>
 			<div>
-				<div class="input-wrapper">
-					<input type="text" id="username" name="username" required />
-					<label for="username">Username</label>
-				</div>
-				<div class="input-wrapper">
-					<input type="password" id="password" name="password" required />
-					<label for="password">Password</label>
-				</div>
+				<Input placeholder="Username" required />
+				<Input placeholder="Password" required />
 			</div>
 			<div>
 				<svg
@@ -238,32 +233,8 @@
 	.admin-modal-content > form > div:has(> div > input) {
 		display: flex;
 		flex-direction: column;
-		gap: 0.2rem;
+		gap: 1rem;
 		margin-bottom: 5rem;
-	}
-
-	.admin-modal-content input {
-		min-width: 130%;
-	}
-
-	.admin-modal-content label {
-		position: absolute;
-		top: 47%;
-		left: 1rem;
-		transition: all 0.2s ease-in-out;
-		color: var(--surface-six);
-		pointer-events: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	.admin-modal-content input:focus + label,
-	input:valid + label {
-		top: 2px;
-		font-size: 0.85rem;
-		background-color: var(--surface-seven);
-		color: var(--text-one);
-		padding: 0.3rem;
 	}
 
 	.admin-modal-content > form > div:has(svg) {
