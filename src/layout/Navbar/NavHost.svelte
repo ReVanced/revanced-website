@@ -206,15 +206,19 @@
 <!-- logged in success -->
 <Modal bind:modalOpen={passed_login_with_creds}>
 	<svelte:fragment slot="title">Successfully logged in!</svelte:fragment>
-	<svelte:fragment slot="description">
+	<div class="login-success">
 		This session will expire in <span class="exp-date">{session_exp_date}</span>
-	</svelte:fragment>
+	</div>
 	<svelte:fragment slot="buttons">
 		<Button type="filled" on:click={() => (passed_login_with_creds = false)}>OK</Button>
 	</svelte:fragment>
 </Modal>
 
 <style>
+	.login-success {
+		color: var(--text-one);
+	}
+
 	.admin-wrapper {
 		display: flex;
 		flex-direction: column;
@@ -222,7 +226,7 @@
 		color: var(--text-one);
 	}
 
-	.admin-wrapper span > .exp-date {
+	.exp-date {
 		color: var(--primary);
 	}
 
