@@ -43,7 +43,9 @@
 	}
 
 	$: passed_login = is_logged_in();
-	$: session_exp_date = passed_login ? moment(get_access_token()!.expires).fromNow() : undefined;
+	$: session_exp_date = passed_login
+		? moment(get_access_token()!.expires).fromNow(true)
+		: undefined;
 
 	async function handle_login(e: SubmitEvent) {
 		const data = new FormData(e.target as HTMLFormElement);
@@ -51,7 +53,7 @@
 		const username = data.get('username') as string;
 		const password = data.get('password') as string;
 
-		passed_login = await login(username, password);
+		passed_login = passed_login_with_creds = await login(username, password);
 		loginOpen = !passed_login;
 	}
 
@@ -59,6 +61,8 @@
 	let modalOpen = false;
 	let y: number;
 	let loginOpen = false;
+	let passed_login_with_creds = false; // will only change when the user INPUTS the credentials, not if the session is just valid
+	let loginForm: HTMLFormElement;
 
 	onMount(() => {
 		return RouterEvents.subscribe((event) => {
@@ -149,9 +153,11 @@
 			</button>
 		</div>
 		<div class="admin-wrapper">
-			<Button type="filled" on:click={() => (loginOpen = !loginOpen)}>Sudo login</Button>
+			<Button type="filled" on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}>
+				Sudo login
+			</Button>
 			{#if passed_login}
-				<span>Session will expire <span class="exp-date">{session_exp_date}</span></span>
+				<span>Admin session will expire in <span class="exp-date">{session_exp_date}</span></span>
 			{/if}
 		</div>
 	</div>
@@ -170,7 +176,7 @@
 			This panel is reserved for administrators at ReVanced, this is not what you should be looking
 			for, go back!
 		</p>
-		<form on:submit|preventDefault={handle_login}>
+		<form on:submit|preventDefault={handle_login} bind:this={loginForm}>
 			<div>
 				<Input placeholder="Username" required />
 				<Input placeholder="Password" required />
@@ -187,15 +193,25 @@
 						d="M404-346h152l-24-136q19-13 30.5-33.5T574-560q0-39.29-27.3-66.64Q519.41-654 480.2-654q-39.2 0-66.7 27.36Q386-599.29 386-560q0 24 11.5 44.5T428-482l-24 136Zm76.13 314Q321-70 217.5-209T114-516.16v-274.82L480-928l366 137.02v274.82Q846-348 742.63-209 639.25-70 480.13-32Z"
 					/>
 				</svg>
-				<div>
-					<Button type="outlined" functionType="button" on:click={() => (loginOpen = !loginOpen)}>
-						Cancel
-					</Button>
-					<Button type="filled" functionType="submit">Login</Button>
-				</div>
 			</div>
 		</form>
 	</div>
+	<svelte:fragment slot="buttons">
+		<Button type="outlined" on:click={() => (loginOpen = !loginOpen)}>Cancel</Button>
+		<!-- first paragraph of https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit -->
+		<Button type="filled" on:click={() => loginForm.requestSubmit()}>Login</Button>
+	</svelte:fragment>
+</Modal>
+
+<!-- logged in success -->
+<Modal bind:modalOpen={passed_login_with_creds}>
+	<svelte:fragment slot="title">Successfully logged in!</svelte:fragment>
+	<svelte:fragment slot="description">
+		This session will expire in <span class="exp-date">{session_exp_date}</span>
+	</svelte:fragment>
+	<svelte:fragment slot="buttons">
+		<Button type="filled" on:click={() => (passed_login_with_creds = false)}>OK</Button>
+	</svelte:fragment>
 </Modal>
 
 <style>
@@ -237,17 +253,12 @@
 		margin-bottom: 5rem;
 	}
 
-	.admin-modal-content > form > div:has(svg) {
+	/* .admin-modal-content > form > div:has(svg) {
 		display: flex;
 		flex-direction: column;
 		gap: 0.2rem;
 		justify-content: space-between;
-	}
-
-	.admin-modal-content > form > div:has(svg) > div {
-		display: flex;
-		gap: 1rem;
-	}
+	} */
 
 	.admin-modal-content svg {
 		flex: 1;
