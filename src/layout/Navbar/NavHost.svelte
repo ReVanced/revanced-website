@@ -250,25 +250,24 @@
 		gap: 1rem;
 	}
 
-	.admin-modal-content > form > div:has(> div > input) {
+	.admin-modal-content > form > div:has(input) {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-		margin-bottom: 5rem;
+		margin-bottom: 1rem;
 	}
 
-	/* .admin-modal-content > form > div:has(svg) {
+	.admin-modal-content > form > div:has(svg) {
 		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
-		justify-content: space-between;
-	} */
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+	}
 
 	.admin-modal-content svg {
-		flex: 1;
 		justify-self: center;
 		align-self: center;
-		width: 50%;
+		width: 75%;
 		height: auto;
 	}
 

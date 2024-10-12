@@ -29,6 +29,8 @@
 
 	input {
 		font-size: 1rem;
+		width: 100%;
+		height: 100%;
 	}
 
 	input:focus + label,
