@@ -241,7 +241,12 @@
 		>
 			OK
 		</Button>
-		<Button type="filled" on:click={() => (loginOpen = !loginOpen)}>Login</Button>
+		<Button
+			type="filled"
+			on:click={() => ((loginOpen = !loginOpen), (sessionExpired = !sessionExpired))}
+		>
+			Login
+		</Button>
 	</svelte:fragment>
 </Modal>
 
