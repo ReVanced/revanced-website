@@ -11,26 +11,101 @@
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
 	import ChannelsHost from './ChannelsHost.svelte';
+	import Search from '$lib/components/Search.svelte';
+	import Fuse from 'fuse.js';
+	import { onMount } from 'svelte';
+
 
 	let searchParams: Readable<URLSearchParams>;
 
 	if (building) searchParams = readable(new URLSearchParams());
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
+	let searchTerm = $searchParams.get('s') || '';
+	let searcher;
+
 	$: query = createQuery(queries.announcements());
 	$: channels = $searchParams.getAll('channel');
+
+	function filter(announcements, search) {
+		const announcementsArray = Array.from(announcements);
+
+		if (!search) {
+			console.log(channels);
+			if (channels.length > 0)
+				return announcementsArray.filter((announcement) => channels.includes(announcement.channel));
+			return announcementsArray;
+		}
+
+		if (!searcher) {
+			searcher = new Fuse(announcementsArray, {
+				keys: ['title', 'content'],
+				shouldSort: true,
+				threshold: 0.3
+			});
+		}
+
+		const result = searcher
+			.search(search)
+			.map(({ item }) => item)
+			.filter((item) => {
+				// Don't show if the announcement isn't under the selected channels
+				if (channels.length > 0 && !channels.includes(item.channel)) {
+					return false;
+				}
+				return true;
+			});
+		return result;
+	}
+
+	// Make sure we don't have to filter the announcements after every key press
+	let displayedTerm = '';
+	const debounce = <T extends any[]>(f: (...args: T) => void) => {
+		let timeout: number;
+		return (...args: T) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => f(...args), 350);
+		};
+	};
+	const update = () => {
+		displayedTerm = searchTerm;
+
+		const url = new URL(window.location.href);
+		url.pathname = '/announcements';
+
+		if (searchTerm) {
+			url.searchParams.set('s', searchTerm);
+		} else {
+			url.searchParams.delete('s');
+		}
+	};
+
+	onMount(update);
 </script>
 
+<div class="search">
+	<div class="search-contain">
+		<!-- Must bind both variables: we get searchTerm from the text input, -->
+		<Search
+			bind:searchTerm
+			bind:displayedTerm
+			title="Search for announcements"
+			on:keyup={debounce(update)}
+		/>
+	</div>
+</div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="announcements-list">
 		<Query {query} let:data>
 			<ChannelsHost announcements={data.announcements.values()} />
 
 			<div class="cards">
-				{#each channels.length > 0 ? data.announcements
-							.values()
-							.filter( (a) => channels.includes(a.channel) ) : data.announcements.values() as announcement (announcement.id)}
-					<AnnouncementCard {announcement} />
+				{#each filter(data.announcements.values(), displayedTerm) as announcement}
+					{#key channels || displayedTerm}
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+							<AnnouncementCard {announcement} />
+						</div>
+					{/key}
 				{/each}
 			</div>
 		</Query>
@@ -38,7 +113,22 @@
 </main>
 <Footer />
 
-<style>
+<style lang="scss">
+	.search {
+		padding-top: 5rem;
+		padding-bottom: 1.25rem;
+		background-color: var(--surface-eight);
+
+		.search-contain {
+			width: min(90%, 80rem);
+			margin-inline: auto;
+		}
+	}
+
+	main {
+		margin-top: 2rem;
+	}
+
 	.cards {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
