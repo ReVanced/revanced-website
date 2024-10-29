@@ -67,20 +67,20 @@
 		display: flex;
 		align-items: center;
 		gap: 4px;
-	}
 
-	.button {
-		display: flex;
-		align-items: center;
-	}
+		.button {
+			display: flex;
+			align-items: center;
+		}
 
-	.expand-arrow {
-		transition: all 0.2s var(--bezier-one);
-		user-select: none;
-		height: 1.5rem;
-	}
+		.expand-arrow {
+			transition: all 0.2s var(--bezier-one);
+			user-select: none;
+			height: 1.5rem;
+		}
 
-	.rotate .expand-arrow {
-		transform: rotate(180deg);
+		.rotate .expand-arrow {
+			transform: rotate(180deg);
+		}
 	}
 </style>

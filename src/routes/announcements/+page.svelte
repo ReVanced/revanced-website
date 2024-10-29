@@ -15,7 +15,6 @@
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
 
-
 	let searchParams: Readable<URLSearchParams>;
 
 	if (building) searchParams = readable(new URLSearchParams());
@@ -31,7 +30,6 @@
 		const announcementsArray = Array.from(announcements);
 
 		if (!search) {
-			console.log(channels);
 			if (channels.length > 0)
 				return announcementsArray.filter((announcement) => channels.includes(announcement.channel));
 			return announcementsArray;

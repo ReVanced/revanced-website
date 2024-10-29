@@ -4,14 +4,11 @@
 
 	import type { Announcement } from '$lib/types';
 	import UnreadDot from './UnreadDot.svelte';
-	import ChannelChip from './ChannelChip.svelte';
-	import ChannelsHost from './ChannelsHost.svelte';
 	import { is_logged_in } from '$lib/auth';
 
 	export let announcement: Announcement;
 
 	let isRead: boolean;
-	let isUserAdmin: boolean;
 
 	function isAnnouncementRead() {
 		isRead = (localStorage.getItem('read_announcements') ?? '')
@@ -28,7 +25,6 @@
 
 	onMount(() => {
 		isAnnouncementRead();
-		isUserAdmin = is_logged_in();
 	});
 </script>
 
