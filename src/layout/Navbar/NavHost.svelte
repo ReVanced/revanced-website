@@ -168,7 +168,7 @@
 		</div>
 		<div class="admin-wrapper">
 			<Button type="filled" on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}>
-				Sudo login
+				Admin Login
 			</Button>
 			{#if passed_login}
 				<span>Admin session will expire in <span class="exp-date">{session_exp_date}</span></span>
@@ -185,7 +185,7 @@
 <!-- login -->
 <Modal bind:modalOpen={loginOpen}>
 	<div class="admin-modal-content">
-		<h2>Sudo login</h2>
+		<h2>Admin Login</h2>
 		<p>
 			This panel is reserved for administrators at ReVanced, this is not what you should be looking
 			for, go back!
@@ -194,19 +194,6 @@
 			<div>
 				<Input placeholder="Username" required />
 				<Input placeholder="Password" required />
-			</div>
-			<div class="desktop-only">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					height="24px"
-					viewBox="0 -960 960 960"
-					width="24px"
-					fill="currentColor"
-				>
-					<path
-						d="M404-346h152l-24-136q19-13 30.5-33.5T574-560q0-39.29-27.3-66.64Q519.41-654 480.2-654q-39.2 0-66.7 27.36Q386-599.29 386-560q0 24 11.5 44.5T428-482l-24 136Zm76.13 314Q321-70 217.5-209T114-516.16v-274.82L480-928l366 137.02v274.82Q846-348 742.63-209 639.25-70 480.13-32Z"
-					/>
-				</svg>
 			</div>
 		</form>
 	</div>
@@ -295,6 +282,7 @@
 		flex-direction: column;
 		gap: 1rem;
 		margin-bottom: 1rem;
+		width: 100%;
 	}
 
 	.admin-modal-content > form > div:has(svg) {
