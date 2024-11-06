@@ -11,7 +11,8 @@ import type {
 	Social,
 	About,
 	CompatiblePackage,
-	Announcement
+	Announcement,
+	ApiAnnouncementCreate
 } from '$lib/types';
 import { get_access_token, is_logged_in, UnauthenticatedError } from '$lib/auth';
 
@@ -23,16 +24,6 @@ export type AboutData = { about: About };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
 export type SocialsData = { socials: Social[] };
 export type AnnouncementsData = { announcements: Map<number, Announcement> };
-
-type ApiAnnouncementCreate = {
-	archivedAt?: string;
-	attachmentUrls?: string[];
-	author?: string;
-	channel?: string;
-	content?: string;
-	level?: number;
-	title: string;
-};
 
 type GetAnnouncementsOptions = Partial<{
 	tags: string[];

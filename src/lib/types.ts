@@ -12,6 +12,16 @@ export interface Announcement {
 	title: string;
 }
 
+export type ApiAnnouncementCreate = {
+	title: string;
+} & Partial<{
+	attachmentUrls: string[];
+	author: string;
+	channel: string;
+	content: string;
+	level: number;
+}>;
+
 export interface Contributor {
 	name: string;
 	avatar_url: string;
