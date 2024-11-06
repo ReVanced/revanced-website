@@ -35,7 +35,7 @@
 		<h5>{patch.description}</h5>
 	{/if}
 	<ul class="info-container">
-		{#if !patch.compatiblePackages?.length}
+		{#if !patch.compatiblePackages}
 			<li class="patch-info">🌎 Universal patch</li>
 		{:else}
 			{#each patch.compatiblePackages as pkg}
