@@ -5,6 +5,8 @@ const URL_KEY = 'revanced_api_url';
 
 export const default_base_url = RV_API_URL;
 
+export const API_VERSION = 'v4';
+
 // Get base URL
 export function api_base_url(): string {
 	if (browser) return localStorage.getItem(URL_KEY) || default_base_url;
