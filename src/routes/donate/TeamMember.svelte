@@ -31,22 +31,22 @@
 			</a>
 			<div class="verified-badge">
 				<ToolTip
-					content="<p><b>{member.name}</b> is verified with this GPG Key ID:</p> <a class='gpg-url' href={member
-						.gpg_key.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
+					content="<p>GPG key ID:</p> <a class='gpg-url' href={member.gpg_key
+						.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
 					html={true}
 				>
-					<div class="desktop-verified">
+					<div class="desktop">
 						<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
 							<Svg svgHeight={16} viewBoxHeight={16}>
 								<path d={verifiedIconPath} />
 							</Svg>
 						</a>
 					</div>
-					<div class="mobile-verified">
+					<div class="mobile">
 						<Svg svgHeight={16} viewBoxHeight={16}>
 							<path d={verifiedIconPath} />
 						</Svg>
-						<h5>Verified</h5>
+						<h5>GPG key</h5>
 					</div>
 				</ToolTip>
 			</div>
@@ -90,18 +90,18 @@
 			.verified-badge {
 				display: flex;
 				align-items: center;
-				fill: var(--secondary);
+				fill: var(--secondary) !important;
 				line-height: 16px;
 				height: 16px;
 
-				.mobile-verified {
+				.mobile {
 					display: none;
 				}
 				@media screen and (width <= 768px) {
-					.desktop-verified {
+					.desktop {
 						display: none;
 					}
-					.mobile-verified {
+					.mobile {
 						display: flex;
 						flex-direction: row;
 						justify-content: center;
