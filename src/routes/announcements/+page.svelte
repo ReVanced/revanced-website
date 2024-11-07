@@ -14,6 +14,7 @@
 	import Search from '$lib/components/Search.svelte';
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
+	import type { Announcement } from '$lib/types';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -21,12 +22,12 @@
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
 	let searchTerm = $searchParams.get('s') || '';
-	let searcher;
+	let searcher: Fuse<Announcement>;
 
 	$: query = createQuery(queries.announcements());
 	$: channels = $searchParams.getAll('channel');
 
-	function filter(announcements, search) {
+	function filter(announcements: Iterable<Announcement>, search: string) {
 		const announcementsArray = Array.from(announcements);
 
 		if (!search) {
@@ -48,9 +49,7 @@
 			.map(({ item }) => item)
 			.filter((item) => {
 				// Don't show if the announcement isn't under the selected channels
-				if (channels.length > 0 && !channels.includes(item.channel)) {
-					return false;
-				}
+				if (channels.length > 0 && !channels.includes(item.channel)) return false;
 				return true;
 			});
 		return result;
@@ -71,11 +70,8 @@
 		const url = new URL(window.location.href);
 		url.pathname = '/announcements';
 
-		if (searchTerm) {
-			url.searchParams.set('s', searchTerm);
-		} else {
-			url.searchParams.delete('s');
-		}
+		if (searchTerm) url.searchParams.set('s', searchTerm);
+		else url.searchParams.delete('s');
 	};
 
 	onMount(update);

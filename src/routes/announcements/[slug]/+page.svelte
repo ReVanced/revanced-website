@@ -6,6 +6,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 	import Query from '$lib/components/Query.svelte';
+	import moment from 'moment';
 
 	$: query = createQuery(queries.announcements());
 	$: announcementIdNumber = Number($page.url.pathname.split('/').pop());
@@ -16,18 +17,14 @@
 		<div class="card">
 			<div class="header">
 				<h1>
-					{data.announcements.get(announcementIdNumber).title}
+					{data.announcements.get(announcementIdNumber)?.title || 'No title'}
 				</h1>
 
 				<h4>
-					{new Date(data.announcements.get(announcementIdNumber).createdAt.value).toLocaleString(
-						'en-US',
-						{
-							dateStyle: 'long',
-							timeStyle: 'short'
-						}
-					)} ·
-					{data.announcements.get(announcementIdNumber).author}
+					{moment(data.announcements.get(announcementIdNumber)?.createdAt.value).format(
+						'MMMM D, YYYY [at] h:mm A'
+					) || 'No date'} ·
+					{data.announcements.get(announcementIdNumber)?.author || 'System'}
 				</h4>
 			</div>
 
@@ -48,7 +45,7 @@
 			</svg>
 
 			<div class="content">
-				{@html data.announcements.get(announcementIdNumber).content}
+				{@html data.announcements.get(announcementIdNumber)?.content || ''}
 			</div>
 		</div>
 	</Query>

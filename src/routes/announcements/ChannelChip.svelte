@@ -19,11 +19,8 @@
 		const url = new URL(window.location.href);
 		const params = new URLSearchParams(url.search);
 
-		if (params.getAll('channel').includes(channel)) {
-			params.delete('channel', channel);
-		} else {
-			params.append('channel', channel);
-		}
+		if (params.getAll('channel').includes(channel)) params.delete('channel', channel);
+		else params.append('channel', channel);
 
 		url.search = params.toString();
 		goto(url.pathname + url.search);
