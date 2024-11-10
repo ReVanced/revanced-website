@@ -10,7 +10,7 @@
 	import Query from '$lib/components/Query.svelte';
 	import AnnouncementCard from './AnnouncementCard.svelte';
 	import { queries } from '$data/api';
-	import ChannelsHost from './ChannelsHost.svelte';
+	import TagsHost from './TagsHost.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
@@ -25,15 +25,15 @@
 	let searcher: Fuse<Announcement>;
 
 	$: query = createQuery(queries.announcements());
-	$: channels = $searchParams.getAll('channel');
+	$: tags = $searchParams.getAll('tag');
 
 	function filter(announcements: Iterable<Announcement>, search: string) {
 		const announcementsArray = Array.from(announcements);
 
 		if (!search) {
-			if (channels.length > 0)
+			if (tags.length > 0)
 				return announcementsArray.filter((announcement) =>
-					channels.some((channel) => announcement.tags.includes(channel))
+					tags.some((tag) => announcement.tags.includes(tag))
 				);
 			return announcementsArray;
 		}
@@ -50,9 +50,8 @@
 			.search(search)
 			.map(({ item }) => item)
 			.filter((item) => {
-				// Don't show if the announcement isn't under the selected channels
-				if (channels.length > 0 && !channels.some((channel) => item.tags.includes(channel)))
-					return false;
+				// Don't show if the announcement isn't under the selected tags
+				if (tags.length > 0 && !tags.some((tag) => item.tags.includes(tag))) return false;
 				return true;
 			});
 		return result;
@@ -94,11 +93,11 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="announcements-list">
 		<Query {query} let:data>
-			<ChannelsHost announcements={data.announcements} />
+			<TagsHost announcements={data.announcements} />
 
 			<div class="cards">
 				{#each filter(data.announcements, displayedTerm) as announcement}
-					{#key channels || displayedTerm}
+					{#key tags || displayedTerm}
 						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 							<AnnouncementCard {announcement} />
 						</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ChannelChip from './ChannelChip.svelte';
+	import TagChip from './TagChip.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import { derived, readable } from 'svelte/store';
 	import { building } from '$app/environment';
@@ -21,37 +21,37 @@
 		});
 	}
 
-	const sortedChannels = sortTagsByAnnouncements(announcements);
-	let showAllChannels = false;
+	const sortedTags = sortTagsByAnnouncements(announcements);
+	let showAllTags = false;
 
 	let searchParams: Readable<URLSearchParams>;
 
 	if (building) searchParams = readable(new URLSearchParams());
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
-	$: selectedChannels = $searchParams.getAll('channel');
+	$: selectedTags = $searchParams.getAll('tag');
 </script>
 
-<div class="channel-list">
-	{#if showAllChannels}
-		{#each sortedChannels as channel}
-			<ChannelChip {channel} />
+<div class="tag-list">
+	{#if showAllTags}
+		{#each sortedTags as tag}
+			<TagChip {tag} />
 		{/each}
-	{:else if selectedChannels.length > 0}
-		<ChannelChip channel={sortedChannels[0]} />
-		{#each selectedChannels.filter((channel) => channel !== sortedChannels[0]) as channel}
-			<ChannelChip {channel} />
+	{:else if selectedTags.length > 0}
+		<TagChip tag={sortedTags[0]} />
+		{#each selectedTags.filter((tag) => tag !== sortedTags[0]) as tag}
+			<TagChip {tag} />
 		{/each}
 	{:else}
-		<ChannelChip channel={sortedChannels[0]} />
+		<TagChip tag={sortedTags[0]} />
 	{/if}
 
-	{#if sortedChannels.length > 1}
+	{#if sortedTags.length > 1}
 		<li class="button">
-			<Button type="text" on:click={() => (showAllChannels = !showAllChannels)}>
+			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
 				<img
 					class="expand-arrow"
-					style:transform={showAllChannels ? 'rotate(90deg)' : 'rotate(-90deg)'}
+					style:transform={showAllTags ? 'rotate(90deg)' : 'rotate(-90deg)'}
 					src="/icons/expand_more.svg"
 					alt="dropdown"
 				/>
@@ -61,7 +61,7 @@
 </div>
 
 <style lang="scss">
-	.channel-list {
+	.tag-list {
 		display: flex;
 		align-items: center;
 		gap: 4px;

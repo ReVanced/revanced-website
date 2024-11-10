@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import Svg from '$lib/components/Svg.svelte';
 
-	export let channel: string;
+	export let tag: string;
 	export let clickable: boolean = true;
 
 	let searchParams: Readable<URLSearchParams>;
@@ -13,14 +13,14 @@
 	if (building) searchParams = readable(new URLSearchParams());
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
-	$: selected = $searchParams.getAll('channel').includes(channel);
+	$: selected = $searchParams.getAll('tag').includes(tag);
 
 	const handleClick = () => {
 		const url = new URL(window.location.href);
 		const params = new URLSearchParams(url.search);
 
-		if (params.getAll('channel').includes(channel)) params.delete('channel', channel);
-		else params.append('channel', channel);
+		if (params.getAll('tag').includes(tag)) params.delete('tag', tag);
+		else params.append('tag', tag);
 
 		url.search = params.toString();
 		goto(url.pathname + url.search);
@@ -37,7 +37,7 @@
 			</Svg>
 		</div>
 	{/if}
-	{channel}
+	{tag}
 </button>
 
 <style lang="scss">

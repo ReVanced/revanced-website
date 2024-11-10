@@ -15,7 +15,7 @@ export type ApiAnnouncementCreate = {
 } & Partial<{
 	attachmentUrls: string[];
 	author: string;
-	channel: string;
+	tag: string;
 	content: string;
 	level: number;
 }>;
