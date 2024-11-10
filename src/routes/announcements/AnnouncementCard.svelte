@@ -6,17 +6,17 @@
 	import { queries } from '$data/api';
 	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
-	
+
 	export let announcement: Announcement;
-	
+
 	const client = useQueryClient();
-	
+
 	let isRead: boolean;
 
 	function prefetch() {
 		const query = queries['announcementById'](announcement.id);
 		dev_log('Prefetching', query);
-		client.prefetchQuery(query.queryKey, query.queryFn, { staleTime: query.staleTime });
+		client.prefetchQuery(query);
 	}
 
 	function isAnnouncementRead() {
