@@ -8,8 +8,8 @@
 	import Query from '$lib/components/Query.svelte';
 	import moment from 'moment';
 
-	$: query = createQuery(queries.announcements());
 	$: announcementIdNumber = Number($page.url.pathname.split('/').pop());
+	$: query = createQuery(queries.announcementById(announcementIdNumber));
 </script>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
@@ -17,14 +17,12 @@
 		<div class="card">
 			<div class="header">
 				<h1>
-					{data.announcements.get(announcementIdNumber)?.title || 'No title'}
+					{data.announcement?.title || 'No title'}
 				</h1>
 
 				<h4>
-					{moment(data.announcements.get(announcementIdNumber)?.created_at).format(
-						'MMMM D, YYYY [at] h:mm A'
-					) || 'No date'} ·
-					{data.announcements.get(announcementIdNumber)?.author || 'System'}
+					{moment(data.announcement?.created_at).format('MMMM D, YYYY [at] h:mm A') || 'No date'} ·
+					{data.announcement?.author || 'System'}
 				</h4>
 			</div>
 
@@ -45,7 +43,7 @@
 			</svg>
 
 			<div class="content">
-				{@html data.announcements.get(announcementIdNumber)?.content || ''}
+				{@html data.announcement?.content || ''}
 			</div>
 		</div>
 	</Query>

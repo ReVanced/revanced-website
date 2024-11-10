@@ -3,10 +3,21 @@
 	import { onMount } from 'svelte';
 	import type { Announcement } from '$lib/types';
 	import NewBadge from './NewBadge.svelte';
-
+	import { queries } from '$data/api';
+	import { dev_log } from '$util/dev';
+	import { useQueryClient } from '@tanstack/svelte-query';
+	
 	export let announcement: Announcement;
-
+	
+	const client = useQueryClient();
+	
 	let isRead: boolean;
+
+	function prefetch() {
+		const query = queries['announcementById'](announcement.id);
+		dev_log('Prefetching', query);
+		client.prefetchQuery(query.queryKey, query.queryFn, { staleTime: query.staleTime });
+	}
 
 	function isAnnouncementRead() {
 		isRead = (localStorage.getItem('read_announcements') ?? '')
@@ -28,7 +39,12 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<a href="/announcements/{announcement.id}" on:click={setAnnouncementRead}>
+<a
+	data-sveltekit-preload-data
+	on:mouseenter={prefetch}
+	href="/announcements/{announcement.id}"
+	on:click={setAnnouncementRead}
+>
 	<div class="card {announcement.attachments.length > 0 ? 'attachment' : 'no-attachment'}">
 		{#if isRead !== undefined && !isRead}
 			<NewBadge animated />

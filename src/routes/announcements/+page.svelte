@@ -94,10 +94,10 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="announcements-list">
 		<Query {query} let:data>
-			<ChannelsHost announcements={Array.from(data.announcements.values())} />
+			<ChannelsHost announcements={data.announcements} />
 
 			<div class="cards">
-				{#each filter(data.announcements.values(), displayedTerm) as announcement}
+				{#each filter(data.announcements, displayedTerm) as announcement}
 					{#key channels || displayedTerm}
 						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 							<AnnouncementCard {announcement} />

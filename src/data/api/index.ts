@@ -23,7 +23,7 @@ export type TeamData = { members: TeamMember[] };
 export type AboutData = { about: About };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
 export type SocialsData = { socials: Social[] };
-export type AnnouncementsData = { announcements: Map<number, Announcement> };
+export type AnnouncementsData = { announcements: Announcement[] };
 
 type GetAnnouncementsOptions = Partial<{
 	tags: string[];
@@ -128,14 +128,14 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 	if (options.count) url.searchParams.set('count', String(options.count));
 	if (options.cursor) url.searchParams.set('cursor', String(options.cursor));
 
-	const json = (await get_json(url.pathname)) as Announcement[];
+	const announcements = (await get_json('announcements')) as Announcement[];
 
-	const announcements = json.sort((a, b) => a.id - b.id);
-	const announcementsMap = new Map(
-		announcements.map((announcement) => [announcement.id, announcement])
-	);
+	return { announcements: announcements };
+}
 
-	return { announcements: announcementsMap };
+async function get_announcement_by_id(id: number): Promise<{ announcement: Announcement }> {
+	console.log(id);
+	return { announcement: (await get_json(`announcements/${id}`)) as Announcement };
 }
 
 async function create_announcement(announcement: ApiAnnouncementCreate) {
@@ -188,6 +188,11 @@ export const queries = {
 	announcements: () => ({
 		queryKey: ['announcements'],
 		queryFn: () => announcements(),
+		staleTime
+	}),
+	announcementById: (id) => ({
+		queryKey: ['announcementById', id],
+		queryFn: () => get_announcement_by_id(id),
 		staleTime
 	})
 };
