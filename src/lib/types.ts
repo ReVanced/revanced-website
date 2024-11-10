@@ -7,41 +7,38 @@ export interface Contributor {
 
 export interface Contributable {
 	name: string;
+	url: string;
 	contributors: Contributor[];
 }
 
 export interface Patch {
 	name: string;
 	description: string;
-	compatiblePackages: CompatiblePackage[];
 	use: boolean;
-	requiresIntegrations: boolean;
+	compatiblePackages: CompatiblePackage[] | null;
 	options: PatchOption[];
 }
 
 export interface CompatiblePackage {
 	name: string;
-	versions: string[];
+	versions: string[] | null;
 }
 
 export interface PatchOption {
 	key: string;
-	default: any;
-	title: string;
+	title: string | null;
 	description: string;
 	required: boolean;
-}
-
-export interface Asset {
-	name: string;
-	download_url: string;
+	type: string;
+	default: any | null;
+	values: any[] | null;
 }
 
 export interface Release {
 	version: string;
 	created_at: string;
 	description: string;
-	assets: Asset[];
+	download_url: string;
 }
 
 export interface TeamMember {
@@ -49,6 +46,12 @@ export interface TeamMember {
 	avatar_url: string;
 	url: string;
 	bio?: string;
+	gpg_key: GpgKey;
+}
+
+export interface GpgKey {
+	id: string;
+	url: string;
 }
 
 export interface CryptoWallet {

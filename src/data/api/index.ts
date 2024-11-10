@@ -41,6 +41,15 @@ async function patches(): Promise<PatchesData> {
 	const json = await get_json('v3/patches/list');
 	const packagesWithCount: { [key: string]: number } = {};
 
+	json.forEach((patch) => {
+		if (!patch.compatiblePackages) return;
+
+		patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
+			name,
+			versions: patch.compatiblePackages[name]
+		}));
+	});
+
 	// gets packages and patch count
 	for (let i = 0; i < json.length; i++) {
 		json[i].compatiblePackages?.forEach((pkg: CompatiblePackage) => {
