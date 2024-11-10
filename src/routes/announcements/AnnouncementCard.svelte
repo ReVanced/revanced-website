@@ -2,7 +2,7 @@
 	import moment from 'moment';
 	import { onMount } from 'svelte';
 	import type { Announcement } from '$lib/types';
-	import UnreadDot from './UnreadDot.svelte';
+	import NewBadge from './NewBadge.svelte';
 
 	export let announcement: Announcement;
 
@@ -31,7 +31,7 @@
 <a href="/announcements/{announcement.id}" on:click={setAnnouncementRead}>
 	<div class="card {announcement.attachments.length > 0 ? 'attachment' : 'no-attachment'}">
 		{#if isRead !== undefined && !isRead}
-			<UnreadDot animated />
+			<NewBadge animated />
 		{/if}
 		{#if announcement.attachments.length > 0}
 			<img src={announcement.attachments[0]} alt="Banner" onerror="this.style.display='none'" />

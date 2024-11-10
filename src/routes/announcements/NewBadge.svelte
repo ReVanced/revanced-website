@@ -9,42 +9,44 @@
 	let self: HTMLElement;
 
 	onMount(() => {
-		// doing this here because we don't want to change the position attribute of the parent element when the component is not present in it
 		self.parentElement!.style.position = 'relative';
 	});
 </script>
 
-<span class="unread-marker {corner.y} {corner.x}" class:animated bind:this={self} />
+<span class="new-badge {corner.y} {corner.x}" class:animated bind:this={self}> NEW </span>
 
 <style>
-	.unread-marker {
-		background-color: var(--red-one);
-		border-radius: 50%;
-		width: 1rem;
-		height: 1rem;
+	.new-badge {
+		background-color: var(--primary);
+		color: var(--text-one);
+		font-size: 0.75rem;
+		font-weight: bold;
+		padding: 2px 6px;
+		border-radius: 4px;
 		pointer-events: none;
 		position: absolute;
 		z-index: 10;
 		transform: translate(40%, -40%);
+		letter-spacing: 0.05em;
 	}
 
-	.unread-marker.top {
+	.new-badge.top {
 		top: 0;
 	}
 
-	.unread-marker.bottom {
+	.new-badge.bottom {
 		bottom: 0;
 	}
 
-	.unread-marker.left {
+	.new-badge.left {
 		left: 0;
 	}
 
-	.unread-marker.right {
+	.new-badge.right {
 		right: 0;
 	}
 
-	.unread-marker.animated {
+	.new-badge.animated {
 		animation: pulse 1.5s linear infinite;
 	}
 
