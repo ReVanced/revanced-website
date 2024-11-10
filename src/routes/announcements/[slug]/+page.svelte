@@ -21,7 +21,7 @@
 				</h1>
 
 				<h4>
-					{moment(data.announcements.get(announcementIdNumber)?.createdAt.value).format(
+					{moment(data.announcements.get(announcementIdNumber)?.created_at).format(
 						'MMMM D, YYYY [at] h:mm A'
 					) || 'No date'} ·
 					{data.announcements.get(announcementIdNumber)?.author || 'System'}

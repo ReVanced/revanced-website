@@ -32,7 +32,9 @@
 
 		if (!search) {
 			if (channels.length > 0)
-				return announcementsArray.filter((announcement) => channels.includes(announcement.channel));
+				return announcementsArray.filter((announcement) =>
+					channels.some((channel) => announcement.tags.includes(channel))
+				);
 			return announcementsArray;
 		}
 
@@ -49,7 +51,8 @@
 			.map(({ item }) => item)
 			.filter((item) => {
 				// Don't show if the announcement isn't under the selected channels
-				if (channels.length > 0 && !channels.includes(item.channel)) return false;
+				if (channels.length > 0 && !channels.some((channel) => item.tags.includes(channel)))
+					return false;
 				return true;
 			});
 		return result;
@@ -91,7 +94,7 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="announcements-list">
 		<Query {query} let:data>
-			<ChannelsHost announcements={data.announcements.values()} />
+			<ChannelsHost announcements={Array.from(data.announcements.values())} />
 
 			<div class="cards">
 				{#each filter(data.announcements.values(), displayedTerm) as announcement}

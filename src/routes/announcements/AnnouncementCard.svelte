@@ -1,10 +1,8 @@
 <script lang="ts">
 	import moment from 'moment';
 	import { onMount } from 'svelte';
-
 	import type { Announcement } from '$lib/types';
 	import UnreadDot from './UnreadDot.svelte';
-	import { is_logged_in } from '$lib/auth';
 
 	export let announcement: Announcement;
 
@@ -31,16 +29,12 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <a href="/announcements/{announcement.id}" on:click={setAnnouncementRead}>
-	<div
-		class="card {announcement.attachmentUrls?.length && announcement.attachmentUrls.length > 0
-			? 'attachment'
-			: 'no-attachment'}"
-	>
+	<div class="card {announcement.attachments.length > 0 ? 'attachment' : 'no-attachment'}">
 		{#if isRead !== undefined && !isRead}
 			<UnreadDot animated />
 		{/if}
-		{#if announcement.attachmentUrls?.length && announcement.attachmentUrls.length > 0}
-			<img src={announcement.attachmentUrls[0]} alt="Banner" onerror="this.style.display='none'" />
+		{#if announcement.attachments.length > 0}
+			<img src={announcement.attachments[0]} alt="Banner" onerror="this.style.display='none'" />
 		{/if}
 		<div class="content">
 			<div class="header">
@@ -52,7 +46,7 @@
 			<div class="footer">
 				<hr />
 				<span class="date">
-					{moment(announcement.createdAt.value).format('MMMM DD, YYYY')}
+					{moment(announcement.created_at).format('MMMM DD, YYYY')}
 				</span>
 			</div>
 		</div>

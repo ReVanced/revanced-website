@@ -1,32 +1,30 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
 	import ChannelChip from './ChannelChip.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import { goto } from '$app/navigation';
 	import { derived, readable } from 'svelte/store';
 	import { building } from '$app/environment';
 	import { page } from '$app/stores';
+	import type { Announcement } from '$lib/types';
+	import type { Readable } from 'svelte/store';
 
-	export let announcements;
+	export let announcements: Announcement[];
 
-	function sortChannelsByAnnouncements(announcements) {
-		const channelAnnouncementCounts = announcements.reduce((channelCountMap, announcement) => {
-			const channelName = announcement.channel;
-			channelCountMap[channelName] = (channelCountMap[channelName] || 0) + 1;
-			return channelCountMap;
-		}, {});
+	function sortTagsByAnnouncements(announcements: Announcement[]) {
+		const tagCounts: { [key: string]: number } = {};
 
-		const sortedChannels = Object.entries(channelAnnouncementCounts)
-			.sort(([channelA, countA], [channelB, countB]) => countB - countA)
-			.map(([channelName]) => channelName);
+		for (const announcement of announcements)
+			for (const tag of announcement.tags) tagCounts[tag] = (tagCounts[tag] || 0) + 1;
 
-		return sortedChannels;
+		return Object.keys(tagCounts).sort((a, b) => {
+			if (tagCounts[b] === tagCounts[a]) return a.localeCompare(b);
+			return tagCounts[b] - tagCounts[a];
+		});
 	}
 
-	const sortedChannels = sortChannelsByAnnouncements(announcements);
+	const sortedChannels = sortTagsByAnnouncements(announcements);
 	let showAllChannels = false;
 
-	let searchParams;
+	let searchParams: Readable<URLSearchParams>;
 
 	if (building) searchParams = readable(new URLSearchParams());
 	else searchParams = derived(page, ($page) => $page.url.searchParams);

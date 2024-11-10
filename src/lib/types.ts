@@ -1,12 +1,10 @@
 export interface Announcement {
-	archivedAt?: string;
-	attachmentUrls?: string[];
+	archived_at?: string;
+	attachments: string[];
 	author: string;
-	channel: string;
+	tags: string[];
 	content: string;
-	createdAt: {
-		value: string;
-	};
+	created_at: string;
 	id: number;
 	level: number;
 	title: string;
