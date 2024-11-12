@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	export let src: string;
 	export let alt: string;
@@ -19,9 +20,9 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="modal-overlay" on:click={closeModal}>
+<div class="modal-overlay" on:click={closeModal} transition:fade={{ duration: 175 }}>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="modal-content" on:click|stopPropagation>
+	<div class="modal-content" on:click|stopPropagation transition:fade={{ duration: 175 }}>
 		<button class="close-button" on:click={closeModal}>×</button>
 		<img {src} {alt} />
 	</div>
@@ -57,7 +58,7 @@
 
 	.close-button {
 		position: absolute;
-		top: -2rem;
+		top: -1rem;
 		right: -2rem;
 		background: none;
 		border: none;
