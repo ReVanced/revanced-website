@@ -11,10 +11,11 @@
 
 	import * as settings from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
+	import { admin_login } from '$lib/stores';
+	import { fromNow } from '$util/fromNow';
 
 	import { useQueryClient } from '@tanstack/svelte-query';
-	import { get_access_token, is_logged_in, login } from '$lib/auth';
-	import moment from 'moment';
+	import { login, set_access_token } from '$lib/auth';
 	import Input from '$lib/components/Input.svelte';
 
 	const client = useQueryClient();
@@ -42,10 +43,13 @@
 		url = settings.default_base_url;
 	}
 
-	$: passed_login = is_logged_in();
-	$: session_exp_date = passed_login
-		? moment(get_access_token()!.expires).fromNow(true)
-		: undefined;
+	let menuOpen = false;
+	let modalOpen = false;
+	let y: number;
+	let loginOpen = false;
+	let passed_login_with_creds = false; // will only change when the user INPUTS the credentials, not if the session is just valid
+	$: session_expired = $admin_login.logged_in_previously && !$admin_login.logged_in;
+	let loginForm: HTMLFormElement;
 
 	async function handle_login(e: SubmitEvent) {
 		const data = new FormData(e.target as HTMLFormElement);
@@ -53,30 +57,16 @@
 		const username = data.get('username') as string;
 		const password = data.get('password') as string;
 
-		passed_login = passed_login_with_creds = await login(username, password);
-		loginOpen = !passed_login;
-		sessionInterval = new_session_interval();
+		const success = await login(username, password);
+
+		loginOpen = !success;
+		passed_login_with_creds = success;
 	}
 
-	function new_session_interval() {
-		clearInterval(sessionInterval);
-		return setInterval(() => {
-			sessionExpired = !is_logged_in();
-			passed_login = !sessionExpired;
-			session_exp_date = passed_login
-				? moment(get_access_token()!.expires).fromNow(true)
-				: undefined;
-		}, 50);
+	function reset_session() {
+		set_access_token();
+		session_expired = !session_expired;
 	}
-
-	let menuOpen = false;
-	let modalOpen = false;
-	let y: number;
-	let loginOpen = false;
-	let passed_login_with_creds = false; // will only change when the user INPUTS the credentials, not if the session is just valid
-	let loginForm: HTMLFormElement;
-	let sessionInterval: number;
-	let sessionExpired: boolean;
 
 	onMount(() => {
 		return RouterEvents.subscribe((event) => {
@@ -167,11 +157,17 @@
 			</button>
 		</div>
 		<div class="admin-wrapper">
-			<Button type="filled" on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}>
+			<Button
+				type="filled"
+				disabled={$admin_login.logged_in}
+				on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}
+			>
 				Admin Login
 			</Button>
-			{#if passed_login}
-				<span>Admin session will expire in <span class="exp-date">{session_exp_date}</span></span>
+			{#if $admin_login.logged_in}
+				<span>
+					Admin session will expire in <span class="exp-date">{fromNow($admin_login.expires)}</span>
+				</span>
 			{/if}
 		</div>
 	</div>
@@ -204,11 +200,12 @@
 	</svelte:fragment>
 </Modal>
 
-<!-- logged in success -->
+<!-- login success -->
 <Modal bind:modalOpen={passed_login_with_creds}>
 	<svelte:fragment slot="title">Successfully logged in!</svelte:fragment>
 	<div class="login-success">
-		This session will expire in <span class="exp-date">{session_exp_date}</span>
+		This session will expire in
+		<span class="exp-date">{$admin_login.logged_in ? fromNow($admin_login.expires) : '...'}</span>
 	</div>
 	<svelte:fragment slot="buttons">
 		<Button type="filled" on:click={() => (passed_login_with_creds = false)}>OK</Button>
@@ -216,22 +213,14 @@
 </Modal>
 
 <!-- session expired -->
-<Modal modalOpen={sessionExpired}>
+<Modal modalOpen={session_expired}>
 	<svelte:fragment slot="title">Expired session</svelte:fragment>
 	<div class="session-expired">
 		This session has expired, log in again to renew or lose all access to administrative power.
 	</div>
 	<svelte:fragment slot="buttons">
-		<Button
-			type="outlined"
-			on:click={() => (clearInterval(sessionInterval), (sessionExpired = !sessionExpired))}
-		>
-			OK
-		</Button>
-		<Button
-			type="filled"
-			on:click={() => ((loginOpen = !loginOpen), (sessionExpired = !sessionExpired))}
-		>
+		<Button type="outlined" on:click={reset_session}>OK</Button>
+		<Button type="filled" on:click={() => (reset_session(), (loginOpen = !loginOpen))}>
 			Login
 		</Button>
 	</svelte:fragment>

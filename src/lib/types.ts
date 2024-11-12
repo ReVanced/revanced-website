@@ -13,9 +13,9 @@ export interface Announcement {
 export type ApiAnnouncementCreate = {
 	title: string;
 } & Partial<{
-	attachmentUrls: string[];
+	attachments: string[];
 	author: string;
-	tag: string;
+	tags: string[];
 	content: string;
 	level: number;
 }>;

@@ -8,6 +8,8 @@
 	import Query from '$lib/components/Query.svelte';
 	import moment from 'moment';
 	import Gallery from '$lib/components/Gallery.svelte';
+	import { admin_login } from '$lib/stores';
+	import { admin } from '$data/api';
 
 	$: announcementIdNumber = Number($page.url.pathname.split('/').pop());
 	$: query = createQuery(queries.announcementById(announcementIdNumber));
@@ -17,13 +19,16 @@
 	<Query {query} let:data>
 		<div class="card">
 			<div class="header">
-				<h1>
+				<h1 contenteditable={$admin_login}>
 					{data.announcement?.title || 'No title'}
 				</h1>
 
 				<h4>
-					{moment(data.announcement?.created_at).format('MMMM D, YYYY [at] h:mm A') || 'No date'} ·
-					{data.announcement?.author || 'System'}
+					<span>
+						{moment(data.announcement?.created_at).format('MMMM D, YYYY [at] h:mm A') || 'No date'}
+					</span>
+					·
+					<span contenteditable={$admin_login}>{data.announcement?.author || 'System'}</span>
 				</h4>
 			</div>
 
@@ -43,7 +48,7 @@
 				<rect width="100%" height="100%" fill="url(#a)" />
 			</svg>
 
-			<div class="content">
+			<div class="content" contenteditable={$admin_login}>
 				{@html data.announcement?.content || ''}
 			</div>
 

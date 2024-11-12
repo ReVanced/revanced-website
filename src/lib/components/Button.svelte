@@ -5,17 +5,25 @@
 	export let href = '';
 	export let target = '';
 	export let label = '';
+	export let disabled = false;
 </script>
 
 {#if href}
-	<a {href} {target} class={`button-${type}`} aria-label={label}>
+	<a {href} {target} class={`button-${type}`} class:disabled aria-label={label}>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
 		<slot />
 	</a>
 {:else}
-	<button on:click class={`button-${type}`} aria-label={label} type={functionType}>
+	<button
+		on:click
+		class={`button-${type}`}
+		class:disabled
+		aria-label={label}
+		type={functionType}
+		{disabled}
+	>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
@@ -74,6 +82,17 @@
 	button:hover,
 	a:hover {
 		filter: brightness(85%);
+	}
+
+	.disabled,
+	:hover.disabled {
+		filter: grayscale(100%);
+		cursor: not-allowed;
+	}
+
+	a.disabled,
+	a:hover.disabled {
+		pointer-events: none;
 	}
 
 	img {

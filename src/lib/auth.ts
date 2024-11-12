@@ -147,7 +147,7 @@ async function digest_fetch(
 }
 
 export async function login(username: string, password: string) {
-	const res = await digest_fetch(build_url('v3/token'), username, password); // hardcoded for development
+	const res = await digest_fetch(build_url('token'), username, password);
 	if (!res.ok) return false;
 
 	const data = await res.json();

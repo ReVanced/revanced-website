@@ -134,29 +134,36 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 }
 
 async function get_announcement_by_id(id: number): Promise<{ announcement: Announcement }> {
-	console.log(id);
 	return { announcement: (await get_json(`announcements/${id}`)) as Announcement };
 }
 
-async function create_announcement(announcement: ApiAnnouncementCreate) {
+export async function create_announcement(announcement: ApiAnnouncementCreate) {
 	await post_json('announcements', announcement);
 }
 
-async function update_announcement(announcement: ApiAnnouncementCreate) {
+export async function update_announcement(announcement: ApiAnnouncementCreate) {
 	await patch_json('announcements', announcement);
 }
 
-async function delete_announcement(id: number) {
+export async function delete_announcement(id: number) {
 	await delete_json(`announcements/${id}`);
 }
 
-async function archive_announcement(id: number) {
+export async function archive_announcement(id: number) {
 	await post_json(`announcements/${id}/archive`);
 }
 
-async function unarchive_announcement(id: number) {
+export async function unarchive_announcement(id: number) {
 	await post_json(`announcements/${id}/unarchive`);
 }
+
+export const admin = {
+	create_announcement,
+	update_announcement,
+	delete_announcement,
+	archive_announcement,
+	unarchive_announcement
+};
 
 export const staleTime = 5 * 60 * 1000;
 export const queries = {
