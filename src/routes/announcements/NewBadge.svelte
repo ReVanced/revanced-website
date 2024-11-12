@@ -13,12 +13,12 @@
 	});
 </script>
 
-<span class="new-badge {corner.y} {corner.x}" class:animated bind:this={self}> NEW </span>
+<span class="new-badge {corner.y} {corner.x}" class:animated bind:this={self}>NEW</span>
 
 <style>
 	.new-badge {
 		background-color: var(--primary);
-		color: var(--text-one);
+		color: var(--surface-two);
 		font-size: 0.75rem;
 		font-weight: bold;
 		padding: 2px 6px;

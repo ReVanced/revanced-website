@@ -47,7 +47,7 @@
 >
 	<div class="card {announcement.attachments.length > 0 ? 'attachment' : 'no-attachment'}">
 		{#if isRead !== undefined && !isRead}
-			<NewBadge animated />
+			<NewBadge />
 		{/if}
 		{#if announcement.attachments.length > 0}
 			<img src={announcement.attachments[0]} alt="Banner" onerror="this.style.display='none'" />
