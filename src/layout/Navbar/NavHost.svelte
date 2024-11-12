@@ -281,13 +281,6 @@
 		flex: 1;
 	}
 
-	.admin-modal-content svg {
-		justify-self: center;
-		align-self: center;
-		width: 75%;
-		height: auto;
-	}
-
 	#logo {
 		padding: 0.5rem;
 	}
