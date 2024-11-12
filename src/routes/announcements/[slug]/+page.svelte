@@ -7,6 +7,7 @@
 	import { queries } from '$data/api';
 	import Query from '$lib/components/Query.svelte';
 	import moment from 'moment';
+	import Gallery from '$lib/components/Gallery.svelte';
 
 	$: announcementIdNumber = Number($page.url.pathname.split('/').pop());
 	$: query = createQuery(queries.announcementById(announcementIdNumber));
@@ -46,6 +47,10 @@
 				{@html data.announcement?.content || ''}
 			</div>
 		</div>
+
+		{#if data.announcement.attachments.length > 0}
+			<Gallery images={data.announcement.attachments} />
+		{/if}
 	</Query>
 </main>
 

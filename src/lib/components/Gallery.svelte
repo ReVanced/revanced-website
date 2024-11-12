@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ImageModal from '$lib/components/ImageModal.svelte';
 
-	export let images: string[] = [];
+	export let images: string[];
 	export let columns: number = 3;
 	export let gap: string = '1rem';
 

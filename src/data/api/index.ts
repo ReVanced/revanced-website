@@ -130,7 +130,7 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 
 	const announcements = (await get_json('announcements')) as Announcement[];
 
-	return { announcements: announcements };
+	return { announcements };
 }
 
 async function get_announcement_by_id(id: number): Promise<{ announcement: Announcement }> {
@@ -190,7 +190,7 @@ export const queries = {
 		queryFn: () => announcements(),
 		staleTime
 	}),
-	announcementById: (id) => ({
+	announcementById: (id: number) => ({
 		queryKey: ['announcementById', id],
 		queryFn: () => get_announcement_by_id(id),
 		staleTime
