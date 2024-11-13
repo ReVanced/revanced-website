@@ -194,7 +194,7 @@
 		</form>
 	</div>
 	<svelte:fragment slot="buttons">
-		<Button type="outlined" on:click={() => (loginOpen = !loginOpen)}>Cancel</Button>
+		<Button type="text" on:click={() => (loginOpen = !loginOpen)}>Cancel</Button>
 		<!-- first paragraph of https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit -->
 		<Button type="filled" on:click={() => loginForm.requestSubmit()}>Login</Button>
 	</svelte:fragment>
@@ -219,7 +219,7 @@
 		This session has expired, log in again to renew or lose all access to administrative power.
 	</div>
 	<svelte:fragment slot="buttons">
-		<Button type="outlined" on:click={reset_session}>OK</Button>
+		<Button type="text" on:click={reset_session}>OK</Button>
 		<Button type="filled" on:click={() => (reset_session(), (loginOpen = !loginOpen))}>
 			Login
 		</Button>

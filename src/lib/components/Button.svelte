@@ -1,22 +1,16 @@
 <script lang="ts">
-	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'danger';
+	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
 	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
 	export let icon = '';
 	export let href = '';
 	export let target = '';
 	export let label = '';
 	export let disabled = false;
+	export let danger = false;
 </script>
 
 {#if href}
-	<a
-		{href}
-		{target}
-		class={`button-${type === 'danger' ? 'filled' : type}`}
-		class:disabled
-		class:danger={type === 'danger'}
-		aria-label={label}
-	>
+	<a {href} {target} class={`button-${type}`} class:disabled class:danger aria-label={label}>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
@@ -25,9 +19,9 @@
 {:else}
 	<button
 		on:click
-		class={`button-${type === 'danger' ? 'filled' : type}`}
+		class={`button-${type}`}
 		class:disabled
-		class:danger={type === 'danger'}
+		class:danger
 		aria-label={label}
 		type={functionType}
 		{disabled}
@@ -67,21 +61,26 @@
 		user-select: none;
 	}
 
-	.danger {
-		background-color: var(--red-one) !important;
-		color: var(--surface-four) !important;
-	}
-
 	.button-filled {
 		background-color: var(--primary);
 		color: var(--text-three);
 	}
+	.button-filled.danger {
+		background-color: var(--red-one);
+		color: var(--surface-four);
+	}
+
 	.button-tonal {
 		background-color: var(--surface-four);
 	}
+	.button-tonal.danger {
+		color: var(--red-one);
+		border: 2px solid var(--red-one);
+	}
 
 	.button-filled,
-	.button-tonal {
+	.button-tonal,
+	.button-outlined {
 		padding: 16px 24px;
 	}
 
@@ -90,6 +89,19 @@
 		color: var(--primary);
 		font-weight: 500;
 		letter-spacing: 0.01rem;
+	}
+	.button-text.danger {
+		color: var(--red-one);
+	}
+
+	.button-outlined {
+		border: 2px solid var(--primary);
+		color: var(--text-one);
+		background-color: transparent;
+	}
+	.button-outlined.danger {
+		border-color: var(--red-one);
+		color: var(--red-one);
 	}
 
 	button:hover,
