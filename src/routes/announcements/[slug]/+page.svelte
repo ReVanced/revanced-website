@@ -13,7 +13,8 @@
 	import Button from '$lib/components/Button.svelte';
 	import { goto } from '$app/navigation';
 
-	$: is_editing = false;
+	$: isEditing = false;
+	$: isSaved = false;
 
 	let titleElement: HTMLHeadingElement | null;
 	$: titleElement;
@@ -48,14 +49,40 @@
 		await admin.delete_announcement(announcementIdNumber);
 		goto('/announcements');
 	};
+
+	const handle_unload = (e: BeforeUnloadEvent) => {
+		if (isEditing && !isSaved) e.preventDefault();
+	};
+
+	const handle_focus = () => {
+		isEditing = true;
+	};
+
+	const handle_blur = async () => {
+		await save();
+		isEditing = false;
+		isSaved = true;
+	};
+
+	const handle_input = () => {
+		isSaved = false;
+	};
 </script>
+
+<svelte:window on:beforeunload={handle_unload} />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<Query {query} let:data>
 		<div class="card">
 			<div class="header">
 				<div class="header-data">
-					<h1 contenteditable={is_editing} bind:this={titleElement}>
+					<h1
+						contenteditable={$admin_login.logged_in}
+						bind:this={titleElement}
+						on:focus={handle_focus}
+						on:blur={handle_blur}
+						on:input={handle_input}
+					>
 						{data.announcement.title}
 					</h1>
 
@@ -64,7 +91,13 @@
 							{moment(data.announcement.created_at).format('MMMM D, YYYY [at] h:mm A')}
 						</span>
 						·
-						<span contenteditable={is_editing} bind:this={authorElement}>
+						<span
+							contenteditable={$admin_login.logged_in}
+							bind:this={authorElement}
+							on:focus={handle_focus}
+							on:blur={handle_blur}
+							on:input={handle_input}
+						>
 							{data.announcement.author}
 						</span>
 					</h4>
@@ -72,15 +105,7 @@
 
 				{#if $admin_login.logged_in}
 					<div class="edit-buttons-container">
-						{#if !is_editing}
-							<Button type="filled" on:click={() => (is_editing = !is_editing)}>Edit</Button>
-							<Button type="danger" on:click={delete_ann}>Delete</Button>
-						{:else}
-							<Button type="filled" on:click={() => (save(), (is_editing = !is_editing))}>
-								Save
-							</Button>
-							<Button type="outlined" on:click={() => (is_editing = !is_editing)}>Cancel</Button>
-						{/if}
+						<Button type="danger" on:click={delete_ann}>Delete</Button>
 					</div>
 				{/if}
 			</div>
@@ -101,7 +126,14 @@
 				<rect width="100%" height="100%" fill="url(#a)" />
 			</svg>
 
-			<div class="content" contenteditable={is_editing} bind:this={contentElement}>
+			<div
+				class="content"
+				contenteditable={$admin_login.logged_in}
+				bind:this={contentElement}
+				on:focus={handle_focus}
+				on:blur={handle_blur}
+				on:input={handle_input}
+			>
 				{@html data.announcement.content}
 			</div>
 
