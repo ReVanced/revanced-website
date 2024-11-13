@@ -77,7 +77,7 @@
 	<svelte:fragment slot="title">Confirm?</svelte:fragment>
 	<div class="warning-text">
 		Do you want to delete this announcement?
-		<span class="red-text">This action cannot be undone.</span>
+		<span class="red-text">This action cannot be undone</span>.
 	</div>
 	<svelte:fragment slot="buttons">
 		<Button type="filled" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
