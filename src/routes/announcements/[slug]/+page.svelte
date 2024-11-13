@@ -12,9 +12,11 @@
 	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import { goto } from '$app/navigation';
+	import Dialogue from '$lib/components/Dialogue.svelte';
 
 	$: isEditing = false;
 	$: isSaved = false;
+	let showDeleteConfirm = false;
 
 	let titleElement: HTMLHeadingElement | null;
 	$: titleElement;
@@ -71,6 +73,17 @@
 
 <svelte:window on:beforeunload={handle_unload} />
 
+<Dialogue bind:modalOpen={showDeleteConfirm}>
+	<svelte:fragment slot="title">Hold up!</svelte:fragment>
+	<div class="red-text">
+		Are you sure you want to delete this announcement? This action cannot be undone.
+	</div>
+	<svelte:fragment slot="buttons">
+		<Button type="filled" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
+		<Button type="danger" on:click={delete_ann}>I'm sure</Button>
+	</svelte:fragment>
+</Dialogue>
+
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<Query {query} let:data>
 		<div class="card">
@@ -105,7 +118,9 @@
 
 				{#if $admin_login.logged_in}
 					<div class="edit-buttons-container">
-						<Button type="danger" on:click={delete_ann}>Delete</Button>
+						<Button type="danger" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>
+							Delete
+						</Button>
 					</div>
 				{/if}
 			</div>
@@ -181,6 +196,10 @@
 	.edit-buttons-container {
 		display: flex;
 		gap: 1rem;
+	}
+
+	.red-text {
+		color: var(--red-one);
 	}
 
 	h1 {
