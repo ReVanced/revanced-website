@@ -14,7 +14,7 @@
 	import Search from '$lib/components/Search.svelte';
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
-	import type { Announcement } from '$lib/types';
+	import type { ResponseAnnouncement } from '$lib/types';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -22,12 +22,12 @@
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
 	let searchTerm = $searchParams.get('s') || '';
-	let searcher: Fuse<Announcement>;
+	let searcher: Fuse<ResponseAnnouncement>;
 
 	$: query = createQuery(queries.announcements());
 	$: tags = $searchParams.getAll('tag');
 
-	function filter(announcements: Iterable<Announcement>, search: string) {
+	function filter(announcements: Iterable<ResponseAnnouncement>, search: string) {
 		const announcementsArray = Array.from(announcements);
 
 		if (!search) {

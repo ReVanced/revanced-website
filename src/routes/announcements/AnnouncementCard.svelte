@@ -1,13 +1,13 @@
 <script lang="ts">
 	import moment from 'moment';
 	import { onMount } from 'svelte';
-	import type { Announcement } from '$lib/types';
+	import type { ResponseAnnouncement } from '$lib/types';
 	import NewBadge from './NewBadge.svelte';
 	import { queries } from '$data/api';
 	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
 
-	export let announcement: Announcement;
+	export let announcement: ResponseAnnouncement;
 
 	const client = useQueryClient();
 

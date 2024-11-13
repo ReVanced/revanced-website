@@ -4,12 +4,12 @@
 	import { derived, readable } from 'svelte/store';
 	import { building } from '$app/environment';
 	import { page } from '$app/stores';
-	import type { Announcement } from '$lib/types';
+	import type { ResponseAnnouncement } from '$lib/types';
 	import type { Readable } from 'svelte/store';
 
-	export let announcements: Announcement[];
+	export let announcements: ResponseAnnouncement[];
 
-	function sortTagsByAnnouncements(announcements: Announcement[]) {
+	function sortTagsByAnnouncements(announcements: ResponseAnnouncement[]) {
 		const tagCounts: { [key: string]: number } = {};
 
 		for (const announcement of announcements)

@@ -11,8 +11,8 @@ import type {
 	Social,
 	About,
 	CompatiblePackage,
-	Announcement,
-	ApiAnnouncementCreate
+	ResponseAnnouncement,
+	Announcement
 } from '$lib/types';
 import { get_access_token, is_logged_in, UnauthenticatedError } from '$lib/auth';
 
@@ -23,7 +23,7 @@ export type TeamData = { members: TeamMember[] };
 export type AboutData = { about: About };
 export type DonationData = { wallets: CryptoWallet[]; platforms: DonationPlatform[] };
 export type SocialsData = { socials: Social[] };
-export type AnnouncementsData = { announcements: Announcement[] };
+export type AnnouncementsData = { announcements: ResponseAnnouncement[] };
 
 type GetAnnouncementsOptions = Partial<{
 	tags: string[];
@@ -128,21 +128,21 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 	if (options.count) url.searchParams.set('count', String(options.count));
 	if (options.cursor) url.searchParams.set('cursor', String(options.cursor));
 
-	const announcements = (await get_json('announcements')) as Announcement[];
+	const announcements = (await get_json('announcements')) as ResponseAnnouncement[];
 
 	return { announcements };
 }
 
-async function get_announcement_by_id(id: number): Promise<{ announcement: Announcement }> {
-	return { announcement: (await get_json(`announcements/${id}`)) as Announcement };
+async function get_announcement_by_id(id: number): Promise<{ announcement: ResponseAnnouncement }> {
+	return { announcement: (await get_json(`announcements/${id}`)) as ResponseAnnouncement };
 }
 
-export async function create_announcement(announcement: ApiAnnouncementCreate) {
+export async function create_announcement(announcement: Announcement) {
 	await post_json('announcements', announcement);
 }
 
-export async function update_announcement(announcement: ApiAnnouncementCreate) {
-	await patch_json('announcements', announcement);
+export async function update_announcement(id: number, announcement: Announcement) {
+	await patch_json(`announcements/${id}`, announcement);
 }
 
 export async function delete_announcement(id: number) {

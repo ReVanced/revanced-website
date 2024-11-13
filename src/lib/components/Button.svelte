@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
+	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'danger';
 	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
 	export let icon = '';
 	export let href = '';
@@ -9,7 +9,14 @@
 </script>
 
 {#if href}
-	<a {href} {target} class={`button-${type}`} class:disabled aria-label={label}>
+	<a
+		{href}
+		{target}
+		class={`button-${type === 'danger' ? 'filled' : type}`}
+		class:disabled
+		class:danger={type === 'danger'}
+		aria-label={label}
+	>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
@@ -18,8 +25,9 @@
 {:else}
 	<button
 		on:click
-		class={`button-${type}`}
+		class={`button-${type === 'danger' ? 'filled' : type}`}
 		class:disabled
+		class:danger={type === 'danger'}
 		aria-label={label}
 		type={functionType}
 		{disabled}
@@ -57,6 +65,11 @@
 			transform 0.4s var(--bezier-one),
 			filter 0.4s var(--bezier-one);
 		user-select: none;
+	}
+
+	.danger {
+		background-color: var(--red-one) !important;
+		color: var(--surface-four) !important;
 	}
 
 	.button-filled {

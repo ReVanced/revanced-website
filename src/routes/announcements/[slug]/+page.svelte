@@ -10,26 +10,79 @@
 	import Gallery from '$lib/components/Gallery.svelte';
 	import { admin_login } from '$lib/stores';
 	import { admin } from '$data/api';
+	import Button from '$lib/components/Button.svelte';
+	import { goto } from '$app/navigation';
+
+	$: is_editing = false;
+
+	let titleElement: HTMLHeadingElement | null;
+	$: titleElement;
+
+	let authorElement: HTMLSpanElement | null;
+	$: authorElement;
+
+	let contentElement: HTMLDivElement | null;
+	$: contentElement;
 
 	$: announcementIdNumber = Number($page.url.pathname.split('/').pop());
 	$: query = createQuery(queries.announcementById(announcementIdNumber));
+
+	const save = async () => {
+		if (!$query.data?.announcement) return;
+
+		const data = {
+			...$query.data.announcement,
+			title: titleElement?.textContent?.trim() || $query.data.announcement.title,
+			author: authorElement?.textContent?.trim() || $query.data.announcement.author,
+			content: contentElement?.textContent?.trim() || $query.data.announcement.content
+		};
+
+		// remove id or it'll throw a 400
+		const { id, ...new_announcement_data } = data;
+
+		await admin.update_announcement(announcementIdNumber, new_announcement_data);
+		await $query.refetch();
+	};
+
+	const delete_ann = async () => {
+		await admin.delete_announcement(announcementIdNumber);
+		goto('/announcements');
+	};
 </script>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<Query {query} let:data>
 		<div class="card">
 			<div class="header">
-				<h1 contenteditable={$admin_login}>
-					{data.announcement?.title || 'No title'}
-				</h1>
+				<div class="header-data">
+					<h1 contenteditable={is_editing} bind:this={titleElement}>
+						{data.announcement.title}
+					</h1>
 
-				<h4>
-					<span>
-						{moment(data.announcement?.created_at).format('MMMM D, YYYY [at] h:mm A') || 'No date'}
-					</span>
-					·
-					<span contenteditable={$admin_login}>{data.announcement?.author || 'System'}</span>
-				</h4>
+					<h4>
+						<span>
+							{moment(data.announcement.created_at).format('MMMM D, YYYY [at] h:mm A')}
+						</span>
+						·
+						<span contenteditable={is_editing} bind:this={authorElement}>
+							{data.announcement.author}
+						</span>
+					</h4>
+				</div>
+
+				{#if $admin_login.logged_in}
+					<div class="edit-buttons-container">
+						{#if !is_editing}
+							<Button type="filled" on:click={() => (is_editing = !is_editing)}>Edit</Button>
+							<Button type="danger" on:click={delete_ann}>Delete</Button>
+						{:else}
+							<Button type="filled" on:click={() => (save(), (is_editing = !is_editing))}>
+								Save
+							</Button>
+							<Button type="outlined" on:click={() => (is_editing = !is_editing)}>Cancel</Button>
+						{/if}
+					</div>
+				{/if}
 			</div>
 
 			<svg
@@ -48,8 +101,8 @@
 				<rect width="100%" height="100%" fill="url(#a)" />
 			</svg>
 
-			<div class="content" contenteditable={$admin_login}>
-				{@html data.announcement?.content || ''}
+			<div class="content" contenteditable={is_editing} bind:this={contentElement}>
+				{@html data.announcement.content}
 			</div>
 
 			<svg
@@ -85,6 +138,17 @@
 		margin-bottom: 3rem;
 		border-radius: 1rem;
 		background-color: var(--surface-eight);
+	}
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.edit-buttons-container {
+		display: flex;
+		gap: 1rem;
 	}
 
 	h1 {

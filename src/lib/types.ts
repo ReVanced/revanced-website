@@ -1,4 +1,4 @@
-export interface Announcement {
+export type ResponseAnnouncement = {
 	archived_at?: string;
 	attachments: string[];
 	author: string;
@@ -8,17 +8,9 @@ export interface Announcement {
 	id: number;
 	level: number;
 	title: string;
-}
+};
 
-export type ApiAnnouncementCreate = {
-	title: string;
-} & Partial<{
-	attachments: string[];
-	author: string;
-	tags: string[];
-	content: string;
-	level: number;
-}>;
+export type Announcement = Omit<ResponseAnnouncement, 'id'>;
 
 export interface Contributor {
 	name: string;
