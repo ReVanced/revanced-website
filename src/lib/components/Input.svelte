@@ -1,10 +1,29 @@
 <script lang="ts">
 	export let placeholder: string;
 	export let required: boolean = false;
+	export let value: any = '';
+	export let type: string = 'text';
+
+	export let onenter: () => void = () => {};
+	export let onexit: () => void = () => {};
+	export let oninput: () => void = () => {};
+
+	const set_type = (node: HTMLInputElement) => {
+		node.type = type;
+	};
 </script>
 
 <div class="input-wrapper">
-	<input type="text" id={placeholder.toLowerCase()} name={placeholder.toLowerCase()} {required} />
+	<input
+		id={placeholder.toLowerCase()}
+		name={placeholder.toLowerCase()}
+		{required}
+		use:set_type
+		on:focus={onenter}
+		on:blur={onexit}
+		on:input={oninput}
+		bind:value
+	/>
 	<label for={placeholder.toLowerCase()}>{placeholder}</label>
 </div>
 
