@@ -48,6 +48,7 @@
 	let y: number;
 	let loginOpen = false;
 	let passed_login_with_creds = false; // will only change when the user INPUTS the credentials, not if the session is just valid
+	let wrong_credentials = false;
 	$: session_expired = $admin_login.logged_in_previously && !$admin_login.logged_in;
 	let loginForm: HTMLFormElement;
 
@@ -61,6 +62,7 @@
 
 		loginOpen = !success;
 		passed_login_with_creds = success;
+		wrong_credentials = !success;
 	}
 
 	function reset_session() {
@@ -186,10 +188,13 @@
 			This panel is reserved for administrators at ReVanced, this is not what you should be looking
 			for, go back!
 		</p>
+		{#if wrong_credentials}
+			<p style="color: var(--red-one)">Username or password do not match. Try again.</p>
+		{/if}
 		<form on:submit|preventDefault={handle_login} bind:this={loginForm}>
 			<div>
 				<Input placeholder="Username" required />
-				<Input placeholder="Password" required />
+				<Input placeholder="Password" type="password" required />
 			</div>
 		</form>
 	</div>
@@ -255,10 +260,6 @@
 
 	.admin-modal-content > h2 {
 		color: var(--primary);
-	}
-
-	.admin-modal-content > p {
-		color: var(--red-one);
 	}
 
 	.admin-modal-content > form {
