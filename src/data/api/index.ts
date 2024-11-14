@@ -60,7 +60,9 @@ async function post_json(endpoint: string, body?: any) {
 		method: 'POST',
 		headers,
 		body: body ? JSON.stringify(body) : ''
-	}).then((r) => r.json());
+	}).then((r) => {
+		return r.headers.get('content-length') === '0' ? null : r.json();
+	});
 }
 
 async function patch_json(endpoint: string, body?: any) {
@@ -70,7 +72,9 @@ async function patch_json(endpoint: string, body?: any) {
 		method: 'PATCH',
 		headers,
 		body: body ? JSON.stringify(body) : ''
-	}).then((r) => r.json());
+	}).then((r) => {
+		return r.headers.get('content-length') === '0' ? null : r.json();
+	});
 }
 
 async function delete_json(endpoint: string, body?: any) {
@@ -80,7 +84,9 @@ async function delete_json(endpoint: string, body?: any) {
 		method: 'DELETE',
 		headers,
 		body: body ? JSON.stringify(body) : ''
-	}).then((r) => r.json());
+	}).then((r) => {
+		return r.headers.get('content-length') === '0' ? null : r.json();
+	});
 }
 
 async function contributors(): Promise<ContributorsData> {
