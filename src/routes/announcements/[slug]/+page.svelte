@@ -75,13 +75,13 @@
 
 <Dialogue bind:modalOpen={showDeleteConfirm}>
 	<svelte:fragment slot="title">Confirm?</svelte:fragment>
-	<div class="warning-text">
+	<svelte:fragment slot="description">
 		Do you want to delete this announcement?
-		<span class="red-text">This action cannot be undone</span>.
-	</div>
+		<span style="color: var(--primary)">This action cannot be undone</span>.
+	</svelte:fragment>
 	<svelte:fragment slot="buttons">
 		<Button type="filled" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
-		<Button type="outlined" danger on:click={delete_ann}>OK</Button>
+		<Button type="text" on:click={delete_ann}>OK</Button>
 	</svelte:fragment>
 </Dialogue>
 
@@ -197,14 +197,6 @@
 	.edit-buttons-container {
 		display: flex;
 		gap: 1rem;
-	}
-
-	.warning-text {
-		color: var(--text-one);
-	}
-
-	.red-text {
-		color: var(--red-one);
 	}
 
 	h1 {
