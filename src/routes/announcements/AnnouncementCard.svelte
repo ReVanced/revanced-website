@@ -2,7 +2,7 @@
 	import moment from 'moment';
 	import { onMount } from 'svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
-	import NewBadge from './NewBadge.svelte';
+	import NewHeader from './NewHeader.svelte';
 	import { queries } from '$data/api';
 	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
@@ -48,7 +48,7 @@
 >
 	<div class="card {announcement.attachments.length > 0 ? 'attachment' : 'no-attachment'}">
 		{#if isRead !== undefined && !isRead}
-			<NewBadge />
+			<NewHeader />
 		{/if}
 		{#if announcement.attachments.length > 0}
 			<img src={announcement.attachments[0]} alt="Banner" onerror="this.style.display='none'" />
