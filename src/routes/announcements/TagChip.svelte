@@ -13,7 +13,7 @@
 	if (building) searchParams = readable(new URLSearchParams());
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
-	$: selected = $searchParams.getAll('tag').includes(tag);
+	$: selected = clickable && $searchParams.getAll('tag').includes(tag);
 
 	const handleClick = () => {
 		const url = new URL(window.location.href);
@@ -29,8 +29,8 @@
 	};
 </script>
 
-<button class:selected on:click={clickable ? handleClick : null}>
-	{#if selected}
+<button class:selected class:clickable on:click={clickable ? handleClick : null}>
+	{#if selected && clickable}
 		<div class="icon">
 			<Svg viewBoxHeight={48} svgHeight={18}>
 				<path fill="currentColor" d="M18.9 36.4 7 24.5l2.9-2.85 9 9L38.05 11.5l2.9 2.85Z" />
@@ -51,9 +51,9 @@
 		padding: 0 16px;
 
 		border-radius: 8px;
-		border: 1px solid var(--border);
+		border: none;
 
-		background-color: transparent;
+		background-color: var(--tertiary);
 		color: var(--text-four);
 
 		letter-spacing: 0.02rem;
@@ -62,19 +62,24 @@
 		user-select: none;
 		transition: all 0.2s var(--bezier-one);
 
-		&:hover {
-			background-color: var(--surface-three);
-		}
+		&.clickable {
+			background-color: transparent;
+			border: 1px solid var(--border);
 
-		&.selected {
-			background-color: var(--tertiary);
-			border-color: transparent;
-			color: var(--primary);
+			&.selected {
+				border-color: transparent;
+				background-color: var(--tertiary);
+				color: var(--primary);
 
-			.icon {
-				display: inherit;
-				margin-left: -6px;
-				transition: none;
+				.icon {
+					display: inherit;
+					margin-left: -6px;
+					transition: none;
+				}
+			}
+
+			&:hover {
+				background-color: var(--surface-three);
 			}
 		}
 	}

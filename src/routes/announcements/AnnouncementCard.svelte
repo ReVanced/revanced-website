@@ -6,6 +6,7 @@
 	import { queries } from '$data/api';
 	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
+	import TagChip from './TagChip.svelte';
 
 	export let announcement: ResponseAnnouncement;
 
@@ -60,10 +61,15 @@
 				</div>
 			</div>
 			<div class="footer">
-				<hr />
 				<span class="date">
 					{moment(announcement.created_at).format('MMMM DD, YYYY')}
 				</span>
+				<hr />
+				<div class="tag-list">
+					{#each announcement.tags as tag}
+						<TagChip {tag} clickable={false} />
+					{/each}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -121,6 +127,13 @@
 				display: flex;
 				flex-direction: column;
 				gap: 12px;
+
+				.tag-list {
+					display: flex;
+					align-items: center;
+					flex-wrap: wrap;
+					gap: 4px;
+				}
 			}
 
 			.description {
