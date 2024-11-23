@@ -15,6 +15,8 @@
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
+	import { admin_login } from '$lib/stores';
+	import Button from '$lib/components/Button.svelte';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -82,12 +84,17 @@
 <div class="search">
 	<div class="search-contain">
 		<!-- Must bind both variables: we get searchTerm from the text input, -->
-		<Search
-			bind:searchTerm
-			bind:displayedTerm
-			title="Search for announcements"
-			on:keyup={debounce(update)}
-		/>
+		<div class="search-bar">
+			<Search
+				bind:searchTerm
+				bind:displayedTerm
+				title="Search for announcements"
+				on:keyup={debounce(update)}
+			/>
+		</div>
+		{#if $admin_login.logged_in}
+			<Button icon="create" type="filled" href="/announcements/create">Create</Button>
+		{/if}
 	</div>
 </div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
@@ -116,8 +123,15 @@
 		background-color: var(--surface-eight);
 
 		.search-contain {
-			width: min(90%, 80rem);
+			display: flex;
+			justify-content: center;
+			gap: 1rem;
 			margin-inline: auto;
+			width: min(90%, 80rem);
+
+			.search-bar {
+				flex: 1;
+			}
 		}
 	}
 
