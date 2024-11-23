@@ -51,7 +51,7 @@
 			<NewHeader />
 		{/if}
 		{#if announcement.attachments.length > 0}
-			<img src={announcement.attachments[0]} alt="Banner" onerror="this.style.display='none'" />
+			<img src={announcement.attachments[0]}  class="{isRead === undefined || isRead ? '' : 'no-border-radius'}" alt="Banner" onerror="this.style.display='none'" />
 		{/if}
 		<div class="content">
 			<div class="header">
@@ -109,6 +109,10 @@
 			object-fit: cover;
 			width: 100%;
 			border-radius: 12px 12px 0px 0px;
+
+			&.no-border-radius {
+				border-radius: 0;
+			}
 		}
 
 		.content {
