@@ -34,21 +34,25 @@
 	});
 
 	let showConsentModal = false;
+	let allowAnalytics = false;
 
 	function rememberChoice(allow: boolean) {
 		localStorage.setItem('analytics', allow.toString());
 		showConsentModal = false;
-
-		if (allow) location.reload();
+		allowAnalytics = allow;
 	}
 
 	onMount(() => {
 		new DateTriggerEventHandler(themeEvents);
 
 		// Check if the user has already decided.
-
+		// Check if the user has already decided
 		const hasDecided = localStorage.getItem('analytics') !== null;
-		if (!hasDecided) showConsentModal = true;
+		if (hasDecided) {
+			allowAnalytics = localStorage.getItem('analytics') === 'true';
+		} else {
+			showConsentModal = true;
+		}
 
 		isRestoring.set(true);
 		const [unsubscribe, promise] = persistQueryClient({
@@ -76,22 +80,24 @@
 </script>
 
 <svelte:head>
-	<!-- Google Tag Manager -->
-	<script>
-		allowAnalytics = localStorage.getItem('analytics') === 'true';
-		if (allowAnalytics) {
-			(function (w, d, s, l, i) {
-				w[l] = w[l] || [];
-				w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-				var f = d.getElementsByTagName(s)[0],
-					j = d.createElement(s),
-					dl = l != 'dataLayer' ? '&l=' + l : '';
-				j.async = true;
-				j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-				f.parentNode.insertBefore(j, f);
-			})(window, document, 'script', 'dataLayer', 'GTM-MQ6K849');
-		}
-	</script>
+	{#if allowAnalytics}
+		<!-- Google Tag Manager -->
+		<script>
+			allowAnalytics = localStorage.getItem('analytics') === 'true';
+			if (allowAnalytics) {
+				(function (w, d, s, l, i) {
+					w[l] = w[l] || [];
+					w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+					var f = d.getElementsByTagName(s)[0],
+						j = d.createElement(s),
+						dl = l != 'dataLayer' ? '&l=' + l : '';
+					j.async = true;
+					j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+					f.parentNode.insertBefore(j, f);
+				})(window, document, 'script', 'dataLayer', 'GTM-MQ6K849');
+			}
+		</script>
+	{/if}
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
@@ -117,3 +123,15 @@
 	</div>
 	<!-- <Footer> -->
 </QueryClientProvider>
+{#if allowAnalytics}
+	<!-- Google Tag Manager (noscript) -->
+	<noscript>
+		<!-- svelte-ignore a11y-missing-attribute -->
+		<iframe
+			src="https://www.googletagmanager.com/ns.html?id=GTM-MQ6K849"
+			height="0"
+			width="0"
+			style="display: none; visibility: hidden"
+		></iframe>
+	</noscript>
+{/if}
