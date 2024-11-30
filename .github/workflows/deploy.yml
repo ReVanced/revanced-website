@@ -11,12 +11,12 @@ on:
       - dev
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
       pull-requests: write
-    name: Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,18 +30,17 @@ jobs:
           npm i
           npm run build
 
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
-          directory: public
-        id: publish
+          command: pages deploy public --project-name=revanced-website
+        id: deploy
 
       - name: Comment deployment URL
         if: ${{ github.event_name == 'pull_request' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           GITHUB_TOKEN: ${{ secrets.PULL_REQUESTS_WRITE }}
-          message: Deployed at ${{ steps.publish.outputs.alias }}.
+          message: Deployed at ${{ steps.deploy.outputs.pages-deployment-alias-url }}.
