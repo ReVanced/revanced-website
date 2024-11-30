@@ -67,8 +67,8 @@ This repository contains the source code of ReVanced Website.
 
 ## ❓ About
 
-Website is a site built from Svelte that uses ReVanced API to quickly provide
-way to retrieve information regarding announcement, patches, contributor, and much more.
+ReVanced Website is the front page of ReVanced. 
+It is built using Svelte and uses [ReVanced API](https://github.com/ReVanced/revanced-api) as a data source.
 
 ## 💪 Features
 
