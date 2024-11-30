@@ -63,11 +63,11 @@
 ![Deployment status](https://img.shields.io/github/actions/workflow/status/ReVanced/revanced-website/deploy.yml)
 ![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)
 
-This repository housed the content of ReVanced Website.
+This repository contains the source code of ReVanced Website.
 
 ## ❓ About
 
-Website is a site built from Svelte that uses ReVanced API to quickly provides 
+Website is a site built from Svelte that uses ReVanced API to quickly provide
 way to retrieve information regarding announcement, patches, contributor, and much more.
 
 ## 💪 Features
@@ -88,7 +88,7 @@ To use ReVanced Website, go to https://revanced.app
 
 ### 📙 Contributing
 
-Thank you for considering contributing to ReVanced Patches. You can find the contribution guidelines [here](CONTRIBUTING.md).
+Thank you for considering contributing to ReVanced Website. You can find the contribution guidelines [here](CONTRIBUTING.md).
 
 ### 🛠️ Building
 
@@ -102,7 +102,7 @@ Follow the steps below to build ReVanced Website:
 > ![TIP]
 > To start development server run `npm run dev` or `npm run preview` to preview production build
 
-## 📜 Licence
+## 📜 License
 
 ReVanced Website is licensed under the GPLv3 license. Please see the [license file](LICENSE) for more information.
 [tl;dr](https://www.tldrlegal.com/license/gnu-general-public-license-v3-gpl-3) you may copy, distribute and modify ReVanced Website as long as you track changes/dates in source files.
