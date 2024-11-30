@@ -4,6 +4,6 @@ node_modules
 /public
 /.svelte-kit
 /package
-!.env.example
+.env
 /_docs_src
 /static/docs

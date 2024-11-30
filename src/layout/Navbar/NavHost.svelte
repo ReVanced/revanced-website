@@ -9,7 +9,7 @@
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
 
-	import * as settings from '$data/api/settings';
+	import { api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
 
 	import { useQueryClient } from '@tanstack/svelte-query';
@@ -28,15 +28,15 @@
 		reload();
 	}
 
-	let url = settings.api_base_url();
+	let url = api_base_url();
 
 	function save() {
-		settings.set_api_base_url(url);
+		set_api_base_url(url);
 		reload();
 	}
 
 	function reset() {
-		url = settings.default_base_url;
+		url = default_api_url;
 	}
 
 	let menuOpen = false;
