@@ -74,15 +74,15 @@ way to retrieve information regarding announcement, patches, contributor, and mu
 
 Some of the features the website provide are:
 
-* ⚙️ **Powered by ReVanced API**: Utilize most of the features provided by [ReVanced API](https://github.com/ReVanced/revanced-api)
-* 📢 **Announcement**: Easy way to create and view announcements to users on the internet
-* ♿ **Accessibility-friendly**: Accessible by anyone who needs an accessibility feature
-* 🔎 **Patch viewer**: List all the patches available in [ReVanced Patches](https://github.com/ReVanced/revanced-patches)
+* 🔽 **Download latest version of manager**: Download the latest version of [ReVanced Manager](https://github.com/ReVanced/revanced-manager)
+* ♿ **View contributors**: List all the contributors of the project
+* 🔎 **View patches**: List all the patches available in [ReVanced Patches](https://github.com/ReVanced/revanced-patches)
+* ❤️ **Explore donation methods**: Provide way to explore donation methods to support the project
 * ✨ **And much more!**
 
 ## 🚀 How to get started
 
-To use ReVanced Website, go to https://revanced.app
+ReVanced Website can be deployed locally using `npm run dev` or preview the build using `npm run preview`. 
 
 ## 📚 Everything else
 
@@ -96,13 +96,11 @@ To build ReVanced Website, [Node.js](https://nodejs.org/en/download) and Git mus
 Follow the steps below to build ReVanced Website:
 
 1. Run `git clone git@github.com:ReVanced/revanced-website.git` to clone the repository
-2. Run `npm install` or `pnpm install` to install the dependencies
-2. Run `npm run build` to build the project
+2. Create `.env` file based on [`.env.example`](.env.example)
+3. Run `npm i` to install the dependencies
+4. Run `npm run build` to build the project
 
-> ![TIP]
-> To start development server run `npm run dev` or `npm run preview` to preview production build
-
-## 📜 License
+## 📜 Licence
 
 ReVanced Website is licensed under the GPLv3 license. Please see the [license file](LICENSE) for more information.
 [tl;dr](https://www.tldrlegal.com/license/gnu-general-public-license-v3-gpl-3) you may copy, distribute and modify ReVanced Website as long as you track changes/dates in source files.
