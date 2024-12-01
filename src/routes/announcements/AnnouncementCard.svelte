@@ -64,12 +64,14 @@
 				<span class="date">
 					{moment(announcement.created_at).format('MMMM DD, YYYY')}
 				</span>
-				<hr />
-				<div class="tag-list">
-					{#each announcement.tags as tag}
-						<TagChip {tag} clickable={false} />
-					{/each}
-				</div>
+				{#if announcement.tags.length > 0}
+					<hr />
+					<div class="tag-list">
+						{#each announcement.tags as tag}
+							<TagChip {tag} clickable={false} />
+						{/each}
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
