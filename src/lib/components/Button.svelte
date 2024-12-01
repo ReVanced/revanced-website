@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
+	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
 	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
 	export let icon = '';
 	export let href = '';
@@ -10,12 +10,22 @@
 </script>
 
 {#if href}
-	<a {href} {target} class={`button-${type}`} class:disabled class:danger aria-label={label}>
-		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
-		{/if}
-		<slot />
-	</a>
+	{#if type == 'icon'}
+		<a {href} {target} aria-label={label}>
+			{#if icon}
+				<img src="../icons/{icon}.svg" alt={icon} />
+			{/if}
+		</a>
+	{:else}
+		<a {href} {target} class={`button-${type}`} class:disabled class:danger aria-label={label}>
+			{#if icon}
+				<img src="../icons/{icon}.svg" alt={icon} />
+			{/if}
+			<slot />
+		</a>
+	{/if}
+{:else if type == 'icon'}
+	<img on:click src="../icons/{icon}.svg" alt={icon} aria-label={label} />
 {:else}
 	<button
 		on:click
