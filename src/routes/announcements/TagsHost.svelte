@@ -30,21 +30,20 @@
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
 	$: selectedTags = $searchParams.getAll('tag');
+
+	$: displayedTags = (() => {
+		if (showAllTags) return sortedTags;
+		if (selectedTags.length > 0) {
+			return [sortedTags[0], ...selectedTags.filter((tag) => tag !== sortedTags[0])];
+		}
+		return sortedTags.length > 0 ? [sortedTags[0]] : [];
+	})();
 </script>
 
 <div class="tag-list">
-	{#if showAllTags}
-		{#each sortedTags as tag}
-			<TagChip {tag} />
-		{/each}
-	{:else if selectedTags.length > 0}
-		<TagChip tag={sortedTags[0]} />
-		{#each selectedTags.filter((tag) => tag !== sortedTags[0]) as tag}
-			<TagChip {tag} />
-		{/each}
-	{:else}
-		<TagChip tag={sortedTags[0]} />
-	{/if}
+	{#each displayedTags as tag}
+		<TagChip {tag} />
+	{/each}
 
 	{#if sortedTags.length > 1}
 		<li class="button">
