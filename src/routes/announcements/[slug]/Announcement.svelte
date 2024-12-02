@@ -18,6 +18,15 @@
 	let titleElement: string = announcementContent?.title ?? '';
 	let authorElement: string = announcementContent?.author ?? '';
 	let contentElement: string = announcementContent?.content ?? '';
+	let attachments: string[] = announcementContent?.attachments ?? [];
+
+	const addAttachment = () => {
+		attachments = [...attachments, '']; // Ensure reactivity with a new array
+	};
+
+	const removeAttachment = (index) => {
+		attachments = attachments.filter((_, i) => i !== index);
+	};
 
 	const save = async () => {
 		const data = {
@@ -41,7 +50,7 @@
 			title: titleElement.toString(),
 			author: authorElement.toString(),
 			content: contentElement.toString(),
-			attachments: attachmentsElement,
+			attachments: attachments,
 			tags: ['youtube', 'revanced'],
 			level: 0
 		};
@@ -84,6 +93,7 @@
 					<input
 						type="text"
 						id="title"
+						class="edit"
 						bind:value={titleElement}
 						class:empty={!titleElement.trim()}
 						placeholder="Enter title"
@@ -109,6 +119,7 @@
 						<input
 							type="text"
 							id="author"
+							class="edit"
 							bind:value={authorElement}
 							class:empty={!authorElement.trim()}
 							placeholder="Enter author name"
@@ -120,7 +131,6 @@
 					</span>
 				{/if}
 			</h4>
-		</div>
 
 		{#if $admin_login.logged_in}
 			<div class="edit-buttons-container">
@@ -172,6 +182,7 @@
 			<textarea
 				bind:value={contentElement}
 				id="content"
+				class="edit"
 				class:empty={!announcementContent.content.trim()}
 				placeholder="Enter content"
 			/>
@@ -183,7 +194,61 @@
 	{/if}
 
 	{#if isEditing || isCreating}
-		<div></div>
+		{#if isPreviewing}
+			{#if attachments.length > 0}
+				<Gallery images={attachments} />
+			{/if}
+		{:else}
+			<svg
+				aria-hidden="true"
+				width="100%"
+				height="8"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
+					<path
+						d="M114 4c-5.067 4.667-10.133 4.667-15.2 0S88.667-.667 83.6 4 73.467 8.667 68.4 4 58.267-.667 53.2 4 43.067 8.667 38 4 27.867-.667 22.8 4 12.667 8.667 7.6 4-2.533-.667-7.6 4s-10.133 4.667-15.2 0S-32.933-.667-38 4s-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0"
+						stroke-linecap="square"
+					/>
+				</pattern>
+				<rect width="100%" height="100%" fill="url(#a)" />
+			</svg>
+			<div>
+				<div class="attachments">
+					{#each attachments as attachment, index}
+						<div style="position: relative; display: flex; justify-content: center;">
+							<input
+								style="width: 100%;"
+								type="text"
+								bind:value={attachments[index]}
+								class:empty={attachment === ''}
+								placeholder="Attachment URL"
+							/>
+							<button
+								style="position: absolute; right: 10px; top: 14px;"
+								on:click={() => removeAttachment(index)}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									height="24px"
+									viewBox="0 -960 960 960"
+									width="24px"
+									fill="#adc8df"
+								>
+									<path
+										d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
+									/>
+								</svg>
+							</button>
+						</div>
+					{/each}
+					<span>
+						<Button type="icon" icon="create" on:click={addAttachment} />
+					</span>
+				</div>
+			</div>
+		{/if}
 	{:else if announcementContent.attachments.length > 0}
 		<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
@@ -209,7 +274,17 @@
 		background-color: var(--surface-eight);
 	}
 
-	input,
+	button {
+		display: flex;
+		justify-content: center;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		svg {
+			margin: 0;
+		}
+	}
+	.edit,
 	textarea {
 		&,
 		&:focus {
@@ -279,6 +354,24 @@
 		}
 	}
 
+	.attachments {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: 1rem;
+
+		.empty {
+			border: 1px solid var(--red-one);
+
+			&:focus {
+				outline: none;
+				border: 1px solid var(--primary);
+			}
+		}
+		span {
+			align-self: start;
+		}
+	}
 	.content {
 		color: var(--text-four);
 		white-space: pre-wrap;
