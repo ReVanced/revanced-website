@@ -2,6 +2,9 @@
 	import moment from 'moment';
 
 	export let isEditing, isCreating, isPreviewing, createdAt, createdAtElement: string;
+
+	// Ensure createdAtElement is properly formatted for the datetime-local input
+	if (createdAtElement) createdAtElement = createdAtElement.split('.')[0];
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -28,9 +31,7 @@
 		}
 
 		padding: 0;
-		color: var(--secondary);
 		font-size: 1rem;
-		font-weight: 400;
 		letter-spacing: 0.02rem;
 	}
 </style>
