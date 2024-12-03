@@ -23,6 +23,7 @@
 	let titleElement: string = announcementContent?.title ?? '';
 	let authorElement: string = announcementContent?.author ?? '';
 	let contentElement: string = announcementContent?.content ?? '';
+	let createdAtElement: string = announcementContent?.created_at ?? '';
 	let attachmentsElement: string[] = announcementContent?.attachments ?? [];
 
 	const addAttachment = () => {
@@ -98,7 +99,13 @@
 			/>
 
 			<h4>
-				<Date {isCreating} {isEditing} {isPreviewing} createdAt={announcementContent.created_at} />
+				<Date
+					{isCreating}
+					{isEditing}
+					{isPreviewing}
+					createdAt={announcementContent.created_at}
+					bind:createdAtElement
+				/>
 				·
 				<Author
 					{isCreating}
