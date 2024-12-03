@@ -27,15 +27,16 @@
 	let searcher: Fuse<ResponseAnnouncement>;
 
 	$: query = createQuery(queries.announcements());
-	$: tags = $searchParams.getAll('tag');
+	$: tagsQuery = createQuery(queries.announcementTags());
+	$: selectedTags = $searchParams.getAll('tag');
 
 	function filter(announcements: Iterable<ResponseAnnouncement>, search: string) {
 		const announcementsArray = Array.from(announcements);
 
 		if (!search) {
-			if (tags.length > 0)
+			if (selectedTags.length > 0)
 				return announcementsArray.filter((announcement) =>
-					tags.some((tag) => announcement.tags.includes(tag))
+					selectedTags.some((tag) => announcement.tags.includes(tag))
 				);
 			return announcementsArray;
 		}
@@ -53,7 +54,8 @@
 			.map(({ item }) => item)
 			.filter((item) => {
 				// Don't show if the announcement isn't under the selected tags
-				if (tags.length > 0 && !tags.some((tag) => item.tags.includes(tag))) return false;
+				if (selectedTags.length > 0 && !selectedTags.some((tag) => item.tags.includes(tag)))
+					return false;
 				return true;
 			});
 		return result;
@@ -99,12 +101,14 @@
 </div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="announcements-list">
-		<Query {query} let:data>
-			<TagsHost announcements={data.announcements} />
+		<Query query={tagsQuery} let:data>
+			<TagsHost tags={data.tags} />
+		</Query>
 
+		<Query {query} let:data>
 			<div class="cards">
 				{#each filter(data.announcements, displayedTerm) as announcement}
-					{#key tags || displayedTerm}
+					{#key selectedTags || displayedTerm}
 						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 							<AnnouncementCard {announcement} />
 						</div>

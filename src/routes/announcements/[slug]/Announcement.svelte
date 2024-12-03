@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { admin } from '$data/api';
+	import { admin, queries } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { admin_login } from '$lib/stores';
-	import TagsHost from '../TagsHost.svelte';
 	import Title from './Title.svelte';
 	import Divider from '$lib/components/Divider.svelte';
 	import AdminButtons from './AdminButtons.svelte';
@@ -12,6 +11,7 @@
 	import Date from './Date.svelte';
 	import Content from './Content.svelte';
 	import Attachments from './Attachments.svelte';
+	import Tags from './Tags.svelte';
 
 	export let isCreating, announcementContent, announcementIdNumber, query;
 
@@ -20,6 +20,7 @@
 	let isSaved = false;
 	let showDeleteConfirm = false;
 
+	let tagsElement: string[] = announcementContent?.tags ?? [];
 	let titleElement: string = announcementContent?.title ?? '';
 	let authorElement: string = announcementContent?.author ?? '';
 	let contentElement: string = announcementContent?.content ?? '';
@@ -40,7 +41,8 @@
 			author: authorElement,
 			content: contentElement,
 			created_at: createdAtElement,
-			attachments: attachmentsElement
+			attachments: attachmentsElement,
+			tags: tagsElement
 		};
 		await admin.update_announcement(announcementIdNumber!, data);
 		await $query.refetch();
@@ -50,6 +52,7 @@
 		announcementContent.content = contentElement;
 		announcementContent.created_at = createdAtElement;
 		announcementContent.attachments = attachmentsElement;
+		announcementContent.tags = tagsElement;
 
 		isEditing = false;
 		isSaved = true;
@@ -61,7 +64,7 @@
 			author: authorElement,
 			content: contentElement,
 			attachments: attachmentsElement,
-			tags: ['youtube', 'revanced'],
+			tags: tagsElement,
 			level: 0
 		};
 		await admin.create_announcement(data);
@@ -120,7 +123,7 @@
 				/>
 			</h4>
 
-			<TagsHost announcements={[announcementContent]} />
+			<Tags {isCreating} {isEditing} {isPreviewing} bind:tagsElement />
 		</div>
 
 		{#if $admin_login.logged_in}
@@ -134,8 +137,6 @@
 			/>
 		{/if}
 	</div>
-
-	<TagsHost announcements={[announcementContent]} />
 
 	<Divider />
 

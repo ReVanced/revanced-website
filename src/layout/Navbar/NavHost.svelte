@@ -103,7 +103,11 @@
 					<Navigation href="/" label="Home">Home</Navigation>
 					<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
 					<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
-					<Navigation queryKey="announcements" href="/announcements" label="Announcements">
+					<Navigation
+						queryKey={['announcements', 'announcementTags']}
+						href="/announcements"
+						label="Announcements"
+					>
 						Announcements
 					</Navigation>
 					<Navigation queryKey="contributors" href="/contributors" label="Contributors">

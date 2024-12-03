@@ -12,6 +12,8 @@ export type ResponseAnnouncement = {
 
 export type Announcement = Omit<ResponseAnnouncement, 'id'>;
 
+export type Tags = { name: string }[];
+
 export interface Contributor {
 	name: string;
 	avatar_url: string;

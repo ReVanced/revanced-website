@@ -12,7 +12,8 @@ import type {
 	About,
 	CompatiblePackage,
 	ResponseAnnouncement,
-	Announcement
+	Announcement,
+	Tags
 } from '$lib/types';
 import { get_access_token, is_logged_in, UnauthenticatedError } from '$lib/auth';
 
@@ -143,6 +144,10 @@ async function get_announcement_by_id(id: number): Promise<{ announcement: Respo
 	return { announcement: (await get_json(`announcements/${id}`)) as ResponseAnnouncement };
 }
 
+async function announcementTags(): Promise<{ tags: Tags }> {
+	return { tags: (await get_json(`announcements/tags`)) as Tags };
+}
+
 export async function create_announcement(announcement: Announcement) {
 	await post_json('announcements', announcement);
 }
@@ -206,6 +211,11 @@ export const queries = {
 	announcementById: (id: number) => ({
 		queryKey: ['announcementById', id],
 		queryFn: () => get_announcement_by_id(id),
+		staleTime
+	}),
+	announcementTags: () => ({
+		queryKey: ['announcementTags'],
+		queryFn: () => announcementTags(),
 		staleTime
 	})
 };

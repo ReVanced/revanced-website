@@ -1,35 +1,15 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { derived, readable, type Readable } from 'svelte/store';
-	import { building } from '$app/environment';
-	import { page } from '$app/stores';
 	import Svg from '$lib/components/Svg.svelte';
 
 	export let tag: string;
 	export let clickable: boolean = true;
+	export let selected: boolean = false;
+	export let onClick;
 
-	let searchParams: Readable<URLSearchParams>;
-
-	if (building) searchParams = readable(new URLSearchParams());
-	else searchParams = derived(page, ($page) => $page.url.searchParams);
-
-	$: selected = clickable && $searchParams.getAll('tag').includes(tag);
-
-	const handleClick = () => {
-		const url = new URL(window.location.href);
-		const params = new URLSearchParams(url.search);
-
-		if (params.getAll('tag').includes(tag)) params.delete('tag', tag);
-		else params.append('tag', tag);
-
-		url.search = params.toString();
-		goto(url.pathname + url.search);
-
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-	};
+	selected = clickable && selected;
 </script>
 
-<button class:selected class:clickable on:click={clickable ? handleClick : null}>
+<button class:selected class:clickable on:click={clickable ? onClick : null}>
 	{#if selected && clickable}
 		<div class="icon">
 			<Svg viewBoxHeight={48} svgHeight={18}>

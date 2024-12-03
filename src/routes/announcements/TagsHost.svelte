@@ -1,51 +1,51 @@
 <script lang="ts">
 	import TagChip from './TagChip.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import { derived, readable } from 'svelte/store';
-	import { building } from '$app/environment';
+	import { derived } from 'svelte/store';
 	import { page } from '$app/stores';
-	import type { ResponseAnnouncement } from '$lib/types';
-	import type { Readable } from 'svelte/store';
+	import { goto } from '$app/navigation';
+	import type { Tags } from '$lib/types';
+	import Button from '$lib/components/Button.svelte';
 
-	export let announcements: ResponseAnnouncement[];
+	export let tags: Tags;
 
-	function sortTagsByAnnouncements(announcements: ResponseAnnouncement[]) {
-		const tagCounts: { [key: string]: number } = {};
-
-		for (const announcement of announcements)
-			for (const tag of announcement.tags) tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-
-		return Object.keys(tagCounts).sort((a, b) => {
-			if (tagCounts[b] === tagCounts[a]) return a.localeCompare(b);
-			return tagCounts[b] - tagCounts[a];
-		});
-	}
-
-	const sortedTags = sortTagsByAnnouncements(announcements);
 	let showAllTags = false;
 
-	let searchParams: Readable<URLSearchParams>;
-
-	if (building) searchParams = readable(new URLSearchParams());
-	else searchParams = derived(page, ($page) => $page.url.searchParams);
+	const searchParams = derived(page, ($page) => $page.url.searchParams);
 
 	$: selectedTags = $searchParams.getAll('tag');
 
 	$: displayedTags = (() => {
-		if (showAllTags) return sortedTags;
+		if (showAllTags) return tags.map((tag) => tag.name);
 		if (selectedTags.length > 0) {
-			return [sortedTags[0], ...selectedTags.filter((tag) => tag !== sortedTags[0])];
+			return [tags[0]?.name, ...selectedTags.filter((tag) => tag !== tags[0]?.name)];
 		}
-		return sortedTags.length > 0 ? [sortedTags[0]] : [];
+		return tags.length > 0 ? [tags[0]?.name] : [];
 	})();
+
+	const handleClick = (tag: string) => {
+		const url = new URL(window.location.href);
+		const params = new URLSearchParams(url.search);
+
+		if (params.getAll('tag').includes(tag)) params.delete('tag', tag);
+		else params.append('tag', tag);
+
+		url.search = params.toString();
+		goto(url.pathname + url.search);
+
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	};
 </script>
 
 <div class="tag-list">
 	{#each displayedTags as tag}
-		<TagChip {tag} />
+		<TagChip
+			{tag}
+			selected={$searchParams.getAll('tag').includes(tag)}
+			onClick={() => handleClick(tag)}
+		/>
 	{/each}
 
-	{#if sortedTags.length > 1}
+	{#if tags.length > 1}
 		<li class="button">
 			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
 				<img
