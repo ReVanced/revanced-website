@@ -38,7 +38,9 @@
 		const data = {
 			title: titleElement,
 			author: authorElement,
-			content: contentElement
+			content: contentElement,
+			created_at: createdAtElement,
+			attachments: attachmentsElement
 		};
 		await admin.update_announcement(announcementIdNumber!, data);
 		await $query.refetch();
@@ -46,6 +48,8 @@
 		announcementContent.title = titleElement;
 		announcementContent.author = authorElement;
 		announcementContent.content = contentElement;
+		announcementContent.created_at = createdAtElement;
+		announcementContent.attachments = attachmentsElement;
 
 		isEditing = false;
 		isSaved = true;
@@ -53,9 +57,9 @@
 
 	const createAnnouncement = async () => {
 		const data = {
-			title: titleElement.toString(),
-			author: authorElement.toString(),
-			content: contentElement.toString(),
+			title: titleElement,
+			author: authorElement,
+			content: contentElement,
 			attachments: attachmentsElement,
 			tags: ['youtube', 'revanced'],
 			level: 0
