@@ -12,11 +12,7 @@
 
 <style lang="scss">
 	h1 {
-		color: var(--text-one);
 		font-size: 2.5rem;
-		font-weight: 700;
-		letter-spacing: -0.025em;
-		border-bottom: 1px solid var(--grey-three);
 	}
 
 	input {

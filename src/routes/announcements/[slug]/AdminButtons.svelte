@@ -1,10 +1,15 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 
-	export let isEditing: boolean, isCreating, isPreviewing: boolean, showDeleteConfirm: boolean, createAnnouncement, save;
+	export let isEditing: boolean,
+		isCreating,
+		isPreviewing: boolean,
+		showDeleteConfirm: boolean,
+		createAnnouncement,
+		save;
 </script>
 
-<div class="edit-buttons-container">
+<div>
 	{#if isEditing}
 		<Button
 			type="icon"
@@ -26,8 +31,8 @@
 	{/if}
 </div>
 
-<style lang="scss">
-	.edit-buttons-container {
+<style>
+	div {
 		display: flex;
 		gap: 1rem;
 	}

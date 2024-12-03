@@ -24,9 +24,7 @@
 		}
 
 		padding: 0;
-		color: var(--secondary);
 		font-size: 1rem;
-		font-weight: 400;
 		letter-spacing: 0.02rem;
 	}
 </style>
