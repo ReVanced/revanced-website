@@ -3,10 +3,15 @@
 	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import Gallery from '$lib/components/Gallery.svelte';
 	import { admin_login } from '$lib/stores';
-	import moment from 'moment';
 	import TagsHost from '../TagsHost.svelte';
+	import Title from './Title.svelte';
+	import Divider from '$lib/components/Divider.svelte';
+	import AdminButtons from './AdminButtons.svelte';
+	import Author from './Author.svelte';
+	import Date from './Date.svelte';
+	import Content from './Content.svelte';
+	import Attachments from './Attachments.svelte';
 
 	export let isCreating, announcementContent, announcementIdNumber, query;
 
@@ -18,14 +23,14 @@
 	let titleElement: string = announcementContent?.title ?? '';
 	let authorElement: string = announcementContent?.author ?? '';
 	let contentElement: string = announcementContent?.content ?? '';
-	let attachments: string[] = announcementContent?.attachments ?? [];
+	let attachmentsElement: string[] = announcementContent?.attachments ?? [];
 
 	const addAttachment = () => {
-		attachments = [...attachments, '']; // Ensure reactivity with a new array
+		attachmentsElement = [...attachmentsElement, '']; // Ensure reactivity with a new array
 	};
 
 	const removeAttachment = (index) => {
-		attachments = attachments.filter((_, i) => i !== index);
+		attachmentsElement = attachmentsElement.filter((_, i) => i !== index);
 	};
 
 	const save = async () => {
@@ -50,7 +55,7 @@
 			title: titleElement.toString(),
 			author: authorElement.toString(),
 			content: contentElement.toString(),
-			attachments: attachments,
+			attachments: attachmentsElement,
 			tags: ['youtube', 'revanced'],
 			level: 0
 		};
@@ -84,184 +89,62 @@
 <div class="card">
 	<div class="header">
 		<div class="header-data">
-			{#if isEditing || isCreating}
-				{#if isPreviewing}
-					<h1>
-						{titleElement}
-					</h1>
-				{:else}
-					<input
-						type="text"
-						id="title"
-						class="edit"
-						bind:value={titleElement}
-						class:empty={!titleElement.trim()}
-						placeholder="Enter title"
-					/>
-				{/if}
-			{:else}
-				<h1>
-					{announcementContent.title}
-				</h1>
-			{/if}
+			<Title
+				{isCreating}
+				{isEditing}
+				{isPreviewing}
+				title={announcementContent.title}
+				bind:titleElement
+			/>
 
 			<h4>
-				<span>
-					{moment(announcementContent.created_at).format('MMMM D, YYYY [at] h:mm A')}
-				</span>
+				<Date {isCreating} {isEditing} {isPreviewing} createdAt={announcementContent.created_at} />
 				·
-				{#if isEditing || isCreating}
-					{#if isPreviewing}
-						<span>
-							{authorElement}
-						</span>
-					{:else}
-						<input
-							type="text"
-							id="author"
-							class="edit"
-							bind:value={authorElement}
-							class:empty={!authorElement.trim()}
-							placeholder="Enter author name"
-						/>
-					{/if}
-				{:else}
-					<span>
-						{announcementContent.author}
-					</span>
-				{/if}
+				<Author
+					{isCreating}
+					{isEditing}
+					{isPreviewing}
+					author={announcementContent.author}
+					bind:authorElement
+				/>
 			</h4>
 
+			<TagsHost announcements={[announcementContent]} />
+		</div>
+
 		{#if $admin_login.logged_in}
-			<div class="edit-buttons-container">
-				{#if isEditing}
-					<Button
-						type="icon"
-						icon={isPreviewing ? 'hide' : 'show'}
-						on:click={() => (isPreviewing = !isPreviewing)}
-					/>
-					<Button type="icon" icon={'close'} on:click={() => (isEditing = false)} />
-					<Button type="icon" icon={'check'} on:click={save} />
-				{:else if isCreating}
-					<Button
-						type="icon"
-						icon={isPreviewing ? 'hide' : 'show'}
-						on:click={() => (isPreviewing = !isPreviewing)}
-					/>
-					<Button type="icon" icon={'check'} on:click={createAnnouncement} />
-				{:else}
-					<Button
-						type="icon"
-						icon={'delete'}
-						on:click={() => (showDeleteConfirm = !showDeleteConfirm)}
-					/>
-					<Button type="icon" icon={'edit'} on:click={() => (isEditing = !isEditing)} />
-				{/if}
-			</div>
+			<AdminButtons
+				{isCreating}
+				bind:isEditing
+				bind:isPreviewing
+				bind:showDeleteConfirm
+				{createAnnouncement}
+				{save}
+			/>
 		{/if}
 	</div>
 
 	<TagsHost announcements={[announcementContent]} />
 
-	<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
-			<path
-				d="M114 4c-5.067 4.667-10.133 4.667-15.2 0S88.667-.667 83.6 4 73.467 8.667 68.4 4 58.267-.667 53.2 4 43.067 8.667 38 4 27.867-.667 22.8 4 12.667 8.667 7.6 4-2.533-.667-7.6 4s-10.133 4.667-15.2 0S-32.933-.667-38 4s-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0"
-				stroke-linecap="square"
-			/>
-		</pattern>
-		<rect width="100%" height="100%" fill="url(#a)" />
-	</svg>
+	<Divider />
 
-	{#if isEditing || isCreating}
-		{#if isPreviewing}
-			<div class="content">
-				{@html contentElement}
-			</div>
-		{:else}
-			<textarea
-				bind:value={contentElement}
-				id="content"
-				class="edit"
-				class:empty={!announcementContent.content.trim()}
-				placeholder="Enter content"
-			/>
-		{/if}
-	{:else}
-		<div class="content">
-			{@html announcementContent.content}
-		</div>
-	{/if}
+	<Content
+		{isCreating}
+		{isEditing}
+		{isPreviewing}
+		content={announcementContent.content}
+		bind:contentElement
+	/>
 
-	{#if isEditing || isCreating}
-		{#if isPreviewing}
-			{#if attachments.length > 0}
-				<Gallery images={attachments} />
-			{/if}
-		{:else}
-			<svg
-				aria-hidden="true"
-				width="100%"
-				height="8"
-				fill="none"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
-					<path
-						d="M114 4c-5.067 4.667-10.133 4.667-15.2 0S88.667-.667 83.6 4 73.467 8.667 68.4 4 58.267-.667 53.2 4 43.067 8.667 38 4 27.867-.667 22.8 4 12.667 8.667 7.6 4-2.533-.667-7.6 4s-10.133 4.667-15.2 0S-32.933-.667-38 4s-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0"
-						stroke-linecap="square"
-					/>
-				</pattern>
-				<rect width="100%" height="100%" fill="url(#a)" />
-			</svg>
-			<div>
-				<div class="attachments">
-					{#each attachments as attachment, index}
-						<div style="position: relative; display: flex; justify-content: center;">
-							<input
-								style="width: 100%;"
-								type="text"
-								bind:value={attachments[index]}
-								class:empty={attachment === ''}
-								placeholder="Attachment URL"
-							/>
-							<button
-								style="position: absolute; right: 10px; top: 14px;"
-								on:click={() => removeAttachment(index)}
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									height="24px"
-									viewBox="0 -960 960 960"
-									width="24px"
-									fill="#adc8df"
-								>
-									<path
-										d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
-									/>
-								</svg>
-							</button>
-						</div>
-					{/each}
-					<span>
-						<Button type="icon" icon="create" on:click={addAttachment} />
-					</span>
-				</div>
-			</div>
-		{/if}
-	{:else if announcementContent.attachments.length > 0}
-		<svg aria-hidden="true" width="100%" height="8" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<pattern id="a" width="91" height="8" patternUnits="userSpaceOnUse">
-				<path
-					d="M114 4c-5.067 4.667-10.133 4.667-15.2 0S88.667-.667 83.6 4 73.467 8.667 68.4 4 58.267-.667 53.2 4 43.067 8.667 38 4 27.867-.667 22.8 4 12.667 8.667 7.6 4-2.533-.667-7.6 4s-10.133 4.667-15.2 0S-32.933-.667-38 4s-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0"
-					stroke-linecap="square"
-				/>
-			</pattern>
-			<rect width="100%" height="100%" fill="url(#a)" />
-		</svg>
-
-		<Gallery images={announcementContent.attachments} />
-	{/if}
+	<Attachments
+		{isCreating}
+		{isEditing}
+		{isPreviewing}
+		{removeAttachment}
+		{addAttachment}
+		attachments={announcementContent.attachments}
+		bind:attachmentsElement
+	/>
 </div>
 
 <style lang="scss">
@@ -274,54 +157,6 @@
 		background-color: var(--surface-eight);
 	}
 
-	button {
-		display: flex;
-		justify-content: center;
-		background-color: transparent;
-		border: none;
-		cursor: pointer;
-		svg {
-			margin: 0;
-		}
-	}
-	.edit,
-	textarea {
-		&,
-		&:focus {
-			border: none;
-			outline: none;
-			border-radius: 0;
-		}
-
-		&#title {
-			width: 100%;
-			border: none;
-			padding: 0;
-
-			color: var(--text-one);
-			font-size: 2.5rem;
-			font-weight: 700;
-			line-height: 4rem;
-			letter-spacing: -0.025em;
-		}
-
-		&#author {
-			border: none;
-			padding: 0;
-
-			color: var(--secondary);
-			font-size: 1rem;
-			font-weight: 400;
-			letter-spacing: 0.02rem;
-		}
-
-		&#content {
-			white-space: pre-wrap;
-			border: none;
-			padding: 0;
-		}
-	}
-
 	.header {
 		display: flex;
 		justify-content: space-between;
@@ -330,78 +165,6 @@
 
 		.header-data {
 			width: 100%;
-		}
-	}
-
-	.edit-buttons-container {
-		display: flex;
-		gap: 1rem;
-	}
-
-	h1 {
-		color: var(--text-one);
-		font-size: 2.5rem;
-		font-weight: 700;
-		letter-spacing: -0.025em;
-		border-bottom: 1px solid var(--grey-three);
-	}
-
-	svg {
-		margin: 1.5rem 0;
-
-		path {
-			stroke: var(--border);
-		}
-	}
-
-	.attachments {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		gap: 1rem;
-
-		.empty {
-			border: 1px solid var(--red-one);
-
-			&:focus {
-				outline: none;
-				border: 1px solid var(--primary);
-			}
-		}
-		span {
-			align-self: start;
-		}
-	}
-	.content {
-		color: var(--text-four);
-		white-space: pre-wrap;
-
-		:global(a) {
-			color: var(--primary);
-			font-weight: 600;
-			font-size: 0.95rem;
-			text-decoration: none;
-
-			&:hover {
-				text-decoration: underline var(--secondary);
-				color: var(--text-one);
-			}
-		}
-
-		:global(h2),
-		:global(h3),
-		:global(h4),
-		:global(h5),
-		:global(h6) {
-			color: var(--secondary);
-			margin-top: 1.25rem;
-			margin-bottom: 1.25rem;
-		}
-
-		:global(li) {
-			list-style-position: inside;
-			font-size: 0.9rem;
-			font-weight: 500;
 		}
 	}
 
