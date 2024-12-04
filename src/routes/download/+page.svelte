@@ -75,7 +75,7 @@
 		<Query {query} let:data>
 			<Button
 				type="text"
-				href={data.release.assets[0].download_url}
+				href={data.release.download_url}
 				on:click={() => (warningDialogue = false)}>Okay</Button
 			>
 		</Query>
@@ -97,7 +97,7 @@
 					on:click={handleClick}
 					type="filled"
 					icon="download"
-					href={data.release.assets[0].download_url}
+					href={data.release.download_url}
 				>
 					{data.release.version}
 				</Button>

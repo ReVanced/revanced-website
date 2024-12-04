@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { friendlyName } from '$util/friendlyName';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Contributor } from '$lib/types';
 	import ContributorButton from './ContributorPerson.svelte';
 
 	export let contributors: Contributor[];
-	export let repo: string;
+	export let name: string;
+	export let url: string;
+
 	let expanded = true;
 
 	let bots = ['semantic-release-bot', 'revanced-bot'];
-	let repo_name = friendlyName(repo);
 </script>
 
 <div class="section-container">
@@ -20,8 +20,8 @@
 		on:click={() => (expanded = !expanded)}
 		on:keypress={() => (expanded = !expanded)}
 	>
-		<a href="https://github.com/{repo}" rel="noreferrer" target="_blank" on:click|stopPropagation>
-			<h4>{repo_name}</h4>
+		<a href="{url}" rel="noreferrer" target="_blank" on:click|stopPropagation>
+			<h4>{name}</h4>
 		</a>
 		<img
 			id="arrow"
