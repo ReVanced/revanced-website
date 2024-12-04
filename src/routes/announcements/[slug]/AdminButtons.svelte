@@ -30,7 +30,9 @@
 			icon={archivedAtElement ? 'unarchive' : 'archive'}
 			on:click={toggleArchived}
 		/>
-		<Button type="icon" icon={'close'} on:click={() => (isEditing = false)} />
+		{#if isEditing}
+			<Button type="icon" icon={'close'} on:click={() => (isEditing = false)} />
+		{/if}
 		<Button type="icon" icon={'check'} on:click={isEditing ? save : createAnnouncement} />
 	{:else}
 		<Button type="icon" icon={'delete'} on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
