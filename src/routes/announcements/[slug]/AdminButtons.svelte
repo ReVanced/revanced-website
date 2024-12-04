@@ -19,7 +19,7 @@
 </script>
 
 <div>
-	{#if isEditing}
+	{#if isEditing || isCreating}
 		<Button
 			type="icon"
 			icon={isPreviewing ? 'hide' : 'show'}
@@ -31,19 +31,7 @@
 			on:click={toggleArchived}
 		/>
 		<Button type="icon" icon={'close'} on:click={() => (isEditing = false)} />
-		<Button type="icon" icon={'check'} on:click={save} />
-	{:else if isCreating}
-		<Button
-			type="icon"
-			icon={archivedAtElement ? 'unarchive' : 'archive'}
-			on:click={toggleArchived}
-		/>
-		<Button
-			type="icon"
-			icon={isPreviewing ? 'hide' : 'show'}
-			on:click={() => (isPreviewing = !isPreviewing)}
-		/>
-		<Button type="icon" icon={'check'} on:click={createAnnouncement} />
+		<Button type="icon" icon={'check'} on:click={isEditing ? save : createAnnouncement} />
 	{:else}
 		<Button type="icon" icon={'delete'} on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
 		<Button type="icon" icon={'edit'} on:click={() => (isEditing = !isEditing)} />
