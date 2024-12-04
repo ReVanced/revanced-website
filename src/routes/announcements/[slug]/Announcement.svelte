@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { admin, queries } from '$data/api';
+	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { admin_login } from '$lib/stores';
@@ -25,6 +25,7 @@
 	let authorElement: string = announcementContent?.author ?? '';
 	let contentElement: string = announcementContent?.content ?? '';
 	let createdAtElement: string = announcementContent?.created_at ?? '';
+	let archivedAtElement: string = announcementContent?.archived_at ?? null;
 	let attachmentsElement: string[] = announcementContent?.attachments ?? [];
 
 	const addAttachment = () => {
@@ -111,6 +112,8 @@
 					{isEditing}
 					{isPreviewing}
 					createdAt={announcementContent.created_at}
+					archivedAt={announcementContent.archived_at}
+					bind:archivedAtElement
 					bind:createdAtElement
 				/>
 				·
@@ -132,6 +135,7 @@
 				bind:isEditing
 				bind:isPreviewing
 				bind:showDeleteConfirm
+				bind:archivedAtElement
 				{createAnnouncement}
 				{save}
 			/>
