@@ -170,7 +170,13 @@ hr {
 	border-top: 1px solid var(--border);
 }
 
-input {
+textarea {
+	resize: vertical;
+	field-sizing: content;
+}
+
+input,
+textarea {
 	padding: 1rem;
 	border-radius: 12px;
 	border: 1px solid var(--border);
@@ -178,6 +184,7 @@ input {
 	color: var(--secondary);
 }
 
-input:focus {
+input:focus,
+textarea:focus {
 	outline: 1px solid var(--primary);
 }

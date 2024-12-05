@@ -22,7 +22,7 @@
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
 
-	const query = createQuery(['patches'], queries.patches);
+	const query = createQuery(queries.patches());
 
 	let searcher: Fuse<Patch> | undefined;
 
