@@ -13,14 +13,11 @@
 
 	const aboutQuery = createQuery(queries.about());
 
+	let location: string;
+
 	onMount(() => {
 		// DMCA Protection Badge
-		var c = document.createElement('link');
-		c.type = 'text/css';
-		c.rel = 'stylesheet';
-		c.href = 'https://images.dmca.com/badges/dmca.css?ID=' + RV_DMCA_GUID;
-		var h = document.getElementsByTagName('head')[0];
-		h.appendChild(c);
+		location = document.location.href;
 	});
 </script>
 
@@ -72,7 +69,7 @@
 		</Query>
 		<!-- DMCA Protection Badge -->
 		<a
-			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}"
+			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"
 			title="DMCA.com Protection Status"
 			class="dmca-badge"
 		>
@@ -81,8 +78,6 @@
 				alt="DMCA.com Protection Status"
 			/></a
 		>
-		<script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js">
-		</script>
 	</div>
 </footer>
 
