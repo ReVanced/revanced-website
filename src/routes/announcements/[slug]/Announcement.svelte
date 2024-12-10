@@ -77,6 +77,7 @@
 		await admin.delete_announcement(announcementIdNumber!);
 		goto('/announcements');
 	};
+
 	const handleUnload = (e: BeforeUnloadEvent) => {
 		if (isEditing && !isSaved) {
 			e.preventDefault();
