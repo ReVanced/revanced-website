@@ -12,6 +12,7 @@
 	import Content from './Content.svelte';
 	import Attachments from './Attachments.svelte';
 	import Tags from './Tags.svelte';
+	import type { Announcement } from '$lib/types';
 
 	export let isCreating, announcementContent, announcementIdNumber, query;
 
@@ -32,7 +33,7 @@
 		attachmentsElement = [...attachmentsElement, '']; // Ensure reactivity with a new array
 	};
 
-	const removeAttachment = (index) => {
+	const removeAttachment = (index: number) => {
 		attachmentsElement = attachmentsElement.filter((_, i) => i !== index);
 	};
 
@@ -45,7 +46,7 @@
 			attachments: attachmentsElement,
 			tags: tagsElement
 		};
-		await admin.update_announcement(announcementIdNumber!, data);
+		await admin.update_announcement(announcementIdNumber!, data as Announcement);
 		await $query.refetch();
 
 		announcementContent.title = titleElement;
@@ -68,7 +69,7 @@
 			tags: tagsElement,
 			level: 0
 		};
-		await admin.create_announcement(data);
+		await admin.create_announcement(data as Announcement);
 		history.back();
 	};
 

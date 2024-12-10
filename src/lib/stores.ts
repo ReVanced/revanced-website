@@ -37,7 +37,31 @@ export const admin_login = readable<AdminLoginInfo>(admin_login_info(), (set) =>
 	return () => clearInterval(interval);
 });
 
-export const read_announcements = readable(
-	new Set<number>(),
-	() => () => new Set<number>(JSON.parse(localStorage.getItem('read_announcements') ?? '[]'))
-);
+export const read_announcements = readable(new Set<number>(), (set) => {
+	const key = 'read_announcements';
+	const data = localStorage.getItem(key);
+	let currentState: Set<number> = new Set();
+
+	const updateStoreState = () => {
+		if (data) {
+			const parsedArray = JSON.parse(data) as number[];
+			currentState = new Set(parsedArray);
+			set(currentState);
+		} else {
+			currentState = new Set();
+			set(currentState);
+		}
+	};
+
+	const handleLocalStorageUpdate = (e: StorageEvent) => {
+		if (e.key === key) updateStoreState();
+	};
+
+	window.addEventListener('storage', handleLocalStorageUpdate);
+	updateStoreState();
+
+	return () => {
+		window.removeEventListener('storage', handleLocalStorageUpdate);
+		localStorage.setItem(key, JSON.stringify(Array.from(currentState)));
+	};
+});

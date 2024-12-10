@@ -4,12 +4,12 @@
 	export let tag: string;
 	export let clickable: boolean = true;
 	export let selected: boolean = false;
-	export let onClick;
+	export let onClick: (event?: MouseEvent) => void = () => {};
 
 	selected = clickable && selected;
 </script>
 
-<button class:selected class:clickable on:click={clickable ? onClick : null}>
+<button class:selected class:clickable on:click={clickable ? onClick : () => {}}>
 	{#if selected && clickable}
 		<div class="icon">
 			<Svg viewBoxHeight={48} svgHeight={18}>

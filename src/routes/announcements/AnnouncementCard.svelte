@@ -23,7 +23,7 @@
 
 	function setAnnouncementRead() {
 		isRead = true;
-		
+
 		$read_announcements.add(announcement.id);
 		localStorage.setItem('read_announcements', JSON.stringify(Array.from($read_announcements)));
 	}
