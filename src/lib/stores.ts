@@ -36,3 +36,8 @@ export const admin_login = readable<AdminLoginInfo>(admin_login_info(), (set) =>
 	const interval = setInterval(checkLoginStatus, 100);
 	return () => clearInterval(interval);
 });
+
+export const read_announcements = readable(
+	new Set<number>(),
+	() => () => new Set<number>(JSON.parse(localStorage.getItem('read_announcements') ?? '[]'))
+);

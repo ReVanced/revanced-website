@@ -7,6 +7,7 @@
 	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import TagChip from './TagChip.svelte';
+	import { read_announcements } from '$lib/stores';
 
 	export let announcement: ResponseAnnouncement;
 
@@ -20,21 +21,15 @@
 		client.prefetchQuery(query);
 	}
 
-	function isAnnouncementRead() {
-		isRead = (localStorage.getItem('read_announcements') ?? '')
-			.split(',')
-			.includes(String(announcement.id));
-	}
-
 	function setAnnouncementRead() {
-		const ids = (localStorage.getItem('read_announcements') ?? '').split(',').filter((id) => !!id);
-		if (!ids.includes(String(announcement.id)))
-			localStorage.setItem('read_announcements', ids.concat(String(announcement.id)).join(','));
 		isRead = true;
+		
+		$read_announcements.add(announcement.id);
+		localStorage.setItem('read_announcements', JSON.stringify(Array.from($read_announcements)));
 	}
 
 	onMount(() => {
-		isAnnouncementRead();
+		isRead = $read_announcements.has(announcement.id);
 	});
 </script>
 
@@ -51,7 +46,12 @@
 			<NewHeader />
 		{/if}
 		{#if announcement.attachments.length > 0}
-			<img src={announcement.attachments[0]}  class="{isRead === undefined || isRead ? '' : 'no-border-radius'}" alt="Banner" onerror="this.style.display='none'" />
+			<img
+				src={announcement.attachments[0]}
+				class={isRead === undefined || isRead ? '' : 'no-border-radius'}
+				alt="Banner"
+				onerror="this.style.display='none'"
+			/>
 		{/if}
 		<div class="content">
 			<div class="header">
