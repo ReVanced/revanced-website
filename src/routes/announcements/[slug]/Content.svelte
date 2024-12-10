@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let isEditing, isCreating, isPreviewing, content, contentElement: string;
+	export let isEditing: boolean,
+		isCreating: boolean,
+		isPreviewing: boolean,
+		content: string,
+		contentElement: string;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}

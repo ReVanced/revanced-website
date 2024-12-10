@@ -3,12 +3,12 @@
 	import Divider from '$lib/components/Divider.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
 
-	export let isEditing,
-		isCreating,
-		isPreviewing,
-		removeAttachment,
-		addAttachment,
-		attachments,
+	export let isEditing: boolean,
+		isCreating: boolean,
+		isPreviewing: boolean,
+		removeAttachment: (index: number) => void,
+		addAttachment: () => void,
+		attachments: string[],
 		attachmentsElement;
 </script>
 

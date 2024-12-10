@@ -1,12 +1,12 @@
 <script lang="ts">
 	import moment from 'moment';
 
-	export let isEditing,
-		isCreating,
-		isPreviewing,
-		createdAt,
+	export let isEditing: boolean,
+		isCreating: boolean,
+		isPreviewing: boolean,
+		createdAt: string,
 		createdAtElement: string,
-		archivedAt,
+		archivedAt: string | undefined,
 		archivedAtElement: string;
 
 	// Ensure createdAtElement is properly formatted for the datetime-local input

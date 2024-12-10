@@ -2,19 +2,16 @@
 	import Button from '$lib/components/Button.svelte';
 
 	export let isEditing: boolean,
-		isCreating,
+		isCreating: boolean,
 		isPreviewing: boolean,
 		archivedAtElement: string | null,
 		showDeleteConfirm: boolean,
-		createAnnouncement,
-		save;
+		createAnnouncement: () => void,
+		save: () => void;
 
 	const toggleArchived = () => {
-		if (archivedAtElement) {
-			archivedAtElement = null;
-		} else {
-			archivedAtElement = new Date().toISOString().split('.')[0].slice(0, -3);
-		}
+		if (archivedAtElement) archivedAtElement = null;
+		else archivedAtElement = new Date().toISOString().split('.')[0].slice(0, -3);
 	};
 </script>
 
@@ -31,12 +28,12 @@
 			on:click={toggleArchived}
 		/>
 		{#if isEditing}
-			<Button type="icon" icon={'close'} on:click={() => (isEditing = false)} />
+			<Button type="icon" icon="close" on:click={() => (isEditing = false)} />
 		{/if}
-		<Button type="icon" icon={'check'} on:click={isEditing ? save : createAnnouncement} />
+		<Button type="icon" icon="check" on:click={isEditing ? save : createAnnouncement} />
 	{:else}
-		<Button type="icon" icon={'delete'} on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
-		<Button type="icon" icon={'edit'} on:click={() => (isEditing = !isEditing)} />
+		<Button type="icon" icon="delete" on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
+		<Button type="icon" icon="edit" on:click={() => (isEditing = !isEditing)} />
 	{/if}
 </div>
 

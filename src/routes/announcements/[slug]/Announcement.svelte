@@ -12,9 +12,12 @@
 	import Content from './Content.svelte';
 	import Attachments from './Attachments.svelte';
 	import Tags from './Tags.svelte';
-	import type { Announcement } from '$lib/types';
+	import type { ResponseAnnouncement, Announcement } from '$lib/types';
 
-	export let isCreating, announcementContent, announcementIdNumber, query;
+	export let isCreating: boolean,
+		announcementContent: ResponseAnnouncement,
+		announcementIdNumber: number | null,
+		query;
 
 	let isPreviewing = false;
 	let isEditing = false;
@@ -26,7 +29,7 @@
 	let authorElement: string = announcementContent?.author ?? '';
 	let contentElement: string = announcementContent?.content ?? '';
 	let createdAtElement: string = announcementContent?.created_at ?? '';
-	let archivedAtElement: string = announcementContent?.archived_at ?? null;
+	let archivedAtElement: string = announcementContent?.archived_at ?? '';
 	let attachmentsElement: string[] = announcementContent?.attachments ?? [];
 
 	const addAttachment = () => {
