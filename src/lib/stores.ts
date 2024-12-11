@@ -1,4 +1,4 @@
-import { readable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
 import { is_logged_in, get_access_token } from './auth';
 
 type AdminLoginInfo =
@@ -37,20 +37,14 @@ export const admin_login = readable<AdminLoginInfo>(admin_login_info(), (set) =>
 	return () => clearInterval(interval);
 });
 
-export const read_announcements = readable(new Set<number>(), (set) => {
+export const read_announcements = writable(new Set<number>(), (set) => {
 	const key = 'read_announcements';
 	const data = localStorage.getItem(key);
-	let currentState: Set<number> = new Set();
+	const parsedArray = data ? JSON.parse(data) : [];
+	const currentState = new Set(parsedArray);
 
 	const updateStoreState = () => {
-		if (data) {
-			const parsedArray = JSON.parse(data) as number[];
-			currentState = new Set(parsedArray);
-			set(currentState);
-		} else {
-			currentState = new Set();
-			set(currentState);
-		}
+		set(currentState);
 	};
 
 	const handleLocalStorageUpdate = (e: StorageEvent) => {
