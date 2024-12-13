@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let name: string;
+	name = name.toLowerCase();
 </script>
 
 <span class="material-symbols-outlined" {...$$restProps}>{name}</span>
