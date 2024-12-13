@@ -1,14 +1,20 @@
 <script lang="ts">
 	export let name: string;
+	export let filled: boolean = false;
+
 	name = name.toLowerCase();
+
+	const filledValue = filled ? 1 : 0;
 </script>
 
-<span class="material-symbols-outlined" {...$$restProps}>{name}</span>
+<span class="material-symbols-outlined" style="--filled: {filledValue};" {...$$restProps}>
+	{name}
+</span>
 
 <style>
 	.material-symbols-outlined {
 		font-variation-settings:
-			'FILL' 0,
+			'FILL' var(--filled),
 			'wght' 400,
 			'GRAD' 0,
 			'opsz' 24;
