@@ -7,7 +7,7 @@
 	const filledValue = filled ? 1 : 0;
 </script>
 
-<span class="material-symbols-outlined" style="--filled: {filledValue};" {...$$restProps}>
+<span class="material-symbols-outlined" style="--filled: {filledValue};">
 	{name}
 </span>
 
