@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Icon from './Icon.svelte';
+
 	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
 	export let icon = '';
 	export let href = '';
@@ -9,14 +11,14 @@
 {#if href}
 	<a {href} {target} class={`button-${type}`} aria-label={label}>
 		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
+			<Icon name={icon} />
 		{/if}
 		<slot />
 	</a>
 {:else}
 	<button on:click class={`button-${type}`} aria-label={label}>
 		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
+			<Icon name={icon} />
 		{/if}
 		<slot />
 	</button>
