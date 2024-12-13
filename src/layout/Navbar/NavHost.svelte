@@ -107,7 +107,7 @@
 <!-- settings -->
 <Modal bind:modalOpen>
 	<svelte:fragment slot="icon">
-		<div style="color: var(--surface-six)">
+		<div>
 			<Icon name="settings" filled />
 		</div>
 	</svelte:fragment>
@@ -117,7 +117,7 @@
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />
 			<button id="button-reset" on:click={reset} aria-label="Reset Button">
-				<div style="color: var(--surface-six)">
+				<div>
 					<Icon name="replay" />
 				</div>
 			</button>
