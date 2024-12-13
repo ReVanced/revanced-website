@@ -15,6 +15,9 @@
 	} else {
 		createdAtElement = new Date().toISOString().split('.')[0].slice(0, -3);
 	}
+
+	$: created = isPreviewing ? createdAtElement : createdAt;
+	$: archived = isPreviewing ? archivedAtElement : archivedAt;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -33,12 +36,13 @@
 			<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtElement} />
 		{/if}
 	</span>
-{:else if isPreviewing ? createdAt : createdAtElement}
+{:else if created}
 	<span>
-		{isPreviewing
-			? moment(createdAtElement).format('MMMM D, YYYY [at] h:mm A')
-			: moment(createdAt).format('MMMM D, YYYY [at] h:mm A')}
-		{#if archivedAt || archivedAtElement}
+		{moment().diff(moment(created), 'days') <= 7
+			? moment(created).fromNow()
+			: moment(created).format('MMMM D, YYYY [at] h:mm A')}
+
+		{#if archived}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="24px"
@@ -48,9 +52,9 @@
 			>
 				<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
 			</svg>
-			{isPreviewing
-				? moment(archivedAtElement).format('MMMM D, YYYY [at] h:mm A')
-				: moment(archivedAt).format('MMMM D, YYYY [at] h:mm A')}
+			{moment().diff(moment(archived), 'days') <= 7
+				? moment(archived).fromNow()
+				: moment(archived).format('MMMM D, YYYY [at] h:mm A')}
 		{/if}
 	</span>
 {/if}
