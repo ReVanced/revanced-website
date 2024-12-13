@@ -4,6 +4,8 @@
 		isPreviewing: boolean,
 		content: string,
 		contentElement: string;
+
+	$: content = isPreviewing ? contentElement : content;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -12,9 +14,9 @@
 		class:empty={!content?.trim()}
 		placeholder="Enter content"
 	/>
-{:else if isPreviewing ? contentElement : content}
+{:else if content}
 	<div>
-		{@html isPreviewing ? contentElement : content}
+		{@html content}
 	</div>
 {/if}
 

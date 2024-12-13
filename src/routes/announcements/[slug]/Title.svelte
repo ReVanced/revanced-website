@@ -4,13 +4,15 @@
 		isPreviewing: boolean,
 		title: string,
 		titleElement: string;
+
+	$: title = isPreviewing ? title : titleElement;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<input bind:value={titleElement} class:empty={!titleElement?.trim()} placeholder="Enter title" />
-{:else if isPreviewing ? titleElement : title}
+{:else if title}
 	<h1>
-		{isPreviewing ? titleElement : title}
+		{title}
 	</h1>
 {/if}
 
