@@ -7,12 +7,12 @@
 	const filledValue = filled ? 1 : 0;
 </script>
 
-<span class="material-symbols-outlined" style="--filled: {filledValue};">
+<span class="material-symbols" style="--filled: {filledValue};">
 	{name}
 </span>
 
 <style>
-	.material-symbols-outlined {
+	.material-symbols {
 		font-variation-settings:
 			'FILL' var(--filled),
 			'wght' 400,
