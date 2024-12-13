@@ -21,25 +21,16 @@
 		? createQuery(queries.announcementById(announcementIdNumber))
 		: null;
 
-	$: announcementContent =
-		$query && !isCreating
-			? $query.data?.announcement || {}
-			: {
-					title: '',
-					author: '',
-					content: '',
-					attachments: [],
-					tags: []
-				};
+	$: announcement = $query?.data?.announcement;
 </script>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	{#if query}
 		<Query {query}>
-			<Announcement {isCreating} {announcementContent} {query} {announcementIdNumber} />
+			<Announcement {isCreating} {announcement} {query} {announcementIdNumber} />
 		</Query>
 	{:else}
-		<Announcement {isCreating} {announcementContent} {announcementIdNumber} />
+		<Announcement {isCreating} {announcement} {announcementIdNumber} {query} />
 	{/if}
 </main>
 

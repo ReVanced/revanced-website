@@ -7,8 +7,8 @@
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
-	<input bind:value={titleElement} class:empty={!titleElement.trim()} placeholder="Enter title" />
-{:else}
+	<input bind:value={titleElement} class:empty={!titleElement?.trim()} placeholder="Enter title" />
+{:else if isPreviewing ? titleElement : title}
 	<h1>
 		{isPreviewing ? titleElement : title}
 	</h1>

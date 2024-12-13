@@ -3,23 +3,27 @@
 	import Divider from '$lib/components/Divider.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
 
-	export let isEditing: boolean,
-		isCreating: boolean,
-		isPreviewing: boolean,
-		removeAttachment: (index: number) => void,
-		addAttachment: () => void,
-		attachments: string[],
-		attachmentsElement;
+	export let isEditing: boolean;
+	export let isCreating: boolean;
+	export let isPreviewing: boolean;
+	export let attachments: string[] | undefined;
+	export let attachmentsElement: string[];
+
+	const addAttachment = () => {
+		attachments = [...(attachments ?? []), ''];
+	};
+
+	const removeAttachment = (index: number) => {
+		if (!attachments) return;
+
+		attachments = attachments.filter((_, i) => i !== index);
+	};
 </script>
 
-{#if isEditing || isCreating}
-	{#if isPreviewing}
-		{#if attachmentsElement.length > 0}
-			<Gallery images={attachmentsElement} />
-		{/if}
-	{:else}
-		<Divider />
-		<div class="attachments-wrapper">
+{#if (isEditing || isCreating) && !isPreviewing}
+	<Divider />
+	<div class="attachments-wrapper">
+		{#if attachmentsElement}
 			{#each attachmentsElement as attachment, index}
 				<div class="attachments">
 					<input
@@ -50,17 +54,16 @@
 					{/if}
 				</div>
 			{/each}
-			{#if attachmentsElement.length == 0}
-				<span>
-					<Button type="icon" icon="create" on:click={addAttachment} />
-				</span>
-			{/if}
-		</div>
-	{/if}
-{:else if attachments.length > 0}
+		{/if}
+		{#if !attachmentsElement || attachmentsElement.length == 0}
+			<span>
+				<Button type="icon" icon="create" on:click={addAttachment} />
+			</span>
+		{/if}
+	</div>
+{:else if isPreviewing ? attachmentsElement?.length > 0 : attachments?.length > 0}
 	<Divider />
-
-	<Gallery images={attachments} />
+	<Gallery images={isPreviewing ? attachmentsElement : attachments} />
 {/if}
 
 <style lang="scss">

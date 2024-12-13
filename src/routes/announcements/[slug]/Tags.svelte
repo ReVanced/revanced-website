@@ -12,14 +12,24 @@
 
 	let newTag: string | null;
 
-	function handleNewTag() {
-		if (newTag) {
-			if (!tags.includes({ name: newTag })) {
-				tags = [...tags, { name: newTag }];
+	function handleTag(tag: string | null) {
+		if (!tag) return;
+
+		if (tags.some((t) => t.name === tag)) {
+			if (tagsElement?.includes(tag)) {
+				tagsElement = tagsElement.filter((t) => t !== tag);
+
+				if (!$query.data?.tags.some((t) => t.name === tag)) {
+					tags = tags.filter((t) => t.name !== tag);
+				}
 			} else {
-				tagsElement = [...tagsElement, newTag];
+				tagsElement = [...(tagsElement || []), tag];
 			}
+		} else {
+			tags = [...tags, { name: tag }];
+			tagsElement = [...(tagsElement || []), tag];
 		}
+
 		newTag = null;
 	}
 </script>
@@ -30,22 +40,16 @@
 			{#each tags as tag}
 				<TagChip
 					tag={tag.name}
-					selected={tagsElement.includes(tag.name)}
-					onClick={() => {
-						if (tagsElement.includes(tag.name)) {
-							tagsElement = tagsElement.filter((t) => t !== tag.name);
-						} else {
-							tagsElement = [...tagsElement, tag.name];
-						}
-					}}
+					selected={tagsElement && tagsElement.includes(tag.name)}
+					onClick={() => handleTag(tag.name)}
 				/>
 			{/each}
 			<div class="new-tag">
 				<input
 					bind:value={newTag}
 					class:empty={!newTag}
-					on:blur={handleNewTag}
-					on:keydown={(event) => event.key === 'Enter' && handleNewTag()}
+					on:blur={() => handleTag(newTag)}
+					on:keydown={(event) => event.key === 'Enter' && handleTag(newTag)}
 				/>
 				<span>
 					<Button type="icon" icon="create" />

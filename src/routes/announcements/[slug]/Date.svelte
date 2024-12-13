@@ -33,7 +33,7 @@
 			<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtElement} />
 		{/if}
 	</span>
-{:else}
+{:else if isPreviewing ? createdAt : createdAtElement}
 	<span>
 		{isPreviewing
 			? moment(createdAtElement).format('MMMM D, YYYY [at] h:mm A')

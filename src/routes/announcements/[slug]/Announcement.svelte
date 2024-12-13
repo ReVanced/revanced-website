@@ -12,93 +12,22 @@
 	import Content from './Content.svelte';
 	import Attachments from './Attachments.svelte';
 	import Tags from './Tags.svelte';
-	import type { ResponseAnnouncement, Announcement } from '$lib/types';
+	import type { Announcement } from '$lib/types';
 
-	export let isCreating: boolean,
-		announcementContent: ResponseAnnouncement,
-		announcementIdNumber: number | null,
-		query;
+	export let isCreating: boolean;
+	export let announcement: Announcement | undefined;
+	export let announcementIdNumber: number;
+	export let query: any;
 
 	let isPreviewing = false;
 	let isEditing = false;
-	let isSaved = false;
 	let showDeleteConfirm = false;
 
-	let tagsElement: string[] = announcementContent?.tags ?? [];
-	let titleElement: string = announcementContent?.title ?? '';
-	let authorElement: string = announcementContent?.author ?? '';
-	let contentElement: string = announcementContent?.content ?? '';
-	let createdAtElement: string = announcementContent?.created_at ?? '';
-	let archivedAtElement: string = announcementContent?.archived_at ?? '';
-	let attachmentsElement: string[] = announcementContent?.attachments ?? [];
-
-	const addAttachment = () => {
-		attachmentsElement = [...attachmentsElement, '']; // Ensure reactivity with a new array
-	};
-
-	const removeAttachment = (index: number) => {
-		attachmentsElement = attachmentsElement.filter((_, i) => i !== index);
-	};
-
-	const save = async () => {
-		const data = {
-			title: titleElement,
-			author: authorElement,
-			content: contentElement,
-			created_at: createdAtElement,
-			attachments: attachmentsElement,
-			tags: tagsElement
-		};
-		await admin.update_announcement(announcementIdNumber!, data as Announcement);
-		await $query.refetch();
-
-		announcementContent.title = titleElement;
-		announcementContent.author = authorElement;
-		announcementContent.content = contentElement;
-		announcementContent.created_at = createdAtElement;
-		announcementContent.attachments = attachmentsElement;
-		announcementContent.tags = tagsElement;
-
-		isEditing = false;
-		isSaved = true;
-	};
-
-	const createAnnouncement = async () => {
-		const data = {
-			title: titleElement,
-			author: authorElement,
-			content: contentElement,
-			attachments: attachmentsElement,
-			tags: tagsElement,
-			level: 0
-		};
-		await admin.create_announcement(data as Announcement);
-		history.back();
-	};
-
-	const deleteAnnouncement = async () => {
-		await admin.delete_announcement(announcementIdNumber!);
-		goto('/announcements');
-	};
-
-	const handleUnload = (e: BeforeUnloadEvent) => {
-		if (isEditing && !isSaved) {
-			e.preventDefault();
-			e.returnValue = '';
-		}
+	const draftElements: Announcement = {
+		...announcement,
+		id: undefined
 	};
 </script>
-
-<svelte:window on:beforeunload={handleUnload} />
-
-<Dialogue bind:modalOpen={showDeleteConfirm}>
-	<svelte:fragment slot="title">Confirm?</svelte:fragment>
-	<svelte:fragment slot="description">Do you want to delete this announcement?</svelte:fragment>
-	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
-		<Button type="filled" on:click={deleteAnnouncement}>OK</Button>
-	</svelte:fragment>
-</Dialogue>
 
 <div class="card">
 	<div class="header">
@@ -107,8 +36,8 @@
 				{isCreating}
 				{isEditing}
 				{isPreviewing}
-				title={announcementContent.title}
-				bind:titleElement
+				title={announcement?.title}
+				bind:titleElement={draftElements.title}
 			/>
 
 			<h4>
@@ -116,22 +45,21 @@
 					{isCreating}
 					{isEditing}
 					{isPreviewing}
-					createdAt={announcementContent.created_at}
-					archivedAt={announcementContent.archived_at}
-					bind:archivedAtElement
-					bind:createdAtElement
+					createdAt={announcement?.created_at}
+					archivedAt={announcement?.archived_at}
+					bind:archivedAtElement={draftElements.archived_at}
+					bind:createdAtElement={draftElements.created_at}
 				/>
-				·
 				<Author
 					{isCreating}
 					{isEditing}
 					{isPreviewing}
-					author={announcementContent.author}
-					bind:authorElement
+					author={announcement?.author}
+					bind:authorElement={draftElements.author}
 				/>
 			</h4>
 
-			<Tags {isCreating} {isEditing} {isPreviewing} bind:tagsElement />
+			<Tags {isCreating} {isEditing} {isPreviewing} bind:tagsElement={draftElements.tags} />
 		</div>
 
 		{#if $admin_login.logged_in}
@@ -140,9 +68,10 @@
 				bind:isEditing
 				bind:isPreviewing
 				bind:showDeleteConfirm
-				bind:archivedAtElement
-				{createAnnouncement}
-				{save}
+				bind:archivedAtElement={draftElements.archived_at}
+				bind:query
+				{draftElements}
+				{announcementIdNumber}
 			/>
 		{/if}
 	</div>
@@ -153,18 +82,16 @@
 		{isCreating}
 		{isEditing}
 		{isPreviewing}
-		content={announcementContent.content}
-		bind:contentElement
+		content={announcement?.content}
+		bind:contentElement={draftElements.content}
 	/>
 
 	<Attachments
 		{isCreating}
 		{isEditing}
 		{isPreviewing}
-		{removeAttachment}
-		{addAttachment}
-		attachments={announcementContent.attachments}
-		bind:attachmentsElement
+		attachments={announcement?.attachments}
+		bind:attachmentsElement={draftElements.attachments}
 	/>
 </div>
 

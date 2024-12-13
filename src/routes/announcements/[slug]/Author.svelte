@@ -7,12 +7,14 @@
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
+	·
 	<input
 		bind:value={authorElement}
-		class:empty={!authorElement.trim()}
+		class:empty={!authorElement?.trim()}
 		placeholder="Enter author name"
 	/>
-{:else}
+{:else if isPreviewing ? author : authorElement}
+	·
 	<span>
 		{isPreviewing ? authorElement : author}
 	</span>

@@ -7,8 +7,12 @@
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
-	<textarea bind:value={contentElement} class:empty={!content.trim()} placeholder="Enter content" />
-{:else}
+	<textarea
+		bind:value={contentElement}
+		class:empty={!content?.trim()}
+		placeholder="Enter content"
+	/>
+{:else if isPreviewing ? contentElement : content}
 	<div>
 		{@html isPreviewing ? contentElement : content}
 	</div>
