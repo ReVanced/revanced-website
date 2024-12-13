@@ -10,26 +10,18 @@
 </script>
 
 {#if href}
-	{#if type == 'icon'}
-		<a {href} {target} aria-label={label}>
-			{#if icon}
-				<img src="../icons/{icon}.svg" alt={icon} />
-			{/if}
-		</a>
-	{:else}
-		<a {href} {target} class={`button-${type}`} class:disabled class:danger aria-label={label}>
-			{#if icon}
-				<img src="../icons/{icon}.svg" alt={icon} />
-			{/if}
+	<a {href} {target} aria-label={label} class={type} class:disabled class:danger>
+		{#if icon}
+			<img src={`../icons/${icon}.svg`} alt={icon} />
+		{/if}
+		{#if type !== 'icon'}
 			<slot />
-		</a>
-	{/if}
-{:else if type == 'icon'}
-	<img on:click src="../icons/{icon}.svg" alt={icon} aria-label={label} />
+		{/if}
+	</a>
 {:else}
 	<button
 		on:click
-		class={`button-${type}`}
+		class={type}
 		class:disabled
 		class:danger
 		aria-label={label}
@@ -39,18 +31,13 @@
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
-		<slot />
+		{#if type !== 'icon'}
+			<slot />
+		{/if}
 	</button>
 {/if}
 
-<style>
-	button {
-		border: none;
-		background-color: transparent;
-		padding: 0;
-		margin: 0;
-	}
-
+<style lang="scss">
 	a,
 	button {
 		min-width: max-content;
@@ -69,68 +56,53 @@
 			transform 0.4s var(--bezier-one),
 			filter 0.4s var(--bezier-one);
 		user-select: none;
-	}
-
-	.button-filled {
-		background-color: var(--primary);
-		color: var(--text-three);
-	}
-	.button-filled.danger {
-		background-color: var(--red-one);
-		color: var(--surface-four);
-	}
-
-	.button-tonal {
-		background-color: var(--surface-four);
-	}
-	.button-tonal.danger {
-		color: var(--red-one);
-		border: 2px solid var(--red-one);
-	}
-
-	.button-filled,
-	.button-tonal,
-	.button-outlined {
 		padding: 16px 24px;
-	}
 
-	.button-text {
-		background-color: transparent;
-		color: var(--primary);
-		font-weight: 500;
-		letter-spacing: 0.01rem;
-	}
-	.button-text.danger {
-		color: var(--red-one);
-	}
+		&:hover:not(.disabled) {
+			filter: brightness(85%);
+		}
 
-	.button-outlined {
-		border: 2px solid var(--primary);
-		color: var(--text-one);
-		background-color: transparent;
-	}
-	.button-outlined.danger {
-		border-color: var(--red-one);
-		color: var(--red-one);
-	}
+		&.disabled {
+			filter: grayscale(100%);
+			cursor: not-allowed;
+		}
 
-	button:hover,
-	a:hover {
-		filter: brightness(85%);
-	}
+		&.filled {
+			background-color: var(--primary);
+			color: var(--text-three);
+		}
 
-	.disabled,
-	:hover.disabled {
-		filter: grayscale(100%);
-		cursor: not-allowed;
-	}
+		&.tonal {
+			background-color: var(--surface-four);
+		}
 
-	a.disabled,
-	a:hover.disabled {
-		pointer-events: none;
-	}
+		&.text {
+			background-color: transparent;
+			color: var(--primary);
+			font-weight: 500;
+			padding: 0;
+		}
 
-	img {
-		height: 20px;
+		&.outlined {
+			border: 2px solid var(--primary);
+			background-color: transparent;
+		}
+
+		&.icon {
+			&:hover {
+				filter: brightness(75%);
+			}
+			background-color: transparent;
+			padding: 0;
+		}
+
+		&.danger {
+			background-color: var(--red-one);
+			color: var(--surface-four);
+		}
+
+		img {
+			height: 20px;
+		}
 	}
 </style>
