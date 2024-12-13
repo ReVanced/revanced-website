@@ -3,13 +3,13 @@
 		isCreating: boolean,
 		isPreviewing: boolean,
 		title: string,
-		titleElement: string;
+		titleInput: string;
 
-	$: title = isPreviewing ? title : titleElement;
+	$: title = isPreviewing ? titleInput : title;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
-	<input bind:value={titleElement} class:empty={!titleElement?.trim()} placeholder="Enter title" />
+	<input bind:value={titleInput} class:empty={!titleInput?.trim()} placeholder="Enter title" />
 {:else if title}
 	<h1>
 		{title}

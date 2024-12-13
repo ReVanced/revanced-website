@@ -5,25 +5,25 @@
 		isCreating: boolean,
 		isPreviewing: boolean,
 		createdAt: string,
-		createdAtElement: string,
+		createdAtInput: string,
 		archivedAt: string | undefined,
-		archivedAtElement: string;
+		archivedAtInput: string;
 
-	// Ensure createdAtElement is properly formatted for the datetime-local input
-	if (createdAtElement) {
-		createdAtElement = createdAtElement.split('.')[0];
+	// Ensure createdAtInput is properly formatted for the datetime-local input
+	if (createdAtInput) {
+		createdAtInput = createdAtInput.split('.')[0];
 	} else {
-		createdAtElement = new Date().toISOString().split('.')[0].slice(0, -3);
+		createdAtInput = new Date().toISOString().split('.')[0].slice(0, -3);
 	}
 
-	$: created = isPreviewing ? createdAtElement : createdAt;
-	$: archived = isPreviewing ? archivedAtElement : archivedAt;
+	$: created = isPreviewing ? createdAtInput : createdAt;
+	$: archived = isPreviewing ? archivedAtInput : archivedAt;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<span>
-		<input type="datetime-local" max="9999-12-31T23:59" bind:value={createdAtElement} />
-		{#if archivedAtElement}
+		<input type="datetime-local" max="9999-12-31T23:59" bind:value={createdAtInput} />
+		{#if archivedAtInput}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="24px"
@@ -33,7 +33,7 @@
 			>
 				<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
 			</svg>
-			<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtElement} />
+			<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtInput} />
 		{/if}
 	</span>
 {:else if created}

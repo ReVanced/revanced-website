@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { admin } from '$data/api';
-	import Button from '$lib/components/Button.svelte';
-	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { admin_login } from '$lib/stores';
 	import Title from './Title.svelte';
 	import Divider from '$lib/components/Divider.svelte';
@@ -23,7 +19,7 @@
 	let isEditing = false;
 	let showDeleteConfirm = false;
 
-	const draftElements: Announcement = {
+	const draftInputs: Announcement = {
 		...announcement,
 		id: undefined
 	};
@@ -37,7 +33,7 @@
 				{isEditing}
 				{isPreviewing}
 				title={announcement?.title}
-				bind:titleElement={draftElements.title}
+				bind:titleInput={draftInputs.title}
 			/>
 
 			<h4>
@@ -47,19 +43,19 @@
 					{isPreviewing}
 					createdAt={announcement?.created_at}
 					archivedAt={announcement?.archived_at}
-					bind:archivedAtElement={draftElements.archived_at}
-					bind:createdAtElement={draftElements.created_at}
+					bind:archivedAtInput={draftInputs.archived_at}
+					bind:createdAtInput={draftInputs.created_at}
 				/>
 				<Author
 					{isCreating}
 					{isEditing}
 					{isPreviewing}
 					author={announcement?.author}
-					bind:authorElement={draftElements.author}
+					bind:authorInput={draftInputs.author}
 				/>
 			</h4>
 
-			<Tags {isCreating} {isEditing} {isPreviewing} bind:tagsElement={draftElements.tags} />
+			<Tags {isCreating} {isEditing} {isPreviewing} bind:tagsInput={draftInputs.tags} />
 		</div>
 
 		{#if $admin_login.logged_in}
@@ -68,9 +64,9 @@
 				bind:isEditing
 				bind:isPreviewing
 				bind:showDeleteConfirm
-				bind:archivedAtElement={draftElements.archived_at}
+				bind:archivedAtInput={draftInputs.archived_at}
 				bind:query
-				{draftElements}
+				{draftInputs}
 				{announcementIdNumber}
 			/>
 		{/if}
@@ -83,7 +79,7 @@
 		{isEditing}
 		{isPreviewing}
 		content={announcement?.content}
-		bind:contentElement={draftElements.content}
+		bind:contentInput={draftInputs.content}
 	/>
 
 	<Attachments
@@ -91,7 +87,7 @@
 		{isEditing}
 		{isPreviewing}
 		attachments={announcement?.attachments}
-		bind:attachmentsElement={draftElements.attachments}
+		bind:attachmentsInput={draftInputs.attachments}
 	/>
 </div>
 

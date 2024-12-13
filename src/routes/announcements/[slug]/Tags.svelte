@@ -5,7 +5,7 @@
 	import { queries } from '$data/api';
 	import Query from '$lib/components/Query.svelte';
 
-	export let isEditing: boolean, isCreating: boolean, isPreviewing: boolean, tagsElement: string[];
+	export let isEditing: boolean, isCreating: boolean, isPreviewing: boolean, tagsInput: string[];
 
 	$: query = createQuery(queries.announcementTags());
 	$: tags = $query.data?.tags || [];
@@ -16,18 +16,18 @@
 		if (!tag) return;
 
 		if (tags.some((t) => t.name === tag)) {
-			if (tagsElement?.includes(tag)) {
-				tagsElement = tagsElement.filter((t) => t !== tag);
+			if (tagsInput?.includes(tag)) {
+				tagsInput = tagsInput.filter((t) => t !== tag);
 
 				if (!$query.data?.tags.some((t) => t.name === tag)) {
 					tags = tags.filter((t) => t.name !== tag);
 				}
 			} else {
-				tagsElement = [...(tagsElement || []), tag];
+				tagsInput = [...(tagsInput || []), tag];
 			}
 		} else {
 			tags = [...tags, { name: tag }];
-			tagsElement = [...(tagsElement || []), tag];
+			tagsInput = [...(tagsInput || []), tag];
 		}
 
 		newTag = null;
@@ -40,7 +40,7 @@
 			{#each tags as tag}
 				<TagChip
 					tag={tag.name}
-					selected={tagsElement && tagsElement.includes(tag.name)}
+					selected={tagsInput && tagsInput.includes(tag.name)}
 					onClick={() => handleTag(tag.name)}
 				/>
 			{/each}

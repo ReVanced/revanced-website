@@ -3,16 +3,16 @@
 		isCreating: boolean,
 		isPreviewing: boolean,
 		author: string,
-		authorElement: string;
+		authorInput: string;
 
-	$: author = isPreviewing ? authorElement : author;
+	$: author = isPreviewing ? authorInput : author;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	·
 	<input
-		bind:value={authorElement}
-		class:empty={!authorElement?.trim()}
+		bind:value={authorInput}
+		class:empty={!authorInput?.trim()}
 		placeholder="Enter author name"
 	/>
 {:else if author}

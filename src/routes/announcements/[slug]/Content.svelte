@@ -3,17 +3,13 @@
 		isCreating: boolean,
 		isPreviewing: boolean,
 		content: string,
-		contentElement: string;
+		contentInput: string;
 
-	$: content = isPreviewing ? contentElement : content;
+	$: content = isPreviewing ? contentInput : content;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
-	<textarea
-		bind:value={contentElement}
-		class:empty={!content?.trim()}
-		placeholder="Enter content"
-	/>
+	<textarea bind:value={contentInput} class:empty={!content?.trim()} placeholder="Enter content" />
 {:else if content}
 	<div>
 		{@html content}

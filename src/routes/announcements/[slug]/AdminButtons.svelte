@@ -7,26 +7,26 @@
 	export let isEditing: boolean,
 		isCreating: boolean,
 		isPreviewing: boolean,
-		archivedAtElement: string | null,
+		archivedAtInput: string | null,
 		showDeleteConfirm: boolean,
 		announcementIdNumber,
-		draftElements,
+		draftInputs,
 		query;
 
 	const toggleArchived = () => {
-		if (archivedAtElement) archivedAtElement = null;
-		else archivedAtElement = new Date().toISOString().split('.')[0].slice(0, -3);
+		if (archivedAtInput) archivedAtInput = null;
+		else archivedAtInput = new Date().toISOString().split('.')[0].slice(0, -3);
 	};
 
 	const save = async () => {
-		await admin.update_announcement(announcementIdNumber!, draftElements);
+		await admin.update_announcement(announcementIdNumber!, draftInputs);
 		await $query.refetch();
 
 		isEditing = false;
 	};
 
 	const createAnnouncement = async () => {
-		await admin.create_announcement(draftElements);
+		await admin.create_announcement(draftInputs);
 		history.back();
 	};
 
@@ -63,7 +63,7 @@
 		/>
 		<Button
 			type="icon"
-			icon={archivedAtElement ? 'unarchive' : 'archive'}
+			icon={archivedAtInput ? 'unarchive' : 'archive'}
 			on:click={toggleArchived}
 		/>
 		{#if isEditing}

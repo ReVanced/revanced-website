@@ -7,7 +7,7 @@
 	export let isCreating: boolean;
 	export let isPreviewing: boolean;
 	export let attachments: string[] | undefined;
-	export let attachmentsElement: string[];
+	export let attachmentsInput: string[];
 
 	const addAttachment = () => {
 		attachments = [...(attachments ?? []), ''];
@@ -19,22 +19,22 @@
 		attachments = attachments.filter((_, i) => i !== index);
 	};
 
-	$: attachments = isPreviewing ? attachmentsElement : attachments;
+	$: attachments = isPreviewing ? attachmentsInput : attachments;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<Divider />
 	<div class="attachments-wrapper">
-		{#if attachmentsElement}
-			{#each attachmentsElement as attachment, index}
+		{#if attachmentsInput}
+			{#each attachmentsInput as attachment, index}
 				<div class="attachments">
 					<input
-						bind:value={attachmentsElement[index]}
+						bind:value={attachmentsInput[index]}
 						class:empty={attachment === ''}
 						placeholder="Attachment URL"
 					/>
 					<button
-						class:last={index == attachmentsElement.length - 1}
+						class:last={index == attachmentsInput.length - 1}
 						on:click={() => removeAttachment(index)}
 					>
 						<svg
@@ -49,7 +49,7 @@
 							/>
 						</svg>
 					</button>
-					{#if index == attachmentsElement.length - 1}
+					{#if index == attachmentsInput.length - 1}
 						<span>
 							<Button type="icon" icon="create" on:click={addAttachment} />
 						</span>
@@ -57,13 +57,13 @@
 				</div>
 			{/each}
 		{/if}
-		{#if !attachmentsElement || attachmentsElement.length == 0}
+		{#if !attachmentsInput || attachmentsInput.length == 0}
 			<span>
 				<Button type="icon" icon="create" on:click={addAttachment} />
 			</span>
 		{/if}
 	</div>
-{:else if attachments && attachments.length > 0}
+{:else if attachments && attachments?.length > 0}
 	<Divider />
 	<Gallery images={attachments} />
 {/if}
