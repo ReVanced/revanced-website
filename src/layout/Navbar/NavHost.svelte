@@ -237,7 +237,7 @@
 
 <style>
 	.session-expired {
-		color: var(--red-one);
+		color: var(--text-four);
 	}
 
 	.login-success {
