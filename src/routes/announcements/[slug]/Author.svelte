@@ -5,7 +5,7 @@
 		author: string,
 		authorInput: string;
 
-	$: author = isPreviewing ? authorInput : author;
+	$: displayAuthor = isPreviewing ? authorInput : author;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -15,10 +15,10 @@
 		class:empty={!authorInput?.trim()}
 		placeholder="Enter author name"
 	/>
-{:else if author}
+{:else if displayAuthor}
 	·
 	<span>
-		{author}
+		{displayAuthor}
 	</span>
 {/if}
 

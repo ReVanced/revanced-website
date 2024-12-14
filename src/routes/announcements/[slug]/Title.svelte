@@ -5,14 +5,14 @@
 		title: string,
 		titleInput: string;
 
-	$: title = isPreviewing ? titleInput : title;
+	$: displayTitle = isPreviewing ? titleInput : title;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<input bind:value={titleInput} class:empty={!titleInput?.trim()} placeholder="Enter title" />
-{:else if title}
+{:else if displayTitle}
 	<h1>
-		{title}
+		{displayTitle}
 	</h1>
 {/if}
 

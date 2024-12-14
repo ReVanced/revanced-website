@@ -67,7 +67,14 @@
 			on:click={toggleArchived}
 		/>
 		{#if isEditing}
-			<Button type="icon" icon="close" on:click={() => (isEditing = false)} />
+			<Button
+				type="icon"
+				icon="close"
+				on:click={() => {
+					isPreviewing = false;
+					isEditing = false;
+				}}
+			/>
 		{/if}
 		<Button type="icon" icon="check" on:click={isEditing ? save : createAnnouncement} />
 	{:else}

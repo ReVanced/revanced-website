@@ -19,7 +19,7 @@
 		attachments = attachments.filter((_, i) => i !== index);
 	};
 
-	$: attachments = isPreviewing ? attachmentsInput : attachments;
+	$: displayAttachments = isPreviewing ? attachmentsInput : attachments;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -63,9 +63,9 @@
 			</span>
 		{/if}
 	</div>
-{:else if attachments && attachments?.length > 0}
+{:else if displayAttachments && displayAttachments?.length > 0}
 	<Divider />
-	<Gallery images={attachments} />
+	<Gallery images={displayAttachments} />
 {/if}
 
 <style lang="scss">

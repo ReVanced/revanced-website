@@ -2,17 +2,17 @@
 	export let isEditing: boolean,
 		isCreating: boolean,
 		isPreviewing: boolean,
-		content: string,
+		content: string | undefined,
 		contentInput: string;
 
-	$: content = isPreviewing ? contentInput : content;
+	$: displayContent = isPreviewing ? contentInput : content;
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<textarea bind:value={contentInput} class:empty={!content?.trim()} placeholder="Enter content" />
-{:else if content}
+{:else if displayContent}
 	<div>
-		{@html content}
+		{@html displayContent}
 	</div>
 {/if}
 
