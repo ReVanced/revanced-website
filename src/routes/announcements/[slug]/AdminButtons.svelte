@@ -20,11 +20,24 @@
 		else archivedAtInput = moment().format('YYYY-MM-DDTHH:mm');
 	};
 
-	const save = async () => {
-		if (!draftInputs.title) {
-			alert("Title can't be left empty");
-			return;
+	const isValid = () => {
+		const hasEmptyTitle = !draftInputs.title;
+		const hasEmptyAttachments = draftInputs.attachments?.some((attachment) => !attachment.trim());
+
+		if (hasEmptyTitle || hasEmptyAttachments) {
+			alert(
+				`${[hasEmptyTitle && 'Title', hasEmptyAttachments && 'Empty attachments']
+					.filter(Boolean)
+					.join(' and ')} must be filled`
+			);
+			return true;
 		}
+
+		return false;
+	};
+
+	const save = async () => {
+		if (isValid()) return;
 
 		await admin.update_announcement(announcementIdNumber!, draftInputs);
 		await $query.refetch();
@@ -33,10 +46,7 @@
 	};
 
 	const createAnnouncement = async () => {
-		if (!draftInputs.title) {
-			alert("Title can't be left empty");
-			return;
-		}
+		if (isValid()) return;
 
 		await admin.create_announcement(draftInputs);
 		goto('/announcements');
