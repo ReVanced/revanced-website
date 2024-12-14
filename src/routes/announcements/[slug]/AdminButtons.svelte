@@ -28,7 +28,7 @@
 
 	const createAnnouncement = async () => {
 		await admin.create_announcement(draftInputs);
-		history.back();
+		goto('/announcements');
 	};
 
 	const deleteAnnouncement = async () => {
