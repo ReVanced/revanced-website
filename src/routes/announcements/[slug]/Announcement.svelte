@@ -12,7 +12,7 @@
 
 	export let isCreating: boolean;
 	export let announcement: Announcement | undefined;
-	export let announcementIdNumber: number;
+	export let announcementIdNumber: number | undefined;
 	export let query: any;
 
 	let isPreviewing = false;

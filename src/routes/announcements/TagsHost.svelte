@@ -36,7 +36,7 @@
 	};
 </script>
 
-<div class="tag-list">
+<div>
 	{#each displayedTags as tag}
 		<TagChip
 			{tag}
@@ -60,7 +60,7 @@
 </div>
 
 <style lang="scss">
-	.tag-list {
+	div {
 		display: flex;
 		align-items: center;
 		gap: 4px;

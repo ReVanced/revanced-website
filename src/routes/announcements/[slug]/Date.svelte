@@ -1,15 +1,14 @@
 <script lang="ts">
 	import moment from 'moment';
 
-	export let isEditing: boolean,
-		isCreating: boolean,
-		isPreviewing: boolean,
-		createdAt: string,
-		createdAtInput: string,
-		archivedAt: string | undefined,
-		archivedAtInput: string;
+	export let isEditing: boolean;
+	export let isCreating: boolean;
+	export let isPreviewing: boolean;
+	export let createdAt: string | undefined;
+	export let createdAtInput: string | undefined;
+	export let archivedAt: string | undefined;
+	export let archivedAtInput: string | undefined;
 
-	// Ensure createdAtInput is properly formatted for the datetime-local input
 	if (createdAtInput) {
 		createdAtInput = moment(createdAtInput).format('YYYY-MM-DDTHH:mm');
 	} else {

@@ -7,7 +7,7 @@
 	export let isCreating: boolean;
 	export let isPreviewing: boolean;
 	export let attachments: string[] | undefined;
-	export let attachmentsInput: string[];
+	export let attachmentsInput: string[] | undefined;
 
 	const addAttachment = () => {
 		attachments = [...(attachments ?? []), ''];

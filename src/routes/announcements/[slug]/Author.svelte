@@ -1,9 +1,9 @@
 <script lang="ts">
-	export let isEditing: boolean,
-		isCreating: boolean,
-		isPreviewing: boolean,
-		author: string,
-		authorInput: string;
+	export let isEditing: boolean;
+	export let isCreating: boolean;
+	export let isPreviewing: boolean;
+	export let author: string | undefined;
+	export let authorInput: string | undefined;
 
 	$: displayAuthor = isPreviewing ? authorInput : author;
 </script>

@@ -1,7 +1,7 @@
-<span class="new-badge">NEW</span>
+<span>NEW</span>
 
 <style>
-	.new-badge {
+	span {
 		text-align: center;
 		background-color: var(--surface-four);
 		color: var(--primary);

@@ -5,7 +5,10 @@
 	import { queries } from '$data/api';
 	import Query from '$lib/components/Query.svelte';
 
-	export let isEditing: boolean, isCreating: boolean, isPreviewing: boolean, tagsInput: string[];
+	export let isEditing: boolean;
+	export let isCreating: boolean;
+	export let isPreviewing: boolean;
+	export let tagsInput: string[];
 
 	$: query = createQuery(queries.announcementTags());
 	$: tags = $query.data?.tags || [];

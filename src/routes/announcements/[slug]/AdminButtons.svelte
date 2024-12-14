@@ -3,19 +3,20 @@
 	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
+	import type { ResponseAnnouncement } from '$lib/types';
 	import moment from 'moment';
 
-	export let isEditing: boolean,
-		isCreating: boolean,
-		isPreviewing: boolean,
-		archivedAtInput: string | null,
-		showDeleteConfirm: boolean,
-		announcementIdNumber,
-		draftInputs,
-		query;
+	export let isEditing: boolean;
+	export let isCreating: boolean;
+	export let isPreviewing: boolean;
+	export let archivedAtInput: string | undefined;
+	export let showDeleteConfirm: boolean;
+	export let announcementIdNumber: number | undefined;
+	export let draftInputs: ResponseAnnouncement;
+	export let query;
 
 	const toggleArchived = () => {
-		if (archivedAtInput) archivedAtInput = null;
+		if (archivedAtInput) archivedAtInput = undefined;
 		else archivedAtInput = moment().format('YYYY-MM-DDTHH:mm');
 	};
 
