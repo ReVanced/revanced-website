@@ -181,3 +181,9 @@ input {
 input:focus {
 	outline: 1px solid var(--primary);
 }
+
+.material-icon-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

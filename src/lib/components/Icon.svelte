@@ -3,7 +3,6 @@
 	export let filled: boolean = false;
 
 	name = name.toLowerCase();
-
 	const filledValue = filled ? 1 : 0;
 </script>
 
