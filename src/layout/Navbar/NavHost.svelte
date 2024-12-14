@@ -162,25 +162,22 @@
 				</Svg>
 			</button>
 		</div>
-		<div class="admin-wrapper">
-			<Button
-				type="filled"
-				disabled={$admin_login.logged_in}
-				on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}
-			>
-				Admin Login
-			</Button>
-			{#if $admin_login.logged_in}
-				<span>
-					Admin session will expire in <span class="exp-date">{fromNow($admin_login.expires)}</span>
-				</span>
-			{/if}
-		</div>
 	</div>
 
 	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={clear_and_reload} label="Reset Button">Reset</Button>
-		<Button type="text" on:click={save} label="Save Button">Save</Button>
+		<div class="buttons-container">
+			<Button
+				type="text"
+				disabled={$admin_login.logged_in}
+				on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}
+			>
+				{$admin_login.logged_in ? `Logged in for ${fromNow($admin_login.expires)}` : 'Login'}
+			</Button>
+			<div class="buttons">
+				<Button type="text" on:click={clear_and_reload} label="Reset Button">Reset</Button>
+				<Button type="text" on:click={save} label="Save Button">Save</Button>
+			</div>
+		</div>
 	</svelte:fragment>
 </Modal>
 
@@ -235,7 +232,22 @@
 	</svelte:fragment>
 </Modal>
 
-<style>
+<style lang="scss">
+	.buttons-container {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 1rem;
+
+		div {
+			display: flex;
+			justify-content: flex-end;
+			flex-wrap: wrap;
+			gap: 2rem;
+		}
+	}
+
 	.session-expired {
 		color: var(--text-four);
 	}
