@@ -47,7 +47,7 @@
 					onClick={() => handleTag(tag.name)}
 				/>
 			{/each}
-			<div class="new-tag">
+			<div id="new-tag">
 				<input
 					bind:value={newTag}
 					class:empty={!newTag}
@@ -69,7 +69,8 @@
 		align-items: center;
 		gap: 4px;
 	}
-	.new-tag {
+
+	#new-tag {
 		display: inline-flex;
 		position: relative;
 
@@ -98,16 +99,9 @@
 	}
 
 	input {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		gap: 8px;
 		height: 32px;
-		padding: 0 16px;
 
 		border-radius: 8px;
-		border: none;
 
 		background-color: var(--tertiary);
 		color: var(--text-four);
@@ -115,28 +109,6 @@
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
 
-		user-select: none;
 		transition: all 0.2s var(--bezier-one);
-
-		&.clickable {
-			background-color: transparent;
-			border: 1px solid var(--border);
-
-			&.selected {
-				border-color: transparent;
-				background-color: var(--tertiary);
-				color: var(--primary);
-
-				.icon {
-					display: inherit;
-					margin-left: -6px;
-					transition: none;
-				}
-			}
-
-			&:hover {
-				background-color: var(--surface-three);
-			}
-		}
 	}
 </style>
