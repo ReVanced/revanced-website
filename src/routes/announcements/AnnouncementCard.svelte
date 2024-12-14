@@ -56,9 +56,11 @@
 		<div class="content">
 			<div class="header">
 				<h3>{announcement.title}</h3>
-				<div class="description">
-					{@html announcement.content}
-				</div>
+				{#if announcement.content}
+					<div class="description">
+						{@html announcement.content}
+					</div>
+				{/if}
 			</div>
 			<div class="footer">
 				<span class="date">
