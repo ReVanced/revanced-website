@@ -20,6 +20,11 @@
 	};
 
 	const save = async () => {
+		if (!draftInputs.title) {
+			alert("Title can't be left empty");
+			return;
+		}
+
 		await admin.update_announcement(announcementIdNumber!, draftInputs);
 		await $query.refetch();
 
@@ -27,6 +32,11 @@
 	};
 
 	const createAnnouncement = async () => {
+		if (!draftInputs.title) {
+			alert("Title can't be left empty");
+			return;
+		}
+
 		await admin.create_announcement(draftInputs);
 		goto('/announcements');
 	};
