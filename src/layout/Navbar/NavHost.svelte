@@ -86,9 +86,7 @@
 			</div>
 			<div id="secondary-navigation">
 				<button on:click={() => (modalOpen = !modalOpen)} aria-label="Settings">
-					<div class="navbar-settings-icon material-icon-container">
-						<Icon name="settings" filled />
-					</div>
+					<Icon name="settings" size="20px" color="var(--surface-six)" filled />
 				</button>
 			</div>
 		</div>
@@ -107,9 +105,7 @@
 <!-- settings -->
 <Modal bind:modalOpen>
 	<svelte:fragment slot="icon">
-		<div class="material-icon-container">
-			<Icon name="settings" filled />
-		</div>
+		<Icon name="settings" color="var(--surface-six)" filled />
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
 	<svelte:fragment slot="description">Configure the API for this website.</svelte:fragment>
@@ -117,9 +113,7 @@
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />
 			<button id="button-reset" on:click={reset} aria-label="Reset Button">
-				<div class="material-icon-container">
-					<Icon name="replay" />
-				</div>
+				<Icon name="replay" color="var(--surface-six)" />
 			</button>
 		</div>
 	</div>
@@ -133,14 +127,6 @@
 <style>
 	#logo {
 		padding: 0.5rem;
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
-	}
-
-	button:hover > .material-icon-container {
-		color: var(--secondary);
 	}
 
 	button {
@@ -224,10 +210,6 @@
 		display: flex;
 		width: 100%;
 		justify-content: space-between;
-	}
-
-	.navbar-settings-icon > :global(span) {
-		font-size: 1.2rem;
 	}
 
 	@media (min-width: 768px) {

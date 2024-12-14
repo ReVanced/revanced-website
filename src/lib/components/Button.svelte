@@ -11,14 +11,14 @@
 {#if href}
 	<a {href} {target} class={`button-${type}`} aria-label={label}>
 		{#if icon}
-			<Icon name={icon} />
+			<Icon name={icon} size="20px" />
 		{/if}
 		<slot />
 	</a>
 {:else}
 	<button on:click class={`button-${type}`} aria-label={label}>
 		{#if icon}
-			<Icon name={icon} />
+			<Icon name={icon} size="20px" />
 		{/if}
 		<slot />
 	</button>

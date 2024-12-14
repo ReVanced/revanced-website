@@ -34,11 +34,11 @@
 				>
 					<div class="desktop">
 						<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
-							<Icon name="verified" />
+							<Icon name="verified" size="20px" color="var(--secondary)" />
 						</a>
 					</div>
 					<div class="mobile">
-						<Icon name="verified" />
+						<Icon name="verified" size="20px" color="var(--secondary)" />
 						<h5>GPG key</h5>
 					</div>
 				</ToolTip>

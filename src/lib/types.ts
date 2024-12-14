@@ -89,3 +89,21 @@ export interface About {
 	socials: Social[];
 	donations: Donations;
 }
+
+type CSSUnit =
+	| 'cm'
+	| 'mm'
+	| 'in'
+	| 'px'
+	| 'pt'
+	| 'pc'
+	| 'em'
+	| 'ex'
+	| 'ch'
+	| 'rem'
+	| 'vw'
+	| 'vh'
+	| 'vmin'
+	| 'vmax'
+	| '%';
+export type CSSSize = `${number}${CSSUnit}`;
