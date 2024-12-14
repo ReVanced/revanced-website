@@ -3,7 +3,7 @@
 	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import type { ResponseAnnouncement } from '$lib/types';
+	import type { Announcement } from '$lib/types';
 	import moment from 'moment';
 
 	export let isEditing: boolean;
@@ -12,7 +12,7 @@
 	export let archivedAtInput: string | undefined;
 	export let showDeleteConfirm: boolean;
 	export let announcementIdNumber: number | undefined;
-	export let draftInputs: ResponseAnnouncement;
+	export let draftInputs: Announcement;
 	export let query;
 
 	const toggleArchived = () => {
