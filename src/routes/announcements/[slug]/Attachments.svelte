@@ -10,13 +10,13 @@
 	export let attachmentsInput: string[] | undefined;
 
 	const addAttachment = () => {
-		attachments = [...(attachments ?? []), ''];
+		attachmentsInput = [...(attachmentsInput ?? []), ''];
 	};
 
 	const removeAttachment = (index: number) => {
-		if (!attachments) return;
+		if (!attachmentsInput) return;
 
-		attachments = attachments.filter((_, i) => i !== index);
+		attachmentsInput = attachmentsInput.filter((_, i) => i !== index);
 	};
 
 	$: displayAttachments = isPreviewing ? attachmentsInput : attachments;
