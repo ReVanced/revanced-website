@@ -3,6 +3,7 @@
 	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
+	import moment from 'moment';
 
 	export let isEditing: boolean,
 		isCreating: boolean,
@@ -15,7 +16,7 @@
 
 	const toggleArchived = () => {
 		if (archivedAtInput) archivedAtInput = null;
-		else archivedAtInput = new Date().toISOString().split('.')[0].slice(0, -3);
+		else archivedAtInput = moment().format('YYYY-MM-DDTHH:mm');
 	};
 
 	const save = async () => {

@@ -11,9 +11,9 @@
 
 	// Ensure createdAtInput is properly formatted for the datetime-local input
 	if (createdAtInput) {
-		createdAtInput = createdAtInput.split('.')[0];
+		createdAtInput = moment(createdAtInput).format('YYYY-MM-DDTHH:mm');
 	} else {
-		createdAtInput = new Date().toISOString().split('.')[0].slice(0, -3);
+		createdAtInput = moment().format('YYYY-MM-DDTHH:mm');
 	}
 
 	$: displayCreatedAt = isPreviewing ? createdAtInput : createdAt;
