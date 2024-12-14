@@ -52,7 +52,9 @@
 					bind:value={newTag}
 					class:empty={!newTag}
 					on:blur={() => handleTag(newTag)}
-					on:keydown={(event) => event.key === 'Enter' && handleTag(newTag)}
+					on:keydown={(event) => {
+						if (event.key === 'Enter') handleTag(newTag);
+					}}
 				/>
 				<span>
 					<Button type="icon" icon="create" />
