@@ -31,14 +31,14 @@
 					.filter(Boolean)
 					.join(' and ')} must be filled properly`
 			);
-			return true;
+			return false;
 		}
 
-		return false;
+		return true;
 	};
 
 	const save = async () => {
-		if (isValid()) return;
+		if (!isValid()) return;
 
 		await admin.update_announcement(announcementIdNumber!, draftInputs);
 		await $query.refetch();
@@ -47,7 +47,7 @@
 	};
 
 	const createAnnouncement = async () => {
-		if (isValid()) return;
+		if (!isValid()) return;
 
 		await admin.create_announcement(draftInputs);
 		goto('/announcements');
