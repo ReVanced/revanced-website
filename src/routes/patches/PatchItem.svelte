@@ -4,6 +4,7 @@
 	import type { Patch } from '$lib/types';
 	import { compare, coerce } from 'semver';
 	import Button from '$lib/components/Button.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -28,7 +29,9 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img class="expand-arrow" src="/icons/expand_more.svg" alt="dropdown" />
+			<div class="expand-arrow material-icon-container">
+				<Icon name="keyboard_arrow_down" size="20" />
+			</div>
 		{/if}
 	</div>
 	{#if patch.description}
@@ -71,12 +74,12 @@
 			{#if patch.compatiblePackages[0].versions.length > 1}
 				<li class="button">
 					<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
-						<img
-							class="expand-arrow"
+						<div
+							class="expand-arrow material-icon-container"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
-							src="/icons/expand_more.svg"
-							alt="dropdown"
-						/>
+						>
+							<Icon name="keyboard_arrow_down" size="20" />
+						</div>
 					</Button>
 				</li>
 			{/if}
@@ -183,6 +186,10 @@
 
 	.rotate .expand-arrow {
 		transform: rotate(180deg);
+	}
+
+	.material-icon-container {
+		color: var(--surface-six);
 	}
 
 	.expanded {
