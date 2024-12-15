@@ -56,16 +56,16 @@
 		<div class="content">
 			<div class="header">
 				<h3>{announcement.title}</h3>
+				<span class="date">
+					{moment(announcement.created_at).format('MMMM DD, YYYY')}
+				</span>
+			</div>
+			<div class="footer">
 				{#if announcement.content}
 					<div class="description">
 						{@html announcement.content}
 					</div>
 				{/if}
-			</div>
-			<div class="footer">
-				<span class="date">
-					{moment(announcement.created_at).format('MMMM DD, YYYY')}
-				</span>
 				{#if announcement.tags.length > 0}
 					<hr />
 					<div class="tag-list">
@@ -134,14 +134,16 @@
 			.footer {
 				display: flex;
 				flex-direction: column;
-				gap: 12px;
-
 				.tag-list {
 					display: flex;
 					align-items: center;
 					flex-wrap: wrap;
 					gap: 4px;
 				}
+			}
+
+			.footer {
+				gap: 12px;
 			}
 
 			.description {
