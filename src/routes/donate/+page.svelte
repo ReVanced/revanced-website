@@ -11,6 +11,7 @@
 	import Snackbar from '$lib/components/Snackbar.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 
 	import QRCode from './QRCode.svelte';
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
@@ -135,7 +136,9 @@
 
 <Dialogue bind:modalOpen={cryptoDialogue}>
 	<svelte:fragment slot="icon">
-		<img class="qr-code" src="/icons/coins.svg" alt="Cryptocurrencies" />
+		<div class="material-icon-container">
+			<Icon name="toll" size="32px" />
+		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Cryptocurrencies</svelte:fragment>
 	<svelte:fragment slot="description">
@@ -174,7 +177,9 @@
 
 <Dialogue bind:modalOpen={qrCodeDialogue}>
 	<svelte:fragment slot="icon">
-		<img class="qr-code" src="/icons/wallet.svg" alt="QR Code" />
+		<div class="material-icon-container">
+			<Icon name="wallet" size="32px" />
+		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="title">{qrCodeDialogueName} Wallet</svelte:fragment>
 	<svelte:fragment slot="description">
@@ -352,5 +357,9 @@
 		align-items: stretch;
 		gap: 1rem;
 		margin-bottom: 4rem;
+	}
+
+	.material-icon-container {
+		color: var(--surface-six);
 	}
 </style>
