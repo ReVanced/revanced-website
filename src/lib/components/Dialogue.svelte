@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
+
+	import Icon from './Icon.svelte';
+
 	export let modalOpen = false;
 	export let fullscreen = false;
 	export let notDismissible = false;
@@ -39,7 +42,9 @@
 			<div class="title" class:hasIcon={$$slots.icon}>
 				{#if fullscreen}
 					<button id="back-button" on:click={() => (modalOpen = !modalOpen)}>
-						<img src="../icons/back.svg" id="back" alt="back" />
+						<div class="material-icon-container">
+							<Icon name="arrow_back" />
+						</div>
 					</button>
 				{/if}
 				{#if $$slots.icon}
@@ -145,8 +150,8 @@
 		align-items: center;
 	}
 
-	#back {
-		height: 24px;
+	.material-icon-container {
+		color: var(--surface-six);
 	}
 
 	.fullscreen {
