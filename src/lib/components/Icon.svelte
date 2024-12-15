@@ -1,9 +1,7 @@
 <script lang="ts">
-	import type { CSSSize } from '$lib/types';
-
 	export let name: string;
 	export let filled: boolean = false;
-	export let size: CSSSize = '24px';
+	export let size: string = '24px';
 	export let color: string = 'inherit';
 
 	name = name.toLowerCase();
