@@ -4,6 +4,8 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
+	import Icon from './Icon.svelte';
+
 	export let title: string;
 	export let searchTerm: string | null;
 	export let displayedTerm: string | undefined;
@@ -19,16 +21,19 @@
 </script>
 
 <div class="search-container">
-	<img src="../icons/search.svg" id="search" alt="Search" />
+	<div id="search" class="material-icon-container">
+		<Icon name="search" />
+	</div>
 	{#if searchTerm}
-		<img
-			src="../icons/close.svg"
+		<div
 			id="clear"
-			alt="Clear"
+			class="material-icon-container"
 			on:click={clear}
 			on:keypress={clear}
 			transition:fade={{ easing: quintOut, duration: 250 }}
-		/>
+		>
+			<Icon name="close" />
+		</div>
 	{/if}
 	<input
 		type="text"
@@ -93,5 +98,9 @@
 		font-size: 0.9rem;
 		font-weight: 500;
 		transition: all 0.2s var(--bezier-one);
+	}
+
+	.material-icon-container {
+		color: var(--surface-six);
 	}
 </style>

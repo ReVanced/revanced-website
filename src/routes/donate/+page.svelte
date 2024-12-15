@@ -164,7 +164,9 @@
 							/>
 							{`${wallet.network} (${wallet.currency_code})`}
 						</div>
-						<img id="arrow" src="/icons/expand_less.svg" alt="continue" />
+						<div id="arrow" class="material-icon-container">
+							<Icon name="keyboard_arrow_up" size="20px" />
+						</div>
 					</button>
 				{/each}
 			</Query>

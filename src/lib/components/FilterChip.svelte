@@ -1,4 +1,6 @@
 <script>
+	import Icon from './Icon.svelte';
+
 	export let dropdown = false;
 	export let check = false;
 	export let selected = false;
@@ -6,11 +8,15 @@
 
 <button class:selected on:click>
 	{#if check}
-		<img id="check" src="/icons/check.svg" alt="selected" />
+		<div id="check" class="material-icon-container">
+			<Icon name="check" size="18px" />
+		</div>
 	{/if}
 	<slot />
 	{#if dropdown}
-		<img id="dropdown" src="/icons/expand_more.svg" alt="dropdown" />
+		<div id="dropdown" class="material-icon-container">
+			<Icon name="keyboard_arrow_down" size="18px" />
+		</div>
 	{/if}
 </button>
 
@@ -34,10 +40,6 @@
 	.selected {
 		background-color: var(--tertiary);
 		color: var(--primary);
-	}
-
-	img {
-		height: 18px;
 	}
 
 	#dropdown {
