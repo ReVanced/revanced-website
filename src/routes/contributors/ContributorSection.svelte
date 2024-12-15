@@ -29,7 +29,9 @@
 			class="material-icon-container"
 			style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
 		>
-			<Icon name="keyboard_arrow_up" size="1.5rem" color="var(--surface-six)" />
+			<div class="material-icon-container" style="color: var(--surface-six);">
+				<Icon name="keyboard_arrow_up" size="1.5rem" />
+			</div>
 		</div>
 	</div>
 
