@@ -195,7 +195,12 @@
 		<form on:submit|preventDefault={handle_login} bind:this={loginForm}>
 			<div>
 				<Input placeholder="Username" required />
-				<Input placeholder="Password" type="password" required />
+				<Input
+					placeholder="Password"
+					type="password"
+					onkeydown={(event) => event.key === 'Enter' && loginForm.requestSubmit()}
+					required
+				/>
 			</div>
 		</form>
 	</div>

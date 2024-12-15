@@ -7,6 +7,7 @@
 	export let onenter: () => void = () => {};
 	export let onexit: () => void = () => {};
 	export let oninput: () => void = () => {};
+	export let onkeydown: (event: KeyboardEvent) => void = (event) => {};
 
 	const set_type = (node: HTMLInputElement) => {
 		node.type = type;
@@ -22,6 +23,7 @@
 		on:focus={onenter}
 		on:blur={onexit}
 		on:input={oninput}
+		on:keydown={onkeydown}
 		bind:value
 	/>
 	<label for={placeholder.toLowerCase()}>{placeholder}</label>
