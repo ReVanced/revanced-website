@@ -2,6 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Divider from '$lib/components/Divider.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
+	import isValidUrl from './utils';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -9,8 +10,16 @@
 	export let attachments: string[] | undefined;
 	export let attachmentsInput: string[] | undefined;
 
-	const addAttachment = () => {
-		attachmentsInput = [...(attachmentsInput ?? []), ''];
+	let newAttachment: string | null = null;
+
+	const isValidAnnouncement = (attachment: string | null) => {
+		return !attachment || (attachment && !isValidUrl(attachment));
+	};
+
+	const addAttachment = (attachment: string | null) => {
+		if (!isValidAnnouncement(attachment)) return;
+
+		attachmentsInput = [...(attachmentsInput ?? []), attachment ? attachment : ''];
 	};
 
 	const removeAttachment = (index: number) => {
@@ -30,7 +39,7 @@
 				<div class="attachments">
 					<input
 						bind:value={attachmentsInput[index]}
-						class:empty={attachment === ''}
+						class:empty={!attachment || (attachment && !isValidUrl(attachment))}
 						placeholder="Attachment URL"
 					/>
 					<button
@@ -49,19 +58,28 @@
 							/>
 						</svg>
 					</button>
-					{#if index == attachmentsInput.length - 1}
-						<span>
-							<Button type="icon" icon="create" on:click={addAttachment} />
-						</span>
-					{/if}
 				</div>
 			{/each}
 		{/if}
-		{#if !attachmentsInput || attachmentsInput.length == 0}
+		<span id="new-attachment">
+			<input
+				bind:value={newAttachment}
+				class:empty={isValidAnnouncement}
+				on:blur={() => {
+					addAttachment(newAttachment);
+					newAttachment = null;
+				}}
+				on:keydown={(event) => {
+					if (event.key === 'Enter') {
+						addAttachment(newAttachment);
+						newAttachment = null;
+					}
+				}}
+			/>
 			<span>
-				<Button type="icon" icon="create" on:click={addAttachment} />
+				<Button type="icon" icon="create" />
 			</span>
-		{/if}
+		</span>
 	</div>
 {:else if displayAttachments && displayAttachments?.length > 0}
 	<Divider />
@@ -81,6 +99,50 @@
 		}
 	}
 
+	input {
+		width: 100%;
+		letter-spacing: 0.02rem;
+		font-size: 0.85rem;
+		transition: all 0.2s var(--bezier-one);
+
+		&:focus {
+			outline: none;
+			border: 1px solid var(--primary);
+		}
+
+		&.empty {
+			border: 1px solid var(--red-one);
+		}
+	}
+
+	#new-attachment {
+		display: inline-flex;
+		align-items: center;
+		position: relative;
+
+		input {
+			width: 52px;
+			border: 1px solid var(--border);
+
+			&:focus {
+				width: 100%;
+				+ span {
+					display: none;
+				}
+
+				&.empty {
+					border: 1px solid var(--red-one);
+				}
+			}
+		}
+
+		span {
+			pointer-events: none;
+			position: absolute;
+			left: 15.5px;
+		}
+	}
+
 	.attachments-wrapper {
 		display: flex;
 		flex-direction: column;
@@ -94,26 +156,10 @@
 			position: relative;
 			gap: 1rem;
 
-			input {
-				width: 100%;
-			}
-
 			button {
 				position: absolute;
 				right: 10px;
 				top: 14px;
-				&.last {
-					right: 45px;
-				}
-			}
-		}
-
-		.empty {
-			border: 1px solid var(--red-one);
-
-			&:focus {
-				outline: none;
-				border: 1px solid var(--primary);
 			}
 		}
 	}

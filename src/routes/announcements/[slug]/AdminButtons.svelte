@@ -5,6 +5,7 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import type { Announcement } from '$lib/types';
 	import moment from 'moment';
+	import isValidUrl from './utils';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -22,13 +23,13 @@
 
 	const isValid = () => {
 		const hasEmptyTitle = !draftInputs.title;
-		const hasEmptyAttachments = draftInputs.attachments?.some((attachment) => !attachment.trim());
+		const hasEmptyAttachments = draftInputs.attachments?.some((a) => !isValidUrl(a));
 
 		if (hasEmptyTitle || hasEmptyAttachments) {
 			alert(
-				`${[hasEmptyTitle && 'Title', hasEmptyAttachments && 'Empty attachments']
+				`${[hasEmptyTitle && 'Title', hasEmptyAttachments && 'Attachments']
 					.filter(Boolean)
-					.join(' and ')} must be filled`
+					.join(' and ')} must be filled properly`
 			);
 			return true;
 		}
