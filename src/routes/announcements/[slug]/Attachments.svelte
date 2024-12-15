@@ -101,6 +101,7 @@
 
 	input {
 		width: 100%;
+		padding-right: 40px;
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
 		transition: all 0.2s var(--bezier-one);
@@ -123,6 +124,7 @@
 		input {
 			width: 52px;
 			border: 1px solid var(--border);
+			padding-right: 0;
 
 			&:focus {
 				width: 100%;
