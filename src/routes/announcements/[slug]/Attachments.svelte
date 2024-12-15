@@ -64,7 +64,7 @@
 		<span id="new-attachment">
 			<input
 				bind:value={newAttachment}
-				class:empty={isValidAnnouncement}
+				class:empty={!isValidAnnouncement(newAttachment)}
 				on:blur={() => {
 					addAttachment(newAttachment);
 					newAttachment = null;
