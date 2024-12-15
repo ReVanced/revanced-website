@@ -20,6 +20,7 @@
 		if (!isValidAnnouncement(attachment)) return;
 
 		attachmentsInput = [...(attachmentsInput ?? []), attachment ? attachment : ''];
+		return true;
 	};
 
 	const removeAttachment = (index: number) => {
@@ -70,10 +71,7 @@
 					newAttachment = null;
 				}}
 				on:keydown={(event) => {
-					if (event.key === 'Enter') {
-						addAttachment(newAttachment);
-						newAttachment = null;
-					}
+					if (event.key === 'Enter' && addAttachment(newAttachment)) newAttachment = null;
 				}}
 			/>
 			<span>
