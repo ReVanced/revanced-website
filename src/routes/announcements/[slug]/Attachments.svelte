@@ -13,7 +13,7 @@
 	let newAttachment: string | null = null;
 
 	const isValidAnnouncement = (attachment: string | null) => {
-		return !attachment || (attachment && !isValidUrl(attachment));
+		return attachment && attachment && isValidUrl(attachment);
 	};
 
 	const addAttachment = (attachment: string | null) => {
