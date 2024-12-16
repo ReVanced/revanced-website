@@ -17,6 +17,7 @@
 	import type { ResponseAnnouncement } from '$lib/types';
 	import { admin_login } from '$lib/stores';
 	import Button from '$lib/components/Button.svelte';
+	import moment from 'moment';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -113,11 +114,13 @@
 		<Query {query} let:data>
 			<div class="cards">
 				{#each filter(data.announcements, displayedTerm) as announcement}
-					{#key selectedTags || displayedTerm}
-						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-							<AnnouncementCard {announcement} />
-						</div>
-					{/key}
+					{#if !moment(announcement.archived_at).isBefore(moment()) || $admin_login.logged_in}
+						{#key selectedTags || displayedTerm}
+							<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+								<AnnouncementCard {announcement} />
+							</div>
+						{/key}
+					{/if}
 				{/each}
 			</div>
 		</Query>
