@@ -95,7 +95,12 @@
 			/>
 		</div>
 		{#if $admin_login.logged_in}
-			<Button icon="create" type="filled" href="/announcements/create">Create</Button>
+			<Button type="filled" href="/announcements/create">
+				<svg height="24px" viewBox="0 -960 960 960" fill="#141d3a">
+					<path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
+				</svg>
+				Create
+			</Button>
 		{/if}
 	</div>
 </div>
