@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { useQueryClient } from '@tanstack/svelte-query';
+	import { admin, queries } from '$data/api';
 	import { goto } from '$app/navigation';
-	import { admin } from '$data/api';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import type { Announcement } from '$lib/types';
@@ -15,6 +16,8 @@
 	export let announcementIdNumber: number | undefined;
 	export let draftInputs: Announcement;
 	export let query;
+
+	const client = useQueryClient();
 
 	const toggleArchived = () => {
 		if (archivedAtInput) archivedAtInput = undefined;
@@ -49,13 +52,15 @@
 	const createAnnouncement = async () => {
 		if (!isValid()) return;
 
+		await client.invalidateQueries(queries['announcements']());
 		await admin.create_announcement(draftInputs);
-		goto('/announcements');
+		goto('/announcements', { invalidateAll: true });
 	};
 
 	const deleteAnnouncement = async () => {
-		await admin.delete_announcement(announcementIdNumber!);
-		goto('/announcements');
+		await client.invalidateQueries(queries['announcements']());
+		admin.delete_announcement(announcementIdNumber!);
+		goto('/announcements', { invalidateAll: true });
 	};
 
 	const handleUnload = (e: BeforeUnloadEvent) => {
