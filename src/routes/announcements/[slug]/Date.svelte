@@ -61,6 +61,7 @@
 <style lang="scss">
 	span {
 		display: inline-flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: 1rem;
 	}

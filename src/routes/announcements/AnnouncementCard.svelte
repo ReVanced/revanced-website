@@ -56,7 +56,7 @@
 		<div class="content">
 			<div class="header">
 				<h3>{announcement.title}</h3>
-				<span class="date">
+				<span>
 					{moment().diff(moment(announcement.created_at), 'days') <= 7
 						? moment(announcement.created_at).fromNow()
 						: moment(announcement.created_at).format('MMMM D, YYYY [at] h:mm A')}

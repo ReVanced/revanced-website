@@ -26,7 +26,7 @@
 
 <div class="card">
 	<div class="header">
-		<div class="header-data">
+		<div>
 			<Title
 				{isCreating}
 				{isEditing}
@@ -101,13 +101,10 @@
 
 	.header {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: center;
 		gap: 2rem;
-
-		.header-data {
-			width: 100%;
-		}
 	}
 
 	@media (max-width: 767px) {
