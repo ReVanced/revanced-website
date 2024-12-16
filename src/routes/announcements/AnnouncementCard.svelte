@@ -8,6 +8,7 @@
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import TagChip from './TagChip.svelte';
 	import { read_announcements } from '$lib/stores';
+	import ToolTip from '$lib/components/ToolTip.svelte';
 
 	export let announcement: ResponseAnnouncement;
 
@@ -41,7 +42,11 @@
 	href="/announcements/{announcement.id}"
 	on:click={setAnnouncementRead}
 >
-	<div class="card {announcement.attachments.length > 0 ? 'attachment' : 'no-attachment'}">
+	<div
+		class="card"
+		class:attachment={announcement.attachments.length > 0}
+		class:archived={moment(announcement.archived_at).isBefore(moment())}
+	>
 		{#if isRead !== undefined && !isRead}
 			<NewHeader />
 		{/if}
@@ -57,9 +62,23 @@
 			<div class="header">
 				<h3>{announcement.title}</h3>
 				<span>
-					{moment().diff(moment(announcement.created_at), 'days') <= 7
-						? moment(announcement.created_at).fromNow()
-						: moment(announcement.created_at).format('MMMM D, YYYY [at] h:mm A')}
+					{#if moment().diff(moment(announcement.created_at), 'days') <= 7}
+						{moment(announcement.created_at).fromNow()}
+					{:else}
+						{moment(announcement.created_at).format('MMMM D, YYYY [at] h:mm A')}
+					{/if}
+
+					{#if moment(announcement.archived_at).isBefore(moment())}
+						<ToolTip
+							content={`This announcement was archived ${
+								moment().diff(moment(announcement.archived_at), 'days') <= 7
+									? moment(announcement.archived_at).fromNow()
+									: moment(announcement.archived_at).format('on MMMM D, YYYY [at] h:mm A')
+							}`}
+						>
+							<img src="../icons/archive.svg" alt="archive" />
+						</ToolTip>
+					{/if}
 				</span>
 			</div>
 			<div class="footer">
@@ -98,6 +117,13 @@
 		&.attachment {
 			grid-row: span 2;
 		}
+		&.archived {
+			filter: hue-rotate(180deg) saturate(35%);
+		}
+		&:hover {
+			background-color: var(--surface-four);
+			filter: none;
+		}
 
 		display: flex;
 		flex-direction: column;
@@ -106,9 +132,6 @@
 		background-color: var(--surface-seven);
 		border: 1px solid var(--border);
 		border-radius: 12px;
-		&:hover {
-			background-color: var(--surface-four);
-		}
 
 		img {
 			height: 150px;
@@ -136,6 +159,17 @@
 			.footer {
 				display: flex;
 				flex-direction: column;
+
+				span {
+					display: flex;
+					gap: 4px;
+
+					img {
+						height: 24px;
+						width: 24px;
+					}
+				}
+
 				.tag-list {
 					display: flex;
 					align-items: center;
