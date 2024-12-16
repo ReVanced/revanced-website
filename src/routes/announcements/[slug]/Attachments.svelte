@@ -2,7 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Divider from '$lib/components/Divider.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
-	import isValidUrl from './utils';
+	import { isValidUrl } from '$util/isValidUrl';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;

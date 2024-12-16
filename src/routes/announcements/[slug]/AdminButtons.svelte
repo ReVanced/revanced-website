@@ -6,7 +6,7 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import type { Announcement } from '$lib/types';
 	import moment from 'moment';
-	import isValidUrl from './utils';
+	import { isValidUrl } from '$util/isValidUrl';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
