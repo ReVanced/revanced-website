@@ -152,6 +152,45 @@
 				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
+
+				:global(a) {
+					color: var(--primary);
+					text-decoration: none;
+					pointer-events: none;
+				}
+
+				:global(h1),
+				:global(h2),
+				:global(h3),
+				:global(h4),
+				:global(h5),
+				:global(h6) {
+					color: var(--secondary);
+					line-height: 1.75rem;
+					margin: 0;
+				}
+
+				:global(h1) {
+					font-size: 1.75rem;
+				}
+
+				:global(h2) {
+					font-size: 1.25rem;
+				}
+
+				:global(h3) {
+					font-size: 1rem;
+				}
+
+				:global(h4) {
+					font-size: 0.5rem;
+				}
+
+				:global(li) {
+					list-style-position: inside;
+					font-size: 0.9rem;
+					font-weight: 500;
+				}
 			}
 		}
 	}
