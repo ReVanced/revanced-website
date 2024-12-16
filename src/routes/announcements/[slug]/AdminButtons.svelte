@@ -44,7 +44,7 @@
 		if (!isValid()) return;
 
 		await admin.update_announcement(announcementIdNumber!, draftInputs);
-		await $query.refetch();
+		await client.invalidateQueries(queries['announcements']());
 
 		isEditing = false;
 	};
@@ -52,14 +52,14 @@
 	const createAnnouncement = async () => {
 		if (!isValid()) return;
 
-		await client.invalidateQueries(queries['announcements']());
 		await admin.create_announcement(draftInputs);
+		await client.invalidateQueries(queries['announcements']());
 		goto('/announcements', { invalidateAll: true });
 	};
 
 	const deleteAnnouncement = async () => {
-		await client.invalidateQueries(queries['announcements']());
 		admin.delete_announcement(announcementIdNumber!);
+		await client.invalidateQueries(queries['announcements']());
 		goto('/announcements', { invalidateAll: true });
 	};
 
