@@ -15,7 +15,6 @@
 	export let showDeleteConfirm: boolean;
 	export let announcementIdNumber: number | undefined;
 	export let draftInputs: Announcement;
-	export let query;
 
 	const client = useQueryClient();
 

@@ -13,7 +13,6 @@
 	export let isCreating: boolean;
 	export let announcement: Announcement | undefined;
 	export let announcementIdNumber: number | undefined;
-	export let query: any;
 
 	let isPreviewing = false;
 	let isEditing = false;
@@ -65,7 +64,6 @@
 				bind:isPreviewing
 				bind:showDeleteConfirm
 				bind:archivedAtInput={draftInputs.archived_at}
-				bind:query
 				{draftInputs}
 				{announcementIdNumber}
 			/>
