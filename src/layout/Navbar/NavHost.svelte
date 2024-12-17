@@ -186,7 +186,7 @@
 	<div class="admin-modal-content">
 		<h2>Admin Login</h2>
 		<p>
-			This panel is reserved for administrators at ReVanced, this is not what you should be looking
+			This login is reserved for site administrators.
 			for, go back!
 		</p>
 		{#if wrong_credentials}
