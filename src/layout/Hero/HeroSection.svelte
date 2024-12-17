@@ -1,5 +1,8 @@
 <script>
 	import Button from '$lib/components/Button.svelte';
+
+	import TrayArrowDown from 'svelte-material-icons/TrayArrowDown.svelte';
+	import FileDocumentOutline from 'svelte-material-icons/FileDocumentOutline.svelte';
 </script>
 
 <section class="hero">
@@ -9,8 +12,22 @@
 			Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
 		</p>
 		<div class="hero-buttons">
-			<Button icon="download" type="filled" href="download">Download</Button>
-			<Button icon="docs" type="tonal" href="patches">View patches</Button>
+			<Button type="filled" href="download">
+				<svelte:fragment slot="icon">
+					<div class="material-icon-container">
+						<TrayArrowDown size="20px" />
+					</div>
+				</svelte:fragment>
+				Download
+			</Button>
+			<Button type="tonal" href="patches">
+				<svelte:fragment slot="icon">
+					<div class="material-icon-container">
+						<FileDocumentOutline size="20px" />
+					</div>
+				</svelte:fragment>
+				View patches
+			</Button>
 		</div>
 	</div>
 </section>
