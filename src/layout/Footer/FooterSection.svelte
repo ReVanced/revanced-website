@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import Icon from '$lib/components/Icon.svelte';
+	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	export let title: string;
 	let expanded: boolean = false;
@@ -23,10 +23,9 @@
 		</span>
 		<div
 			class="arrow material-icon-container"
-			style="color: var(--surface-six);"
-			style:transform={expanded ? 'rotate(0deg)' : 'rotate(180deg)'}
+			style:transform={expanded ? 'rotate(180deg)' : 'rotate(0deg)'}
 		>
-			<Icon name="keyboard_arrow_down" />
+			<ChevronDown size="24px" />
 		</div>
 	</button>
 	{#if expanded}
@@ -73,6 +72,10 @@
 	.arrow {
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
+	}
+
+	.material-icon-container {
+		color: var(--surface-six);
 	}
 
 	@media screen and (max-width: 768px) {

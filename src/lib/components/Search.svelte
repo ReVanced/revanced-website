@@ -4,7 +4,8 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
-	import Icon from './Icon.svelte';
+	import Close from 'svelte-material-icons/Close.svelte';
+	import Magnify from 'svelte-material-icons/Magnify.svelte';
 
 	export let title: string;
 	export let searchTerm: string | null;
@@ -22,7 +23,7 @@
 
 <div class="search-container">
 	<div id="search" class="material-icon-container">
-		<Icon name="search" />
+		<Magnify size="24px" color="var(--surface-six)" />
 	</div>
 	{#if searchTerm}
 		<div
@@ -32,7 +33,7 @@
 			on:keypress={clear}
 			transition:fade={{ easing: quintOut, duration: 250 }}
 		>
-			<Icon name="close" />
+			<Close size="24px" color="var(--surface-six)" />
 		</div>
 	{/if}
 	<input

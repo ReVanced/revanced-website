@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import type { Patch } from '$lib/types';
 	import { compare, coerce } from 'semver';
+
+	import type { Patch } from '$lib/types';
 	import Button from '$lib/components/Button.svelte';
-	import Icon from '$lib/components/Icon.svelte';
+
+	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -30,7 +32,7 @@
 		</div>
 		{#if hasPatchOptions}
 			<div class="expand-arrow material-icon-container">
-				<Icon name="keyboard_arrow_down" size="20" />
+				<ChevronDown size="20px" />
 			</div>
 		{/if}
 	</div>
@@ -78,7 +80,7 @@
 							class="expand-arrow material-icon-container"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
 						>
-							<Icon name="keyboard_arrow_down" size="20" />
+							<ChevronDown size="20px" />
 						</div>
 					</Button>
 				</li>

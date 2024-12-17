@@ -7,7 +7,9 @@
 	import Navigation from './NavButton.svelte';
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Icon from '$lib/components/Icon.svelte';
+
+	import Cog from 'svelte-material-icons/Cog.svelte';
+	import Replay from 'svelte-material-icons/Replay.svelte';
 
 	import { api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
@@ -87,7 +89,7 @@
 			<div id="secondary-navigation">
 				<button on:click={() => (modalOpen = !modalOpen)} aria-label="Settings">
 					<div class="material-icon-container">
-						<Icon name="settings" size="20px" filled />
+						<Cog size="20px" />
 					</div>
 				</button>
 			</div>
@@ -108,7 +110,7 @@
 <Modal bind:modalOpen>
 	<svelte:fragment slot="icon">
 		<div class="material-icon-container">
-			<Icon name="settings" filled />
+			<Cog size="24px" />
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
@@ -118,7 +120,7 @@
 			<input name="api-url" type="text" bind:value={url} />
 			<button id="button-reset" on:click={reset} aria-label="Reset Button">
 				<div class="material-icon-container">
-					<Icon name="replay" />
+					<Replay size="24px" />
 				</div>
 			</button>
 		</div>

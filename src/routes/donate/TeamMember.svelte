@@ -4,7 +4,8 @@
 
 	import type { TeamMember } from '$lib/types';
 	import ToolTip from '$lib/components/ToolTip.svelte';
-	import Icon from '$lib/components/Icon.svelte';
+
+	import CheckDecagramOutline from 'svelte-material-icons/CheckDecagramOutline.svelte';
 
 	export let member: TeamMember;
 	export let i: number;
@@ -35,13 +36,13 @@
 					<div class="desktop">
 						<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
 							<div class="material-icon-container">
-								<Icon name="verified" size="20px" />
+								<CheckDecagramOutline size="20px" />
 							</div>
 						</a>
 					</div>
 					<div class="mobile">
 						<div class="material-icon-container">
-							<Icon name="verified" size="20px" />
+							<CheckDecagramOutline size="20px" />
 						</div>
 						<h5>GPG key</h5>
 					</div>

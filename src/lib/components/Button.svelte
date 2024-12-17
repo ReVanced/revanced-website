@@ -1,24 +1,21 @@
 <script lang="ts">
-	import Icon from './Icon.svelte';
-
 	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
-	export let icon = '';
-	export let href = '';
-	export let target = '';
-	export let label = '';
+	export let href: string = '';
+	export let target: string = '';
+	export let label: string = '';
 </script>
 
 {#if href}
 	<a {href} {target} class={`button-${type}`} aria-label={label}>
-		{#if icon}
-			<Icon name={icon} size="20px" />
+		{#if $$slots.icon}
+			<slot name="icon" />
 		{/if}
 		<slot />
 	</a>
 {:else}
 	<button on:click class={`button-${type}`} aria-label={label}>
-		{#if icon}
-			<Icon name={icon} size="20px" />
+		{#if $$slots.icon}
+			<slot name="icon" />
 		{/if}
 		<slot />
 	</button>
@@ -75,9 +72,5 @@
 	button:hover,
 	a:hover {
 		filter: brightness(85%);
-	}
-
-	img {
-		height: 20px;
 	}
 </style>

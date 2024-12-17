@@ -3,7 +3,8 @@
 	import { quintOut } from 'svelte/easing';
 	import type { Contributor } from '$lib/types';
 	import ContributorButton from './ContributorPerson.svelte';
-	import Icon from '$lib/components/Icon.svelte';
+
+	import ChevronUp from 'svelte-material-icons/ChevronUp.svelte';
 
 	export let contributors: Contributor[];
 	export let name: string;
@@ -28,9 +29,8 @@
 			id="arrow"
 			class="material-icon-container"
 			style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
-			style="color: var(--surface-six);"
 		>
-			<Icon name="keyboard_arrow_up" size="1.5rem" />
+			<ChevronUp size="24px" />
 		</div>
 	</div>
 
@@ -94,6 +94,10 @@
 		display: grid;
 		justify-items: center;
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	}
+
+	.material-icon-container {
+		color: var(--surface-six);
 	}
 
 	@media (max-width: 767px) {

@@ -2,7 +2,7 @@
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
 
-	import Icon from './Icon.svelte';
+	import ArrowLeft from 'svelte-material-icons/ArrowLeft.svelte';
 
 	export let modalOpen = false;
 	export let fullscreen = false;
@@ -43,7 +43,7 @@
 				{#if fullscreen}
 					<button id="back-button" on:click={() => (modalOpen = !modalOpen)}>
 						<div class="material-icon-container">
-							<Icon name="arrow_back" />
+							<ArrowLeft size="24px" />
 						</div>
 					</button>
 				{/if}

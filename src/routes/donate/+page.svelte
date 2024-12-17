@@ -11,11 +11,14 @@
 	import Snackbar from '$lib/components/Snackbar.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import Icon from '$lib/components/Icon.svelte';
 
 	import QRCode from './QRCode.svelte';
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
+
+	import CircleMultipleOutline from 'svelte-material-icons/CircleMultipleOutline.svelte';
+	import WalletOutline from 'svelte-material-icons/WalletOutline.svelte';
+	import ChevronUp from 'svelte-material-icons/ChevronUp.svelte';
 
 	import { supportsWebP } from '$util/supportsWebP';
 
@@ -137,7 +140,7 @@
 <Dialogue bind:modalOpen={cryptoDialogue}>
 	<svelte:fragment slot="icon">
 		<div class="material-icon-container">
-			<Icon name="toll" size="32px" />
+			<CircleMultipleOutline size="32px" />
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="title">Cryptocurrencies</svelte:fragment>
@@ -165,7 +168,7 @@
 							{`${wallet.network} (${wallet.currency_code})`}
 						</div>
 						<div id="arrow" class="material-icon-container">
-							<Icon name="keyboard_arrow_up" size="20px" />
+							<ChevronUp size="20px" />
 						</div>
 					</button>
 				{/each}
@@ -180,7 +183,7 @@
 <Dialogue bind:modalOpen={qrCodeDialogue}>
 	<svelte:fragment slot="icon">
 		<div class="material-icon-container">
-			<Icon name="wallet" size="32px" />
+			<WalletOutline size="32px" />
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="title">{qrCodeDialogueName} Wallet</svelte:fragment>
