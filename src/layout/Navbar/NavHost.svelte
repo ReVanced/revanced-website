@@ -184,7 +184,7 @@
 <!-- login -->
 <Modal bind:modalOpen={loginOpen}>
 	<div class="admin-modal-content">
-		<h2>Admin Login</h2>
+		<h2>Login</h2>
 		<p>
 			This login is reserved for site administrators.
 			for, go back!
