@@ -31,8 +31,8 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<div class="expand-arrow material-icon-container">
-				<ChevronDown size="24px" />
+			<div class="expand-arrow">
+				<ChevronDown size="24px" color="var(--surface-six)" />
 			</div>
 		{/if}
 	</div>
@@ -77,10 +77,10 @@
 				<li class="button">
 					<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
 						<div
-							class="expand-arrow material-icon-container"
+							class="expand-arrow"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
 						>
-							<ChevronDown size="24px" />
+							<ChevronDown size="24px" color="var(--surface-six)" />
 						</div>
 					</Button>
 				</li>
@@ -188,10 +188,6 @@
 
 	.rotate .expand-arrow {
 		transform: rotate(180deg);
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 
 	.expanded {

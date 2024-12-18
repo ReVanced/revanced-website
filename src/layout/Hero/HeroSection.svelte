@@ -14,17 +14,13 @@
 		<div class="hero-buttons">
 			<Button type="filled" href="download">
 				<svelte:fragment slot="icon">
-					<div class="material-icon-container">
-						<TrayArrowDown size="20px" />
-					</div>
+					<TrayArrowDown size="20px" />
 				</svelte:fragment>
 				Download
 			</Button>
 			<Button type="tonal" href="patches">
 				<svelte:fragment slot="icon">
-					<div class="material-icon-container">
-						<FileDocumentOutline size="20px" />
-					</div>
+					<FileDocumentOutline size="20px" />
 				</svelte:fragment>
 				View patches
 			</Button>

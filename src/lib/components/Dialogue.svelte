@@ -42,9 +42,7 @@
 			<div class="title" class:hasIcon={$$slots.icon}>
 				{#if fullscreen}
 					<button id="back-button" on:click={() => (modalOpen = !modalOpen)}>
-						<div class="material-icon-container">
-							<ArrowLeft size="24px" />
-						</div>
+						<ArrowLeft size="24px" color="var(--surface-six)" />
 					</button>
 				{/if}
 				{#if $$slots.icon}
@@ -148,10 +146,6 @@
 		background-color: transparent;
 		display: flex;
 		align-items: center;
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 
 	.fullscreen {

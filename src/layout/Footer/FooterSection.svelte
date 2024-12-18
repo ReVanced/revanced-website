@@ -21,11 +21,8 @@
 		<span>
 			{title}
 		</span>
-		<div
-			class="arrow material-icon-container"
-			style:transform={expanded ? 'rotate(180deg)' : 'rotate(0deg)'}
-		>
-			<ChevronDown size="24px" />
+		<div class="arrow" style:transform={expanded ? 'rotate(180deg)' : 'rotate(0deg)'}>
+			<ChevronDown size="24px" color="var(--surface-six)" />
 		</div>
 	</button>
 	{#if expanded}
@@ -72,10 +69,6 @@
 	.arrow {
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 
 	@media screen and (max-width: 768px) {

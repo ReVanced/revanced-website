@@ -25,12 +25,8 @@
 		<a href={url} rel="noreferrer" target="_blank" on:click|stopPropagation>
 			<h4>{name}</h4>
 		</a>
-		<div
-			id="arrow"
-			class="material-icon-container"
-			style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
-		>
-			<ChevronUp size="24px" />
+		<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}>
+			<ChevronUp size="24px" color="var(--surface-six)" />
 		</div>
 	</div>
 
@@ -94,10 +90,6 @@
 		display: grid;
 		justify-items: center;
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 
 	@media (max-width: 767px) {

@@ -35,15 +35,11 @@
 				>
 					<div class="desktop">
 						<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
-							<div class="material-icon-container">
-								<CheckDecagramOutline size="20px" />
-							</div>
+							<CheckDecagramOutline size="20px" color="var(--secondary)" />
 						</a>
 					</div>
 					<div class="mobile">
-						<div class="material-icon-container">
-							<CheckDecagramOutline size="20px" />
-						</div>
+						<CheckDecagramOutline size="20px" color="var(--secondary)" />
 						<h5>GPG key</h5>
 					</div>
 				</ToolTip>
@@ -124,9 +120,5 @@
 			height: 48px;
 			width: 48px;
 		}
-	}
-
-	.material-icon-container {
-		color: var(--secondary);
 	}
 </style>

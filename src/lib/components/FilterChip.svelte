@@ -9,15 +9,11 @@
 
 <button class:selected on:click>
 	{#if check}
-		<div id="check" class="material-icon-container">
-			<Check size="18px" />
-		</div>
+		<Check size="18px" color="var(--surface-six)" />
 	{/if}
 	<slot />
 	{#if dropdown}
-		<div id="dropdown" class="material-icon-container">
-			<ChevronDown size="18px" />
-		</div>
+		<ChevronDown size="18px" color="var(--surface-six)" />
 	{/if}
 </button>
 
@@ -41,10 +37,6 @@
 	.selected {
 		background-color: var(--tertiary);
 		color: var(--primary);
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 
 	#dropdown {

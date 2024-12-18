@@ -139,9 +139,7 @@
 
 <Dialogue bind:modalOpen={cryptoDialogue}>
 	<svelte:fragment slot="icon">
-		<div class="material-icon-container">
-			<CircleMultipleOutline size="32px" />
-		</div>
+		<CircleMultipleOutline size="32px" color="var(--surface-six)" />
 	</svelte:fragment>
 	<svelte:fragment slot="title">Cryptocurrencies</svelte:fragment>
 	<svelte:fragment slot="description">
@@ -167,8 +165,8 @@
 							/>
 							{`${wallet.network} (${wallet.currency_code})`}
 						</div>
-						<div id="arrow" class="material-icon-container">
-							<ChevronUp size="20px" />
+						<div id="arrow">
+							<ChevronUp size="20px" color="var(--surface-six)" />
 						</div>
 					</button>
 				{/each}
@@ -182,9 +180,7 @@
 
 <Dialogue bind:modalOpen={qrCodeDialogue}>
 	<svelte:fragment slot="icon">
-		<div class="material-icon-container">
-			<WalletOutline size="32px" />
-		</div>
+		<WalletOutline size="32px" color="var(--surface-six)" />
 	</svelte:fragment>
 	<svelte:fragment slot="title">{qrCodeDialogueName} Wallet</svelte:fragment>
 	<svelte:fragment slot="description">
@@ -362,9 +358,5 @@
 		align-items: stretch;
 		gap: 1rem;
 		margin-bottom: 4rem;
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 </style>

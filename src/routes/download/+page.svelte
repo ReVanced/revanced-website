@@ -93,18 +93,14 @@
 			{#if !isAndroid || androidVersion < 8}
 				<Button on:click={handleClick} type="filled">
 					<svelte:fragment slot="icon">
-						<div class="material-icon-container">
-							<TrayArrowDown size="20px" />
-						</div>
+						<TrayArrowDown size="20px" />
 					</svelte:fragment>
 					{data.release.version}
 				</Button>
 			{:else}
 				<Button on:click={handleClick} type="filled" href={data.release.download_url}>
 					<svelte:fragment slot="icon">
-						<div class="material-icon-container">
-							<TrayArrowDown size="20px" />
-						</div>
+						<TrayArrowDown size="20px" />
 					</svelte:fragment>
 					{data.release.version}
 				</Button>

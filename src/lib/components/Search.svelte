@@ -22,13 +22,12 @@
 </script>
 
 <div class="search-container">
-	<div id="search" class="material-icon-container">
+	<div id="search">
 		<Magnify size="24px" color="var(--surface-six)" />
 	</div>
 	{#if searchTerm}
 		<div
 			id="clear"
-			class="material-icon-container"
 			on:click={clear}
 			on:keypress={clear}
 			transition:fade={{ easing: quintOut, duration: 250 }}
@@ -99,9 +98,5 @@
 		font-size: 0.9rem;
 		font-weight: 500;
 		transition: all 0.2s var(--bezier-one);
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 </style>

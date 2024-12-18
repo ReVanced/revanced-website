@@ -88,9 +88,7 @@
 			</div>
 			<div id="secondary-navigation">
 				<button on:click={() => (modalOpen = !modalOpen)} aria-label="Settings">
-					<div class="material-icon-container">
-						<Cog size="20px" />
-					</div>
+					<Cog size="20px" color="var(--surface-six)" />
 				</button>
 			</div>
 		</div>
@@ -109,9 +107,7 @@
 <!-- settings -->
 <Modal bind:modalOpen>
 	<svelte:fragment slot="icon">
-		<div class="material-icon-container">
-			<Cog size="24px" />
-		</div>
+		<Cog size="24px" color="var(--surface-six)" />
 	</svelte:fragment>
 	<svelte:fragment slot="title">Settings</svelte:fragment>
 	<svelte:fragment slot="description">Configure the API for this website.</svelte:fragment>
@@ -119,9 +115,7 @@
 		<div class="input-wrapper">
 			<input name="api-url" type="text" bind:value={url} />
 			<button id="button-reset" on:click={reset} aria-label="Reset Button">
-				<div class="material-icon-container">
-					<Replay size="24px" />
-				</div>
+				<Replay size="24px" color="var(--surface-six)" />
 			</button>
 		</div>
 	</div>
@@ -218,10 +212,6 @@
 		display: flex;
 		width: 100%;
 		justify-content: space-between;
-	}
-
-	.material-icon-container {
-		color: var(--surface-six);
 	}
 
 	@media (min-width: 768px) {
