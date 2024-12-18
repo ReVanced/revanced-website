@@ -32,7 +32,7 @@
 		</div>
 		{#if hasPatchOptions}
 			<div class="expand-arrow material-icon-container">
-				<ChevronDown size="20px" />
+				<ChevronDown size="24px" />
 			</div>
 		{/if}
 	</div>
@@ -80,7 +80,7 @@
 							class="expand-arrow material-icon-container"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
 						>
-							<ChevronDown size="20px" />
+							<ChevronDown size="24px" />
 						</div>
 					</Button>
 				</li>
