@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { compare, coerce } from 'semver';
 
 	import type { Patch } from '$lib/types';
 	import Button from '$lib/components/Button.svelte';
