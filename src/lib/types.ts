@@ -1,12 +1,12 @@
 export type ResponseAnnouncement = {
 	archived_at?: string;
-	attachments: string[];
-	author: string;
-	tags: string[];
-	content: string;
+	attachments?: string[];
+	author?: string;
+	tags?: string[];
+	content?: string;
 	created_at: string;
 	id: number;
-	level: number;
+	level?: number;
 	title: string;
 };
 

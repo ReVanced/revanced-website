@@ -41,7 +41,10 @@
 				keys: ['title', 'content']
 			},
 			additionalFilter: (announcement: ResponseAnnouncement, tags: string[]): boolean => {
-				return tags.length === 0 || tags.some((tag) => announcement.tags.includes(tag));
+				return (
+					tags.length === 0 ||
+					tags.some((tag) => announcement.tags && announcement.tags.includes(tag))
+				);
 			}
 		});
 

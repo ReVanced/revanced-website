@@ -40,10 +40,25 @@
 		return true;
 	};
 
+	const sanitize = (draftInputs: Announcement) => {
+		return {
+			...draftInputs,
+			content: draftInputs.content?.trim() || undefined,
+			tags: draftInputs.tags && draftInputs.tags.length > 0 ? draftInputs.tags : undefined,
+			archived_at: draftInputs.archived_at?.trim() || undefined,
+			attachments:
+				draftInputs.attachments && draftInputs.attachments?.length > 0
+					? draftInputs.attachments
+					: undefined,
+			author: draftInputs.author?.trim() || undefined,
+			level: draftInputs.level ?? undefined
+		};
+	};
+
 	const save = async () => {
 		if (!isValid()) return;
 
-		await admin.update_announcement(announcementIdNumber!, draftInputs);
+		await admin.update_announcement(announcementIdNumber!, sanitize(draftInputs));
 		await $query?.refetch();
 
 		isEditing = false;
@@ -52,7 +67,7 @@
 	const createAnnouncement = async () => {
 		if (!isValid()) return;
 
-		await admin.create_announcement(draftInputs);
+		await admin.create_announcement(sanitize(draftInputs));
 		await client.invalidateQueries(queries['announcements']());
 		goto('/announcements', { invalidateAll: true });
 	};
