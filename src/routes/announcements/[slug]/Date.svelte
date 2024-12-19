@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { relativeTime } from '$util/relativeTime';
 	import moment from 'moment';
 
 	export let isEditing: boolean;
@@ -28,7 +29,7 @@
 				height="24px"
 				viewBox="0 -960 960 960"
 				width="24px"
-				fill="#ACC1D2"
+				fill="currentColor"
 			>
 				<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
 			</svg>
@@ -37,9 +38,7 @@
 	</span>
 {:else if displayCreatedAt}
 	<span>
-		{moment().diff(moment(displayCreatedAt), 'days') <= 7
-			? moment(displayCreatedAt).fromNow()
-			: moment(displayCreatedAt).format('MMMM D, YYYY [at] h:mm A')}
+		{relativeTime(displayCreatedAt)}
 
 		{#if displayArchivedAt}
 			<svg
@@ -47,13 +46,11 @@
 				height="24px"
 				viewBox="0 -960 960 960"
 				width="24px"
-				fill="#ACC1D2"
+				fill="currentColor"
 			>
 				<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
 			</svg>
-			{moment().diff(moment(displayArchivedAt), 'days') <= 7
-				? moment(displayArchivedAt).fromNow()
-				: moment(displayArchivedAt).format('MMMM D, YYYY [at] h:mm A')}
+			{relativeTime(displayArchivedAt)}
 		{/if}
 	</span>
 {/if}

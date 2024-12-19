@@ -7,8 +7,10 @@
 	import Button from '$lib/components/Button.svelte';
 
 	export let tags: Tags;
+	export let expandable: boolean = false;
+	export let clickable: boolean = true;
 
-	let showAllTags = false;
+	let showAllTags = expandable ? false : true;
 
 	const searchParams = derived(page, ($page) => $page.url.searchParams);
 
@@ -42,10 +44,11 @@
 			{tag}
 			selected={$searchParams.getAll('tag').includes(tag)}
 			onClick={() => handleClick(tag)}
+			{clickable}
 		/>
 	{/each}
 
-	{#if tags.length > 1}
+	{#if expandable && tags.length > 1}
 		<li class="button">
 			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
 				<img

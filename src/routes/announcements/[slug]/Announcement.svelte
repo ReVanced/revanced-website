@@ -91,12 +91,12 @@
 
 <style lang="scss">
 	.card {
+		background-color: var(--surface-eight);
 		display: flex;
 		flex-direction: column;
 		padding: 2rem;
 		margin-bottom: 3rem;
 		border-radius: 1rem;
-		background-color: var(--surface-eight);
 	}
 
 	.header {

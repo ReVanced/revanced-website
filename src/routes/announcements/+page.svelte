@@ -12,12 +12,13 @@
 	import { queries } from '$data/api';
 	import TagsHost from './TagsHost.svelte';
 	import Search from '$lib/components/Search.svelte';
-	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
 	import { admin_login } from '$lib/stores';
 	import Button from '$lib/components/Button.svelte';
 	import moment from 'moment';
+	import { debounce } from '$util/debounce';
+	import createFilter from '$util/filter';
 
 	let searchParams: Readable<URLSearchParams>;
 
@@ -25,52 +26,30 @@
 	else searchParams = derived(page, ($page) => $page.url.searchParams);
 
 	let searchTerm = $searchParams.get('s') || '';
-	let searcher: Fuse<ResponseAnnouncement>;
 
 	$: query = createQuery(queries.announcements());
 	$: tagsQuery = createQuery(queries.announcementTags());
 	$: selectedTags = $searchParams.getAll('tag');
 
-	function filter(announcements: Iterable<ResponseAnnouncement>, search: string) {
-		const announcementsArray = Array.from(announcements);
+	function filterAnnouncements(
+		announcements: Iterable<ResponseAnnouncement>,
+		search: string,
+		selectedTags: string[]
+	): ResponseAnnouncement[] {
+		const announcementFilter = createFilter(Array.from(announcements), {
+			searcherOptions: {
+				keys: ['title', 'content']
+			},
+			additionalFilter: (announcement: ResponseAnnouncement, tags: string[]): boolean => {
+				return tags.length === 0 || tags.some((tag) => announcement.tags.includes(tag));
+			}
+		});
 
-		if (!search) {
-			if (selectedTags.length > 0)
-				return announcementsArray.filter((announcement) =>
-					selectedTags.some((tag) => announcement.tags.includes(tag))
-				);
-			return announcementsArray;
-		}
-
-		if (!searcher) {
-			searcher = new Fuse(announcementsArray, {
-				keys: ['title', 'content'],
-				shouldSort: true,
-				threshold: 0.3
-			});
-		}
-
-		const result = searcher
-			.search(search)
-			.map(({ item }) => item)
-			.filter((item) => {
-				// Don't show if the announcement isn't under the selected tags
-				if (selectedTags.length > 0 && !selectedTags.some((tag) => item.tags.includes(tag)))
-					return false;
-				return true;
-			});
-		return result;
+		return announcementFilter(selectedTags, search);
 	}
 
 	// Make sure we don't have to filter the announcements after every key press
 	let displayedTerm = '';
-	const debounce = <T extends any[]>(f: (...args: T) => void) => {
-		let timeout: number;
-		return (...args: T) => {
-			clearTimeout(timeout);
-			timeout = setTimeout(() => f(...args), 350);
-		};
-	};
 	const update = () => {
 		displayedTerm = searchTerm;
 
@@ -113,7 +92,7 @@
 
 		<Query {query} let:data>
 			<div class="cards">
-				{#each filter(data.announcements, displayedTerm) as announcement}
+				{#each filterAnnouncements(data.announcements, displayedTerm, selectedTags) as announcement}
 					{#if !moment(announcement.archived_at).isBefore(moment()) || $admin_login.logged_in}
 						{#key selectedTags || displayedTerm}
 							<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>

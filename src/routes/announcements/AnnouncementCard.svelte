@@ -6,9 +6,11 @@
 	import { queries } from '$data/api';
 	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
-	import TagChip from './TagChip.svelte';
 	import { read_announcements } from '$lib/stores';
+	import TagsHost from './TagsHost.svelte';
+	import Content from './[slug]/Content.svelte';
 	import ToolTip from '$lib/components/ToolTip.svelte';
+	import { relativeTime } from '$util/relativeTime';
 
 	export let announcement: ResponseAnnouncement;
 
@@ -62,19 +64,10 @@
 			<div class="header">
 				<h3>{announcement.title}</h3>
 				<span>
-					{#if moment().diff(moment(announcement.created_at), 'days') <= 7}
-						{moment(announcement.created_at).fromNow()}
-					{:else}
-						{moment(announcement.created_at).format('MMMM D, YYYY [at] h:mm A')}
-					{/if}
-
-					{#if moment(announcement.archived_at).isBefore(moment())}
+					{relativeTime(announcement.created_at)}
+					{#if announcement.archived_at && moment(announcement.archived_at).isBefore(moment())}
 						<ToolTip
-							content={`This announcement was archived ${
-								moment().diff(moment(announcement.archived_at), 'days') <= 7
-									? moment(announcement.archived_at).fromNow()
-									: moment(announcement.archived_at).format('on MMMM D, YYYY [at] h:mm A')
-							}`}
+							content={`This announcement was archived ${relativeTime(announcement.archived_at)}`}
 						>
 							<img src="../icons/archive.svg" alt="archive" />
 						</ToolTip>
@@ -83,17 +76,15 @@
 			</div>
 			<div class="footer">
 				{#if announcement.content}
-					<div class="description">
-						{@html announcement.content}
-					</div>
+					<Content content={announcement.content} clamp={true} />
 				{/if}
 				{#if announcement.tags.length > 0}
 					<hr />
-					<div class="tag-list">
-						{#each announcement.tags as tag}
-							<TagChip {tag} clickable={false} />
-						{/each}
-					</div>
+					<TagsHost
+						tags={announcement.tags.map((tag) => ({ name: tag }))}
+						expandable={false}
+						clickable={false}
+					/>
 				{/if}
 			</div>
 		</div>
@@ -102,15 +93,7 @@
 
 <style lang="scss">
 	a {
-		color: inherit !important;
-		text-decoration: inherit !important;
-		font-weight: inherit !important;
-		font-size: inherit !important;
-		user-select: none !important;
-	}
-
-	hr {
-		justify-content: end;
+		text-decoration: inherit;
 	}
 
 	.card {
@@ -169,64 +152,10 @@
 						width: 24px;
 					}
 				}
-
-				.tag-list {
-					display: flex;
-					align-items: center;
-					flex-wrap: wrap;
-					gap: 4px;
-				}
 			}
 
 			.footer {
 				gap: 12px;
-			}
-
-			.description {
-				display: -webkit-inline-box;
-				line-clamp: 3;
-				-webkit-line-clamp: 3;
-				-webkit-box-orient: vertical;
-				overflow: hidden;
-
-				:global(a) {
-					color: var(--primary);
-					text-decoration: none;
-					pointer-events: none;
-				}
-
-				:global(h1),
-				:global(h2),
-				:global(h3),
-				:global(h4),
-				:global(h5),
-				:global(h6) {
-					color: var(--secondary);
-					line-height: 1.75rem;
-					margin: 0;
-				}
-
-				:global(h1) {
-					font-size: 1.75rem;
-				}
-
-				:global(h2) {
-					font-size: 1.25rem;
-				}
-
-				:global(h3) {
-					font-size: 1rem;
-				}
-
-				:global(h4) {
-					font-size: 0.5rem;
-				}
-
-				:global(li) {
-					list-style-position: inside;
-					font-size: 0.9rem;
-					font-weight: 500;
-				}
 			}
 		}
 	}
