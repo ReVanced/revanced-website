@@ -10,7 +10,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	const query = createQuery(['contributors'], queries.contributors);
+	const query = createQuery(queries.contributors());
 </script>
 
 <Head

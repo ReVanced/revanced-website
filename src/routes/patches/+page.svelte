@@ -5,7 +5,7 @@
 	import { derived, readable, type Readable } from 'svelte/store';
 	import { page } from '$app/stores';
 
-	import type { Patch } from '$lib/types';
+	import type { CompatiblePackage, Patch } from '$lib/types';
 
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
@@ -21,8 +21,10 @@
 	import Query from '$lib/components/Query.svelte';
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
+	import createFilter from '$util/filter';
+	import { debounce } from '$util/debounce';
 
-	const query = createQuery(['patches'], queries.patches);
+	const query = createQuery(queries.patches());
 
 	let searcher: Fuse<Patch> | undefined;
 
@@ -39,49 +41,26 @@
 	let mobilePackages = false;
 	let showAllVersions = false;
 
-	function checkCompatibility(patch: Patch, pkg: string) {
-		if (pkg === '') {
-			return false;
-		}
-		return !!patch.compatiblePackages?.find((compat) => compat.name === pkg);
-	}
+	function filterPatches(patches: Patch[], pkg: string, search?: string): Patch[] {
+		const patchFilter = createFilter(patches, {
+			searcherOptions: {
+				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
+			},
+			additionalFilter: (patch: Patch, pkg: string): boolean => {
+				return (
+					patch.compatiblePackages?.some(
+						(compatiblePackage: CompatiblePackage) =>
+							compatiblePackage.name === pkg || compatiblePackage.versions?.includes(pkg)
+					) || false
+				);
+			}
+		});
 
-	function filter(patches: Patch[], pkg: string, search?: string): Patch[] {
-		if (!search) {
-			if (pkg) return patches.filter((patch) => checkCompatibility(patch, pkg));
-			else return patches;
-		}
-
-		if (!searcher) {
-			searcher = new Fuse(patches, {
-				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions'],
-				shouldSort: true,
-				threshold: 0.3
-			});
-		}
-
-		const result = searcher
-			.search(search)
-			.map(({ item }) => item)
-			.filter((item) => {
-				// Don't show if the patch doesn't support the selected package
-				if (pkg && !checkCompatibility(item, pkg)) {
-					return false;
-				}
-				return true;
-			});
-		return result;
+		return patchFilter(pkg, search);
 	}
 
 	// Make sure we don't have to filter the patches after every key press
 	let displayedTerm = '';
-	const debounce = <T extends any[]>(f: (...args: T) => void) => {
-		let timeout: number;
-		return (...args: T) => {
-			clearTimeout(timeout);
-			timeout = setTimeout(() => f(...args), 350);
-		};
-	};
 	const update = () => {
 		displayedTerm = searchTerm;
 
@@ -184,7 +163,7 @@
 		</aside>
 
 		<div class="patches-container">
-			{#each filter(data.patches, selectedPkg || '', displayedTerm) as patch}
+			{#each filterPatches(data.patches, selectedPkg || '', displayedTerm) as patch}
 				<!-- Trigger new animations when package or search changes (I love Svelte) -->
 				{#key selectedPkg || displayedTerm}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>

@@ -1,35 +1,43 @@
 <script lang="ts">
-	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
+	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
+	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
 	export let icon = '';
 	export let href = '';
 	export let target = '';
 	export let label = '';
+	export let disabled = false;
+	export let danger = false;
 </script>
 
 {#if href}
-	<a {href} {target} class={`button-${type}`} aria-label={label}>
+	<a {href} {target} aria-label={label} class={type} class:disabled class:danger>
 		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
+			<img src={`../icons/${icon}.svg`} alt={icon} />
 		{/if}
-		<slot />
+		{#if type !== 'icon'}
+			<slot />
+		{/if}
 	</a>
 {:else}
-	<button on:click class={`button-${type}`} aria-label={label}>
+	<button
+		on:click
+		class={type}
+		class:disabled
+		class:danger
+		aria-label={label}
+		type={functionType}
+		{disabled}
+	>
 		{#if icon}
 			<img src="../icons/{icon}.svg" alt={icon} />
 		{/if}
-		<slot />
+		{#if type !== 'icon'}
+			<slot />
+		{/if}
 	</button>
 {/if}
 
-<style>
-	button {
-		border: none;
-		background-color: transparent;
-		padding: 0;
-		margin: 0;
-	}
-
+<style lang="scss">
 	a,
 	button {
 		min-width: max-content;
@@ -48,34 +56,53 @@
 			transform 0.4s var(--bezier-one),
 			filter 0.4s var(--bezier-one);
 		user-select: none;
-	}
-
-	.button-filled {
-		background-color: var(--primary);
-		color: var(--text-three);
-	}
-	.button-tonal {
-		background-color: var(--surface-four);
-	}
-
-	.button-filled,
-	.button-tonal {
 		padding: 16px 24px;
-	}
 
-	.button-text {
-		background-color: transparent;
-		color: var(--primary);
-		font-weight: 500;
-		letter-spacing: 0.01rem;
-	}
+		&:hover:not(.disabled) {
+			filter: brightness(85%);
+		}
 
-	button:hover,
-	a:hover {
-		filter: brightness(85%);
-	}
+		&.disabled {
+			filter: grayscale(100%);
+			cursor: not-allowed;
+		}
 
-	img {
-		height: 20px;
+		&.filled {
+			background-color: var(--primary);
+			color: var(--text-three);
+		}
+
+		&.tonal {
+			background-color: var(--surface-four);
+		}
+
+		&.text {
+			background-color: transparent;
+			color: var(--primary);
+			font-weight: 500;
+			padding: 0;
+		}
+
+		&.outlined {
+			border: 2px solid var(--primary);
+			background-color: transparent;
+		}
+
+		&.icon {
+			&:hover {
+				filter: brightness(75%);
+			}
+			background-color: transparent;
+			padding: 0;
+		}
+
+		&.danger {
+			background-color: var(--red-one);
+			color: var(--surface-four);
+		}
+
+		img {
+			height: 20px;
+		}
 	}
 </style>
