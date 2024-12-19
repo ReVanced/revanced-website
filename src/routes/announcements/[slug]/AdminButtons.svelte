@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { useQueryClient } from '@tanstack/svelte-query';
+	import { useQueryClient, type CreateQueryResult } from '@tanstack/svelte-query';
 	import { admin, queries } from '$data/api';
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
-	import type { Announcement } from '$lib/types';
+	import type { Announcement, ResponseAnnouncement } from '$lib/types';
 	import moment from 'moment';
 	import { isValidUrl } from '$util/isValidUrl';
 
@@ -15,6 +15,7 @@
 	export let showDeleteConfirm: boolean;
 	export let announcementIdNumber: number | undefined;
 	export let draftInputs: Announcement;
+	export let query: CreateQueryResult<{ announcement: ResponseAnnouncement }, unknown> | undefined;
 
 	const client = useQueryClient();
 
@@ -43,7 +44,7 @@
 		if (!isValid()) return;
 
 		await admin.update_announcement(announcementIdNumber!, draftInputs);
-		await client.invalidateQueries(queries['announcements']());
+		await $query?.refetch();
 
 		isEditing = false;
 	};

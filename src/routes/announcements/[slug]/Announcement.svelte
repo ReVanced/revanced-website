@@ -8,11 +8,14 @@
 	import Content from './Content.svelte';
 	import Attachments from './Attachments.svelte';
 	import Tags from './Tags.svelte';
-	import type { Announcement } from '$lib/types';
+	import type { Announcement, ResponseAnnouncement } from '$lib/types';
+	import type { CreateQueryResult } from '@tanstack/svelte-query';
 
 	export let isCreating: boolean;
 	export let announcement: Announcement | undefined;
 	export let announcementIdNumber: number | undefined;
+	export let query: CreateQueryResult<{ announcement: ResponseAnnouncement }, unknown> | undefined =
+		undefined;
 
 	let isPreviewing = false;
 	let isEditing = false;
@@ -66,6 +69,7 @@
 				bind:archivedAtInput={draftInputs.archived_at}
 				{draftInputs}
 				{announcementIdNumber}
+				{query}
 			/>
 		{/if}
 	</div>

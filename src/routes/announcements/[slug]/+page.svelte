@@ -27,7 +27,7 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	{#if query}
 		<Query {query}>
-			<Announcement {isCreating} {announcement} {announcementIdNumber} />
+			<Announcement {isCreating} {announcement} {announcementIdNumber} {query} />
 		</Query>
 	{:else}
 		<Announcement {isCreating} {announcement} {announcementIdNumber} />
