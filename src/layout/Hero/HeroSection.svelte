@@ -13,15 +13,11 @@
 		</p>
 		<div class="hero-buttons">
 			<Button type="filled" href="download">
-				<svelte:fragment slot="icon">
-					<TrayArrowDown size="20px" />
-				</svelte:fragment>
+				<TrayArrowDown size="20px" />
 				Download
 			</Button>
 			<Button type="tonal" href="patches">
-				<svelte:fragment slot="icon">
-					<FileDocumentOutline size="20px" />
-				</svelte:fragment>
+				<FileDocumentOutline size="20px" />
 				View patches
 			</Button>
 		</div>

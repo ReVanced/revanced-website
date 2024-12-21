@@ -7,16 +7,10 @@
 
 {#if href}
 	<a {href} {target} class={`button-${type}`} aria-label={label}>
-		{#if $$slots.icon}
-			<slot name="icon" />
-		{/if}
 		<slot />
 	</a>
 {:else}
 	<button on:click class={`button-${type}`} aria-label={label}>
-		{#if $$slots.icon}
-			<slot name="icon" />
-		{/if}
 		<slot />
 	</button>
 {/if}

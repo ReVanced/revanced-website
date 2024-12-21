@@ -92,16 +92,12 @@
 		<Query {query} let:data>
 			{#if !isAndroid || androidVersion < 8}
 				<Button on:click={handleClick} type="filled">
-					<svelte:fragment slot="icon">
-						<TrayArrowDown size="20px" />
-					</svelte:fragment>
+					<TrayArrowDown size="20px" />
 					{data.release.version}
 				</Button>
 			{:else}
 				<Button on:click={handleClick} type="filled" href={data.release.download_url}>
-					<svelte:fragment slot="icon">
-						<TrayArrowDown size="20px" />
-					</svelte:fragment>
+					<TrayArrowDown size="20px" />
 					{data.release.version}
 				</Button>
 			{/if}
