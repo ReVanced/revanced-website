@@ -46,12 +46,12 @@
 >
 	<div
 		class="card"
-		class:attachment={announcement.attachments.length > 0}
+		class:attachment={announcement.attachments && announcement.attachments.length > 0}
 	>
 		{#if isRead !== undefined && !isRead}
 			<NewHeader />
 		{/if}
-		{#if announcement.attachments.length > 0}
+		{#if announcement.attachments && announcement.attachments.length > 0}
 			<img
 				src={announcement.attachments[0]}
 				class={isRead === undefined || isRead ? '' : 'no-border-radius'}
@@ -77,7 +77,7 @@
 				{#if announcement.content}
 					<Content content={announcement.content} clamp={true} />
 				{/if}
-				{#if announcement.tags.length > 0}
+				{#if announcement.tags && announcement.tags.length > 0}
 					<hr />
 					<TagsHost
 						tags={announcement.tags.map((tag) => ({ name: tag }))}
