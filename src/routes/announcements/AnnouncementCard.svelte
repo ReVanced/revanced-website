@@ -47,7 +47,6 @@
 	<div
 		class="card"
 		class:attachment={announcement.attachments.length > 0}
-		class:archived={moment(announcement.archived_at).isBefore(moment())}
 	>
 		{#if isRead !== undefined && !isRead}
 			<NewHeader />
@@ -99,9 +98,6 @@
 	.card {
 		&.attachment {
 			grid-row: span 2;
-		}
-		&.archived {
-			filter: hue-rotate(180deg) saturate(35%);
 		}
 		&:hover {
 			background-color: var(--surface-four);

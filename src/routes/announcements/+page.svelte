@@ -4,8 +4,8 @@
 	import { building } from '$app/environment';
 	import { page } from '$app/stores';
 	import Footer from '$layout/Footer/FooterHost.svelte';
-	import { fly } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
+	import { fly, slide } from 'svelte/transition';
+	import { quintIn, quintOut } from 'svelte/easing';
 
 	import Query from '$lib/components/Query.svelte';
 	import AnnouncementCard from './AnnouncementCard.svelte';
@@ -30,6 +30,8 @@
 	$: query = createQuery(queries.announcements());
 	$: tagsQuery = createQuery(queries.announcementTags());
 	$: selectedTags = $searchParams.getAll('tag');
+
+	let expanded = false;
 
 	function filterAnnouncements(
 		announcements: Iterable<ResponseAnnouncement>,
@@ -88,29 +90,76 @@
 	</div>
 </div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<div class="announcements-list">
-		<Query query={tagsQuery} let:data>
-			<TagsHost tags={data.tags} />
-		</Query>
+	<Query query={tagsQuery} let:data>
+		<TagsHost tags={data.tags} />
+	</Query>
 
-		<Query {query} let:data>
-			<div class="cards">
+	<Query {query} let:data>
+		<div class="cards">
+			{#each filterAnnouncements(data.announcements, displayedTerm, selectedTags) as announcement}
+				{#if !announcement.archived_at || moment(announcement.archived_at).isAfter(moment())}
+					{#key selectedTags || displayedTerm}
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+							<AnnouncementCard {announcement} />
+						</div>
+					{/key}
+				{/if}
+			{/each}
+		</div>
+
+		<div
+			role="button"
+			class="expand-archived"
+			aria-expanded={expanded}
+			class:closed={!expanded}
+			on:click={() => (expanded = !expanded)}
+			on:keypress={() => (expanded = !expanded)}
+			tabindex="0"
+		>
+			<h4>Archived announcements</h4>
+
+			<img
+				id="arrow"
+				style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
+				src="/icons/expand_less.svg"
+				alt="dropdown"
+			/>
+		</div>
+
+		{#if expanded}
+			<div
+				class="cards"
+				in:slide={{ easing: quintIn, duration: 250 }}
+				out:slide={{ easing: quintOut, duration: 250 }}
+			>
 				{#each filterAnnouncements(data.announcements, displayedTerm, selectedTags) as announcement}
-					{#if !moment(announcement.archived_at).isBefore(moment()) || $admin_login.logged_in}
+					{#if announcement.archived_at && moment(announcement.archived_at).isBefore(moment())}
 						{#key selectedTags || displayedTerm}
-							<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-								<AnnouncementCard {announcement} />
-							</div>
+							<AnnouncementCard {announcement} />
 						{/key}
 					{/if}
 				{/each}
 			</div>
-		</Query>
-	</div>
+		{/if}
+	</Query>
 </main>
 <Footer />
 
 <style lang="scss">
+	.expand-archived {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+		user-select: none;
+		padding: 0rem 0.25rem;
+
+		#arrow {
+			height: 1.5rem;
+			transition: all 0.2s var(--bezier-one);
+		}
+	}
+
 	.search {
 		padding-top: 5rem;
 		padding-bottom: 1.25rem;
