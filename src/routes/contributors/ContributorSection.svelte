@@ -25,7 +25,7 @@
 		<a href={url} rel="noreferrer" target="_blank" on:click|stopPropagation>
 			<h4>{name}</h4>
 		</a>
-		<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}>
+		<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(180deg)'}>
 			<ChevronUp size="24px" color="var(--surface-six)" />
 		</div>
 	</div>

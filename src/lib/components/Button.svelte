@@ -1,5 +1,8 @@
 <script lang="ts">
 	export let type: 'filled' | 'tonal' | 'text' | 'outlined';
+	export let icon: any | undefined = undefined;
+	export let iconSize = 20;
+	export let iconColor = 'currentColor';
 	export let href: string = '';
 	export let target: string = '';
 	export let label: string = '';
@@ -7,10 +10,12 @@
 
 {#if href}
 	<a {href} {target} class={`button-${type}`} aria-label={label}>
+		<svelte:component this={icon} size={iconSize} color={iconColor} />
 		<slot />
 	</a>
 {:else}
 	<button on:click class={`button-${type}`} aria-label={label}>
+		<svelte:component this={icon} size={iconSize} color={iconColor} />
 		<slot />
 	</button>
 {/if}

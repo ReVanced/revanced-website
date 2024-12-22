@@ -12,14 +12,8 @@
 			Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
 		</p>
 		<div class="hero-buttons">
-			<Button type="filled" href="download">
-				<TrayArrowDown size="20px" />
-				Download
-			</Button>
-			<Button type="tonal" href="patches">
-				<FileDocumentOutline size="20px" />
-				View patches
-			</Button>
+			<Button type="filled" icon={TrayArrowDown} href="download">Download</Button>
+			<Button type="tonal" icon={FileDocumentOutline} href="patches">View patches</Button>
 		</div>
 	</div>
 </section>

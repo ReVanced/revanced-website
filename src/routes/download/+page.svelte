@@ -91,13 +91,16 @@
 	<div class="buttons">
 		<Query {query} let:data>
 			{#if !isAndroid || androidVersion < 8}
-				<Button on:click={handleClick} type="filled">
-					<TrayArrowDown size="20px" />
+				<Button on:click={handleClick} icon={TrayArrowDown} type="filled">
 					{data.release.version}
 				</Button>
 			{:else}
-				<Button on:click={handleClick} type="filled" href={data.release.download_url}>
-					<TrayArrowDown size="20px" />
+				<Button
+					on:click={handleClick}
+					icon={TrayArrowDown}
+					type="filled"
+					href={data.release.download_url}
+				>
 					{data.release.version}
 				</Button>
 			{/if}
