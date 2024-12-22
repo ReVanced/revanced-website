@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { friendlyName } from '$util/friendlyName';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { Contributor } from '$lib/types';
 	import ContributorButton from './ContributorPerson.svelte';
 
+	import ChevronUp from 'svelte-material-icons/ChevronUp.svelte';
+
 	export let contributors: Contributor[];
-	export let repo: string;
+	export let name: string;
+	export let url: string;
+
 	let expanded = true;
 
 	let bots = ['semantic-release-bot', 'revanced-bot'];
-	let repo_name = friendlyName(repo);
 </script>
 
 <div class="section-container">
@@ -20,15 +22,12 @@
 		on:click={() => (expanded = !expanded)}
 		on:keypress={() => (expanded = !expanded)}
 	>
-		<a href="https://github.com/{repo}" rel="noreferrer" target="_blank" on:click|stopPropagation>
-			<h4>{repo_name}</h4>
+		<a href={url} rel="noreferrer" target="_blank" on:click|stopPropagation>
+			<h4>{name}</h4>
 		</a>
-		<img
-			id="arrow"
-			style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
-			src="/icons/expand_less.svg"
-			alt="dropdown"
-		/>
+		<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(180deg)'}>
+			<ChevronUp size="24px" color="var(--surface-six)" />
+		</div>
 	</div>
 
 	{#if expanded}
@@ -63,7 +62,6 @@
 	}
 
 	#arrow {
-		height: 1.5rem;
 		transition: all 0.2s var(--bezier-one);
 		user-select: none;
 	}

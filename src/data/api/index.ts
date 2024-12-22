@@ -27,19 +27,28 @@ async function get_json(endpoint: string) {
 }
 
 async function contributors(): Promise<ContributorsData> {
-	const json = await get_json('v3/contributors');
+	const json = await get_json('v4/contributors');
 	return { contributables: json };
 }
 
 async function manager(): Promise<ReleaseData> {
-	const json = await get_json('v3/manager/latest');
+	const json = await get_json('v4/manager');
 
 	return { release: json };
 }
 
 async function patches(): Promise<PatchesData> {
-	const json = await get_json('v3/patches/latest/list');
+	const json = await get_json('v4/patches/list');
 	const packagesWithCount: { [key: string]: number } = {};
+
+	json.forEach((patch) => {
+		if (!patch.compatiblePackages) return;
+
+		patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
+			name,
+			versions: patch.compatiblePackages[name]
+		}));
+	});
 
 	// gets packages and patch count
 	for (let i = 0; i < json.length; i++) {
@@ -56,12 +65,12 @@ async function patches(): Promise<PatchesData> {
 }
 
 async function team(): Promise<TeamData> {
-	const json = await get_json('v3/team');
+	const json = await get_json('v4/team');
 	return { members: json };
 }
 
 async function about(): Promise<AboutData> {
-	const json = await get_json('v3/about');
+	const json = await get_json('v4/about');
 	return { about: json };
 }
 

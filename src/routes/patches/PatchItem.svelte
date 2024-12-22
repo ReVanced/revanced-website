@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+
 	import type { Patch } from '$lib/types';
-	import { compare, coerce } from 'semver';
 	import Button from '$lib/components/Button.svelte';
+
+	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -28,14 +30,16 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img class="expand-arrow" src="/icons/expand_more.svg" alt="dropdown" />
+			<div class="expand-arrow">
+				<ChevronDown size="24px" color="var(--surface-six)" />
+			</div>
 		{/if}
 	</div>
 	{#if patch.description}
 		<h5>{patch.description}</h5>
 	{/if}
 	<ul class="info-container">
-		{#if !patch.compatiblePackages?.length}
+		{#if !patch.compatiblePackages}
 			<li class="patch-info">🌎 Universal patch</li>
 		{:else}
 			{#each patch.compatiblePackages as pkg}
@@ -71,12 +75,12 @@
 			{#if patch.compatiblePackages[0].versions.length > 1}
 				<li class="button">
 					<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
-						<img
+						<div
 							class="expand-arrow"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
-							src="/icons/expand_more.svg"
-							alt="dropdown"
-						/>
+						>
+							<ChevronDown size="24px" color="var(--surface-six)" />
+						</div>
 					</Button>
 				</li>
 			{/if}

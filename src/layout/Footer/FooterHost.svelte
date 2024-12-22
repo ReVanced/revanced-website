@@ -8,7 +8,17 @@
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
 
+	import { RV_DMCA_GUID } from '$env/static/public';
+	import { onMount } from 'svelte';
+
 	const aboutQuery = createQuery(['about'], queries.about);
+
+	let location: string;
+
+	onMount(() => {
+		// DMCA Protection Badge
+		location = document.location.href;
+	});
 </script>
 
 <!-- squiggly divider line -->
@@ -64,15 +74,26 @@
 			</Query>
 		</section>
 	</div>
-	<Query query={aboutQuery} let:data>
-		{#if data}
-			<div class="footer-bottom">
-				<div id="logo-name"><span>Re</span>Vanced</div>
-				<a href="/donate"><div>Donate</div></a>
+	<div class="footer-bottom">
+		<div id="logo-name"><span>Re</span>Vanced</div>
+		<a href="/donate"><div>Donate</div></a>
+		<Query query={aboutQuery} let:data>
+			{#if data}
 				<a href="mailto:{data.about.contact.email}"><div>Email</div></a>
-			</div>
-		{/if}
-	</Query>
+			{/if}
+		</Query>
+		<!-- DMCA Protection Badge -->
+		<a
+			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"
+			title="DMCA.com Protection Status"
+			class="dmca-badge"
+		>
+			<img
+				src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={RV_DMCA_GUID}"
+				alt="DMCA.com Protection Status"
+			/></a
+		>
+	</div>
 </footer>
 
 <style>
@@ -93,6 +114,11 @@
 	.footer-bottom {
 		display: flex;
 		gap: 2rem;
+		align-items: center;
+	}
+
+	.dmca-badge {
+		display: flex;
 		align-items: center;
 	}
 
@@ -143,7 +169,7 @@
 		align-items: flex-start;
 	}
 
-	img {
+	.logo-image {
 		height: 2.5rem;
 	}
 
