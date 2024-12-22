@@ -4,7 +4,7 @@
 	import Gallery from '$lib/components/Gallery.svelte';
 	import { isValidUrl } from '$util/isValidUrl';
 	import Create from 'svelte-material-icons/Plus.svelte';
-	import Delete from 'svelte-material-icons/Delete.svelte';
+	import Delete from 'svelte-material-icons/DeleteOutline.svelte';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;

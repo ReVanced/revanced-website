@@ -8,14 +8,14 @@
 	import moment from 'moment';
 	import { isValidUrl } from '$util/isValidUrl';
 
-	import Delete from 'svelte-material-icons/Delete.svelte';
-	import Edit from 'svelte-material-icons/Pencil.svelte';
-	import Archive from 'svelte-material-icons/ArchiveArrowDown.svelte';
+	import Delete from 'svelte-material-icons/DeleteOutline.svelte';
+	import Edit from 'svelte-material-icons/PencilOutline.svelte';
+	import Archive from 'svelte-material-icons/ArchiveArrowDownOutline.svelte';
 	import Close from 'svelte-material-icons/Close.svelte';
 	import Check from 'svelte-material-icons/Check.svelte';
-	import Show from 'svelte-material-icons/Eye.svelte';
-	import Hide from 'svelte-material-icons/EyeOff.svelte';
-	import Unarchive from 'svelte-material-icons/ArchiveArrowUp.svelte';
+	import Show from 'svelte-material-icons/EyeOutline.svelte';
+	import Hide from 'svelte-material-icons/EyeOffOutline.svelte';
+	import Unarchive from 'svelte-material-icons/ArchiveArrowUpOutline.svelte';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;

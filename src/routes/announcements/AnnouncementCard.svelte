@@ -12,7 +12,7 @@
 	import ToolTip from '$lib/components/ToolTip.svelte';
 	import { relativeTime } from '$util/relativeTime';
 
-	import Archive from 'svelte-material-icons/Archive.svelte';
+	import Archive from 'svelte-material-icons/ArchiveOutline.svelte';
 
 	export let announcement: ResponseAnnouncement;
 
