@@ -180,7 +180,8 @@
 	.cards {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		padding: 16px 0px;
+		padding: 16px 0;
+		min-width: 0;
 		width: 100%;
 		gap: 16px;
 	}

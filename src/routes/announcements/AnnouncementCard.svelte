@@ -140,6 +140,7 @@
 			.footer {
 				display: flex;
 				flex-direction: column;
+				overflow-wrap: anywhere;
 
 				span {
 					display: flex;
