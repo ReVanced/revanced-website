@@ -1,22 +1,22 @@
 <script lang="ts">
-	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
+	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon' = 'filled';
 	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
-	export let icon = '';
-	export let href = '';
-	export let target = '';
-	export let label = '';
+	export let icon: any | undefined = undefined;
+	export let iconSize = 20;
+	export let iconColor = 'currentColor';
+	export let href: string = '';
+	export let target: string = '';
+	export let label: string = '';
 	export let disabled = false;
 	export let danger = false;
+
+	$: type = $$slots.default ? type : 'icon';
 </script>
 
 {#if href}
 	<a {href} {target} aria-label={label} class={type} class:disabled class:danger>
-		{#if icon}
-			<img src={`../icons/${icon}.svg`} alt={icon} />
-		{/if}
-		{#if type !== 'icon'}
-			<slot />
-		{/if}
+		<svelte:component this={icon} size={iconSize} color={iconColor} />
+		<slot />
 	</a>
 {:else}
 	<button
@@ -28,12 +28,8 @@
 		type={functionType}
 		{disabled}
 	>
-		{#if icon}
-			<img src="../icons/{icon}.svg" alt={icon} />
-		{/if}
-		{#if type !== 'icon'}
-			<slot />
-		{/if}
+		<svelte:component this={icon} size={iconSize} color={iconColor} />
+		<slot />
 	</button>
 {/if}
 
@@ -99,10 +95,6 @@
 		&.danger {
 			background-color: var(--red-one);
 			color: var(--surface-four);
-		}
-
-		img {
-			height: 20px;
 		}
 	}
 </style>

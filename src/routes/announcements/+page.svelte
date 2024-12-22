@@ -20,6 +20,9 @@
 	import { debounce } from '$util/debounce';
 	import createFilter from '$util/filter';
 
+	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
+	import Create from 'svelte-material-icons/Plus.svelte';
+
 	let searchParams: Readable<URLSearchParams>;
 
 	if (building) searchParams = readable(new URLSearchParams());
@@ -80,12 +83,7 @@
 			/>
 		</div>
 		{#if $admin_login.logged_in}
-			<Button type="filled" href="/announcements/create">
-				<svg height="24px" viewBox="0 -960 960 960" fill="#141d3a">
-					<path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-				</svg>
-				Create
-			</Button>
+			<Button type="filled" icon={Create} href="/announcements/create">Create</Button>
 		{/if}
 	</div>
 </div>
@@ -118,12 +116,9 @@
 		>
 			<h4>Archived announcements</h4>
 
-			<img
-				id="arrow"
-				style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}
-				src="/icons/expand_less.svg"
-				alt="dropdown"
-			/>
+			<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}>
+				<ChevronDown size="24px" color="var(--surface-six)" />
+			</div>
 		</div>
 
 		{#if expanded}

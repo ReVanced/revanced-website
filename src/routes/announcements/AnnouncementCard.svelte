@@ -12,6 +12,8 @@
 	import ToolTip from '$lib/components/ToolTip.svelte';
 	import { relativeTime } from '$util/relativeTime';
 
+	import Archive from 'svelte-material-icons/Archive.svelte';
+
 	export let announcement: ResponseAnnouncement;
 
 	const client = useQueryClient();
@@ -68,7 +70,7 @@
 						<ToolTip
 							content={`This announcement was archived ${relativeTime(announcement.archived_at)}`}
 						>
-							<img src="../icons/archive.svg" alt="archive" />
+							<Archive size="24" />
 						</ToolTip>
 					{/if}
 				</span>

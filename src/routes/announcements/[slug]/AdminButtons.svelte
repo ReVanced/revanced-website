@@ -8,6 +8,15 @@
 	import moment from 'moment';
 	import { isValidUrl } from '$util/isValidUrl';
 
+	import Delete from 'svelte-material-icons/Delete.svelte';
+	import Edit from 'svelte-material-icons/Pencil.svelte';
+	import Archive from 'svelte-material-icons/Archive.svelte';
+	import Close from 'svelte-material-icons/Close.svelte';
+	import Check from 'svelte-material-icons/Check.svelte';
+	import Show from 'svelte-material-icons/Eye.svelte';
+	import Hide from 'svelte-material-icons/EyeOff.svelte';
+	import Unarchive from 'svelte-material-icons/ArchiveArrowUp.svelte';
+
 	export let isEditing: boolean;
 	export let isCreating: boolean;
 	export let isPreviewing: boolean;
@@ -99,30 +108,21 @@
 
 <div>
 	{#if isEditing || isCreating}
-		<Button
-			type="icon"
-			icon={isPreviewing ? 'hide' : 'show'}
-			on:click={() => (isPreviewing = !isPreviewing)}
-		/>
-		<Button
-			type="icon"
-			icon={archivedAtInput ? 'unarchive' : 'archive'}
-			on:click={toggleArchived}
-		/>
+		<Button icon={isPreviewing ? Hide : Show} on:click={() => (isPreviewing = !isPreviewing)} />
+		<Button icon={archivedAtInput ? Unarchive : Archive} on:click={toggleArchived} />
 		{#if isEditing}
 			<Button
-				type="icon"
-				icon="close"
+				icon={Close}
 				on:click={() => {
 					isPreviewing = false;
 					isEditing = false;
 				}}
 			/>
 		{/if}
-		<Button type="icon" icon="check" on:click={isEditing ? save : createAnnouncement} />
+		<Button icon={Check} on:click={isEditing ? save : createAnnouncement} />
 	{:else}
-		<Button type="icon" icon="delete" on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
-		<Button type="icon" icon="edit" on:click={() => (isEditing = !isEditing)} />
+		<Button icon={Delete} on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
+		<Button icon={Edit} on:click={() => (isEditing = !isEditing)} />
 	{/if}
 </div>
 

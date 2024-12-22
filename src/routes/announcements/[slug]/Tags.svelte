@@ -4,6 +4,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 	import Query from '$lib/components/Query.svelte';
+	import Create from 'svelte-material-icons/Plus.svelte';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -57,7 +58,7 @@
 					}}
 				/>
 				<span>
-					<Button type="icon" icon="create" />
+					<Button icon={Create} />
 				</span>
 			</div>
 		</div>

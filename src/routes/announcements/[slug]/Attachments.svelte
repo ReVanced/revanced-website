@@ -3,6 +3,7 @@
 	import Divider from '$lib/components/Divider.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
 	import { isValidUrl } from '$util/isValidUrl';
+	import Create from 'svelte-material-icons/Plus.svelte';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -75,7 +76,7 @@
 				}}
 			/>
 			<span>
-				<Button type="icon" icon="create" />
+				<Button icon={Create} />
 			</span>
 		</span>
 	</div>

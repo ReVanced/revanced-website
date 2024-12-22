@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 	import type { Tags } from '$lib/types';
 	import Button from '$lib/components/Button.svelte';
+	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	export let tags: Tags;
 	export let expandable: boolean = false;
@@ -51,12 +52,12 @@
 	{#if expandable && tags.length > 1}
 		<li class="button">
 			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
-				<img
+				<div
 					class="expand-arrow"
 					style:transform={showAllTags ? 'rotate(90deg)' : 'rotate(-90deg)'}
-					src="/icons/expand_more.svg"
-					alt="dropdown"
-				/>
+				>
+					<ChevronDown size="24px" color="var(--surface-six)" />
+				</div>
 			</Button>
 		</li>
 	{/if}
