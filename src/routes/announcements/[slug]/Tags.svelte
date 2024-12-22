@@ -58,7 +58,7 @@
 					}}
 				/>
 				<span>
-					<Button icon={Create} />
+					<Button icon={Create} iconColor="var(--text-four)" />
 				</span>
 			</div>
 		</div>

@@ -10,7 +10,7 @@
 
 	import Delete from 'svelte-material-icons/Delete.svelte';
 	import Edit from 'svelte-material-icons/Pencil.svelte';
-	import Archive from 'svelte-material-icons/Archive.svelte';
+	import Archive from 'svelte-material-icons/ArchiveArrowDown.svelte';
 	import Close from 'svelte-material-icons/Close.svelte';
 	import Check from 'svelte-material-icons/Check.svelte';
 	import Show from 'svelte-material-icons/Eye.svelte';
@@ -108,21 +108,38 @@
 
 <div>
 	{#if isEditing || isCreating}
-		<Button icon={isPreviewing ? Hide : Show} on:click={() => (isPreviewing = !isPreviewing)} />
-		<Button icon={archivedAtInput ? Unarchive : Archive} on:click={toggleArchived} />
+		<Button
+			icon={isPreviewing ? Hide : Show}
+			iconColor="var(--secondary)"
+			on:click={() => (isPreviewing = !isPreviewing)}
+		/>
+		<Button
+			icon={archivedAtInput ? Unarchive : Archive}
+			iconColor="var(--secondary)"
+			on:click={toggleArchived}
+		/>
 		{#if isEditing}
 			<Button
 				icon={Close}
+				iconColor="var(--secondary)"
 				on:click={() => {
 					isPreviewing = false;
 					isEditing = false;
 				}}
 			/>
 		{/if}
-		<Button icon={Check} on:click={isEditing ? save : createAnnouncement} />
+		<Button
+			icon={Check}
+			iconColor="var(--secondary)"
+			on:click={isEditing ? save : createAnnouncement}
+		/>
 	{:else}
-		<Button icon={Delete} on:click={() => (showDeleteConfirm = !showDeleteConfirm)} />
-		<Button icon={Edit} on:click={() => (isEditing = !isEditing)} />
+		<Button
+			icon={Delete}
+			iconColor="var(--secondary)"
+			on:click={() => (showDeleteConfirm = !showDeleteConfirm)}
+		/>
+		<Button icon={Edit} iconColor="var(--secondary)" on:click={() => (isEditing = !isEditing)} />
 	{/if}
 </div>
 
@@ -130,5 +147,6 @@
 	div {
 		display: flex;
 		gap: 1rem;
+		color: var(--secondary);
 	}
 </style>

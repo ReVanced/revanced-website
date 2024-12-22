@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { relativeTime } from '$util/relativeTime';
 	import moment from 'moment';
+	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -24,15 +25,7 @@
 	<span>
 		<input type="datetime-local" max="9999-12-31T23:59" bind:value={createdAtInput} />
 		{#if archivedAtInput}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				height="24px"
-				viewBox="0 -960 960 960"
-				width="24px"
-				fill="currentColor"
-			>
-				<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-			</svg>
+			<ArrowRight size="24" />
 			<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtInput} />
 		{/if}
 	</span>
@@ -41,15 +34,7 @@
 		{relativeTime(displayCreatedAt)}
 
 		{#if displayArchivedAt}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				height="24px"
-				viewBox="0 -960 960 960"
-				width="24px"
-				fill="currentColor"
-			>
-				<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-			</svg>
+			<ArrowRight size="24" />
 			{relativeTime(displayArchivedAt)}
 		{/if}
 	</span>

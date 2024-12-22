@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Svg from '$lib/components/Svg.svelte';
+	import Check from 'svelte-material-icons/Check.svelte';
 
 	export let tag: string;
 	export let clickable: boolean = true;
@@ -12,9 +12,7 @@
 <button class:selected class:clickable on:click={clickable ? onClick : () => {}}>
 	{#if selected && clickable}
 		<div class="icon">
-			<Svg viewBoxHeight={48} svgHeight={18}>
-				<path fill="currentColor" d="M18.9 36.4 7 24.5l2.9-2.85 9 9L38.05 11.5l2.9 2.85Z" />
-			</Svg>
+			<Check />
 		</div>
 	{/if}
 	{tag}

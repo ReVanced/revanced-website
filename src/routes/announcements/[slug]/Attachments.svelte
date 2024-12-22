@@ -4,6 +4,7 @@
 	import Gallery from '$lib/components/Gallery.svelte';
 	import { isValidUrl } from '$util/isValidUrl';
 	import Create from 'svelte-material-icons/Plus.svelte';
+	import Delete from 'svelte-material-icons/Delete.svelte';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -48,17 +49,7 @@
 						class:last={index == attachmentsInput.length - 1}
 						on:click={() => removeAttachment(index)}
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							height="24px"
-							viewBox="0 -960 960 960"
-							width="24px"
-							fill="#adc8df"
-						>
-							<path
-								d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"
-							/>
-						</svg>
+						<Delete size="24" color="var(--text-four)" />
 					</button>
 				</div>
 			{/each}
@@ -92,10 +83,6 @@
 		background-color: transparent;
 		border: none;
 		cursor: pointer;
-
-		svg {
-			margin: 0;
-		}
 	}
 
 	input {
