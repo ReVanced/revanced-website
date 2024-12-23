@@ -174,10 +174,7 @@
 <Modal bind:modalOpen={loginOpen}>
 	<div class="admin-modal-content">
 		<h2>Login</h2>
-		<p>
-			This login is reserved for site administrators.
-			for, go back!
-		</p>
+		<p>This login is reserved for site administrators. Go back!</p>
 		{#if wrong_credentials}
 			<p style="color: var(--red-one)">Username or password do not match. Try again.</p>
 		{/if}
