@@ -220,8 +220,7 @@ export const queries = {
 	}),
 	announcementById: (id: number) => ({
 		queryKey: ['announcementById', id],
-		queryFn: () => get_announcement_by_id(id),
-		staleTime
+		queryFn: () => get_announcement_by_id(id)
 	}),
 	announcementTags: () => ({
 		queryKey: ['announcementTags'],
