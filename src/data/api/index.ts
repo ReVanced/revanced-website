@@ -158,24 +158,28 @@ async function announcementTags(): Promise<{ tags: Tags }> {
 	return { tags: (await get_json(`announcements/tags`)) as Tags };
 }
 
+function show_error_alert(res: Response) {
+	alert(`A ${res.status < 500 ? 'user' : 'server'} error occurred. Please try again.`);
+}
+
 export async function create_announcement(announcement: Announcement) {
-	await post_json('announcements', announcement);
+	await post_json('announcements', announcement).catch(show_error_alert);
 }
 
 export async function update_announcement(id: number, announcement: Announcement) {
-	await patch_json(`announcements/${id}`, announcement);
+	await patch_json(`announcements/${id}`, announcement).catch(show_error_alert);
 }
 
 export async function delete_announcement(id: number) {
-	await delete_json(`announcements/${id}`);
+	await delete_json(`announcements/${id}`).catch(show_error_alert);
 }
 
 export async function archive_announcement(id: number) {
-	await post_json(`announcements/${id}/archive`);
+	await post_json(`announcements/${id}/archive`).catch(show_error_alert);
 }
 
 export async function unarchive_announcement(id: number) {
-	await post_json(`announcements/${id}/unarchive`);
+	await post_json(`announcements/${id}/unarchive`).catch(show_error_alert);
 }
 
 export const admin = {
