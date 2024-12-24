@@ -97,8 +97,8 @@
 			>
 				<div id="banner-pad">
 					<Query query={pingQuery()} let:data>
-						<span class="banner">
-							{#if !data}
+						{#if !data}
+							<span class="banner">
 								<Banner level="caution" permanent>
 									The API is currently unresponsive and some services may not work correctly. Check
 									the <a
@@ -107,8 +107,8 @@
 										rel="noopener noreferrer">status page</a
 									> for updates.
 								</Banner>
-							{/if}
-						</span>
+							</span>
+						{/if}
 					</Query>
 				</div>
 
