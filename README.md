@@ -67,22 +67,22 @@ This repository contains the source code of ReVanced Website.
 
 ## ❓ About
 
-ReVanced Website is the front page of ReVanced. 
+ReVanced Website is the front page of ReVanced.
 It is built using Svelte and uses [ReVanced API](https://github.com/ReVanced/revanced-api) as a data source.
 
 ## 💪 Features
 
-Some of the features the website provide are:
+Discover what the ReVanced Website offers:  
 
-* 🔽 **Download latest version of manager**: Download the latest version of [ReVanced Manager](https://github.com/ReVanced/revanced-manager)
-* ♿ **View contributors**: List all the contributors of the project
-* 🔎 **View patches**: List all the patches available in [ReVanced Patches](https://github.com/ReVanced/revanced-patches)
-* ❤️ **Explore donation methods**: Provide way to explore donation methods to support the project
-* ✨ **And much more!**
+- 👥 **View contributors:** Explore the people who make this project possible.
+- 🔧 **Browse first-party patches:** Access a comprehensive list of official ReVanced Patches.
+- ❤️ **Explore donation options:** Find ways to support the project through donations.  
+- 🌐 **Connect with the community:** Follow us on social media and stay updated.
+- 🔽 **Get ReVanced Manager:** Download the latest version of ReVanced Manager with ease.  
 
 ## 🚀 How to get started
 
-ReVanced Website can be deployed locally using `npm run dev` or preview the build using `npm run preview`. 
+ReVanced Website can be deployed locally using `npm run dev` or preview the build using `npm run preview`.
 
 ## 📚 Everything else
 

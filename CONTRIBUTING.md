@@ -5,7 +5,7 @@
       media="(prefers-color-scheme: dark)"
       srcset="assets/revanced-headline/revanced-headline-vertical-dark.svg"
     >
-    <img 
+    <img
       width="256px"
       src="assets/revanced-headline/revanced-headline-vertical-light.svg"
     >
@@ -73,7 +73,7 @@ Features can be requested by opening an issue using the
 [feature request issue template](https://github.com/ReVanced/revanced-website/issues/new?assignees=&labels=feature-request&projects=&template=feature-issue.yml&title=feat%3A+%3Ctitle%3E).
 
 > [!NOTE]
-> Requests can be accepted or rejected at the discretion of maintainers of ReVanced Website. 
+> Requests can be accepted or rejected at the discretion of maintainers of ReVanced Website.
 > Good motivation has to be provided for a request to be accepted.
 
 ## 🐞 Submitting a bug report
