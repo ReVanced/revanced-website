@@ -64,13 +64,15 @@
 <div id="nav-container">
 	<Query query={pingQuery()} let:data>
 		{#if !data}
-			<Banner level="caution" permanent>
-				The API is currently unresponsive and some services may not work correctly. Check the <a
-					href="https://status.revanced.app/"
-					target="_blank"
-					rel="noopener noreferrer">status page</a
-				> for updates.
-			</Banner>
+			<span class="banner">
+				<Banner level="caution" permanent>
+					The API is currently unresponsive and some services may not work correctly. Check the <a
+						href="https://status.revanced.app/"
+						target="_blank"
+						rel="noopener noreferrer">status page</a
+					> for updates.
+				</Banner>
+			</span>
 		{/if}
 	</Query>
 
@@ -95,14 +97,18 @@
 			>
 				<div id="banner-pad">
 					<Query query={pingQuery()} let:data>
-						{#if !data}
-							<Banner level="caution" permanent>
-								The API is currently unresponsive and some services may not work correctly. Check
-								the <a href="https://status.revanced.app/" target="_blank" rel="noopener noreferrer"
-									>status page</a
-								> for updates.
-							</Banner>
-						{/if}
+						<span class="banner">
+							{#if !data}
+								<Banner level="caution" permanent>
+									The API is currently unresponsive and some services may not work correctly. Check
+									the <a
+										href="https://status.revanced.app/"
+										target="_blank"
+										rel="noopener noreferrer">status page</a
+									> for updates.
+								</Banner>
+							{/if}
+						</span>
 					</Query>
 				</div>
 
@@ -162,7 +168,7 @@
 	</svelte:fragment>
 </Modal>
 
-<style>
+<style lang="scss">
 	#logo {
 		padding: 0.5rem;
 	}
@@ -198,9 +204,16 @@
 
 	#nav-container {
 		position: sticky;
-		top: 0;
 		z-index: 666;
 		width: 100%;
+
+		&:has(.nav-buttons > li:first-child.selected) {
+			margin-bottom: 2.65rem;
+
+			&:has(.banner) {
+				margin-bottom: 1.5rem;
+			}
+		}
 	}
 
 	nav {
@@ -269,6 +282,10 @@
 			display: block;
 			width: 100vw;
 			visibility: hidden;
+		}
+
+		#nav-container:has(.nav-buttons > li:first-child.selected):has(.banner) {
+			margin-bottom: 0rem;
 		}
 
 		#nav-wrapper-container {
