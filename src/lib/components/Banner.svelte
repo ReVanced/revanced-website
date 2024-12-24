@@ -1,9 +1,14 @@
 <script lang="ts">
+	import Info from 'svelte-material-icons/InformationOutline.svelte';
+	import Warning from 'svelte-material-icons/AlertOutline.svelte';
+	import Caution from 'svelte-material-icons/AlertCircleOutline.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Button from './Button.svelte';
 
 	export let level: 'info' | 'warning' | 'caution' = 'info';
 	export let permanent: boolean = false;
+
+	const icons = { info: Info, warning: Warning, caution: Caution };
 
 	const dispatch = createEventDispatcher();
 	let closed: boolean = false;
@@ -17,7 +22,7 @@
 <div class="banner-container" class:closed class:permanent>
 	<div class="banner {level}">
 		<div class="banner-text">
-			<img src="../icons/{level}.svg" alt="{level}-icon" />
+			<svelte:component this={icons[level]} size={permanent ? 22.4 : 32} />
 			<span><slot /></span>
 		</div>
 		{#if !permanent}
@@ -89,15 +94,6 @@
 		word-wrap: break-word;
 	}
 
-	.banner-text > img {
-		height: 2rem;
-		width: auto;
-	}
-
-	.banner-container.permanent .banner-text > img {
-		height: 1.4rem;
-	}
-
 	.banner.info {
 		background-color: var(--surface-four);
 		color: var(--text-one);
@@ -112,8 +108,7 @@
 		color: #000;
 	}
 
-	.banner.warning > :global(button img),
-	.banner.warning > .banner-text > img {
+	.banner.warning > :global(button img) {
 		filter: grayscale(1) brightness(0); /* Make the icon black */
 	}
 
@@ -126,9 +121,7 @@
 		color: #000;
 	}
 
-	.banner.caution > :global(button img),
-	.banner.caution > .banner-text > img,
-	.banner.info > .banner-text > img {
+	.banner.caution > :global(button img) {
 		filter: grayscale(1) brightness(0); /* Make the icon white */
 	}
 
