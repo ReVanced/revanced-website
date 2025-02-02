@@ -122,30 +122,23 @@
 	]}
 />
 
-<main>
+<main style={scrollY > 50 ? '' : `height: 100vh;`}>
 	<div class="wrap">
 		<div class="wrappezoid">
 			<Home />
 			<div id="heroimg"><HeroImage /></div>
 		</div>
 	</div>
-	<div class="hide-on-scroll socials" class:hidden={scrollY > 50}>
+	<div class="hide-on-scroll" class:hidden={scrollY > 50}>
+		<Wave />
 		<SocialHost />
 	</div>
 </main>
-<div class="hide-on-scroll wave" class:hidden={scrollY > 50}>
-	<Wave />
-</div>
 <div class="footer">
 	<Footer />
 </div>
 
 <style lang="scss">
-	.wave {
-		z-index: -999;
-		position: absolute;
-	}
-
 	.hide-on-scroll {
 		transition: opacity 0.25s var(--bezier-one);
 
@@ -157,8 +150,7 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		margin-bottom: 3rem;
+		gap: 3rem;
 	}
 	.wrap {
 		margin-inline: auto;
