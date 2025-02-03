@@ -5,11 +5,36 @@
 	import Wave from '$lib/components/Wave.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import { onMount } from 'svelte';
 
 	let scrollY = 0;
+	let footerVisible = false;
+
+	function handleScroll() {
+		if (scrollY === 10) {
+			footerVisible = false;
+		}
+	}
+
+	onMount(() => {
+		const footer = document.querySelector(
+			'#skiptab > div > footer > div.footer-top.s-X6C5cGk-sppI'
+		);
+
+		if (footer) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					footerVisible = entries[0].isIntersecting;
+				},
+				{ threshold: 0.1 }
+			);
+
+			observer.observe(footer);
+		}
+	});
 </script>
 
-<svelte:window bind:scrollY />
+<svelte:window bind:scrollY on:scroll={handleScroll} />
 
 <Head
 	schemas={[
@@ -122,25 +147,26 @@
 	]}
 />
 
-<main style={scrollY > 50 ? '' : `height: 100vh;`}>
+<main style={footerVisible ? '' : `height: 100vh;`}>
 	<div class="wrap">
 		<div class="wrappezoid">
 			<Home />
 			<div id="heroimg"><HeroImage /></div>
 		</div>
 	</div>
-	<div class="hide-on-scroll" class:hidden={scrollY > 50}>
+	<div class="hide-on-scroll" class:hidden={footerVisible}>
 		<Wave />
 		<SocialHost />
 	</div>
 </main>
 <div class="footer">
-	<Footer />
+	<Footer showDivider={footerVisible ? true : false} />
 </div>
 
 <style lang="scss">
 	.hide-on-scroll {
 		transition: opacity 0.25s var(--bezier-one);
+		z-index: -999;
 
 		&.hidden {
 			height: 0;
@@ -150,7 +176,8 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		gap: 3rem;
+		gap: 1.5rem;
+		margin-bottom: 3rem;
 	}
 	.wrap {
 		margin-inline: auto;
@@ -168,6 +195,7 @@
 	.footer {
 		background-color: var(--background-one);
 	}
+
 	@media (max-width: 1700px) {
 		.wrappezoid {
 			justify-content: space-between;
