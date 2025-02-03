@@ -11,27 +11,13 @@
 	let footerVisible = false;
 
 	function handleScroll() {
-		if (scrollY === 10) {
+		console.log(scrollY);
+		if (scrollY <= 10) {
 			footerVisible = false;
+		} else {
+			footerVisible = true;
 		}
 	}
-
-	onMount(() => {
-		const footer = document.querySelector(
-			'#skiptab > div > footer > div.footer-top.s-X6C5cGk-sppI'
-		);
-
-		if (footer) {
-			const observer = new IntersectionObserver(
-				(entries) => {
-					footerVisible = entries[0].isIntersecting;
-				},
-				{ threshold: 0.1 }
-			);
-
-			observer.observe(footer);
-		}
-	});
 </script>
 
 <svelte:window bind:scrollY on:scroll={handleScroll} />
@@ -147,7 +133,7 @@
 	]}
 />
 
-<main style={footerVisible ? '' : `height: 100vh;`}>
+<main style={footerVisible ? '' : `height: 100vh;`} class:hidden={footerVisible}>
 	<div class="wrap">
 		<div class="wrappezoid">
 			<Home />
@@ -165,7 +151,7 @@
 
 <style lang="scss">
 	.hide-on-scroll {
-		transition: opacity 0.25s var(--bezier-one);
+		transition: opacity 0.5s var(--bezier-one);
 		z-index: -999;
 
 		&.hidden {
@@ -178,6 +164,14 @@
 		flex-direction: column;
 		gap: 1.5rem;
 		margin-bottom: 3rem;
+		transition:
+			gap 0.5s var(--bezier-one),
+			margin-bottom 0.5s var(--bezier-one);
+
+		&.hidden {
+			gap: 0rem;
+			margin-bottom: 0rem;
+		}
 	}
 	.wrap {
 		margin-inline: auto;
