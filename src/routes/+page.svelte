@@ -5,22 +5,14 @@
 	import Wave from '$lib/components/Wave.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
-	import { onMount } from 'svelte';
 
 	let scrollY = 0;
 	let footerVisible = false;
 
-	function handleScroll() {
-		console.log(scrollY);
-		if (scrollY <= 10) {
-			footerVisible = false;
-		} else {
-			footerVisible = true;
-		}
-	}
+	$: footerVisible = scrollY >= 10;
 </script>
 
-<svelte:window bind:scrollY on:scroll={handleScroll} />
+<svelte:window bind:scrollY />
 
 <Head
 	schemas={[
