@@ -33,7 +33,11 @@ export function api_base_url(): string {
 }
 
 export function status_url(): string | null {
-	return localStorage.getItem(STATUS_KEY) || null;
+	if (browser) {
+		return localStorage.getItem(STATUS_KEY) || null;
+	}
+
+	return null;
 }
 
 // (re)set base URL.
