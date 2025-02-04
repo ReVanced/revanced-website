@@ -22,7 +22,7 @@ export function api_base_url(): string {
 	if (browser) {
 		const apiUrl = localStorage.getItem(URL_KEY) || default_api_url;
 
-		if (!localStorage.getItem(STATUS_KEY) || localStorage.getItem(STATUS_KEY) == undefined) {
+		if (!localStorage.getItem(STATUS_KEY)) {
 			set_status_url(apiUrl);
 		}
 
