@@ -75,8 +75,12 @@ async function about(): Promise<AboutData> {
 }
 
 async function ping(): Promise<boolean> {
-	const res = await fetch(`${settings.api_base_url()}/v3/ping`, { method: 'HEAD' });
-	return res.ok;
+	try {
+		const res = await fetch(`${settings.api_base_url()}/v4/ping`, { method: 'HEAD' });
+		return res.ok;
+	} catch (error) {
+		return false;
+	}
 }
 
 export const staleTime = 5 * 60 * 1000;
