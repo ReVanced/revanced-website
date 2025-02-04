@@ -14,7 +14,7 @@
 	import Cog from 'svelte-material-icons/Cog.svelte';
 	import Replay from 'svelte-material-icons/Replay.svelte';
 
-	import { api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
+	import { status_url, api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
 	import { queries } from '$data/api';
 
@@ -35,6 +35,7 @@
 	}
 
 	let url = api_base_url();
+	const statusUrl = status_url();
 
 	function save() {
 		set_api_base_url(url);
@@ -66,11 +67,10 @@
 		{#if !data}
 			<span class="banner">
 				<Banner level="caution" permanent>
-					The API is currently unresponsive and some services may not work correctly. Check the <a
-						href="https://status.revanced.app/"
-						target="_blank"
-						rel="noopener noreferrer">status page</a
-					> for updates.
+					The API is currently unresponsive and some services may not work correctly. {#if statusUrl}
+						Check the <a href={statusUrl} target="_blank" rel="noopener noreferrer">status page</a> for
+						updates.
+					{/if}
 				</Banner>
 			</span>
 		{/if}
@@ -100,12 +100,11 @@
 						{#if !data}
 							<span class="banner">
 								<Banner level="caution" permanent>
-									The API is currently unresponsive and some services may not work correctly. Check
-									the <a
-										href="https://status.revanced.app/"
-										target="_blank"
-										rel="noopener noreferrer">status page</a
-									> for updates.
+									The API is currently unresponsive and some services may not work correctly. {#if statusUrl}
+										Check the
+										<a href={statusUrl} target="_blank" rel="noopener noreferrer">status page</a> for
+										updates.
+									{/if}
 								</Banner>
 							</span>
 						{/if}
