@@ -11,6 +11,8 @@
 	import { RV_DMCA_GUID } from '$env/static/public';
 	import { onMount } from 'svelte';
 
+	export let showDivider = true;
+
 	const aboutQuery = createQuery(queries.about());
 
 	let location: string;
@@ -22,7 +24,9 @@
 </script>
 
 <!-- squiggly divider line -->
-<Divider />
+{#if showDivider}
+	<Divider />
+{/if}
 <footer in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<div class="footer-top">
 		<section class="main-content">

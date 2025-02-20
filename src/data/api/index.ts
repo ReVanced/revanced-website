@@ -190,6 +190,15 @@ export const admin = {
 	unarchive_announcement
 };
 
+async function ping(): Promise<boolean> {
+	try {
+		const res = await fetch(`${settings.api_base_url()}/v4/ping`, { method: 'HEAD' });
+		return res.ok;
+	} catch (error) {
+		return false;
+	}
+}
+
 export const staleTime = 5 * 60 * 1000;
 export const queries = {
 	manager: () => ({
@@ -229,6 +238,11 @@ export const queries = {
 	announcementTags: () => ({
 		queryKey: ['announcementTags'],
 		queryFn: () => announcementTags(),
+		staleTime
+	}),
+	ping: () => ({
+		queryKey: ['ping'],
+		queryFn: ping,
 		staleTime
 	})
 };

@@ -3,18 +3,22 @@
 	import { horizontalSlide } from '$util/horizontalSlide';
 	import { fade } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
+	import { createQuery } from '@tanstack/svelte-query';
 
 	import Navigation from './NavButton.svelte';
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Banner from '$lib/components/Banner.svelte';
+	import Query from '$lib/components/Query.svelte';
 
 	import Cog from 'svelte-material-icons/Cog.svelte';
 	import Replay from 'svelte-material-icons/Replay.svelte';
 
-	import { api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
+	import { status_url, api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
 	import RouterEvents from '$data/RouterEvents';
 	import { admin_login } from '$lib/stores';
 	import { fromNow } from '$util/fromNow';
+	import { queries } from '$data/api';
 
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import { login, set_access_token } from '$lib/auth';
@@ -35,6 +39,7 @@
 	}
 
 	let url = api_base_url();
+	const statusUrl = status_url();
 
 	function save() {
 		set_api_base_url(url);
@@ -71,6 +76,7 @@
 		set_access_token();
 		session_expired = !session_expired;
 	}
+	const pingQuery = () => createQuery(['ping'], queries.ping);
 
 	onMount(() => {
 		return RouterEvents.subscribe((event) => {
@@ -81,61 +87,96 @@
 
 <svelte:window bind:scrollY={y} />
 
-<nav class:scrolled={y > 10}>
-	<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>
+<div id="nav-container">
+	<Query query={pingQuery()} let:data>
+		{#if !data}
+			<span class="banner">
+				<Banner level="caution" permanent>
+					The API is currently unresponsive and some services may not work correctly. {#if statusUrl}
+						Check the <a href={statusUrl} target="_blank" rel="noopener noreferrer">status page</a> for
+						updates.
+					{/if}
+				</Banner>
+			</span>
+		{/if}
+	</Query>
 
-	<button
-		class="menu-btn mobile-only"
-		on:click={() => (menuOpen = !menuOpen)}
-		class:open={menuOpen}
-		aria-label="Menu"
-	>
-		<span class="menu-btn__burger" />
-	</button>
-	<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
+	<nav class:scrolled={y > 10}>
+		<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>
 
-	{#key menuOpen}
-		<div
-			class="nav-wrapper"
-			class:desktop-only={!menuOpen}
-			transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
-		>
-			<div id="main-navigation">
-				<ul class="nav-buttons">
-					<Navigation href="/" label="Home">Home</Navigation>
-					<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
-					<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
-					<Navigation
-						queryKey={['announcements', 'announcementTags']}
-						href="/announcements"
-						label="Announcements"
-					>
-						Announcements
-					</Navigation>
-					<Navigation queryKey="contributors" href="/contributors" label="Contributors">
-						Contributors
-					</Navigation>
-					<Navigation queryKey={['about', 'team']} href="/donate" label="Donate">Donate</Navigation>
-				</ul>
-			</div>
-			<div id="secondary-navigation">
-				<button on:click={() => (modalOpen = !modalOpen)} aria-label="Settings">
-					<Cog size="20px" color="var(--surface-six)" />
-				</button>
-			</div>
-		</div>
-	{/key}
-
-	{#if menuOpen}
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<div
-			class="overlay mobile-only"
-			transition:fade={{ duration: 350 }}
+		<button
+			class="menu-btn mobile-only"
 			on:click={() => (menuOpen = !menuOpen)}
-			on:keypress={() => (menuOpen = !menuOpen)}
-		/>
-	{/if}
-</nav>
+			class:open={menuOpen}
+			aria-label="Menu"
+		>
+			<span class="menu-btn__burger" />
+		</button>
+		<a href="/" id="logo"><img src="/logo.svg" alt="ReVanced Logo" /></a>
+
+		{#key menuOpen}
+			<div
+				id="nav-wrapper-container"
+				class:desktop-only={!menuOpen}
+				transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
+			>
+				<div id="banner-pad">
+					<Query query={pingQuery()} let:data>
+						{#if !data}
+							<span class="banner">
+								<Banner level="caution" permanent>
+									The API is currently unresponsive and some services may not work correctly. {#if statusUrl}
+										Check the
+										<a href={statusUrl} target="_blank" rel="noopener noreferrer">status page</a> for
+										updates.
+									{/if}
+								</Banner>
+							</span>
+						{/if}
+					</Query>
+				</div>
+
+				<div class="nav-wrapper">
+					<div id="main-navigation">
+						<ul class="nav-buttons">
+							<Navigation href="/" label="Home">Home</Navigation>
+							<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
+							<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
+							<Navigation
+								queryKey={['announcements', 'announcementTags']}
+								href="/announcements"
+								label="Announcements"
+							>
+								Announcements
+							</Navigation>
+							<Navigation queryKey="contributors" href="/contributors" label="Contributors">
+								Contributors
+							</Navigation>
+							<Navigation queryKey={['about', 'team']} href="/donate" label="Donate"
+								>Donate</Navigation
+							>
+						</ul>
+					</div>
+					<div id="secondary-navigation">
+						<button on:click={() => (modalOpen = !modalOpen)} aria-label="Settings">
+							<Cog size="20px" color="var(--surface-six)" />
+						</button>
+					</div>
+				</div>
+			</div>
+		{/key}
+
+		{#if menuOpen}
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<div
+				class="overlay mobile-only"
+				transition:fade={{ duration: 350 }}
+				on:click={() => (menuOpen = !menuOpen)}
+				on:keypress={() => (menuOpen = !menuOpen)}
+			/>
+		{/if}
+	</nav>
+</div>
 
 <!-- settings -->
 <Modal bind:modalOpen>
@@ -230,7 +271,6 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 1rem;
-
 		div {
 			display: flex;
 			justify-content: flex-end;
@@ -238,42 +278,34 @@
 			gap: 2rem;
 		}
 	}
-
 	.session-expired {
 		color: var(--text-four);
 	}
-
 	.login-success {
 		color: var(--text-one);
 	}
-
 	.admin-wrapper {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
 		color: var(--text-one);
 	}
-
 	.exp-date {
 		color: var(--primary);
 	}
-
 	.admin-modal-content {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
 		position: relative;
 	}
-
 	.admin-modal-content > h2 {
 		color: var(--primary);
 	}
-
 	.admin-modal-content > form {
 		display: flex;
 		gap: 1rem;
 	}
-
 	.admin-modal-content > form > div:has(input) {
 		display: flex;
 		flex-direction: column;
@@ -281,7 +313,6 @@
 		margin-bottom: 1rem;
 		width: 100%;
 	}
-
 	.admin-modal-content > form > div:has(svg) {
 		display: flex;
 		align-items: center;
@@ -322,15 +353,26 @@
 		top: 30px;
 	}
 
+	#nav-container {
+		position: sticky;
+		z-index: 666;
+		width: 100%;
+
+		&:has(.nav-buttons > li:first-child.selected) {
+			margin-bottom: 2.65rem;
+
+			&:has(.banner) {
+				margin-bottom: 1.5rem;
+			}
+		}
+	}
+
 	nav {
-		position: fixed;
-		top: 0;
 		display: flex;
 		gap: 2rem;
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem 2rem;
-		z-index: 666;
 		height: 70px;
 		background-color: var(--surface-eight);
 		width: 100%;
@@ -341,10 +383,6 @@
 		align-items: center;
 		display: flex;
 		gap: 2rem;
-	}
-
-	a {
-		display: flex;
 	}
 
 	img {
@@ -382,21 +420,45 @@
 		}
 	}
 
+	#banner-pad {
+		display: none;
+	}
+
+	#nav-wrapper-container {
+		width: 100%;
+	}
+
 	@media (max-width: 767px) {
+		#banner-pad {
+			display: block;
+			width: 100vw;
+			visibility: hidden;
+		}
+
+		#nav-container:has(.nav-buttons > li:first-child.selected):has(.banner) {
+			margin-bottom: 0rem;
+		}
+
+		#nav-wrapper-container {
+			overflow: hidden;
+			position: fixed;
+			width: 20rem;
+			top: 0;
+			left: 0;
+			height: 100%;
+			background-color: var(--surface-eight);
+			z-index: 100;
+		}
+
 		.nav-wrapper {
 			flex-direction: column;
 			gap: 0.5rem;
 			height: 100%;
 			margin: 0 auto;
-			position: fixed;
 			width: 20rem;
-			top: 0px;
 			border-radius: 0px 24px 24px 0px;
-			left: 0px;
-			background-color: var(--surface-eight);
 			padding: 1rem;
 			padding-top: 6rem;
-			z-index: 100;
 		}
 
 		.desktop-only {
