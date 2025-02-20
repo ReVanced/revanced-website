@@ -14,7 +14,7 @@
 	$: {
 		const lastSegment = $page.url.pathname.split('/').pop();
 		isCreating = lastSegment === 'create';
-		announcementIdNumber = isCreating ? undefined : Number(lastSegment);
+		announcementIdNumber = isCreating ? undefined : Number(lastSegment.split('-')[0]);
 	}
 
 	$: query = announcementIdNumber
@@ -22,6 +22,20 @@
 		: null;
 
 	$: announcement = $query?.data?.announcement || undefined;
+
+	$: slug = announcement?.title
+		? announcement.title
+				.toLowerCase()
+				.replace(/[^a-z0-9]+/g, '-')
+				.replace(/^-+|-+$/g, '')
+		: '';
+
+	$: {
+		const slugPathname = `/announcements/${announcementIdNumber}-${slug}`;
+		if (slug && $page.url.pathname !== slugPathname) {
+			window.history.replaceState(null, '', slugPathname);
+		}
+	}
 </script>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>

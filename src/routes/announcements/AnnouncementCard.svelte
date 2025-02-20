@@ -33,6 +33,13 @@
 		localStorage.setItem('read_announcements', JSON.stringify(Array.from($read_announcements)));
 	}
 
+	function generateSlug(title: string) {
+		return title
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-+|-+$/g, '');
+	}
+
 	onMount(() => {
 		isRead = $read_announcements.has(announcement.id);
 	});
@@ -43,7 +50,7 @@
 <a
 	data-sveltekit-preload-data
 	on:mouseenter={prefetch}
-	href="/announcements/{announcement.id}"
+	href={`/announcements/${announcement.id}-${generateSlug(announcement.title)}`}
 	on:click={setAnnouncementRead}
 >
 	<div
