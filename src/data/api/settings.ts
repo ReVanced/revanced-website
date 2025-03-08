@@ -17,6 +17,8 @@ function set_status_url(apiUrl: string) {
 		});
 }
 
+export const API_VERSION = 'v4';
+
 // Get base URL
 export function api_base_url(): string {
 	if (browser) {

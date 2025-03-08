@@ -46,6 +46,7 @@
 		"@tanstack/query-sync-storage-persister": "^4.36.1",
 		"@tanstack/svelte-query": "^4.36.1",
 		"datetrigger": "^1.1.1",
+		"moment": "^2.30.1",
 		"svelte-material-icons": "^3.0.5"
 	}
 }

@@ -17,7 +17,7 @@
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
 
-	const query = createQuery(['manager'], queries.manager);
+	const query = createQuery(queries.manager());
 
 	let warning: string;
 	let warningDialogue = false;

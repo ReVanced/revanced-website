@@ -1,3 +1,19 @@
+export type ResponseAnnouncement = {
+	archived_at?: string;
+	attachments?: string[];
+	author?: string;
+	tags?: string[];
+	content?: string;
+	created_at: string;
+	id: number;
+	level?: number;
+	title: string;
+};
+
+export type Announcement = Omit<ResponseAnnouncement, 'id'>;
+
+export type Tags = { name: string }[];
+
 export interface Contributor {
 	name: string;
 	avatar_url: string;

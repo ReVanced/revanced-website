@@ -22,8 +22,8 @@
 
 	import { supportsWebP } from '$util/supportsWebP';
 
-	const teamQuery = createQuery(['team'], queries.team);
-	const aboutQuery = createQuery(['about'], queries.about);
+	const teamQuery = createQuery(queries.team());
+	const aboutQuery = createQuery(queries.about());
 
 	let qrCodeDialogue = false;
 	let cryptoDialogue = false;

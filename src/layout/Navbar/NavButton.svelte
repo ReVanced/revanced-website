@@ -14,12 +14,12 @@
 		if (queryKey !== null) {
 			if (Array.isArray(queryKey)) {
 				queryKey.forEach((key) => {
-					const query = queries[key];
+					const query = (queries[key] as Function)();
 					dev_log('Prefetching', query);
 					client.prefetchQuery(query as any);
 				});
 			} else {
-				const query = queries[queryKey];
+				const query = (queries[queryKey] as Function)();
 				dev_log('Prefetching', query);
 				client.prefetchQuery(query as any);
 			}
@@ -27,20 +27,40 @@
 	}
 </script>
 
-<li class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}>
+<li
+	class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}
+	class:unclickable={$RouterEvents.target_url.pathname === href}
+>
 	<a data-sveltekit-preload-data on:mouseenter={prefetch} {href} aria-label={label}>
-		<!-- Check if href is equal to the first path -->
 		<span><slot /></span>
 	</a>
 </li>
 
-<style>
+<style lang="scss">
 	li {
 		list-style: none;
 		position: relative;
 		transition-timing-function: var(--bezier-one);
 		transition-duration: 0.25s;
 		border-radius: 10px;
+
+		&.selected {
+			background-color: var(--tertiary);
+			color: var(--primary);
+
+			span {
+				color: var(--primary);
+			}
+		}
+
+		&.unclickable {
+			pointer-events: none;
+		}
+
+		:hover {
+			color: var(--text-one);
+			background-color: var(--surface-three);
+		}
 	}
 
 	a {
@@ -58,21 +78,6 @@
 		font-size: 0.9rem;
 		letter-spacing: 0.02rem;
 		color: var(--text-four);
-	}
-
-	li:hover {
-		color: var(--text-one);
-		background-color: var(--surface-three);
-	}
-
-	li.selected {
-		background-color: var(--tertiary);
-		color: var(--primary);
-		pointer-events: none;
-	}
-
-	li.selected span {
-		color: var(--primary);
 	}
 
 	@media (max-width: 767px) {
