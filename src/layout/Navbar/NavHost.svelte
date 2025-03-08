@@ -10,6 +10,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Banner from '$lib/components/Banner.svelte';
 	import Query from '$lib/components/Query.svelte';
+	import AnnouncementBanner from '../../routes/announcements/AnnouncementBanner.svelte';
 
 	import Cog from 'svelte-material-icons/Cog.svelte';
 	import Replay from 'svelte-material-icons/Replay.svelte';
@@ -100,6 +101,8 @@
 			</span>
 		{/if}
 	</Query>
+
+	<AnnouncementBanner />
 
 	<nav class:scrolled={y > 10}>
 		<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>

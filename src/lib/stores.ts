@@ -1,5 +1,6 @@
 import { readable, writable } from 'svelte/store';
 import { is_logged_in, get_access_token } from './auth';
+import { browser } from '$app/environment';
 
 type AdminLoginInfo =
 	| {
@@ -37,7 +38,9 @@ export const admin_login = readable<AdminLoginInfo>(admin_login_info(), (set) =>
 	return () => clearInterval(interval);
 });
 
-export const read_announcements = writable(new Set<number>(), (set) => {
+export const read_announcements = writable<Set<number>>(new Set(), (set) => {
+	if (!browser) return;
+
 	const key = 'read_announcements';
 	const data = localStorage.getItem(key);
 	const parsedArray = data ? JSON.parse(data) : [];
