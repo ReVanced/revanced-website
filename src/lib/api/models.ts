@@ -20,17 +20,20 @@ export type BackendAnnouncement = {
 	title: string;
 };
 
-export type BackendLatestPatchesRelease = {
+type BackendAssetRelease = {
 	created_at: Date;
 	description: string;
 	download_url: string;
-	signature_download_url?: string;
 	version: string;
 };
+export type BackendLatestPatchesRelease = BackendAssetRelease & { signature_download_url?: string };
+export type BackendLatestManagerRelease = BackendAssetRelease;
 
-export type BackendLatestPatchesVersion = {
+type BackendAssetVersion = {
 	version: string;
 };
+export type BackendLatestPatchesVersion = BackendAssetVersion;
+export type BackendLatestManagerVersion = BackendAssetVersion;
 
 export type BackendCompatiblePackage = Record<string, string[]>;
 export type BackendPatchOptionValue = Record<string, string | number>;
@@ -47,12 +50,6 @@ export type BackendPatch = {
 	options: BackendPatchOption[];
 };
 
-// TODO
-
-export type BackendAssetPublicKey = {
-	patches_public_key: string;
-};
-
 export type BackendToken = {
 	token: string;
 };
@@ -63,7 +60,6 @@ export type BackendContributor = {
 	name: string;
 	url: string;
 };
-
 export type BackendContributable = {
 	contributors: BackendContributor[];
 	name: string;
@@ -74,8 +70,7 @@ export type BackendGpgKey = {
 	id: string;
 	url: string;
 };
-
-export type BackendMember = {
+export type BackendTeamMember = {
 	avatar_url: string;
 	bio?: string;
 	gpg_key?: BackendGpgKey;
@@ -83,46 +78,28 @@ export type BackendMember = {
 	url: string;
 };
 
-export type BackendAboutBranding = {
-	logo: string;
-};
-
-export type BackendAboutContact = {
+type BackendAboutContact = {
 	email: string;
 };
-
-export type BackendAboutLink = {
+type BackendAboutUrl = {
 	name: string;
-	preferred?: boolean;
+	preferred: boolean;
 	url: string;
 };
-
-export type BackendAboutWallet = {
+type BackendAboutWallet = {
 	address: string;
 	currency_code: string;
 	network: string;
-	preferred?: boolean;
+	preferred: boolean;
 };
-
-export type BackendAboutDonations = {
-	links?: BackendAboutLink[];
-	wallets?: BackendAboutWallet[];
+type BackendAboutDonations = {
+	links: BackendAboutUrl[];
+	wallets: BackendAboutWallet[];
 };
-
-export type BackendAboutSocial = {
-	name: string;
-	preferred?: boolean;
-	url: string;
-};
-
 export type BackendAbout = {
-	about: string;
-	branding?: BackendAboutBranding;
-	contact?: BackendAboutContact;
-	donations?: BackendAboutDonations;
-	keys: string;
-	name: string;
-	socials?: BackendAboutSocial[];
+	contact: BackendAboutContact;
+	donations: BackendAboutDonations;
+	socials: BackendAboutUrl[];
 	status: string;
 };
 
