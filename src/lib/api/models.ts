@@ -29,11 +29,9 @@ type BackendAssetRelease = {
 export type BackendLatestPatchesRelease = BackendAssetRelease & { signature_download_url?: string };
 export type BackendLatestManagerRelease = BackendAssetRelease;
 
-type BackendAssetVersion = {
+export type BackendAssetVersion = {
 	version: string;
 };
-export type BackendLatestPatchesVersion = BackendAssetVersion;
-export type BackendLatestManagerVersion = BackendAssetVersion;
 
 export type BackendCompatiblePackage = Record<string, string[]>;
 export type BackendPatchOptionValue = Record<string, string | number>;
