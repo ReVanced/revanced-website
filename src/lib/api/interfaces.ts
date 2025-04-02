@@ -9,18 +9,13 @@ export interface AnnouncementsApi {
 	getLatestAnnouncement(tag?: string): Promise<models.BackendResponseAnnouncement[]>;
 	getLatestAnnouncementIds(tag?: string): Promise<models.BackendResponseAnnouncement[]>;
 	getAnnouncement(id: number): Promise<models.BackendResponseAnnouncement>;
-	createAnnouncement(
-		announcement: models.BackendAnnouncement,
-		username: string,
-		password: string
-	): Promise<void>;
+	createAnnouncement(announcement: models.BackendAnnouncement, authToken: string): Promise<void>;
 	updateAnnouncement(
 		id: number,
 		announcement: models.BackendAnnouncement,
-		username: string,
-		password: string
+		authToken: string
 	): Promise<void>;
-	deleteAnnouncement(id: number, username: string, password: string): Promise<void>;
+	deleteAnnouncement(id: number, authToken: string): Promise<void>;
 	getAnnouncementTags(): Promise<string[]>;
 }
 
