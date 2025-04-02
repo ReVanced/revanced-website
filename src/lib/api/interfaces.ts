@@ -40,7 +40,7 @@ export interface GeneralApi {
 }
 
 // unified API interface
-export interface RevancedApi {
+export interface ReVancedApi {
 	announcements: AnnouncementsApi;
 	patches: PatchesApi;
 	manager: ManagerApi;
