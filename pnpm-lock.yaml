@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      svelte-material-icons:
+        specifier: ^3.0.5
+        version: 3.0.5(svelte@5.25.3)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -1119,6 +1123,11 @@ packages:
       svelte:
         optional: true
 
+  svelte-material-icons@3.0.5:
+    resolution: {integrity: sha512-UbhAa+Btd5y6e6DMljVccP+cbJ8lvesltMippiCOvfIUtYe2TsQqM+P6osfrVsZHV47b1tY6AmqCuSpMKnwMOQ==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0
+
   svelte@5.25.3:
     resolution: {integrity: sha512-J9rcZ/xVJonAoESqVGHHZhrNdVbrCfkdB41BP6eiwHMoFShD9it3yZXApVYMHdGfCshBsZCKsajwJeBbS/M1zg==}
     engines: {node: '>=18'}
@@ -2178,6 +2187,10 @@ snapshots:
       postcss-scss: 4.0.9(postcss@8.5.3)
       postcss-selector-parser: 7.1.0
     optionalDependencies:
+      svelte: 5.25.3
+
+  svelte-material-icons@3.0.5(svelte@5.25.3):
+    dependencies:
       svelte: 5.25.3
 
   svelte@5.25.3:
