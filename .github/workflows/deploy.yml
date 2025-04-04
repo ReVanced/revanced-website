@@ -52,7 +52,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy './build' --project-name=revanced-website
+          command: pages deploy build --project-name=revanced-website
 
       - name: Comment deployment URL
         if: ${{ github.event_name == 'pull_request' }}
