@@ -10,7 +10,7 @@ const config = {
 			$components: './src/lib/components',
 			$api: './src/lib/api',
 			$lib: './src/lib',
-			$types: './src/lib/types.ts'
+			$types: './src/lib/types.d.ts'
 		}
 	}
 };

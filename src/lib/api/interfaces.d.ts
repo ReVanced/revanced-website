@@ -1,4 +1,4 @@
-import type * as Models from './models';
+import type * as Models from '$api/models';
 
 export interface AnnouncementsApi {
 	getAnnouncements(
