@@ -1,18 +1,18 @@
-import type * as models from './models';
+import type * as Models from './models';
 
 export interface AnnouncementsApi {
 	getAnnouncements(
 		cursor?: number,
 		count?: number,
 		tag?: string
-	): Promise<models.BackendResponseAnnouncement[]>;
-	getLatestAnnouncement(tag?: string): Promise<models.BackendResponseAnnouncement[]>;
-	getLatestAnnouncementIds(tag?: string): Promise<models.BackendResponseAnnouncement[]>;
-	getAnnouncement(id: number): Promise<models.BackendResponseAnnouncement>;
-	createAnnouncement(announcement: models.BackendAnnouncement, authToken: string): Promise<void>;
+	): Promise<Models.BackendResponseAnnouncement[]>;
+	getLatestAnnouncement(tag?: string): Promise<Models.BackendResponseAnnouncement[]>;
+	getLatestAnnouncementIds(tag?: string): Promise<Models.BackendResponseAnnouncement[]>;
+	getAnnouncement(id: number): Promise<Models.BackendResponseAnnouncement>;
+	createAnnouncement(announcement: Models.BackendAnnouncement, authToken: string): Promise<void>;
 	updateAnnouncement(
 		id: number,
-		announcement: models.BackendAnnouncement,
+		announcement: Models.BackendAnnouncement,
 		authToken: string
 	): Promise<void>;
 	deleteAnnouncement(id: number, authToken: string): Promise<void>;
@@ -20,23 +20,23 @@ export interface AnnouncementsApi {
 }
 
 export interface PatchesApi {
-	getCurrentRelease(prerelease?: boolean): Promise<models.BackendLatestPatchesRelease>;
-	getCurrentReleaseVersion(prerelease?: boolean): Promise<models.BackendAssetVersion>;
-	getPatchesList(prerelease?: boolean): Promise<models.BackendPatch[]>;
+	getCurrentRelease(prerelease?: boolean): Promise<Models.BackendLatestPatchesRelease>;
+	getCurrentReleaseVersion(prerelease?: boolean): Promise<Models.BackendAssetVersion>;
+	getPatchesList(prerelease?: boolean): Promise<Models.BackendPatch[]>;
 }
 
 export interface ManagerApi {
-	getCurrentRelease(prerelease?: boolean): Promise<models.BackendLatestManagerRelease>;
-	getCurrentReleaseVersion(prerelease?: boolean): Promise<models.BackendAssetVersion>;
+	getCurrentRelease(prerelease?: boolean): Promise<Models.BackendLatestManagerRelease>;
+	getCurrentReleaseVersion(prerelease?: boolean): Promise<Models.BackendAssetVersion>;
 }
 
 export interface GeneralApi {
-	getToken(username: string, password: string): Promise<models.BackendToken>;
-	getContributors(): Promise<models.BackendContributable[]>;
-	getTeamMembers(): Promise<models.BackendTeamMember[]>;
-	getAbout(): Promise<models.BackendAbout>;
+	getToken(username: string, password: string): Promise<Models.BackendToken>;
+	getContributors(): Promise<Models.BackendContributable[]>;
+	getTeamMembers(): Promise<Models.BackendTeamMember[]>;
+	getAbout(): Promise<Models.BackendAbout>;
 	ping(): Promise<boolean>;
-	getRateLimit(): Promise<models.BackendRateLimit>;
+	getRateLimit(): Promise<Models.BackendRateLimit>;
 }
 
 // unified API interface
