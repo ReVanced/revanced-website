@@ -44,7 +44,7 @@ jobs:
         #   RV_API_URL: ${{ vars.RV_API_URL }}
         #   RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
         #   RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
-        run: npm run build
+        run: pnpm run build
 
       - name: Deploy
         id: deploy
@@ -52,7 +52,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=revanced-website
+          command: pages deploy './build' --project-name=revanced-website
 
       - name: Comment deployment URL
         if: ${{ github.event_name == 'pull_request' }}
