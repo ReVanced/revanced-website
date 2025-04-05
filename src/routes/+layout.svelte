@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { theme } from '$lib/stores';
+	import { theme } from '$stores';
 	import type { Snippet } from 'svelte';
 
 	type Props = { children: Snippet };
