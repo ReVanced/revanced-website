@@ -5,14 +5,12 @@
 
 	type Props = { title?: string; children: Snippet };
 	let { title, children }: Props = $props();
+
+	const pageTitle = title ? `ReVanced - ${title.trim()}` : 'ReVanced';
 </script>
 
 <svelte:head>
-	{#if title}
-		<title>ReVanced - {title.trim()}</title>
-	{:else}
-		<title>ReVanced</title>
-	{/if}
+	<title>{pageTitle}</title>
 </svelte:head>
 
 <main>
