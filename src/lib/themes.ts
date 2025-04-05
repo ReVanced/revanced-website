@@ -40,6 +40,9 @@ export const themes = {
 	christmas: ['december', 25],
 	valentine: ['february', 14],
 	halloween: ['october', 31],
-	easter: [getEaster().format('MMMM').toLowerCase() as MonthName, getEaster().date()],
+	easter: [
+		getEaster().format('MMMM').toLowerCase() as MonthName, // can be 'march' or 'april'
+		getEaster().date() // variable date
+	],
 	aprilFools: ['april', 1]
 } as const satisfies Record<string, [month: MonthName, date: number]>;
