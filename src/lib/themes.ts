@@ -36,14 +36,10 @@ const getEaster = (): Moment => {
 };
 
 export const themes = {
-	new_year: ['january', 1],
+	newYear: ['january', 1],
 	christmas: ['december', 25],
 	valentine: ['february', 14],
 	halloween: ['october', 31],
-	// prettier-ignore
-	easter: [
-        getEaster().format('MMMM').toLowerCase() as MonthName,
-        getEaster().date()
-    ],
-	april_fools: ['april', 1]
+	easter: [getEaster().format('MMMM').toLowerCase() as MonthName, getEaster().date()],
+	aprilFools: ['april', 1]
 } as const satisfies Record<string, [month: MonthName, date: number]>;
