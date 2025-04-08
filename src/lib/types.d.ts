@@ -7,3 +7,7 @@ export enum SpecialTargetValues {
 	PARENT = '_parent',
 	TOP = '_top'
 }
+
+type Prettify<T> = {
+	[K in keyof T]: T[K];
+} & {};

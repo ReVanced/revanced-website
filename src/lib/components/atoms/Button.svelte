@@ -1,20 +1,35 @@
 <script lang="ts">
 	import type { Component, Snippet } from 'svelte';
-	import type { SpecialTargetValues } from '$types';
+	import type { SpecialTargetValues, Prettify } from '$types';
 
 	type ButtonType = 'filled' | 'tonal' | 'text' | 'outlined';
 
-	type Props = {
+	type BaseProps = {
 		type: ButtonType;
 		icon?: Component;
 		iconSize?: number;
 		iconColor?: string;
-		href?: string;
-		target?: `${SpecialTargetValues}` | SpecialTargetValues;
 		label?: string;
 		children?: Snippet;
-		onclick?: () => void;
 	};
+
+	type ButtonProps = Prettify<
+		BaseProps & {
+			onclick: () => void;
+			href: never;
+			target: never;
+		}
+	>;
+
+	type LinkProps = Prettify<
+		BaseProps & {
+			href: string;
+			target?: `${SpecialTargetValues}` | SpecialTargetValues;
+			onclick: never;
+		}
+	>;
+
+	type Props = ButtonProps | LinkProps;
 
 	let {
 		type,
