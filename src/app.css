@@ -2,6 +2,29 @@
 
 :root {
     --font-family: 'Manrope', sans-serif;
+    --text-one: hsl(206, 100%, 94%);
+    --surface-one: hsl(206, 100%, 94%);
+    --primary: hsl(206, 100%, 81%);
+    --secondary: hsl(208, 75%, 82%);
+    --tertiary: hsla(205, 91%, 69%, 0.15);
+    --background-one: hsl(252, 10%, 11%);
+    --surface-two: hsl(252, 10%, 11%);
+    --surface-three: hsl(210, 14%, 17%);
+    --surface-four: hsl(212, 19%, 19%);
+    --text-two: hsl(212, 19%, 19%);
+    --border: hsl(221, 17%, 26%);
+    --surface-five: hsl(221, 17%, 26%);
+    --text-three: hsl(226, 48%, 18%);
+    --text-four: hsl(208, 30%, 75%);
+    --surface-six: hsl(208, 30%, 75%);
+    --surface-seven: hsl(230, 9%, 13%);
+    --surface-eight: hsl(240, 9%, 13.5%);
+    --surface-nine: hsl(230, 9.5%, 17.5%);
+    --red-one: hsl(333, 84%, 62%);
+
+    --bezier-one: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+        0px 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 * {
