@@ -24,27 +24,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: latest
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: pnpm
-          cache-dependency-path: 'package.json'
+          bun-version: latest
 
       - name: Install dependencies
-        run: pnpm i
+        run: bun i
 
       - name: Build
         # env:
         #   RV_API_URL: ${{ vars.RV_API_URL }}
         #   RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
         #   RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
-        run: pnpm run build
+        run: bun run build
 
       - name: Deploy
         id: deploy

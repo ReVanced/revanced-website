@@ -31,13 +31,6 @@
 		"typescript-eslint": "^8.20.0",
 		"vite": "^6.0.0"
 	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@parcel/watcher",
-			"esbuild",
-			"svelte-preprocess"
-		]
-	},
 	"dependencies": {
 		"moment": "^2.30.1",
 		"svelte-material-icons": "^3.0.5"
