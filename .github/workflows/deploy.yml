@@ -40,10 +40,10 @@ jobs:
         run: bun i
 
       - name: Build
-        # env:
-        #   RV_API_URL: ${{ vars.RV_API_URL }}
-        #   RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
-        #   RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
+        env:
+          RV_API_URL: ${{ vars.RV_API_URL }}
+          RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
+          RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
         run: bun run build
 
       - name: Deploy
