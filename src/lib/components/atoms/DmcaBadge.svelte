@@ -15,5 +15,5 @@
 	<img
 		src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={RV_DMCA_GUID}"
 		alt="DMCA.com Protection Status"
-	/></a
->
+	/>
+</a>
