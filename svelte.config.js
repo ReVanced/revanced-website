@@ -12,6 +12,9 @@ const config = {
 			$lib: './src/lib',
 			$types: './src/lib/types.d.ts',
 			$stores: './src/lib/stores.ts'
+		},
+		env: {
+			publicPrefix: 'RV'
 		}
 	}
 };

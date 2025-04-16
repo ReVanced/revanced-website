@@ -1,5 +1,5 @@
 <script lang="ts">
-	const RV_DMCA_GUID = 'test'; // TODO: replace later
+	import { RV_DMCA_GUID } from '$env/static/public';
 
 	let refurl: string = $state('');
 	$effect(() => {
