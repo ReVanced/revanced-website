@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { RV_DMCA_GUID } from '$env/static/public';
+	import { page } from '$app/state';
 
-	let refurl: string = $state('');
-	$effect(() => {
-		refurl = window.location.href;
-	});
+	type Props = { guid: string };
+	let { guid }: Props = $props();
 </script>
 
 <a
-	href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={refurl}"
+	href="//www.dmca.com/Protection/Status.aspx?ID={guid}&refurl={page.url.href}"
 	title="DMCA.com Protection Status"
 	class="dmca-badge"
 >
 	<img
-		src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={RV_DMCA_GUID}"
+		src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={guid}"
 		alt="DMCA.com Protection Status"
 	/>
 </a>
