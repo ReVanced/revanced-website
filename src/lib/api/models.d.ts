@@ -20,6 +20,8 @@ export type BackendAnnouncement = {
 	title: string;
 };
 
+export type BackendAnnouncementTag = { name: string };
+
 type BackendAssetRelease = {
 	created_at: Date;
 	description: string;

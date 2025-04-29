@@ -16,7 +16,7 @@ export interface AnnouncementsApi {
 		authToken: string
 	): Promise<void>;
 	deleteAnnouncement(id: number, authToken: string): Promise<void>;
-	getAnnouncementTags(): Promise<string[]>;
+	getAnnouncementTags(): Promise<Models.BackendAnnouncementTag[]>;
 }
 
 export interface PatchesApi {
