@@ -97,6 +97,7 @@ type BackendAboutDonations = {
 	wallets: BackendAboutWallet[];
 };
 export type BackendAbout = {
+	about: string;
 	contact: BackendAboutContact;
 	donations: BackendAboutDonations;
 	socials: BackendAboutUrl[];

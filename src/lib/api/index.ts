@@ -111,6 +111,8 @@ const mockTeamMembers: Models.BackendTeamMember[] = [
 ];
 
 const mockAbout: Models.BackendAbout = {
+	about:
+		"ReVanced was born out of Vanced's discontinuation and it is our goal to continue the legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create long-lasting patches for nearly any Android app. ReVanced's patching system is designed to allow patches to work on new versions of the apps automatically with bare minimum maintenance.",
 	contact: {
 		email: 'contact@revanced.app'
 	},
