@@ -20,6 +20,7 @@
 				</div>
 			{/await}
 		</section>
+
 		<section class="links-container">
 			<FooterSection title="Pages">
 				<li><Button type="text" href="/">Home</Button></li>
