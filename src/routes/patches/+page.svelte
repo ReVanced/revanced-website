@@ -1,7 +1,5 @@
 <script lang="ts">
-	import Page from '$components/templates/Page.svelte';
+	import Head from '$components/molecules/Head.svelte';
 </script>
 
-<Page title="Patches for ReVanced">
-	<h1>Patches</h1>
-</Page>
+<Head title="Patches for ReVanced" />

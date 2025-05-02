@@ -1,7 +1,5 @@
 <script lang="ts">
-	import Page from '$components/templates/Page.svelte';
+	import Head from '$components/molecules/Head.svelte';
 </script>
 
-<Page title="Download ReVanced">
-	<h1>Download</h1>
-</Page>
+<Head title="Download ReVanced" />
