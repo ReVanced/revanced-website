@@ -12,8 +12,8 @@ importers:
         specifier: ^4.36.1
         version: 4.36.1
       '@tanstack/query-persist-client-core':
-        specifier: ^4.36.1
-        version: 4.36.1
+        specifier: ^5.75.0
+        version: 5.75.0
       '@tanstack/query-sync-storage-persister':
         specifier: ^4.36.1
         version: 4.36.1
@@ -679,8 +679,14 @@ packages:
   '@tanstack/query-core@4.36.1':
     resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
 
+  '@tanstack/query-core@5.75.0':
+    resolution: {integrity: sha512-rk8KQuCdhoRkzjRVF3QxLgAfFUyS0k7+GCQjlGEpEGco+qazJ0eMH6aO1DjDjibH7/ik383nnztua3BG+lOnwg==}
+
   '@tanstack/query-persist-client-core@4.36.1':
     resolution: {integrity: sha512-eocgCeI7D7TRv1IUUBMfVwOI0wdSmMkBIbkKhqEdTrnUHUQEeOaYac8oeZk2cumAWJdycu6P/wB+WqGynTnzXg==}
+
+  '@tanstack/query-persist-client-core@5.75.0':
+    resolution: {integrity: sha512-/EeURZCen5hw1u4B7s/UbbwrtvNBX/VNWhR8rNtXvXmY9020YtvRd95SCblUVd8kcia4knPM+T+UThskowKmVA==}
 
   '@tanstack/query-sync-storage-persister@4.36.1':
     resolution: {integrity: sha512-yMEt5hWe2+1eclf1agMtXHnPIkxEida0lYWkfdhR8U6KXk/lO4Vca6piJmhKI85t0NHlx3l/z6zX+t/Fn5O9NA==}
@@ -1972,9 +1978,15 @@ snapshots:
 
   '@tanstack/query-core@4.36.1': {}
 
+  '@tanstack/query-core@5.75.0': {}
+
   '@tanstack/query-persist-client-core@4.36.1':
     dependencies:
       '@tanstack/query-core': 4.36.1
+
+  '@tanstack/query-persist-client-core@5.75.0':
+    dependencies:
+      '@tanstack/query-core': 5.75.0
 
   '@tanstack/query-sync-storage-persister@4.36.1':
     dependencies:
