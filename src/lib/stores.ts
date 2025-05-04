@@ -1,7 +1,7 @@
 import { readable } from 'svelte/store';
 import moment from 'moment';
 import { events } from './events';
-import { seconds } from './time';
+import { minutes } from './time';
 
 export const event = readable('default', (set) => {
 	const updateTheme = () => {
@@ -18,7 +18,7 @@ export const event = readable('default', (set) => {
 	};
 
 	updateTheme();
-	const interval = setInterval(updateTheme, seconds(30));
+	const interval = setInterval(updateTheme, minutes(1));
 
 	return () => clearInterval(interval);
 });
