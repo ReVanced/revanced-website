@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { theme } from '$stores';
+	import { event } from '$stores';
 
 	import Footer from '$components/organisms/Footer.svelte';
 	import NavBar from '$components/organisms/NavBar.svelte';
@@ -10,7 +10,7 @@
 	let { children }: Props = $props();
 
 	$effect(() => {
-		document.documentElement.setAttribute('data-theme', $theme);
+		document.documentElement.setAttribute('data-event-name', $event);
 	});
 </script>
 
