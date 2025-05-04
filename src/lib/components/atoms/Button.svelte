@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { Component, Snippet } from 'svelte';
+	import type { Snippet } from 'svelte';
+	import { page } from '$app/state';
 	import type { SpecialTargetValues, Prettify } from '$types';
 
-	type ButtonType = 'filled' | 'tonal' | 'text' | 'outlined';
+	type ButtonType = 'filled' | 'tonal' | 'text' | 'outlined' | 'navbar';
 
 	type BaseProps = {
 		type: ButtonType;
-		icon?: Component;
-		iconSize?: number;
+		icon?: typeof import('~icons/mdi').default;
 		iconColor?: string;
 		label?: string;
 		children?: Snippet;
@@ -39,38 +39,45 @@
 		children,
 		label = '',
 		onclick = () => {},
-		iconSize = 20,
 		iconColor = 'currentColor',
 		target = '_self'
 	}: Props = $props();
+
+	// prettier-ignore
+	const navBarButtonSelected = type === 'navbar' && href && new URL(href, page.url.href).pathname === page.url.pathname;
 </script>
 
 {#if href}
-	<a {href} {target} class={`button-${type}`} aria-label={label}>
+	<a
+		{href}
+		{target}
+		class={`button-${type}${navBarButtonSelected ? ' selected' : ''}`}
+		aria-label={label}
+	>
 		{#if Icon}
-			<Icon size={iconSize} color={iconColor} />
+			<Icon color={iconColor} />
 		{/if}
-		{@render children?.()}
+		{#if type === 'navbar'}
+			<span>{@render children?.()}</span>
+		{:else}
+			{@render children?.()}
+		{/if}
 	</a>
 {:else}
 	<button {onclick} class={`button-${type}`} aria-label={label}>
 		{#if Icon}
-			<Icon size={iconSize} color={iconColor} />
+			<Icon color={iconColor} />
 		{/if}
 		{@render children?.()}
 	</button>
 {/if}
 
 <style>
+	a,
 	button {
-		border: none;
 		background-color: transparent;
 		padding: 0;
 		margin: 0;
-	}
-
-	a,
-	button {
 		min-width: max-content;
 		font-size: 0.95rem;
 		text-decoration: none;
@@ -83,9 +90,7 @@
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
-		transition:
-			transform 0.4s var(--bezier-one),
-			filter 0.4s var(--bezier-one);
+		transition: all 0.4s var(--bezier-one);
 		user-select: none;
 	}
 
@@ -109,8 +114,55 @@
 		letter-spacing: 0.01rem;
 	}
 
-	button:hover,
-	a:hover {
+	button:not(.button-navbar):hover,
+	a:not(.button-navbar):hover {
 		filter: brightness(85%);
 	}
+
+	.button-navbar {
+		transition-duration: 0.25s;
+		text-decoration: none;
+		user-select: none;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 16px;
+	}
+
+	.button-navbar > span {
+		font-weight: 400;
+		font-size: 0.9rem;
+		letter-spacing: 0.02rem;
+		color: var(--text-four);
+	}
+
+	.button-navbar:hover {
+		color: var(--text-one);
+		background-color: var(--surface-three);
+	}
+
+	.button-navbar.selected {
+		background-color: var(--tertiary);
+		color: var(--primary);
+		pointer-events: none;
+	}
+
+	.button-navbar.selected > span {
+		color: var(--primary);
+	}
+
+	/* @media (max-width: 767px) {
+		li {
+			border-radius: 100px;
+		}
+		a {
+			padding: 0.75rem 1.25rem;
+			justify-content: left;
+		}
+		span {
+			font-size: 1rem;
+			font-weight: 500;
+		}
+	} */
 </style>
