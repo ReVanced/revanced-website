@@ -52,8 +52,8 @@ importers:
         specifier: 2.46.1
         version: 2.46.1(eslint@9.16.0)(svelte@4.2.18)
       fuse.js:
-        specifier: ^7.0.0
-        version: 7.0.0
+        specifier: ^7.1.0
+        version: 7.1.0
       imagetools-core:
         specifier: 7.0.2
         version: 7.0.2
@@ -1043,8 +1043,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fuse.js@7.0.0:
-    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
+  fuse.js@7.1.0:
+    resolution: {integrity: sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==}
     engines: {node: '>=10'}
 
   get-port@5.1.1:
@@ -2384,7 +2384,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuse.js@7.0.0: {}
+  fuse.js@7.1.0: {}
 
   get-port@5.1.1: {}
 
