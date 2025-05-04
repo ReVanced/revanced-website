@@ -1,6 +1,6 @@
 import { readable } from 'svelte/store';
 import moment from 'moment';
-import { themes } from './themes';
+import { events } from './events';
 import { seconds } from './time';
 
 export const theme = readable('default', (set) => {
@@ -9,8 +9,8 @@ export const theme = readable('default', (set) => {
 		const monthName = today.format('MMMM').toLowerCase();
 		const day = today.date();
 
-		Object.entries(themes).forEach(([themeName, [month, date]]) => {
-			if (monthName === month && day === date) set(themeName);
+		Object.entries(events).forEach(([eventName, [month, date]]) => {
+			if (monthName === month && day === date) set(eventName);
 		});
 	};
 

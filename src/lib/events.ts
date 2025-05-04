@@ -35,7 +35,7 @@ const getEaster = (): Moment => {
 	return moment(new Date(currentYear, month - 1, day));
 };
 
-export const themes = {
+export const events = {
 	newYear: ['january', 1],
 	christmas: ['december', 25],
 	valentine: ['february', 14],
