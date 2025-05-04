@@ -2,4 +2,4 @@
 	import Head from '$components/molecules/Head.svelte';
 </script>
 
-<Head title="Patches for ReVanced" />
+<Head title="Announcements" />
