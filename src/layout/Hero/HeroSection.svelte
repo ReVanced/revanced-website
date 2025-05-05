@@ -28,10 +28,6 @@
 		margin-bottom: 2rem;
 	}
 
-	.hero {
-		padding-bottom: 9rem;
-	}
-
 	.hero-text {
 		align-items: center;
 	}

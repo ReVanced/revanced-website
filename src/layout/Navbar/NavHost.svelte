@@ -202,17 +202,10 @@
 	}
 
 	#nav-container {
+		top: 0;
 		position: sticky;
 		z-index: 666;
 		width: 100%;
-
-		&:has(.nav-buttons > li:first-child.selected) {
-			margin-bottom: 2.65rem;
-
-			&:has(.banner) {
-				margin-bottom: 1.5rem;
-			}
-		}
 	}
 
 	nav {

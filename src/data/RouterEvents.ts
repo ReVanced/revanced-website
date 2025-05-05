@@ -18,24 +18,24 @@ function makeStore(): Readable<RouterEvent> {
 		return derived(page, ($page) => {
 			return { navigating: false, target_url: $page.url };
 		});
-	} else {
-		// On client.
-		let current = new URL(location.href);
-
-		// Return store that responds to navigation events.
-		// The `navigating` store immediately "pushes" `null`.
-		// This in turn causes this derived store to immediately "push" the current URL.
-		return derived(navigating, ($nav) => {
-			let navigating = false;
-			// $nav is null when navigation finishes.
-			if ($nav != null && $nav.to != null) {
-				current = $nav.to.url;
-				navigating = true;
-			}
-
-			return { navigating, target_url: current };
-		});
 	}
+
+	// On client.
+	let current = new URL(location.href);
+
+	// Return store that responds to navigation events.
+	// The `navigating` store immediately "pushes" `null`.
+	// This in turn causes this derived store to immediately "push" the current URL.
+	return derived(navigating, ($nav) => {
+		let navigating = false;
+		// $nav is null when navigation finishes.
+		if ($nav != null && $nav.to != null) {
+			current = $nav.to.url;
+			navigating = true;
+		}
+
+		return { navigating, target_url: current };
+	});
 }
 
 // Do not subscribe to it outside of components!

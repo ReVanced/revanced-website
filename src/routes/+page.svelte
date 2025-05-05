@@ -142,16 +142,15 @@
 </div>
 
 <style lang="scss">
-	.hide-on-scroll {
-		transition: opacity 0.5s var(--bezier-one);
-		z-index: -999;
-
-		&.hidden {
-			height: 0;
-			opacity: 0;
-		}
+	.hide-on-scroll.hidden {
+		z-index: -2;
+		height: 0;
+		opacity: 0;
+		overflow: hidden;
 	}
+
 	main {
+		padding-block: 2rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;

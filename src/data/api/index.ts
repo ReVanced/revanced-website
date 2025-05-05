@@ -9,8 +9,7 @@ import type {
 	DonationPlatform,
 	CryptoWallet,
 	Social,
-	About,
-	CompatiblePackage
+	About
 } from '$lib/types';
 
 export type ContributorsData = { contributables: Contributable[] };
@@ -41,20 +40,21 @@ async function patches(): Promise<PatchesData> {
 	const json = await get_json('v4/patches/list');
 	const packagesWithCount: { [key: string]: number } = {};
 
-	json.forEach((patch) => {
-		if (!patch.compatiblePackages) return;
+	for (const patch of json) {
+		if (!patch.compatiblePackages) continue;
 
 		patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
 			name,
 			versions: patch.compatiblePackages[name]
 		}));
-	});
+	}
 
 	// gets packages and patch count
-	for (let i = 0; i < json.length; i++) {
-		json[i].compatiblePackages?.forEach((pkg: CompatiblePackage) => {
+	for (const { compatiblePackages } of json) {
+		if (!compatiblePackages) continue;
+		for (const pkg of compatiblePackages) {
 			packagesWithCount[pkg.name] = (packagesWithCount[pkg.name] || 0) + 1;
-		});
+		}
 	}
 
 	// sort packages by patch count to get most relevant apps on top
