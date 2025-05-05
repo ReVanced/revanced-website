@@ -1,13 +1,21 @@
-<svg viewBox="0 0 1440 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+<script>
+	export let bottom = 0;
+</script>
+
+<svg
+	viewBox="0 0 1440 500"
+	xmlns="http://www.w3.org/2000/svg"
+	preserveAspectRatio="none"
+	style="bottom: {-bottom}; height: {bottom / 5 + 35}vh"
+>
 	<path class="wave" />
 </svg>
 
 <style>
 	svg {
+		transition: height 1s var(--bezier-one);
 		position: absolute;
 		z-index: -999;
-		bottom: 0;
-		height: 35vh;
 		width: 100%;
 	}
 

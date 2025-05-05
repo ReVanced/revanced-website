@@ -5,11 +5,33 @@
 	import Wave from '$lib/components/Wave.svelte';
 	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import { onMount } from 'svelte';
 
 	let scrollY = 0;
 	let footerVisible = false;
 
-	$: footerVisible = scrollY >= 10;
+	// temporary fix until rewrite is out
+	function checkVisibility() {
+		if (scrollY === 0) return (footerVisible = false);
+
+		const el = document.querySelector('#skiptab > main > div.hide-on-scroll.s-y_bCXRrkrYfP > div');
+		const buffer = 24; // 1.5rem gap
+
+		if (!el) return (footerVisible = scrollY >= 24);
+
+		const rect = el.getBoundingClientRect();
+		footerVisible = rect.bottom + buffer <= window.innerHeight;
+	}
+
+	onMount(() => {
+		window.addEventListener('scroll', checkVisibility, { passive: true });
+		window.addEventListener('resize', checkVisibility);
+
+		return () => {
+			window.removeEventListener('scroll', checkVisibility);
+			window.removeEventListener('resize', checkVisibility);
+		};
+	});
 </script>
 
 <svelte:window bind:scrollY />
@@ -133,7 +155,7 @@
 		</div>
 	</div>
 	<div class="hide-on-scroll" class:hidden={footerVisible}>
-		<Wave />
+		<Wave bottom={scrollY} />
 		<SocialHost />
 	</div>
 </main>
