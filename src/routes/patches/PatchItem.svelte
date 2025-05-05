@@ -74,7 +74,13 @@
 			{/if}
 			{#if patch.compatiblePackages[0].versions.length > 1}
 				<li class="button">
-					<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
+					<Button
+						type="text"
+						on:click={(e) => {
+							e.stopPropagation();
+							showAllVersions = !showAllVersions;
+						}}
+					>
 						<div
 							class="expand-arrow"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
@@ -93,7 +99,7 @@
 		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
 				{#each options as option}
-					<div class="option">
+					<div class="option" on:click|stopPropagation>
 						<h5 id="option-title">{option.title}</h5>
 						<h5>
 							<pre id="option-description">{option.description}</pre>

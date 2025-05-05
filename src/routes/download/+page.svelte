@@ -106,7 +106,7 @@
 			{/if}
 		</Query>
 		<Button type="tonal" href="https://github.com/revanced/revanced-manager" target="_blank">
-			View Source
+			View source
 		</Button>
 	</div>
 	<div class="screenshot">

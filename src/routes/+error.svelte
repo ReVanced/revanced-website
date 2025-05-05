@@ -13,7 +13,7 @@
 	{#if status == 404}
 		<p>This page received a cease and desist letter from a multi-billion dollar tech company.</p>
 		<br />
-		<Button type="filled" href="/">Return Home</Button>
+		<Button type="filled" href="/">Return home</Button>
 	{:else}
 		<p>
 			{$page.error?.message}
@@ -23,6 +23,9 @@
 
 <style>
 	section {
+		display: flex;
+		flex-direction: column;
+		width: fit-content;
 		text-align: center;
 		margin-top: 10rem;
 	}
