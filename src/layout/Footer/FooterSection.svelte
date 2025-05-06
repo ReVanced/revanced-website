@@ -1,11 +1,5 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
-
-	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
-
 	export let title: string;
-	let expanded: boolean = false;
 </script>
 
 <div class="desktop-only">
@@ -16,20 +10,14 @@
 </div>
 
 <div class="mobile-only">
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<button class="title" on:click={() => (expanded = !expanded)}>
+	<button class="title">
 		<span>
 			{title}
 		</span>
-		<div class="arrow" style:transform={expanded ? 'rotate(180deg)' : 'rotate(0deg)'}>
-			<ChevronDown size="24px" color="var(--surface-six)" />
-		</div>
 	</button>
-	{#if expanded}
-		<ul transition:slide={{ easing: quintOut, duration: 500 }}>
-			<slot />
-		</ul>
-	{/if}
+	<ul>
+		<slot />
+	</ul>
 </div>
 
 <style lang="scss">
