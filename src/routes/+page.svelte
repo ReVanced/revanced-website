@@ -1,9 +1,28 @@
 <script>
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
-	import SocialHost from '$layout/Hero/SocialHost.svelte';
-	import Wave from '$lib/components/Wave.svelte';
+	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import Wave from '$lib/components/Wave.svelte';
+	import { onMount } from 'svelte';
+
+	let bottomVisibility = true;
+
+	onMount(() => {
+		const checkVisibility = () => {
+			const wave = document.querySelector('.wave');
+			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
+		};
+
+		window.addEventListener('scroll', checkVisibility, { passive: true });
+		window.addEventListener('resize', checkVisibility);
+
+		checkVisibility(); // Initial check
+		return () => {
+			window.removeEventListener('scroll', checkVisibility);
+			window.removeEventListener('resize', checkVisibility);
+		};
+	});
 </script>
 
 <Head
@@ -118,49 +137,39 @@
 />
 
 <main>
-	<div class="wrap">
-		<div class="wrappezoid">
-			<Home />
-			<div id="heroimg"><HeroImage /></div>
+	<div class="content">
+		<Home socialsVisibility={bottomVisibility} />
+		<div class="hero-img-container">
+			<HeroImage />
 		</div>
 	</div>
-	<SocialHost />
 </main>
-<Wave />
+<Wave visibility={bottomVisibility} />
+<Footer />
 
-<style>
+<style lang="scss">
+	.content {
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+		width: min(87%, 100rem);
+	}
 	main {
+		overflow: hidden;
+		padding: 5rem 0;
+		height: max(100vh, 600px);
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-	}
-	.wrap {
-		margin-inline: auto;
-		width: min(87%, 100rem);
-		margin-top: 7rem;
-	}
-	.wrappezoid {
-		height: calc(100vh - 225px);
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		gap: 22rem;
 		align-items: center;
 	}
-	@media (max-width: 1700px) {
-		.wrappezoid {
-			justify-content: space-between;
-		}
+
+	.hero-img-container {
+		z-index: 0;
 	}
-	@media (max-width: 1052px) {
-		#heroimg {
+
+	@media screen and (max-width: 1100px) {
+		.hero-img-container {
 			display: none;
-		}
-	}
-	@media (max-width: 767px) {
-		.wrappezoid {
-			justify-content: center;
-			height: calc(65vh);
 		}
 	}
 </style>

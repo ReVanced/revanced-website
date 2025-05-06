@@ -21,26 +21,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+
+      - name: Install dependencies
+        run: npm i
+
       - name: Build
         env:
           RV_API_URL: ${{ vars.RV_API_URL }}
           RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
           RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
-        run: |
-          npm i
-          npm run build
+        run: npm run build
 
       - name: Deploy
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy public --project-name=revanced-website
-        id: deploy
 
       - name: Comment deployment URL
         if: ${{ github.event_name == 'pull_request' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
-          GITHUB_TOKEN: ${{ secrets.PULL_REQUESTS_WRITE }}
-          message: Deployed at ${{ steps.deploy.outputs.pages-deployment-alias-url }}.
+          message: Deployed at ${{ steps.deploy.outputs.deployment-url }}.

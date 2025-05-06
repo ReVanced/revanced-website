@@ -1,9 +1,5 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
-
 	export let title: string;
-	let expanded: boolean = false;
 </script>
 
 <div class="desktop-only">
@@ -14,21 +10,14 @@
 </div>
 
 <div class="mobile-only">
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<button class="title" on:click={() => (expanded = !expanded)}>
+	<button class="title">
 		<span>
 			{title}
 		</span>
-		<img
-			src="/icons/{expanded ? 'expand_less' : 'expand_more'}.svg"
-			alt={expanded ? 'Close' : 'Expand'}
-		/>
 	</button>
-	{#if expanded}
-		<ul transition:slide={{ easing: quintOut, duration: 500 }}>
-			<slot />
-		</ul>
-	{/if}
+	<ul>
+		<slot />
+	</ul>
 </div>
 
 <style lang="scss">
@@ -65,6 +54,11 @@
 		display: none;
 	}
 
+	.arrow {
+		transition: all 0.2s var(--bezier-one);
+		user-select: none;
+	}
+
 	@media screen and (max-width: 768px) {
 		.mobile-only {
 			display: block;
@@ -72,9 +66,5 @@
 		.desktop-only {
 			display: none;
 		}
-	}
-
-	img {
-		height: 24px;
 	}
 </style>

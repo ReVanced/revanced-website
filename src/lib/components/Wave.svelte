@@ -1,19 +1,36 @@
-<svg viewBox="0 0 1440 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+<script>
+	export let visibility = true;
+</script>
+
+<svg
+	class="wave"
+	viewBox="0 0 1440 500"
+	xmlns="http://www.w3.org/2000/svg"
+	preserveAspectRatio="none"
+	style="opacity: {visibility ? '100%' : '0'}"
+>
 	<path class="wave" />
 </svg>
 
 <style>
 	svg {
-		position: fixed;
-		z-index: -999;
-		bottom: 0;
-		height: 35vh;
+		transition: opacity 0.1s var(--bezier-one);
+		position: absolute;
+		bottom: -1px;
+		z-index: -1;
 		width: 100%;
+		height: 40vh;
+	}
+
+	@media screen and (max-height: 820px) {
+		svg {
+			opacity: 0 !important;
+		}
 	}
 
 	.wave {
-		animation: wave-anim 40s;
-		animation-timing-function: linear;
+		animation: wave-anim 30s;
+		animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
 		animation-iteration-count: infinite;
 		fill: var(--primary);
 	}

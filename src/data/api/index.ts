@@ -9,8 +9,7 @@ import type {
 	DonationPlatform,
 	CryptoWallet,
 	Social,
-	About,
-	CompatiblePackage
+	About
 } from '$lib/types';
 
 export type ContributorsData = { contributables: Contributable[] };
@@ -41,20 +40,21 @@ async function patches(): Promise<PatchesData> {
 	const json = await get_json('v4/patches/list');
 	const packagesWithCount: { [key: string]: number } = {};
 
-	json.forEach((patch) => {
-		if (!patch.compatiblePackages) return;
+	for (const patch of json) {
+		if (!patch.compatiblePackages) continue;
 
 		patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
 			name,
 			versions: patch.compatiblePackages[name]
 		}));
-	});
+	}
 
 	// gets packages and patch count
-	for (let i = 0; i < json.length; i++) {
-		json[i].compatiblePackages?.forEach((pkg: CompatiblePackage) => {
+	for (const { compatiblePackages } of json) {
+		if (!compatiblePackages) continue;
+		for (const pkg of compatiblePackages) {
 			packagesWithCount[pkg.name] = (packagesWithCount[pkg.name] || 0) + 1;
-		});
+		}
 	}
 
 	// sort packages by patch count to get most relevant apps on top
@@ -72,6 +72,15 @@ async function team(): Promise<TeamData> {
 async function about(): Promise<AboutData> {
 	const json = await get_json('v4/about');
 	return { about: json };
+}
+
+async function ping(): Promise<boolean> {
+	try {
+		const res = await fetch(`${settings.api_base_url()}/v4/ping`, { method: 'HEAD' });
+		return res.ok;
+	} catch (error) {
+		return false;
+	}
 }
 
 export const staleTime = 5 * 60 * 1000;
@@ -99,6 +108,11 @@ export const queries = {
 	about: {
 		queryKey: ['info'],
 		queryFn: about,
+		staleTime
+	},
+	ping: {
+		queryKey: ['ping'],
+		queryFn: ping,
 		staleTime
 	}
 };

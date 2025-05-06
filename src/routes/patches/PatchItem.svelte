@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { slide, fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+
 	import type { Patch } from '$lib/types';
-	import { compare, coerce } from 'semver';
 	import Button from '$lib/components/Button.svelte';
+
+	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	export let patch: Patch;
 	export let showAllVersions: boolean;
@@ -28,7 +30,9 @@
 			<h3>{patch.name}</h3>
 		</div>
 		{#if hasPatchOptions}
-			<img class="expand-arrow" src="/icons/expand_more.svg" alt="dropdown" />
+			<div class="expand-arrow">
+				<ChevronDown size="24px" color="var(--surface-six)" />
+			</div>
 		{/if}
 	</div>
 	{#if patch.description}
@@ -70,13 +74,19 @@
 			{/if}
 			{#if patch.compatiblePackages[0].versions.length > 1}
 				<li class="button">
-					<Button type="text" on:click={() => (showAllVersions = !showAllVersions)}>
-						<img
+					<Button
+						type="text"
+						on:click={(e) => {
+							e.stopPropagation();
+							showAllVersions = !showAllVersions;
+						}}
+					>
+						<div
 							class="expand-arrow"
 							style:transform={showAllVersions ? 'rotate(90deg)' : 'rotate(-90deg)'}
-							src="/icons/expand_more.svg"
-							alt="dropdown"
-						/>
+						>
+							<ChevronDown size="24px" color="var(--surface-six)" />
+						</div>
 					</Button>
 				</li>
 			{/if}
@@ -89,7 +99,7 @@
 		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
 				{#each options as option}
-					<div class="option">
+					<div class="option" on:click|stopPropagation>
 						<h5 id="option-title">{option.title}</h5>
 						<h5>
 							<pre id="option-description">{option.description}</pre>

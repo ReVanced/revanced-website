@@ -14,22 +14,15 @@
 	}
 
 	.hero-img {
-		overflow: hidden;
 		height: 70vh;
-		max-height: 70rem;
-		z-index: -1;
-		width: auto;
-		float: right;
 		padding: 0.5rem 0.5rem;
 		border-radius: 1.75rem;
 		background-color: var(--surface-seven);
 		user-select: none;
 	}
-	@media (max-width: 1700px) {
+	@media screen and (max-width: 1700px) {
 		.hero-img {
-			position: fixed;
 			height: 100vh;
-			top: 115px;
 			right: 6rem;
 		}
 	}
