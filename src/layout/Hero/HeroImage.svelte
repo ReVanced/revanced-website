@@ -14,16 +14,10 @@
 	}
 
 	.hero-img {
-		height: 70vh;
+		height: max(100vh, 600px);
 		padding: 0.5rem 0.5rem;
 		border-radius: 1.75rem;
 		background-color: var(--surface-seven);
 		user-select: none;
-	}
-	@media screen and (max-width: 1700px) {
-		.hero-img {
-			height: 100vh;
-			right: 6rem;
-		}
 	}
 </style>

@@ -60,6 +60,7 @@
 	}
 
 	.hero {
+		padding-top: 10vh;
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
@@ -69,27 +70,9 @@
 		color: var(--primary);
 	}
 
-	@media screen and (max-width: 1700px) {
+	@media screen and (max-width: 1100px) {
 		.hero {
-			height: 80vh;
-		}
-	}
-
-	@media screen and (max-height: 820px) {
-		.social-buttons {
-			bottom: initial;
-			left: initial;
-			position: initial;
-			width: initial;
-			opacity: 100% !important;
-		}
-	}
-	@media screen and (max-width: 1100px) or (min-height: 820px) {
-		.social-buttons {
-			transform: translateX(-50%);
-			width: 100%;
-			position: absolute;
-			justify-content: center;
+			padding-top: initial;
 		}
 	}
 
@@ -100,11 +83,34 @@
 		}
 
 		.social-buttons {
+			left: 50%;
+			transform: translateX(-50%);
 			justify-content: center;
+			width: 100%;
 		}
 
 		.hero {
 			height: initial;
+		}
+	}
+
+	@media screen and (max-width: 1100px) or (min-height: 780px) {
+		.social-buttons {
+			transform: translateX(-50%);
+			width: 90%;
+			position: absolute;
+			left: initial;
+			transform: initial;
+		}
+	}
+
+	@media screen and (max-height: 780px) {
+		.social-buttons {
+			transform: initial;
+			left: initial;
+			position: initial;
+			width: initial;
+			opacity: 100% !important;
 		}
 	}
 </style>
