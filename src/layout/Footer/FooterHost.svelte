@@ -10,9 +10,6 @@
 
 	import { RV_DMCA_GUID } from '$env/static/public';
 	import { onMount } from 'svelte';
-
-	export let showDivider = true;
-
 	const aboutQuery = createQuery(['about'], queries.about);
 
 	let location: string;
@@ -23,8 +20,7 @@
 	});
 </script>
 
-<!-- squiggly divider line -->
-{#if showDivider}
+<footer in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<svg
 		aria-hidden="true"
 		width="100%"
@@ -41,71 +37,74 @@
 		</pattern>
 		<rect width="100%" height="100%" fill="url(#a)" />
 	</svg>
-{/if}
-<footer in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<div class="footer-top">
-		<section class="main-content">
-			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-			<Query query={aboutQuery} let:data>
-				{#if data}
-					<div>
-						<p>
-							{data.about.about}
-						</p>
-					</div>
-				{/if}
-			</Query>
-		</section>
+	<div class="footer-wrapper">
+		<div class="footer-top">
+			<section class="main-content">
+				<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
+				<Query query={aboutQuery} let:data>
+					{#if data}
+						<div>
+							<p>
+								{data.about.about}
+							</p>
+						</div>
+					{/if}
+				</Query>
+			</section>
 
-		<section class="links-container">
-			<FooterSection title="Pages">
-				<li><a href="/">Home</a></li>
-				<li><a href="/download">Download</a></li>
-				<li><a href="/patches">Patches</a></li>
-				<li><a href="/contributors">Contributors</a></li>
-				<li><a href="/donate">Donate</a></li>
-			</FooterSection>
+			<section class="links-container">
+				<FooterSection title="Pages">
+					<li><a href="/">Home</a></li>
+					<li><a href="/download">Download</a></li>
+					<li><a href="/patches">Patches</a></li>
+					<li><a href="/contributors">Contributors</a></li>
+					<li><a href="/donate">Donate</a></li>
+				</FooterSection>
+				<Query query={aboutQuery} let:data>
+					{#if data}
+						<FooterSection title="Socials">
+							{#each data.about.socials as { name, url }}
+								<li>
+									<a href={url} target="_blank" rel="noreferrer">{name}</a>
+								</li>
+							{/each}
+						</FooterSection>
+					{/if}
+				</Query>
+			</section>
+		</div>
+		<div class="footer-bottom">
+			<div id="logo-name"><span>Re</span>Vanced</div>
+			<a href="/donate"><div>Donate</div></a>
 			<Query query={aboutQuery} let:data>
 				{#if data}
-					<FooterSection title="Socials">
-						{#each data.about.socials as { name, url }}
-							<li>
-								<a href={url} target="_blank" rel="noreferrer">{name}</a>
-							</li>
-						{/each}
-					</FooterSection>
+					<a href="mailto:{data.about.contact.email}"><div>Email</div></a>
 				{/if}
 			</Query>
-		</section>
-	</div>
-	<div class="footer-bottom">
-		<div id="logo-name"><span>Re</span>Vanced</div>
-		<a href="/donate"><div>Donate</div></a>
-		<Query query={aboutQuery} let:data>
-			{#if data}
-				<a href="mailto:{data.about.contact.email}"><div>Email</div></a>
-			{/if}
-		</Query>
-		<!-- DMCA Protection Badge -->
-		<a
-			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"
-			title="DMCA.com Protection Status"
-			class="dmca-badge"
-		>
-			<img
-				src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={RV_DMCA_GUID}"
-				alt="DMCA.com Protection Status"
-			/></a
-		>
+			<!-- DMCA Protection Badge -->
+			<a
+				href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"
+				title="DMCA.com Protection Status"
+				class="dmca-badge"
+			>
+				<img
+					src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={RV_DMCA_GUID}"
+					alt="DMCA.com Protection Status"
+				/></a
+			>
+		</div>
 	</div>
 </footer>
 
 <style>
 	footer {
-		margin: 4rem 0 5rem 0;
-		margin-inline: auto;
-		padding-bottom: 1rem;
-		width: min(87%, 80rem);
+		background-color: var(--background-one);
+	}
+
+	.footer-wrapper {
+		max-width: min(87%, 100rem);
+		padding: 5rem 0rem;
+		margin: 0 auto;
 	}
 
 	.footer-top {
