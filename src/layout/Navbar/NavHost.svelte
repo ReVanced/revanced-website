@@ -202,6 +202,7 @@
 	}
 
 	#nav-container {
+		z-index: 1;
 		top: 0;
 		position: sticky;
 		width: 100%;

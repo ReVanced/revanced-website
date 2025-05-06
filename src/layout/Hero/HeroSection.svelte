@@ -46,10 +46,9 @@
 	}
 
 	.social-buttons {
-		justify-content: center;
+		max-width: 30rem;
 		position: absolute;
 		bottom: 1rem;
-		z-index: 1;
 		transition: opacity 0.1s var(--bezier-one);
 	}
 
@@ -69,9 +68,28 @@
 	span {
 		color: var(--primary);
 	}
-	@media (max-width: 1700px) {
+
+	@media screen and (max-width: 1700px) {
 		.hero {
 			height: 80vh;
+		}
+	}
+
+	@media screen and (max-height: 820px) {
+		.social-buttons {
+			bottom: initial;
+			left: initial;
+			position: initial;
+			width: initial;
+			opacity: 100% !important;
+		}
+	}
+	@media screen and (max-width: 1100px) or (min-height: 820px) {
+		.social-buttons {
+			transform: translateX(-50%);
+			width: 100%;
+			position: absolute;
+			justify-content: center;
 		}
 	}
 
@@ -79,6 +97,10 @@
 		.internal-buttons {
 			flex-direction: column;
 			gap: 1rem;
+		}
+
+		.social-buttons {
+			justify-content: center;
 		}
 
 		.hero {

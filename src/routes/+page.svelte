@@ -165,10 +165,10 @@
 	}
 
 	.hero-img-container {
-		z-index: 1;
+		z-index: 0;
 	}
 
-	@media (max-width: 1100px) {
+	@media screen and (max-width: 1100px) {
 		.hero-img-container {
 			display: none;
 		}
