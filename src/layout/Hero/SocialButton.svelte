@@ -4,13 +4,11 @@
 </script>
 
 <a href={social.url} rel="noreferrer" target="_blank">
-	<div>
-		<img src="socials/{social.name.toLowerCase()}.svg" alt={social.name} />
-	</div>
+	<img src="socials/{social.name.toLowerCase()}.svg" alt={social.name} />
 </a>
 
 <style>
-	div {
+	a {
 		border: 0;
 		width: 60px;
 		height: 60px;
@@ -23,7 +21,7 @@
 		user-select: none;
 	}
 
-	div {
+	a {
 		display: flex;
 		justify-content: center;
 	}
@@ -33,11 +31,11 @@
 		width: 30px;
 	}
 
-	div:hover {
+	a:hover {
 		transform: translateY(-5%);
 	}
 
-	div:hover img {
+	a:hover img {
 		filter: brightness(1.2);
 	}
 </style>

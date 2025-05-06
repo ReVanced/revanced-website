@@ -1,27 +1,29 @@
 <script>
-	export let bottom = 0;
+	export let visibility = true;
 </script>
 
 <svg
+	class="wave"
 	viewBox="0 0 1440 500"
 	xmlns="http://www.w3.org/2000/svg"
 	preserveAspectRatio="none"
-	style="bottom: {-bottom}; height: {bottom / 5 + 35}vh"
+	style="opacity: {visibility ? '100%' : '0'}"
 >
 	<path class="wave" />
 </svg>
 
 <style>
 	svg {
-		transition: height 1s var(--bezier-one);
+		transition: opacity 0.1s var(--bezier-one);
 		position: absolute;
-		z-index: -999;
+		bottom: 0rem;
 		width: 100%;
+		height: 40vh;
 	}
 
 	.wave {
-		animation: wave-anim 40s;
-		animation-timing-function: linear;
+		animation: wave-anim 30s;
+		animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
 		animation-iteration-count: infinite;
 		fill: var(--primary);
 	}
