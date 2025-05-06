@@ -20,7 +20,7 @@
 		background-color: var(--surface-seven);
 		user-select: none;
 	}
-	@media (max-width: 1700px) {
+	@media screen and (max-width: 1700px) {
 		.hero-img {
 			height: 100vh;
 			right: 6rem;

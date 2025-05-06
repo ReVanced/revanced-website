@@ -11,7 +11,7 @@
 	onMount(() => {
 		const checkVisibility = () => {
 			const wave = document.querySelector('.wave');
-			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight);
+			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
 		};
 
 		window.addEventListener('scroll', checkVisibility, { passive: true });
@@ -165,10 +165,10 @@
 	}
 
 	.hero-img-container {
-		z-index: 1;
+		z-index: 0;
 	}
 
-	@media (max-width: 1100px) {
+	@media screen and (max-width: 1100px) {
 		.hero-img-container {
 			display: none;
 		}

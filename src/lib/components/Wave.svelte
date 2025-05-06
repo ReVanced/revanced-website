@@ -16,9 +16,16 @@
 	svg {
 		transition: opacity 0.1s var(--bezier-one);
 		position: absolute;
-		bottom: 0rem;
+		bottom: -1px;
+		z-index: -1;
 		width: 100%;
 		height: 40vh;
+	}
+
+	@media screen and (max-height: 820px) {
+		svg {
+			opacity: 0 !important;
+		}
 	}
 
 	.wave {
