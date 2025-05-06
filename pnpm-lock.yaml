@@ -15,8 +15,8 @@ importers:
         specifier: ^4.36.1
         version: 4.36.1
       '@tanstack/query-sync-storage-persister':
-        specifier: ^4.36.1
-        version: 4.36.1
+        specifier: ^5.75.4
+        version: 5.75.4
       '@tanstack/svelte-query':
         specifier: ^4.36.1
         version: 4.36.1(svelte@4.2.18)
@@ -679,11 +679,17 @@ packages:
   '@tanstack/query-core@4.36.1':
     resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
 
+  '@tanstack/query-core@5.75.4':
+    resolution: {integrity: sha512-pcqOUgWG9oGlzkfRQQMMsEFmtQu0wq81A414CtELZGq+ztVwSTAaoB3AZRAXQJs88LmNMk2YpUKuQbrvzNDyRg==}
+
   '@tanstack/query-persist-client-core@4.36.1':
     resolution: {integrity: sha512-eocgCeI7D7TRv1IUUBMfVwOI0wdSmMkBIbkKhqEdTrnUHUQEeOaYac8oeZk2cumAWJdycu6P/wB+WqGynTnzXg==}
 
-  '@tanstack/query-sync-storage-persister@4.36.1':
-    resolution: {integrity: sha512-yMEt5hWe2+1eclf1agMtXHnPIkxEida0lYWkfdhR8U6KXk/lO4Vca6piJmhKI85t0NHlx3l/z6zX+t/Fn5O9NA==}
+  '@tanstack/query-persist-client-core@5.75.4':
+    resolution: {integrity: sha512-prAOpF1vE124MUuyvQSGBesJM0uprI8m14MhI1VSb4eqybnoruJZjeJdPiwGYDJ5ToQ3IDxRgwH4Z+AAcyIapw==}
+
+  '@tanstack/query-sync-storage-persister@5.75.4':
+    resolution: {integrity: sha512-l6hfn5POYGZXa9c+DwnQ40joseoBzvGeXNDO0dbYbf9EBSB/EhhB5OE290CSMC9iVxgdswyDGas9M1K9+bdeTw==}
 
   '@tanstack/svelte-query@4.36.1':
     resolution: {integrity: sha512-5fj79QuAu5HuS6G/fairU6ywgILXfs4TGl3+Xc9+MBlmB1aPoQBvGsgJrNyhqvXQcnxro8wDNyZOH8S+Qitycw==}
@@ -1972,13 +1978,20 @@ snapshots:
 
   '@tanstack/query-core@4.36.1': {}
 
+  '@tanstack/query-core@5.75.4': {}
+
   '@tanstack/query-persist-client-core@4.36.1':
     dependencies:
       '@tanstack/query-core': 4.36.1
 
-  '@tanstack/query-sync-storage-persister@4.36.1':
+  '@tanstack/query-persist-client-core@5.75.4':
     dependencies:
-      '@tanstack/query-persist-client-core': 4.36.1
+      '@tanstack/query-core': 5.75.4
+
+  '@tanstack/query-sync-storage-persister@5.75.4':
+    dependencies:
+      '@tanstack/query-core': 5.75.4
+      '@tanstack/query-persist-client-core': 5.75.4
 
   '@tanstack/svelte-query@4.36.1(svelte@4.2.18)':
     dependencies:
