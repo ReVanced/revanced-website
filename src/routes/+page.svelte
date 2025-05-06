@@ -11,7 +11,7 @@
 	onMount(() => {
 		const checkVisibility = () => {
 			const wave = document.querySelector('.wave');
-			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight);
+			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
 		};
 
 		window.addEventListener('scroll', checkVisibility, { passive: true });
