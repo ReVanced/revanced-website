@@ -157,8 +157,7 @@
 	main {
 		overflow: hidden;
 		padding: 5rem 0;
-		// Instead of 100vh because of header.
-		height: 93vh;
+		height: max(100vh, 600px);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
