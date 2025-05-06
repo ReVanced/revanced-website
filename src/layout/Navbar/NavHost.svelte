@@ -202,7 +202,7 @@
 	}
 
 	#nav-container {
-		z-index: 1;
+		z-index: 5;
 		top: 0;
 		position: sticky;
 		width: 100%;
@@ -246,7 +246,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 88;
+		z-index: 3;
 	}
 
 	.nav-wrapper {
@@ -288,7 +288,7 @@
 			left: 0;
 			height: 100%;
 			background-color: var(--surface-eight);
-			z-index: 100;
+			z-index: 4;
 		}
 
 		.nav-wrapper {
@@ -317,7 +317,7 @@
 		}
 
 		#secondary-navigation {
-			z-index: 100;
+			z-index: 4;
 			padding: 16px;
 		}
 	}
@@ -334,7 +334,7 @@
 		position: relative;
 		display: flex;
 		height: 50px;
-		z-index: 999;
+		z-index: 6;
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
@@ -383,7 +383,7 @@
 		border-radius: 100px;
 		text-decoration: none;
 		background-color: var(--primary);
-		z-index: 10;
+		z-index: 2;
 		color: var(--text-three);
 		font-weight: 600;
 		font-size: 0.95rem;
