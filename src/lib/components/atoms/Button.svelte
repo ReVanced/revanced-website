@@ -9,6 +9,7 @@
 		type: ButtonType;
 		icon?: typeof import('~icons/mdi').default;
 		iconColor?: string;
+		color?: string;
 		label?: string;
 		children?: Snippet;
 	};
@@ -40,12 +41,21 @@
 		label = '',
 		onclick = () => {},
 		iconColor = 'currentColor',
+		color = 'currentColor',
 		target = '_self'
 	}: Props = $props();
 
 	// prettier-ignore
 	const navBarButtonSelected = type === 'navbar' && href && new URL(href, page.url.href).pathname === page.url.pathname;
 </script>
+
+<!-- reusable snippet to remove duplicate code -->
+{#snippet content()}
+	{#if Icon}
+		<Icon color={iconColor} />
+	{/if}
+	<span class="content" style="color: {color};">{@render children?.()}</span>
+{/snippet}
 
 {#if href}
 	<a
@@ -54,21 +64,11 @@
 		class={`button-${type}${navBarButtonSelected ? ' selected' : ''}`}
 		aria-label={label}
 	>
-		{#if Icon}
-			<Icon color={iconColor} />
-		{/if}
-		{#if type === 'navbar'}
-			<span>{@render children?.()}</span>
-		{:else}
-			{@render children?.()}
-		{/if}
+		{@render content()}
 	</a>
 {:else}
 	<button {onclick} class={`button-${type}`} aria-label={label}>
-		{#if Icon}
-			<Icon color={iconColor} />
-		{/if}
-		{@render children?.()}
+		{@render content()}
 	</button>
 {/if}
 
@@ -112,6 +112,11 @@
 		color: var(--primary);
 		font-weight: 500;
 		letter-spacing: 0.01rem;
+	}
+
+	.button-text:hover .content {
+		text-decoration: underline;
+		text-decoration-color: currentColor;
 	}
 
 	button:not(.button-navbar):hover,
