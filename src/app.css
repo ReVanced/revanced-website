@@ -35,3 +35,87 @@
     outline: none;
     font-family: var(--font-family);
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    background-clip: content-box;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--surface-five);
+}
+
+::selection {
+    background-color: var(--tertiary);
+}
+
+/* ##### HEADINGS ##### */
+
+h1 {
+    color: var(--text-one);
+    line-height: 4rem;
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    color: var(--text-four);
+    font-size: 2.5rem;
+    letter-spacing: -0.04rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.25rem;
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+h4 {
+    color: var(--secondary);
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.02rem;
+    line-height: 2rem;
+}
+
+h5 {
+    color: var(--text-four);
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 0.02rem;
+}
+
+h6 {
+    color: var(--text-four);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+p {
+    color: var(--text-four);
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.02rem;
+    line-height: 1.75rem;
+}
+
+/* ##### MEDIA QUERIES ##### */
+
+@media screen and (max-width: 767px) {
+    h1 {
+        font-size: 2.6rem;
+        line-height: 3.75rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+}
