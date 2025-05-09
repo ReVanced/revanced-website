@@ -11,9 +11,17 @@
 	type Props = {
 		children: Snippet;
 		level: 'info' | 'warning' | 'caution';
-		permanent?: boolean;
-		onDismiss?: () => void;
-	};
+	} & (
+		| {
+				permanent?: false;
+				onDismiss?: () => void;
+		  }
+		| {
+				permanent: true;
+				onDismiss?: never; // permanent banner doesn't have a dismiss button
+		  }
+	);
+
 	let { children, level = 'info', permanent = false, onDismiss }: Props = $props();
 
 	const icons = { info: Info, warning: Warning, caution: Caution };
