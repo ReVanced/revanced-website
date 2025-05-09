@@ -129,7 +129,6 @@
 		text-decoration: none;
 		user-select: none;
 		border-radius: 10px;
-		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 10px 16px;
