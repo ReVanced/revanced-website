@@ -4,7 +4,7 @@ import { events } from './events';
 import { minutes } from './time';
 
 export const event = readable('default', (set) => {
-	const updateTheme = () => {
+	const updateEvent = () => {
 		const now = moment();
 
 		const today = {
@@ -17,8 +17,8 @@ export const event = readable('default', (set) => {
 		});
 	};
 
-	updateTheme();
-	const interval = setInterval(updateTheme, minutes(1));
+	updateEvent();
+	const interval = setInterval(updateEvent, minutes(1));
 
 	return () => clearInterval(interval);
 });
