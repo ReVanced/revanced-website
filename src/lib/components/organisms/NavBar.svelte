@@ -8,7 +8,7 @@
 
 {#await api.general.ping() then apiUp}
 	{#if !apiUp}
-		<Banner level="caution">
+		<Banner level="caution" permanent>
 			The API is currently unresponsive and some services may not work correctly.
 			{#if statusUrl}
 				Check the <Button type="text" href={statusUrl}>status page</Button> for updates.
