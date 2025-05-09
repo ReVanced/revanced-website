@@ -9,6 +9,9 @@
 	type Props = { children: Snippet };
 	let { children }: Props = $props();
 
+	// set this to true to enable debug outlines on all elements
+	const debug = false;
+
 	$effect(() => {
 		document.documentElement.setAttribute('data-event-name', $event);
 	});
@@ -21,3 +24,12 @@
 	{@render children()}
 </main>
 <Footer />
+
+{#if debug}
+	<style global>
+		* {
+			outline: 1px solid #f002 !important;
+			outline-offset: -1px;
+		}
+	</style>
+{/if}
