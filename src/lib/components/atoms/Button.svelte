@@ -31,7 +31,6 @@
 	>;
 
 	type Props = ButtonProps | LinkProps;
-
 	let {
 		type,
 		// https://svelte.dev/docs/svelte/compiler-warnings#svelte_component_deprecated

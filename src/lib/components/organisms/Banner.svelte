@@ -7,21 +7,28 @@
 
 	import type { Snippet } from 'svelte';
 	import Button from '$components/atoms/Button.svelte';
+	import type { Prettify } from '$types';
 
-	type Props = {
+	type BaseProps = {
 		children: Snippet;
 		level: 'info' | 'warning' | 'caution';
-	} & (
-		| {
-				permanent?: false;
-				onDismiss?: () => void;
-		  }
-		| {
-				permanent: true;
-				onDismiss?: never; // permanent banner doesn't have a dismiss button
-		  }
-	);
+	};
 
+	type NonPermanentProps = Prettify<
+		BaseProps & {
+			permanent?: false;
+			onDismiss?: () => void;
+		}
+	>;
+
+	type PermanentProps = Prettify<
+		BaseProps & {
+			permanent: true;
+			onDismiss?: never; // permanent banner doesn't have a dismiss button
+		}
+	>;
+
+	type Props = NonPermanentProps | PermanentProps;
 	let { children, level = 'info', permanent = false, onDismiss }: Props = $props();
 
 	const icons = { info: Info, warning: Warning, caution: Caution };
