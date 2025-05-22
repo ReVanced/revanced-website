@@ -11,11 +11,13 @@
 
 	// set this to true to enable debug outlines on all elements
 	const debug = false;
-
-	$effect(() => {
-		document.documentElement.setAttribute('data-event-name', $event);
-	});
 </script>
+
+<svelte:document
+	{@attach (doc) => {
+		doc.documentElement.setAttribute('data-event-name', $event);
+	}}
+/>
 
 <Head />
 

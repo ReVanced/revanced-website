@@ -8,7 +8,7 @@
 	type Props = { title: string; children: Snippet };
 	let { title, children }: Props = $props();
 
-	let expanded: boolean = $state(false);
+	let expanded = $state(false);
 </script>
 
 <div class="desktop-only">
@@ -33,7 +33,7 @@
 		</ul>
 	{/if}
 </div>
- 
+
 <style>
 	span {
 		list-style: none;
