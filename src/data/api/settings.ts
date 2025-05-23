@@ -12,7 +12,7 @@ function set_status_url(apiUrl: string) {
 		.then((data) => {
 			if (data?.status) {
 				localStorage.setItem(STATUS_KEY, data.status);
-				console.log('status is now ' + localStorage.getItem(STATUS_KEY));
+				console.log('Status is now:', localStorage.getItem(STATUS_KEY));
 			}
 		});
 }

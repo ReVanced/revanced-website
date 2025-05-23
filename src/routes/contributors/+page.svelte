@@ -3,7 +3,6 @@
 	import { quintOut } from 'svelte/easing';
 
 	import ContributorHost from './ContributorSection.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 
@@ -61,8 +60,6 @@
 		</div>
 	</div>
 </main>
-
-<Footer />
 
 <style>
 	.repos {

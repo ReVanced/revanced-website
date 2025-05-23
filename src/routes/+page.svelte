@@ -1,18 +1,28 @@
 <script>
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
-	import SocialHost from '$layout/Hero/SocialHost.svelte';
-	import Wave from '$lib/components/Wave.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
+	import Wave from '$lib/components/Wave.svelte';
+	import { onMount } from 'svelte';
 
-	let scrollY = 0;
-	let footerVisible = false;
+	let bottomVisibility = true;
 
-	$: footerVisible = scrollY >= 10;
+	onMount(() => {
+		const checkVisibility = () => {
+			const wave = document.querySelector('.wave');
+			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
+		};
+
+		window.addEventListener('scroll', checkVisibility, { passive: true });
+		window.addEventListener('resize', checkVisibility);
+
+		checkVisibility(); // Initial check
+		return () => {
+			window.removeEventListener('scroll', checkVisibility);
+			window.removeEventListener('resize', checkVisibility);
+		};
+	});
 </script>
-
-<svelte:window bind:scrollY />
 
 <Head
 	schemas={[
@@ -125,76 +135,46 @@
 	]}
 />
 
-<main style={footerVisible ? '' : `height: 100vh;`} class:hidden={footerVisible}>
-	<div class="wrap">
-		<div class="wrappezoid">
-			<Home />
-			<div id="heroimg"><HeroImage /></div>
+<main>
+	<div class="content">
+		<Home socialsVisibility={bottomVisibility} />
+		<div class="hero-img-container">
+			<HeroImage />
 		</div>
 	</div>
-	<div class="hide-on-scroll" class:hidden={footerVisible}>
-		<Wave />
-		<SocialHost />
-	</div>
 </main>
-<div class="footer">
-	<Footer showDivider={footerVisible ? true : false} />
-</div>
+<Wave visibility={bottomVisibility} />
 
 <style lang="scss">
-	.hide-on-scroll {
-		transition: opacity 0.5s var(--bezier-one);
-		z-index: -999;
-
-		&.hidden {
-			height: 0;
-			opacity: 0;
-		}
+	.content {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-evenly;
+		width: min(87%, 80rem);
+		gap: 1rem;
 	}
 	main {
+		overflow: hidden;
+		padding: 5rem 0;
+		min-height: max(100vh, 600px);
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		margin-bottom: 3rem;
-		transition:
-			gap 0.5s var(--bezier-one),
-			margin-bottom 0.5s var(--bezier-one);
-
-		&.hidden {
-			gap: 0rem;
-			margin-bottom: 0rem;
-		}
-	}
-	.wrap {
-		margin-inline: auto;
-		width: min(87%, 100rem);
-	}
-	.wrappezoid {
-		height: calc(100vh - 225px);
-		display: flex;
-		justify-content: center;
 		align-items: center;
-		gap: 22rem;
 	}
 
-	.footer {
-		background-color: var(--background-one);
+	.hero-img-container {
+		z-index: 0;
 	}
 
-	@media (max-width: 1700px) {
-		.wrappezoid {
-			justify-content: space-between;
-		}
-	}
-	@media (max-width: 1052px) {
-		#heroimg {
+	@media screen and (max-width: 1100px) {
+		.hero-img-container {
 			display: none;
 		}
 	}
-	@media (max-width: 767px) {
-		.wrappezoid {
-			justify-content: center;
-			height: calc(65vh);
+
+	@media screen and (max-width: 335px) {
+		main {
+			padding: 2rem 0 !important;
 		}
 	}
 </style>

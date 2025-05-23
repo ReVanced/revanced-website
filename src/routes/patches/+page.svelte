@@ -14,7 +14,6 @@
 	import PackageMenu from './PackageMenu.svelte';
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
@@ -174,7 +173,6 @@
 		</div>
 	</Query>
 </main>
-<Footer />
 
 <style>
 	main {

@@ -12,7 +12,6 @@
 	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 	import Dialogue from '$lib/components/Dialogue.svelte';
 	import { onMount } from 'svelte';
@@ -85,7 +84,7 @@
 	</svelte:fragment>
 </Dialogue>
 
-<div class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+<main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
@@ -106,15 +105,13 @@
 			{/if}
 		</Query>
 		<Button type="tonal" href="https://github.com/revanced/revanced-manager" target="_blank">
-			View Source
+			View source
 		</Button>
 	</div>
 	<div class="screenshot">
 		<Picture data={manager_screenshot} alt="Manager Screenshot" />
 	</div>
-</div>
-
-<Footer />
+</main>
 
 <style>
 	.center {
