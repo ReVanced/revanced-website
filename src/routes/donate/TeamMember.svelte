@@ -28,21 +28,23 @@
 				<h4>{member.name}</h4>
 			</a>
 			<div class="verified-badge">
-				<ToolTip
-					content="<p>GPG key ID:</p> <a class='gpg-url' href={member.gpg_key
-						.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
-					html={true}
-				>
-					<div class="desktop">
-						<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
+				{#if member.gpg_key}
+					<ToolTip
+						content="<p>GPG key ID:</p> <a class='gpg-url' href={member.gpg_key
+							.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
+						html={true}
+					>
+						<div class="desktop">
+							<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
+								<CheckDecagramOutline size="20px" color="var(--secondary)" />
+							</a>
+						</div>
+						<div class="mobile">
 							<CheckDecagramOutline size="20px" color="var(--secondary)" />
-						</a>
-					</div>
-					<div class="mobile">
-						<CheckDecagramOutline size="20px" color="var(--secondary)" />
-						<h5>GPG key</h5>
-					</div>
-				</ToolTip>
+							<h5>GPG key</h5>
+						</div>
+					</ToolTip>
+				{/if}
 			</div>
 		</div>
 		{#if member.bio}
