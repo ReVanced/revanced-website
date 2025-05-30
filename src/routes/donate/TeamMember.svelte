@@ -27,23 +27,25 @@
 			<a href={member.url} rel="noreferrer" target="_blank" in:fly|global={transitionOptions}>
 				<h4>{member.name}</h4>
 			</a>
-			<div class="verified-badge">
-				<ToolTip
-					content="<p>GPG key ID:</p> <a class='gpg-url' href={member.gpg_key
-						.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
-					html={true}
-				>
-					<div class="desktop">
-						<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
+			{#if member.gpg_key}
+				<div class="verified-badge">
+					<ToolTip
+						content="<p>GPG key ID:</p> <a class='gpg-url' href={member.gpg_key
+							.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
+						html={true}
+					>
+						<div class="desktop">
+							<a href={member.gpg_key.url} rel="noreferrer" target="_blank">
+								<CheckDecagramOutline size="20px" color="var(--secondary)" />
+							</a>
+						</div>
+						<div class="mobile">
 							<CheckDecagramOutline size="20px" color="var(--secondary)" />
-						</a>
-					</div>
-					<div class="mobile">
-						<CheckDecagramOutline size="20px" color="var(--secondary)" />
-						<h5>GPG key</h5>
-					</div>
-				</ToolTip>
-			</div>
+							<h5>GPG key</h5>
+						</div>
+					</ToolTip>
+				</div>
+			{/if}
 		</div>
 		{#if member.bio}
 			<h6>{member.bio}</h6>
