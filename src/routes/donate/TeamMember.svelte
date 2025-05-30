@@ -27,8 +27,8 @@
 			<a href={member.url} rel="noreferrer" target="_blank" in:fly|global={transitionOptions}>
 				<h4>{member.name}</h4>
 			</a>
-			<div class="verified-badge">
-				{#if member.gpg_key}
+			{#if member.gpg_key}
+				<div class="verified-badge">
 					<ToolTip
 						content="<p>GPG key ID:</p> <a class='gpg-url' href={member.gpg_key
 							.url} rel='noreferrer' target='_blank'>{member.gpg_key.id}</a>"
@@ -44,8 +44,8 @@
 							<h5>GPG key</h5>
 						</div>
 					</ToolTip>
-				{/if}
-			</div>
+				</div>
+			{/if}
 		</div>
 		{#if member.bio}
 			<h6>{member.bio}</h6>
