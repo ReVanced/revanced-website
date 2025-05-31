@@ -26,6 +26,7 @@
 
 	import { RV_GOOGLE_TAG_MANAGER_ID } from '$env/static/public';
 	import FooterHost from '$layout/Footer/FooterHost.svelte';
+	import { isCrawler } from '$lib/utils';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -66,7 +67,7 @@
 			allowAnalytics = localStorage.getItem('analytics') === 'true';
 			if (allowAnalytics) enableAnalytics();
 		} else {
-			showConsentModal = true;
+			showConsentModal = !isCrawler(navigator.userAgent);
 		}
 
 		new DateTriggerEventHandler(themeEvents);
