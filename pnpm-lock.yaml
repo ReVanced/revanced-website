@@ -10,16 +10,16 @@ importers:
     dependencies:
       '@tanstack/query-core':
         specifier: ^4.36.1
-        version: 4.36.1
+        version: 4.39.1
       '@tanstack/query-persist-client-core':
         specifier: ^4.36.1
-        version: 4.36.1
+        version: 4.39.1
       '@tanstack/query-sync-storage-persister':
         specifier: ^4.36.1
-        version: 4.36.1
+        version: 4.39.1
       '@tanstack/svelte-query':
         specifier: ^4.36.1
-        version: 4.36.1(svelte@4.2.18)
+        version: 4.39.1(svelte@4.2.18)
       datetrigger:
         specifier: ^1.1.1
         version: 1.1.1
@@ -53,16 +53,16 @@ importers:
         version: 2.46.1(eslint@9.16.0)(svelte@4.2.18)
       fuse.js:
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.1.0
       imagetools-core:
         specifier: 7.0.2
         version: 7.0.2
       prettier:
-        specifier: 3.4.1
-        version: 3.4.1
+        specifier: 3.5.3
+        version: 3.5.3
       prettier-plugin-svelte:
         specifier: 3.3.2
-        version: 3.3.2(prettier@3.4.1)(svelte@4.2.18)
+        version: 3.3.2(prettier@3.5.3)(svelte@4.2.18)
       qrious:
         specifier: ^4.0.2
         version: 4.0.2
@@ -83,10 +83,10 @@ importers:
         version: 3.1.2(svelte@4.2.18)(typescript@5.7.2)
       svelte-sitemap:
         specifier: ^2.6.0
-        version: 2.6.0
+        version: 2.7.0
       svooltip:
         specifier: ^0.8.2
-        version: 0.8.2(svelte@4.2.18)
+        version: 0.8.3(svelte@4.2.18)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -676,17 +676,17 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       vite: ^5.0.0
 
-  '@tanstack/query-core@4.36.1':
-    resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
+  '@tanstack/query-core@4.39.1':
+    resolution: {integrity: sha512-E1g5oEiBq8l1xU1ELXieEBD55oZQscn4kaHidsxdCH1egAk9Tx4sTi8rgQiayoaEWESOurRdDEf2wJHp9/BRDg==}
 
-  '@tanstack/query-persist-client-core@4.36.1':
-    resolution: {integrity: sha512-eocgCeI7D7TRv1IUUBMfVwOI0wdSmMkBIbkKhqEdTrnUHUQEeOaYac8oeZk2cumAWJdycu6P/wB+WqGynTnzXg==}
+  '@tanstack/query-persist-client-core@4.39.1':
+    resolution: {integrity: sha512-o/4pDSsSqgfD9hkdIM9NHSDtFsR5dCmE/pKZu/oAp60CR8RUYvmN65PKT1iY5ntozjfGJEHqW9+jHnp8iuCatw==}
 
-  '@tanstack/query-sync-storage-persister@4.36.1':
-    resolution: {integrity: sha512-yMEt5hWe2+1eclf1agMtXHnPIkxEida0lYWkfdhR8U6KXk/lO4Vca6piJmhKI85t0NHlx3l/z6zX+t/Fn5O9NA==}
+  '@tanstack/query-sync-storage-persister@4.39.1':
+    resolution: {integrity: sha512-KULvHo1uui13JElh3Ut08wKiB8txPUznHOfESLPNsl4nSuUycOSagaNyLnn6BvhwjuDJ+RmBu+RRETS6n3kXUA==}
 
-  '@tanstack/svelte-query@4.36.1':
-    resolution: {integrity: sha512-5fj79QuAu5HuS6G/fairU6ywgILXfs4TGl3+Xc9+MBlmB1aPoQBvGsgJrNyhqvXQcnxro8wDNyZOH8S+Qitycw==}
+  '@tanstack/svelte-query@4.39.1':
+    resolution: {integrity: sha512-GW/x+zGbVba3w0hC/rqXjL9+CL/PahdFi/BGh3Uh6uDUPJ+K61DPdetexLG89/cxZ7DaJoCcIDoasC8Y4Y7g0g==}
     peerDependencies:
       svelte: '>=3 <5'
 
@@ -1002,14 +1002,18 @@ packages:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
     engines: {node: '>=8.6.0'}
 
+  fast-glob@3.3.3:
+    resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
+    engines: {node: '>=8.6.0'}
+
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
 
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fastq@1.17.1:
-    resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
+  fastq@1.19.1:
+    resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
 
   fdir@6.4.2:
     resolution: {integrity: sha512-KnhMXsKSPZlAhp7+IjUkRZKPb4fUyccpDrdFXbi4QL1qkmFh9kVY09Yox+n4MaOb3lHZ1Tv829C3oaaXoMYPDQ==}
@@ -1043,8 +1047,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  fuse.js@7.0.0:
-    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
+  fuse.js@7.1.0:
+    resolution: {integrity: sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==}
     engines: {node: '>=10'}
 
   get-port@5.1.1:
@@ -1182,6 +1186,10 @@ packages:
     resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
     engines: {node: '>=8.6'}
 
+  micromatch@4.0.8:
+    resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
+    engines: {node: '>=8.6'}
+
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
@@ -1290,8 +1298,8 @@ packages:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
 
-  prettier@3.4.1:
-    resolution: {integrity: sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==}
+  prettier@3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -1313,8 +1321,8 @@ packages:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
 
-  reusify@1.0.4:
-    resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
+  reusify@1.1.0:
+    resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
   rollup@4.20.0:
@@ -1423,8 +1431,8 @@ packages:
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0
 
-  svelte-sitemap@2.6.0:
-    resolution: {integrity: sha512-WcwsuIeo8iJFG9a5cgvXwXEGoyjk6Zowb6JmL5BbwfnFXMzakGa1+mQjthw5Ni3UV/gGbE0PgJvc7Ygir3LmFg==}
+  svelte-sitemap@2.7.0:
+    resolution: {integrity: sha512-/0rHrKQuA4MQ7CyHj6d9lD5jSO3woq86LR+ATUS/lx9hxwiQee6awjJ2nzy639Giu6m/Bhzereu9738CkWprfw==}
     engines: {node: '>= 14.17.0'}
     hasBin: true
 
@@ -1432,8 +1440,8 @@ packages:
     resolution: {integrity: sha512-d0FdzYIiAePqRJEb90WlJDkjUEx42xhivxN8muUBmfZnP+tzUgz12DJ2hRJi8sIHCME7jeK1PTMgKPSfTd8JrA==}
     engines: {node: '>=16'}
 
-  svooltip@0.8.2:
-    resolution: {integrity: sha512-tNuWxAf8A6li0aJNUAuyWrUtNpT7SAii4nuiB3t79K6bngRF3MNQ6jgJdeWN0Y1ZaplJA308MPlIbIF9SioiKw==}
+  svooltip@0.8.3:
+    resolution: {integrity: sha512-ruSxiF0nc3WvqY2wEwOI4pIfOZhC52b5K5L9t8bofEfHcxbME+QodvzRbuIcpp64r0XXXT+OYJmwIFDsFimXrg==}
     peerDependencies:
       svelte: ^4.0.0
 
@@ -1787,7 +1795,7 @@ snapshots:
   '@nodelib/fs.walk@1.2.8':
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
-      fastq: 1.17.1
+      fastq: 1.19.1
 
   '@oozcitak/dom@1.15.10':
     dependencies:
@@ -1970,19 +1978,19 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tanstack/query-core@4.36.1': {}
+  '@tanstack/query-core@4.39.1': {}
 
-  '@tanstack/query-persist-client-core@4.36.1':
+  '@tanstack/query-persist-client-core@4.39.1':
     dependencies:
-      '@tanstack/query-core': 4.36.1
+      '@tanstack/query-core': 4.39.1
 
-  '@tanstack/query-sync-storage-persister@4.36.1':
+  '@tanstack/query-sync-storage-persister@4.39.1':
     dependencies:
-      '@tanstack/query-persist-client-core': 4.36.1
+      '@tanstack/query-persist-client-core': 4.39.1
 
-  '@tanstack/svelte-query@4.36.1(svelte@4.2.18)':
+  '@tanstack/svelte-query@4.39.1(svelte@4.2.18)':
     dependencies:
-      '@tanstack/query-core': 4.36.1
+      '@tanstack/query-core': 4.39.1
       svelte: 4.2.18
 
   '@types/cookie@0.6.0': {}
@@ -2351,13 +2359,21 @@ snapshots:
       merge2: 1.4.1
       micromatch: 4.0.7
 
+  fast-glob@3.3.3:
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      '@nodelib/fs.walk': 1.2.8
+      glob-parent: 5.1.2
+      merge2: 1.4.1
+      micromatch: 4.0.8
+
   fast-json-stable-stringify@2.1.0: {}
 
   fast-levenshtein@2.0.6: {}
 
-  fastq@1.17.1:
+  fastq@1.19.1:
     dependencies:
-      reusify: 1.0.4
+      reusify: 1.1.0
 
   fdir@6.4.2: {}
 
@@ -2384,7 +2400,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuse.js@7.0.0: {}
+  fuse.js@7.1.0: {}
 
   get-port@5.1.1: {}
 
@@ -2490,6 +2506,11 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
+  micromatch@4.0.8:
+    dependencies:
+      braces: 3.0.3
+      picomatch: 2.3.1
+
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
@@ -2576,12 +2597,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-svelte@3.3.2(prettier@3.4.1)(svelte@4.2.18):
+  prettier-plugin-svelte@3.3.2(prettier@3.5.3)(svelte@4.2.18):
     dependencies:
-      prettier: 3.4.1
+      prettier: 3.5.3
       svelte: 4.2.18
 
-  prettier@3.4.1: {}
+  prettier@3.5.3: {}
 
   punycode@2.3.1: {}
 
@@ -2593,7 +2614,7 @@ snapshots:
 
   resolve-from@4.0.0: {}
 
-  reusify@1.0.4: {}
+  reusify@1.1.0: {}
 
   rollup@4.20.0:
     dependencies:
@@ -2743,9 +2764,9 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  svelte-sitemap@2.6.0:
+  svelte-sitemap@2.7.0:
     dependencies:
-      fast-glob: 3.3.2
+      fast-glob: 3.3.3
       minimist: 1.2.8
       xmlbuilder2: 3.1.1
 
@@ -2766,7 +2787,7 @@ snapshots:
       magic-string: 0.30.11
       periscopic: 3.1.0
 
-  svooltip@0.8.2(svelte@4.2.18):
+  svooltip@0.8.3(svelte@4.2.18):
     dependencies:
       '@floating-ui/dom': 1.6.10
       svelte: 4.2.18
