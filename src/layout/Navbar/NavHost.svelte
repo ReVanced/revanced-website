@@ -91,9 +91,11 @@
 					</ul>
 				</div>
 				<div id="secondary-navigation">
-					<button on:click={() => (modals.settings = !modals.settings)} aria-label="Settings">
-						<Cog size="20px" color="var(--surface-six)" />
-					</button>
+					<span class:selected={modals.settings}>
+						<button on:click={() => (modals.settings = !modals.settings)} aria-label="Settings">
+							<Cog size="20px" color={modals.settings ? 'var(--primary)' : 'var(--surface-six)'} />
+						</button>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -119,6 +121,23 @@
 <SessionExpiredModal bind:loginOpen={modals.login} />
 
 <style lang="scss">
+	#secondary-navigation {
+		display: flex;
+
+		span {
+			border-radius: 10px;
+			padding: 10px 16px;
+
+			&:hover {
+				background-color: var(--surface-three);
+			}
+
+			&.selected {
+				background-color: var(--tertiary);
+			}
+		}
+	}
+
 	#logo {
 		padding: 0.5rem;
 	}
@@ -147,13 +166,6 @@
 		width: 100%;
 
 		background-color: var(--surface-eight);
-	}
-
-	#main-navigation,
-	#secondary-navigation {
-		align-items: center;
-		display: flex;
-		gap: 2rem;
 	}
 
 	img {

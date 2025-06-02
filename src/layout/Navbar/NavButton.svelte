@@ -81,9 +81,6 @@
 	}
 
 	@media (max-width: 767px) {
-		li {
-			border-radius: 100px;
-		}
 		a {
 			padding: 0.75rem 1.25rem;
 			justify-content: left;
