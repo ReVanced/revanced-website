@@ -27,14 +27,23 @@
 		}
 	}
 
-	const handleClick = () =>
-		latestUnreadAnnouncement && goto(`/announcements/${latestUnreadAnnouncement.id}`);
+	function setAsRead() {
+		if (!latestUnreadAnnouncement) return;
+		$read_announcements.add(latestUnreadAnnouncement.id);
+		localStorage.setItem('read_announcements', JSON.stringify(Array.from($read_announcements)));
+		latestUnreadAnnouncement = undefined;
+	}
+
+	function handleClick() {
+		if (latestUnreadAnnouncement) {
+			goto(`/announcements/${latestUnreadAnnouncement.id}`);
+			setAsRead();
+		}
+	}
 
 	function handleClose() {
 		if (latestUnreadAnnouncement && browser) {
-			$read_announcements.add(latestUnreadAnnouncement.id);
-			localStorage.setItem('read_announcements', JSON.stringify(Array.from($read_announcements)));
-			latestUnreadAnnouncement = undefined;
+			setAsRead();
 		}
 	}
 
