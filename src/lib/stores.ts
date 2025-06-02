@@ -62,3 +62,5 @@ export const read_announcements = writable<Set<number>>(new Set(), (set) => {
 		localStorage.setItem(key, JSON.stringify(Array.from(currentState)));
 	};
 });
+
+export const passed_login_with_creds = writable(false); // will only change when the user INPUTS the credentials, not if the session is just valid
