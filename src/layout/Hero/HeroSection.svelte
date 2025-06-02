@@ -7,7 +7,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import SocialButton from './SocialButton.svelte';
 
-	const aboutQuery = createQuery(['about'], queries.about);
+	const aboutQuery = createQuery(queries.about());
 
 	export let socialsVisibility = true;
 </script>

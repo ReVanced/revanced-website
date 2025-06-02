@@ -74,6 +74,7 @@ body {
 
 	--red-one: hsl(333, 84%, 62%);
 	--red-two: hsl(357, 74%, 60%);
+	--red-three: hsl(2, 68%, 83%);
 
 	--yellow-one: hsl(59, 100%, 72%);
 
@@ -84,6 +85,10 @@ body {
 
 ::selection {
 	background-color: var(--tertiary);
+}
+
+mark {
+	background-color: var(--secondary);
 }
 
 /*-----headings-----*/
@@ -173,7 +178,13 @@ hr {
 	border-top: 1px solid var(--border);
 }
 
-input {
+textarea {
+	resize: vertical;
+	field-sizing: content;
+}
+
+input,
+textarea {
 	padding: 1rem;
 	border-radius: 12px;
 	border: 1px solid var(--border);
@@ -181,6 +192,7 @@ input {
 	color: var(--secondary);
 }
 
-input:focus {
+input:focus,
+textarea:focus {
 	outline: 1px solid var(--primary);
 }
