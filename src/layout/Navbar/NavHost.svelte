@@ -8,7 +8,6 @@
 	import Navigation from './NavButton.svelte';
 	import Modal from '$lib/components/Dialogue.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Banner from '$lib/components/Banner.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import AnnouncementBanner from '../../routes/announcements/AnnouncementBanner.svelte';
 
@@ -24,6 +23,7 @@
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import { login, set_access_token } from '$lib/auth';
 	import Input from '$lib/components/Input.svelte';
+	import StatusBanner from './StatusBanner.svelte';
 
 	const client = useQueryClient();
 
@@ -89,20 +89,15 @@
 <svelte:window bind:scrollY={y} />
 
 <div id="nav-container">
-	<Query query={pingQuery()} let:data>
-		{#if !data}
-			<span class="banner">
-				<Banner level="caution" permanent>
-					The API is currently unresponsive and some services may not work correctly. {#if statusUrl}
-						Check the <a href={statusUrl} target="_blank" rel="noopener noreferrer">status page</a> for
-						updates.
-					{/if}
-				</Banner>
-			</span>
-		{/if}
-	</Query>
+	<span class="banner">
+		<Query query={pingQuery()} let:data>
+			{#if !data}
+				<StatusBanner {statusUrl} />
+			{/if}
+		</Query>
 
-	<AnnouncementBanner />
+		<AnnouncementBanner />
+	</span>
 
 	<nav class:scrolled={y > 10}>
 		<a class="menu-btn skiptab-btn" href="#skiptab">Skip navigation</a>
@@ -127,13 +122,7 @@
 					<Query query={pingQuery()} let:data>
 						{#if !data}
 							<span class="banner">
-								<Banner level="caution" permanent>
-									The API is currently unresponsive and some services may not work correctly. {#if statusUrl}
-										Check the
-										<a href={statusUrl} target="_blank" rel="noopener noreferrer">status page</a> for
-										updates.
-									{/if}
-								</Banner>
+								<StatusBanner {statusUrl} />
 							</span>
 						{/if}
 					</Query>

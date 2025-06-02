@@ -10,7 +10,6 @@ import type {
 	CryptoWallet,
 	Social,
 	About,
-	CompatiblePackage,
 	ResponseAnnouncement,
 	Announcement,
 	Tags

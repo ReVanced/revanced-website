@@ -3,7 +3,6 @@
 	import { derived, readable, type Readable } from 'svelte/store';
 	import { building } from '$app/environment';
 	import { page } from '$app/stores';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import { fly, slide } from 'svelte/transition';
 	import { quintIn, quintOut } from 'svelte/easing';
 
@@ -138,7 +137,6 @@
 		{/if}
 	</Query>
 </main>
-<Footer />
 
 <style lang="scss">
 	.expand-archived {

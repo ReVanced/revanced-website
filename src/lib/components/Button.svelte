@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon' = 'filled';
+	export let variant: 'default' | 'danger' | 'onDangerBackground' = 'default';
 	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
 	export let icon: any | undefined = undefined;
 	export let iconSize = 20;
@@ -7,23 +8,21 @@
 	export let href: string = '';
 	export let target: string = '';
 	export let label: string = '';
-	export let disabled = false;
-	export let danger = false;
+	export let disabled: boolean = false;
 
 	$: type = $$slots.default ? type : 'icon';
 </script>
 
 {#if href}
-	<a {href} {target} aria-label={label} class={type} class:disabled class:danger>
+	<a {href} {target} aria-label={label} class={`${type} ${variant}`} class:disabled>
 		<svelte:component this={icon} size={iconSize} color={iconColor} />
 		<slot />
 	</a>
 {:else}
 	<button
 		on:click
-		class={type}
+		class={`${type} ${variant}`}
 		class:disabled
-		class:danger
 		aria-label={label}
 		type={functionType}
 		{disabled}
@@ -95,6 +94,11 @@
 		&.danger {
 			background-color: var(--red-one);
 			color: var(--surface-four);
+		}
+
+		&.onDangerBackground {
+			background-color: #ffd3d3;
+			color: #601410;
 		}
 	}
 </style>
