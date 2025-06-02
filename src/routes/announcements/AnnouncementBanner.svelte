@@ -6,6 +6,7 @@
 	import { browser } from '$app/environment';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
+	import moment from 'moment';
 
 	let latestUnreadAnnouncement: ResponseAnnouncement | undefined = undefined;
 
@@ -13,8 +14,12 @@
 
 	$: {
 		if ($query.data?.announcements && $query.data.announcements.length > 0) {
-			const announcement = $query.data.announcements[0];
-			if (!$read_announcements.has(announcement.id)) {
+			const nonArchived = $query.data.announcements.filter(
+				(a) => !a.archived_at || moment(a.archived_at).isAfter(moment())
+			);
+			const announcement = nonArchived[0];
+
+			if (announcement && !$read_announcements.has(announcement.id)) {
 				latestUnreadAnnouncement = announcement;
 			} else {
 				latestUnreadAnnouncement = undefined;
