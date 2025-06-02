@@ -88,6 +88,7 @@
 				filter: brightness(75%);
 			}
 			background-color: transparent;
+			color: currentColor;
 			padding: 0;
 		}
 

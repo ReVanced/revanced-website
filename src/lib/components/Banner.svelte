@@ -26,22 +26,25 @@
 	};
 </script>
 
-<div class="banner {level}" class:closed class:permanent>
-	<div class="text">
-		<h1 id="title">{title}</h1>
-		<h2 id="description">{description}</h2>
+{#if !closed}
+	<div class="banner {level}" class:permanent>
+		<div class="text">
+			<h1 id="title">{title}</h1>
+			<h2 id="description">{description}</h2>
+		</div>
+		<div class="actions">
+			{#if !permanent}
+				<Button type={'icon'} icon={Close} on:click={dismiss} />
+			{/if}
+			{#if buttonText && buttonOnClick}
+				<Button variant={getVariant(level)} on:click={buttonOnClick}>
+					{buttonText}
+					<ArrowRight />
+				</Button>
+			{/if}
+		</div>
 	</div>
-	<div class="actions">
-		{#if !permanent}
-			<Button type={'icon'} icon={Close} on:click={dismiss} />
-		{/if}
-		{#if buttonText && buttonOnClick}
-			<Button variant={getVariant(level)} on:click={buttonOnClick}>
-				{buttonText} <ArrowRight />
-			</Button>
-		{/if}
-	</div>
-</div>
+{/if}
 
 <style lang="scss">
 	#title {
@@ -80,14 +83,6 @@
 			color: #601410;
 		}
 
-		&.closed {
-			animation: swipeUp var(--bezier-one) 1.5s forwards;
-		}
-
-		&:not(.permanent) {
-			animation: dropDown var(--bezier-one) 0.7s forwards;
-		}
-
 		@media (max-width: 767px) {
 			flex-direction: column;
 			padding: 1.1rem 1.3rem;
@@ -105,24 +100,6 @@
 			display: flex;
 			justify-content: end;
 			gap: 1rem;
-		}
-	}
-
-	@keyframes dropDown {
-		from {
-			top: -100%;
-		}
-		to {
-			top: 0;
-		}
-	}
-
-	@keyframes swipeUp {
-		from {
-			top: 0;
-		}
-		to {
-			top: -100%;
 		}
 	}
 </style>
