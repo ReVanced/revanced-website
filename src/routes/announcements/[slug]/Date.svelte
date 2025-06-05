@@ -45,7 +45,7 @@
 		display: inline-flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 1rem;
+		column-gap: 1rem;
 	}
 
 	input {

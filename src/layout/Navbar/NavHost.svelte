@@ -91,11 +91,13 @@
 					</ul>
 				</div>
 				<div id="secondary-navigation">
-					<span class:selected={modals.settings}>
-						<button on:click={() => (modals.settings = !modals.settings)} aria-label="Settings">
+						<button
+							on:click={() => (modals.settings = !modals.settings)}
+							class:selected={modals.settings}
+							aria-label="Settings"
+						>
 							<Cog size="20px" color={modals.settings ? 'var(--primary)' : 'var(--surface-six)'} />
 						</button>
-					</span>
 				</div>
 			</div>
 		</div>
@@ -124,7 +126,7 @@
 	#secondary-navigation {
 		display: flex;
 
-		span {
+		button {
 			border-radius: 10px;
 			padding: 10px 16px;
 
