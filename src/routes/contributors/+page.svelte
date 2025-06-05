@@ -3,14 +3,13 @@
 	import { quintOut } from 'svelte/easing';
 
 	import ContributorHost from './ContributorSection.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
 
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	const query = createQuery(['contributors'], queries.contributors);
+	const query = createQuery(queries.contributors());
 </script>
 
 <Head
@@ -61,8 +60,6 @@
 		</div>
 	</div>
 </main>
-
-<Footer />
 
 <style>
 	.repos {

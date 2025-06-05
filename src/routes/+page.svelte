@@ -1,7 +1,6 @@
 <script>
 	import HeroImage from '$layout/Hero/HeroImage.svelte';
 	import Home from '$layout/Hero/HeroSection.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Head from '$lib/components/Head.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import { onMount } from 'svelte';
@@ -145,19 +144,19 @@
 	</div>
 </main>
 <Wave visibility={bottomVisibility} />
-<Footer />
 
 <style lang="scss">
 	.content {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-evenly;
-		width: min(87%, 100rem);
+		width: min(87%, 80rem);
+		gap: 1rem;
 	}
 	main {
 		overflow: hidden;
 		padding: 5rem 0;
-		height: max(100vh, 600px);
+		min-height: max(100vh, 600px);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -170,6 +169,12 @@
 	@media screen and (max-width: 1100px) {
 		.hero-img-container {
 			display: none;
+		}
+	}
+
+	@media screen and (max-width: 335px) {
+		main {
+			padding: 2rem 0 !important;
 		}
 	}
 </style>

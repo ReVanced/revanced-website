@@ -22,7 +22,7 @@
 		height: 40vh;
 	}
 
-	@media screen and (max-height: 820px) {
+	@media screen and (max-height: 780px) {
 		svg {
 			opacity: 0 !important;
 		}

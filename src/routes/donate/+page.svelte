@@ -6,7 +6,6 @@
 	import { createQuery } from '@tanstack/svelte-query';
 
 	import Head from '$lib/components/Head.svelte';
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Snackbar from '$lib/components/Snackbar.svelte';
 	import Query from '$lib/components/Query.svelte';
@@ -22,8 +21,8 @@
 
 	import { supportsWebP } from '$util/supportsWebP';
 
-	const teamQuery = createQuery(['team'], queries.team);
-	const aboutQuery = createQuery(['about'], queries.about);
+	const teamQuery = createQuery(queries.team());
+	const aboutQuery = createQuery(queries.about());
 
 	let qrCodeDialogue = false;
 	let cryptoDialogue = false;
@@ -204,8 +203,6 @@
 <Snackbar bind:open={addressSnackbar}>
 	<svelte:fragment slot="text">Address copied to clipboard</svelte:fragment>
 </Snackbar>
-
-<Footer />
 
 <style lang="scss">
 	main {

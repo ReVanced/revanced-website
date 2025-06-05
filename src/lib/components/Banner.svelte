@@ -1,160 +1,105 @@
 <script lang="ts">
-	import Info from 'svelte-material-icons/InformationOutline.svelte';
-	import Warning from 'svelte-material-icons/AlertOutline.svelte';
-	import Caution from 'svelte-material-icons/AlertCircleOutline.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import Close from 'svelte-material-icons/Close.svelte';
+	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import Button from './Button.svelte';
 
-	export let level: 'info' | 'warning' | 'caution' = 'info';
+	export let title: string;
+	export let description: string | undefined = undefined;
+	export let buttonText: string | undefined = undefined;
+	export let buttonOnClick: any | undefined = undefined;
+	export let level: 'info' | 'caution' = 'info';
 	export let permanent: boolean = false;
-
-	const icons = { info: Info, warning: Warning, caution: Caution };
+	export let onDismiss: () => void = () => {};
 
 	const dispatch = createEventDispatcher();
 	let closed: boolean = false;
 
-	const dismissBanner = () => {
+	function getVariant(level: string): 'default' | 'onDangerBackground' {
+		return level === 'caution' ? 'onDangerBackground' : 'default';
+	}
+
+	const dismiss = () => {
+		if (onDismiss) onDismiss();
 		closed = true;
 		dispatch('dismissed');
 	};
 </script>
 
-<div class="banner-container" class:closed class:permanent>
-	<div class="banner {level}">
-		<div class="banner-text">
-			<svelte:component this={icons[level]} size={permanent ? 22.4 : 32} />
-			<span><slot /></span>
+{#if !closed}
+	<div class="banner {level}" class:permanent>
+		<div class="text">
+			<h1 id="title">{title}</h1>
+			<h2 id="description">{description}</h2>
 		</div>
-		{#if !permanent}
-			<Button type="text" icon="close" on:click={dismissBanner}>Dismiss</Button>
-		{/if}
+		<div class="actions">
+			{#if !permanent}
+				<Button type={'icon'} icon={Close} on:click={dismiss} />
+			{/if}
+			{#if buttonText && buttonOnClick}
+				<Button variant={getVariant(level)} on:click={buttonOnClick}>
+					{buttonText}
+					<ArrowRight />
+				</Button>
+			{/if}
+		</div>
 	</div>
-</div>
+{/if}
 
-<style>
-	.banner-container,
-	.banner-container *,
-	.banner-container :global(*) {
-		transition: none;
+<style lang="scss">
+	#title {
+		line-height: 26px;
+		color: currentColor;
+		font-size: 20px;
 	}
 
-	.banner-text :global(a) {
-		color: inherit;
-		text-decoration: none;
-		font-weight: 700;
-	}
-
-	.banner-text :global(a:hover) {
-		text-decoration: underline;
-	}
-
-	.banner-container {
-		display: flex;
-		justify-content: center;
-		width: 100%;
-	}
-
-	.banner-container:not(.permanent) {
-		animation: dropDown var(--bezier-one) 0.7s forwards;
-	}
-
-	.banner-container.closed {
-		animation: swipeUp var(--bezier-one) 1.5s forwards;
-	}
-
-	.banner-container.permanent {
-		font-size: 0.87rem;
+	#description {
+		line-height: 20px;
+		color: currentColor;
+		font-size: 14px;
 	}
 
 	.banner {
-		margin: 0;
-		padding: 1.5rem 1.7rem;
-		box-sizing: border-box;
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
+		box-sizing: border-box;
 		gap: 1.3rem;
-		margin: 0.7rem 1rem;
-		border-radius: 1rem;
-	}
-
-	.banner-container.permanent > .banner {
-		padding: 0.5rem 0.7rem;
-		margin: 0;
-		border-radius: 0;
 		width: 100%;
-	}
+		margin: 0;
+		padding: 24px 40px;
+		border-radius: 0;
+		font-size: 0.87rem;
 
-	.banner-text {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex: 1;
-		gap: 0.55rem;
-		word-wrap: break-word;
-	}
+		&.info {
+			background-color: var(--surface-four);
+			color: var(--text-one);
 
-	.banner.info {
-		background-color: var(--surface-four);
-		color: var(--text-one);
-	}
+			#description {
+				color: var(--text-four);
+			}
+		}
+		&.caution {
+			background-color: var(--red-three);
+			color: #601410;
+		}
 
-	.banner.warning {
-		background-color: var(--yellow-one);
-		color: #000;
-	}
-
-	.banner.warning > :global(button) {
-		color: #000;
-	}
-
-	.banner.warning > :global(button img) {
-		filter: grayscale(1) brightness(0); /* Make the icon black */
-	}
-
-	.banner.caution {
-		background-color: var(--red-two);
-		color: #000;
-	}
-
-	.banner.caution > :global(button) {
-		color: #000;
-	}
-
-	.banner.caution > :global(button img) {
-		filter: grayscale(1) brightness(0); /* Make the icon white */
-	}
-
-	.banner > :global(button):hover {
-		text-decoration: underline;
-	}
-
-	@media screen and (max-width: 767px) {
-		.banner {
+		@media (max-width: 767px) {
 			flex-direction: column;
 			padding: 1.1rem 1.3rem;
 		}
 
-		.banner > :global(button) {
-			align-self: flex-end;
+		.text {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			gap: 0.55rem;
+			word-wrap: break-word;
 		}
-	}
 
-	@keyframes dropDown {
-		0% {
-			top: -100%;
-		}
-		100% {
-			top: 0;
-		}
-	}
-
-	@keyframes swipeUp {
-		0% {
-			top: 0;
-		}
-		100% {
-			top: -100%;
+		.actions {
+			display: flex;
+			justify-content: end;
+			gap: 1rem;
 		}
 	}
 </style>

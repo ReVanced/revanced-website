@@ -7,10 +7,10 @@
 
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
-
 	import { RV_DMCA_GUID } from '$env/static/public';
 	import { onMount } from 'svelte';
-	const aboutQuery = createQuery(['about'], queries.about);
+
+	const aboutQuery = createQuery(queries.about());
 
 	let location: string;
 
