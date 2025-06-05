@@ -8,7 +8,7 @@
 	export let fullscreen = false;
 	export let notDismissible = false;
 
-	let element: HTMLDivElement;
+	let element: HTMLDialogElement;
 	let y = 0;
 
 	function parseScroll() {
@@ -28,9 +28,8 @@
 		transition:fade={{ easing: quadInOut, duration: 150 }}
 	/>
 
-	<div
+	<dialog
 		class="modal"
-		role="dialog"
 		class:fullscreen
 		class:scrolled={y > 10}
 		aria-modal="true"
@@ -69,7 +68,7 @@
 				</div>
 			{/if}
 		</div>
-	</div>
+	</dialog>
 {/if}
 
 <style>
@@ -121,6 +120,7 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+		border: none;
 		border-radius: 26px;
 		background-color: var(--surface-seven);
 		display: flex;
