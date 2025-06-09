@@ -40,8 +40,12 @@
 		target = ''
 	}: Props = $props();
 
-	// prettier-ignore
-	const navBarButtonSelected = type === 'navbar' && href && new URL(href, page.url.href).pathname === page.url.pathname;
+	let navBarButtonSelected = $state(false);
+
+	$effect(() => {
+		navBarButtonSelected =
+			type === 'navbar' && !!href && new URL(href, page.url.href).pathname === page.url.pathname;
+	});
 </script>
 
 <!-- reusable snippet to remove duplicate code -->
