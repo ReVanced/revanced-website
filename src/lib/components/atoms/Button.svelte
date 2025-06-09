@@ -25,7 +25,7 @@
 	type LinkProps = Prettify<
 		BaseProps & {
 			href: string;
-			target?: `${SpecialTargetValues}` | SpecialTargetValues;
+			target?: string | `${SpecialTargetValues}` | SpecialTargetValues;
 			onclick?: never;
 		}
 	>;
@@ -41,7 +41,7 @@
 		onclick = () => {},
 		iconColor = 'currentColor',
 		color = 'currentColor',
-		target = '_self'
+		target = ''
 	}: Props = $props();
 
 	// prettier-ignore
@@ -62,6 +62,7 @@
 		{target}
 		class={`button-${type}${navBarButtonSelected ? ' selected' : ''}`}
 		aria-label={label}
+		data-sveltekit-preload-data="hover"
 	>
 		{@render content()}
 	</a>
