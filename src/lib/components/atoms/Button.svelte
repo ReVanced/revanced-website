@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
-	import type { SpecialTargetValues, Prettify } from '$types';
+	import type { SpecialTargetValues } from '$types';
 
 	type ButtonType = 'filled' | 'tonal' | 'text' | 'outlined' | 'navbar';
 
@@ -14,21 +14,17 @@
 		children?: Snippet;
 	};
 
-	type ButtonProps = Prettify<
-		BaseProps & {
-			onclick: () => void;
-			href?: never;
-			target?: never;
-		}
-	>;
+	type ButtonProps = BaseProps & {
+		onclick: () => void;
+		href?: never;
+		target?: never;
+	};
 
-	type LinkProps = Prettify<
-		BaseProps & {
-			href: string;
-			target?: string | `${SpecialTargetValues}` | SpecialTargetValues;
-			onclick?: never;
-		}
-	>;
+	type LinkProps = BaseProps & {
+		href: string;
+		target?: string | `${SpecialTargetValues}` | SpecialTargetValues;
+		onclick?: never;
+	};
 
 	type Props = ButtonProps | LinkProps;
 	let {
