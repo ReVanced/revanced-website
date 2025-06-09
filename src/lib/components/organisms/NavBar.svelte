@@ -50,10 +50,8 @@
 		display: flex;
 		width: 100%;
 		justify-content: space-between;
-	}
 
-	@media (min-width: 768px) {
-		.nav-wrapper {
+		@media (min-width: 768px) {
 			align-items: center;
 		}
 	}

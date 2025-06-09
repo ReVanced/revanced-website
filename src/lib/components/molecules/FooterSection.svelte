@@ -60,12 +60,12 @@
 		cursor: pointer;
 	}
 
-	.mobile-only:not(:last-child) {
-		border-bottom: 1px solid var(--border);
-	}
-
 	.mobile-only {
 		display: none;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--border);
+		}
 	}
 
 	.arrow {
@@ -77,6 +77,7 @@
 		.mobile-only {
 			display: block;
 		}
+
 		.desktop-only {
 			display: none;
 		}

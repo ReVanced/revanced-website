@@ -88,18 +88,20 @@
 		cursor: pointer;
 		transition: all 0.4s var(--bezier-one);
 		user-select: none;
+
+		&:not(.button-navbar):hover {
+			filter: brightness(85%);
+		}
 	}
 
 	.button-filled {
 		background-color: var(--primary);
 		color: var(--text-three);
-	}
-	.button-tonal {
-		background-color: var(--surface-four);
+		padding: 16px 24px;
 	}
 
-	.button-filled,
 	.button-tonal {
+		background-color: var(--surface-four);
 		padding: 16px 24px;
 	}
 
@@ -108,16 +110,11 @@
 		color: var(--primary);
 		font-weight: 500;
 		letter-spacing: 0.01rem;
-	}
 
-	.button-text:hover .content {
-		text-decoration: underline;
-		text-decoration-color: currentColor;
-	}
-
-	button:not(.button-navbar):hover,
-	a:not(.button-navbar):hover {
-		filter: brightness(85%);
+		&:hover .content {
+			text-decoration: underline;
+			text-decoration-color: currentColor;
+		}
 	}
 
 	.button-navbar {
@@ -128,28 +125,28 @@
 		align-items: center;
 		justify-content: center;
 		padding: 10px 16px;
-	}
 
-	.button-navbar > span {
-		font-weight: 400;
-		font-size: 0.9rem;
-		letter-spacing: 0.02rem;
-		color: var(--text-four);
-	}
+		& > span {
+			font-weight: 400;
+			font-size: 0.9rem;
+			letter-spacing: 0.02rem;
+			color: var(--text-four);
+		}
 
-	.button-navbar:hover {
-		color: var(--text-one);
-		background-color: var(--surface-three);
-	}
+		&:hover {
+			color: var(--text-one);
+			background-color: var(--surface-three);
+		}
 
-	.button-navbar.selected {
-		background-color: var(--tertiary);
-		color: var(--primary);
-		pointer-events: none;
-	}
+		&.selected {
+			background-color: var(--tertiary);
+			color: var(--primary);
+			pointer-events: none;
 
-	.button-navbar.selected > span {
-		color: var(--primary);
+			& > span {
+				color: var(--primary);
+			}
+		}
 	}
 
 	/* @media (max-width: 767px) {

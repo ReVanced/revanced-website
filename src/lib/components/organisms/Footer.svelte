@@ -70,16 +70,19 @@
 		gap: 8rem;
 		justify-content: space-between;
 		margin-bottom: 4rem;
+
+		@media screen and (max-width: 1050px) {
+			flex-direction: column;
+			gap: 2rem;
+		}
 	}
 
 	.footer-bottom {
 		display: flex;
 		gap: 2rem;
 		align-items: center;
-	}
 
-	@media screen and (max-width: 768px) {
-		.footer-bottom {
+		@media screen and (max-width: 768px) {
 			flex-wrap: wrap;
 			gap: 1rem;
 		}
@@ -89,10 +92,10 @@
 		font-size: 1.4rem;
 		color: var(--text-one);
 		font-weight: 600;
-	}
 
-	#logo-name span {
-		color: var(--primary);
+		& span {
+			color: var(--primary);
+		}
 	}
 
 	li {
@@ -117,23 +120,14 @@
 		display: flex;
 		gap: 10rem;
 		margin-top: 1rem;
-	}
 
-	@media screen and (max-width: 1050px) {
-		.footer-top {
-			flex-direction: column;
-			gap: 2rem;
-		}
-
-		.links-container {
+		@media screen and (max-width: 1050px) {
 			display: grid;
 			gap: 2rem;
 			grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 		}
-	}
 
-	@media screen and (max-width: 768px) {
-		.links-container {
+		@media screen and (max-width: 768px) {
 			display: flex;
 			flex-direction: column;
 			gap: initial;

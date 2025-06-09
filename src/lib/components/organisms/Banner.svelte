@@ -75,31 +75,47 @@
 {/if}
 
 <style>
-	.banner-container,
-	.banner-container *,
-	.banner-container :global(*) {
-		transition: none;
-	}
-
-	.banner-text :global(a) {
-		color: inherit;
-		text-decoration: none;
-		font-weight: 700;
-	}
-
-	.banner-text :global(a:hover) {
-		text-decoration: underline;
-	}
-
 	.banner-container {
 		display: flex;
 		justify-content: center;
 		width: 100%;
 		/* optional: to prevent content spill during transition */
+
+		&,
+		& *,
+		& :global(*) {
+			transition: none;
+		}
+	}
+
+	.banner-text {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+		gap: 0.55rem;
+		word-wrap: break-word;
+
+		& :global(a) {
+			color: inherit;
+			text-decoration: none;
+			font-weight: 700;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 
 	.permanent {
 		font-size: 0.87rem;
+
+		& > .banner {
+			padding: 0.5rem 0.7rem;
+			margin: 0;
+			border-radius: 0;
+			width: 100%;
+		}
 	}
 
 	.banner {
@@ -112,47 +128,29 @@
 		gap: 1.3rem;
 		margin: 0.7rem 1rem;
 		border-radius: 1rem;
-	}
 
-	.permanent > .banner {
-		padding: 0.5rem 0.7rem;
-		margin: 0;
-		border-radius: 0;
-		width: 100%;
-	}
-
-	.banner-text {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex: 1;
-		gap: 0.55rem;
-		word-wrap: break-word;
-	}
-
-	.banner.info {
-		background-color: var(--surface-four);
-		color: var(--text-one);
-	}
-
-	.banner.warning {
-		background-color: var(--yellow-one);
-		color: #000;
-	}
-
-	.banner.caution {
-		background-color: var(--red-two);
-		color: #000;
-	}
-
-	@media screen and (max-width: 767px) {
-		.banner {
-			flex-direction: column;
-			padding: 1.1rem 1.3rem;
+		&.info {
+			background-color: var(--surface-four);
+			color: var(--text-one);
 		}
 
-		.banner > :global(button) {
-			align-self: flex-end;
+		&.warning {
+			background-color: var(--yellow-one);
+			color: #000;
+		}
+
+		&.caution {
+			background-color: var(--red-two);
+			color: #000;
+		}
+
+		@media screen and (max-width: 767px) {
+			flex-direction: column;
+			padding: 1.1rem 1.3rem;
+
+			& > :global(button) {
+				align-self: flex-end;
+			}
 		}
 	}
 </style>
