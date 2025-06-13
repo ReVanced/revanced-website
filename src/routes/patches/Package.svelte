@@ -33,7 +33,7 @@
 	{name}
 </div>
 
-<style>
+<style lang="scss">
 	.package {
 		padding: 0.75rem 1rem;
 		font-size: 0.85rem;
@@ -48,19 +48,17 @@
 		transition: background-color 0.4s var(--bezier-one);
 		color: var(--text-four);
 		transition: color 0.3s var(--bezier-one);
-	}
 
-	.selected {
-		color: var(--primary);
-		transition: color 0.3s var(--bezier-one);
-		background-color: var(--tertiary);
-	}
-	.package:hover:not(.selected) {
-		background-color: var(--surface-seven);
-	}
+		&.selected {
+			color: var(--primary);
+			transition: color 0.3s var(--bezier-one);
+			background-color: var(--tertiary);
+		}
 
-	.package:not(.selected):hover {
-		color: var(--text-one);
+		&:hover:not(.selected) {
+			background-color: var(--surface-seven);
+			color: var(--text-one);
+		}
 	}
 
 	@media (max-width: 767px) {

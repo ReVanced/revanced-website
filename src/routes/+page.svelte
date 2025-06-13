@@ -160,21 +160,18 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+
+		@media (max-width: 335px) {
+			padding: 2rem 0 !important;
+		}
+
 	}
 
 	.hero-img-container {
 		z-index: 0;
-	}
 
-	@media screen and (max-width: 1100px) {
-		.hero-img-container {
+		@media (max-width: 1100px) {
 			display: none;
-		}
-	}
-
-	@media screen and (max-width: 335px) {
-		main {
-			padding: 2rem 0 !important;
 		}
 	}
 </style>

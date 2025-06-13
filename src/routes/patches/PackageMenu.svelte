@@ -6,7 +6,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="scss">
 	.menu {
 		height: calc(100vh - 60px);
 		width: 100%;
@@ -17,13 +17,13 @@
 		top: 60px;
 		padding-top: calc(6rem - 60px);
 		overflow-y: scroll;
-	}
 
-	.menu::-webkit-scrollbar-thumb {
-		background-color: transparent;
-	}
-	.menu:hover::-webkit-scrollbar-thumb {
-		background-color: var(--primary);
+		&::-webkit-scrollbar-thumb {
+			background-color: transparent;
+		}
+		&:hover::-webkit-scrollbar-thumb {
+			background-color: var(--primary);
+		}
 	}
 
 	.slot {

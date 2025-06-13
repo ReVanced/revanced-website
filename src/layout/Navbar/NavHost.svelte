@@ -91,13 +91,13 @@
 					</ul>
 				</div>
 				<div id="secondary-navigation">
-						<button
-							on:click={() => (modals.settings = !modals.settings)}
-							class:selected={modals.settings}
-							aria-label="Settings"
-						>
-							<Cog size="20px" color={modals.settings ? 'var(--primary)' : 'var(--surface-six)'} />
-						</button>
+					<button
+						on:click={() => (modals.settings = !modals.settings)}
+						class:selected={modals.settings}
+						aria-label="Settings"
+					>
+						<Cog size="20px" color={modals.settings ? 'var(--primary)' : 'var(--surface-six)'} />
+					</button>
 				</div>
 			</div>
 		</div>
@@ -256,7 +256,7 @@
 		}
 	}
 
-	@media screen and (min-width: 768px) {
+	@media (min-width: 768px) {
 		.mobile-only {
 			display: none !important;
 		}

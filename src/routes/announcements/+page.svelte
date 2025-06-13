@@ -175,13 +175,10 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		padding: 16px 0;
-		min-width: 0;
 		width: 100%;
 		gap: 16px;
-	}
 
-	@media (max-width: 767px) {
-		.cards {
+		@media (max-width: 767px) {
 			display: flex;
 			flex-direction: column;
 		}

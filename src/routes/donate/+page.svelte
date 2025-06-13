@@ -215,7 +215,7 @@
 			justify-content: center;
 			align-items: center;
 
-			@media screen and (max-width: 768px) {
+			@media (max-width: 768px) {
 				flex-direction: column-reverse;
 			}
 		}
@@ -234,17 +234,16 @@
 		margin-bottom: 2rem;
 		width: 60%;
 
-		@media screen and (max-width: 1200px) {
+		@media (max-width: 1200px) {
 			width: 90%;
 		}
 
-		@media screen and (max-width: 768px) {
+		@media (max-width: 768px) {
 			width: 100%;
 		}
 	}
 
-	// COPEEEE
-	@media screen and (max-width: 768px) {
+	@media (max-width: 768px) {
 		#heart {
 			display: none;
 		}
@@ -255,7 +254,7 @@
 		gap: 1rem;
 		margin-bottom: 3rem;
 
-		@media screen and (max-width: 768px) {
+		@media (max-width: 768px) {
 			flex-direction: column;
 		}
 	}
