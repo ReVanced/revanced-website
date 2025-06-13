@@ -46,6 +46,7 @@
 				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
 			},
 			additionalFilter: (patch: Patch, pkg: string): boolean => {
+				if (!pkg) return true;
 				return (
 					patch.compatiblePackages?.some(
 						(compatiblePackage: CompatiblePackage) =>
