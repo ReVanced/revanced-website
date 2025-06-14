@@ -5,9 +5,9 @@
 	import { expoOut } from 'svelte/easing';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Navigation from './NavButton.svelte';
+	import Navigation from '$layout/Navbar/NavButton.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import AnnouncementBanner from '../../routes/announcements/AnnouncementBanner.svelte';
+	import AnnouncementBanner from '$layout/Banners/AnnouncementBanner.svelte';
 
 	import Cog from 'svelte-material-icons/Cog.svelte';
 
@@ -15,17 +15,17 @@
 	import RouterEvents from '$data/RouterEvents';
 	import { queries } from '$data/api';
 
-	import StatusBanner from './StatusBanner.svelte';
-	import SettingsModal from './Modals/SettingsModal.svelte';
-	import LoginModal from './Modals/LoginModal.svelte';
-	import LoginSuccessfulModal from './Modals/LoginSuccessfulModal.svelte';
-	import SessionExpiredModal from './Modals/SessionExpiredModal.svelte';
+	import StatusBanner from '$layout/Banners/StatusBanner.svelte';
+	import SettingsDialog from '$layout/Dialogs/SettingsDialog.svelte';
+	import LoginDialog from '$layout/Dialogs/LoginDialog.svelte';
+	import LoginSuccessfulDialog from '$layout/Dialogs/LoginSuccessfulDialog.svelte';
+	import SessionExpiredDialog from '$layout/Dialogs/SessionExpiredDialog.svelte';
 
 	const ping = createQuery(queries.ping());
 	const statusUrl = status_url();
 
 	let menuOpen = false;
-	const modals: Record<string, boolean> = {
+	const dialogs: Record<string, boolean> = {
 		settings: false,
 		login: false
 	};
@@ -92,11 +92,11 @@
 				</div>
 				<div id="secondary-navigation">
 					<button
-						on:click={() => (modals.settings = !modals.settings)}
-						class:selected={modals.settings}
+						on:click={() => (dialogs.settings = !dialogs.settings)}
+						class:selected={dialogs.settings}
 						aria-label="Settings"
 					>
-						<Cog size="20px" color={modals.settings ? 'var(--primary)' : 'var(--surface-six)'} />
+						<Cog size="20px" color={dialogs.settings ? 'var(--primary)' : 'var(--surface-six)'} />
 					</button>
 				</div>
 			</div>
@@ -114,13 +114,13 @@
 	{/if}
 </nav>
 
-<SettingsModal bind:modalOpen={modals.settings} bind:loginOpen={modals.login} />
+<SettingsDialog bind:dialogOpen={dialogs.settings} bind:loginOpen={dialogs.login} />
 
-<LoginModal bind:modalOpen={modals.login} />
+<LoginDialog bind:dialogOpen={dialogs.login} />
 
-<LoginSuccessfulModal />
+<LoginSuccessfulDialog />
 
-<SessionExpiredModal bind:loginOpen={modals.login} />
+<SessionExpiredDialog bind:loginOpen={dialogs.login} />
 
 <style lang="scss">
 	#secondary-navigation {

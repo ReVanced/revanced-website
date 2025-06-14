@@ -7,12 +7,12 @@
 
 	const dispatch = createEventDispatcher();
 
-	function closeModal() {
+	function closeDialog() {
 		dispatch('close');
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Escape') closeModal();
+		if (event.key === 'Escape') closeDialog();
 	}
 </script>
 
@@ -20,16 +20,16 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="modal-overlay" on:click={closeModal} transition:fade={{ duration: 175 }}>
+<div class="dialog-overlay" on:click={closeDialog} transition:fade={{ duration: 175 }}>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="modal-content" on:click|stopPropagation transition:fade={{ duration: 175 }}>
-		<button class="close-button" on:click={closeModal}>×</button>
+	<div class="dialog-content" on:click|stopPropagation transition:fade={{ duration: 175 }}>
+		<button class="close-button" on:click={closeDialog}>×</button>
 		<img {src} {alt} />
 	</div>
 </div>
 
 <style>
-	.modal-overlay {
+	.dialog-overlay {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -44,7 +44,7 @@
 		box-sizing: border-box;
 	}
 
-	.modal-content {
+	.dialog-content {
 		position: relative;
 		max-width: 90vw;
 		max-height: 90vh;

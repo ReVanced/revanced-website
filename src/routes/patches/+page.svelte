@@ -16,7 +16,7 @@
 	import PatchItem from './PatchItem.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
-	import Dialogue from '$lib/components/Dialogue.svelte';
+	import MobilePatchesPackagesDialog from '$layout/Dialogs/MobilePatchesPackagesDialog.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
@@ -77,6 +77,13 @@
 	};
 
 	onMount(update);
+	console.log(
+		query.subscribe((data) => {
+			// console.log(filterPatches(data.data?.patches, selectedPkg || '', displayedTerm));
+			console.log(data.data?.patches);
+			console.log(displayedTerm);
+		})
+	);
 </script>
 
 <Head
@@ -124,31 +131,16 @@
 		>
 			{selectedPkg || 'Packages'}
 		</FilterChip>
-		<!-- <FilterChip check>Universal</FilterChip>
-		<FilterChip>Patch options</FilterChip> -->
 	</div>
 
 	<Query {query} let:data>
-		<div class="mobile-packages-Dialogue">
-			<Dialogue bind:modalOpen={mobilePackages} fullscreen>
-				<svelte:fragment slot="title">Packages</svelte:fragment>
-				<div class="mobile-packages">
-					<span
-						on:click={() => (mobilePackages = !mobilePackages)}
-						on:keypress={() => (mobilePackages = !mobilePackages)}
-					>
-						<Package {selectedPkg} name="All packages" bind:searchTerm />
-					</span>
-					{#each data.packages as pkg}
-						<span
-							on:click={() => (mobilePackages = !mobilePackages)}
-							on:keypress={() => (mobilePackages = !mobilePackages)}
-						>
-							<Package {selectedPkg} name={pkg} bind:searchTerm />
-						</span>
-					{/each}
-				</div>
-			</Dialogue>
+		<div class="mobile-packages-dialogue">
+			<MobilePatchesPackagesDialog
+				bind:dialogOpen={mobilePackages}
+				bind:searchTerm
+				{data}
+				{selectedPkg}
+			/>
 		</div>
 
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
@@ -213,15 +205,8 @@
 		display: none;
 	}
 
-	.mobile-packages {
-		margin-bottom: -1px;
-		overflow: hidden;
-		border-radius: 12px;
-		border: 1px solid var(--border);
-	}
-
 	@media (min-width: 768px) {
-		.mobile-packages-Dialogue {
+		.mobile-packages-dialogue {
 			display: none;
 		}
 	}

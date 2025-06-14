@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { set_access_token } from '$lib/auth';
 	import { admin_login } from '$lib/stores';
-    
+
 	import Button from '$lib/components/Button.svelte';
-	import Modal from '$lib/components/Dialogue.svelte';
+	import Dialog from '$layout/Dialogs/Dialog.svelte';
 
 	export let loginOpen: boolean;
 
@@ -15,9 +15,9 @@
 	}
 </script>
 
-<Modal modalOpen={session_expired}>
+<Dialog dialogOpen={session_expired}>
 	<svelte:fragment slot="title">Expired session</svelte:fragment>
-	<div class="session-expired">
+	<div>
 		This session has expired, log in again to renew or lose all access to administrative power.
 	</div>
 	<svelte:fragment slot="buttons">
@@ -26,10 +26,10 @@
 			Login
 		</Button>
 	</svelte:fragment>
-</Modal>
+</Dialog>
 
 <style>
-	.session-expired {
+	div {
 		color: var(--text-four);
 	}
 </style>

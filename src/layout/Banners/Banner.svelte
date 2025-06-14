@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Close from 'svelte-material-icons/Close.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
-	import Button from './Button.svelte';
+	import Button from '$lib/components/Button.svelte';
 
 	export let title: string;
 	export let description: string | undefined = undefined;

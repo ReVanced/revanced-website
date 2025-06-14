@@ -64,3 +64,5 @@ export const read_announcements = writable<Set<number>>(new Set(), (set) => {
 });
 
 export const passed_login_with_creds = writable(false); // will only change when the user INPUTS the credentials, not if the session is just valid
+
+export const allowAnalytics = writable(false);
