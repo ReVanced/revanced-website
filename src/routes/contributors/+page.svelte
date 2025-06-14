@@ -111,7 +111,7 @@
 	a:hover::after {
 		transform: translateX(5px);
 	}
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		.text-container {
 			padding: 2rem 1.75rem;
 		}

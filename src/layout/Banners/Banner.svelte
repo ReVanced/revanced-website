@@ -83,7 +83,7 @@
 			color: #601410;
 		}
 
-		@media (max-width: 767px) {
+		@media (max-width: 768px) {
 			flex-direction: column;
 			padding: 1.1rem 1.3rem;
 		}

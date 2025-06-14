@@ -193,7 +193,7 @@
 		display: none;
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		main {
 			grid-template-columns: none;
 			flex-direction: column;

@@ -213,7 +213,7 @@
 		width: 100%;
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		#nav-wrapper-container {
 			overflow: hidden;
 			position: fixed;

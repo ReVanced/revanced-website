@@ -47,7 +47,7 @@
 		user-select: none;
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		h5 {
 			display: none;
 		}

@@ -91,7 +91,7 @@
 			justify-items: center;
 			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 
-			@media (max-width: 767px) {
+			@media (max-width: 768px) {
 				padding: 0.75rem;
 				gap: 0.25rem;
 				grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));

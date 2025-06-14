@@ -49,7 +49,7 @@
 			background-color 0.4s var(--bezier-one),
 			color 0.3s var(--bezier-one);
 
-		@media (max-width: 767px) {
+		@media (max-width: 768px) {
 			border-radius: 0px;
 			font-size: 0.9rem;
 			padding: 1rem;

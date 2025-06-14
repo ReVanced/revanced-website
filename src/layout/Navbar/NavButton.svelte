@@ -80,7 +80,7 @@
 		color: var(--text-four);
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		a {
 			padding: 0.75rem 1.25rem;
 			justify-content: left;
