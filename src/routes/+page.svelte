@@ -7,20 +7,13 @@
 
 	let bottomVisibility = true;
 
+	const checkVisibility = () => {
+		const wave = document.querySelector('.wave');
+		bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
+	};
+
 	onMount(() => {
-		const checkVisibility = () => {
-			const wave = document.querySelector('.wave');
-			bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
-		};
-
-		window.addEventListener('scroll', checkVisibility, { passive: true });
-		window.addEventListener('resize', checkVisibility);
-
 		checkVisibility(); // Initial check
-		return () => {
-			window.removeEventListener('scroll', checkVisibility);
-			window.removeEventListener('resize', checkVisibility);
-		};
 	});
 </script>
 
@@ -135,7 +128,9 @@
 	]}
 />
 
-<main>
+<svelte:window on:scroll={checkVisibility} on:resize={checkVisibility} />
+
+<main class:visibility={!bottomVisibility}>
 	<div class="content">
 		<Home socialsVisibility={bottomVisibility} />
 		<div class="hero-img-container">
@@ -161,10 +156,17 @@
 		flex-direction: column;
 		align-items: center;
 
+		@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+			min-height: initial;
+		}
+
 		@media (max-width: 335px) {
 			padding: 2rem 0 !important;
 		}
 
+		&.visibility {
+			min-height: initial;
+		}
 	}
 
 	.hero-img-container {
