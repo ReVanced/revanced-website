@@ -1,7 +1,8 @@
 import { browser } from '$app/environment';
-import { RV_API_URL } from '$env/static/public';
+import { RV_API_URL, RV_STATUS_URL } from '$env/static/public';
 
 export const default_api_url = RV_API_URL;
+export const default_status_url = RV_STATUS_URL;
 
 const URL_KEY = 'revanced_api_url';
 const STATUS_KEY = 'revanced_status_url';
@@ -34,12 +35,12 @@ export function api_base_url(): string {
 	return default_api_url;
 }
 
-export function status_url(): string | null {
+export function status_url(): string {
 	if (browser) {
-		return localStorage.getItem(STATUS_KEY) || null;
+		return localStorage.getItem(STATUS_KEY) || default_status_url;
 	}
 
-	return null;
+	return default_status_url;
 }
 
 // (re)set base URL.
