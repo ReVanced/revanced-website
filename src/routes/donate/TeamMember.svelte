@@ -93,7 +93,7 @@
 				.mobile {
 					display: none;
 				}
-				@media screen and (width <= 768px) {
+				@media (max-width: 768px) {
 					.desktop {
 						display: none;
 					}
@@ -117,7 +117,7 @@
 		user-select: none;
 		margin-bottom: 1rem;
 
-		@media screen and (max-width: 768px) {
+		@media (max-width: 768px) {
 			margin-bottom: 0;
 			height: 48px;
 			width: 48px;

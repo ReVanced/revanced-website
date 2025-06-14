@@ -5,12 +5,12 @@
 	import { useQueryClient } from '@tanstack/svelte-query';
 
 	import Button from '$lib/components/Button.svelte';
-	import Modal from '$lib/components/Dialogue.svelte';
+	import Dialog from '$layout/Dialogs/Dialog.svelte';
 	import Replay from 'svelte-material-icons/Replay.svelte';
 	import Cog from 'svelte-material-icons/Cog.svelte';
 
 	export let loginOpen: boolean;
-	export let modalOpen: boolean;
+	export let dialogOpen: boolean;
 
 	const client = useQueryClient();
 
@@ -38,7 +38,7 @@
 	}
 </script>
 
-<Modal bind:modalOpen>
+<Dialog bind:dialogOpen>
 	<svelte:fragment slot="icon">
 		<Cog size="24px" color="var(--surface-six)" />
 	</svelte:fragment>
@@ -58,7 +58,7 @@
 			<Button
 				type="text"
 				disabled={$admin_login.logged_in}
-				on:click={() => ((loginOpen = !loginOpen), (modalOpen = !modalOpen))}
+				on:click={() => ((loginOpen = !loginOpen), (dialogOpen = !dialogOpen))}
 			>
 				{$admin_login.logged_in ? `Logged in for ${fromNow($admin_login.expires)}` : 'Login'}
 			</Button>
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 	</svelte:fragment>
-</Modal>
+</Dialog>
 
 <style lang="scss">
 	input {
@@ -106,7 +106,8 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 1rem;
-		div {
+
+		.buttons {
 			display: flex;
 			justify-content: flex-end;
 			flex-wrap: wrap;

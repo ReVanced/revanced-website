@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { read_announcements } from '$lib/stores';
-	import Banner from '$lib/components/Banner.svelte';
+	import Banner from '$layout/Banners/Banner.svelte';
 	import { goto } from '$app/navigation';
 	import type { ResponseAnnouncement } from '$lib/types';
 	import { browser } from '$app/environment';

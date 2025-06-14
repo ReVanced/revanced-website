@@ -3,10 +3,10 @@
 
 	import Input from '$lib/components/Input.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import Modal from '$lib/components/Dialogue.svelte';
+	import Dialog from '$layout/Dialogs/Dialog.svelte';
 	import { passed_login_with_creds } from '$lib/stores';
 
-	export let modalOpen: boolean;
+	export let dialogOpen: boolean;
 
 	let loginForm: HTMLFormElement;
 	let wrong_credentials = false;
@@ -19,15 +19,14 @@
 
 		const success = await login(username, password);
 
-		modalOpen = !success;
-		console.log(success);
+		dialogOpen = !success;
 		passed_login_with_creds.set(success);
 		wrong_credentials = !success;
 	}
 </script>
 
-<Modal bind:modalOpen>
-	<div class="admin-modal-content">
+<Dialog bind:dialogOpen>
+	<div class="container">
 		<h2>Login</h2>
 		<p>This login is reserved for site administrators. Go back!</p>
 		{#if wrong_credentials}
@@ -46,14 +45,14 @@
 		</form>
 	</div>
 	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={() => (modalOpen = !modalOpen)}>Cancel</Button>
+		<Button type="text" on:click={() => (dialogOpen = !dialogOpen)}>Cancel</Button>
 		<!-- first paragraph of https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit -->
 		<Button type="filled" on:click={() => loginForm.requestSubmit()}>Login</Button>
 	</svelte:fragment>
-</Modal>
+</Dialog>
 
 <style lang="scss">
-	.admin-modal-content {
+	.container {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;

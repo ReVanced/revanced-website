@@ -7,17 +7,17 @@
 	<Picture data={manager_screenshot} alt="Screenshot of ReVanced Manager" />
 </div>
 
-<style>
-	.hero-img :global(img) {
-		height: 100%;
-		border-radius: 1.75rem;
-	}
-
+<style lang="scss">
 	.hero-img {
 		height: max(100vh, 600px);
 		padding: 0.5rem 0.5rem;
 		border-radius: 1.75rem;
 		background-color: var(--surface-seven);
 		user-select: none;
+
+		:global(img) {
+			height: 100%;
+			border-radius: 1.75rem;
+		}
 	}
 </style>

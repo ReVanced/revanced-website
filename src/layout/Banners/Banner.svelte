@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Close from 'svelte-material-icons/Close.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
-	import Button from './Button.svelte';
+	import Button from '$lib/components/Button.svelte';
 
 	export let title: string;
 	export let description: string | undefined = undefined;
@@ -83,7 +83,7 @@
 			color: #601410;
 		}
 
-		@media (max-width: 767px) {
+		@media (max-width: 768px) {
 			flex-direction: column;
 			padding: 1.1rem 1.3rem;
 		}

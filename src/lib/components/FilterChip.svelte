@@ -17,7 +17,7 @@
 	{/if}
 </button>
 
-<style>
+<style lang="scss">
 	button {
 		font-family: var(--font-two);
 		border: none;
@@ -32,18 +32,11 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+		
+		&.selected {
+			background-color: var(--tertiary);
+			color: var(--primary);
+		}
 	}
 
-	.selected {
-		background-color: var(--tertiary);
-		color: var(--primary);
-	}
-
-	#dropdown {
-		margin-right: -6px;
-	}
-
-	#check {
-		margin-left: -6px;
-	}
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Banner from '$lib/components/Banner.svelte';
+	import Banner from '$layout/Banners/Banner.svelte';
 
 	export let statusUrl: string | null = null;
 

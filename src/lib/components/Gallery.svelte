@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ImageModal from '$lib/components/ImageModal.svelte';
+	import ImageDialog from '$layout/Dialogs/ImageDialog.svelte';
 
 	export let images: string[];
 	export let columns: number = 3;
@@ -7,14 +7,14 @@
 
 	let selectedImage: { src: string; alt: string } | null = null;
 
-	function openModal(image: string, index: number) {
+	function openDialog(image: string, index: number) {
 		selectedImage = {
 			src: image,
 			alt: `Gallery image ${index + 1}`
 		};
 	}
 
-	function closeModal() {
+	function closeDialog() {
 		selectedImage = null;
 	}
 </script>
@@ -28,8 +28,8 @@
 				src={image}
 				alt={`Gallery image ${i + 1}`}
 				loading="lazy"
-				on:click={() => openModal(image, i)}
-				on:keydown={(e) => e.key === 'Enter' && openModal(image, i)}
+				on:click={() => openDialog(image, i)}
+				on:keydown={(e) => e.key === 'Enter' && openDialog(image, i)}
 				tabindex="0"
 			/>
 		</div>
@@ -37,7 +37,7 @@
 </div>
 
 {#if selectedImage}
-	<ImageModal src={selectedImage.src} alt={selectedImage.alt} on:close={closeModal} />
+	<ImageDialog src={selectedImage.src} alt={selectedImage.alt} on:close={closeDialog} />
 {/if}
 
 <style>

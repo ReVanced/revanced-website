@@ -7,7 +7,7 @@
 	viewBox="0 0 1440 500"
 	xmlns="http://www.w3.org/2000/svg"
 	preserveAspectRatio="none"
-	style="opacity: {visibility ? '100%' : '0'}"
+	style="opacity: {visibility ? '100%' : '0'}; height: {visibility ? '40vh' : '0px'}"
 >
 	<path class="wave" />
 </svg>
@@ -19,10 +19,9 @@
 		bottom: -1px;
 		z-index: -1;
 		width: 100%;
-		height: 40vh;
 	}
 
-	@media screen and (max-height: 780px) {
+	@media (max-height: 780px) {
 		svg {
 			opacity: 0 !important;
 		}
