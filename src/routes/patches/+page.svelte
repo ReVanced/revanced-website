@@ -25,8 +25,6 @@
 
 	const query = createQuery(queries.patches());
 
-	let searcher: Fuse<Patch> | undefined;
-
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {
 		searchParams = readable(new URLSearchParams());
@@ -77,13 +75,6 @@
 	};
 
 	onMount(update);
-	console.log(
-		query.subscribe((data) => {
-			// console.log(filterPatches(data.data?.patches, selectedPkg || '', displayedTerm));
-			console.log(data.data?.patches);
-			console.log(displayedTerm);
-		})
-	);
 </script>
 
 <Head
@@ -134,14 +125,12 @@
 	</div>
 
 	<Query {query} let:data>
-		<div class="mobile-packages-dialogue">
-			<MobilePatchesPackagesDialog
-				bind:dialogOpen={mobilePackages}
-				bind:searchTerm
-				{data}
-				{selectedPkg}
-			/>
-		</div>
+		<MobilePatchesPackagesDialog
+			bind:dialogOpen={mobilePackages}
+			bind:searchTerm
+			{data}
+			{selectedPkg}
+		/>
 
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
@@ -156,7 +145,6 @@
 
 		<div class="patches-container">
 			{#each filterPatches(data.patches, selectedPkg || '', displayedTerm) as patch}
-				<!-- Trigger new animations when package or search changes (I love Svelte) -->
 				{#key selectedPkg || displayedTerm}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<PatchItem {patch} bind:showAllVersions />
@@ -205,11 +193,6 @@
 		display: none;
 	}
 
-	@media (min-width: 768px) {
-		.mobile-packages-dialogue {
-			display: none;
-		}
-	}
 	@media (max-width: 767px) {
 		main {
 			grid-template-columns: none;

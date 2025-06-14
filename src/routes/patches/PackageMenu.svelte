@@ -1,21 +1,21 @@
-<div class="menu">
+<div>
 	<h6>Packages</h6>
 	<hr />
-	<div class="slot">
+	<span>
 		<slot />
-	</div>
+	</span>
 </div>
 
 <style lang="scss">
-	.menu {
-		height: calc(100vh - 60px);
-		width: 100%;
-		padding: 0px 30px 30px 10px;
+	div {
 		display: flex;
 		flex-direction: column;
 		position: sticky;
+
+		height: calc(100vh - 60px);
 		top: 60px;
-		padding-top: calc(6rem - 60px);
+		padding: calc(6rem - 60px) 30px 30px 10px;
+
 		overflow-y: scroll;
 
 		&::-webkit-scrollbar-thumb {
@@ -26,29 +26,13 @@
 		}
 	}
 
-	.slot {
+	span {
 		margin-top: 0.75rem;
-		display: flex;
-		gap: 1rem;
-		flex-direction: column;
-		white-space: normal;
 		word-break: break-all;
 	}
 
 	h6 {
 		margin-bottom: 1rem;
 		color: var(--primary);
-	}
-
-	@media (max-width: 767px) {
-		.menu {
-			padding: 0.75rem;
-			height: unset;
-		}
-
-		h6,
-		hr {
-			display: none;
-		}
 	}
 </style>

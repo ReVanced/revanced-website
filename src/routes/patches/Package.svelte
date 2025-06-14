@@ -25,6 +25,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class="package"
 	class:selected={selectedPkg === name || (name === 'All packages' && !selectedPkg)}
@@ -36,52 +37,36 @@
 <style lang="scss">
 	.package {
 		padding: 0.75rem 1rem;
+		border-radius: 100px;
+
 		font-size: 0.85rem;
 		font-weight: 500;
-		border-radius: 100px;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		width: 100%;
-		user-select: none;
-		transition: background-color 0.4s var(--bezier-one);
 		color: var(--text-four);
-		transition: color 0.3s var(--bezier-one);
+
+		cursor: pointer;
+		user-select: none;
+		transition:
+			background-color 0.4s var(--bezier-one),
+			color 0.3s var(--bezier-one);
+
+		@media (max-width: 767px) {
+			border-radius: 0px;
+			font-size: 0.9rem;
+			padding: 1rem;
+			word-break: break-all;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			border-bottom: 1px solid var(--border);
+		}
 
 		&.selected {
 			color: var(--primary);
-			transition: color 0.3s var(--bezier-one);
 			background-color: var(--tertiary);
 		}
 
 		&:hover:not(.selected) {
 			background-color: var(--surface-seven);
 			color: var(--text-one);
-		}
-	}
-
-	@media (max-width: 767px) {
-		.package {
-			border-radius: 0px;
-			font-size: 0.9rem;
-			padding: 1rem 1rem;
-			width: 100%;
-			background-color: transparent;
-			word-break: break-all;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			color: var(--text-four);
-			border-bottom: 1px solid var(--border);
-		}
-
-		.selected {
-			color: var(--primary);
-			background-color: var(--tertiary);
-		}
-
-		.package:not(.selected):hover {
-			color: var(--text-four);
 		}
 	}
 </style>

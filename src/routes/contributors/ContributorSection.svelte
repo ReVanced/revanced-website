@@ -15,7 +15,8 @@
 	let bots = ['semantic-release-bot', 'revanced-bot'];
 </script>
 
-<div class="section-container">
+<div class="container">
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
 		class="title"
 		class:closed={!expanded}
@@ -31,7 +32,7 @@
 	</div>
 
 	{#if expanded}
-		<div class="contrib-host" transition:slide={{ easing: quintOut, duration: 500 }}>
+		<div class="contributors" transition:slide={{ easing: quintOut, duration: 500 }}>
 			{#each contributors as { name, avatar_url, url }}
 				{#if !bots.includes(name)}
 					<ContributorButton {name} pfp={avatar_url} {url} />
@@ -42,61 +43,59 @@
 </div>
 
 <style lang="scss">
-	.title {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		cursor: pointer;
-		background-color: var(--surface-seven);
-		padding: 0.75rem 1.25rem;
-		border-bottom: 1px solid var(--border);
-		transition: all 0.2s var(--bezier-one);
-
-		&:hover {
-			background-color: var(--surface-three);
-		}
-	}
-
-	.closed {
-		border-bottom: none;
-	}
-
-	#arrow {
-		transition: all 0.2s var(--bezier-one);
-		user-select: none;
-	}
-
-	.section-container {
+	.container {
 		border-radius: 20px;
 		overflow: hidden;
 		border: 1px solid var(--border);
-	}
 
-	a {
-		display: flex;
-		text-decoration: none;
-		width: max-content;
-		border-radius: 8px;
-	}
+		.title {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			cursor: pointer;
+			background-color: var(--surface-seven);
+			padding: 0.75rem 1.25rem;
+			border-bottom: 1px solid var(--border);
+			transition: all 0.2s var(--bezier-one);
 
-	a:hover {
-		text-decoration: underline var(--primary);
-		color: var(--text-one);
-	}
+			&:hover {
+				background-color: var(--surface-three);
+			}
 
-	.contrib-host {
-		margin-right: -1px;
-		margin-bottom: -1px;
-		display: grid;
-		justify-items: center;
-		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	}
+			&.closed {
+				border-bottom: none;
+			}
 
-	@media (max-width: 767px) {
-		.contrib-host {
-			padding: 0.75rem;
-			gap: 0.25rem;
-			grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+			a {
+				display: flex;
+				text-decoration: none;
+				width: max-content;
+				border-radius: 8px;
+
+				&:hover {
+					text-decoration: underline var(--primary);
+					color: var(--text-one);
+				}
+			}
+
+			#arrow {
+				transition: all 0.2s var(--bezier-one);
+				user-select: none;
+			}
+		}
+
+		.contributors {
+			margin-right: -1px;
+			margin-bottom: -1px;
+			display: grid;
+			justify-items: center;
+			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+			@media (max-width: 767px) {
+				padding: 0.75rem;
+				gap: 0.25rem;
+				grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+			}
 		}
 	}
 </style>

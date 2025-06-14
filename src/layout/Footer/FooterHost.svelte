@@ -146,10 +146,6 @@
 		}
 	}
 
-	path {
-		stroke: var(--border);
-	}
-
 	.main-content {
 		display: flex;
 		flex-direction: column;

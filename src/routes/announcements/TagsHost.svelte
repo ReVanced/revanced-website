@@ -49,19 +49,9 @@
 		/>
 	{/each}
 
-	{#if expandable && tags.length > 1}
-		<li class="button">
-			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
-				<div
-					class="expand-arrow"
-					style:transform={showAllTags ? 'rotate(90deg)' : 'rotate(-90deg)'}
-				>
-					<ChevronDown size="24px" color="var(--surface-six)" />
-				</div>
-			</Button>
-		</li>
-	{/if}
-</div>
+		{#if expandable && tags.length > 1}
+			<li>
+				<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
 
 <style lang="scss">
 	div {
@@ -69,7 +59,7 @@
 		align-items: center;
 		gap: 4px;
 
-		.button {
+		li {
 			display: flex;
 			align-items: center;
 		}
@@ -78,10 +68,6 @@
 			transition: all 0.2s var(--bezier-one);
 			user-select: none;
 			height: 1.5rem;
-		}
-
-		.rotate .expand-arrow {
-			transform: rotate(180deg);
 		}
 	}
 </style>
