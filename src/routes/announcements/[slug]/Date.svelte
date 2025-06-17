@@ -57,7 +57,7 @@
 	label {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5rem;
+		column-gap: 0.5rem;
 	}
 
 	input {
