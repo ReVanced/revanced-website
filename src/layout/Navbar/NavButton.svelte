@@ -52,17 +52,17 @@
 				color: var(--primary);
 			}
 		}
-
+		
 		&.unclickable {
 			pointer-events: none;
 		}
-
+		
 		:hover {
 			color: var(--text-one);
 			background-color: var(--surface-three);
 		}
 	}
-
+	
 	a {
 		text-decoration: none;
 		user-select: none;
@@ -72,8 +72,11 @@
 		justify-content: center;
 		padding: 10px 16px;
 	}
-
+	
 	span {
+		display: flex;
+		justify-content: center;
+		
 		font-weight: 400;
 		font-size: 0.9rem;
 		letter-spacing: 0.02rem;
