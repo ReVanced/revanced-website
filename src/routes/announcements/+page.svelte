@@ -13,7 +13,7 @@
 	import Search from '$lib/components/Search.svelte';
 	import { onMount } from 'svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
-	import { admin_login } from '$lib/stores';
+	import { admin_login, read_announcements } from '$lib/stores';
 	import Button from '$lib/components/Button.svelte';
 	import moment from 'moment';
 	import { debounce } from '$util/debounce';
@@ -66,6 +66,16 @@
 
 	onMount(() => {
 		debounce(update)();
+
+		if ($read_announcements.size === 0) {
+			query.subscribe((data) => {
+				read_announcements.update((set) => {
+					const updated = new Set(set);
+					data.data?.announcements.forEach((a) => updated.add(a.id));
+					return updated;
+				});
+			});
+		}
 	});
 </script>
 

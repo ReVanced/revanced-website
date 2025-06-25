@@ -63,6 +63,12 @@ export const read_announcements = writable<Set<number>>(new Set(), (set) => {
 	};
 });
 
+read_announcements.subscribe((value) => {
+	if (!browser) return;
+
+	localStorage.setItem('read_announcements', JSON.stringify(Array.from(value)));
+});
+
 export const passed_login_with_creds = writable(false); // will only change when the user INPUTS the credentials, not if the session is just valid
 
 export const allowAnalytics = writable(false);

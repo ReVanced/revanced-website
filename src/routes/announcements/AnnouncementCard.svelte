@@ -18,7 +18,7 @@
 
 	const client = useQueryClient();
 
-	let isRead: boolean;
+	$: isRead = $read_announcements.has(announcement.id);
 
 	function prefetch() {
 		const query = queries['announcementById'](announcement.id);
@@ -27,10 +27,11 @@
 	}
 
 	function setAnnouncementRead() {
-		isRead = true;
-
-		$read_announcements.add(announcement.id);
-		localStorage.setItem('read_announcements', JSON.stringify(Array.from($read_announcements)));
+		read_announcements.update((set) => {
+			const updated = new Set(set);
+			updated.add(announcement.id);
+			return updated;
+		});
 	}
 
 	function generateSlug(title: string) {
@@ -39,10 +40,6 @@
 			.replace(/[^a-z0-9]+/g, '-')
 			.replace(/^-+|-+$/g, '');
 	}
-
-	onMount(() => {
-		isRead = $read_announcements.has(announcement.id);
-	});
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
