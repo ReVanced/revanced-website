@@ -67,6 +67,8 @@
 	div {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
+		white-space: nowrap;
 		gap: 4px;
 
 		li {

@@ -87,7 +87,7 @@
 </div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<Query query={tagsQuery} let:data>
-		<TagsHost tags={data.tags} />
+		<TagsHost tags={data.tags} expandable={true} />
 	</Query>
 
 	<Query {query} let:data>
@@ -110,7 +110,7 @@
 				on:keypress={() => (expanded = !expanded)}
 				tabindex="0"
 			>
-				<h4>Archived announcements</h4>
+				<h4>Archive</h4>
 
 				<div id="arrow" style:transform={expanded ? 'rotate(-180deg)' : 'rotate(0deg)'}>
 					<ChevronDown size="24px" color="var(--surface-six)" />

@@ -109,17 +109,22 @@
 <div>
 	{#if isEditing || isCreating}
 		<Button
+			toolTipText={isPreviewing ? 'Hide preview' : 'Show preview'}
 			icon={isPreviewing ? Hide : Show}
 			iconColor="var(--secondary)"
 			on:click={() => (isPreviewing = !isPreviewing)}
 		/>
+
 		<Button
+			toolTipText={archivedAtInput ? 'Disable archive field' : 'Enable archive field'}
 			icon={archivedAtInput ? Unarchive : Archive}
 			iconColor="var(--secondary)"
 			on:click={toggleArchived}
 		/>
+
 		{#if isEditing}
 			<Button
+				toolTipText="Cancel editing"
 				icon={Close}
 				iconColor="var(--secondary)"
 				on:click={() => {
@@ -128,18 +133,27 @@
 				}}
 			/>
 		{/if}
+
 		<Button
+			toolTipText={isEditing ? 'Save changes' : 'Create announcement'}
 			icon={Check}
 			iconColor="var(--secondary)"
 			on:click={isEditing ? save : createAnnouncement}
 		/>
 	{:else}
 		<Button
+			toolTipText="Delete announcement"
 			icon={Delete}
 			iconColor="var(--secondary)"
 			on:click={() => (showDeleteConfirm = !showDeleteConfirm)}
 		/>
-		<Button icon={Edit} iconColor="var(--secondary)" on:click={() => (isEditing = !isEditing)} />
+
+		<Button
+			toolTipText="Edit announcement"
+			icon={Edit}
+			iconColor="var(--secondary)"
+			on:click={() => (isEditing = !isEditing)}
+		/>
 	{/if}
 </div>
 
