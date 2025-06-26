@@ -10,6 +10,7 @@
 	import { RV_DMCA_GUID } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import Divider from '$lib/components/Divider.svelte';
+	import { email } from '$data/api/settings';
 
 	const aboutQuery = createQuery(queries.about());
 
@@ -27,13 +28,11 @@
 		<section class="main-content">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 			<Query query={aboutQuery} let:data>
-				{#if data}
-					<div>
-						<p>
-							{data.about.about}
-						</p>
-					</div>
-				{/if}
+				<div>
+					<p>
+						{data.about.about}
+					</p>
+				</div>
 			</Query>
 		</section>
 
@@ -62,11 +61,7 @@
 	<div class="bottom">
 		<div id="logo-name"><span>Re</span>Vanced</div>
 		<a href="/donate"><div>Donate</div></a>
-		<Query query={aboutQuery} let:data>
-			{#if data}
-				<a href="mailto:{data.about.contact.email}"><div>Email</div></a>
-			{/if}
-		</Query>
+		<a href="mailto:{email()}"><div>Email</div></a>
 		<!-- DMCA Protection Badge -->
 		<a
 			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"

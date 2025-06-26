@@ -97,7 +97,7 @@
 </div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<Query query={tagsQuery} let:data>
-		<TagsHost tags={data.tags} expandable={true} />
+		<TagsHost tags={data.tags} />
 	</Query>
 
 	<Query {query} let:data>

@@ -35,6 +35,7 @@ jobs:
           RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
           RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
           RV_STATUS_URL: ${{ vars.RV_STATUS_URL }}
+          RV_EMAIL: ${{ vars.RV_EMAIL }}
         run: npm run build
 
       - name: Deploy

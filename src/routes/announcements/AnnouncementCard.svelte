@@ -85,11 +85,7 @@
 				{/if}
 				{#if announcement.tags && announcement.tags.length > 0}
 					<hr />
-					<TagsHost
-						tags={announcement.tags.map((tag) => ({ name: tag }))}
-						expandable={false}
-						clickable={false}
-					/>
+					<TagsHost tags={announcement.tags.map((tag) => ({ name: tag }))} clickable={false} />
 				{/if}
 			</div>
 		</div>
