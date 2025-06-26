@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ToolTip from './ToolTip.svelte';
+
 	export let type: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon' = 'filled';
 	export let variant: 'default' | 'danger' | 'onDangerBackground' = 'default';
 	export let functionType: typeof HTMLButtonElement.prototype.type = 'button';
@@ -9,28 +11,31 @@
 	export let target: string = '';
 	export let label: string = '';
 	export let disabled: boolean = false;
+	export let toolTipText: string | undefined = undefined;
 
 	$: type = $$slots.default ? type : 'icon';
 </script>
 
-{#if href}
-	<a {href} {target} aria-label={label} class={`${type} ${variant}`} class:disabled>
-		<svelte:component this={icon} size={iconSize} color={iconColor} />
-		<slot />
-	</a>
-{:else}
-	<button
-		on:click
-		class={`${type} ${variant}`}
-		class:disabled
-		aria-label={label}
-		type={functionType}
-		{disabled}
-	>
-		<svelte:component this={icon} size={iconSize} color={iconColor} />
-		<slot />
-	</button>
-{/if}
+<ToolTip content={toolTipText} html={false}>
+	{#if href}
+		<a {href} {target} aria-label={label} class={`${type} ${variant}`} class:disabled>
+			<svelte:component this={icon} size={iconSize} color={iconColor} />
+			<slot />
+		</a>
+	{:else}
+		<button
+			on:click
+			class={`${type} ${variant}`}
+			class:disabled
+			aria-label={label}
+			type={functionType}
+			{disabled}
+		>
+			<svelte:component this={icon} size={iconSize} color={iconColor} />
+			<slot />
+		</button>
+	{/if}
+</ToolTip>
 
 <style lang="scss">
 	a,

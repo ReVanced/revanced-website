@@ -13,7 +13,7 @@
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Picture from '$lib/components/Picture.svelte';
-	import Dialogue from '$lib/components/Dialogue.svelte';
+	import DownloadCompatibilityWarningDialog from '$layout/Dialogs/DownloadCompatibilityWarningDialog.svelte';
 	import { onMount } from 'svelte';
 
 	const query = createQuery(queries.manager());
@@ -69,21 +69,6 @@
 	]}
 />
 
-<Dialogue bind:modalOpen={warningDialogue}>
-	<svelte:fragment slot="title">Warning</svelte:fragment>
-	<svelte:fragment slot="description">{warning} Do you still want to download?</svelte:fragment>
-	<svelte:fragment slot="buttons">
-		<Query {query} let:data>
-			<Button
-				type="text"
-				href={data.release.download_url}
-				on:click={() => (warningDialogue = false)}>Okay</Button
-			>
-		</Query>
-		<Button type="text" on:click={() => (warningDialogue = false)}>Cancel</Button>
-	</svelte:fragment>
-</Dialogue>
-
 <main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
@@ -112,6 +97,8 @@
 		<Picture data={manager_screenshot} alt="Manager Screenshot" />
 	</div>
 </main>
+
+<DownloadCompatibilityWarningDialog bind:dialogOpen={warningDialogue} {warning} />
 
 <style>
 	.center {

@@ -13,7 +13,7 @@
 	import Search from '$lib/components/Search.svelte';
 	import { onMount } from 'svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
-	import { admin_login } from '$lib/stores';
+	import { admin_login, read_announcements } from '$lib/stores';
 	import Button from '$lib/components/Button.svelte';
 	import moment from 'moment';
 	import { debounce } from '$util/debounce';
@@ -22,52 +22,61 @@
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 	import Create from 'svelte-material-icons/Plus.svelte';
 
-	let searchParams: Readable<URLSearchParams>;
+	let expanded = false;
 
-	if (building) searchParams = readable(new URLSearchParams());
-	else searchParams = derived(page, ($page) => $page.url.searchParams);
+	const searchParams: Readable<URLSearchParams> = building
+		? readable(new URLSearchParams())
+		: derived(page, ($page) => $page.url.searchParams);
 
 	let searchTerm = $searchParams.get('s') || '';
+	let displayedTerm = '';
 
 	$: query = createQuery(queries.announcements());
 	$: tagsQuery = createQuery(queries.announcementTags());
 	$: selectedTags = $searchParams.getAll('tag');
 
-	let expanded = false;
-
-	function filterAnnouncements(
-		announcements: Iterable<ResponseAnnouncement>,
-		search: string,
-		selectedTags: string[]
-	): ResponseAnnouncement[] {
-		const announcementFilter = createFilter(Array.from(announcements), {
-			searcherOptions: {
-				keys: ['title', 'content']
-			},
-			additionalFilter: (announcement: ResponseAnnouncement, tags: string[]): boolean => {
-				return (
-					tags.length === 0 ||
-					tags.some((tag) => announcement.tags && announcement.tags.includes(tag))
-				);
-			}
-		});
-
-		return announcementFilter(selectedTags, search);
-	}
-
-	// Make sure we don't have to filter the announcements after every key press
-	let displayedTerm = '';
 	const update = () => {
 		displayedTerm = searchTerm;
 
 		const url = new URL(window.location.href);
 		url.pathname = '/announcements';
 
-		if (searchTerm) url.searchParams.set('s', searchTerm);
-		else url.searchParams.delete('s');
+		searchTerm ? url.searchParams.set('s', searchTerm) : url.searchParams.delete('s');
 	};
 
-	onMount(update);
+	const archivedAnnouncements = (announcements: ResponseAnnouncement[]) =>
+		announcements.filter((a) => a.archived_at && moment(a.archived_at).isBefore(moment()));
+	const activeAnnouncements = (announcements: ResponseAnnouncement[]) =>
+		announcements.filter((a) => !a.archived_at || moment(a.archived_at).isAfter(moment()));
+
+	const filterAnnouncements = (
+		announcements: ResponseAnnouncement[],
+		search: string,
+		tags: string[]
+	): ResponseAnnouncement[] => {
+		const announcementFilter = createFilter(announcements, {
+			searcherOptions: { keys: ['title', 'content'] },
+
+			additionalFilter: (a: ResponseAnnouncement, tags: string[]) =>
+				tags.length === 0 || tags.some((tag) => a.tags?.includes(tag))
+		});
+
+		return announcementFilter(tags, search);
+	};
+
+	onMount(() => {
+		debounce(update)();
+
+		if ($read_announcements.size === 0) {
+			query.subscribe((data) => {
+				read_announcements.update((set) => {
+					const updated = new Set(set);
+					data.data?.announcements.forEach((a) => updated.add(a.id));
+					return updated;
+				});
+			});
+		}
+	});
 </script>
 
 <div class="search">
@@ -92,60 +101,61 @@
 	</Query>
 
 	<Query {query} let:data>
-		<div class="cards">
-			{#each filterAnnouncements(data.announcements, displayedTerm, selectedTags) as announcement}
-				{#if !announcement.archived_at || moment(announcement.archived_at).isAfter(moment())}
-					{#key selectedTags || displayedTerm}
-						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-							<AnnouncementCard {announcement} />
-						</div>
-					{/key}
-				{/if}
-			{/each}
-		</div>
-
-		<div
-			role="button"
-			class="expand-archived"
-			aria-expanded={expanded}
-			class:closed={!expanded}
-			on:click={() => (expanded = !expanded)}
-			on:keypress={() => (expanded = !expanded)}
-			tabindex="0"
-		>
-			<h4>Archived announcements</h4>
-
-			<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(-180deg)'}>
-				<ChevronDown size="24px" color="var(--surface-six)" />
-			</div>
-		</div>
-
-		{#if expanded}
-			<div
-				class="cards"
-				in:slide={{ easing: quintIn, duration: 250 }}
-				out:slide={{ easing: quintOut, duration: 250 }}
-			>
-				{#each filterAnnouncements(data.announcements, displayedTerm, selectedTags) as announcement}
-					{#if announcement.archived_at && moment(announcement.archived_at).isBefore(moment())}
-						{#key selectedTags || displayedTerm}
-							<AnnouncementCard {announcement} />
-						{/key}
-					{/if}
+		{#if activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
+			<div class="cards">
+				{#each activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<AnnouncementCard {announcement} />
+					</div>
 				{/each}
 			</div>
+		{/if}
+
+		{#if archivedAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
+			<div
+				role="button"
+				class="expand-archived"
+				aria-expanded={expanded}
+				on:click={() => (expanded = !expanded)}
+				on:keypress={() => (expanded = !expanded)}
+				tabindex="0"
+			>
+				<h4>Archive</h4>
+
+				<div id="arrow" style:transform={expanded ? 'rotate(-180deg)' : 'rotate(0deg)'}>
+					<ChevronDown size="24px" color="var(--surface-six)" />
+				</div>
+			</div>
+
+			{#if expanded}
+				<div
+					class="cards"
+					in:slide={{ easing: quintIn, duration: 250 }}
+					out:slide={{ easing: quintOut, duration: 250 }}
+				>
+					{#each archivedAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
+						<AnnouncementCard {announcement} />
+					{/each}
+				</div>
+			{/if}
 		{/if}
 	</Query>
 </main>
 
 <style lang="scss">
+	main {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
 	.expand-archived {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		cursor: pointer;
 		user-select: none;
-		padding: 0rem 0.25rem;
+		padding-inline: 0.25rem;
 
 		#arrow {
 			height: 1.5rem;
@@ -174,14 +184,10 @@
 	.cards {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		padding: 16px 0;
-		min-width: 0;
 		width: 100%;
 		gap: 16px;
-	}
 
-	@media (max-width: 767px) {
-		.cards {
+		@media (max-width: 768px) {
 			display: flex;
 			flex-direction: column;
 		}

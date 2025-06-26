@@ -2,18 +2,22 @@
 	import { tooltip } from 'svooltip';
 	import '../styles/ToolTip.scss';
 
-	export let content: string;
+	export let content: string | undefined;
 	export let html: boolean = false;
 </script>
 
-<div
-	use:tooltip={{
-		content: content,
-		html: html
-	}}
->
+{#if content}
+	<div
+		use:tooltip={{
+			content: content,
+			html: html
+		}}
+	>
+		<slot />
+	</div>
+{:else}
 	<slot />
-</div>
+{/if}
 
 <style>
 	:root {

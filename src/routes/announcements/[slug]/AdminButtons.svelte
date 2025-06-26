@@ -3,7 +3,7 @@
 	import { admin, queries } from '$data/api';
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
-	import Dialogue from '$lib/components/Dialogue.svelte';
+	import Dialog from '$layout/Dialogs/Dialog.svelte';
 	import type { Announcement, ResponseAnnouncement } from '$lib/types';
 	import moment from 'moment';
 	import { isValidUrl } from '$util/isValidUrl';
@@ -97,29 +97,34 @@
 
 <svelte:window on:beforeunload={handleUnload} />
 
-<Dialogue bind:modalOpen={showDeleteConfirm}>
+<Dialog bind:dialogOpen={showDeleteConfirm}>
 	<svelte:fragment slot="title">Confirm?</svelte:fragment>
 	<svelte:fragment slot="description">Do you want to delete this announcement?</svelte:fragment>
 	<svelte:fragment slot="buttons">
 		<Button type="text" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
 		<Button type="filled" on:click={deleteAnnouncement}>OK</Button>
 	</svelte:fragment>
-</Dialogue>
+</Dialog>
 
 <div>
 	{#if isEditing || isCreating}
 		<Button
+			toolTipText={isPreviewing ? 'Hide preview' : 'Show preview'}
 			icon={isPreviewing ? Hide : Show}
 			iconColor="var(--secondary)"
 			on:click={() => (isPreviewing = !isPreviewing)}
 		/>
+
 		<Button
+			toolTipText={archivedAtInput ? 'Disable archive field' : 'Enable archive field'}
 			icon={archivedAtInput ? Unarchive : Archive}
 			iconColor="var(--secondary)"
 			on:click={toggleArchived}
 		/>
+
 		{#if isEditing}
 			<Button
+				toolTipText="Cancel editing"
 				icon={Close}
 				iconColor="var(--secondary)"
 				on:click={() => {
@@ -128,18 +133,27 @@
 				}}
 			/>
 		{/if}
+
 		<Button
+			toolTipText={isEditing ? 'Save changes' : 'Create announcement'}
 			icon={Check}
 			iconColor="var(--secondary)"
 			on:click={isEditing ? save : createAnnouncement}
 		/>
 	{:else}
 		<Button
+			toolTipText="Delete announcement"
 			icon={Delete}
 			iconColor="var(--secondary)"
 			on:click={() => (showDeleteConfirm = !showDeleteConfirm)}
 		/>
-		<Button icon={Edit} iconColor="var(--secondary)" on:click={() => (isEditing = !isEditing)} />
+
+		<Button
+			toolTipText="Edit announcement"
+			icon={Edit}
+			iconColor="var(--secondary)"
+			on:click={() => (isEditing = !isEditing)}
+		/>
 	{/if}
 </div>
 

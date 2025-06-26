@@ -26,7 +26,7 @@
 
 		gap: 8px;
 		height: 32px;
-		padding: 0 16px;
+		padding: 0 12px;
 
 		border-radius: 8px;
 		border: none;

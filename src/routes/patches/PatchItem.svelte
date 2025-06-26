@@ -19,6 +19,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class="patch-container"
 	class:expanded={hasPatchOptions}
@@ -99,6 +100,7 @@
 		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
 				{#each options as option}
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<div class="option" on:click|stopPropagation>
 						<h5 id="option-title">{option.title}</h5>
 						<h5>

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Footer from '$layout/Footer/FooterHost.svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -47,5 +46,3 @@
 		<Announcement {isCreating} {announcement} {announcementIdNumber} />
 	{/if}
 </main>
-
-<Footer />

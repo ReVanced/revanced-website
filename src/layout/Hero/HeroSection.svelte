@@ -17,7 +17,7 @@
 	<p>
 		Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
 	</p>
-	<div class="hero-buttons-container">
+	<div class="buttons-container">
 		<div class="hero-buttons internal-buttons">
 			<Button type="filled" icon={TrayArrowDown} href="download">Download</Button>
 			<Button type="tonal" icon={FileDocumentOutline} href="patches">View patches</Button>
@@ -34,83 +34,59 @@
 	</div>
 </section>
 
-<style>
-	h1 {
-		color: var(--text-one);
-	}
-
-	.hero-buttons-container {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
-	.social-buttons {
-		max-width: 30rem;
-		position: absolute;
-		bottom: 1rem;
-		transition: opacity 0.1s var(--bezier-one);
-	}
-
-	.hero-buttons {
-		flex-wrap: wrap;
-		display: flex;
-		user-select: none;
-		gap: 1rem;
-	}
-
+<style lang="scss">
 	.hero {
-		padding-top: 10vh;
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
 
-	span {
-		color: var(--primary);
-	}
-
-	@media screen and (max-width: 1100px) {
-		.hero {
-			padding-top: initial;
+		@media (min-width: 1100px) {
+			padding-top: 10vh;
 		}
-	}
 
-	@media screen and (max-width: 450px) {
-		.internal-buttons {
+		h1 {
+			color: var(--text-one);
+		}
+
+		span {
+			color: var(--primary);
+		}
+
+		.buttons-container {
+			display: flex;
 			flex-direction: column;
-			gap: 1rem;
-		}
+			gap: 2.5rem;
 
-		.social-buttons {
-			left: 50%;
-			transform: translateX(-50%);
-			justify-content: center;
-			width: 100%;
-		}
+			.social-buttons {
+				max-width: 30rem;
+				position: absolute;
+				bottom: 1rem;
+				transition: opacity 0.1s var(--bezier-one);
 
-		.hero {
-			height: initial;
-		}
-	}
+				@media (max-width: 450px) {
+					justify-content: center;
+					left: 0;
+				}
 
-	@media screen and (max-width: 1100px) or (min-height: 780px) {
-		.social-buttons {
-			transform: translateX(-50%);
-			width: 90%;
-			position: absolute;
-			left: initial;
-			transform: initial;
-		}
-	}
+				@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+					position: static;
+					opacity: 100% !important;
+				}
+			}
 
-	@media screen and (max-height: 780px) {
-		.social-buttons {
-			transform: initial;
-			left: initial;
-			position: initial;
-			width: initial;
-			opacity: 100% !important;
+			.hero-buttons {
+				flex-wrap: wrap;
+				display: flex;
+				user-select: none;
+				gap: 1rem;
+
+				@media (max-width: 450px) {
+					&.internal-buttons {
+						flex-direction: column;
+						gap: 1rem;
+					}
+				}
+			}
 		}
 	}
 </style>

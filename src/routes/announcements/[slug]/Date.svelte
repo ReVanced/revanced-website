@@ -18,7 +18,11 @@
 	}
 
 	$: displayCreatedAt = isPreviewing ? createdAtInput : createdAt;
-	$: displayArchivedAt = isPreviewing ? archivedAtInput : archivedAt;
+
+	$: displayArchivedAt = (() => {
+		const date = isPreviewing ? archivedAtInput : archivedAt;
+		return date && moment(date).isBefore() ? date : null;
+	})();
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}

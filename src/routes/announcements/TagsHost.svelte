@@ -50,7 +50,7 @@
 	{/each}
 
 	{#if expandable && tags.length > 1}
-		<li class="button">
+		<li>
 			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
 				<div
 					class="expand-arrow"
@@ -67,9 +67,11 @@
 	div {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
+		white-space: nowrap;
 		gap: 4px;
 
-		.button {
+		li {
 			display: flex;
 			align-items: center;
 		}
@@ -78,10 +80,6 @@
 			transition: all 0.2s var(--bezier-one);
 			user-select: none;
 			height: 1.5rem;
-		}
-
-		.rotate .expand-arrow {
-			transform: rotate(180deg);
 		}
 	}
 </style>

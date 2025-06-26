@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Banner from '$lib/components/Banner.svelte';
+	import { email } from '$data/api/settings';
+	import Banner from '$layout/Banners/Banner.svelte';
 
 	export let statusUrl: string | null = null;
 
@@ -9,7 +10,7 @@
 
 <Banner
 	title="API service is currently down"
-	description="We're actively investigating and will update you shortly. We appreciate your patience."
+	description="Some features of the site might be impacted. If this issue persists, reach out to mailto:{email()}"
 	buttonText={statusUrl ? 'View status' : undefined}
 	buttonOnClick={statusUrl ? handleClick : undefined}
 	level="caution"

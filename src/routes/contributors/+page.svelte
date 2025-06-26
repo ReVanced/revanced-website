@@ -37,36 +37,38 @@
 	]}
 />
 
-<main>
-	<div class="wrapper">
-		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-			<h2>Made possible by the community.</h2>
-			<p>
-				Want to show up here? <span
-					><a href="https://github.com/revanced" target="_blank" rel="noreferrer"
-						>Become a contributor</a
-					></span
-				>
-			</p>
-		</div>
-		<div class="repos">
-			<Query {query} let:data>
-				{#each data.contributables as { name, url, contributors }}
-					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<ContributorHost {name} {url} {contributors} />
-					</div>
-				{/each}
-			</Query>
-		</div>
+<div class="wrapper">
+	<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		<h2>Made possible by the community.</h2>
+		<p>
+			Want to show up here? <span>
+				<a href="https://github.com/revanced" target="_blank" rel="noreferrer"
+					>Become a contributor
+				</a>
+			</span>
+		</p>
 	</div>
-</main>
+
+	<div class="repos">
+		<Query {query} let:data>
+			{#each data.contributables as { name, url, contributors }}
+				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+					<ContributorHost {name} {url} {contributors} />
+				</div>
+			{/each}
+		</Query>
+	</div>
+</div>
 
 <style>
+	.wrapper {
+		margin-bottom: 5rem;
+	}
+
 	.repos {
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
-		margin-bottom: 4rem;
 	}
 
 	h2 {
@@ -109,7 +111,7 @@
 	a:hover::after {
 		transform: translateX(5px);
 	}
-	@media screen and (max-width: 767px) {
+	@media (max-width: 768px) {
 		.text-container {
 			padding: 2rem 1.75rem;
 		}

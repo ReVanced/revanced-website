@@ -5,9 +5,9 @@
 	import { expoOut } from 'svelte/easing';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Navigation from './NavButton.svelte';
+	import Navigation from '$layout/Navbar/NavButton.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import AnnouncementBanner from '../../routes/announcements/AnnouncementBanner.svelte';
+	import AnnouncementBanner from '$layout/Banners/AnnouncementBanner.svelte';
 
 	import Cog from 'svelte-material-icons/Cog.svelte';
 
@@ -15,17 +15,17 @@
 	import RouterEvents from '$data/RouterEvents';
 	import { queries } from '$data/api';
 
-	import StatusBanner from './StatusBanner.svelte';
-	import SettingsModal from './Modals/SettingsModal.svelte';
-	import LoginModal from './Modals/LoginModal.svelte';
-	import LoginSuccessfulModal from './Modals/LoginSuccessfulModal.svelte';
-	import SessionExpiredModal from './Modals/SessionExpiredModal.svelte';
+	import StatusBanner from '$layout/Banners/StatusBanner.svelte';
+	import SettingsDialog from '$layout/Dialogs/SettingsDialog.svelte';
+	import LoginDialog from '$layout/Dialogs/LoginDialog.svelte';
+	import LoginSuccessfulDialog from '$layout/Dialogs/LoginSuccessfulDialog.svelte';
+	import SessionExpiredDialog from '$layout/Dialogs/SessionExpiredDialog.svelte';
 
 	const ping = createQuery(queries.ping());
 	const statusUrl = status_url();
 
 	let menuOpen = false;
-	const modals: Record<string, boolean> = {
+	const dialogs: Record<string, boolean> = {
 		settings: false,
 		login: false
 	};
@@ -75,13 +75,15 @@
 						<Navigation href="/" label="Home">Home</Navigation>
 						<Navigation queryKey="manager" href="/download" label="Download">Download</Navigation>
 						<Navigation queryKey="patches" href="/patches" label="Patches">Patches</Navigation>
-						<Navigation
-							queryKey={['announcements', 'announcementTags']}
-							href="/announcements"
-							label="Announcements"
-						>
-							Announcements
-						</Navigation>
+						<span class="mobile-only">
+							<Navigation
+								queryKey={['announcements', 'announcementTags']}
+								href="/announcements"
+								label="Announcements"
+							>
+								Announcements
+							</Navigation>
+						</span>
 						<Navigation queryKey="contributors" href="/contributors" label="Contributors">
 							Contributors
 						</Navigation>
@@ -91,13 +93,32 @@
 					</ul>
 				</div>
 				<div id="secondary-navigation">
-						<button
-							on:click={() => (modals.settings = !modals.settings)}
-							class:selected={modals.settings}
-							aria-label="Settings"
+					<span class="desktop-only">
+						<Navigation
+							queryKey={['announcements', 'announcementTags']}
+							href="/announcements"
+							label="Announcements"
 						>
-							<Cog size="20px" color={modals.settings ? 'var(--primary)' : 'var(--surface-six)'} />
-						</button>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								height="24px"
+								viewBox="0 -960 960 960"
+								width="24px"
+								fill="currentColor"
+							>
+								<path
+									d="M720-440v-80h160v80H720Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM200-200v-160h-40q-33 0-56.5-23.5T80-440v-80q0-33 23.5-56.5T160-600h160l200-120v480L320-360h-40v160h-80Zm360-146v-268q27 24 43.5 58.5T620-480q0 41-16.5 75.5T560-346Z"
+								/>
+							</svg>
+						</Navigation>
+					</span>
+					<button
+						on:click={() => (dialogs.settings = !dialogs.settings)}
+						class:selected={dialogs.settings}
+						aria-label="Settings"
+					>
+						<Cog size="20px" color={dialogs.settings ? 'var(--primary)' : 'var(--surface-six)'} />
+					</button>
 				</div>
 			</div>
 		</div>
@@ -114,18 +135,18 @@
 	{/if}
 </nav>
 
-<SettingsModal bind:modalOpen={modals.settings} bind:loginOpen={modals.login} />
+<SettingsDialog bind:dialogOpen={dialogs.settings} bind:loginOpen={dialogs.login} />
 
-<LoginModal bind:modalOpen={modals.login} />
+<LoginDialog bind:dialogOpen={dialogs.login} />
 
-<LoginSuccessfulModal />
+<LoginSuccessfulDialog />
 
-<SessionExpiredModal bind:loginOpen={modals.login} />
+<SessionExpiredDialog bind:loginOpen={dialogs.login} />
 
 <style lang="scss">
 	#secondary-navigation {
 		display: flex;
-
+		gap: 1rem;
 		button {
 			border-radius: 10px;
 			padding: 10px 16px;
@@ -213,7 +234,7 @@
 		width: 100%;
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		#nav-wrapper-container {
 			overflow: hidden;
 			position: fixed;
@@ -256,7 +277,7 @@
 		}
 	}
 
-	@media screen and (min-width: 768px) {
+	@media (min-width: 768px) {
 		.mobile-only {
 			display: none !important;
 		}

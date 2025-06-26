@@ -111,7 +111,7 @@
 		gap: 2rem;
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 768px) {
 		.card {
 			background-color: initial;
 			padding: 0;
