@@ -27,7 +27,7 @@
 		"prettier": "3.4.1",
 		"prettier-plugin-svelte": "3.3.2",
 		"qrious": "^4.0.2",
-		"sass": "1.81.0",
+		"sass": "1.89.2",
 		"sirv-cli": "3.0.0",
 		"svelte": "4.2.18",
 		"svelte-check": "4.1.0",
