@@ -58,8 +58,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       imagetools-core:
-        specifier: 7.0.2
-        version: 7.0.2
+        specifier: 7.1.0
+        version: 7.1.0
       prettier:
         specifier: 3.4.1
         version: 3.4.1
@@ -1083,8 +1083,8 @@ packages:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
 
-  imagetools-core@7.0.2:
-    resolution: {integrity: sha512-nrLdKLJHHXd8MitwlXK6/h1TSwGaH3X1DZ3z6yMv/tX7dJ12ecLxZ6P5jgKetfIFh8IJwH9fCWMoTA8ixg0VVA==}
+  imagetools-core@7.1.0:
+    resolution: {integrity: sha512-8Aa4NecBBGmTkaAUjcuRYgTPKHCsBEWYmCnvKCL6/bxedehtVVFyZPdXe8DD0Nevd6UWBq85ifUaJ8498lgqNQ==}
     engines: {node: '>=18.0.0'}
 
   immutable@5.0.3:
@@ -2414,7 +2414,7 @@ snapshots:
 
   ignore@5.3.2: {}
 
-  imagetools-core@7.0.2: {}
+  imagetools-core@7.1.0: {}
 
   immutable@5.0.3: {}
 
@@ -2813,7 +2813,7 @@ snapshots:
   vite-imagetools@7.0.4(rollup@4.20.0):
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.20.0)
-      imagetools-core: 7.0.2
+      imagetools-core: 7.1.0
       sharp: 0.33.4
     transitivePeerDependencies:
       - rollup
