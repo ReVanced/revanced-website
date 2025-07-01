@@ -18,8 +18,8 @@ importers:
         specifier: ^4.36.1
         version: 4.36.1
       '@tanstack/svelte-query':
-        specifier: ^4.36.1
-        version: 4.36.1(svelte@4.2.18)
+        specifier: ^5.81.5
+        version: 5.81.5(svelte@4.2.18)
       datetrigger:
         specifier: ^1.1.1
         version: 1.1.1
@@ -682,16 +682,19 @@ packages:
   '@tanstack/query-core@4.36.1':
     resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
 
+  '@tanstack/query-core@5.81.5':
+    resolution: {integrity: sha512-ZJOgCy/z2qpZXWaj/oxvodDx07XcQa9BF92c0oINjHkoqUPsmm3uG08HpTaviviZ/N9eP1f9CM7mKSEkIo7O1Q==}
+
   '@tanstack/query-persist-client-core@4.36.1':
     resolution: {integrity: sha512-eocgCeI7D7TRv1IUUBMfVwOI0wdSmMkBIbkKhqEdTrnUHUQEeOaYac8oeZk2cumAWJdycu6P/wB+WqGynTnzXg==}
 
   '@tanstack/query-sync-storage-persister@4.36.1':
     resolution: {integrity: sha512-yMEt5hWe2+1eclf1agMtXHnPIkxEida0lYWkfdhR8U6KXk/lO4Vca6piJmhKI85t0NHlx3l/z6zX+t/Fn5O9NA==}
 
-  '@tanstack/svelte-query@4.36.1':
-    resolution: {integrity: sha512-5fj79QuAu5HuS6G/fairU6ywgILXfs4TGl3+Xc9+MBlmB1aPoQBvGsgJrNyhqvXQcnxro8wDNyZOH8S+Qitycw==}
+  '@tanstack/svelte-query@5.81.5':
+    resolution: {integrity: sha512-P2TaL+dGHWwQ83CyX8I9icb/1lYUSFwqQvGHI8jzFbacOEtVtQQXB0N12fotvn/BDn7Eh+tyCNiiMN56tFuFJw==}
     peerDependencies:
-      svelte: '>=3 <5'
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -1978,6 +1981,8 @@ snapshots:
 
   '@tanstack/query-core@4.36.1': {}
 
+  '@tanstack/query-core@5.81.5': {}
+
   '@tanstack/query-persist-client-core@4.36.1':
     dependencies:
       '@tanstack/query-core': 4.36.1
@@ -1986,9 +1991,9 @@ snapshots:
     dependencies:
       '@tanstack/query-persist-client-core': 4.36.1
 
-  '@tanstack/svelte-query@4.36.1(svelte@4.2.18)':
+  '@tanstack/svelte-query@5.81.5(svelte@4.2.18)':
     dependencies:
-      '@tanstack/query-core': 4.36.1
+      '@tanstack/query-core': 5.81.5
       svelte: 4.2.18
 
   '@types/cookie@0.6.0': {}
