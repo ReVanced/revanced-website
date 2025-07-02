@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
-	import { Query } from '@tanstack/query-core';
+	import Query from '$lib/components/Query.svelte';
 	import Dialog from '$layout/Dialogs/Dialog.svelte';
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
