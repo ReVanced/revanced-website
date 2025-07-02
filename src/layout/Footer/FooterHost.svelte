@@ -78,7 +78,6 @@
 
 <style lang="scss">
 	footer {
-		background-color: var(--background-one);
 		max-width: min(87%, 100rem);
 		padding: 5rem 0rem;
 		margin: 0 auto;
