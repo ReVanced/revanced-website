@@ -16,8 +16,6 @@ export function api_base_url(): string {
 	if (browser) {
 		const apiUrl = localStorage.getItem(URL_KEY) || default_api_url;
 
-		set_about_info(apiUrl);
-
 		return apiUrl;
 	}
 
@@ -46,11 +44,11 @@ export function set_api_base_url(url?: string) {
 		localStorage.removeItem(URL_KEY);
 	} else {
 		localStorage.setItem(URL_KEY, url);
-		set_about_info(url);
 	}
+	set_about_info(api_base_url());
 }
 
-function set_about_info(apiUrl: string) {
+export function set_about_info(apiUrl: string) {
 	if (!localStorage.getItem(STATUS_KEY) || !localStorage.getItem(EMAIL_KEY)) {
 		fetch(`${apiUrl}/v4/about`)
 			.then((response) => (response.ok ? response.json() : null))
