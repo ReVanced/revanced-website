@@ -9,16 +9,20 @@
 
 	function enableAnalytics() {
 		//@ts-ignore
-		window.dataLayer = window.dataLayer || [];
-		function gtag(...args: any[]) {
-			//@ts-ignore
-			window.dataLayer.push(args);
-		}
-		gtag('js', new Date());
+		window.dataLayer = [
+			{
+				'gtm.start': new Date().getTime(),
+				event: 'gtm.js'
+			}
+		];
 
-		const script = document.createElement('script');
-		script.src = `https://www.googletagmanager.com/gtm.js?id=${RV_GOOGLE_TAG_MANAGER_ID}`;
-		document.head.append(script);
+		var firstScript = document.getElementsByTagName('script')[0];
+		var script = document.createElement('script');
+		script.async = true;
+		script.src = 'https://www.googletagmanager.com/gtm.js?id=' + RV_GOOGLE_TAG_MANAGER_ID;
+		
+		//@ts-ignore
+		firstScript.parentNode.insertBefore(script, firstScript);
 	}
 
 	function handleConsent(allowed: boolean) {
