@@ -27,19 +27,25 @@
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<span>
-		<input type="datetime-local" max="9999-12-31T23:59" bind:value={createdAtInput} />
+		<label>
+			Created
+			<input type="datetime-local" max="9999-12-31T23:59" bind:value={createdAtInput} />
+		</label>
 		{#if archivedAtInput}
 			<ArrowRight size="24" />
-			<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtInput} />
+			<label>
+				Archived
+				<input type="datetime-local" max="9999-12-31T23:59" bind:value={archivedAtInput} />
+			</label>
 		{/if}
 	</span>
 {:else if displayCreatedAt}
 	<span>
-		{relativeTime(displayCreatedAt)}
+		Created {relativeTime(displayCreatedAt)}
 
 		{#if displayArchivedAt}
 			<ArrowRight size="24" />
-			{relativeTime(displayArchivedAt)}
+			Archived {relativeTime(displayArchivedAt)}
 		{/if}
 	</span>
 {/if}
@@ -50,6 +56,12 @@
 		flex-wrap: wrap;
 		align-items: center;
 		column-gap: 1rem;
+	}
+
+	label {
+		display: inline-flex;
+		align-items: center;
+		column-gap: 0.5rem;
 	}
 
 	input {
