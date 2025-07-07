@@ -52,7 +52,7 @@
 
 	onMount(() => {
 		set_about_info(api_base_url());
-		new DateTriggerEventHandler(themeEvents);
+		// new DateTriggerEventHandler(themeEvents);
 
 		isRestoring.set(true);
 		const [unsubscribe, promise] = persistQueryClient({
