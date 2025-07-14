@@ -16,6 +16,7 @@
 	import Show from 'svelte-material-icons/EyeOutline.svelte';
 	import Hide from 'svelte-material-icons/EyeOffOutline.svelte';
 	import Unarchive from 'svelte-material-icons/ArchiveArrowUpOutline.svelte';
+	import { formatUTC } from '$util/formatUtc';
 
 	export let isEditing: boolean;
 	export let isCreating: boolean;
@@ -67,6 +68,11 @@
 	const save = async () => {
 		if (!isValid()) return;
 
+		Object.assign(draftInputs, {
+			created_at: formatUTC(draftInputs.created_at),
+			archived_at: formatUTC(draftInputs.archived_at)
+		});
+
 		await admin.update_announcement(announcementIdNumber!, sanitize(draftInputs));
 		await $query?.refetch();
 
@@ -76,8 +82,13 @@
 	const createAnnouncement = async () => {
 		if (!isValid()) return;
 
+		Object.assign(draftInputs, {
+			created_at: formatUTC(draftInputs.created_at),
+			archived_at: formatUTC(draftInputs.archived_at)
+		});
+
 		await admin.create_announcement(sanitize(draftInputs));
-		await client.invalidateQueries(queries['announcements']());
+		await client.invalidateQueries(queries.announcements());
 		goto('/announcements', { invalidateAll: true });
 	};
 
