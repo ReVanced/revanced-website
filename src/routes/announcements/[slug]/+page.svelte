@@ -6,6 +6,8 @@
 	import { page } from '$app/stores';
 	import Announcement from './Announcement.svelte';
 	import Query from '$lib/components/Query.svelte';
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 
 	let announcementIdNumber: number | undefined = undefined;
 	let isCreating: boolean = false;
@@ -16,9 +18,10 @@
 		announcementIdNumber = isCreating ? undefined : Number(lastSegment.split('-')[0]);
 	}
 
-	$: query = announcementIdNumber
-		? createQuery(queries.announcementById(announcementIdNumber))
-		: null;
+	$: query =
+		isReady && browser && announcementIdNumber
+			? createQuery(queries.announcementById(announcementIdNumber))
+			: null;
 
 	$: announcement = $query?.data?.announcement || undefined;
 
@@ -35,14 +38,18 @@
 			window.history.replaceState(null, '', slugPathname);
 		}
 	}
+
+	let isReady = false;
+
+	onMount(() => {
+		isReady = true;
+	});
 </script>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	{#if query}
-		<Query {query}>
-			<Announcement {isCreating} {announcement} {announcementIdNumber} {query} />
-		</Query>
+	{#if !isReady}
+		<div></div>
 	{:else}
-		<Announcement {isCreating} {announcement} {announcementIdNumber} />
+		<Query {query}>...</Query>
 	{/if}
 </main>
