@@ -150,7 +150,7 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 	return { announcements };
 }
 
-async function get_announcement_by_id(id: number): Promise<{ announcement: ResponseAnnouncement }> {
+export async function get_announcement_by_id(id: number): Promise<{ announcement: ResponseAnnouncement }> {
 	return { announcement: (await get_json(`announcements/${id}`)) as ResponseAnnouncement };
 }
 
