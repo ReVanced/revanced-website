@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@tanstack/query-core':
-        specifier: ^4.36.1
-        version: 4.36.1
+        specifier: ^5.85.6
+        version: 5.85.6
       '@tanstack/query-persist-client-core':
         specifier: ^4.36.1
         version: 4.36.1
@@ -681,6 +681,9 @@ packages:
 
   '@tanstack/query-core@4.36.1':
     resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
+
+  '@tanstack/query-core@5.85.6':
+    resolution: {integrity: sha512-hCj0TktzdCv2bCepIdfwqVwUVWb+GSHm1Jnn8w+40lfhQ3m7lCO7ADRUJy+2unxQ/nzjh2ipC6ye69NDW3l73g==}
 
   '@tanstack/query-persist-client-core@4.36.1':
     resolution: {integrity: sha512-eocgCeI7D7TRv1IUUBMfVwOI0wdSmMkBIbkKhqEdTrnUHUQEeOaYac8oeZk2cumAWJdycu6P/wB+WqGynTnzXg==}
@@ -1977,6 +1980,8 @@ snapshots:
       - supports-color
 
   '@tanstack/query-core@4.36.1': {}
+
+  '@tanstack/query-core@5.85.6': {}
 
   '@tanstack/query-persist-client-core@4.36.1':
     dependencies:
