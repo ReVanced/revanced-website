@@ -130,6 +130,7 @@
 		.buttons {
 			display: flex;
 			gap: 2rem;
+			align-items: center;
 			justify-content: flex-end;
 			width: 100%;
 		}
