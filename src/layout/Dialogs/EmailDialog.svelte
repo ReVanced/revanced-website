@@ -18,13 +18,13 @@
 		keyword = '';
 	}
 
-	$: if (showEmailDialog) {
-		clearInterval(interval);
+	$: if (showEmailDialog && !interval && enableInputSeconds != 0) {
 		interval = setInterval(() => {
-			enableInputSeconds -= 1;
 			if (enableInputSeconds <= 0) {
 				clearInterval(interval);
+				return;
 			}
+			enableInputSeconds -= 1;
 		}, 1000);
 	}
 </script>
