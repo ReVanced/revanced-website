@@ -24,6 +24,7 @@
 	import { events as themeEvents } from '$util/themeEvents';
 
 	import FooterHost from '$layout/Footer/FooterHost.svelte';
+	import { api_base_url, set_about_info } from '$data/api/settings';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -50,6 +51,7 @@
 	);
 
 	onMount(() => {
+		set_about_info(api_base_url());
 		new DateTriggerEventHandler(themeEvents);
 
 		isRestoring.set(true);

@@ -12,6 +12,7 @@
 	export let label: string = '';
 	export let disabled: boolean = false;
 	export let toolTipText: string | undefined = undefined;
+	export let style: string = '';
 
 	$: type = $$slots.default ? type : 'icon';
 </script>
@@ -26,6 +27,7 @@
 		<button
 			on:click
 			class={`${type} ${variant}`}
+			style="{style}"
 			class:disabled
 			aria-label={label}
 			type={functionType}
