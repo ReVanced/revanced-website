@@ -10,17 +10,22 @@
 	import { RV_DMCA_GUID } from '$env/static/public';
 	import { onMount } from 'svelte';
 	import Divider from '$lib/components/Divider.svelte';
-	import { email } from '$data/api/settings';
+	import Button from '$lib/components/Button.svelte';
+	import EmailDialog from '$layout/Dialogs/EmailDialog.svelte';
 
 	const aboutQuery = createQuery(queries.about());
 
 	let location: string;
+
+	let showEmailDialog = false;
 
 	onMount(() => {
 		// DMCA Protection Badge
 		location = document.location.href;
 	});
 </script>
+
+<EmailDialog bind:showEmailDialog />
 
 <Divider horizontalPadding={'15px'} />
 <footer in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
@@ -60,8 +65,16 @@
 
 	<div class="bottom">
 		<div id="logo-name"><span>Re</span>Vanced</div>
-		<a href="/donate"><div>Donate</div></a>
-		<a href="mailto:{email()}"><div>Email</div></a>
+		<Button type="text" style="color: var(--text-four); font-weight: 600;">
+			<a href="/donate">Donate</a>
+		</Button>
+		<Button
+			type="text"
+			style="color: var(--text-four); font-weight: 600;"
+			on:click={() => (showEmailDialog = true)}
+		>
+			E-Mail
+		</Button>
 		<!-- DMCA Protection Badge -->
 		<a
 			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"

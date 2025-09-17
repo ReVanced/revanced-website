@@ -10,8 +10,8 @@
 
 <Banner
 	title="API service is currently down"
-	description="Some features of the site might be impacted. If this issue persists, reach out to mailto:{email()}"
-	buttonText={statusUrl ? 'View status' : undefined}
+	description="Some features of the site might be impacted. If this issue persists, reach out to {email()}."
+	buttonText={statusUrl ? 'Check status' : undefined}
 	buttonOnClick={statusUrl ? handleClick : undefined}
 	level="caution"
 	permanent
