@@ -65,12 +65,16 @@
 
 	<div class="bottom">
 		<div id="logo-name"><span>Re</span>Vanced</div>
-		<a href="/donate"><div>Donate</div></a>
+		<Button type="text" style="color: var(--text-four); font-weight: 600;">
+			<a href="/donate">Donate</a>
+		</Button>
 		<Button
 			type="text"
 			style="color: var(--text-four); font-weight: 600;"
-			on:click={() => (showEmailDialog = true)}>E-Mail</Button
+			on:click={() => (showEmailDialog = true)}
 		>
+			E-Mail
+		</Button>
 		<!-- DMCA Protection Badge -->
 		<a
 			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"
@@ -161,7 +165,6 @@
 	}
 
 	a {
-		color: var(--primary);
 		text-decoration: none;
 
 		&:hover {
