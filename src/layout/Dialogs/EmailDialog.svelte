@@ -10,10 +10,11 @@
 	let enableInputSeconds = 15;
 	let keyword: string = '';
 
-	let interval: NodeJS.Timeout;
+	let interval: number | undefined;
 	function closeDialog() {
 		showEmailDialog = false;
 		clearInterval(interval);
+		interval = undefined;
 		enableInputSeconds = 15;
 		keyword = '';
 	}
