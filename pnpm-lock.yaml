@@ -61,11 +61,11 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
       prettier:
-        specifier: 3.4.1
-        version: 3.4.1
+        specifier: 3.6.2
+        version: 3.6.2
       prettier-plugin-svelte:
         specifier: 3.3.2
-        version: 3.3.2(prettier@3.4.1)(svelte@4.2.18)
+        version: 3.3.2(prettier@3.6.2)(svelte@4.2.18)
       qrious:
         specifier: ^4.0.2
         version: 4.0.2
@@ -1296,8 +1296,8 @@ packages:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
 
-  prettier@3.4.1:
-    resolution: {integrity: sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==}
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2584,12 +2584,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-svelte@3.3.2(prettier@3.4.1)(svelte@4.2.18):
+  prettier-plugin-svelte@3.3.2(prettier@3.6.2)(svelte@4.2.18):
     dependencies:
-      prettier: 3.4.1
+      prettier: 3.6.2
       svelte: 4.2.18
 
-  prettier@3.4.1: {}
+  prettier@3.6.2: {}
 
   punycode@2.3.1: {}
 
