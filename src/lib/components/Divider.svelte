@@ -1,5 +1,5 @@
-<script>
-	export let horizontalPadding;
+<script lang="ts">
+	export let horizontalPadding: string;
 </script>
 
 <svg
