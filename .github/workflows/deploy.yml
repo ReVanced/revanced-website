@@ -1,0 +1,53 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - dev
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Build
+        env:
+          RV_API_URL: ${{ vars.RV_API_URL }}
+          RV_GOOGLE_TAG_MANAGER_ID: ${{ vars.RV_GOOGLE_TAG_MANAGER_ID }}
+          RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
+          RV_STATUS_URL: ${{ vars.RV_STATUS_URL }}
+          RV_EMAIL: ${{ vars.RV_EMAIL }}
+        run: npm run build
+
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=revanced-website
+
+      - name: Comment deployment URL
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: Deployed at ${{ steps.deploy.outputs.deployment-url }}.
