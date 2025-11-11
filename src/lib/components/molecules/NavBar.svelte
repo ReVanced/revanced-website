@@ -27,7 +27,11 @@
 	</div>
 
 	<div class="nav-group">
-		<a href="/announcements" class="rounded nav-button unselectable"><Announcement /></a>
+		<a
+			href="/announcements"
+			class="rounded nav-button unselectable"
+			class:active={page.url.pathname === '/announcements'}><Announcement /></a
+		>
 		<button class="rounded nav-button unselectable" type="button"><Gear /></button>
 	</div>
 </nav>
