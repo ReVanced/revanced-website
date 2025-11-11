@@ -1,7 +1,9 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
+	import '../app.css';
+	import favicon from '$assets/favicon.ico';
+	import type { WithChildren } from '$types';
 
-	let { children } = $props();
+	let { children }: WithChildren = $props();
 </script>
 
 <svelte:head>
