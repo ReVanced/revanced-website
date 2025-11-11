@@ -4,6 +4,19 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    border: none;
+    outline: none;
     font-family: "Manrope", sans-serif;
     font-optical-sizing: auto;
+}
+
+.rounded {
+    border-radius: 10px;
+}
+
+.unselectable, .unselectable * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
