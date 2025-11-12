@@ -70,7 +70,6 @@
 		font-weight: 500;
 		padding: 0.5rem 1rem;
 		transition: background-color 0.2s;
-		background-color: transparent;
 
 		&:hover {
 			background-color: #e0e0e0;
