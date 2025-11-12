@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import storable from '@madkarma/svelte-storable';
@@ -26,16 +25,9 @@
 	}: Props = $props();
 
 	const Icon = type === 'info' ? Info : type === 'warning' ? Warning : Error;
-
-	let visible = $state(false);
-
-	onMount(() => {
-		if (closed) return;
-		visible = true;
-	});
 </script>
 
-{#if visible}
+{#if !closed}
 	<div class="banner {type}" {id} transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<Icon />
 
@@ -49,7 +41,6 @@
 				type="button"
 				onclick={() => {
 					closed = true;
-					visible = false;
 					$readBannerIds = [...$readBannerIds, id];
 				}}
 			>
