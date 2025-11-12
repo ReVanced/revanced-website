@@ -33,7 +33,7 @@
 		"vite": "^7.1.10"
 	},
 	"dependencies": {
-		"@iconify-json/mdi": "^1.2.3",
+		"@iconify-json/material-symbols": "^1.2.45",
 		"unplugin-icons": "^22.5.0"
 	}
 }

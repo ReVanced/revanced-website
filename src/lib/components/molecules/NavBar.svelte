@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import logo from '$assets/logo.svg';
-	import Announcement from 'virtual:icons/mdi/announcement';
-	import Gear from 'virtual:icons/mdi/gear';
+	import Notifications from 'virtual:icons/material-symbols/notifications-outline';
+	import Settings from 'virtual:icons/material-symbols/settings-outline';
 
 	const navItems = [
 		{ label: 'Home', href: '/' },
@@ -30,9 +30,9 @@
 		<a
 			href="/announcements"
 			class="rounded nav-button unselectable"
-			class:active={page.url.pathname === '/announcements'}><Announcement /></a
+			class:active={page.url.pathname === '/announcements'}><Notifications /></a
 		>
-		<button class="rounded nav-button unselectable" type="button"><Gear /></button>
+		<button class="rounded nav-button unselectable" type="button"><Settings /></button>
 	</div>
 </nav>
 
