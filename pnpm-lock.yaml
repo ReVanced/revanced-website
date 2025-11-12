@@ -11,6 +11,9 @@ importers:
       '@iconify-json/material-symbols':
         specifier: ^1.2.45
         version: 1.2.45
+      '@madkarma/svelte-storable':
+        specifier: ^1.0.4
+        version: 1.0.4(svelte@5.43.5)(typescript@5.9.3)
       unplugin-icons:
         specifier: ^22.5.0
         version: 22.5.0(svelte@5.43.5)
@@ -318,6 +321,16 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@madkarma/svelte-storable@1.0.4':
+    resolution: {integrity: sha512-E1vyfs89MzEjT4JJwUH23qKuwia50NP48zRXPLuOtEtIqXl46AW0ZbwpBFXGoSaHodhFOrbYROSLQ4iZCjbJag==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@madkarma/ts-utils@1.1.2':
+    resolution: {integrity: sha512-iQqKMtcd0QXSHzHm0L0VNHcUyAuYyd9W05F9fG/pvdB3YZOQzfN85v6pFUH5BdjbjhFGOIs/JwmXBEu290YRww==}
+    peerDependencies:
+      typescript: ^5.9.3
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1451,6 +1464,17 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@madkarma/svelte-storable@1.0.4(svelte@5.43.5)(typescript@5.9.3)':
+    dependencies:
+      '@madkarma/ts-utils': 1.1.2(typescript@5.9.3)
+      svelte: 5.43.5
+    transitivePeerDependencies:
+      - typescript
+
+  '@madkarma/ts-utils@1.1.2(typescript@5.9.3)':
+    dependencies:
+      typescript: 5.9.3
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
