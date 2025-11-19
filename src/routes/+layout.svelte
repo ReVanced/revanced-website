@@ -2,6 +2,7 @@
 	import '../app.css';
 	import favicon from '$assets/favicon.ico';
 	import NavBar from '$components/molecules/NavBar.svelte';
+	import ModalBackground from '$components/atoms/ModalBackground.svelte';
 	import type { WithChildren } from '$types';
 
 	let { children }: WithChildren = $props();
@@ -12,4 +13,7 @@
 </svelte:head>
 
 <NavBar />
+
+<ModalBackground />
+
 {@render children()}

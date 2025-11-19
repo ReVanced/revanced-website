@@ -3,6 +3,7 @@
 	import logo from '$assets/logo.svg';
 	import Notifications from 'virtual:icons/material-symbols/notifications-outline';
 	import Settings from 'virtual:icons/material-symbols/settings-outline';
+	import Modal from '$components/molecules/Modal.svelte';
 
 	const navItems = [
 		{ label: 'Home', href: '/' },
@@ -11,6 +12,9 @@
 		{ label: 'Contributors', href: '/contributors' },
 		{ label: 'Donate', href: '/donate' }
 	] as const satisfies { label: string; href: string }[];
+
+	let settingsOpen = $state(false);
+	let loginOpen = $state(false);
 </script>
 
 <nav>
@@ -32,9 +36,24 @@
 			class="rounded nav-button unselectable"
 			class:active={page.url.pathname === '/announcements'}><Notifications /></a
 		>
-		<button class="rounded nav-button unselectable" type="button"><Settings /></button>
+		<button
+			class="rounded nav-button unselectable"
+			type="button"
+			onclick={() => (settingsOpen = true)}><Settings /></button
+		>
 	</div>
 </nav>
+
+<Modal id="settings" bind:open={settingsOpen}>
+	<h2>Settings</h2>
+	{#snippet buttons()}
+		<button type="button" onclick={() => (loginOpen = true)}>Login</button>
+	{/snippet}
+</Modal>
+
+<Modal id="login" bind:open={loginOpen}>
+	<h2>Login</h2>
+</Modal>
 
 <style>
 	nav {
@@ -46,7 +65,7 @@
 		position: sticky;
 		top: 0;
 		left: 0;
-		z-index: 9998;
+		z-index: 9997;
 	}
 
 	.nav-group {
