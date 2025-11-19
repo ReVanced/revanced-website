@@ -1,10 +1,8 @@
 <script lang="ts">
-	import Page from '$components/molecules/Page.svelte';
+	import PageShell from '$components/templates/PageShell.svelte';
 </script>
 
-<Page description="Contributors of ReVanced">
-	<h1>Welcome to SvelteKit</h1>
-	<p>
-		Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation
-	</p>
-</Page>
+<PageShell description="Contributors">
+	<h1 id="page-heading">ReVanced Contributors</h1>
+	<p>Placeholder contributors listing.</p>
+</PageShell>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { WithChildren } from '$types';
-	import { modalsStack } from '$stores/modals.svelte';
+	import { modalStack } from '$stores/modalStack';
 	import { fade } from 'svelte/transition';
 
 	type Props = {
@@ -11,14 +11,19 @@
 	} & WithChildren;
 	let { id, buttons, children, open = $bindable(true) }: Props = $props();
 
-	let isTopModal = $derived(modalsStack.isTopModal(id));
+	let stack = $state<string[]>([]);
+	$effect(() => {
+		const unsub = modalStack.subscribe((s) => (stack = s));
+		return unsub;
+	});
+	let isTopModal = $derived(stack.length > 0 && stack[stack.length - 1] === id);
 
 	$effect(() => {
 		if (open)
-			modalsStack.push(id, () => {
+			modalStack.open(id, () => {
 				open = false;
 			});
-		else modalsStack.pop(id);
+		else modalStack.close(id);
 	});
 </script>
 
@@ -54,7 +59,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
-		z-index: 9999;
+		z-index: var(--z-modal, 900);
 	}
 
 	.content {
