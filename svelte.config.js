@@ -8,7 +8,7 @@ const config = {
 	preprocess: vitePreprocess(),
 	kit: {
 		adapter: adapter(),
-		alias: {
+		alias: { // resolve TypeScript path alias errors for Svelte components and stores
 			$components: 'src/lib/components',
 			$assets: 'src/lib/assets',
 			$types: 'src/lib/types.ts',

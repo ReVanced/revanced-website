@@ -1,13 +1,7 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"$lib/*": ["src/lib/*"],
-			"$types": ["src/lib/types.ts"],
-			"$stores/*": ["src/lib/stores/*"],
-			"$components/*": ["src/lib/components/*"]
-		},
+		// Added a and removed ( Moved to svelte.config.js ) the code that resolved path alias errors
 		"allowImportingTsExtensions": true,
 		"allowJs": true,
 		"checkJs": true,

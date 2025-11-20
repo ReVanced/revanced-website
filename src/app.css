@@ -1,39 +1,55 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+/* Navigation bar button hover effect */
+.nav-btn:not(.active):hover,
+.nav-btn:not(.active):focus-visible {
+    background: var(--color-accent-hover);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.nav-btn.active {
+    background: var(--color-accent-active);
+    color: #fff;
+    box-shadow: none;
+}
 
 /* Design Tokens */
 :root {
     /* Color scale */
-    --color-neutral-0: #ffffff;
-    --color-neutral-25: #fcfcfd;
-    --color-neutral-50: #f5f7fa;
-    --color-neutral-100: #eef1f5;
-    --color-neutral-200: #dadee3;
-    --color-neutral-300: #c3cad1;
-    --color-neutral-400: #a1adb9;
-    --color-neutral-500: #7d8a97;
-    --color-neutral-600: #5a6773;
-    --color-neutral-700: #3e4852;
-    --color-neutral-800: #273038;
-    --color-neutral-900: #161c21;
-    --color-accent-500: #ff4d34;
-    --color-accent-600: #e63e28;
-    --color-accent-700: #c4321f;
-    --color-danger: #d92d20;
-    --color-warning: #f79009;
-    --color-info: #1570ef;
+    --color-neutral-0: #181c24;
+    --color-neutral-25: #1e2230;
+    --color-neutral-50: #23273a;
+    --color-neutral-100: #2a2f45;
+    --color-neutral-200: #313654;
+    --color-neutral-300: #3a4060;
+    --color-neutral-400: #4a5270;
+    --color-neutral-500: #5a6380;
+    --color-neutral-600: #6a7490;
+    --color-neutral-700: #7a85a0;
+    --color-neutral-800: #8a96b0;
+    --color-neutral-900: #f4f7fa;
+    --color-accent-500: #3b82f6;
+    --color-accent-600: #2563eb;
+    --color-accent-700: #1d4ed8;
+    --color-danger: #e53935;
+    --color-warning: #fbbf24;
+    --color-info: #38bdf8;
 
     /* Semantic colors */
     --color-bg: var(--color-neutral-0);
-    --color-bg-alt: var(--color-neutral-50);
-    --color-surface: var(--color-neutral-100);
+    --color-bg-alt: var(--color-neutral-25);
+    --color-surface: var(--color-neutral-50);
     --color-border: var(--color-neutral-200);
     --color-border-strong: var(--color-neutral-300);
     --color-text: var(--color-neutral-900);
-    --color-text-muted: var(--color-neutral-600);
+    --color-text-muted: var(--color-neutral-700);
     --color-accent: var(--color-accent-500);
     --color-accent-hover: var(--color-accent-600);
     --color-accent-active: var(--color-accent-700);
-    --color-focus-ring: #3b82f6;
+    --color-focus-ring: #38bdf8;
 
     /* Spacing (4pt base) */
     --space-0: 0;
@@ -90,13 +106,13 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-bg: var(--color-neutral-900);
-        --color-bg-alt: var(--color-neutral-800);
-        --color-surface: var(--color-neutral-700);
-        --color-border: var(--color-neutral-600);
+        --color-bg: var(--color-neutral-100);
+        --color-bg-alt: var(--color-neutral-200);
+        --color-surface: var(--color-neutral-300);
+        --color-border: var(--color-neutral-400);
         --color-border-strong: var(--color-neutral-500);
-        --color-text: var(--color-neutral-0);
-        --color-text-muted: var(--color-neutral-300);
+        --color-text: var(--color-neutral-900);
+        --color-text-muted: var(--color-neutral-800);
     }
 }
 
@@ -114,7 +130,7 @@
 
 html, body {
     min-height: 100%;
-    background: var(--color-bg);
+    background: #181c24;
     color: var(--color-text);
     font-size: var(--font-size-md);
     line-height: var(--line-height-normal);

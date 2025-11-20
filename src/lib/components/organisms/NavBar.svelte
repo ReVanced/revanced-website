@@ -95,9 +95,22 @@
 		border: 1px solid transparent;
 	}
 
-	.nav-button:hover { background: var(--color-bg-alt); }
-	.nav-button.active { background: var(--color-accent); color: var(--color-neutral-0); }
-	.nav-button:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+	.nav-button:not(.active):hover,
+	.nav-button:not(.active):focus-visible {
+		background: var(--color-accent-hover);
+		color: #fff;
+		box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+		transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+	}
+	.nav-button.active {
+		background: var(--color-accent);
+		color: var(--color-neutral-0);
+		box-shadow: none;
+	}
+	.nav-button:focus-visible {
+		outline: 2px solid var(--color-focus-ring);
+		outline-offset: 2px;
+	}
 
 	.logo { height: 22px; width: auto; display: block; }
 
