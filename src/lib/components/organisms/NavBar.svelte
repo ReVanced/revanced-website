@@ -15,33 +15,34 @@
 	] as const satisfies { label: string; href: string }[];
 </script>
 
-<nav class="nav" aria-label="Main navigation">
-	<div class="nav-group">
-		<a href="/" class="nav-item unselectable" aria-label="ReVanced home">
+
+<nav class="nav modern-nav" aria-label="Main navigation">
+	<div class="nav-left">
+		<a href="/" class="nav-logo unselectable" aria-label="ReVanced home">
 			<img src={logo} alt="ReVanced Logo" class="logo" />
 		</a>
-
-		{#each navItems as { href, label }}
-			<a
-				{href}
-				class="nav-button rounded unselectable"
-				class:active={page.url.pathname === href}
-				aria-current={page.url.pathname === href ? 'page' : undefined}
-			>{label}</a>
-		{/each}
+		<div class="nav-links">
+			{#each navItems as { href, label }}
+				<a
+					{href}
+					class="nav-button modern-nav-btn unselectable"
+					class:active={page.url.pathname === href}
+					aria-current={page.url.pathname === href ? 'page' : undefined}
+				>{label}</a>
+			{/each}
+		</div>
 	</div>
-
-	<div class="nav-group">
+	<div class="nav-right">
 		<a
 			href="/announcements"
-			class="nav-button rounded unselectable"
+			class="nav-button modern-nav-btn icon-btn unselectable"
 			class:active={page.url.pathname === '/announcements'}
 			aria-label="Announcements"
 			aria-current={page.url.pathname === '/announcements' ? 'page' : undefined}
 		><Notifications aria-hidden="true" /></a>
 		<button
 			type="button"
-			class="nav-button rounded unselectable"
+			class="nav-button modern-nav-btn icon-btn unselectable"
 			aria-haspopup="dialog"
 			aria-controls="settings-modal"
 			aria-label="Open settings"
@@ -49,7 +50,7 @@
 		><Settings aria-hidden="true" /></button>
 		<button
 			type="button"
-			class="nav-button rounded unselectable"
+			class="nav-button modern-nav-btn icon-btn unselectable"
 			aria-haspopup="dialog"
 			aria-controls="login-modal"
 			aria-label="Open login"
@@ -59,62 +60,137 @@
 </nav>
 
 <style>
-	.nav {
+	/* Only keep modern-nav styles, remove legacy .nav and .nav-group styles */
+
+	.modern-nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: var(--space-3) var(--space-6);
-		height: 70px;
-		position: sticky;
-		top: 0;
-		left: 0;
-		z-index: var(--z-nav);
-		background: var(--color-bg);
-		border-bottom: 1px solid var(--color-border);
+		padding: var(--space-3) var(--space-5);
+		background: rgba(15, 23, 42, 0.65);
+		backdrop-filter: blur(16px);
+		border-radius: var(--radius-3);
+		box-shadow: 0 10px 40px rgba(15, 23, 42, 0.2);
 	}
 
-	.nav-group {
+	.nav-left {
 		display: flex;
-		align-items: stretch;
-		justify-content: center;
-		gap: var(--space-4);
-		height: 100%;
+		align-items: center;
+		gap: var(--space-8);
 	}
 
-	.nav-item,
-	.nav-button {
+	.nav-logo {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: var(--font-size-sm);
-		font-weight: var(--font-weight-medium);
-		text-decoration: none;
-		color: var(--color-text);
-		padding: var(--space-2) var(--space-3);
-		transition: background-color .18s ease, color .18s ease;
-		border: 1px solid transparent;
+		height: 44px;
+		width: 44px;
+		background: rgba(59, 130, 246, 0.08);
+		border-radius: var(--radius-pill);
+		box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+		margin-right: var(--space-4);
+		transition: box-shadow 0.2s;
 	}
 
-	.nav-button:not(.active):hover,
-	.nav-button:not(.active):focus-visible {
-		background: var(--color-accent-hover);
-		color: #fff;
-		box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
-		transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-	}
-	.nav-button.active {
-		background: var(--color-accent);
-		color: var(--color-neutral-0);
-		box-shadow: none;
-	}
-	.nav-button:focus-visible {
-		outline: 2px solid var(--color-focus-ring);
-		outline-offset: 2px;
+	.nav-logo:hover {
+		box-shadow: 0 4px 16px rgba(59, 130, 246, 0.18);
 	}
 
-	.logo { height: 22px; width: auto; display: block; }
+	.logo {
+		height: 28px;
+		width: auto;
+		display: block;
+		border-radius: var(--radius-2);
+	}
 
-	@media (prefers-color-scheme: dark) {
-		.nav { background: var(--color-bg-alt); }
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+		.modern-nav-btn {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: var(--font-size-md);
+			font-weight: var(--font-weight-semibold);
+			text-decoration: none;
+			color: var(--color-text);
+			padding: var(--space-2) var(--space-5);
+			border-radius: var(--radius-pill);
+			border: 1.5px solid transparent;
+			background: transparent;
+			transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+			position: relative;
+		}
+		.modern-nav-btn:not(.active):hover,
+		.modern-nav-btn:not(.active):focus-visible {
+			background: var(--color-accent-hover);
+			color: #fff;
+			box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+			border-color: var(--color-accent-hover);
+		}
+		.modern-nav-btn.active {
+			background: var(--color-accent);
+			color: #fff;
+			border-color: var(--color-accent);
+			box-shadow: 0 2px 8px rgba(59,130,246,0.18);
+		}
+		.modern-nav-btn:focus-visible {
+			outline: 2px solid var(--color-focus-ring);
+			outline-offset: 2px;
+		}
+
+		.icon-btn {
+			padding: var(--space-2);
+			width: 40px;
+			height: 40px;
+			border-radius: var(--radius-pill);
+			background: transparent;
+			font-size: 1.25rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.18s, box-shadow 0.18s;
+		}
+		.icon-btn:hover,
+		.icon-btn:focus-visible {
+			background: var(--color-accent-hover);
+			color: #fff;
+			box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+		}
+		.icon-btn.active {
+			background: var(--color-accent);
+			color: #fff;
+			box-shadow: 0 2px 8px rgba(59,130,246,0.18);
+		}
+
+		.nav-right {
+			display: flex;
+			align-items: center;
+			gap: var(--space-2);
+		}
+
+	@media (max-width: 700px) {
+		.modern-nav {
+			padding: var(--space-2) var(--space-2);
+			height: 56px;
+		}
+		.nav-logo {
+			height: 32px;
+			width: 32px;
+		}
+		.logo {
+			height: 18px;
+		}
+		.modern-nav-btn {
+			font-size: var(--font-size-sm);
+			padding: var(--space-1) var(--space-3);
+		}
+		.icon-btn {
+			width: 32px;
+			height: 32px;
+		}
 	}
 </style>
