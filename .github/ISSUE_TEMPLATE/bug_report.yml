@@ -81,7 +81,7 @@ body:
         - Add steps to reproduce the bug if possible (Step 1. ... Step 2. ...)
         - Add images and videos if possible
     validations:
-        required: true
+      required: true
   - type: textarea
     attributes:
       label: Error logs

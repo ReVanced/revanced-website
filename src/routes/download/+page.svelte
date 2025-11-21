@@ -29,7 +29,8 @@
 	onMount(() => {
 		userAgent = navigator.userAgent;
 		androidVersionMatch = /Android\s([\d.]+)/i.exec(userAgent);
-		androidVersion = androidVersionMatch ? parseInt(androidVersionMatch[1]) : 0;
+		// Use parseFloat to preserve minor versions (e.g., 8.1, 13.0)
+		androidVersion = androidVersionMatch ? parseFloat(androidVersionMatch[1]) : 0;
 		isAndroid = !!androidVersion;
 	});
 

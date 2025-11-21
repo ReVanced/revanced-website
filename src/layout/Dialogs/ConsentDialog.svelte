@@ -20,27 +20,37 @@
 		var script = document.createElement('script');
 		script.async = true;
 		script.src = 'https://www.googletagmanager.com/gtm.js?id=' + RV_GOOGLE_TAG_MANAGER_ID;
-		
+
 		//@ts-ignore
 		firstScript.parentNode.insertBefore(script, firstScript);
 	}
 
 	function handleConsent(allowed: boolean) {
-		localStorage.setItem('analytics', allowed.toString());
-		allowAnalytics.set(allowed);
-		showConsentDialog = false;
+		try {
+			localStorage.setItem('analytics', allowed.toString());
+			allowAnalytics.set(allowed);
+			showConsentDialog = false;
 
-		if (allowed) enableAnalytics();
+			if (allowed) enableAnalytics();
+		} catch (error) {
+			console.error('Failed to save analytics consent:', error);
+			showConsentDialog = false;
+		}
 	}
 
 	onMount(() => {
-		const savedConsent = localStorage.getItem('analytics');
+		try {
+			const savedConsent = localStorage.getItem('analytics');
 
-		if (savedConsent !== null) {
-			const allowed = savedConsent === 'true';
-			allowAnalytics.set(allowed);
-			if (allowed) enableAnalytics();
-		} else {
+			if (savedConsent !== null) {
+				const allowed = savedConsent === 'true';
+				allowAnalytics.set(allowed);
+				if (allowed) enableAnalytics();
+			} else {
+				showConsentDialog = true;
+			}
+		} catch (error) {
+			console.error('Failed to read analytics consent:', error);
 			showConsentDialog = true;
 		}
 	});

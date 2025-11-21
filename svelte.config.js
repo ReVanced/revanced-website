@@ -10,7 +10,8 @@ const config = {
 		adapter: adapter({
 			strict: false
 		}),
-		alias: { // resolve TypeScript path alias errors for Svelte components and stores
+		alias: {
+			// resolve TypeScript path alias errors for Svelte components and stores
 			$components: 'src/lib/components',
 			$assets: 'src/lib/assets',
 			$types: 'src/lib/types.ts',

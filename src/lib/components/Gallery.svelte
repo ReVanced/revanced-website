@@ -21,17 +21,14 @@
 
 <div class="gallery" style="--columns: {columns}; --gap: {gap}">
 	{#each images as image, i}
-		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<div class="image-container">
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<img
-				src={image}
-				alt={`Gallery image ${i + 1}`}
-				loading="lazy"
+			<button
+				class="image-btn"
 				on:click={() => openDialog(image, i)}
-				on:keydown={(e) => e.key === 'Enter' && openDialog(image, i)}
-				tabindex="0"
-			/>
+				aria-label={`View gallery image ${i + 1}`}
+			>
+				<img src={image} alt={`Gallery image ${i + 1}`} loading="lazy" />
+			</button>
 		</div>
 	{/each}
 </div>
@@ -56,15 +53,25 @@
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
 
+	.image-btn {
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+		display: block;
+	}
+
 	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		transition: transform 0.3s ease;
-		cursor: pointer;
 	}
 
-	img:hover {
+	.image-btn:hover img,
+	.image-btn:focus img {
 		transform: scale(1.05);
 	}
 

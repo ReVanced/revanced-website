@@ -40,7 +40,7 @@
 		animation-iteration-count: infinite;
 		fill: url(#waveGradient);
 	}
-	
+
 	/* Add gradient definition for modern look */
 
 	@keyframes wave-anim {

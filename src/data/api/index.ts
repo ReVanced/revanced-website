@@ -112,10 +112,17 @@ async function patches(): Promise<PatchesData> {
 	for (const patch of json) {
 		if (!patch.compatiblePackages) continue;
 
-		patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
-			name,
-			versions: patch.compatiblePackages[name]
-		}));
+		// Validate that compatiblePackages is an object before transforming
+		if (typeof patch.compatiblePackages === 'object' && !Array.isArray(patch.compatiblePackages)) {
+			patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
+				name,
+				versions: patch.compatiblePackages[name]
+			}));
+		} else if (!Array.isArray(patch.compatiblePackages)) {
+			console.warn('Invalid compatiblePackages format for patch:', patch.name);
+			patch.compatiblePackages = null;
+			continue;
+		}
 	}
 
 	// gets packages and patch count
@@ -164,7 +171,13 @@ async function announcementTags(): Promise<{ tags: Tags }> {
 }
 
 function show_error_alert(res: Response) {
-	alert(`A ${res.status < 500 ? 'user' : 'server'} error occurred. Please try again.`);
+	const errorType = res.status < 500 ? 'Client' : 'Server';
+	const message = `${errorType} error (${res.status}): ${res.statusText}`;
+	console.error('API Error:', message);
+	// TODO: Replace with proper notification system
+	// if (typeof window !== 'undefined') {
+	// 	alert(`A ${res.status < 500 ? 'user' : 'server'} error occurred. Please try again.`);
+	// }
 }
 
 export async function create_announcement(announcement: Announcement) {
@@ -199,7 +212,7 @@ async function ping(): Promise<boolean> {
 	try {
 		const res = await fetch(`${settings.api_base_url()}/v4/ping`, { method: 'HEAD' });
 		return res.ok;
-	} catch (error) {
+	} catch {
 		return false;
 	}
 }

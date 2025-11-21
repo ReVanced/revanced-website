@@ -1,4 +1,6 @@
 <script lang="ts">
+	import DOMPurify from 'isomorphic-dompurify';
+
 	export let isEditing: boolean = false;
 	export let isCreating: boolean = false;
 	export let isPreviewing: boolean = false;
@@ -6,14 +8,18 @@
 	export let contentInput: string | undefined = undefined;
 	export let clamp: boolean = false;
 
+	let sanitizedContent: string = '';
+
 	$: displayContent = isPreviewing ? contentInput : content;
+	$: sanitizedContent = DOMPurify.sanitize(displayContent || '');
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
-	<textarea bind:value={contentInput} class:empty={!content?.trim()} placeholder="Enter content"></textarea>
-{:else if displayContent}
+	<textarea bind:value={contentInput} class:empty={!content?.trim()} placeholder="Enter content"
+	></textarea>
+{:else if sanitizedContent}
 	<div class:clamp>
-		{@html displayContent}
+		{@html sanitizedContent}
 	</div>
 {/if}
 

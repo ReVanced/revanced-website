@@ -60,8 +60,7 @@
 	}
 
 	input::-webkit-calendar-picker-indicator {
-		filter: invert(88%) sepia(60%) saturate(4731%) hue-rotate(173deg) brightness(91%)
-			contrast(111%);
+		filter: invert(88%) sepia(60%) saturate(4731%) hue-rotate(173deg) brightness(91%) contrast(111%);
 	}
 
 	input {

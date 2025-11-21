@@ -23,7 +23,11 @@
 	function clear_and_reload() {
 		client.clear();
 		// `client.clear()` does technically do this for us, but it takes a while.
-		localStorage.clear();
+		try {
+			localStorage.clear();
+		} catch (error) {
+			console.error('Failed to clear localStorage:', error);
+		}
 
 		reload();
 	}

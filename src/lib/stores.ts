@@ -35,7 +35,8 @@ export const admin_login = readable<AdminLoginInfo>(admin_login_info(), (set) =>
 
 	checkLoginStatus();
 
-	const interval = setInterval(checkLoginStatus, 1000);
+	// Reduced from 1 second to 30 seconds to prevent battery drain
+	const interval = setInterval(checkLoginStatus, 30000);
 	return () => clearInterval(interval);
 });
 
@@ -43,30 +44,47 @@ export const read_announcements = writable<Set<number>>(new Set(), (set) => {
 	if (!browser) return;
 
 	const key = 'read_announcements';
-	const data = localStorage.getItem(key);
-	const parsedArray: number[] = data ? JSON.parse(data) : [];
-	const currentState = new Set<number>(parsedArray);
+	try {
+		const data = localStorage.getItem(key);
+		const parsedArray: number[] = data ? JSON.parse(data) : [];
+		const currentState = new Set<number>(parsedArray);
 
-	const updateStoreState = () => {
-		set(currentState);
-	};
+		const updateStoreState = () => {
+			set(currentState);
+		};
 
-	const handleLocalStorageUpdate = (e: StorageEvent) => {
-		if (e.key === key) updateStoreState();
-	};
+		const handleLocalStorageUpdate = (e: StorageEvent) => {
+			if (e.key === key) {
+				try {
+					const newData = e.newValue ? JSON.parse(e.newValue) : [];
+					set(new Set<number>(newData));
+				} catch (error) {
+					console.error('Failed to parse localStorage update:', error);
+				}
+			}
+		};
 
-	window.addEventListener('storage', handleLocalStorageUpdate);
-	updateStoreState();
+		window.addEventListener('storage', handleLocalStorageUpdate);
+		updateStoreState();
 
-	return () => {
-		window.removeEventListener('storage', handleLocalStorageUpdate);
-		localStorage.setItem(key, JSON.stringify(Array.from(currentState)));
-	};
-});
+		// Subscribe to changes and persist to localStorage
+		const unsubscribe = read_announcements.subscribe((value) => {
+			try {
+				localStorage.setItem(key, JSON.stringify(Array.from(value)));
+			} catch (error) {
+				console.error('Failed to save to localStorage:', error);
+			}
+		});
 
-read_announcements.subscribe((value) => {
-	if (!browser) return;
-	localStorage.setItem('read_announcements', JSON.stringify(Array.from(value)));
+		return () => {
+			window.removeEventListener('storage', handleLocalStorageUpdate);
+			unsubscribe();
+		};
+	} catch (error) {
+		console.error('Failed to initialize read_announcements:', error);
+		// Return no-op cleanup function
+		return () => {};
+	}
 });
 
 export const passed_login_with_creds = writable(false); // will only change when the user INPUTS the credentials, not if the session is just valid

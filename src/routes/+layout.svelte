@@ -58,6 +58,11 @@
 		// });
 		// promise.then(() => isRestoring.set(false));
 		// return unsubscribe;
+
+		// Cleanup query client on unmount
+		return () => {
+			queryClient.clear();
+		};
 	});
 </script>
 

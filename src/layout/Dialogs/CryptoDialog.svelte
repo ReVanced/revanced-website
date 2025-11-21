@@ -49,7 +49,11 @@
 					<div class="wallet-name">
 						<img
 							src="/donate/crypto/{wallet.currency_code}.svg"
-							on:error={(e) => { const img = e.target as HTMLImageElement; img.onerror = null; img.src = '/donate/fallback.svg'; }}
+							on:error={(e) => {
+								const img = e.target as HTMLImageElement;
+								img.onerror = null;
+								img.src = '/donate/fallback.svg';
+							}}
 							alt={`${wallet.network} icon.'`}
 						/>
 						{`${wallet.network} (${wallet.currency_code})`}

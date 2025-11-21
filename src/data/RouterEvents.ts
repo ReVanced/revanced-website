@@ -1,4 +1,5 @@
 import { navigating, page } from '$app/stores';
+import { browser } from '$app/environment';
 import { derived, type Readable } from 'svelte/store';
 
 export interface RouterEvent {
@@ -11,7 +12,7 @@ export interface RouterEvent {
 function makeStore(): Readable<RouterEvent> {
 	// This stuff will run both client side and server side.
 
-	if (typeof location === 'undefined') {
+	if (!browser) {
 		// `location` does not exist on the server.
 		// Return a derived store based on `page` for SSR.
 		// Server will never navigate so this is fine.

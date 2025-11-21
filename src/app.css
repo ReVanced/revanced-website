@@ -43,50 +43,50 @@ body {
 	--main-font: 'Manrope', sans-serif;
 	--mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 
-	--primary: #8B7FFF;
-	--primary-hover: #9D93FF;
-	--primary-pressed: #7066E6;
-	
-	--secondary: #00E5FF;
-	--secondary-hover: #33ECFF;
-	--secondary-pressed: #00C8E0;
-	
+	--primary: #8b7fff;
+	--primary-hover: #9d93ff;
+	--primary-pressed: #7066e6;
+
+	--secondary: #00e5ff;
+	--secondary-hover: #33ecff;
+	--secondary-pressed: #00c8e0;
+
 	--tertiary: rgba(139, 127, 255, 0.12);
-	--tertiary-solid: #B4A7FF;
+	--tertiary-solid: #b4a7ff;
 
-	--background-one: #0A0E1A;
-	--background-gradient: linear-gradient(135deg, #0A0E1A 0%, #0F1425 100%);
-	
-	--surface-one: #E8EAF0;
+	--background-one: #0a0e1a;
+	--background-gradient: linear-gradient(135deg, #0a0e1a 0%, #0f1425 100%);
+
+	--surface-one: #e8eaf0;
 	--surface-two: #141825;
-	--surface-three: #1E2333;
-	--surface-four: #252B40;
-	--surface-five: #2F3649;
-	--surface-six: #A8AFCB;
-	--surface-seven: #161B2B;
+	--surface-three: #1e2333;
+	--surface-four: #252b40;
+	--surface-five: #2f3649;
+	--surface-six: #a8afcb;
+	--surface-seven: #161b2b;
 	--surface-eight: #131823;
-	--surface-nine: #1A1F30;
+	--surface-nine: #1a1f30;
 
-	--text-one: #E8EAF0;
-	--text-two: #1E2333;
-	--text-three: #0F1425;
-	--text-four: #A8AFCB;
-	--text-muted: #6B7280;
+	--text-one: #e8eaf0;
+	--text-two: #1e2333;
+	--text-three: #0f1425;
+	--text-four: #a8afcb;
+	--text-muted: #6b7280;
 
 	--border: rgba(168, 175, 203, 0.15);
 	--border-light: rgba(168, 175, 203, 0.08);
 	--border-strong: rgba(168, 175, 203, 0.25);
 
-	--success: #22C55E;
-	--warning: #F59E0B;
-	--error: #EF4444;
-	--info: #3B82F6;
+	--success: #22c55e;
+	--warning: #f59e0b;
+	--error: #ef4444;
+	--info: #3b82f6;
 
-	--red-one: #EF4444;
-	--red-two: #F87171;
-	--red-three: #FCA5A5;
+	--red-one: #ef4444;
+	--red-two: #f87171;
+	--red-three: #fca5a5;
 
-	--yellow-one: #FCD34D;
+	--yellow-one: #fcd34d;
 
 	--glass-background: rgba(20, 24, 37, 0.75);
 	--glass-border: rgba(168, 175, 203, 0.1);
@@ -98,10 +98,8 @@ body {
 	--transition-base: 250ms;
 	--transition-slow: 400ms;
 
-	--drop-shadow-one: 0px 4px 16px rgba(0, 0, 0, 0.25), 
-					  0px 2px 8px rgba(0, 0, 0, 0.15);
-	--drop-shadow-two: 0px 8px 32px rgba(0, 0, 0, 0.35),
-					  0px 4px 16px rgba(0, 0, 0, 0.2);
+	--drop-shadow-one: 0px 4px 16px rgba(0, 0, 0, 0.25), 0px 2px 8px rgba(0, 0, 0, 0.15);
+	--drop-shadow-two: 0px 8px 32px rgba(0, 0, 0, 0.35), 0px 4px 16px rgba(0, 0, 0, 0.2);
 	--drop-shadow-glow: 0px 0px 24px rgba(139, 127, 255, 0.25);
 	--inner-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -182,7 +180,13 @@ p {
 
 /* Base Styles */
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -268,7 +272,9 @@ textarea:focus {
 	outline: none;
 	border-color: var(--primary);
 	background-color: var(--surface-three);
-	box-shadow: 0 0 0 4px var(--tertiary), var(--inner-shadow);
+	box-shadow:
+		0 0 0 4px var(--tertiary),
+		var(--inner-shadow);
 }
 
 input:hover:not(:focus),

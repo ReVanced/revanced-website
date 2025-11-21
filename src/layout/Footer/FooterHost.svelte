@@ -19,7 +19,6 @@
 
 	let showEmailDialog = false;
 
-
 	onMount(() => {
 		// DMCA Protection Badge
 		location = document.location.href;
@@ -35,7 +34,11 @@
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 			<div>
 				<p>
-					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create long-lasting patches for nearly any Android app. ReVanced's patching system is designed to allow patches to work on new versions of the apps automatically with bare minimum maintenance.
+					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the
+					legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create
+					long-lasting patches for nearly any Android app. ReVanced's patching system is designed to
+					allow patches to work on new versions of the apps automatically with bare minimum
+					maintenance.
 				</p>
 			</div>
 		</section>
@@ -168,7 +171,7 @@
 		height: 2.5rem;
 		transition: transform var(--transition-base) var(--bezier-one);
 	}
-	
+
 	.logo-image:hover {
 		transform: scale(1.05);
 	}

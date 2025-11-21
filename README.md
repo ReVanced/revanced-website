@@ -72,13 +72,13 @@ It is built using Svelte and uses [ReVanced API](https://github.com/ReVanced/rev
 
 ## 💪 Features
 
-Discover what the ReVanced Website offers:  
+Discover what the ReVanced Website offers:
 
 - 👥 **View contributors:** Explore the people who make this project possible.
 - 🔧 **Browse first-party patches:** Access a comprehensive list of official ReVanced Patches.
-- ❤️ **Explore donation options:** Find ways to support the project through donations.  
+- ❤️ **Explore donation options:** Find ways to support the project through donations.
 - 🌐 **Connect with the community:** Follow us on social media and stay updated.
-- 🔽 **Get ReVanced Manager:** Download the latest version of ReVanced Manager with ease.  
+- 🔽 **Get ReVanced Manager:** Download the latest version of ReVanced Manager with ease.
 
 ## 🚀 How to get started
 

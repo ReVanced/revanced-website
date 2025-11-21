@@ -5,7 +5,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 	import moment from 'moment';
-	
+
 	import type { ResponseAnnouncement } from '$lib/types';
 
 	const query = createQuery(queries.announcements());

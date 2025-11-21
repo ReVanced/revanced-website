@@ -27,7 +27,9 @@ function createFilter<T, C>(items: T[], options: FilterOptions<T, C>) {
 
 		const results = searcher.search(search).map((result) => result.item);
 
-		return additionalFilter ? results.filter((item: T) => additionalFilter(item, context)) : results;
+		return additionalFilter
+			? results.filter((item: T) => additionalFilter(item, context))
+			: results;
 	};
 }
 

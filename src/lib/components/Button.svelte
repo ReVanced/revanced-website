@@ -27,7 +27,7 @@
 		<button
 			on:click
 			class={`${type} ${variant}`}
-			style="{style}"
+			{style}
 			class:disabled
 			aria-label={label}
 			type={functionType}
@@ -79,7 +79,9 @@
 		border-radius: 50%;
 		background: rgba(255, 255, 255, 0.15);
 		transform: translate(-50%, -50%);
-		transition: width 0.6s, height 0.6s;
+		transition:
+			width 0.6s,
+			height 0.6s;
 		pointer-events: none;
 	}
 
@@ -110,21 +112,24 @@
 	a.filled,
 	button.filled {
 		background: linear-gradient(135deg, var(--primary) 0%, var(--primary-pressed) 100%);
-		color: #FFFFFF;
-		box-shadow: 0 4px 12px rgba(139, 127, 255, 0.3),
-					0 2px 4px rgba(0, 0, 0, 0.2);
+		color: #ffffff;
+		box-shadow:
+			0 4px 12px rgba(139, 127, 255, 0.3),
+			0 2px 4px rgba(0, 0, 0, 0.2);
 	}
 
 	a.filled:hover:not(.disabled),
 	button.filled:hover:not(.disabled) {
-		box-shadow: 0 6px 20px rgba(139, 127, 255, 0.4),
-					0 4px 8px rgba(0, 0, 0, 0.25);
+		box-shadow:
+			0 6px 20px rgba(139, 127, 255, 0.4),
+			0 4px 8px rgba(0, 0, 0, 0.25);
 	}
 
 	a.filled:active:not(.disabled),
 	button.filled:active:not(.disabled) {
-		box-shadow: 0 2px 8px rgba(139, 127, 255, 0.3),
-					0 1px 2px rgba(0, 0, 0, 0.2);
+		box-shadow:
+			0 2px 8px rgba(139, 127, 255, 0.3),
+			0 1px 2px rgba(0, 0, 0, 0.2);
 	}
 
 	/* Tonal Style - Secondary action */
@@ -194,8 +199,8 @@
 	/* Danger Variant */
 	a.danger,
 	button.danger {
-		background: linear-gradient(135deg, var(--error) 0%, #DC2626 100%);
-		color: #FFFFFF;
+		background: linear-gradient(135deg, var(--error) 0%, #dc2626 100%);
+		color: #ffffff;
 		box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 	}
 
@@ -207,12 +212,12 @@
 	/* On Danger Background Variant */
 	a.onDangerBackground,
 	button.onDangerBackground {
-		background-color: #FEE2E2;
-		color: #991B1B;
+		background-color: #fee2e2;
+		color: #991b1b;
 	}
 
 	a.onDangerBackground:hover:not(.disabled),
 	button.onDangerBackground:hover:not(.disabled) {
-		background-color: #FECACA;
+		background-color: #fecaca;
 	}
 </style>

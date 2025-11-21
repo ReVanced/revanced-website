@@ -17,7 +17,11 @@
 	<svelte:fragment slot="description">{warning} Do you still want to download?</svelte:fragment>
 	<svelte:fragment slot="buttons">
 		<Query {query} let:data>
-			<Button type="text" href={(data as ReleaseData).release.download_url} on:click={() => (dialogOpen = false)}>
+			<Button
+				type="text"
+				href={(data as ReleaseData).release.download_url}
+				on:click={() => (dialogOpen = false)}
+			>
 				Okay
 			</Button>
 		</Query>

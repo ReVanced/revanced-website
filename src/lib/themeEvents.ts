@@ -23,23 +23,29 @@ function getEaster(Y: number): Date {
 	return new Date(Y, month - 1, day);
 }
 
-const currentYear = new Date().getFullYear();
-
-const themeEvents = [
-	{ date: new Date(currentYear, 0, 1), hue: 240, name: 'New Year' },
-	{ date: new Date(currentYear, 11, 25), hue: 120, name: 'Christmas' },
-	{ date: new Date(currentYear, 1, 14), hue: 300, name: 'Valentine\'s Day' },
-	{ date: new Date(currentYear, 9, 31), hue: 0, name: 'Halloween' },
-	{ date: getEaster(currentYear), hue: 100, name: 'Easter' },
-	{ date: new Date(currentYear, 3, 1), hue: 69, name: 'April Fools' }
-];
+function getThemeEvents() {
+	const currentYear = new Date().getFullYear();
+	return [
+		{ date: new Date(currentYear, 0, 1), hue: 240, name: 'New Year' },
+		{ date: new Date(currentYear, 11, 25), hue: 120, name: 'Christmas' },
+		{ date: new Date(currentYear, 1, 14), hue: 300, name: "Valentine's Day" },
+		{ date: new Date(currentYear, 9, 31), hue: 0, name: 'Halloween' },
+		{ date: getEaster(currentYear), hue: 100, name: 'Easter' },
+		{ date: new Date(currentYear, 3, 1), hue: 69, name: 'April Fools' }
+	];
+}
 
 export function checkThemeEvents() {
 	const now = new Date();
 	const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+	const themeEvents = getThemeEvents();
 
 	for (const event of themeEvents) {
-		const eventDate = new Date(event.date.getFullYear(), event.date.getMonth(), event.date.getDate());
+		const eventDate = new Date(
+			event.date.getFullYear(),
+			event.date.getMonth(),
+			event.date.getDate()
+		);
 		if (today.getTime() === eventDate.getTime()) {
 			changeHue(event.hue);
 			break;

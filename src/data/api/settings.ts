@@ -14,7 +14,14 @@ export const API_VERSION = 'v4';
 // Get base URL
 export function api_base_url(): string {
 	if (browser) {
-		return localStorage.getItem(URL_KEY) || default_api_url;
+		try {
+			const url = localStorage.getItem(URL_KEY);
+			if (url) {
+				return url;
+			}
+		} catch (error) {
+			console.error('Failed to get API URL from localStorage:', error);
+		}
 	}
 
 	return default_api_url;
@@ -22,7 +29,12 @@ export function api_base_url(): string {
 
 export function status_url(): string {
 	if (browser) {
-		return localStorage.getItem(STATUS_KEY) || default_status_url;
+		try {
+			return localStorage.getItem(STATUS_KEY) || default_status_url;
+		} catch (error) {
+			console.error('Failed to get status URL from localStorage:', error);
+			return default_status_url;
+		}
 	}
 
 	return default_status_url;
@@ -30,7 +42,12 @@ export function status_url(): string {
 
 export function email(): string {
 	if (browser) {
-		return localStorage.getItem(EMAIL_KEY) || default_email;
+		try {
+			return localStorage.getItem(EMAIL_KEY) || default_email;
+		} catch (error) {
+			console.error('Failed to get email from localStorage:', error);
+			return default_email;
+		}
 	}
 
 	return default_email;
@@ -39,24 +56,51 @@ export function email(): string {
 // (re)set base URL.
 export function set_api_base_url(url?: string) {
 	if (!browser) return;
-	
-	if (!url) {
-		localStorage.removeItem(URL_KEY);
-	} else {
-		localStorage.setItem(URL_KEY, url);
+
+	try {
+		if (!url) {
+			localStorage.removeItem(URL_KEY);
+		} else {
+			localStorage.setItem(URL_KEY, url);
+		}
+		set_about_info(api_base_url());
+	} catch (error) {
+		console.error('Failed to set API URL:', error);
 	}
-	set_about_info(api_base_url());
 }
 
+let aboutInfoFetching = false;
+
 export function set_about_info(apiUrl: string) {
-	if (!localStorage.getItem(STATUS_KEY) || !localStorage.getItem(EMAIL_KEY)) {
-		fetch(`${apiUrl}/v4/about`)
-			.then((response) => (response.ok ? response.json() : null))
-			.then((data) => {
-				if (data?.status) {
-					localStorage.setItem(STATUS_KEY, data.status);
-					localStorage.setItem(EMAIL_KEY, data.contact.email);
-				}
-			});
+	if (!browser || aboutInfoFetching) return;
+
+	try {
+		const hasStatus = localStorage.getItem(STATUS_KEY);
+		const hasEmail = localStorage.getItem(EMAIL_KEY);
+
+		if (!hasStatus || !hasEmail) {
+			aboutInfoFetching = true;
+			fetch(`${apiUrl}/v4/about`)
+				.then((response) => (response.ok ? response.json() : null))
+				.then((data) => {
+					if (data?.status) {
+						try {
+							localStorage.setItem(STATUS_KEY, data.status);
+							localStorage.setItem(EMAIL_KEY, data.contact.email);
+						} catch (error) {
+							console.error('Failed to save about info to localStorage:', error);
+						}
+					}
+				})
+				.catch((error) => {
+					console.error('Failed to fetch about info:', error);
+				})
+				.finally(() => {
+					aboutInfoFetching = false;
+				});
+		}
+	} catch (error) {
+		console.error('Failed to check about info:', error);
+		aboutInfoFetching = false;
 	}
 }

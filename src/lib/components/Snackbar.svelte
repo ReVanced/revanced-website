@@ -13,7 +13,11 @@
 </script>
 
 {#if open}
-	<div id="snackbar" in:slide={{ duration: 400, easing: expoOut }} out:slide={{ duration: 300, easing: backIn }}>
+	<div
+		id="snackbar"
+		in:slide={{ duration: 400, easing: expoOut }}
+		out:slide={{ duration: 300, easing: backIn }}
+	>
 		<slot name="text" />
 	</div>
 {/if}

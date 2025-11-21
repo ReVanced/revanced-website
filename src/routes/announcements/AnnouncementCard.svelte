@@ -61,7 +61,13 @@
 				src={announcement.attachments[0]}
 				class={isRead === undefined || isRead ? '' : 'no-border-radius'}
 				alt="Banner"
-				onerror={(e) => (e.target as HTMLImageElement).style.display = 'none'}
+				onerror={(e) => {
+					const target = e.target;
+					if (target instanceof HTMLImageElement) {
+						target.style.display = 'none';
+						console.warn('Failed to load image:', announcement.attachments?.[0]);
+					}
+				}}
 			/>
 		{/if}
 		<div class="content">

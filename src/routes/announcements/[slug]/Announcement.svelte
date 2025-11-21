@@ -21,7 +21,18 @@
 	let isEditing = false;
 	let showDeleteConfirm = false;
 
-	const draftInputs = {
+	let draftInputs: {
+		title: string;
+		content: string;
+		created_at: string;
+		tags: string[];
+		archived_at: string | undefined;
+		attachments: string[];
+		author: string;
+		level: number | undefined;
+	};
+
+	$: draftInputs = {
 		title: announcement?.title || '',
 		content: announcement?.content || '',
 		created_at: announcement?.created_at || '',

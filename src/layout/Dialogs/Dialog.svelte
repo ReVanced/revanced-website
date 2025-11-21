@@ -83,7 +83,7 @@
 		z-index: 6;
 		animation: overlayFadeIn var(--transition-base) var(--bezier-one);
 	}
-	
+
 	@keyframes overlayFadeIn {
 		from {
 			opacity: 0;
@@ -121,7 +121,7 @@
 		-ms-overflow-style: none;
 		animation: dialogFadeIn var(--transition-base) var(--bezier-one);
 	}
-	
+
 	@keyframes dialogFadeIn {
 		from {
 			opacity: 0;

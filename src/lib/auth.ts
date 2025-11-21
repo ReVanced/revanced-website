@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { build_url } from '$data/api';
+import { jwtDecode } from 'jwt-decode';
 
 export type AuthToken = {
 	token: string;
@@ -21,28 +22,29 @@ export class UnauthenticatedError extends Error {
 // Get access token.
 export function get_access_token(): AuthToken | null {
 	if (!browser) return null;
-	const data = localStorage.getItem('revanced_api_access_token');
-	if (data) return JSON.parse(data) as AuthToken;
-	return null;
+	try {
+		const data = localStorage.getItem('revanced_api_access_token');
+		if (data) return JSON.parse(data) as AuthToken;
+		return null;
+	} catch (error) {
+		console.error('Failed to get access token:', error);
+		return null;
+	}
 }
 
 // (Re)set access token.
 export function set_access_token(token?: AuthToken) {
-	if (!token) localStorage.removeItem('revanced_api_access_token');
-	else localStorage.setItem('revanced_api_access_token', JSON.stringify(token));
+	try {
+		if (!token) localStorage.removeItem('revanced_api_access_token');
+		else localStorage.setItem('revanced_api_access_token', JSON.stringify(token));
+	} catch (error) {
+		console.error('Failed to set access token:', error);
+	}
 }
 
 // Parse a JWT token
 export function parseJwt(token: string): JwtPayload {
-	const base64Url = token.split('.')[1];
-	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-	const jsonPayload = decodeURIComponent(
-		atob(base64)
-			.split('')
-			.map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-			.join('')
-	);
-	return JSON.parse(jsonPayload) as JwtPayload;
+	return jwtDecode<JwtPayload>(token);
 }
 
 // Check if the admin is authenticated
@@ -91,12 +93,12 @@ async function digest_fetch(
 	// Parse the `WWW-Authenticate` header to extract the fields
 	const authParams = authHeader
 		.replace('Digest ', '')
-		.split(',')
-		.reduce((acc: Record<string, string>, item) => {
-			const [key, value] = item.trim().split('=');
+		.match(/(\w+)=("[^"]*"|[^,]*)/g)
+		?.reduce((acc: Record<string, string>, item) => {
+			const [key, value] = item.split('=');
 			acc[key] = value.replace(/"/g, '');
 			return acc;
-		}, {});
+		}, {}) || {};
 
 	const { realm, nonce, algorithm } = authParams;
 	const method = options.method || 'GET';
@@ -124,6 +126,22 @@ async function digest_fetch(
 }
 
 export async function login(username: string, password: string) {
+	// Validate inputs
+	if (!username || !password) {
+		console.error('Username and password are required');
+		return false;
+	}
+
+	if (username.length < 1 || username.length > 255) {
+		console.error('Invalid username length');
+		return false;
+	}
+
+	if (password.length < 1 || password.length > 255) {
+		console.error('Invalid password length');
+		return false;
+	}
+
 	const res = await digest_fetch(build_url('token'), username, password);
 	if (!res.ok) return false;
 

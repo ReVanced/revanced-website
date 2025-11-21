@@ -26,16 +26,15 @@
 		<Magnify size="24px" color="var(--surface-six)" />
 	</div>
 	{#if searchTerm}
-		<div
+		<button
 			id="clear"
-			role="button"
-			tabindex="0"
+			type="button"
+			aria-label="Clear search"
 			on:click={clear}
-			on:keypress={clear}
 			transition:fade={{ easing: quintOut, duration: 250 }}
 		>
 			<Close size="24px" color="var(--surface-six)" />
-		</div>
+		</button>
 	{/if}
 	<input
 		type="text"
@@ -63,6 +62,9 @@
 		z-index: 1;
 		height: 24px;
 		cursor: pointer;
+		background: none;
+		border: none;
+		padding: 0;
 	}
 
 	.search-container {

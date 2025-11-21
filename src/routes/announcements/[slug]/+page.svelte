@@ -13,7 +13,21 @@
 	$: {
 		const lastSegment = $page.url.pathname.split('/').pop() ?? '';
 		isCreating = lastSegment === 'create';
-		announcementIdNumber = isCreating ? undefined : Number(lastSegment.split('-')[0]);
+
+		if (!isCreating) {
+			const idString = lastSegment.split('-')[0];
+			const parsedId = Number(idString);
+
+			// Validate the ID is a valid positive integer
+			if (!isNaN(parsedId) && parsedId > 0 && Number.isInteger(parsedId)) {
+				announcementIdNumber = parsedId;
+			} else {
+				console.error('Invalid announcement ID:', idString);
+				announcementIdNumber = undefined;
+			}
+		} else {
+			announcementIdNumber = undefined;
+		}
 	}
 
 	$: query = announcementIdNumber

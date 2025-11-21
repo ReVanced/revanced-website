@@ -37,24 +37,22 @@
 	let mobilePackages = false;
 	let showAllVersions = false;
 
-	function filterPatches(patches: Patch[], pkg: string, search?: string): Patch[] {
-		const patchFilter = createFilter(patches, {
-			searcherOptions: {
-				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
-			},
-			additionalFilter: (patch: Patch, pkg: string): boolean => {
-				if (!pkg) return true;
-				return (
-					patch.compatiblePackages?.some(
-						(compatiblePackage: CompatiblePackage) =>
-							compatiblePackage.name === pkg || compatiblePackage.versions?.includes(pkg)
-					) || false
-				);
-			}
-		});
+	$: patchFilter = createFilter($query.data?.patches || [], {
+		searcherOptions: {
+			keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
+		},
+		additionalFilter: (patch: Patch, pkg: string): boolean => {
+			if (!pkg) return true;
+			return (
+				patch.compatiblePackages?.some(
+					(compatiblePackage: CompatiblePackage) =>
+						compatiblePackage.name === pkg || compatiblePackage.versions?.includes(pkg)
+				) || false
+			);
+		}
+	});
 
-		return patchFilter(pkg, search);
-	}
+	$: filteredPatches = patchFilter(selectedPkg || '', displayedTerm);
 
 	// Make sure we don't have to filter the patches after every key press
 	let displayedTerm = '';
@@ -143,7 +141,7 @@
 		</aside>
 
 		<div class="patches-container">
-			{#each filterPatches(data.patches, selectedPkg || '', displayedTerm) as patch}
+			{#each filteredPatches as patch}
 				{#key selectedPkg || displayedTerm}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<PatchItem {patch} bind:showAllVersions />

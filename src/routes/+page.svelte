@@ -4,10 +4,12 @@
 	import Head from '$lib/components/Head.svelte';
 	import Wave from '$lib/components/Wave.svelte';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	let bottomVisibility = true;
 
 	const checkVisibility = () => {
+		if (!browser) return;
 		const wave = document.querySelector('.wave');
 		bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
 	};
@@ -148,7 +150,7 @@
 		width: min(87%, 80rem);
 		gap: 1rem;
 	}
-	
+
 	main {
 		overflow: hidden;
 		padding: 5rem 0;

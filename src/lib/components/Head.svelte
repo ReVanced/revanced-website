@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { JsonLd } from 'svelte-meta-tags';
-	
+
 	let _title: string = '';
 	$: title = _title === '' ? 'ReVanced' : `ReVanced - ${_title}`;
 
