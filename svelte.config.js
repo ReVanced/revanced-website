@@ -7,13 +7,19 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			strict: false
+		}),
 		alias: { // resolve TypeScript path alias errors for Svelte components and stores
 			$components: 'src/lib/components',
 			$assets: 'src/lib/assets',
 			$types: 'src/lib/types.ts',
 			$stores: 'src/lib/stores',
-			$lib: 'src/lib'
+			$lib: 'src/lib',
+			$layout: 'src/layout',
+			$data: 'src/data',
+			$util: 'src/util',
+			$images: 'images'
 		}
 	}
 };

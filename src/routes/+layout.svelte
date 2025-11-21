@@ -1,31 +1,76 @@
-<script lang="ts">
-	import '../app.css';
-	import favicon from '$assets/favicon.ico';
-	import NavBar from '$components/organisms/NavBar.svelte';
-	import ModalBackdrop from '$components/atoms/ModalBackground.svelte';
-	import Modal from '$components/organisms/Modal.svelte';
-	import SettingsPanel from '$components/molecules/SettingsPanel.svelte';
-	import { ui } from '$stores/ui.svelte';
-	import type { WithChildren } from '$types';
-
-	let { children }: WithChildren = $props();
-
-	// Provide settings & login modals at layout level
-	let settingsOpen = $derived(ui.isSettingsOpen());
-	let loginOpen = $derived(ui.isLoginOpen());
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+	// There might be a better place to put this, but I am not entirely sure...
+	export const isRestoring = writable(false);
 </script>
 
-<svelte:head>
-	<link rel="icon" href={favicon} />
-</svelte:head>
+<script lang="ts">
+	import '../app.scss';
+	import { derived } from 'svelte/store';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
-<NavBar />
-<ModalBackdrop />
-<Modal id="settings" bind:open={settingsOpen} label="Settings dialog">
-	<h2>Settings</h2>
-	<SettingsPanel />
-</Modal>
-<Modal id="login" bind:open={loginOpen} label="Login dialog">
-	<h2>Login</h2>
-</Modal>
-{@render children()}
+	import { QueryClient } from '@tanstack/svelte-query';
+	import { QueryClientProvider } from '@tanstack/svelte-query';
+
+	import NavHost from '$layout/Navbar/NavHost.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
+	import ConsentDialog from '$layout/Dialogs/ConsentDialog.svelte';
+	import { staleTime } from '$data/api';
+	import RouterEvents from '$data/RouterEvents';
+	import { checkThemeEvents } from '$util/themeEvents';
+
+	import FooterHost from '$layout/Footer/FooterHost.svelte';
+	import { api_base_url, set_about_info } from '$data/api/settings';
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				enabled: browser,
+				gcTime: staleTime
+			}
+		}
+	});
+
+	// Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
+	const show_loading_animation = derived(
+		RouterEvents,
+		($event, set) => {
+			if ($event.navigating) {
+				// Wait 250 ms before showing the animation.
+				const timeout = setTimeout(() => set(true), 250);
+				return () => clearTimeout(timeout);
+			} else {
+				set(false);
+			}
+		},
+		false
+	);
+
+	onMount(() => {
+		set_about_info(api_base_url());
+		checkThemeEvents();
+
+		// isRestoring.set(true);
+		// const [unsubscribe, promise] = persistQueryClient({
+		// 	queryClient,
+		// 	persister: createSyncStoragePersister({ storage: localStorage })
+		// });
+		// promise.then(() => isRestoring.set(false));
+		// return unsubscribe;
+	});
+</script>
+
+<ConsentDialog />
+
+<QueryClientProvider client={queryClient}>
+	<NavHost />
+	<div id="skiptab">
+		{#if $show_loading_animation}
+			<Spinner />
+		{:else}
+			<slot />
+		{/if}
+	</div>
+	<FooterHost />
+</QueryClientProvider>
