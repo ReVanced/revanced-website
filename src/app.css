@@ -37,77 +37,67 @@ body {
 	margin-top: 2.6rem;
 }
 
+/* CSS Variables */
+
 :root {
 	--main-font: 'Manrope', sans-serif;
 	--mono-font: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 
-	/* Modern Midnight Slate Color System */
+	--primary: #8B7FFF;
+	--primary-hover: #9D93FF;
+	--primary-pressed: #7066E6;
 	
-	/* Primary Brand Colors - Deep Purple-Blue Theme */
-	--primary: #8B7FFF; /* Vibrant purple-blue for primary actions */
-	--primary-hover: #9D93FF; /* Lighter on hover */
-	--primary-pressed: #7066E6; /* Darker when pressed */
-	
-	--secondary: #00E5FF; /* Cyan accent for secondary actions */
+	--secondary: #00E5FF;
 	--secondary-hover: #33ECFF;
 	--secondary-pressed: #00C8E0;
 	
-	--tertiary: rgba(139, 127, 255, 0.12); /* Translucent primary for backgrounds */
-	--tertiary-solid: #B4A7FF; /* Soft lavender for highlights */
+	--tertiary: rgba(139, 127, 255, 0.12);
+	--tertiary-solid: #B4A7FF;
 
-	/* Background System - True Dark with Slate Undertones */
-	--background-one: #0A0E1A; /* Deep slate base - main background */
+	--background-one: #0A0E1A;
 	--background-gradient: linear-gradient(135deg, #0A0E1A 0%, #0F1425 100%);
 	
-	/* Surface Elevation System - Creates depth hierarchy */
-	--surface-one: #E8EAF0; /* Light surface for contrast (legacy compatibility) */
-	--surface-two: #141825; /* Elevated surfaces - cards, panels */
-	--surface-three: #1E2333; /* Higher elevation - raised cards */
-	--surface-four: #252B40; /* Highest elevation - active/hover states */
-	--surface-five: #2F3649; /* Border color alternative */
-	--surface-six: #A8AFCB; /* Medium gray for icons/text */
-	--surface-seven: #161B2B; /* Dialog backgrounds */
-	--surface-eight: #131823; /* Navigation background */
-	--surface-nine: #1A1F30; /* Alternative elevated surface */
+	--surface-one: #E8EAF0;
+	--surface-two: #141825;
+	--surface-three: #1E2333;
+	--surface-four: #252B40;
+	--surface-five: #2F3649;
+	--surface-six: #A8AFCB;
+	--surface-seven: #161B2B;
+	--surface-eight: #131823;
+	--surface-nine: #1A1F30;
 
-	/* Text System - Optimized for readability on dark backgrounds */
-	--text-one: #E8EAF0; /* Primary text - high contrast white */
-	--text-two: #1E2333; /* Dark text for light backgrounds */
-	--text-three: #0F1425; /* Darkest text */
-	--text-four: #A8AFCB; /* Secondary text - body content */
-	--text-muted: #6B7280; /* Tertiary text - labels, captions */
+	--text-one: #E8EAF0;
+	--text-two: #1E2333;
+	--text-three: #0F1425;
+	--text-four: #A8AFCB;
+	--text-muted: #6B7280;
 
-	/* Border System - Subtle separation */
-	--border: rgba(168, 175, 203, 0.15); /* Translucent border */
-	--border-light: rgba(168, 175, 203, 0.08); /* Even lighter border */
-	--border-strong: rgba(168, 175, 203, 0.25); /* Stronger emphasis */
+	--border: rgba(168, 175, 203, 0.15);
+	--border-light: rgba(168, 175, 203, 0.08);
+	--border-strong: rgba(168, 175, 203, 0.25);
 
-	/* Semantic Colors - Modern palette */
-	--success: #22C55E; /* Modern green */
-	--warning: #F59E0B; /* Amber warning */
-	--error: #EF4444; /* Soft red */
-	--info: #3B82F6; /* Blue info */
+	--success: #22C55E;
+	--warning: #F59E0B;
+	--error: #EF4444;
+	--info: #3B82F6;
 
-	/* Legacy Red Colors - Updated for modern look */
 	--red-one: #EF4444;
 	--red-two: #F87171;
 	--red-three: #FCA5A5;
 
 	--yellow-one: #FCD34D;
 
-	/* Glassmorphism Effects */
 	--glass-background: rgba(20, 24, 37, 0.75);
 	--glass-border: rgba(168, 175, 203, 0.1);
 	--backdrop-blur: blur(16px);
 
-	/* Animation & Transitions */
-	--bezier-one: cubic-bezier(0.4, 0, 0.2, 1); /* Smooth ease */
-	--bezier-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bounce effect */
+	--bezier-one: cubic-bezier(0.4, 0, 0.2, 1);
+	--bezier-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 	--transition-fast: 150ms;
 	--transition-base: 250ms;
 	--transition-slow: 400ms;
 
-	/* Shadows - Softer, more realistic */
 	--drop-shadow-one: 0px 4px 16px rgba(0, 0, 0, 0.25), 
 					  0px 2px 8px rgba(0, 0, 0, 0.15);
 	--drop-shadow-two: 0px 8px 32px rgba(0, 0, 0, 0.35),
@@ -115,6 +105,8 @@ body {
 	--drop-shadow-glow: 0px 0px 24px rgba(139, 127, 255, 0.25);
 	--inner-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
+
+/* Selection & Highlighting */
 
 ::selection {
 	background-color: var(--tertiary);
@@ -128,15 +120,15 @@ mark {
 	border-radius: 4px;
 }
 
-/*-----Typography System - Modern & Polished-----*/
+/* Typography */
 
 h1 {
 	color: var(--text-one);
 	line-height: 1.15;
-	font-size: clamp(2.5rem, 5vw, 3.75rem); /* Responsive sizing */
-	font-weight: 750; /* Slightly bolder for impact */
-	letter-spacing: -0.03em; /* Tighter for modern feel */
-	text-wrap: balance; /* Better line breaks */
+	font-size: clamp(2.5rem, 5vw, 3.75rem);
+	font-weight: 750;
+	letter-spacing: -0.03em;
+	text-wrap: balance;
 }
 
 h2 {
@@ -188,7 +180,8 @@ p {
 	line-height: 1.7;
 }
 
-/* Smooth text rendering */
+/* Base Styles */
+
 h1, h2, h3, h4, h5, h6, p {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -211,9 +204,7 @@ h1, h2, h3, h4, h5, h6, p {
 	}
 }
 
-/*---------------*/
-
-/*-----Modern Scrollbar-----*/
+/* Scrollbar */
 
 ::-webkit-scrollbar {
 	width: 8px;
@@ -240,6 +231,8 @@ h1, h2, h3, h4, h5, h6, p {
 ::-webkit-scrollbar-corner {
 	background-color: transparent;
 }
+
+/* Form Elements */
 
 hr {
 	display: block;

@@ -35,9 +35,6 @@ importers:
       qrious:
         specifier: ^4.0.2
         version: 4.0.2
-      sass-embedded:
-        specifier: ^1.93.3
-        version: 1.93.3
       svelte-material-icons:
         specifier: ^3.0.5
         version: 3.0.5(svelte@5.43.12)
@@ -1781,7 +1778,8 @@ snapshots:
 
   '@antfu/utils@9.3.0': {}
 
-  '@bufbuild/protobuf@2.10.1': {}
+  '@bufbuild/protobuf@2.10.1':
+    optional: true
 
   '@emnapi/runtime@1.7.1':
     dependencies:
@@ -2443,7 +2441,8 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  buffer-builder@0.2.0: {}
+  buffer-builder@0.2.0:
+    optional: true
 
   callsites@3.1.0: {}
 
@@ -2464,7 +2463,8 @@ snapshots:
 
   color-name@1.1.4: {}
 
-  colorjs.io@0.5.2: {}
+  colorjs.io@0.5.2:
+    optional: true
 
   concat-map@0.0.1: {}
 
@@ -2697,7 +2697,8 @@ snapshots:
 
   imagetools-core@9.0.0: {}
 
-  immutable@5.1.4: {}
+  immutable@5.1.4:
+    optional: true
 
   import-fresh@3.3.1:
     dependencies:
@@ -2933,6 +2934,7 @@ snapshots:
   rxjs@7.8.2:
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   sade@1.8.1:
     dependencies:
@@ -3025,6 +3027,7 @@ snapshots:
       sass-embedded-unknown-all: 1.93.3
       sass-embedded-win32-arm64: 1.93.3
       sass-embedded-win32-x64: 1.93.3
+    optional: true
 
   sass@1.93.3:
     dependencies:
@@ -3095,6 +3098,7 @@ snapshots:
   supports-color@8.1.1:
     dependencies:
       has-flag: 4.0.0
+    optional: true
 
   svelte-check@4.3.4(picomatch@4.0.3)(svelte@5.43.12)(typescript@5.9.3):
     dependencies:
@@ -3153,8 +3157,10 @@ snapshots:
   sync-child-process@1.0.2:
     dependencies:
       sync-message-port: 1.1.3
+    optional: true
 
-  sync-message-port@1.1.3: {}
+  sync-message-port@1.1.3:
+    optional: true
 
   tinyexec@1.0.2: {}
 
@@ -3173,7 +3179,8 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
-  tslib@2.8.1: {}
+  tslib@2.8.1:
+    optional: true
 
   type-check@0.4.0:
     dependencies:
@@ -3221,7 +3228,8 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  varint@6.0.0: {}
+  varint@6.0.0:
+    optional: true
 
   vite-imagetools@9.0.0(rollup@4.53.3):
     dependencies:

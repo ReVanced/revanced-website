@@ -12,7 +12,7 @@
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
 
-	import { supportsWebP } from '$util/supportsWebP';
+	import { supportsWebP } from '$lib/supportsWebP';
 
 	const teamQuery = createQuery(queries.team());
 	const aboutQuery = createQuery(queries.about());
@@ -118,20 +118,22 @@
 	<CryptoDialog bind:dialogOpen={cryptoDialogue} wallets={data.about.donations.wallets} />
 </Query>
 
-<style lang="scss">
+<style>
 	main {
 		display: flex;
 		flex-direction: column;
 		margin-bottom: 5rem;
+	}
 
-		section {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+	main section {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
-			@media (max-width: 768px) {
-				flex-direction: column-reverse;
-			}
+	@media (max-width: 768px) {
+		main section {
+			flex-direction: column-reverse;
 		}
 	}
 
@@ -147,17 +149,19 @@
 	p {
 		margin-bottom: 2rem;
 		width: 60%;
+	}
 
-		@media (max-width: 1200px) {
+	@media (max-width: 1200px) {
+		p {
 			width: 90%;
-		}
-
-		@media (max-width: 768px) {
-			width: 100%;
 		}
 	}
 
 	@media (max-width: 768px) {
+		p {
+			width: 100%;
+		}
+
 		#heart {
 			display: none;
 		}
@@ -167,8 +171,10 @@
 		display: flex;
 		gap: 1rem;
 		margin-bottom: 3rem;
+	}
 
-		@media (max-width: 768px) {
+	@media (max-width: 768px) {
+		.donate-cards {
 			flex-direction: column;
 		}
 	}
@@ -185,29 +191,29 @@
 		transition:
 			0.3s border-radius var(--bezier-one),
 			0.3s background-color var(--bezier-one);
+	}
 
-		&:hover {
-			background-color: var(--tertiary);
-		}
+	.donate-card:hover {
+		background-color: var(--tertiary);
+	}
 
-		&:active {
-			border-radius: 2.75rem;
-		}
+	.donate-card:active {
+		border-radius: 2.75rem;
+	}
 
-		span {
-			display: block;
-			color: var(--text-four);
-			font-size: 1.05rem;
-			font-weight: 500;
-			padding: 1.5rem;
-		}
+	.donate-card span {
+		display: block;
+		color: var(--text-four);
+		font-size: 1.05rem;
+		font-weight: 500;
+		padding: 1.5rem;
+	}
 
-		div {
-			height: 200px;
-			background-size: cover;
-			background-position: center;
-			max-width: 100%;
-		}
+	.donate-card div {
+		height: 200px;
+		background-size: cover;
+		background-position: center;
+		max-width: 100%;
 	}
 
 	.team {

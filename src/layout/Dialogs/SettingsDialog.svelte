@@ -70,7 +70,7 @@
 	</svelte:fragment>
 </Dialog>
 
-<style lang="scss">
+<style>
 	input {
 		width: 100%;
 		position: relative;
@@ -106,12 +106,12 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 1rem;
+	}
 
-		.buttons {
-			display: flex;
-			justify-content: flex-end;
-			flex-wrap: wrap;
-			gap: 2rem;
-		}
+	.buttons-container .buttons {
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		gap: 2rem;
 	}
 </style>

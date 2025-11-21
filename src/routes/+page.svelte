@@ -140,7 +140,7 @@
 </main>
 <Wave visibility={bottomVisibility} />
 
-<style lang="scss">
+<style>
 	.content {
 		display: flex;
 		align-items: flex-start;
@@ -148,6 +148,7 @@
 		width: min(87%, 80rem);
 		gap: 1rem;
 	}
+	
 	main {
 		overflow: hidden;
 		padding: 5rem 0;
@@ -155,24 +156,30 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
 
-		@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+	main.visibility {
+		min-height: initial;
+	}
+
+	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+		main {
 			min-height: initial;
 		}
+	}
 
-		@media (max-width: 335px) {
+	@media (max-width: 335px) {
+		main {
 			padding: 2rem 0 !important;
-		}
-
-		&.visibility {
-			min-height: initial;
 		}
 	}
 
 	.hero-img-container {
 		z-index: 0;
+	}
 
-		@media (max-width: 1100px) {
+	@media (max-width: 1100px) {
+		.hero-img-container {
 			display: none;
 		}
 	}

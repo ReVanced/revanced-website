@@ -6,24 +6,23 @@
 	</span>
 </div>
 
-<style lang="scss">
+<style>
 	div {
 		display: flex;
 		flex-direction: column;
 		position: sticky;
-
 		height: calc(100vh - 60px);
 		top: 60px;
 		padding: calc(6rem - 60px) 30px 30px 10px;
-
 		overflow-y: scroll;
+	}
 
-		&::-webkit-scrollbar-thumb {
-			background-color: transparent;
-		}
-		&:hover::-webkit-scrollbar-thumb {
-			background-color: var(--primary);
-		}
+	div::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+
+	div:hover::-webkit-scrollbar-thumb {
+		background-color: var(--primary);
 	}
 
 	span {

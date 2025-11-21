@@ -113,7 +113,7 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	h3 {
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
@@ -145,20 +145,20 @@
 		padding: 0.25rem 0.5rem;
 		border: 1px solid var(--border);
 		border-radius: 8px;
+	}
 
-		&:hover {
-			background-color: var(--surface-four);
-		}
+	.patch-info:hover {
+		background-color: var(--surface-four);
 	}
 
 	a {
 		text-decoration: none;
 		color: var(--text-four);
+	}
 
-		&:hover {
-			text-decoration: underline var(--secondary);
-			color: var(--secondary);
-		}
+	a:hover {
+		text-decoration: underline var(--secondary);
+		color: var(--secondary);
 	}
 
 	.info-container {
@@ -199,21 +199,20 @@
 
 	.expanded {
 		cursor: pointer;
+	}
 
-		&:hover {
-			background-color: var(--surface-three);
-		}
+	.expanded:hover {
+		background-color: var(--surface-three);
+	}
 
-		&:active {
-			filter: brightness(1.15);
-		}
+	.expanded:active {
+		filter: brightness(1.15);
 	}
 
 	.option {
 		padding: 1rem;
 	}
 
-	/* thanks piknik */
 	.option + .option {
 		border-top: 1px solid var(--border);
 	}

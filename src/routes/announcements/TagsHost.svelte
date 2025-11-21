@@ -63,23 +63,23 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	div {
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
 		white-space: nowrap;
 		gap: 4px;
+	}
 
-		li {
-			display: flex;
-			align-items: center;
-		}
+	div li {
+		display: flex;
+		align-items: center;
+	}
 
-		.expand-arrow {
-			transition: all 0.2s var(--bezier-one);
-			user-select: none;
-			height: 1.5rem;
-		}
+	div .expand-arrow {
+		transition: all 0.2s var(--bezier-one);
+		user-select: none;
+		height: 1.5rem;
 	}
 </style>

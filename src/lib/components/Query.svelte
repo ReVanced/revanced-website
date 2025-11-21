@@ -12,10 +12,9 @@
 			// slot name
 			data: T;
 		};
+		loading?: {};
 		error: {};
 	}
-
-	// TODO: errors
 
 	export let query: Readable<QueryObserverResult<T, any>>;
 </script>
@@ -25,5 +24,7 @@
 		<slot data={$query.data} />
 	{:else if $query.status === 'error'}
 		<slot name="error" />
+	{:else if $query.status === 'pending'}
+		<slot name="loading" />
 	{/if}
 {/if}

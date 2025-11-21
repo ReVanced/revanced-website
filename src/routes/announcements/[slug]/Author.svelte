@@ -22,15 +22,15 @@
 	</span>
 {/if}
 
-<style lang="scss">
-	input {
-		&,
-		&:focus {
-			border: none;
-			outline: none;
-			border-radius: 0;
-		}
+<style>
+	input,
+	input:focus {
+		border: none;
+		outline: none;
+		border-radius: 0;
+	}
 
+	input {
 		padding: 0;
 		font-size: 1rem;
 		letter-spacing: 0.02rem;

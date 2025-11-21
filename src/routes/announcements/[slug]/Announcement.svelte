@@ -2,7 +2,7 @@
 	import { admin_login } from '$lib/stores';
 	import Title from './Title.svelte';
 	import Divider from '$lib/components/Divider.svelte';
-	import AdminButtons from './AdminButtons.svelte';
+	import AdminToolbar from './AdminToolbar.svelte';
 	import Author from './Author.svelte';
 	import Date from './Date.svelte';
 	import Content from './Content.svelte';
@@ -67,7 +67,7 @@
 		</div>
 
 		{#if $admin_login.logged_in}
-			<AdminButtons
+			<AdminToolbar
 				{isCreating}
 				bind:isEditing
 				bind:isPreviewing
@@ -99,7 +99,7 @@
 	/>
 </div>
 
-<style lang="scss">
+<style>
 	.card {
 		background-color: var(--surface-eight);
 		display: flex;

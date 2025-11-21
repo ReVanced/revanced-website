@@ -91,68 +91,65 @@
 	</div>
 </a>
 
-<style lang="scss">
+<style>
 	a {
 		text-decoration: inherit;
 	}
 
 	.card {
-		&.attachment {
-			grid-row: span 2;
-		}
-		&:hover {
-			background-color: var(--surface-four);
-			filter: none;
-		}
-
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-
 		background-color: var(--surface-seven);
 		border: 1px solid var(--border);
 		border-radius: 12px;
+	}
 
-		img {
-			height: 150px;
-			object-fit: cover;
-			width: 100%;
-			border-radius: 12px 12px 0px 0px;
+	.card.attachment {
+		grid-row: span 2;
+	}
 
-			&.no-border-radius {
-				border-radius: 0;
-			}
-		}
+	.card:hover {
+		background-color: var(--surface-four);
+		filter: none;
+	}
 
-		.content {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			gap: 12px;
+	.card img {
+		height: 150px;
+		object-fit: cover;
+		width: 100%;
+		border-radius: 12px 12px 0px 0px;
+	}
 
-			height: 100%;
-			padding: 12px 16px;
+	.card img.no-border-radius {
+		border-radius: 0;
+	}
 
-			color: var(--text-four);
+	.card .content {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 12px;
+		height: 100%;
+		padding: 12px 16px;
+		color: var(--text-four);
+	}
 
-			.header {
-				display: flex;
-				flex-direction: column;
-				overflow-wrap: anywhere;
+	.card .content .header {
+		display: flex;
+		flex-direction: column;
+		overflow-wrap: anywhere;
+	}
 
-				span {
-					display: flex;
-					gap: 4px;
-				}
-			}
+	.card .content .header span {
+		display: flex;
+		gap: 4px;
+	}
 
-			.footer {
-				display: flex;
-				flex-direction: column;
-				overflow-wrap: anywhere;
-
-				gap: 12px;
-			}
-		}
+	.card .content .footer {
+		display: flex;
+		flex-direction: column;
+		overflow-wrap: anywhere;
+		gap: 12px;
 	}
 </style>

@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-	import '../app.scss';
+	import '../app.css';
 	import { derived } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
@@ -18,10 +18,10 @@
 	import ConsentDialog from '$layout/Dialogs/ConsentDialog.svelte';
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/RouterEvents';
-	import { checkThemeEvents } from '$util/themeEvents';
 
 	import FooterHost from '$layout/Footer/FooterHost.svelte';
 	import { api_base_url, set_about_info } from '$data/api/settings';
+	import { checkThemeEvents } from '$lib/themeEvents';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {

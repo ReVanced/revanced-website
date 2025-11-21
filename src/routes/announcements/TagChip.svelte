@@ -18,47 +18,42 @@
 	{tag}
 </button>
 
-<style lang="scss">
+<style>
 	button {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-
 		gap: 8px;
 		height: 32px;
 		padding: 0 12px;
-
 		border-radius: 8px;
 		border: none;
-
 		background-color: var(--tertiary);
 		color: var(--text-four);
-
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
-
 		user-select: none;
 		transition: all 0.2s var(--bezier-one);
+	}
 
-		&.clickable {
-			background-color: transparent;
-			border: 1px solid var(--border);
+	button.clickable {
+		background-color: transparent;
+		border: 1px solid var(--border);
+	}
 
-			&.selected {
-				border-color: transparent;
-				background-color: var(--tertiary);
-				color: var(--primary);
+	button.clickable.selected {
+		border-color: transparent;
+		background-color: var(--tertiary);
+		color: var(--primary);
+	}
 
-				.icon {
-					display: inherit;
-					margin-left: -6px;
-					transition: none;
-				}
-			}
+	button.clickable.selected .icon {
+		display: inherit;
+		margin-left: -6px;
+		transition: none;
+	}
 
-			&:hover {
-				background-color: var(--surface-three);
-			}
-		}
+	button.clickable:hover {
+		background-color: var(--surface-three);
 	}
 </style>

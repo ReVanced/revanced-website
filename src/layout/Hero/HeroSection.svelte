@@ -37,59 +37,65 @@
 	</div>
 </section>
 
-<style lang="scss">
+<style>
 	.hero {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+	}
 
-		@media (min-width: 1100px) {
+	@media (min-width: 1100px) {
+		.hero {
 			padding-top: 10vh;
 		}
+	}
 
-		h1 {
-			color: var(--text-one);
+	.hero h1 {
+		color: var(--text-one);
+	}
+
+	.hero span {
+		color: var(--primary);
+	}
+
+	.hero .buttons-container {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	.hero .buttons-container .social-buttons {
+		max-width: 30rem;
+		position: absolute;
+		bottom: 1rem;
+		transition: opacity 0.1s var(--bezier-one);
+	}
+
+	@media (max-width: 450px) {
+		.hero .buttons-container .social-buttons {
+			justify-content: center;
+			left: 0;
 		}
+	}
 
-		span {
-			color: var(--primary);
+	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+		.hero .buttons-container .social-buttons {
+			position: static;
+			opacity: 100% !important;
 		}
+	}
 
-		.buttons-container {
-			display: flex;
+	.hero .buttons-container .hero-buttons {
+		flex-wrap: wrap;
+		display: flex;
+		user-select: none;
+		gap: 1rem;
+	}
+
+	@media (max-width: 450px) {
+		.hero .buttons-container .hero-buttons.internal-buttons {
 			flex-direction: column;
-			gap: 2.5rem;
-
-			.social-buttons {
-				max-width: 30rem;
-				position: absolute;
-				bottom: 1rem;
-				transition: opacity 0.1s var(--bezier-one);
-
-				@media (max-width: 450px) {
-					justify-content: center;
-					left: 0;
-				}
-
-				@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
-					position: static;
-					opacity: 100% !important;
-				}
-			}
-
-			.hero-buttons {
-				flex-wrap: wrap;
-				display: flex;
-				user-select: none;
-				gap: 1rem;
-
-				@media (max-width: 450px) {
-					&.internal-buttons {
-						flex-direction: column;
-						gap: 1rem;
-					}
-				}
-			}
+			gap: 1rem;
 		}
 	}
 </style>

@@ -15,13 +15,13 @@
 	let newAttachment: string | null = null;
 
 	const isValidAnnouncement = (attachment: string | null) => {
-		return attachment && attachment && isValidUrl(attachment);
+		return attachment && isValidUrl(attachment);
 	};
 
 	const addAttachment = (attachment: string | null) => {
 		if (!isValidAnnouncement(attachment)) return;
 
-		attachmentsInput = [...(attachmentsInput ?? []), attachment ? attachment : ''];
+		attachmentsInput = [...(attachmentsInput ?? []), attachment!];
 		return true;
 	};
 
@@ -42,7 +42,7 @@
 				<div class="attachments">
 					<input
 						bind:value={attachmentsInput[index]}
-						class:empty={!attachment || (attachment && !isValidUrl(attachment))}
+						class:empty={!attachment || !isValidUrl(attachment)}
 						placeholder="Attachment URL"
 					/>
 					<button
@@ -76,7 +76,7 @@
 	<Gallery images={displayAttachments} />
 {/if}
 
-<style lang="scss">
+<style>
 	button {
 		display: flex;
 		justify-content: center;
@@ -91,44 +91,45 @@
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
 		transition: all 0.2s var(--bezier-one);
+	}
 
-		&:focus {
-			outline: none;
-			border: 1px solid var(--primary);
-		}
+	input:focus {
+		outline: none;
+		border: 1px solid var(--primary);
+	}
 
-		&.empty {
-			border: 1px solid var(--red-one);
-		}
+	input.empty {
+		border: 1px solid var(--red-one);
 	}
 
 	#new-attachment {
 		display: inline-flex;
 		align-items: center;
 		position: relative;
+	}
 
-		input {
-			width: 52px;
-			border: 1px solid var(--border);
-			padding-right: 0;
+	#new-attachment input {
+		width: 52px;
+		border: 1px solid var(--border);
+		padding-right: 0;
+	}
 
-			&:focus {
-				width: 100%;
-				+ span {
-					display: none;
-				}
+	#new-attachment input:focus {
+		width: 100%;
+	}
 
-				&.empty {
-					border: 1px solid var(--red-one);
-				}
-			}
-		}
+	#new-attachment input:focus + span {
+		display: none;
+	}
 
-		span {
-			pointer-events: none;
-			position: absolute;
-			left: 15.5px;
-		}
+	#new-attachment input:focus.empty {
+		border: 1px solid var(--red-one);
+	}
+
+	#new-attachment span {
+		pointer-events: none;
+		position: absolute;
+		left: 15.5px;
 	}
 
 	.attachments-wrapper {
@@ -136,19 +137,19 @@
 		flex-direction: column;
 		width: 100%;
 		gap: 1rem;
+	}
 
-		.attachments {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: relative;
-			gap: 1rem;
+	.attachments-wrapper .attachments {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		gap: 1rem;
+	}
 
-			button {
-				position: absolute;
-				right: 10px;
-				top: 14px;
-			}
-		}
+	.attachments-wrapper .attachments button {
+		position: absolute;
+		right: 10px;
+		top: 14px;
 	}
 </style>

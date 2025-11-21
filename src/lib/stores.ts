@@ -15,17 +15,18 @@ type AdminLoginInfo =
 	  };
 
 const admin_login_info = (): AdminLoginInfo => {
-	if (is_logged_in())
+	const token = get_access_token();
+	if (token && is_logged_in())
 		return {
 			logged_in: true,
-			expires: get_access_token()!.expires,
-			logged_in_previously: !!get_access_token()?.token
+			expires: token.expires,
+			logged_in_previously: !!token.token
 		};
 	else
 		return {
 			logged_in: false,
 			expires: undefined,
-			logged_in_previously: !!get_access_token()?.token
+			logged_in_previously: !!token?.token
 		};
 };
 
@@ -34,7 +35,7 @@ export const admin_login = readable<AdminLoginInfo>(admin_login_info(), (set) =>
 
 	checkLoginStatus();
 
-	const interval = setInterval(checkLoginStatus, 100);
+	const interval = setInterval(checkLoginStatus, 1000);
 	return () => clearInterval(interval);
 });
 
@@ -65,7 +66,6 @@ export const read_announcements = writable<Set<number>>(new Set(), (set) => {
 
 read_announcements.subscribe((value) => {
 	if (!browser) return;
-
 	localStorage.setItem('read_announcements', JSON.stringify(Array.from(value)));
 });
 

@@ -16,26 +16,25 @@
 	</h1>
 {/if}
 
-<style lang="scss">
+<style>
 	h1 {
 		font-size: 2.5rem;
 	}
 
 	input {
-		&,
-		&:focus {
-			border: none;
-			outline: none;
-			border-radius: 0;
-		}
-
 		width: 100%;
 		padding: 0;
-
 		color: var(--text-one);
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 4rem;
 		letter-spacing: -0.025em;
+	}
+
+	input,
+	input:focus {
+		border: none;
+		outline: none;
+		border-radius: 0;
 	}
 </style>

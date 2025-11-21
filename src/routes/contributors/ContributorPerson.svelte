@@ -10,7 +10,7 @@
 	<h5>{name}</h5>
 </a>
 
-<style lang="scss">
+<style>
 	a {
 		color: var(--text-one);
 		text-decoration: none;
@@ -23,12 +23,12 @@
 		align-items: center;
 		border-right: 1px solid var(--border);
 		border-bottom: 1px solid var(--border);
+	}
 
-		&:hover {
-			background: var(--surface-three);
-			text-decoration: underline var(--primary);
-			color: var(--text-one);
-		}
+	a:hover {
+		background: var(--surface-three);
+		text-decoration: underline var(--primary);
+		color: var(--text-one);
 	}
 
 	h5 {
@@ -56,6 +56,7 @@
 			height: 42px;
 			width: 42px;
 		}
+
 		a {
 			width: max-content;
 			background-color: transparent;

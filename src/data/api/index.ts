@@ -50,7 +50,9 @@ function build_headers() {
 }
 
 async function get_json(endpoint: string) {
-	return await fetch(build_url(endpoint)).then((r) => r.json());
+	const r = await fetch(build_url(endpoint));
+	if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+	return await r.json();
 }
 
 async function post_json(endpoint: string, body?: any) {
@@ -61,6 +63,7 @@ async function post_json(endpoint: string, body?: any) {
 		headers,
 		body: body ? JSON.stringify(body) : ''
 	}).then((r) => {
+		if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
 		return r.headers.get('content-length') === '0' ? null : r.json();
 	});
 }
@@ -73,6 +76,7 @@ async function patch_json(endpoint: string, body?: any) {
 		headers,
 		body: body ? JSON.stringify(body) : ''
 	}).then((r) => {
+		if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
 		return r.headers.get('content-length') === '0' ? null : r.json();
 	});
 }
@@ -85,6 +89,7 @@ async function delete_json(endpoint: string, body?: any) {
 		headers,
 		body: body ? JSON.stringify(body) : ''
 	}).then((r) => {
+		if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
 		return r.headers.get('content-length') === '0' ? null : r.json();
 	});
 }

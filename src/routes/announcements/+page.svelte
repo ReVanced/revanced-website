@@ -142,7 +142,7 @@
 	</Query>
 </main>
 
-<style lang="scss">
+<style>
 	main {
 		display: flex;
 		flex-direction: column;
@@ -156,29 +156,29 @@
 		cursor: pointer;
 		user-select: none;
 		padding-inline: 0.25rem;
+	}
 
-		#arrow {
-			height: 1.5rem;
-			transition: all 0.2s var(--bezier-one);
-		}
+	.expand-archived #arrow {
+		height: 1.5rem;
+		transition: all 0.2s var(--bezier-one);
 	}
 
 	.search {
 		padding-top: 0.6rem;
 		padding-bottom: 1.25rem;
 		background-color: var(--surface-eight);
+	}
 
-		.search-contain {
-			display: flex;
-			justify-content: center;
-			gap: 1rem;
-			margin-inline: auto;
-			width: min(90%, 80rem);
+	.search .search-contain {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		margin-inline: auto;
+		width: min(90%, 80rem);
+	}
 
-			.search-bar {
-				flex: 1;
-			}
-		}
+	.search .search-contain .search-bar {
+		flex: 1;
 	}
 
 	.cards {
@@ -186,8 +186,10 @@
 		grid-template-columns: repeat(3, 1fr);
 		width: 100%;
 		gap: 16px;
+	}
 
-		@media (max-width: 768px) {
+	@media (max-width: 768px) {
+		.cards {
 			display: flex;
 			flex-direction: column;
 		}

@@ -8,11 +8,10 @@
 	<img src="socials/{social.name.toLowerCase()}.svg" alt={social.name} />
 </a>
 
-<style lang="scss">
+<style>
 	a {
 		display: flex;
 		justify-content: center;
-
 		border: 0;
 		width: 60px;
 		height: 60px;
@@ -23,18 +22,18 @@
 		background-color: var(--surface-four);
 		color: var(--text-one);
 		user-select: none;
+	}
 
-		&:hover {
-			transform: translateY(-5%);
-		}
+	a:hover {
+		transform: translateY(-5%);
+	}
 
-		img {
-			transition: filter 0.4s var(--bezier-one);
-			width: 30px;
-		}
+	a img {
+		transition: filter 0.4s var(--bezier-one);
+		width: 30px;
+	}
 
-		&:hover img {
-			filter: brightness(1.2);
-		}
+	a:hover img {
+		filter: brightness(1.2);
 	}
 </style>

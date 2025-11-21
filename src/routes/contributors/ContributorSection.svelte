@@ -42,60 +42,62 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	.container {
 		border-radius: 20px;
 		overflow: hidden;
 		border: 1px solid var(--border);
+	}
 
-		.title {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			cursor: pointer;
-			background-color: var(--surface-seven);
-			padding: 0.75rem 1.25rem;
-			border-bottom: 1px solid var(--border);
-			transition: all 0.2s var(--bezier-one);
+	.container .title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+		background-color: var(--surface-seven);
+		padding: 0.75rem 1.25rem;
+		border-bottom: 1px solid var(--border);
+		transition: all 0.2s var(--bezier-one);
+	}
 
-			&:hover {
-				background-color: var(--surface-three);
-			}
+	.container .title:hover {
+		background-color: var(--surface-three);
+	}
 
-			&.closed {
-				border-bottom: none;
-			}
+	.container .title.closed {
+		border-bottom: none;
+	}
 
-			a {
-				display: flex;
-				text-decoration: none;
-				width: max-content;
-				border-radius: 8px;
+	.container .title a {
+		display: flex;
+		text-decoration: none;
+		width: max-content;
+		border-radius: 8px;
+	}
 
-				&:hover {
-					text-decoration: underline var(--primary);
-					color: var(--text-one);
-				}
-			}
+	.container .title a:hover {
+		text-decoration: underline var(--primary);
+		color: var(--text-one);
+	}
 
-			#arrow {
-				transition: all 0.2s var(--bezier-one);
-				user-select: none;
-			}
-		}
+	.container .title #arrow {
+		transition: all 0.2s var(--bezier-one);
+		user-select: none;
+	}
 
-		.contributors {
-			margin-right: -1px;
-			margin-bottom: -1px;
-			display: grid;
-			justify-items: center;
-			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	.container .contributors {
+		margin-right: -1px;
+		margin-bottom: -1px;
+		display: grid;
+		justify-items: center;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	}
 
-			@media (max-width: 768px) {
-				padding: 0.75rem;
-				gap: 0.25rem;
-				grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-			}
+	@media (max-width: 768px) {
+		.container .contributors {
+			padding: 0.75rem;
+			gap: 0.25rem;
+			grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
 		}
 	}
 </style>

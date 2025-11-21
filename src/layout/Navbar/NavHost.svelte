@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { horizontalSlide } from '$util/horizontalSlide';
+	import { horizontalSlide } from '$lib/horizontalSlide';
 	import { fade } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -17,6 +17,7 @@
 	import { admin_login } from '$lib/stores';
 
 	import StatusBanner from '$layout/Banners/StatusBanner.svelte';
+	import SettingsDialog from '$layout/Dialogs/SettingsDialog.svelte';
 	import LoginDialog from '$layout/Dialogs/LoginDialog.svelte';
 	import LoginSuccessfulDialog from '$layout/Dialogs/LoginSuccessfulDialog.svelte';
 	import SessionExpiredDialog from '$layout/Dialogs/SessionExpiredDialog.svelte';
@@ -112,11 +113,13 @@
 							</svg>
 						</Navigation>
 					</span>
-					{#if $admin_login.logged_in}
-						<a href="/admin" aria-label="Admin Panel">
-							<Cog size="20px" color="var(--surface-six)" />
-						</a>
-					{/if}
+					<button
+						on:click={() => (dialogs.settings = !dialogs.settings)}
+						class:selected={dialogs.settings}
+						aria-label="Settings"
+					>
+						<Cog size="20px" color={dialogs.settings ? 'var(--primary)' : 'var(--surface-six)'} />
+					</button>
 				</div>
 			</div>
 		</div>
@@ -133,36 +136,34 @@
 	{/if}
 </nav>
 
+<SettingsDialog bind:dialogOpen={dialogs.settings} bind:loginOpen={dialogs.login} />
+
 <LoginDialog bind:dialogOpen={dialogs.login} />
 
 <LoginSuccessfulDialog />
 
 <SessionExpiredDialog bind:loginOpen={dialogs.login} />
 
-<style>
+<style lang="scss">
 	#secondary-navigation {
 		display: flex;
 		gap: 1rem;
-	}
+		button {
+			border-radius: 10px;
+			padding: 10px 16px;
 
-	#secondary-navigation a {
-		border-radius: 10px;
-		padding: 10px 16px;
-		transition: all var(--transition-base) var(--bezier-one);
-	}
+			&:hover {
+				background-color: var(--surface-three);
+			}
 
-	#secondary-navigation a:hover {
-		background-color: var(--surface-three);
-		transform: translateY(-1px);
+			&.selected {
+				background-color: var(--tertiary);
+			}
+		}
 	}
 
 	#logo {
 		padding: 0.5rem;
-		transition: transform var(--transition-base) var(--bezier-one);
-	}
-	
-	#logo:hover {
-		transform: scale(1.05);
 	}
 
 	button {
@@ -178,18 +179,17 @@
 		position: sticky;
 		top: 0;
 		z-index: 5;
+
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 2rem;
+
 		height: 70px;
 		padding: 1rem 2rem;
 		width: 100%;
-		background: var(--glass-background);
-		backdrop-filter: var(--backdrop-blur);
-		-webkit-backdrop-filter: var(--backdrop-blur);
-		border-bottom: 1px solid var(--glass-border);
-		transition: all var(--transition-base) var(--bezier-one);
+
+		background-color: var(--surface-eight);
 	}
 
 	img {
@@ -244,10 +244,7 @@
 			top: 0;
 			left: 0;
 			height: 100%;
-			background: var(--glass-background);
-			backdrop-filter: var(--backdrop-blur);
-			-webkit-backdrop-filter: var(--backdrop-blur);
-			border-right: 1px solid var(--glass-border);
+			background-color: var(--surface-eight);
 			z-index: 4;
 		}
 
@@ -298,48 +295,51 @@
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
-	}
 
-	.menu-btn__burger {
-		display: flex;
-		flex-wrap: wrap;
-		width: 24px;
-		height: 2px;
-		background: var(--surface-six);
-		transition: all 0.3s var(--bezier-one);
-	}
+		&__burger {
+			display: flex;
+			flex-wrap: wrap;
 
-	.menu-btn__burger::before,
-	.menu-btn__burger::after {
-		content: '';
-		position: absolute;
-		width: 24px;
-		height: 2px;
-		background: var(--surface-six);
-		transition: all 0.3s var(--bezier-one);
-	}
+			&,
+			&::before,
+			&::after {
+				width: 24px;
+				height: 2px;
+				background: var(--surface-six);
+				transition: all 0.3s var(--bezier-one);
+			}
 
-	.menu-btn__burger::before {
-		transform: translateY(-6.5px);
-	}
+			&::before,
+			&::after {
+				content: '';
+				position: absolute;
+			}
 
-	.menu-btn__burger::after {
-		transform: translateY(6.5px);
-	}
+			&::before {
+				transform: translateY(-6.5px);
+			}
 
-	/* ANIMATION */
-	.menu-btn.open .menu-btn__burger {
-		transform: translateX(-10px);
-		background: transparent;
-		box-shadow: none;
-	}
+			&::after {
+				transform: translateY(6.5px);
+			}
+		}
 
-	.menu-btn.open .menu-btn__burger::before {
-		transform: rotate(45deg) translate(10px, -10px);
-	}
+		/* ANIMATION */
+		&.open {
+			.menu-btn__burger {
+				transform: translateX(-10px);
+				background: transparent;
+				box-shadow: none;
 
-	.menu-btn.open .menu-btn__burger::after {
-		transform: rotate(-45deg) translate(10px, 10px);
+				&::before {
+					transform: rotate(45deg) translate(10px, -10px);
+				}
+
+				&::after {
+					transform: rotate(-45deg) translate(10px, 10px);
+				}
+			}
+		}
 	}
 
 	.skiptab-btn {
@@ -353,9 +353,9 @@
 		font-weight: 600;
 		font-size: 0.95rem;
 		padding: 16px 24px;
-	}
 
-	.skiptab-btn:focus {
-		left: 12px;
+		&:focus {
+			left: 12px;
+		}
 	}
 </style>

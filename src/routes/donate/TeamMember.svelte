@@ -53,7 +53,7 @@
 	</div>
 </div>
 
-<style lang="scss">
+<style>
 	a {
 		text-decoration: none;
 	}
@@ -67,45 +67,47 @@
 		display: flex;
 		gap: 1rem;
 		transition: 0.3s background-color var(--bezier-one);
+	}
 
-		&:hover {
-			background-color: var(--surface-seven);
-		}
+	.member:hover {
+		background-color: var(--surface-seven);
 	}
 
 	.member-text {
 		display: flex;
 		flex-direction: column;
 		word-break: break-word;
+	}
 
-		.member-title {
+	.member-text .member-title {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.member-text .member-title .verified-badge {
+		display: flex;
+		align-items: center;
+		fill: var(--secondary) !important;
+		line-height: 16px;
+		height: 16px;
+	}
+
+	.member-text .member-title .verified-badge .mobile {
+		display: none;
+	}
+
+	@media (max-width: 768px) {
+		.member-text .member-title .verified-badge .desktop {
+			display: none;
+		}
+
+		.member-text .member-title .verified-badge .mobile {
 			display: flex;
+			flex-direction: row;
+			justify-content: center;
 			align-items: center;
-			gap: 0.5rem;
-
-			.verified-badge {
-				display: flex;
-				align-items: center;
-				fill: var(--secondary) !important;
-				line-height: 16px;
-				height: 16px;
-
-				.mobile {
-					display: none;
-				}
-				@media (max-width: 768px) {
-					.desktop {
-						display: none;
-					}
-					.mobile {
-						display: flex;
-						flex-direction: row;
-						justify-content: center;
-						align-items: center;
-						gap: 0.25rem;
-					}
-				}
-			}
+			gap: 0.25rem;
 		}
 	}
 
@@ -116,8 +118,10 @@
 		transition: transform 0.4s var(--bezier-one);
 		user-select: none;
 		margin-bottom: 1rem;
+	}
 
-		@media (max-width: 768px) {
+	@media (max-width: 768px) {
+		img {
 			margin-bottom: 0;
 			height: 48px;
 			width: 48px;

@@ -44,7 +44,7 @@
 	</span>
 {/if}
 
-<style lang="scss">
+<style>
 	span {
 		display: inline-flex;
 		flex-wrap: wrap;
@@ -52,18 +52,19 @@
 		column-gap: 1rem;
 	}
 
-	input {
-		&,
-		&:focus {
-			border: none;
-			outline: none;
-			border-radius: 0;
-		}
-		&::-webkit-calendar-picker-indicator {
-			filter: invert(88%) sepia(60%) saturate(4731%) hue-rotate(173deg) brightness(91%)
-				contrast(111%);
-		}
+	input,
+	input:focus {
+		border: none;
+		outline: none;
+		border-radius: 0;
+	}
 
+	input::-webkit-calendar-picker-indicator {
+		filter: invert(88%) sepia(60%) saturate(4731%) hue-rotate(173deg) brightness(91%)
+			contrast(111%);
+	}
+
+	input {
 		padding: 0;
 		font-size: 1rem;
 		letter-spacing: 0.02rem;

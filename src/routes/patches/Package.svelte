@@ -34,22 +34,22 @@
 	{name}
 </div>
 
-<style lang="scss">
+<style>
 	.package {
 		padding: 0.75rem 1rem;
 		border-radius: 100px;
-
 		font-size: 0.85rem;
 		font-weight: 500;
 		color: var(--text-four);
-
 		cursor: pointer;
 		user-select: none;
 		transition:
 			background-color 0.4s var(--bezier-one),
 			color 0.3s var(--bezier-one);
+	}
 
-		@media (max-width: 768px) {
+	@media (max-width: 768px) {
+		.package {
 			border-radius: 0px;
 			font-size: 0.9rem;
 			padding: 1rem;
@@ -58,15 +58,15 @@
 			text-overflow: ellipsis;
 			border-bottom: 1px solid var(--border);
 		}
+	}
 
-		&.selected {
-			color: var(--primary);
-			background-color: var(--tertiary);
-		}
+	.package.selected {
+		color: var(--primary);
+		background-color: var(--tertiary);
+	}
 
-		&:hover:not(.selected) {
-			background-color: var(--surface-seven);
-			color: var(--text-one);
-		}
+	.package:hover:not(.selected) {
+		background-color: var(--surface-seven);
+		color: var(--text-one);
 	}
 </style>

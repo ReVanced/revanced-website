@@ -30,7 +30,7 @@
 	</div>
 </Dialog>
 
-<style lang="scss">
+<style>
 	.mobile-packages {
 		margin-bottom: -1px;
 		overflow: hidden;
