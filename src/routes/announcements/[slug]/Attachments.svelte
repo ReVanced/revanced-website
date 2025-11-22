@@ -6,13 +6,21 @@
 	import Create from 'svelte-material-icons/Plus.svelte';
 	import Delete from 'svelte-material-icons/DeleteOutline.svelte';
 
-	export let isEditing: boolean;
-	export let isCreating: boolean;
-	export let isPreviewing: boolean;
-	export let attachments: string[] | undefined;
-	export let attachmentsInput: string[] | undefined;
+	let {
+		isEditing,
+		isCreating,
+		isPreviewing,
+		attachments,
+		attachmentsInput = $bindable()
+	}: {
+		isEditing: boolean;
+		isCreating: boolean;
+		isPreviewing: boolean;
+		attachments: string[] | undefined;
+		attachmentsInput: string[] | undefined;
+	} = $props();
 
-	let newAttachment: string | null = null;
+	let newAttachment: string | null = $state(null);
 
 	const isValidAnnouncement = (attachment: string | null) => {
 		return attachment && isValidUrl(attachment);
@@ -31,23 +39,23 @@
 		attachmentsInput = attachmentsInput.filter((_, i) => i !== index);
 	};
 
-	$: displayAttachments = isPreviewing ? attachmentsInput : attachments;
+	let displayAttachments = $derived(isPreviewing ? attachmentsInput : attachments);
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
-	<Divider horizontalPadding={0} />
+	<Divider horizontalPadding="0" />
 	<div class="attachments-wrapper">
 		{#if attachmentsInput}
 			{#each attachmentsInput as attachment, index}
 				<div class="attachments">
 					<input
 						bind:value={attachmentsInput[index]}
-						class:empty={!attachment || !isValidUrl(attachment)}
+						class:empty={!attachment || (attachment && !isValidUrl(attachment))}
 						placeholder="Attachment URL"
 					/>
 					<button
 						class:last={index == attachmentsInput.length - 1}
-						on:click={() => removeAttachment(index)}
+						onclick={() => removeAttachment(index)}
 					>
 						<Delete size="24" color="var(--text-four)" />
 					</button>
@@ -58,11 +66,11 @@
 			<input
 				bind:value={newAttachment}
 				class:empty={!isValidAnnouncement(newAttachment)}
-				on:blur={() => {
+				onblur={() => {
 					addAttachment(newAttachment);
 					newAttachment = null;
 				}}
-				on:keydown={(event) => {
+				onkeydown={(event) => {
 					if (event.key === 'Enter' && addAttachment(newAttachment)) newAttachment = null;
 				}}
 			/>
@@ -72,11 +80,11 @@
 		</span>
 	</div>
 {:else if displayAttachments && displayAttachments?.length > 0}
-	<Divider horizontalPadding={0} />
+	<Divider horizontalPadding="0" />
 	<Gallery images={displayAttachments} />
 {/if}
 
-<style>
+<style lang="scss">
 	button {
 		display: flex;
 		justify-content: center;
@@ -91,45 +99,44 @@
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
 		transition: all 0.2s var(--bezier-one);
-	}
 
-	input:focus {
-		outline: none;
-		border: 1px solid var(--primary);
-	}
+		&:focus {
+			outline: none;
+			border: 1px solid var(--primary);
+		}
 
-	input.empty {
-		border: 1px solid var(--red-one);
+		&.empty {
+			border: 1px solid var(--red-one);
+		}
 	}
 
 	#new-attachment {
 		display: inline-flex;
 		align-items: center;
 		position: relative;
-	}
 
-	#new-attachment input {
-		width: 52px;
-		border: 1px solid var(--border);
-		padding-right: 0;
-	}
+		input {
+			width: 52px;
+			border: 1px solid var(--border);
+			padding-right: 0;
 
-	#new-attachment input:focus {
-		width: 100%;
-	}
+			&:focus {
+				width: 100%;
+				+ span {
+					display: none;
+				}
 
-	#new-attachment input:focus + span {
-		display: none;
-	}
+				&.empty {
+					border: 1px solid var(--red-one);
+				}
+			}
+		}
 
-	#new-attachment input:focus.empty {
-		border: 1px solid var(--red-one);
-	}
-
-	#new-attachment span {
-		pointer-events: none;
-		position: absolute;
-		left: 15.5px;
+		span {
+			pointer-events: none;
+			position: absolute;
+			left: 15.5px;
+		}
 	}
 
 	.attachments-wrapper {
@@ -137,19 +144,19 @@
 		flex-direction: column;
 		width: 100%;
 		gap: 1rem;
-	}
 
-	.attachments-wrapper .attachments {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		gap: 1rem;
-	}
+		.attachments {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			gap: 1rem;
 
-	.attachments-wrapper .attachments button {
-		position: absolute;
-		right: 10px;
-		top: 14px;
+			button {
+				position: absolute;
+				right: 10px;
+				top: 14px;
+			}
+		}
 	}
 </style>

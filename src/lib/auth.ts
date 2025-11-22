@@ -1,6 +1,5 @@
 import { browser } from '$app/environment';
 import { build_url } from '$data/api';
-import { jwtDecode } from 'jwt-decode';
 
 export type AuthToken = {
 	token: string;
@@ -22,29 +21,34 @@ export class UnauthenticatedError extends Error {
 // Get access token.
 export function get_access_token(): AuthToken | null {
 	if (!browser) return null;
-	try {
-		const data = localStorage.getItem('revanced_api_access_token');
-		if (data) return JSON.parse(data) as AuthToken;
-		return null;
-	} catch (error) {
-		console.error('Failed to get access token:', error);
-		return null;
-	}
+	const data = localStorage.getItem('revanced_api_access_token');
+	if (data) return JSON.parse(data) as AuthToken;
+	return null;
 }
+
+export const AUTH_CHANGE_EVENT = 'revanced-auth-change';
 
 // (Re)set access token.
 export function set_access_token(token?: AuthToken) {
-	try {
-		if (!token) localStorage.removeItem('revanced_api_access_token');
-		else localStorage.setItem('revanced_api_access_token', JSON.stringify(token));
-	} catch (error) {
-		console.error('Failed to set access token:', error);
+	if (!token) localStorage.removeItem('revanced_api_access_token');
+	else localStorage.setItem('revanced_api_access_token', JSON.stringify(token));
+
+	if (browser) {
+		window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
 	}
 }
 
-// Parse a JWT token
+// Parse a jwt token
 export function parseJwt(token: string): JwtPayload {
-	return jwtDecode<JwtPayload>(token);
+	const base64Url = token.split('.')[1];
+	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	const jsonPayload = decodeURIComponent(
+		atob(base64)
+			.split('')
+			.map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+			.join('')
+	);
+	return JSON.parse(jsonPayload) as JwtPayload;
 }
 
 // Check if the admin is authenticated
@@ -60,7 +64,7 @@ async function digest_fetch(
 	password: string,
 	options: RequestInit = {}
 ): Promise<Response> {
-	// Helper function to convert ArrayBuffer to Hex string
+	// Helper function to convert arrayBuffer to Hex string
 	function bufferToHex(buffer: ArrayBuffer): string {
 		return Array.from(new Uint8Array(buffer))
 			.map((b) => b.toString(16).padStart(2, '0'))
@@ -93,12 +97,12 @@ async function digest_fetch(
 	// Parse the `WWW-Authenticate` header to extract the fields
 	const authParams = authHeader
 		.replace('Digest ', '')
-		.match(/(\w+)=("[^"]*"|[^,]*)/g)
-		?.reduce((acc: Record<string, string>, item) => {
-			const [key, value] = item.split('=');
+		.split(',')
+		.reduce((acc: Record<string, string>, item) => {
+			const [key, value] = item.trim().split('=');
 			acc[key] = value.replace(/"/g, '');
 			return acc;
-		}, {}) || {};
+		}, {});
 
 	const { realm, nonce, algorithm } = authParams;
 	const method = options.method || 'GET';
@@ -110,10 +114,13 @@ async function digest_fetch(
 
 	const responseHash = await sha256(`${HA1}:${nonce}:${HA2}`);
 
-	// Build the Authorization header
-	const authHeaderDigest = `Digest username="${username}", realm="${realm}", nonce="${nonce}", uri="${uri}", algorithm=${algorithm}, response="${responseHash}"`;
+	// prevent header injection
+	const safeUsername = username.replace(/"/g, '\\"');
 
-	// Perform the final request with the Authorization header
+	// Build authorization header
+	const authHeaderDigest = `Digest username="${safeUsername}", realm="${realm}", nonce="${nonce}", uri="${uri}", algorithm=${algorithm}, response="${responseHash}"`;
+
+	// Perform the final request with the authorization header
 	const finalResponse = await fetch(url, {
 		...options,
 		headers: {
@@ -126,22 +133,6 @@ async function digest_fetch(
 }
 
 export async function login(username: string, password: string) {
-	// Validate inputs
-	if (!username || !password) {
-		console.error('Username and password are required');
-		return false;
-	}
-
-	if (username.length < 1 || username.length > 255) {
-		console.error('Invalid username length');
-		return false;
-	}
-
-	if (password.length < 1 || password.length > 255) {
-		console.error('Invalid password length');
-		return false;
-	}
-
 	const res = await digest_fetch(build_url('token'), username, password);
 	if (!res.ok) return false;
 

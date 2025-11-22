@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	// @ts-ignore
-	import QRious from 'qrious/dist/qrious';
+	let { codeValue, squareSize = 150 }: { codeValue: string; squareSize?: number } = $props();
 
-	export let codeValue: string;
-	export let squareSize: number = 150;
+	let canvas = $state() as HTMLCanvasElement;
 
-	onMount(() => {
-		new QRious({
-			element: document.getElementById('qrcode'),
-			value: codeValue,
-			size: squareSize
+	$effect(() => {
+		// @ts-ignore
+		import('qrious/dist/qrious').then((module) => { // when i remove the comment ts-ignore it breaks???
+			const QRious = module.default || module;
+			new QRious({
+				element: canvas,
+				value: codeValue,
+				size: squareSize
+			});
 		});
 	});
 </script>
 
-<canvas id="qrcode"></canvas>
+<canvas bind:this={canvas}></canvas>
 
 <style>
 	canvas {

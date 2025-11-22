@@ -7,19 +7,17 @@
 
 	import Query from '$lib/components/Query.svelte';
 	import FooterSection from './FooterSection.svelte';
-	import { onMount } from 'svelte';
+	import { RV_DMCA_GUID } from '$data/api/public';
 	import Divider from '$lib/components/Divider.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import EmailDialog from '$layout/Dialogs/EmailDialog.svelte';
-	import { RV_DMCA_GUID } from '../../env/static/public';
+	import EmailDialog from '$layout/dialogs/EmailDialog.svelte';
 
-	const aboutQuery = createQuery(queries.about());
+	const aboutQuery = createQuery(() => queries.about());
 
-	let location: string;
+	let location: string = $state('');
+	let showEmailDialog = $state(false);
 
-	let showEmailDialog = false;
-
-	onMount(() => {
+	$effect(() => {
 		// DMCA Protection Badge
 		location = document.location.href;
 	});
@@ -32,15 +30,17 @@
 	<div class="top">
 		<section class="main-content">
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
-			<div>
-				<p>
-					ReVanced was born out of Vanced's discontinuation and it is our goal to continue the
-					legacy of what Vanced left behind. Thanks to ReVanced Patcher, it's possible to create
-					long-lasting patches for nearly any Android app. ReVanced's patching system is designed to
-					allow patches to work on new versions of the apps automatically with bare minimum
-					maintenance.
-				</p>
-			</div>
+			<Query query={aboutQuery}>
+				{#snippet children(data)}
+					{#if data && typeof data === 'object' && 'about' in data && data.about && 'about' in data.about}
+						<div>
+							<p>
+								{(data as any).about.about}
+							</p>
+						</div>
+					{/if}
+				{/snippet}
+			</Query>
 		</section>
 
 		<section class="links-container">
@@ -51,16 +51,18 @@
 				<li><a href="/contributors">Contributors</a></li>
 				<li><a href="/donate">Donate</a></li>
 			</FooterSection>
-			<Query query={aboutQuery} let:data>
-				{#if data}
-					<FooterSection title="Socials">
-						{#each data.about.socials as { name, url }}
-							<li>
-								<a href={url} target="_blank" rel="noreferrer">{name}</a>
-							</li>
-						{/each}
-					</FooterSection>
-				{/if}
+			<Query query={aboutQuery}>
+				{#snippet children(data)}
+					{#if data && typeof data === 'object' && 'about' in data && data.about && 'socials' in data.about}
+						<FooterSection title="Socials">
+							{#each (data as any).about.socials as { name, url }}
+								<li>
+									<a href={url} target="_blank" rel="noreferrer">{name}</a>
+								</li>
+							{/each}
+						</FooterSection>
+					{/if}
+				{/snippet}
 			</Query>
 		</section>
 	</div>
@@ -73,7 +75,7 @@
 		<Button
 			type="text"
 			style="color: var(--text-four); font-weight: 600;"
-			on:click={() => (showEmailDialog = true)}
+			onclick={() => (showEmailDialog = true)}
 		>
 			E-Mail
 		</Button>
@@ -91,43 +93,39 @@
 	</div>
 </footer>
 
-<style>
+<style lang="scss">
 	footer {
 		max-width: min(87%, 100rem);
 		padding: 5rem 0rem;
 		margin: 0 auto;
-	}
 
-	footer .top {
-		display: flex;
-		gap: 8rem;
-		justify-content: space-between;
-		margin-bottom: 4rem;
-	}
+		.top {
+			display: flex;
+			gap: 8rem;
+			justify-content: space-between;
+			margin-bottom: 4rem;
 
-	@media (max-width: 1050px) {
-		footer .top {
-			flex-direction: column;
-			gap: 2rem;
+			@media (max-width: 1050px) {
+				flex-direction: column;
+				gap: 2rem;
+			}
 		}
-	}
 
-	footer .bottom {
-		display: flex;
-		gap: 2rem;
-		align-items: center;
-	}
+		.bottom {
+			display: flex;
+			gap: 2rem;
+			align-items: center;
 
-	footer .bottom a {
-		text-decoration: none;
-		color: var(--text-four);
-		font-weight: 600;
-	}
+			a {
+				text-decoration: none;
+				color: var(--text-four);
+				font-weight: 600;
+			}
 
-	@media (max-width: 768px) {
-		footer .bottom {
-			flex-wrap: wrap;
-			gap: 1rem;
+			@media (max-width: 768px) {
+				flex-wrap: wrap;
+				gap: 1rem;
+			}
 		}
 	}
 
@@ -140,10 +138,10 @@
 		font-size: 1.4rem;
 		color: var(--text-one);
 		font-weight: 600;
-	}
 
-	#logo-name span {
-		color: var(--primary);
+		span {
+			color: var(--primary);
+		}
 	}
 
 	li {
@@ -151,13 +149,12 @@
 		color: var(--text-four);
 		font-size: 0.9rem;
 		font-weight: 500;
-	}
 
-	li a {
-		color: var(--primary);
-		font-weight: 600;
-		font-size: 0.95rem;
-		transition: all var(--transition-base) var(--bezier-one);
+		a {
+			color: var(--primary);
+			font-weight: 600;
+			font-size: 0.95rem;
+		}
 	}
 
 	.main-content {
@@ -169,40 +166,29 @@
 
 	.logo-image {
 		height: 2.5rem;
-		transition: transform var(--transition-base) var(--bezier-one);
-	}
-
-	.logo-image:hover {
-		transform: scale(1.05);
 	}
 
 	a {
 		text-decoration: none;
-		transition: all var(--transition-base) var(--bezier-one);
-	}
 
-	a:hover {
-		text-decoration: none;
-		color: var(--primary-hover);
-		transform: translateX(2px);
+		&:hover {
+			text-decoration: underline var(--secondary);
+			color: var(--text-one);
+		}
 	}
 
 	.links-container {
 		display: flex;
 		gap: 10rem;
 		margin-top: 1rem;
-	}
 
-	@media (max-width: 1050px) {
-		.links-container {
+		@media (max-width: 1050px) {
 			display: grid;
 			gap: 2rem;
 			grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
 		}
-	}
 
-	@media (max-width: 768px) {
-		.links-container {
+		@media (max-width: 768px) {
 			display: flex;
 			flex-direction: column;
 			gap: initial;

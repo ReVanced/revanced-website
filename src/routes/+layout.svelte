@@ -1,27 +1,31 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import { writable } from 'svelte/store';
 	// There might be a better place to put this, but I am not entirely sure...
 	export const isRestoring = writable(false);
 </script>
 
 <script lang="ts">
-	import '../app.css';
+	import '../app.scss';
 	import { derived } from 'svelte/store';
-	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
-	import { QueryClient } from '@tanstack/svelte-query';
+	import { QueryClient } from '@tanstack/query-core';
+	import { persistQueryClient } from '@tanstack/query-persist-client-core';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+	import { DateTrigger } from '$util/DateTrigger';
 
-	import NavHost from '$layout/Navbar/NavHost.svelte';
+	import NavHost from '$layout/navbar/NavHost.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import ConsentDialog from '$layout/Dialogs/ConsentDialog.svelte';
+	import ConsentDialog from '$layout/dialogs/ConsentDialog.svelte';
 	import { staleTime } from '$data/api';
-	import RouterEvents from '$data/RouterEvents';
+	import RouterEvents from '$data/routerEvents';
+	import { registerThemeEvents } from '$util/themeEvents';
 
-	import FooterHost from '$layout/Footer/FooterHost.svelte';
+	import FooterHost from '$layout/footer/FooterHost.svelte';
 	import { api_base_url, set_about_info } from '$data/api/settings';
-	import { checkThemeEvents } from '$lib/themeEvents';
+
+	let { children } = $props();
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -47,22 +51,18 @@
 		false
 	);
 
-	onMount(() => {
+	$effect(() => {
 		set_about_info(api_base_url());
-		checkThemeEvents();
+		const dt = new DateTrigger();
+		registerThemeEvents(dt);
 
-		// isRestoring.set(true);
-		// const [unsubscribe, promise] = persistQueryClient({
-		// 	queryClient,
-		// 	persister: createSyncStoragePersister({ storage: localStorage })
-		// });
-		// promise.then(() => isRestoring.set(false));
-		// return unsubscribe;
-
-		// Cleanup query client on unmount
-		return () => {
-			queryClient.clear();
-		};
+		isRestoring.set(true);
+		const [unsubscribe, promise] = persistQueryClient({
+			queryClient,
+			persister: createSyncStoragePersister({ storage: localStorage })
+		});
+		promise.then(() => isRestoring.set(false));
+		return unsubscribe;
 	});
 </script>
 
@@ -74,7 +74,7 @@
 		{#if $show_loading_animation}
 			<Spinner />
 		{:else}
-			<slot />
+			{@render children()}
 		{/if}
 	</div>
 	<FooterHost />

@@ -2,22 +2,22 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
-	import { queries } from '$data/api';
+	import { queries, type TeamData, type AboutData } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
 	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import CryptoDialog from '$layout/Dialogs/CryptoDialog.svelte';
+	import CryptoDialog from '$layout/dialogs/CryptoDialog.svelte';
 
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
 
-	import { supportsWebP } from '$lib/supportsWebP';
+	import { supportsWebP } from '$util/supportsWebP';
 
-	const teamQuery = createQuery(queries.team());
-	const aboutQuery = createQuery(queries.about());
+	const teamQuery = createQuery(() => queries.team());
+	const aboutQuery = createQuery(() => queries.about());
 
-	let cryptoDialogue = false;
+	let cryptoDialogue = $state(false);
 
 	const shuffle = <T,>(array: T[]) =>
 		array
@@ -70,7 +70,8 @@
 		</div>
 	</section>
 	<h3>Donate</h3>
-	<Query query={aboutQuery} let:data>
+	<Query query={aboutQuery}>
+		{#snippet children(data: AboutData)}
 		<div class="donate-cards">
 			{#if data.about.donations.links}
 				{#each data.about.donations.links as link}
@@ -88,7 +89,7 @@
 				{/each}
 			{/if}
 			{#if data.about.donations.wallets}
-				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
+				<button class="donate-card" onclick={() => (cryptoDialogue = !cryptoDialogue)}>
 					<div
 						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP()
 							? 'webp'
@@ -100,8 +101,10 @@
 				</button>
 			{/if}
 		</div>
+		{/snippet}
 	</Query>
-	<Query query={teamQuery} let:data>
+	<Query query={teamQuery}>
+		{#snippet children(data: TeamData)}
 		<h3>Meet the team</h3>
 		{#if data.members.length > 0}
 			<section class="team">
@@ -111,29 +114,30 @@
 				{/each}
 			</section>
 		{/if}
+		{/snippet}
 	</Query>
 </main>
 
-<Query query={aboutQuery} let:data>
-	<CryptoDialog bind:dialogOpen={cryptoDialogue} wallets={data.about.donations.wallets} />
+<Query query={aboutQuery}>
+	{#snippet children(data: AboutData)}
+		<CryptoDialog bind:dialogOpen={cryptoDialogue} wallets={data.about.donations.wallets} />
+	{/snippet}
 </Query>
 
-<style>
+<style lang="scss">
 	main {
 		display: flex;
 		flex-direction: column;
 		margin-bottom: 5rem;
-	}
 
-	main section {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+		section {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 
-	@media (max-width: 768px) {
-		main section {
-			flex-direction: column-reverse;
+			@media (max-width: 768px) {
+				flex-direction: column-reverse;
+			}
 		}
 	}
 
@@ -149,19 +153,17 @@
 	p {
 		margin-bottom: 2rem;
 		width: 60%;
-	}
 
-	@media (max-width: 1200px) {
-		p {
+		@media (max-width: 1200px) {
 			width: 90%;
+		}
+
+		@media (max-width: 768px) {
+			width: 100%;
 		}
 	}
 
 	@media (max-width: 768px) {
-		p {
-			width: 100%;
-		}
-
 		#heart {
 			display: none;
 		}
@@ -171,10 +173,8 @@
 		display: flex;
 		gap: 1rem;
 		margin-bottom: 3rem;
-	}
 
-	@media (max-width: 768px) {
-		.donate-cards {
+		@media (max-width: 768px) {
 			flex-direction: column;
 		}
 	}
@@ -191,29 +191,29 @@
 		transition:
 			0.3s border-radius var(--bezier-one),
 			0.3s background-color var(--bezier-one);
-	}
 
-	.donate-card:hover {
-		background-color: var(--tertiary);
-	}
+		&:hover {
+			background-color: var(--tertiary);
+		}
 
-	.donate-card:active {
-		border-radius: 2.75rem;
-	}
+		&:active {
+			border-radius: 2.75rem;
+		}
 
-	.donate-card span {
-		display: block;
-		color: var(--text-four);
-		font-size: 1.05rem;
-		font-weight: 500;
-		padding: 1.5rem;
-	}
+		span {
+			display: block;
+			color: var(--text-four);
+			font-size: 1.05rem;
+			font-weight: 500;
+			padding: 1.5rem;
+		}
 
-	.donate-card div {
-		height: 200px;
-		background-size: cover;
-		background-position: center;
-		max-width: 100%;
+		div {
+			height: 200px;
+			background-size: cover;
+			background-position: center;
+			max-width: 100%;
+		}
 	}
 
 	.team {

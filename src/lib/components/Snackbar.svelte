@@ -2,23 +2,28 @@
 	import { backIn, expoOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
-	export let open = false;
-	export let dismissTime = 3000;
+	let {
+		open = $bindable(false),
+		dismissTime = 3000,
+		text
+	}: {
+		open?: boolean;
+		dismissTime?: number;
+		text?: any;
+	} = $props();
 
 	let timeout: ReturnType<typeof setTimeout>;
-	$: if (open) {
-		clearTimeout(timeout);
-		timeout = setTimeout(() => (open = false), dismissTime);
-	}
+	$effect(() => {
+		if (open) {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => (open = false), dismissTime);
+		}
+	});
 </script>
 
 {#if open}
-	<div
-		id="snackbar"
-		in:slide={{ duration: 400, easing: expoOut }}
-		out:slide={{ duration: 300, easing: backIn }}
-	>
-		<slot name="text" />
+	<div id="snackbar" in:slide={{ duration: 400, easing: expoOut }} out:slide={{ duration: 300, easing: backIn }}>
+		{@render text?.()}
 	</div>
 {/if}
 

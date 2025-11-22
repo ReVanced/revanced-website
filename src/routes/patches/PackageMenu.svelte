@@ -1,28 +1,33 @@
+<script>
+	let { children } = $props();
+</script>
+
 <div>
 	<h6>Packages</h6>
 	<hr />
 	<span>
-		<slot />
+		{@render children?.()}
 	</span>
 </div>
 
-<style>
+<style lang="scss">
 	div {
 		display: flex;
 		flex-direction: column;
 		position: sticky;
+
 		height: calc(100vh - 60px);
 		top: 60px;
 		padding: calc(6rem - 60px) 30px 30px 10px;
+
 		overflow-y: scroll;
-	}
 
-	div::-webkit-scrollbar-thumb {
-		background-color: transparent;
-	}
-
-	div:hover::-webkit-scrollbar-thumb {
-		background-color: var(--primary);
+		&::-webkit-scrollbar-thumb {
+			background-color: transparent;
+		}
+		&:hover::-webkit-scrollbar-thumb {
+			background-color: var(--primary);
+		}
 	}
 
 	span {

@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 
-	export let selectedPkg: string | null;
-	export let name: string;
-	export let searchTerm: string | null;
+	let {
+		selectedPkg,
+		name,
+		searchTerm
+	}: {
+		selectedPkg: string | null;
+		name: string;
+		searchTerm: string | null;
+	} = $props();
 
 	function handleClick() {
 		// Assign the selected package. If it's already selected, deselect it.
@@ -24,32 +30,32 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="package"
 	class:selected={selectedPkg === name || (name === 'All packages' && !selectedPkg)}
-	on:click={handleClick}
+	onclick={handleClick}
 >
 	{name}
 </div>
 
-<style>
+<style lang="scss">
 	.package {
 		padding: 0.75rem 1rem;
 		border-radius: 100px;
+
 		font-size: 0.85rem;
 		font-weight: 500;
 		color: var(--text-four);
+
 		cursor: pointer;
 		user-select: none;
 		transition:
 			background-color 0.4s var(--bezier-one),
 			color 0.3s var(--bezier-one);
-	}
 
-	@media (max-width: 768px) {
-		.package {
+		@media (max-width: 768px) {
 			border-radius: 0px;
 			font-size: 0.9rem;
 			padding: 1rem;
@@ -58,15 +64,15 @@
 			text-overflow: ellipsis;
 			border-bottom: 1px solid var(--border);
 		}
-	}
 
-	.package.selected {
-		color: var(--primary);
-		background-color: var(--tertiary);
-	}
+		&.selected {
+			color: var(--primary);
+			background-color: var(--tertiary);
+		}
 
-	.package:hover:not(.selected) {
-		background-color: var(--surface-seven);
-		color: var(--text-one);
+		&:hover:not(.selected) {
+			background-color: var(--surface-seven);
+			color: var(--text-one);
+		}
 	}
 </style>

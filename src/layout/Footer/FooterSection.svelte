@@ -1,5 +1,11 @@
 <script lang="ts">
-	export let title: string;
+	let {
+		title,
+		children
+	}: {
+		title: string;
+		children?: any;
+	} = $props();
 </script>
 
 <div>
@@ -7,11 +13,11 @@
 		{title}
 	</span>
 	<ul>
-		<slot />
+		{@render children?.()}
 	</ul>
 </div>
 
-<style>
+<style lang="scss">
 	span {
 		display: flex;
 		margin: 1.5rem 0;

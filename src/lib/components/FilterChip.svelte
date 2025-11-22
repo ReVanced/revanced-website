@@ -2,22 +2,26 @@
 	import Check from 'svelte-material-icons/Check.svelte';
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
-	export let dropdown = false;
-	export let check = false;
-	export let selected = false;
+	let {
+		dropdown = false,
+		check = false,
+		selected = false,
+		children,
+		onclick
+	} = $props();
 </script>
 
-<button class:selected on:click>
+<button class:selected onclick={onclick}>
 	{#if check}
 		<Check size="18px" color="var(--surface-six)" />
 	{/if}
-	<slot />
+	{@render children?.()}
 	{#if dropdown}
 		<ChevronDown size="18px" color="var(--surface-six)" />
 	{/if}
 </button>
 
-<style>
+<style lang="scss">
 	button {
 		font-family: var(--font-two);
 		border: none;
@@ -32,10 +36,11 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+		
+		&.selected {
+			background-color: var(--tertiary);
+			color: var(--primary);
+		}
 	}
 
-	button.selected {
-		background-color: var(--tertiary);
-		color: var(--primary);
-	}
 </style>

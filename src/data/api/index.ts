@@ -1,6 +1,5 @@
 import * as settings from './settings';
 
-// API Endpoints
 import type {
 	Patch,
 	Contributable,
@@ -32,10 +31,8 @@ type GetAnnouncementsOptions = Partial<{
 }>;
 
 export function build_url(endpoint: string) {
-	// //////v4/contributors -> v4/contributors
 	endpoint = endpoint.replace(/^\/+/, '');
 
-	// v4/contributors -> contributors
 	if (endpoint.startsWith(settings.API_VERSION)) endpoint = endpoint.split('/').slice(1).join('/');
 
 	return `${settings.api_base_url()}/${settings.API_VERSION}/${endpoint}`;
@@ -50,9 +47,7 @@ function build_headers() {
 }
 
 async function get_json(endpoint: string) {
-	const r = await fetch(build_url(endpoint));
-	if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
-	return await r.json();
+	return await fetch(build_url(endpoint)).then((r) => r.json());
 }
 
 async function post_json(endpoint: string, body?: any) {
@@ -63,7 +58,6 @@ async function post_json(endpoint: string, body?: any) {
 		headers,
 		body: body ? JSON.stringify(body) : ''
 	}).then((r) => {
-		if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
 		return r.headers.get('content-length') === '0' ? null : r.json();
 	});
 }
@@ -76,7 +70,6 @@ async function patch_json(endpoint: string, body?: any) {
 		headers,
 		body: body ? JSON.stringify(body) : ''
 	}).then((r) => {
-		if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
 		return r.headers.get('content-length') === '0' ? null : r.json();
 	});
 }
@@ -89,7 +82,6 @@ async function delete_json(endpoint: string, body?: any) {
 		headers,
 		body: body ? JSON.stringify(body) : ''
 	}).then((r) => {
-		if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
 		return r.headers.get('content-length') === '0' ? null : r.json();
 	});
 }
@@ -112,17 +104,10 @@ async function patches(): Promise<PatchesData> {
 	for (const patch of json) {
 		if (!patch.compatiblePackages) continue;
 
-		// Validate that compatiblePackages is an object before transforming
-		if (typeof patch.compatiblePackages === 'object' && !Array.isArray(patch.compatiblePackages)) {
-			patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
-				name,
-				versions: patch.compatiblePackages[name]
-			}));
-		} else if (!Array.isArray(patch.compatiblePackages)) {
-			console.warn('Invalid compatiblePackages format for patch:', patch.name);
-			patch.compatiblePackages = null;
-			continue;
-		}
+		patch.compatiblePackages = Object.keys(patch.compatiblePackages).map((name) => ({
+			name,
+			versions: patch.compatiblePackages[name]
+		}));
 	}
 
 	// gets packages and patch count
@@ -171,13 +156,7 @@ async function announcementTags(): Promise<{ tags: Tags }> {
 }
 
 function show_error_alert(res: Response) {
-	const errorType = res.status < 500 ? 'Client' : 'Server';
-	const message = `${errorType} error (${res.status}): ${res.statusText}`;
-	console.error('API Error:', message);
-	// TODO: Replace with proper notification system
-	// if (typeof window !== 'undefined') {
-	// 	alert(`A ${res.status < 500 ? 'user' : 'server'} error occurred. Please try again.`);
-	// }
+	alert(`A ${res.status < 500 ? 'user' : 'server'} error occurred. Please try again.`);
 }
 
 export async function create_announcement(announcement: Announcement) {
@@ -212,7 +191,7 @@ async function ping(): Promise<boolean> {
 	try {
 		const res = await fetch(`${settings.api_base_url()}/v4/ping`, { method: 'HEAD' });
 		return res.ok;
-	} catch {
+	} catch (error) {
 		return false;
 	}
 }
@@ -264,3 +243,5 @@ export const queries = {
 		staleTime
 	})
 };
+
+// madkarma_ är arg, Efter lunchen börja från https://svelte.dev/docs/svelte/v5-migration-guide och migrera all syntax

@@ -1,5 +1,7 @@
 <script>
-	export let horizontalPadding;
+	let {
+		horizontalPadding
+	} = $props();
 </script>
 
 <svg
@@ -19,12 +21,12 @@
 	<rect width="100%" height="100%" fill="url(#a)" />
 </svg>
 
-<style>
+<style lang="scss">
 	svg {
 		margin: 1.5rem 0;
-	}
 
-	svg path {
-		stroke: var(--border);
+		path {
+			stroke: var(--border);
+		}
 	}
 </style>

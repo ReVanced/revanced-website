@@ -9,7 +9,7 @@
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	const query = createQuery(queries.contributors());
+	const query = createQuery(() => queries.contributors());
 </script>
 
 <Head
@@ -50,12 +50,14 @@
 	</div>
 
 	<div class="repos">
-		<Query {query} let:data>
+		<Query {query}>
+			{#snippet children(data)}
 			{#each data.contributables as { name, url, contributors }}
 				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 					<ContributorHost {name} {url} {contributors} />
 				</div>
 			{/each}
+			{/snippet}
 		</Query>
 	</div>
 </div>

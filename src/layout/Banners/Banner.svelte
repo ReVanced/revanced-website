@@ -1,19 +1,29 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import Close from 'svelte-material-icons/Close.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import Button from '$lib/components/Button.svelte';
 
-	export let title: string;
-	export let description: string | undefined = undefined;
-	export let buttonText: string | undefined = undefined;
-	export let buttonOnClick: any | undefined = undefined;
-	export let level: 'info' | 'caution' = 'info';
-	export let permanent: boolean = false;
-	export let onDismiss: () => void = () => {};
+	let {
+		title,
+		description = undefined,
+		buttonText = undefined,
+		buttonOnClick = undefined,
+		level = 'info',
+		permanent = false,
+		onDismiss = () => {},
+		ondismissed = () => {}
+	}: {
+		title: string;
+		description?: string | undefined;
+		buttonText?: string | undefined;
+		buttonOnClick?: any | undefined;
+		level?: 'info' | 'caution';
+		permanent?: boolean;
+		onDismiss?: () => void;
+		ondismissed?: () => void;
+	} = $props();
 
-	const dispatch = createEventDispatcher();
-	let closed: boolean = false;
+	let closed: boolean = $state(false);
 
 	function getVariant(level: string): 'default' | 'onDangerBackground' {
 		return level === 'caution' ? 'onDangerBackground' : 'default';
@@ -22,7 +32,7 @@
 	const dismiss = () => {
 		if (onDismiss) onDismiss();
 		closed = true;
-		dispatch('dismissed');
+		ondismissed();
 	};
 </script>
 
@@ -34,10 +44,10 @@
 		</div>
 		<div class="actions">
 			{#if !permanent}
-				<Button type={'icon'} icon={Close} on:click={dismiss} />
+				<Button type={'icon'} icon={Close} onclick={dismiss} />
 			{/if}
 			{#if buttonText && buttonOnClick}
-				<Button variant={getVariant(level)} on:click={buttonOnClick}>
+				<Button variant={getVariant(level)} onclick={buttonOnClick}>
 					{buttonText}
 					<ArrowRight />
 				</Button>
@@ -46,7 +56,7 @@
 	</div>
 {/if}
 
-<style>
+<style lang="scss">
 	#title {
 		line-height: 26px;
 		color: currentColor;
@@ -69,40 +79,37 @@
 		padding: 24px 40px;
 		border-radius: 0;
 		font-size: 0.87rem;
-	}
 
-	.banner.info {
-		background-color: var(--surface-four);
-		color: var(--text-one);
-	}
+		&.info {
+			background-color: var(--surface-four);
+			color: var(--text-one);
 
-	.banner.info #description {
-		color: var(--text-four);
-	}
+			#description {
+				color: var(--text-four);
+			}
+		}
+		&.caution {
+			background-color: var(--red-three);
+			color: #601410;
+		}
 
-	.banner.caution {
-		background-color: var(--red-three);
-		color: #601410;
-	}
-
-	@media (max-width: 768px) {
-		.banner {
+		@media (max-width: 768px) {
 			flex-direction: column;
 			padding: 1.1rem 1.3rem;
 		}
-	}
 
-	.banner .text {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		gap: 0.55rem;
-		word-wrap: break-word;
-	}
+		.text {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			gap: 0.55rem;
+			word-wrap: break-word;
+		}
 
-	.banner .actions {
-		display: flex;
-		justify-content: end;
-		gap: 1rem;
+		.actions {
+			display: flex;
+			justify-content: end;
+			gap: 1rem;
+		}
 	}
 </style>

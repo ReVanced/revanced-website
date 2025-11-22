@@ -3,26 +3,41 @@
 	import moment from 'moment';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 
-	export let isEditing: boolean;
-	export let isCreating: boolean;
-	export let isPreviewing: boolean;
-	export let createdAt: string | undefined;
-	export let createdAtInput: string | undefined;
-	export let archivedAt: string | undefined;
-	export let archivedAtInput: string | undefined;
+	let {
+		isEditing,
+		isCreating,
+		isPreviewing,
+		createdAt,
+		createdAtInput = $bindable(),
+		archivedAt,
+		archivedAtInput = $bindable()
+	}: {
+		isEditing: boolean;
+		isCreating: boolean;
+		isPreviewing: boolean;
+		createdAt: string | undefined;
+		createdAtInput: string | undefined;
+		archivedAt: string | undefined;
+		archivedAtInput: string | undefined;
+	} = $props();
 
-	if (createdAtInput) {
-		createdAtInput = moment(createdAtInput).format('YYYY-MM-DDTHH:mm');
-	} else {
-		createdAtInput = moment().format('YYYY-MM-DDTHH:mm');
-	}
+	$effect(() => {
+		if (createdAtInput) {
+			const formatted = moment(createdAtInput).format('YYYY-MM-DDTHH:mm');
+			if (createdAtInput !== formatted) {
+				createdAtInput = formatted;
+			}
+		} else {
+			createdAtInput = moment().format('YYYY-MM-DDTHH:mm');
+		}
+	});
 
-	$: displayCreatedAt = isPreviewing ? createdAtInput : createdAt;
+	let displayCreatedAt = $derived(isPreviewing ? createdAtInput : createdAt);
 
-	$: displayArchivedAt = (() => {
+	let displayArchivedAt = $derived.by(() => {
 		const date = isPreviewing ? archivedAtInput : archivedAt;
 		return date && moment(date).isBefore() ? date : null;
-	})();
+	});
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -44,7 +59,7 @@
 	</span>
 {/if}
 
-<style>
+<style lang="scss">
 	span {
 		display: inline-flex;
 		flex-wrap: wrap;
@@ -52,18 +67,18 @@
 		column-gap: 1rem;
 	}
 
-	input,
-	input:focus {
-		border: none;
-		outline: none;
-		border-radius: 0;
-	}
-
-	input::-webkit-calendar-picker-indicator {
-		filter: invert(88%) sepia(60%) saturate(4731%) hue-rotate(173deg) brightness(91%) contrast(111%);
-	}
-
 	input {
+		&,
+		&:focus {
+			border: none;
+			outline: none;
+			border-radius: 0;
+		}
+		&::-webkit-calendar-picker-indicator {
+			filter: invert(88%) sepia(60%) saturate(4731%) hue-rotate(173deg) brightness(91%)
+				contrast(111%);
+		}
+
 		padding: 0;
 		font-size: 1rem;
 		letter-spacing: 0.02rem;

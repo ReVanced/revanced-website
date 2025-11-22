@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import Button from '$lib/components/Button.svelte';
 
-	$: status = $page.status;
+	const status = $derived($page.status);
 </script>
 
 <Meta title={status.toString()} schemas={[]} />

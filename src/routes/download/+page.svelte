@@ -13,24 +13,22 @@
 	import Query from '$lib/components/Query.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Picture from '$lib/components/Picture.svelte';
-	import DownloadCompatibilityWarningDialog from '$layout/Dialogs/DownloadCompatibilityWarningDialog.svelte';
-	import { onMount } from 'svelte';
+	import DownloadCompatibilityWarningDialog from '$layout/dialogs/DownloadCompatibilityWarningDialog.svelte';
 
-	const query = createQuery(queries.manager());
+	const query = createQuery(() => queries.manager());
 
-	let warning: string;
-	let warningDialogue = false;
+	let warning = $state<string>('');
+	let warningDialogue = $state(false);
 
-	let userAgent: string;
-	let isAndroid: boolean;
-	let androidVersionMatch: RegExpExecArray | null;
-	let androidVersion: number;
+	let userAgent = $state<string>('');
+	let isAndroid = $state<boolean>(false);
+	let androidVersionMatch = $state<RegExpExecArray | null>(null);
+	let androidVersion = $state<number>(0);
 
-	onMount(() => {
+	$effect(() => {
 		userAgent = navigator.userAgent;
 		androidVersionMatch = /Android\s([\d.]+)/i.exec(userAgent);
-		// Use parseFloat to preserve minor versions (e.g., 8.1, 13.0)
-		androidVersion = androidVersionMatch ? parseFloat(androidVersionMatch[1]) : 0;
+		androidVersion = androidVersionMatch ? parseInt(androidVersionMatch[1]) : 0;
 		isAndroid = !!androidVersion;
 	});
 
@@ -74,21 +72,23 @@
 	<h2>ReVanced <span>Manager</span></h2>
 	<p>Patch your favourite apps, right on your device.</p>
 	<div class="buttons">
-		<Query {query} let:data>
-			{#if !isAndroid || androidVersion < 8}
-				<Button on:click={handleClick} icon={TrayArrowDown} type="filled">
-					{data.release.version}
-				</Button>
-			{:else}
-				<Button
-					on:click={handleClick}
-					icon={TrayArrowDown}
-					type="filled"
-					href={data.release.download_url}
-				>
-					{data.release.version}
-				</Button>
-			{/if}
+		<Query {query}>
+			{#snippet children(data)}
+				{#if !isAndroid || androidVersion < 8}
+					<Button onclick={handleClick} icon={TrayArrowDown} type="filled">
+						{data.release.version}
+					</Button>
+				{:else}
+					<Button
+						onclick={handleClick}
+						icon={TrayArrowDown}
+						type="filled"
+						href={data.release.download_url}
+					>
+						{data.release.version}
+					</Button>
+				{/if}
+			{/snippet}
 		</Query>
 		<Button type="tonal" href="https://github.com/revanced/revanced-manager" target="_blank">
 			View source

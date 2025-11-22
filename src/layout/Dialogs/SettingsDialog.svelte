@@ -1,20 +1,25 @@
 <script lang="ts">
 	import { fromNow } from '$util/fromNow';
-	import { admin_login } from '$lib/stores';
+	import { admin_login } from '$lib/stores.svelte';
 	import { api_base_url, set_api_base_url, default_api_url } from '$data/api/settings';
 	import { useQueryClient } from '@tanstack/svelte-query';
 
 	import Button from '$lib/components/Button.svelte';
-	import Dialog from '$layout/Dialogs/Dialog.svelte';
+	import Dialog from '$layout/dialogs/Dialog.svelte';
 	import Replay from 'svelte-material-icons/Replay.svelte';
 	import Cog from 'svelte-material-icons/Cog.svelte';
 
-	export let loginOpen: boolean;
-	export let dialogOpen: boolean;
+	let {
+		loginOpen = $bindable(false),
+		dialogOpen = $bindable(false)
+	}: {
+		loginOpen?: boolean;
+		dialogOpen?: boolean;
+	} = $props();
 
 	const client = useQueryClient();
 
-	let url = api_base_url();
+	let url = $state(api_base_url());
 
 	function reload() {
 		location.reload();
@@ -23,11 +28,7 @@
 	function clear_and_reload() {
 		client.clear();
 		// `client.clear()` does technically do this for us, but it takes a while.
-		try {
-			localStorage.clear();
-		} catch (error) {
-			console.error('Failed to clear localStorage:', error);
-		}
+		localStorage.clear();
 
 		reload();
 	}
@@ -43,38 +44,38 @@
 </script>
 
 <Dialog bind:dialogOpen>
-	<svelte:fragment slot="icon">
+	{#snippet icon()}
 		<Cog size="24px" color="var(--surface-six)" />
-	</svelte:fragment>
-	<svelte:fragment slot="title">Settings</svelte:fragment>
+	{/snippet}
+	{#snippet title()}Settings{/snippet}
 	<div id="settings-content">
 		<p>Configure the API for this website.</p>
 		<div class="input-wrapper">
 			<input name="api-url" id="api-url" type="text" bind:value={url} />
-			<button id="button-reset" on:click={reset} aria-label="Reset Button">
+			<button id="button-reset" onclick={reset} aria-label="Reset Button">
 				<Replay size="24px" color="var(--surface-six)" />
 			</button>
 		</div>
 	</div>
 
-	<svelte:fragment slot="buttons">
+	{#snippet buttons()}
 		<div class="buttons-container">
 			<Button
 				type="text"
-				disabled={$admin_login.logged_in}
-				on:click={() => ((loginOpen = !loginOpen), (dialogOpen = !dialogOpen))}
+				disabled={admin_login.value.logged_in}
+				onclick={() => ((loginOpen = !loginOpen), (dialogOpen = !dialogOpen))}
 			>
-				{$admin_login.logged_in ? `Logged in for ${fromNow($admin_login.expires)}` : 'Login'}
+				{admin_login.value.logged_in ? `Logged in for ${fromNow(admin_login.value.expires)}` : 'Login'}
 			</Button>
 			<div class="buttons">
-				<Button type="text" on:click={clear_and_reload} label="Reset Button">Reset</Button>
-				<Button type="text" on:click={save} label="Save Button">Save</Button>
+				<Button type="text" onclick={clear_and_reload} label="Reset Button">Reset</Button>
+				<Button type="text" onclick={save} label="Save Button">Save</Button>
 			</div>
 		</div>
-	</svelte:fragment>
+	{/snippet}
 </Dialog>
 
-<style>
+<style lang="scss">
 	input {
 		width: 100%;
 		position: relative;
@@ -110,12 +111,12 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 1rem;
-	}
 
-	.buttons-container .buttons {
-		display: flex;
-		justify-content: flex-end;
-		flex-wrap: wrap;
-		gap: 2rem;
+		.buttons {
+			display: flex;
+			justify-content: flex-end;
+			flex-wrap: wrap;
+			gap: 2rem;
+		}
 	}
 </style>

@@ -1,35 +1,30 @@
 <script lang="ts">
-	import { read_announcements } from '$lib/stores';
-	import Banner from '$layout/Banners/Banner.svelte';
+	import { read_announcements } from '$lib/stores.svelte';
+	import Banner from '$layout/banners/Banner.svelte';
 	import { goto } from '$app/navigation';
-	import { createQuery } from '@tanstack/svelte-query';
+	import { createQuery, queryOptions } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 	import moment from 'moment';
+	import { type ResponseAnnouncement } from '$lib/types';
 
-	import type { ResponseAnnouncement } from '$lib/types';
+	const query = createQuery(() => queryOptions(queries.announcements()));
 
-	const query = createQuery(queries.announcements());
-
-	$: latestUnreadAnnouncement = (() => {
-		const announcements = $query.data?.announcements ?? [];
+	let latestUnreadAnnouncement = $derived.by(() => {
+		const announcements: ResponseAnnouncement[] = query.data?.announcements ?? [];
 
 		const nonArchived = announcements.filter(
-			(a: ResponseAnnouncement) => !a.archived_at || moment(a.archived_at).isAfter(moment())
+			(a) => !a.archived_at || moment(a.archived_at).isAfter(moment())
 		);
 
 		const announcement = nonArchived[0];
 
-		return announcement && !$read_announcements.has(announcement.id) ? announcement : undefined;
-	})();
+		return announcement && !read_announcements.value.has(announcement.id) ? announcement : undefined;
+	});
 
 	function setAsRead() {
 		if (!latestUnreadAnnouncement) return;
 
-		read_announcements.update((set) => {
-			const updated = new Set(set);
-			updated.add(latestUnreadAnnouncement.id);
-			return updated;
-		});
+		read_announcements.add(latestUnreadAnnouncement.id);
 	}
 
 	function handleClick() {

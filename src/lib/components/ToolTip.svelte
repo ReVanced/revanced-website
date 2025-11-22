@@ -1,9 +1,16 @@
 <script lang="ts">
-	// @ts-ignore
 	import { tooltip } from 'svooltip';
+	import '../styles/ToolTip.scss';
 
-	export let content: string | undefined;
-	export let html: boolean = false;
+	let {
+		content,
+		html = false,
+		children
+	}: {
+		content?: string | undefined;
+		html?: boolean;
+		children?: any;
+	} = $props();
 </script>
 
 {#if content}
@@ -13,10 +20,10 @@
 			html: html
 		}}
 	>
-		<slot />
+		{@render children?.()}
 	</div>
 {:else}
-	<slot />
+	{@render children?.()}
 {/if}
 
 <style>

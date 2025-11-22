@@ -1,11 +1,19 @@
 <script lang="ts">
-	export let isEditing: boolean;
-	export let isCreating: boolean;
-	export let isPreviewing: boolean;
-	export let title: string | undefined;
-	export let titleInput: string;
+	let {
+		isEditing,
+		isCreating,
+		isPreviewing,
+		title,
+		titleInput = $bindable()
+	}: {
+		isEditing: boolean;
+		isCreating: boolean;
+		isPreviewing: boolean;
+		title: string | undefined;
+		titleInput: string;
+	} = $props();
 
-	$: displayTitle = isPreviewing ? titleInput : title;
+	let displayTitle = $derived(isPreviewing ? titleInput : title);
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -16,25 +24,26 @@
 	</h1>
 {/if}
 
-<style>
+<style lang="scss">
 	h1 {
 		font-size: 2.5rem;
 	}
 
 	input {
+		&,
+		&:focus {
+			border: none;
+			outline: none;
+			border-radius: 0;
+		}
+
 		width: 100%;
 		padding: 0;
+
 		color: var(--text-one);
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 4rem;
 		letter-spacing: -0.025em;
-	}
-
-	input,
-	input:focus {
-		border: none;
-		outline: none;
-		border-radius: 0;
 	}
 </style>

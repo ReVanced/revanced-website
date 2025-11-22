@@ -1,28 +1,28 @@
 <script lang="ts">
 	import { fromNow } from '$util/fromNow';
-	import { admin_login, passed_login_with_creds } from '$lib/stores';
+	import { admin_login, passed_login_with_creds } from '$lib/stores.svelte';
 
 	import Button from '$lib/components/Button.svelte';
-	import Dialog from '$layout/Dialogs/Dialog.svelte';
+	import Dialog from '$layout/dialogs/Dialog.svelte';
 </script>
 
-<Dialog bind:dialogOpen={$passed_login_with_creds}>
-	<svelte:fragment slot="title">Successfully logged in!</svelte:fragment>
+<Dialog bind:dialogOpen={passed_login_with_creds.value}>
+	{#snippet title()}Successfully logged in!{/snippet}
 	<div>
 		This session will expire in
-		<span>{$admin_login.logged_in ? fromNow($admin_login.expires) : '...'}</span>
+		<span>{admin_login.value.logged_in ? fromNow(admin_login.value.expires) : '...'}</span>
 	</div>
-	<svelte:fragment slot="buttons">
-		<Button type="filled" on:click={() => passed_login_with_creds.set(false)}>OK</Button>
-	</svelte:fragment>
+	{#snippet buttons()}
+		<Button type="filled" onclick={() => (passed_login_with_creds.value = false)}>OK</Button>
+	{/snippet}
 </Dialog>
 
-<style>
+<style lang="scss">
 	div {
 		color: var(--text-one);
-	}
 
-	div span {
-		color: var(--primary);
+		span {
+			color: var(--primary);
+		}
 	}
 </style>

@@ -7,9 +7,17 @@
 	import Close from 'svelte-material-icons/Close.svelte';
 	import Magnify from 'svelte-material-icons/Magnify.svelte';
 
-	export let title: string;
-	export let searchTerm: string | null;
-	export let displayedTerm: string | undefined;
+	let {
+		title,
+		searchTerm = $bindable(null),
+		displayedTerm = $bindable(undefined),
+		onkeyup
+	}: {
+		title: string;
+		searchTerm?: string | null;
+		displayedTerm?: string | undefined;
+		onkeyup?: (e: KeyboardEvent) => void;
+	} = $props();
 
 	function clear() {
 		searchTerm = '';
@@ -26,26 +34,27 @@
 		<Magnify size="24px" color="var(--surface-six)" />
 	</div>
 	{#if searchTerm}
-		<button
+		<div
 			id="clear"
-			type="button"
-			aria-label="Clear search"
-			on:click={clear}
+			role="button"
+			tabindex="0"
+			onclick={clear}
+			onkeypress={clear}
 			transition:fade={{ easing: quintOut, duration: 250 }}
 		>
 			<Close size="24px" color="var(--surface-six)" />
-		</button>
+		</div>
 	{/if}
 	<input
 		type="text"
 		class:clear={searchTerm}
 		placeholder={title}
 		bind:value={searchTerm}
-		on:keyup
+		onkeyup={onkeyup}
 	/>
 </div>
 
-<style>
+<style lang="scss">
 	#search {
 		/* umm dont ask */
 		position: absolute;
@@ -62,9 +71,6 @@
 		z-index: 1;
 		height: 24px;
 		cursor: pointer;
-		background: none;
-		border: none;
-		padding: 0;
 	}
 
 	.search-container {
@@ -83,19 +89,18 @@
 		border: none;
 		background-color: var(--surface-nine);
 		outline: none;
+
 		transition: background-color 0.3s var(--bezier-one);
-	}
+		&:hover {
+			background-color: var(--surface-five);
+		}
 
-	input:hover {
-		background-color: var(--surface-five);
-	}
-
-	input:focus::placeholder {
-		color: var(--primary);
-	}
-
-	input:focus {
-		background-color: var(--surface-two);
+		&:focus::placeholder {
+			color: var(--primary);
+		}
+		&:focus {
+			background-color: var(--surface-two);
+		}
 	}
 
 	input::placeholder {

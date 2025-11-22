@@ -6,15 +6,28 @@
 	import Query from '$lib/components/Query.svelte';
 	import Create from 'svelte-material-icons/Plus.svelte';
 
-	export let isEditing: boolean;
-	export let isCreating: boolean;
-	export let isPreviewing: boolean;
-	export let tagsInput: string[];
+	let {
+		isEditing,
+		isCreating,
+		isPreviewing,
+		tagsInput = $bindable()
+	}: {
+		isEditing: boolean;
+		isCreating: boolean;
+		isPreviewing: boolean;
+		tagsInput: string[] | undefined;
+	} = $props();
 
-	$: query = createQuery(queries.announcementTags());
-	$: tags = $query.data?.tags || [];
+	const query = createQuery(() => queries.announcementTags());
+	let tags: { name: string }[] = $state([]);
 
-	let newTag: string | null;
+	$effect(() => {
+		if (query.data?.tags) {
+			tags = query.data.tags;
+		}
+	});
+
+	let newTag: string | null = $state(null);
 
 	function handleTag(tag: string | null) {
 		if (!tag) return;
@@ -23,15 +36,15 @@
 			if (tagsInput?.includes(tag)) {
 				tagsInput = tagsInput.filter((t) => t !== tag);
 
-				if (!$query.data?.tags.some((t) => t.name === tag)) {
+				if (!query.data?.tags.some((t) => t.name === tag)) {
 					tags = tags.filter((t) => t.name !== tag);
 				}
 			} else {
-				tagsInput = [...(tagsInput ?? []), tag];
+				tagsInput = [...(tagsInput || []), tag];
 			}
 		} else {
 			tags = [...tags, { name: tag }];
-			tagsInput = [...(tagsInput ?? []), tag];
+			tagsInput = [...(tagsInput || []), tag];
 		}
 
 		newTag = null;
@@ -40,32 +53,34 @@
 
 {#if (isEditing || isCreating) && !isPreviewing}
 	<Query {query}>
-		<div>
-			{#each tags as tag}
-				<TagChip
-					tag={tag.name}
-					selected={tagsInput && tagsInput.includes(tag.name)}
-					onClick={() => handleTag(tag.name)}
-				/>
-			{/each}
-			<div id="new-tag">
-				<input
-					bind:value={newTag}
-					class:empty={!newTag}
-					on:blur={() => handleTag(newTag)}
-					on:keydown={(event) => {
-						if (event.key === 'Enter') handleTag(newTag);
-					}}
-				/>
-				<span>
-					<Button icon={Create} iconColor="var(--text-four)" />
-				</span>
+		{#snippet children(data)}
+			<div>
+				{#each tags as tag}
+					<TagChip
+						tag={tag.name}
+						selected={tagsInput && tagsInput.includes(tag.name)}
+						onClick={() => handleTag(tag.name)}
+					/>
+				{/each}
+				<div id="new-tag">
+					<input
+						bind:value={newTag}
+						class:empty={!newTag}
+						onblur={() => handleTag(newTag)}
+						onkeydown={(event) => {
+							if (event.key === 'Enter') handleTag(newTag);
+						}}
+					/>
+					<span>
+						<Button icon={Create} iconColor="var(--text-four)" />
+					</span>
+				</div>
 			</div>
-		</div>
+		{/snippet}
 	</Query>
 {/if}
 
-<style>
+<style lang="scss">
 	div {
 		display: flex;
 		flex-wrap: wrap;
@@ -76,40 +91,42 @@
 	#new-tag {
 		display: inline-flex;
 		position: relative;
-	}
 
-	#new-tag input {
-		width: 38px;
-	}
+		input {
+			&,
+			&:focus {
+				border: none;
+				outline: none;
+			}
+			&:focus {
+				width: 100%;
+				+ span {
+					display: none;
+				}
+			}
 
-	#new-tag input,
-	#new-tag input:focus {
-		border: none;
-		outline: none;
-	}
+			width: 38px;
+		}
 
-	#new-tag input:focus {
-		width: 100%;
-	}
-
-	#new-tag input:focus + span {
-		display: none;
-	}
-
-	#new-tag span {
-		pointer-events: none;
-		position: absolute;
-		left: 9px;
-		top: 6px;
+		span {
+			pointer-events: none;
+			position: absolute;
+			left: 9px;
+			top: 6px;
+		}
 	}
 
 	input {
 		height: 32px;
+
 		border-radius: 8px;
+
 		background-color: var(--tertiary);
 		color: var(--text-four);
+
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
+
 		transition: all 0.2s var(--bezier-one);
 	}
 </style>

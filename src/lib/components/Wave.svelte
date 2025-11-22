@@ -1,21 +1,18 @@
 <script>
-	export let visibility = true;
+	let {
+		visibility = true,
+		waveElement = $bindable()
+	} = $props();
 </script>
 
 <svg
+	bind:this={waveElement}
 	class="wave"
 	viewBox="0 0 1440 500"
 	xmlns="http://www.w3.org/2000/svg"
 	preserveAspectRatio="none"
 	style="opacity: {visibility ? '100%' : '0'}; height: {visibility ? '40vh' : '0px'}"
 >
-	<defs>
-		<linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-			<stop offset="0%" style="stop-color:#8B7FFF;stop-opacity:1" />
-			<stop offset="50%" style="stop-color:#9D93FF;stop-opacity:1" />
-			<stop offset="100%" style="stop-color:#7066E6;stop-opacity:1" />
-		</linearGradient>
-	</defs>
 	<path class="wave" />
 </svg>
 
@@ -38,10 +35,8 @@
 		animation: wave-anim 30s;
 		animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
 		animation-iteration-count: infinite;
-		fill: url(#waveGradient);
+		fill: var(--primary);
 	}
-
-	/* Add gradient definition for modern look */
 
 	@keyframes wave-anim {
 		0% {

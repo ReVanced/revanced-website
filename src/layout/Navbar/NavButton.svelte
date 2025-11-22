@@ -1,13 +1,22 @@
 <script lang="ts">
 	import { queries } from '$data/api';
+	import { dev_log } from '$util/dev';
 
-	import RouterEvents from '$data/RouterEvents';
+	import RouterEvents from '$data/routerEvents';
 	import { useQueryClient } from '@tanstack/svelte-query';
 	const client = useQueryClient();
 
-	export let href: string;
-	export let queryKey: null | keyof typeof queries | Array<keyof typeof queries> = null;
-	export let label: string;
+	let {
+		href,
+		queryKey = null,
+		label,
+		children
+	}: {
+		href: string;
+		queryKey?: null | keyof typeof queries | Array<keyof typeof queries>;
+		label: string;
+		children?: any;
+	} = $props();
 
 	function prefetch() {
 		if (queryKey !== null) {
@@ -28,8 +37,8 @@
 	class:selected={href === '/' + $RouterEvents.target_url.pathname.split('/')[1]}
 	class:unclickable={$RouterEvents.target_url.pathname === href}
 >
-	<a data-sveltekit-preload-data on:mouseenter={prefetch} {href} aria-label={label}>
-		<span><slot /></span>
+	<a data-sveltekit-preload-data onmouseenter={prefetch} {href} aria-label={label}>
+		<span>{@render children?.()}</span>
 	</a>
 </li>
 
@@ -49,17 +58,17 @@
 				color: var(--primary);
 			}
 		}
-
+		
 		&.unclickable {
 			pointer-events: none;
 		}
-
+		
 		:hover {
 			color: var(--text-one);
 			background-color: var(--surface-three);
 		}
 	}
-
+	
 	a {
 		text-decoration: none;
 		user-select: none;
@@ -69,11 +78,11 @@
 		justify-content: center;
 		padding: 10px 16px;
 	}
-
+	
 	span {
 		display: flex;
 		justify-content: center;
-
+		
 		font-weight: 400;
 		font-size: 0.9rem;
 		letter-spacing: 0.02rem;

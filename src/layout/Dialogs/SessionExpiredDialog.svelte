@@ -1,31 +1,34 @@
 <script lang="ts">
 	import { set_access_token } from '$lib/auth';
-	import { admin_login } from '$lib/stores';
+	import { admin_login } from '$lib/stores.svelte';
 
 	import Button from '$lib/components/Button.svelte';
-	import Dialog from '$layout/Dialogs/Dialog.svelte';
+	import Dialog from '$layout/dialogs/Dialog.svelte';
 
-	export let loginOpen: boolean;
+	let {
+		loginOpen = $bindable(false)
+	}: {
+		loginOpen?: boolean;
+	} = $props();
 
-	$: session_expired = $admin_login.logged_in_previously && !$admin_login.logged_in;
+	let session_expired = $derived(admin_login.value.logged_in_previously && !admin_login.value.logged_in);
 
 	function reset_session() {
 		set_access_token();
-		session_expired = !session_expired;
 	}
 </script>
 
 <Dialog dialogOpen={session_expired}>
-	<svelte:fragment slot="title">Expired session</svelte:fragment>
+	{#snippet title()}Expired session{/snippet}
 	<div>
 		This session has expired, log in again to renew or lose all access to administrative power.
 	</div>
-	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={reset_session}>OK</Button>
-		<Button type="filled" on:click={() => (reset_session(), (loginOpen = !loginOpen))}>
+	{#snippet buttons()}
+		<Button type="text" onclick={reset_session}>OK</Button>
+		<Button type="filled" onclick={() => (reset_session(), (loginOpen = !loginOpen))}>
 			Login
 		</Button>
-	</svelte:fragment>
+	{/snippet}
 </Dialog>
 
 <style>

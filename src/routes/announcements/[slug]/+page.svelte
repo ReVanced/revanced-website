@@ -7,54 +7,38 @@
 	import Announcement from './Announcement.svelte';
 	import Query from '$lib/components/Query.svelte';
 
-	let announcementIdNumber: number | undefined = undefined;
-	let isCreating: boolean = false;
+	let lastSegment = $derived($page.url.pathname.split('/').pop() ?? '');
+	let isCreating = $derived(lastSegment === 'create');
+	let announcementIdNumber = $derived(isCreating ? undefined : Number(lastSegment.split('-')[0]));
 
-	$: {
-		const lastSegment = $page.url.pathname.split('/').pop() ?? '';
-		isCreating = lastSegment === 'create';
+	let query = createQuery(() => ({
+		...queries.announcementById(announcementIdNumber ?? 0),
+		enabled: !!announcementIdNumber
+	}));
 
-		if (!isCreating) {
-			const idString = lastSegment.split('-')[0];
-			const parsedId = Number(idString);
+	let announcement = $derived(query.data?.announcement);
 
-			// Validate the ID is a valid positive integer
-			if (!isNaN(parsedId) && parsedId > 0 && Number.isInteger(parsedId)) {
-				announcementIdNumber = parsedId;
-			} else {
-				console.error('Invalid announcement ID:', idString);
-				announcementIdNumber = undefined;
-			}
-		} else {
-			announcementIdNumber = undefined;
-		}
-	}
-
-	$: query = announcementIdNumber
-		? createQuery(queries.announcementById(announcementIdNumber))
-		: null;
-
-	$: announcement = $query?.data?.announcement || undefined;
-
-	$: slug = announcement?.title
+	let slug = $derived(announcement?.title
 		? announcement.title
 				.toLowerCase()
 				.replace(/[^a-z0-9]+/g, '-')
 				.replace(/^-+|-+$/g, '')
-		: '';
+		: '');
 
-	$: {
+	$effect(() => {
 		const slugPathname = `/announcements/${announcementIdNumber}-${slug}`;
 		if (slug && $page.url.pathname !== slugPathname) {
 			window.history.replaceState(null, '', slugPathname);
 		}
-	}
+	});
 </script>
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	{#if query}
+	{#if announcementIdNumber}
 		<Query {query}>
-			<Announcement {isCreating} {announcement} {announcementIdNumber} {query} />
+			{#snippet children(data)}
+				<Announcement {isCreating} {announcement} {announcementIdNumber} {query} />
+			{/snippet}
 		</Query>
 	{:else}
 		<Announcement {isCreating} {announcement} {announcementIdNumber} />

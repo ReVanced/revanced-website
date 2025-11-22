@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { queries } from '$data/api';
 	import { createQuery } from '@tanstack/svelte-query';
 	import Query from '$lib/components/Query.svelte';
@@ -6,17 +6,25 @@
 	import FileDocumentOutline from 'svelte-material-icons/FileDocumentOutline.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import SocialButton from './SocialButton.svelte';
+	import type { Social } from '$lib/types';
 
-	const aboutQuery = createQuery(queries.about());
+	const aboutQuery = createQuery(() => queries.about());
 
-	const hardcodedSocials = [
-		{ name: 'YouTube', url: 'https://www.youtube.com/@ReVanced', preferred: true },
-		{ name: 'GitHub', url: 'https://github.com/revanced', preferred: true },
-		{ name: 'Reddit', url: 'https://www.reddit.com/r/revancedapp/', preferred: true },
-		{ name: 'X', url: 'https://twitter.com/revancedapp', preferred: true },
-		{ name: 'Telegram', url: 'https://t.me/revanced', preferred: true },
-		{ name: 'Discord', url: 'https://discord.gg/revanced', preferred: true }
-	];
+	let {
+		socialsVisibility = true
+	}: {
+		socialsVisibility?: boolean;
+	} = $props();
+
+	let filteredSocials = $derived.by(() => {
+		if (aboutQuery.data && typeof aboutQuery.data === 'object' && 'about' in aboutQuery.data && aboutQuery.data.about && 'socials' in aboutQuery.data.about) {
+			return aboutQuery.data.about.socials
+				.filter((s: Social) => s.name !== 'Website')
+				.map((s: Social) => ({ ...s, preferred: typeof s.preferred === 'boolean' ? s.preferred : false }));
+		} else {
+			return [];
+		}
+	});
 </script>
 
 <section class="hero">
@@ -29,73 +37,73 @@
 			<Button type="filled" icon={TrayArrowDown} href="download">Download</Button>
 			<Button type="tonal" icon={FileDocumentOutline} href="patches">View patches</Button>
 		</div>
-		<div class="hero-buttons social-buttons">
-			{#each hardcodedSocials as social}
-				<SocialButton {social} />
-			{/each}
+		<div class="hero-buttons social-buttons" style:opacity={socialsVisibility ? '100%' : '0'}>
+			<Query query={aboutQuery}>
+				{#snippet children(data)}
+					{#if data}
+						{#each filteredSocials as social}
+							<SocialButton {social} />
+						{/each}
+					{/if}
+				{/snippet}
+			</Query>
 		</div>
 	</div>
 </section>
 
-<style>
+<style lang="scss">
 	.hero {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
 
-	@media (min-width: 1100px) {
-		.hero {
+		@media (min-width: 1100px) {
 			padding-top: 10vh;
 		}
-	}
 
-	.hero h1 {
-		color: var(--text-one);
-	}
-
-	.hero span {
-		color: var(--primary);
-	}
-
-	.hero .buttons-container {
-		display: flex;
-		flex-direction: column;
-		gap: 2.5rem;
-	}
-
-	.hero .buttons-container .social-buttons {
-		max-width: 30rem;
-		position: absolute;
-		bottom: 1rem;
-		transition: opacity 0.1s var(--bezier-one);
-	}
-
-	@media (max-width: 450px) {
-		.hero .buttons-container .social-buttons {
-			justify-content: center;
-			left: 0;
+		h1 {
+			color: var(--text-one);
 		}
-	}
 
-	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
-		.hero .buttons-container .social-buttons {
-			position: static;
-			opacity: 100% !important;
+		span {
+			color: var(--primary);
 		}
-	}
 
-	.hero .buttons-container .hero-buttons {
-		flex-wrap: wrap;
-		display: flex;
-		user-select: none;
-		gap: 1rem;
-	}
-
-	@media (max-width: 450px) {
-		.hero .buttons-container .hero-buttons.internal-buttons {
+		.buttons-container {
+			display: flex;
 			flex-direction: column;
-			gap: 1rem;
+			gap: 2.5rem;
+
+			.social-buttons {
+				max-width: 30rem;
+				position: absolute;
+				bottom: 1rem;
+				transition: opacity 0.1s var(--bezier-one);
+
+				@media (max-width: 450px) {
+					justify-content: center;
+					left: 0;
+				}
+
+				@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+					position: static;
+					opacity: 100% !important;
+				}
+			}
+
+			.hero-buttons {
+				flex-wrap: wrap;
+				display: flex;
+				user-select: none;
+				gap: 1rem;
+
+				@media (max-width: 450px) {
+					&.internal-buttons {
+						flex-direction: column;
+						gap: 1rem;
+					}
+				}
+			}
 		}
 	}
 </style>

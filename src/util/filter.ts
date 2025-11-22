@@ -22,14 +22,12 @@ function createFilter<T, C>(items: T[], options: FilterOptions<T, C>) {
 
 	return (context: C, search?: string): T[] => {
 		if (!search) {
-			return additionalFilter ? items.filter((item: T) => additionalFilter(item, context)) : items;
+			return additionalFilter ? items.filter((item) => additionalFilter(item, context)) : items;
 		}
 
-		const results = searcher.search(search).map((result) => result.item);
+		const results = searcher.search(search).map(({ item }) => item);
 
-		return additionalFilter
-			? results.filter((item: T) => additionalFilter(item, context))
-			: results;
+		return additionalFilter ? results.filter((item) => additionalFilter(item, context)) : results;
 	};
 }
 

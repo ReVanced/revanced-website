@@ -7,24 +7,30 @@
 
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
-	export let patch: Patch;
-	export let showAllVersions: boolean;
-	let expanded: boolean = false;
+	let {
+		patch,
+		showAllVersions = $bindable(false)
+	}: {
+		patch: Patch;
+		showAllVersions?: boolean;
+	} = $props();
 
-	const options = Object.entries(patch.options).map(([optionKey, option]) => ({
+	let expanded: boolean = $state(false);
+
+	const options = $derived(Object.entries(patch.options).map(([optionKey, option]) => ({
 		optionKey,
 		...option
-	}));
-	const hasPatchOptions = options.length > 0;
+	})));
+	const hasPatchOptions = $derived(options.length > 0);
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="patch-container"
 	class:expanded={hasPatchOptions}
 	class:rotate={expanded}
-	on:click={() => (expanded = !expanded)}
+	onclick={() => (expanded = !expanded)}
 >
 	<div class="things">
 		<div class="title">
@@ -77,7 +83,7 @@
 				<li class="button">
 					<Button
 						type="text"
-						on:click={(e) => {
+						onclick={(e) => {
 							e.stopPropagation();
 							showAllVersions = !showAllVersions;
 						}}
@@ -100,8 +106,8 @@
 		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
 			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
 				{#each options as option}
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<div class="option" on:click|stopPropagation>
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div class="option" onclick={(e) => e.stopPropagation()}>
 						<h5 id="option-title">{option.title}</h5>
 						<h5>
 							<pre id="option-description">{option.description}</pre>
@@ -113,7 +119,7 @@
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	h3 {
 		margin-right: 0.5rem;
 		margin-bottom: 0.2rem;
@@ -145,20 +151,20 @@
 		padding: 0.25rem 0.5rem;
 		border: 1px solid var(--border);
 		border-radius: 8px;
-	}
 
-	.patch-info:hover {
-		background-color: var(--surface-four);
+		&:hover {
+			background-color: var(--surface-four);
+		}
 	}
 
 	a {
 		text-decoration: none;
 		color: var(--text-four);
-	}
 
-	a:hover {
-		text-decoration: underline var(--secondary);
-		color: var(--secondary);
+		&:hover {
+			text-decoration: underline var(--secondary);
+			color: var(--secondary);
+		}
 	}
 
 	.info-container {
@@ -199,20 +205,21 @@
 
 	.expanded {
 		cursor: pointer;
-	}
 
-	.expanded:hover {
-		background-color: var(--surface-three);
-	}
+		&:hover {
+			background-color: var(--surface-three);
+		}
 
-	.expanded:active {
-		filter: brightness(1.15);
+		&:active {
+			filter: brightness(1.15);
+		}
 	}
 
 	.option {
 		padding: 1rem;
 	}
 
+	/* thanks piknik */
 	.option + .option {
 		border-top: 1px solid var(--border);
 	}

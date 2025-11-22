@@ -1,15 +1,12 @@
 <script lang="ts">
 	import Check from 'svelte-material-icons/Check.svelte';
 
-	export let tag: string;
-	export let clickable: boolean = true;
-	export let selected: boolean = false;
-	export let onClick: (event?: MouseEvent) => void = () => {};
+	let { tag, clickable = true, selected: selectedProp = false, onClick = () => {} }: { tag: string; clickable?: boolean; selected?: boolean; onClick?: (event?: MouseEvent) => void } = $props();
 
-	selected = clickable && selected;
+	const selected = $derived(clickable && selectedProp);
 </script>
 
-<button class:selected class:clickable on:click={clickable ? onClick : () => {}}>
+<button class:selected class:clickable onclick={clickable ? onClick : () => {}}>
 	{#if selected && clickable}
 		<div class="icon">
 			<Check />
@@ -18,42 +15,47 @@
 	{tag}
 </button>
 
-<style>
+<style lang="scss">
 	button {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
 		gap: 8px;
 		height: 32px;
 		padding: 0 12px;
+
 		border-radius: 8px;
 		border: none;
+
 		background-color: var(--tertiary);
 		color: var(--text-four);
+
 		letter-spacing: 0.02rem;
 		font-size: 0.85rem;
+
 		user-select: none;
 		transition: all 0.2s var(--bezier-one);
-	}
 
-	button.clickable {
-		background-color: transparent;
-		border: 1px solid var(--border);
-	}
+		&.clickable {
+			background-color: transparent;
+			border: 1px solid var(--border);
 
-	button.clickable.selected {
-		border-color: transparent;
-		background-color: var(--tertiary);
-		color: var(--primary);
-	}
+			&.selected {
+				border-color: transparent;
+				background-color: var(--tertiary);
+				color: var(--primary);
 
-	button.clickable.selected .icon {
-		display: inherit;
-		margin-left: -6px;
-		transition: none;
-	}
+				.icon {
+					display: inherit;
+					margin-left: -6px;
+					transition: none;
+				}
+			}
 
-	button.clickable:hover {
-		background-color: var(--surface-three);
+			&:hover {
+				background-color: var(--surface-three);
+			}
+		}
 	}
 </style>

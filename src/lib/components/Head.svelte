@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { JsonLd } from 'svelte-meta-tags';
 
-	let _title: string = '';
-	$: title = _title === '' ? 'ReVanced' : `ReVanced - ${_title}`;
+	let {
+		title: _title = '',
+		description = 'Continuing the legacy of Vanced.',
+		schemas
+	}: {
+		title?: string;
+		description?: string;
+		schemas?: any[] | undefined;
+	} = $props();
 
-	export { _title as title };
-
-	export let description: string = 'Continuing the legacy of Vanced.';
-
-	export let schemas: any[] | undefined;
+	const title = $derived(_title === '' ? 'ReVanced' : `ReVanced - ${_title}`);
 </script>
 
 <svelte:head>

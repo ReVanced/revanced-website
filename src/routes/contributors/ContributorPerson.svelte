@@ -1,8 +1,6 @@
 <script lang="ts">
-	export let name: string;
-	export let pfp: string;
-	export let url: string;
-	let alt = `${name}'s profile picture`;
+	let { name, pfp, url }: { name: string; pfp: string; url: string } = $props();
+	let alt = $derived(`${name}'s profile picture`);
 </script>
 
 <a href={url} rel="noreferrer" target="_blank">
@@ -10,7 +8,7 @@
 	<h5>{name}</h5>
 </a>
 
-<style>
+<style lang="scss">
 	a {
 		color: var(--text-one);
 		text-decoration: none;
@@ -23,12 +21,12 @@
 		align-items: center;
 		border-right: 1px solid var(--border);
 		border-bottom: 1px solid var(--border);
-	}
 
-	a:hover {
-		background: var(--surface-three);
-		text-decoration: underline var(--primary);
-		color: var(--text-one);
+		&:hover {
+			background: var(--surface-three);
+			text-decoration: underline var(--primary);
+			color: var(--text-one);
+		}
 	}
 
 	h5 {
@@ -56,7 +54,6 @@
 			height: 42px;
 			width: 42px;
 		}
-
 		a {
 			width: max-content;
 			background-color: transparent;

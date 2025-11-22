@@ -1,14 +1,18 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	export let src: string;
-	export let alt: string;
-
-	const dispatch = createEventDispatcher();
+	let {
+		src,
+		alt,
+		onclose = () => {}
+	}: {
+		src: string;
+		alt: string;
+		onclose?: () => void;
+	} = $props();
 
 	function closeDialog() {
-		dispatch('close');
+		onclose();
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -16,14 +20,14 @@
 	}
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="dialog-overlay" on:click={closeDialog} transition:fade={{ duration: 175 }}>
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="dialog-content" on:click|stopPropagation transition:fade={{ duration: 175 }}>
-		<button class="close-button" on:click={closeDialog}>×</button>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="dialog-overlay" onclick={closeDialog} transition:fade={{ duration: 175 }}>
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="dialog-content" onclick={(e) => e.stopPropagation()} transition:fade={{ duration: 175 }}>
+		<button class="close-button" onclick={closeDialog}>×</button>
 		<img {src} {alt} />
 	</div>
 </div>

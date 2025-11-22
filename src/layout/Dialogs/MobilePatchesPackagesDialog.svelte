@@ -1,36 +1,43 @@
 <script lang="ts">
 	import Package from '../../routes/patches/Package.svelte';
-	import Dialog from '$layout/Dialogs/Dialog.svelte';
+	import Dialog from '$layout/dialogs/Dialog.svelte';
 
-	export let dialogOpen: boolean;
-	export let searchTerm: string;
-	export let data;
-	export let selectedPkg;
+	let {
+		dialogOpen = $bindable(false),
+		searchTerm = $bindable(''),
+		data,
+		selectedPkg
+	}: {
+		dialogOpen?: boolean;
+		searchTerm?: string;
+		data: any;
+		selectedPkg: any;
+	} = $props();
 </script>
 
 <Dialog bind:dialogOpen fullscreen>
-	<svelte:fragment slot="title">Packages</svelte:fragment>
+	{#snippet title()}Packages{/snippet}
 	<div class="mobile-packages">
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<span
-			on:click={() => (dialogOpen = !dialogOpen)}
-			on:keypress={() => (dialogOpen = !dialogOpen)}
+			onclick={() => (dialogOpen = !dialogOpen)}
+			onkeypress={() => (dialogOpen = !dialogOpen)}
 		>
-			<Package {selectedPkg} name="All packages" bind:searchTerm />
+			<Package {selectedPkg} name="All packages" {searchTerm} />
 		</span>
 		{#each data.packages as pkg}
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<span
-				on:click={() => (dialogOpen = !dialogOpen)}
-				on:keypress={() => (dialogOpen = !dialogOpen)}
+				onclick={() => (dialogOpen = !dialogOpen)}
+				onkeypress={() => (dialogOpen = !dialogOpen)}
 			>
-				<Package {selectedPkg} name={pkg} bind:searchTerm />
+				<Package {selectedPkg} name={pkg} {searchTerm} />
 			</span>
 		{/each}
 	</div>
 </Dialog>
 
-<style>
+<style lang="scss">
 	.mobile-packages {
 		margin-bottom: -1px;
 		overflow: hidden;

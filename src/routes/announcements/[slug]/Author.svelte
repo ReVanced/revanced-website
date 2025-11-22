@@ -1,11 +1,19 @@
 <script lang="ts">
-	export let isEditing: boolean;
-	export let isCreating: boolean;
-	export let isPreviewing: boolean;
-	export let author: string | undefined;
-	export let authorInput: string | undefined;
+	let {
+		isEditing,
+		isCreating,
+		isPreviewing,
+		author,
+		authorInput = $bindable()
+	}: {
+		isEditing: boolean;
+		isCreating: boolean;
+		isPreviewing: boolean;
+		author: string | undefined;
+		authorInput: string | undefined;
+	} = $props();
 
-	$: displayAuthor = isPreviewing ? authorInput : author;
+	let displayAuthor = $derived(isPreviewing ? authorInput : author);
 </script>
 
 {#if (isEditing || isCreating) && !isPreviewing}
@@ -22,15 +30,15 @@
 	</span>
 {/if}
 
-<style>
-	input,
-	input:focus {
-		border: none;
-		outline: none;
-		border-radius: 0;
-	}
-
+<style lang="scss">
 	input {
+		&,
+		&:focus {
+			border: none;
+			outline: none;
+			border-radius: 0;
+		}
+
 		padding: 0;
 		font-size: 1rem;
 		letter-spacing: 0.02rem;

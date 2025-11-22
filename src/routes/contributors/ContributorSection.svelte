@@ -6,24 +6,22 @@
 
 	import ChevronUp from 'svelte-material-icons/ChevronUp.svelte';
 
-	export let contributors: Contributor[];
-	export let name: string;
-	export let url: string;
+	let { contributors, name, url }: { contributors: Contributor[]; name: string; url: string } = $props();
 
-	let expanded = true;
+	let expanded = $state(true);
 
 	let bots = ['semantic-release-bot', 'revanced-bot'];
 </script>
 
 <div class="container">
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="title"
 		class:closed={!expanded}
-		on:click={() => (expanded = !expanded)}
-		on:keypress={() => (expanded = !expanded)}
+		onclick={() => (expanded = !expanded)}
+		onkeypress={() => (expanded = !expanded)}
 	>
-		<a href={url} rel="noreferrer" target="_blank" on:click|stopPropagation>
+		<a href={url} rel="noreferrer" target="_blank" onclick={(e) => e.stopPropagation()}>
 			<h4>{name}</h4>
 		</a>
 		<div id="arrow" style:transform={expanded ? 'rotate(0deg)' : 'rotate(180deg)'}>
@@ -42,62 +40,60 @@
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	.container {
 		border-radius: 20px;
 		overflow: hidden;
 		border: 1px solid var(--border);
-	}
 
-	.container .title {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		cursor: pointer;
-		background-color: var(--surface-seven);
-		padding: 0.75rem 1.25rem;
-		border-bottom: 1px solid var(--border);
-		transition: all 0.2s var(--bezier-one);
-	}
+		.title {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			cursor: pointer;
+			background-color: var(--surface-seven);
+			padding: 0.75rem 1.25rem;
+			border-bottom: 1px solid var(--border);
+			transition: all 0.2s var(--bezier-one);
 
-	.container .title:hover {
-		background-color: var(--surface-three);
-	}
+			&:hover {
+				background-color: var(--surface-three);
+			}
 
-	.container .title.closed {
-		border-bottom: none;
-	}
+			&.closed {
+				border-bottom: none;
+			}
 
-	.container .title a {
-		display: flex;
-		text-decoration: none;
-		width: max-content;
-		border-radius: 8px;
-	}
+			a {
+				display: flex;
+				text-decoration: none;
+				width: max-content;
+				border-radius: 8px;
 
-	.container .title a:hover {
-		text-decoration: underline var(--primary);
-		color: var(--text-one);
-	}
+				&:hover {
+					text-decoration: underline var(--primary);
+					color: var(--text-one);
+				}
+			}
 
-	.container .title #arrow {
-		transition: all 0.2s var(--bezier-one);
-		user-select: none;
-	}
+			#arrow {
+				transition: all 0.2s var(--bezier-one);
+				user-select: none;
+			}
+		}
 
-	.container .contributors {
-		margin-right: -1px;
-		margin-bottom: -1px;
-		display: grid;
-		justify-items: center;
-		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	}
+		.contributors {
+			margin-right: -1px;
+			margin-bottom: -1px;
+			display: grid;
+			justify-items: center;
+			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 
-	@media (max-width: 768px) {
-		.container .contributors {
-			padding: 0.75rem;
-			gap: 0.25rem;
-			grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+			@media (max-width: 768px) {
+				padding: 0.75rem;
+				gap: 0.25rem;
+				grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+			}
 		}
 	}
 </style>

@@ -3,8 +3,9 @@
 	import type { ResponseAnnouncement } from '$lib/types';
 	import NewHeader from './NewHeader.svelte';
 	import { queries } from '$data/api';
+	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
-	import { read_announcements } from '$lib/stores';
+	import { read_announcements } from '$lib/stores.svelte';
 	import TagsHost from './TagsHost.svelte';
 	import Content from './[slug]/Content.svelte';
 	import ToolTip from '$lib/components/ToolTip.svelte';
@@ -12,11 +13,11 @@
 
 	import Archive from 'svelte-material-icons/ArchiveOutline.svelte';
 
-	export let announcement: ResponseAnnouncement;
+	let { announcement }: { announcement: ResponseAnnouncement } = $props();
 
 	const client = useQueryClient();
 
-	$: isRead = $read_announcements.has(announcement.id);
+	const isRead = $derived(read_announcements.value.has(announcement.id));
 
 	function prefetch() {
 		const query = queries['announcementById'](announcement.id);
@@ -24,11 +25,7 @@
 	}
 
 	function setAnnouncementRead() {
-		read_announcements.update((set) => {
-			const updated = new Set(set);
-			updated.add(announcement.id);
-			return updated;
-		});
+		read_announcements.add(announcement.id);
 	}
 
 	function generateSlug(title: string) {
@@ -39,8 +36,8 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <a
 	data-sveltekit-preload-data
 	onmouseenter={prefetch}
@@ -59,13 +56,7 @@
 				src={announcement.attachments[0]}
 				class={isRead === undefined || isRead ? '' : 'no-border-radius'}
 				alt="Banner"
-				onerror={(e) => {
-					const target = e.target;
-					if (target instanceof HTMLImageElement) {
-						target.style.display = 'none';
-						console.warn('Failed to load image:', announcement.attachments?.[0]);
-					}
-				}}
+				onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')}
 			/>
 		{/if}
 		<div class="content">
@@ -95,65 +86,65 @@
 	</div>
 </a>
 
-<style>
+<style lang="scss">
 	a {
 		text-decoration: inherit;
 	}
 
 	.card {
+		&.attachment {
+			grid-row: span 2;
+		}
+		&:hover {
+			background-color: var(--surface-four);
+			filter: none;
+		}
+
 		display: flex;
 		flex-direction: column;
 		height: 100%;
+
 		background-color: var(--surface-seven);
 		border: 1px solid var(--border);
 		border-radius: 12px;
-	}
 
-	.card.attachment {
-		grid-row: span 2;
-	}
+		img {
+			height: 150px;
+			object-fit: cover;
+			width: 100%;
+			border-radius: 12px 12px 0px 0px;
 
-	.card:hover {
-		background-color: var(--surface-four);
-		filter: none;
-	}
+			&.no-border-radius {
+				border-radius: 0;
+			}
+		}
 
-	.card img {
-		height: 150px;
-		object-fit: cover;
-		width: 100%;
-		border-radius: 12px 12px 0px 0px;
-	}
+		.content {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			gap: 12px;
 
-	.card img.no-border-radius {
-		border-radius: 0;
-	}
+			height: 100%;
+			padding: 12px 16px;
 
-	.card .content {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		gap: 12px;
-		height: 100%;
-		padding: 12px 16px;
-		color: var(--text-four);
-	}
+			color: var(--text-four);
 
-	.card .content .header {
-		display: flex;
-		flex-direction: column;
-		overflow-wrap: anywhere;
-	}
+			.header,
+			.footer {
+				display: flex;
+				flex-direction: column;
+				overflow-wrap: anywhere;
+			}
 
-	.card .content .header span {
-		display: flex;
-		gap: 4px;
-	}
+			.header span {
+				display: flex;
+				gap: 4px;
+			}
 
-	.card .content .footer {
-		display: flex;
-		flex-direction: column;
-		overflow-wrap: anywhere;
-		gap: 12px;
+			.footer {
+				gap: 12px;
+			}
+		}
 	}
 </style>

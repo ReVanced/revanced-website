@@ -3,7 +3,7 @@
 	import { admin, queries } from '$data/api';
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/Button.svelte';
-	import Dialog from '$layout/Dialogs/Dialog.svelte';
+	import Dialog from '$layout/dialogs/Dialog.svelte';
 	import type { Announcement, ResponseAnnouncement } from '$lib/types';
 	import moment from 'moment';
 	import { isValidUrl } from '$util/isValidUrl';
@@ -18,14 +18,25 @@
 	import Unarchive from 'svelte-material-icons/ArchiveArrowUpOutline.svelte';
 	import { formatUTC } from '$util/formatUtc';
 
-	export let isEditing: boolean;
-	export let isCreating: boolean;
-	export let isPreviewing: boolean;
-	export let archivedAtInput: string | undefined;
-	export let showDeleteConfirm: boolean;
-	export let announcementIdNumber: number | undefined;
-	export let draftInputs: Announcement;
-	export let query: CreateQueryResult<{ announcement: ResponseAnnouncement }, unknown> | undefined;
+	let {
+		isEditing = $bindable(),
+		isCreating,
+		isPreviewing = $bindable(),
+		archivedAtInput = $bindable(),
+		showDeleteConfirm = $bindable(),
+		announcementIdNumber,
+		draftInputs,
+		query
+	}: {
+		isEditing: boolean;
+		isCreating: boolean;
+		isPreviewing: boolean;
+		archivedAtInput: string | undefined;
+		showDeleteConfirm: boolean;
+		announcementIdNumber: number | undefined;
+		draftInputs: Announcement;
+		query: CreateQueryResult<{ announcement: ResponseAnnouncement }, unknown> | undefined;
+	} = $props();
 
 	const client = useQueryClient();
 
@@ -74,7 +85,7 @@
 		});
 
 		await admin.update_announcement(announcementIdNumber!, sanitize(draftInputs));
-		await $query?.refetch();
+		await query?.refetch();
 
 		isEditing = false;
 	};
@@ -93,8 +104,8 @@
 	};
 
 	const deleteAnnouncement = async () => {
-		admin.delete_announcement(announcementIdNumber!);
-		await client.invalidateQueries(queries['announcements']());
+		await admin.delete_announcement(announcementIdNumber!);
+		await client.invalidateQueries(queries.announcements());
 		goto('/announcements', { invalidateAll: true });
 	};
 
@@ -106,15 +117,15 @@
 	};
 </script>
 
-<svelte:window on:beforeunload={handleUnload} />
+<svelte:window onbeforeunload={handleUnload} />
 
 <Dialog bind:dialogOpen={showDeleteConfirm}>
-	<svelte:fragment slot="title">Confirm?</svelte:fragment>
-	<svelte:fragment slot="description">Do you want to delete this announcement?</svelte:fragment>
-	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
-		<Button type="filled" on:click={deleteAnnouncement}>OK</Button>
-	</svelte:fragment>
+	{#snippet title()}Confirm?{/snippet}
+	{#snippet description()}Do you want to delete this announcement?{/snippet}
+	{#snippet buttons()}
+		<Button type="text" onclick={() => (showDeleteConfirm = !showDeleteConfirm)}>Cancel</Button>
+		<Button type="filled" onclick={deleteAnnouncement}>OK</Button>
+	{/snippet}
 </Dialog>
 
 <div>
@@ -123,14 +134,14 @@
 			toolTipText={isPreviewing ? 'Hide preview' : 'Show preview'}
 			icon={isPreviewing ? Hide : Show}
 			iconColor="var(--secondary)"
-			on:click={() => (isPreviewing = !isPreviewing)}
+			onclick={() => (isPreviewing = !isPreviewing)}
 		/>
 
 		<Button
 			toolTipText={archivedAtInput ? 'Disable archive field' : 'Enable archive field'}
 			icon={archivedAtInput ? Unarchive : Archive}
 			iconColor="var(--secondary)"
-			on:click={toggleArchived}
+			onclick={toggleArchived}
 		/>
 
 		{#if isEditing}
@@ -138,7 +149,7 @@
 				toolTipText="Cancel editing"
 				icon={Close}
 				iconColor="var(--secondary)"
-				on:click={() => {
+				onclick={() => {
 					isPreviewing = false;
 					isEditing = false;
 				}}
@@ -149,21 +160,21 @@
 			toolTipText={isEditing ? 'Save changes' : 'Create announcement'}
 			icon={Check}
 			iconColor="var(--secondary)"
-			on:click={isEditing ? save : createAnnouncement}
+			onclick={isEditing ? save : createAnnouncement}
 		/>
 	{:else}
 		<Button
 			toolTipText="Delete announcement"
 			icon={Delete}
 			iconColor="var(--secondary)"
-			on:click={() => (showDeleteConfirm = !showDeleteConfirm)}
+			onclick={() => (showDeleteConfirm = !showDeleteConfirm)}
 		/>
 
 		<Button
 			toolTipText="Edit announcement"
 			icon={Edit}
 			iconColor="var(--secondary)"
-			on:click={() => (isEditing = !isEditing)}
+			onclick={() => (isEditing = !isEditing)}
 		/>
 	{/if}
 </div>

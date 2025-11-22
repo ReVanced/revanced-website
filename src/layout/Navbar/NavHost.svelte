@@ -1,39 +1,37 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { horizontalSlide } from '$lib/horizontalSlide';
+	import { horizontalSlide } from '$util/horizontalSlide';
 	import { fade } from 'svelte/transition';
 	import { expoOut } from 'svelte/easing';
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import Navigation from '$layout/Navbar/NavButton.svelte';
+	import Navigation from '$layout/navbar/NavButton.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import AnnouncementBanner from '$layout/Banners/AnnouncementBanner.svelte';
+	import AnnouncementBanner from '$layout/banners/AnnouncementBanner.svelte';
 
 	import Cog from 'svelte-material-icons/Cog.svelte';
 
 	import { status_url } from '$data/api/settings';
-	import RouterEvents from '$data/RouterEvents';
+	import RouterEvents from '$data/routerEvents';
 	import { queries } from '$data/api';
-	import { admin_login } from '$lib/stores';
 
-	import StatusBanner from '$layout/Banners/StatusBanner.svelte';
-	import SettingsDialog from '$layout/Dialogs/SettingsDialog.svelte';
-	import LoginDialog from '$layout/Dialogs/LoginDialog.svelte';
-	import LoginSuccessfulDialog from '$layout/Dialogs/LoginSuccessfulDialog.svelte';
-	import SessionExpiredDialog from '$layout/Dialogs/SessionExpiredDialog.svelte';
+	import StatusBanner from '$layout/banners/StatusBanner.svelte';
+	import SettingsDialog from '$layout/dialogs/SettingsDialog.svelte';
+	import LoginDialog from '$layout/dialogs/LoginDialog.svelte';
+	import LoginSuccessfulDialog from '$layout/dialogs/LoginSuccessfulDialog.svelte';
+	import SessionExpiredDialog from '$layout/dialogs/SessionExpiredDialog.svelte';
 
-	const ping = createQuery(queries.ping());
+	const ping = createQuery(() => queries.ping());
 	const statusUrl = status_url();
 
-	let menuOpen = false;
-	const dialogs: Record<string, boolean> = {
+	let menuOpen = $state(false);
+	const dialogs: Record<string, boolean> = $state({
 		settings: false,
 		login: false
-	};
+	});
 
-	let scrollY: number;
+	let scrollY: number = $state(0);
 
-	onMount(() => {
+	$effect(() => {
 		return RouterEvents.subscribe((event) => {
 			if (event.navigating) menuOpen = false;
 		});
@@ -43,10 +41,12 @@
 <svelte:window bind:scrollY />
 
 <span class="banner" class:hide={menuOpen}>
-	<Query query={ping} let:data>
-		{#if !data}
-			<StatusBanner {statusUrl} />
-		{/if}
+	<Query query={ping}>
+		{#snippet children(data)}
+			{#if !data}
+				<StatusBanner {statusUrl} />
+			{/if}
+		{/snippet}
 	</Query>
 	<AnnouncementBanner />
 </span>
@@ -56,7 +56,7 @@
 
 	<button
 		class="menu-btn mobile-only"
-		on:click={() => (menuOpen = !menuOpen)}
+		onclick={() => (menuOpen = !menuOpen)}
 		class:open={menuOpen}
 		aria-label="Menu"
 	>
@@ -114,7 +114,7 @@
 						</Navigation>
 					</span>
 					<button
-						on:click={() => (dialogs.settings = !dialogs.settings)}
+						onclick={() => (dialogs.settings = !dialogs.settings)}
 						class:selected={dialogs.settings}
 						aria-label="Settings"
 					>
@@ -126,12 +126,12 @@
 	{/key}
 
 	{#if menuOpen}
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div
 			class="overlay mobile-only"
 			transition:fade={{ duration: 350 }}
-			on:click={() => (menuOpen = !menuOpen)}
-			on:keypress={() => (menuOpen = !menuOpen)}
+			onclick={() => (menuOpen = !menuOpen)}
+			onkeypress={() => (menuOpen = !menuOpen)}
 		></div>
 	{/if}
 </nav>
@@ -203,7 +203,6 @@
 
 	.scrolled {
 		box-shadow: var(--drop-shadow-one);
-		background: rgba(10, 14, 26, 0.85);
 	}
 
 	.overlay {

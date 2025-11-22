@@ -1,8 +1,17 @@
 <script lang="ts">
-	export let viewBoxHeight: number;
-	export let viewBoxWidth = viewBoxHeight;
-	export let svgHeight: number;
-	export let svgWidth = svgHeight;
+	let {
+		viewBoxHeight,
+		viewBoxWidth = viewBoxHeight,
+		svgHeight,
+		svgWidth = svgHeight,
+		children
+	}: {
+		viewBoxHeight: number;
+		viewBoxWidth?: number;
+		svgHeight: number;
+		svgWidth?: number;
+		children?: any;
+	} = $props();
 </script>
 
 <svg
@@ -12,5 +21,5 @@
 	style:height={svgHeight + 'px'}
 	style:width={svgWidth + 'px'}
 >
-	<slot />
+	{@render children?.()}
 </svg>

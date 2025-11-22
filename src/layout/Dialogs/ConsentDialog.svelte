@@ -1,11 +1,10 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
-	import Dialog from '$layout/Dialogs/Dialog.svelte';
-	import { onMount } from 'svelte';
-	import { allowAnalytics } from '$lib/stores';
-	import { RV_GOOGLE_TAG_MANAGER_ID } from '../../env/static/public';
+	import Dialog from '$layout/dialogs/Dialog.svelte';
+	import { allowAnalytics } from '$lib/stores.svelte';
+	import { RV_GOOGLE_TAG_MANAGER_ID } from '$data/api/public';
 
-	let showConsentDialog = false;
+	let showConsentDialog = $state(false);
 
 	function enableAnalytics() {
 		//@ts-ignore
@@ -20,50 +19,40 @@
 		var script = document.createElement('script');
 		script.async = true;
 		script.src = 'https://www.googletagmanager.com/gtm.js?id=' + RV_GOOGLE_TAG_MANAGER_ID;
-
+		
 		//@ts-ignore
 		firstScript.parentNode.insertBefore(script, firstScript);
 	}
 
 	function handleConsent(allowed: boolean) {
-		try {
-			localStorage.setItem('analytics', allowed.toString());
-			allowAnalytics.set(allowed);
-			showConsentDialog = false;
+		localStorage.setItem('analytics', allowed.toString());
+		allowAnalytics.value = allowed;
+		showConsentDialog = false;
 
-			if (allowed) enableAnalytics();
-		} catch (error) {
-			console.error('Failed to save analytics consent:', error);
-			showConsentDialog = false;
-		}
+		if (allowed) enableAnalytics();
 	}
 
-	onMount(() => {
-		try {
-			const savedConsent = localStorage.getItem('analytics');
+	$effect(() => {
+		const savedConsent = localStorage.getItem('analytics');
 
-			if (savedConsent !== null) {
-				const allowed = savedConsent === 'true';
-				allowAnalytics.set(allowed);
-				if (allowed) enableAnalytics();
-			} else {
-				showConsentDialog = true;
-			}
-		} catch (error) {
-			console.error('Failed to read analytics consent:', error);
+		if (savedConsent !== null) {
+			const allowed = savedConsent === 'true';
+			allowAnalytics.value = allowed;
+			if (allowed) enableAnalytics();
+		} else {
 			showConsentDialog = true;
 		}
 	});
 </script>
 
 <Dialog bind:dialogOpen={showConsentDialog} notDismissible>
-	<svelte:fragment slot="title">It's your choice</svelte:fragment>
-	<svelte:fragment slot="description">
+	{#snippet title()}It's your choice{/snippet}
+	{#snippet description()}
 		We use analytics to improve your experience on this site. By clicking "Allow", you allow us to
 		collect anonymous data about your visit.
-	</svelte:fragment>
-	<svelte:fragment slot="buttons">
-		<Button type="text" on:click={() => handleConsent(false)}>Deny</Button>
-		<Button type="filled" on:click={() => handleConsent(true)}>Allow</Button>
-	</svelte:fragment>
+	{/snippet}
+	{#snippet buttons()}
+		<Button type="text" onclick={() => handleConsent(false)}>Deny</Button>
+		<Button type="filled" onclick={() => handleConsent(true)}>Allow</Button>
+	{/snippet}
 </Dialog>

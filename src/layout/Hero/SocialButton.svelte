@@ -1,17 +1,24 @@
 <script lang="ts">
 	import type { Social } from '$lib/types';
 
-	export let social: Social;
+	let {
+		social
+	}: {
+		social: Social;
+	} = $props();
+
+	const iconName = $derived(social.name.toLowerCase() === 'twitter' ? 'x' : social.name.toLowerCase());
 </script>
 
 <a href={social.url} rel="noreferrer" target="_blank">
-	<img src="socials/{social.name.toLowerCase()}.svg" alt={social.name} />
+	<img src="socials/{iconName}.svg" alt={social.name} />
 </a>
 
-<style>
+<style lang="scss">
 	a {
 		display: flex;
 		justify-content: center;
+
 		border: 0;
 		width: 60px;
 		height: 60px;
@@ -22,18 +29,18 @@
 		background-color: var(--surface-four);
 		color: var(--text-one);
 		user-select: none;
-	}
 
-	a:hover {
-		transform: translateY(-5%);
-	}
+		&:hover {
+			transform: translateY(-5%);
+		}
 
-	a img {
-		transition: filter 0.4s var(--bezier-one);
-		width: 30px;
-	}
+		img {
+			transition: filter 0.4s var(--bezier-one);
+			width: 30px;
+		}
 
-	a:hover img {
-		filter: brightness(1.2);
+		&:hover img {
+			filter: brightness(1.2);
+		}
 	}
 </style>

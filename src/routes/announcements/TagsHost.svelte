@@ -7,23 +7,21 @@
 	import Button from '$lib/components/Button.svelte';
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
-	export let tags: Tags;
-	export let expandable: boolean = false;
-	export let clickable: boolean = true;
+	let { tags, expandable = false, clickable = true }: { tags: Tags; expandable?: boolean; clickable?: boolean } = $props();
 
-	let showAllTags = expandable ? false : true;
+	let showAllTags = $state(expandable ? false : true);
 
 	const searchParams = derived(page, ($page) => $page.url.searchParams);
 
-	$: selectedTags = $searchParams.getAll('tag');
+	const selectedTags = $derived($searchParams.getAll('tag'));
 
-	$: displayedTags = (() => {
+	const displayedTags = $derived.by(() => {
 		if (showAllTags) return tags.map((tag) => tag.name);
 		if (selectedTags.length > 0) {
 			return [tags[0]?.name, ...selectedTags.filter((tag) => tag !== tags[0]?.name)];
 		}
 		return tags.length > 0 ? [tags[0]?.name] : [];
-	})();
+	});
 
 	const handleClick = (tag: string) => {
 		const url = new URL(window.location.href);
@@ -51,7 +49,7 @@
 
 	{#if expandable && tags.length > 1}
 		<li>
-			<Button type="text" on:click={() => (showAllTags = !showAllTags)}>
+			<Button type="text" onclick={() => (showAllTags = !showAllTags)}>
 				<div
 					class="expand-arrow"
 					style:transform={showAllTags ? 'rotate(90deg)' : 'rotate(-90deg)'}
@@ -63,23 +61,23 @@
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	div {
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
 		white-space: nowrap;
 		gap: 4px;
-	}
 
-	div li {
-		display: flex;
-		align-items: center;
-	}
+		li {
+			display: flex;
+			align-items: center;
+		}
 
-	div .expand-arrow {
-		transition: all 0.2s var(--bezier-one);
-		user-select: none;
-		height: 1.5rem;
+		.expand-arrow {
+			transition: all 0.2s var(--bezier-one);
+			user-select: none;
+			height: 1.5rem;
+		}
 	}
 </style>

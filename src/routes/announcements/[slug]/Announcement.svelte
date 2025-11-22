@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { admin_login } from '$lib/stores';
+	import { admin_login } from '$lib/stores.svelte';
 	import Title from './Title.svelte';
 	import Divider from '$lib/components/Divider.svelte';
-	import AdminToolbar from './AdminToolbar.svelte';
+	import AdminButtons from './AdminButtons.svelte';
 	import Author from './Author.svelte';
 	import Date from './Date.svelte';
 	import Content from './Content.svelte';
@@ -11,37 +11,36 @@
 	import type { Announcement, ResponseAnnouncement } from '$lib/types';
 	import type { CreateQueryResult } from '@tanstack/svelte-query';
 
-	export let isCreating: boolean;
-	export let announcement: Announcement | undefined;
-	export let announcementIdNumber: number | undefined;
-	export let query: CreateQueryResult<{ announcement: ResponseAnnouncement }, unknown> | undefined =
-		undefined;
+	let {
+		isCreating,
+		announcement,
+		announcementIdNumber,
+		query = undefined
+	}: {
+		isCreating: boolean;
+		announcement: Announcement | undefined;
+		announcementIdNumber: number | undefined;
+		query?: CreateQueryResult<{ announcement: ResponseAnnouncement }, unknown> | undefined;
+	} = $props();
 
-	let isPreviewing = false;
-	let isEditing = false;
-	let showDeleteConfirm = false;
+	let isPreviewing = $state(false);
+	let isEditing = $state(false);
+	let showDeleteConfirm = $state(false);
 
-	let draftInputs: {
-		title: string;
-		content: string;
-		created_at: string;
-		tags: string[];
-		archived_at: string | undefined;
-		attachments: string[];
-		author: string;
-		level: number | undefined;
-	};
+	let draftInputs = $state<Announcement>({
+		title: '',
+		created_at: '',
+		tags: []
+	});
 
-	$: draftInputs = {
-		title: announcement?.title || '',
-		content: announcement?.content || '',
-		created_at: announcement?.created_at || '',
-		tags: announcement?.tags || [],
-		archived_at: announcement?.archived_at,
-		attachments: announcement?.attachments || [],
-		author: announcement?.author || '',
-		level: announcement?.level
-	};
+	$effect(() => {
+		if (announcement) {
+			Object.assign(draftInputs, {
+				...announcement,
+				tags: announcement.tags ?? []
+			});
+		}
+	});
 </script>
 
 <div class="card">
@@ -77,8 +76,8 @@
 			<Tags {isCreating} {isEditing} {isPreviewing} bind:tagsInput={draftInputs.tags} />
 		</div>
 
-		{#if $admin_login.logged_in}
-			<AdminToolbar
+		{#if admin_login.value.logged_in}
+			<AdminButtons
 				{isCreating}
 				bind:isEditing
 				bind:isPreviewing
@@ -91,7 +90,7 @@
 		{/if}
 	</div>
 
-	<Divider horizontalPadding={0} />
+	<Divider horizontalPadding="0" />
 
 	<Content
 		{isCreating}
@@ -110,7 +109,7 @@
 	/>
 </div>
 
-<style>
+<style lang="scss">
 	.card {
 		background-color: var(--surface-eight);
 		display: flex;

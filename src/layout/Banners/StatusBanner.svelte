@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { email } from '$data/api/settings';
-	import Banner from '$layout/Banners/Banner.svelte';
+	import Banner from '$layout/banners/Banner.svelte';
 
-	export let statusUrl: string | null = null;
+	let {
+		statusUrl = null
+	}: {
+		statusUrl?: string | null;
+	} = $props();
 
 	const handleClick = () => statusUrl && goto(statusUrl);
 </script>

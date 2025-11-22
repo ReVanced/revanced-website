@@ -16,13 +16,13 @@
 	import PatchItem from './PatchItem.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import FilterChip from '$lib/components/FilterChip.svelte';
-	import MobilePatchesPackagesDialog from '$layout/Dialogs/MobilePatchesPackagesDialog.svelte';
+	import MobilePatchesPackagesDialog from '$layout/dialogs/MobilePatchesPackagesDialog.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import { onMount } from 'svelte';
+	import Fuse from 'fuse.js';
 	import createFilter from '$util/filter';
 	import { debounce } from '$util/debounce';
 
-	const query = createQuery(queries.patches());
+	const query = createQuery(() => queries.patches());
 
 	let searchParams: Readable<URLSearchParams>;
 	if (building) {
@@ -31,31 +31,33 @@
 		searchParams = derived(page, ($page) => $page.url.searchParams);
 	}
 
-	$: selectedPkg = $searchParams.get('pkg');
-	let searchTerm = $searchParams.get('s') || '';
+	let selectedPkg = $derived($searchParams.get('pkg'));
+	let searchTerm = $state($searchParams.get('s') || '');
 
-	let mobilePackages = false;
-	let showAllVersions = false;
+	let mobilePackages = $state(false);
+	let showAllVersions = $state(false);
 
-	$: patchFilter = createFilter($query.data?.patches || [], {
-		searcherOptions: {
-			keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
-		},
-		additionalFilter: (patch: Patch, pkg: string): boolean => {
-			if (!pkg) return true;
-			return (
-				patch.compatiblePackages?.some(
-					(compatiblePackage: CompatiblePackage) =>
-						compatiblePackage.name === pkg || compatiblePackage.versions?.includes(pkg)
-				) || false
-			);
-		}
-	});
+	function filterPatches(patches: Patch[], pkg: string, search?: string): Patch[] {
+		const patchFilter = createFilter(patches, {
+			searcherOptions: {
+				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
+			},
+			additionalFilter: (patch: Patch, pkg: string): boolean => {
+				if (!pkg) return true;
+				return (
+					patch.compatiblePackages?.some(
+						(compatiblePackage: CompatiblePackage) =>
+							compatiblePackage.name === pkg || compatiblePackage.versions?.includes(pkg)
+					) || false
+				);
+			}
+		});
 
-	$: filteredPatches = patchFilter(selectedPkg || '', displayedTerm);
+		return patchFilter(pkg, search);
+	}
 
 	// Make sure we don't have to filter the patches after every key press
-	let displayedTerm = '';
+	let displayedTerm = $state('');
 	const update = () => {
 		displayedTerm = searchTerm;
 
@@ -71,7 +73,9 @@
 		window.history.pushState(null, '', url);
 	};
 
-	onMount(update);
+	$effect(() => {
+		update();
+	});
 </script>
 
 <Head
@@ -106,7 +110,7 @@
 			bind:searchTerm
 			bind:displayedTerm
 			title="Search for patches"
-			on:keyup={debounce(update)}
+			onkeyup={debounce(update)}
 		/>
 	</div>
 </div>
@@ -115,13 +119,14 @@
 		<FilterChip
 			selected={!!selectedPkg}
 			dropdown
-			on:click={() => (mobilePackages = !mobilePackages)}
+			onclick={() => (mobilePackages = !mobilePackages)}
 		>
 			{selectedPkg || 'Packages'}
 		</FilterChip>
 	</div>
 
-	<Query {query} let:data>
+	<Query {query}>
+		{#snippet children(data)}
 		<MobilePatchesPackagesDialog
 			bind:dialogOpen={mobilePackages}
 			bind:searchTerm
@@ -132,16 +137,16 @@
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
 				<span class="packages">
-					<Package {selectedPkg} name="All packages" bind:searchTerm />
+					<Package {selectedPkg} name="All packages" {searchTerm} />
 					{#each data.packages as pkg}
-						<Package {selectedPkg} name={pkg} bind:searchTerm />
+						<Package {selectedPkg} name={pkg} {searchTerm} />
 					{/each}
 				</span>
 			</PackageMenu>
 		</aside>
 
 		<div class="patches-container">
-			{#each filteredPatches as patch}
+			{#each filterPatches(data.patches, selectedPkg || '', displayedTerm) as patch}
 				{#key selectedPkg || displayedTerm}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<PatchItem {patch} bind:showAllVersions />
@@ -149,6 +154,7 @@
 				{/key}
 			{/each}
 		</div>
+		{/snippet}
 	</Query>
 </main>
 

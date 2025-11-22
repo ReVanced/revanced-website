@@ -11,9 +11,8 @@
 	import { queries } from '$data/api';
 	import TagsHost from './TagsHost.svelte';
 	import Search from '$lib/components/Search.svelte';
-	import { onMount } from 'svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
-	import { admin_login, read_announcements } from '$lib/stores';
+	import { admin_login, read_announcements } from '$lib/stores.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import moment from 'moment';
 	import { debounce } from '$util/debounce';
@@ -22,18 +21,18 @@
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 	import Create from 'svelte-material-icons/Plus.svelte';
 
-	let expanded = false;
+	let expanded = $state(false);
 
 	const searchParams: Readable<URLSearchParams> = building
 		? readable(new URLSearchParams())
 		: derived(page, ($page) => $page.url.searchParams);
 
-	let searchTerm = $searchParams.get('s') || '';
-	let displayedTerm = '';
+	let searchTerm = $state($searchParams.get('s') || '');
+	let displayedTerm = $state('');
 
-	$: query = createQuery(queries.announcements());
-	$: tagsQuery = createQuery(queries.announcementTags());
-	$: selectedTags = $searchParams.getAll('tag');
+	const query = createQuery(() => queries.announcements());
+	const tagsQuery = createQuery(() => queries.announcementTags());
+	const selectedTags = $derived($searchParams.getAll('tag'));
 
 	const update = () => {
 		displayedTerm = searchTerm;
@@ -64,17 +63,11 @@
 		return announcementFilter(tags, search);
 	};
 
-	onMount(() => {
+	$effect(() => {
 		debounce(update)();
 
-		if ($read_announcements.size === 0) {
-			query.subscribe((data) => {
-				read_announcements.update((set) => {
-					const updated = new Set(set);
-					data.data?.announcements.forEach((a) => updated.add(a.id));
-					return updated;
-				});
-			});
+		if (read_announcements.value.size === 0 && query.data) {
+			read_announcements.addAll(query.data.announcements.map((a) => a.id));
 		}
 	});
 </script>
@@ -87,20 +80,23 @@
 				bind:searchTerm
 				bind:displayedTerm
 				title="Search for announcements"
-				on:keyup={debounce(update)}
+				onkeyup={debounce(update)}
 			/>
 		</div>
-		{#if $admin_login.logged_in}
+		{#if admin_login.value.logged_in}
 			<Button type="filled" icon={Create} href="/announcements/create">Create</Button>
 		{/if}
 	</div>
 </div>
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<Query query={tagsQuery} let:data>
+	<Query query={tagsQuery}>
+		{#snippet children(data)}
 		<TagsHost tags={data.tags} />
+		{/snippet}
 	</Query>
 
-	<Query {query} let:data>
+	<Query {query}>
+		{#snippet children(data)}
 		{#if activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
 			<div class="cards">
 				{#each activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
@@ -116,8 +112,8 @@
 				role="button"
 				class="expand-archived"
 				aria-expanded={expanded}
-				on:click={() => (expanded = !expanded)}
-				on:keypress={() => (expanded = !expanded)}
+				onclick={() => (expanded = !expanded)}
+				onkeypress={() => (expanded = !expanded)}
 				tabindex="0"
 			>
 				<h4>Archive</h4>
@@ -139,10 +135,11 @@
 				</div>
 			{/if}
 		{/if}
+		{/snippet}
 	</Query>
 </main>
 
-<style>
+<style lang="scss">
 	main {
 		display: flex;
 		flex-direction: column;
@@ -156,29 +153,29 @@
 		cursor: pointer;
 		user-select: none;
 		padding-inline: 0.25rem;
-	}
 
-	.expand-archived #arrow {
-		height: 1.5rem;
-		transition: all 0.2s var(--bezier-one);
+		#arrow {
+			height: 1.5rem;
+			transition: all 0.2s var(--bezier-one);
+		}
 	}
 
 	.search {
 		padding-top: 0.6rem;
 		padding-bottom: 1.25rem;
 		background-color: var(--surface-eight);
-	}
 
-	.search .search-contain {
-		display: flex;
-		justify-content: center;
-		gap: 1rem;
-		margin-inline: auto;
-		width: min(90%, 80rem);
-	}
+		.search-contain {
+			display: flex;
+			justify-content: center;
+			gap: 1rem;
+			margin-inline: auto;
+			width: min(90%, 80rem);
 
-	.search .search-contain .search-bar {
-		flex: 1;
+			.search-bar {
+				flex: 1;
+			}
+		}
 	}
 
 	.cards {
@@ -186,10 +183,8 @@
 		grid-template-columns: repeat(3, 1fr);
 		width: 100%;
 		gap: 16px;
-	}
 
-	@media (max-width: 768px) {
-		.cards {
+		@media (max-width: 768px) {
 			display: flex;
 			flex-direction: column;
 		}

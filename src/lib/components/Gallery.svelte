@@ -1,11 +1,17 @@
 <script lang="ts">
-	import ImageDialog from '$layout/Dialogs/ImageDialog.svelte';
+	import ImageDialog from '$layout/dialogs/ImageDialog.svelte';
 
-	export let images: string[];
-	export let columns: number = 3;
-	export let gap: string = '1rem';
+	let {
+		images,
+		columns = 3,
+		gap = '1rem'
+	}: {
+		images: string[];
+		columns?: number;
+		gap?: string;
+	} = $props();
 
-	let selectedImage: { src: string; alt: string } | null = null;
+	let selectedImage: { src: string; alt: string } | null = $state(null);
 
 	function openDialog(image: string, index: number) {
 		selectedImage = {
@@ -21,20 +27,23 @@
 
 <div class="gallery" style="--columns: {columns}; --gap: {gap}">
 	{#each images as image, i}
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<div class="image-container">
-			<button
-				class="image-btn"
-				on:click={() => openDialog(image, i)}
-				aria-label={`View gallery image ${i + 1}`}
-			>
-				<img src={image} alt={`Gallery image ${i + 1}`} loading="lazy" />
-			</button>
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+			<img
+				src={image}
+				alt={`Gallery image ${i + 1}`}
+				loading="lazy"
+				onclick={() => openDialog(image, i)}
+				onkeydown={(e) => e.key === 'Enter' && openDialog(image, i)}
+				tabindex="0"
+			/>
 		</div>
 	{/each}
 </div>
 
 {#if selectedImage}
-	<ImageDialog src={selectedImage.src} alt={selectedImage.alt} on:close={closeDialog} />
+	<ImageDialog src={selectedImage.src} alt={selectedImage.alt} onclose={closeDialog} />
 {/if}
 
 <style>
@@ -53,25 +62,15 @@
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
 
-	.image-btn {
-		width: 100%;
-		height: 100%;
-		padding: 0;
-		border: none;
-		background: none;
-		cursor: pointer;
-		display: block;
-	}
-
 	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		transition: transform 0.3s ease;
+		cursor: pointer;
 	}
 
-	.image-btn:hover img,
-	.image-btn:focus img {
+	img:hover {
 		transform: scale(1.05);
 	}
 
