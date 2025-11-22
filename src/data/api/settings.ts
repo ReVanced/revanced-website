@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { RV_API_URL, RV_EMAIL, RV_STATUS_URL } from '../../env/static/public';
+import { RV_API_URL, RV_EMAIL, RV_STATUS_URL } from '../../env/static/public'; // Attention needed here, changed import paths
 
 export const default_api_url = RV_API_URL;
 export const default_status_url = RV_STATUS_URL;

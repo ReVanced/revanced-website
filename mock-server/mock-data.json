@@ -1,0 +1,279 @@
+{
+  "contributors": [
+    {
+      "name": "revanced-patches",
+      "url": "https://github.com/revanced/revanced-patches",
+      "contributors": [
+        {
+          "name": "John Doe",
+          "avatar_url": "https://avatars.githubusercontent.com/u/1?v=4",
+          "url": "https://github.com/johndoe",
+          "contributions": 150
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        },
+        {
+          "name": "Jane Smith",
+          "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
+          "url": "https://github.com/janesmith",
+          "contributions": 95
+        }
+      ]
+    },
+    {
+      "name": "revanced-manager",
+      "url": "https://github.com/revanced/revanced-manager",
+      "contributors": [
+        {
+          "name": "Bob Johnson",
+          "avatar_url": "https://avatars.githubusercontent.com/u/3?v=4",
+          "url": "https://github.com/bobjohnson",
+          "contributions": 78
+        }
+      ]
+    }
+  ],
+  "manager": {
+    "version": "v1.20.0",
+    "created_at": "2024-01-15T10:30:00Z",
+    "description": "ReVanced Manager - Latest stable release",
+    "download_url": "https://github.com/revanced/revanced-manager/releases/download/v1.20.0/revanced-manager.apk"
+  },
+  "patches": [
+    {
+      "name": "Hide ads",
+      "description": "Hides all advertisements from the app",
+      "use": true,
+      "compatiblePackages": [
+        {
+          "name": "com.google.android.youtube",
+          "versions": ["18.48.39", "18.49.37", "19.01.34"]
+        }
+      ],
+      "options": [
+        {
+          "key": "includeReels",
+          "title": "Include Reels",
+          "description": "Hide ads in reels section as well",
+          "required": false,
+          "type": "boolean",
+          "default": true,
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Custom branding",
+      "description": "Change app name and icon",
+      "use": false,
+      "compatiblePackages": [
+        {
+          "name": "com.google.android.youtube",
+          "versions": null
+        }
+      ],
+      "options": [
+        {
+          "key": "appName",
+          "title": "App Name",
+          "description": "Custom name for the app",
+          "required": true,
+          "type": "string",
+          "default": "ReVanced",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Remove tracking",
+      "description": "Removes tracking and analytics",
+      "use": true,
+      "compatiblePackages": [
+        {
+          "name": "com.twitter.android",
+          "versions": ["9.95.0", "9.96.0"]
+        },
+        {
+          "name": "com.google.android.youtube",
+          "versions": ["18.48.39", "18.49.37"]
+        }
+      ],
+      "options": []
+    }
+  ],
+  "team": [
+    {
+      "name": "Alice Developer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10?v=4",
+      "url": "https://github.com/alicedev",
+      "bio": "Core developer and maintainer",
+      "gpg_key": {
+        "id": "ABC123DEF456",
+        "url": "https://keys.openpgp.org/search?q=ABC123DEF456"
+      }
+    },
+    {
+      "name": "Bob Designer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11?v=4",
+      "url": "https://github.com/bobdesign",
+      "bio": "UI/UX Designer",
+      "gpg_key": {
+        "id": "DEF456GHI789",
+        "url": "https://keys.openpgp.org/search?q=DEF456GHI789"
+      }
+    }
+  ],
+  "about": {
+    "name": "ReVanced",
+    "about": "ReVanced is a modular patcher for Android apps. We provide patches for various popular applications.",
+    "contact": {
+      "email": "contact@revanced.dev"
+    },
+    "socials": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/revanced",
+        "preferred": true
+      },
+      {
+        "name": "Discord",
+        "url": "https://discord.gg/revanced",
+        "preferred": true
+      },
+      {
+        "name": "Twitter",
+        "url": "https://twitter.com/revancedapp",
+        "preferred": false
+      }
+    ],
+    "donations": {
+      "wallets": [
+        {
+          "network": "Bitcoin",
+          "currency_code": "BTC",
+          "address": "bc1qexampleaddress123456789",
+          "preferred": true
+        },
+        {
+          "network": "Ethereum",
+          "currency_code": "ETH",
+          "address": "0xExampleAddress123456789",
+          "preferred": false
+        }
+      ],
+      "links": [
+        {
+          "name": "GitHub Sponsors",
+          "url": "https://github.com/sponsors/revanced",
+          "preferred": true
+        },
+        {
+          "name": "Patreon",
+          "url": "https://patreon.com/revanced",
+          "preferred": false
+        }
+      ]
+    }
+  },
+  "announcements": [
+    {
+      "id": 1,
+      "title": "Welcome to ReVanced!",
+      "content": "We're excited to announce the launch of our new website. This platform will serve as the central hub for all ReVanced-related information.",
+      "author": "ReVanced Team",
+      "tags": ["announcement", "news"],
+      "level": 1,
+      "created_at": "2024-01-01T12:00:00Z",
+      "archived_at": null,
+      "attachments": []
+    },
+    {
+      "id": 2,
+      "title": "New Patch Release v2.0",
+      "content": "We've released a major update to our patches. Check out the changelog for more details on what's new.",
+      "author": "Patch Team",
+      "tags": ["release", "patches"],
+      "level": 2,
+      "created_at": "2024-01-10T15:30:00Z",
+      "archived_at": null,
+      "attachments": []
+    },
+    {
+      "id": 3,
+      "title": "Maintenance Window",
+      "content": "Scheduled maintenance on January 20th from 2-4 PM UTC. Services may be temporarily unavailable.",
+      "author": "Infrastructure Team",
+      "tags": ["maintenance", "important"],
+      "level": 3,
+      "created_at": "2024-01-15T10:00:00Z",
+      "archived_at": null,
+      "attachments": []
+    },
+    {
+      "id": 4,
+      "title": "Archived: Old Announcement",
+      "content": "This is an old announcement that has been archived.",
+      "author": "ReVanced Team",
+      "tags": ["archived"],
+      "level": 1,
+      "created_at": "2023-12-01T08:00:00Z",
+      "archived_at": "2024-01-05T00:00:00Z",
+      "attachments": []
+    }
+  ],
+  "announcementTags": [
+    { "name": "announcement" },
+    { "name": "news" },
+    { "name": "release" },
+    { "name": "patches" },
+    { "name": "maintenance" },
+    { "name": "important" },
+    { "name": "archived" }
+  ]
+}

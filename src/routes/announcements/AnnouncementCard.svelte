@@ -3,7 +3,6 @@
 	import type { ResponseAnnouncement } from '$lib/types';
 	import NewHeader from './NewHeader.svelte';
 	import { queries } from '$data/api';
-	import { dev_log } from '$util/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import { read_announcements } from '$lib/stores';
 	import TagsHost from './TagsHost.svelte';
@@ -21,7 +20,6 @@
 
 	function prefetch() {
 		const query = queries['announcementById'](announcement.id);
-		dev_log('Prefetching', query);
 		client.prefetchQuery(query);
 	}
 

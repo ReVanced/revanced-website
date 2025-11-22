@@ -1,0 +1,13 @@
+{
+  "name": "revanced-mock-api-server",
+  "version": "1.0.0",
+  "description": "Mock API server for ReVanced website development",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["revanced", "mock", "api", "server"],
+  "author": "",
+  "license": "MIT"
+}
