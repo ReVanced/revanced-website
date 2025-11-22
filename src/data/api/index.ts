@@ -136,13 +136,14 @@ async function about(): Promise<AboutData> {
 }
 
 async function announcements(options: GetAnnouncementsOptions = {}): Promise<AnnouncementsData> {
-	const url = new URL(build_url('announcements'));
+	const base = typeof window !== 'undefined' ? window.location.href : undefined;
+	const url = new URL(build_url('announcements'), base);
 
 	if (options.tags && options.tags.length > 0) url.searchParams.set('tags', options.tags.join(','));
 	if (options.count) url.searchParams.set('count', String(options.count));
 	if (options.cursor) url.searchParams.set('cursor', String(options.cursor));
 
-	const announcements = (await get_json('announcements')) as ResponseAnnouncement[];
+	const announcements = (await fetch(url.toString()).then((r) => r.json())) as ResponseAnnouncement[];
 
 	return { announcements };
 }

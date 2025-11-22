@@ -1,7 +1,7 @@
-import { browser } from '$app/environment'; // Ta bort senare
+import { browser, dev } from '$app/environment'; // Ta bort senare
 import { RV_API_URL, RV_EMAIL, RV_STATUS_URL } from './public'; // Was previously $env/static/public but for some reason this caused issues of not finding or being able to read the variables in .env
 
-export const default_api_url = RV_API_URL;
+export const default_api_url = (browser && dev) ? '/api' : RV_API_URL;
 export const default_status_url = RV_STATUS_URL;
 export const default_email = RV_EMAIL;
 
@@ -52,7 +52,7 @@ export function set_api_base_url(url?: string) {
 	} else {
 		// Validate URL before setting
 		try {
-			const parsed = new URL(url);
+			const parsed = new URL(url, 'http://localhost');
 			if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
 				localStorage.setItem(URL_KEY, url);
 			}

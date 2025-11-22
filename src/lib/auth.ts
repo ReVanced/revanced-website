@@ -106,7 +106,7 @@ async function digest_fetch(
 
 	const { realm, nonce, algorithm } = authParams;
 	const method = options.method || 'GET';
-	const uri = new URL(url).pathname;
+	const uri = new URL(url, 'http://localhost').pathname;
 
 	// https://ktor.io/docs/server-digest-auth.html#flow
 	const HA1 = await sha256(`${username}:${realm}:${password}`);

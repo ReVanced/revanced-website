@@ -17,3 +17,14 @@ Fully understandable that Cloudflare is doing the conversion to https:// but it 
 
 There is also a comment in a file where if you remove the comment ( // ) the line under it goes red....Absolut cinema 
   pssst: C:\Users\06mosnaz\Desktop\Laboratory\rewrite-refractor\src\lib\components\QRCode.svelte
+
+
+In developemnt (pnpm run dev):
+The code detects it is in "dev mode".
+It routes requests through your local server (/api/...), which acts as a proxy to bypass CORS.
+Result: No errors while you work locally.
+In Production (Your Main Server):
+
+The code detects it is not in "dev mode".
+It reverts to using the real URL: https://api.revanced.app.
+Result: Your browser will make requests directly to the API.
