@@ -1,0 +1,150 @@
+<script lang="ts">
+	import moment from 'moment';
+	import type { ResponseAnnouncement } from '$lib/types';
+	import NewHeader from './NewHeader.svelte';
+	import { queries } from '$data/api';
+	import { dev_log } from '$utils/dev';
+	import { useQueryClient } from '@tanstack/svelte-query';
+	import { read_announcements } from '$lib/stores.svelte';
+	import TagsHost from './TagsHost.svelte';
+	import Content from './[slug]/Content.svelte';
+	import ToolTip from '$ui/ToolTip.svelte';
+	import { relativeTime } from '$utils/relativeTime';
+
+	import Archive from 'svelte-material-icons/ArchiveOutline.svelte';
+
+	let { announcement }: { announcement: ResponseAnnouncement } = $props();
+
+	const client = useQueryClient();
+
+	const isRead = $derived(read_announcements.value.has(announcement.id));
+
+	function prefetch() {
+		const query = queries['announcementById'](announcement.id);
+		client.prefetchQuery(query);
+	}
+
+	function setAnnouncementRead() {
+		read_announcements.add(announcement.id);
+	}
+
+	function generateSlug(title: string) {
+		return title
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-+|-+$/g, '');
+	}
+</script>
+
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<a
+	data-sveltekit-preload-data
+	onmouseenter={prefetch}
+	href={`/announcements/${announcement.id}-${generateSlug(announcement.title)}`}
+	onclick={setAnnouncementRead}
+>
+	<div
+		class="card"
+		class:attachment={announcement.attachments && announcement.attachments.length > 0}
+	>
+		{#if isRead !== undefined && !isRead}
+			<NewHeader />
+		{/if}
+		{#if announcement.attachments && announcement.attachments.length > 0}
+			<img
+				src={announcement.attachments[0]}
+				class={isRead === undefined || isRead ? '' : 'no-border-radius'}
+				alt="Banner"
+				onerror={(e) => ((e.currentTarget as HTMLImageElement).style.display = 'none')}
+			/>
+		{/if}
+		<div class="content">
+			<div class="header">
+				<h3>{announcement.title}</h3>
+				<span>
+					{relativeTime(announcement.created_at)}
+					{#if announcement.archived_at && moment(announcement.archived_at).isBefore(moment())}
+						<ToolTip
+							content={`This announcement was archived ${relativeTime(announcement.archived_at)}`}
+						>
+							<Archive size="24" />
+						</ToolTip>
+					{/if}
+				</span>
+			</div>
+			<div class="footer">
+				{#if announcement.content}
+					<Content content={announcement.content} clamp={true} />
+				{/if}
+				{#if announcement.tags && announcement.tags.length > 0}
+					<hr />
+					<TagsHost tags={announcement.tags.map((tag) => ({ name: tag }))} clickable={false} />
+				{/if}
+			</div>
+		</div>
+	</div>
+</a>
+
+<style lang="scss">
+	a {
+		text-decoration: inherit;
+	}
+
+	.card {
+		&.attachment {
+			grid-row: span 2;
+		}
+		&:hover {
+			background-color: var(--surface-four);
+			filter: none;
+		}
+
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+
+		background-color: var(--surface-seven);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+
+		img {
+			height: 150px;
+			object-fit: cover;
+			width: 100%;
+			border-radius: 12px 12px 0px 0px;
+
+			&.no-border-radius {
+				border-radius: 0;
+			}
+		}
+
+		.content {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			gap: 12px;
+
+			height: 100%;
+			padding: 12px 16px;
+
+			color: var(--text-four);
+
+			.header,
+			.footer {
+				display: flex;
+				flex-direction: column;
+				overflow-wrap: anywhere;
+			}
+
+			.header span {
+				display: flex;
+				gap: 4px;
+			}
+
+			.footer {
+				gap: 12px;
+			}
+		}
+	}
+</style>

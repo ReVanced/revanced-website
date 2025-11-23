@@ -1,10 +1,140 @@
 <script lang="ts">
-	import Page from '$components/molecules/Page.svelte';
+	import { queries } from '$data/api';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+
+	import { createQuery } from '@tanstack/svelte-query';
+
+	import manager_screenshot from '$images/manager.png?format=avif;webp;png&as=picture';
+
+	import TrayArrowDown from 'svelte-material-icons/TrayArrowDown.svelte';
+
+	import Head from '$lib/components/Head.svelte';
+	import Query from '$lib/components/Query.svelte';
+	import Button from '$ui/Button.svelte';
+	import Picture from '$lib/components/Picture.svelte';
+	import DownloadCompatibilityWarningDialog from '$layout/dialogs/DownloadCompatibilityWarningDialog.svelte';
+
+	const query = createQuery(() => queries.manager());
+
+	let warning = $state<string>('');
+	let warningDialogue = $state(false);
+
+	let userAgent = $state<string>('');
+	let isAndroid = $state<boolean>(false);
+	let androidVersionMatch = $state<RegExpExecArray | null>(null);
+	let androidVersion = $state<number>(0);
+
+	$effect(() => {
+		userAgent = navigator.userAgent;
+		androidVersionMatch = /Android\s([\d.]+)/i.exec(userAgent);
+		androidVersion = androidVersionMatch ? parseInt(androidVersionMatch[1]) : 0;
+		isAndroid = !!androidVersion;
+	});
+
+	function handleClick() {
+		if (!isAndroid) {
+			warning = 'Your device is not running Android.';
+			warningDialogue = true;
+		} else if (androidVersion < 8) {
+			warning = `Your device is running ${androidVersion}. ReVanced only supports Android versions 8 and above.`;
+			warningDialogue = true;
+		}
+	}
 </script>
 
-<Page description="Download ReVanced">
-	<h1>Welcome to SvelteKit</h1>
-	<p>
-		Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation
-	</p>
-</Page>
+<Head
+	title="Download ReVanced"
+	description="Download ReVanced Manager to patch your favourite apps, right on your device."
+	schemas={[
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					position: 1,
+					name: 'Home',
+					item: 'https://revanced.app/'
+				},
+				{
+					'@type': 'ListItem',
+					position: 2,
+					name: 'Download',
+					item: 'https://revanced.app/download'
+				}
+			]
+		}
+	]}
+/>
+
+<main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	<h2>ReVanced <span>Manager</span></h2>
+	<p>Patch your favourite apps, right on your device.</p>
+	<div class="buttons">
+		<Query {query}>
+			{#snippet children(data)}
+				{#if !isAndroid || androidVersion < 8}
+					<Button onclick={handleClick} icon={TrayArrowDown} type="filled">
+						{data.release.version}
+					</Button>
+				{:else}
+					<Button
+						onclick={handleClick}
+						icon={TrayArrowDown}
+						type="filled"
+						href={data.release.download_url}
+					>
+						{data.release.version}
+					</Button>
+				{/if}
+			{/snippet}
+		</Query>
+		<Button type="tonal" href="https://github.com/revanced/revanced-manager" target="_blank">
+			View source
+		</Button>
+	</div>
+	<div class="screenshot">
+		<Picture data={manager_screenshot} alt="Manager Screenshot" />
+	</div>
+</main>
+
+<DownloadCompatibilityWarningDialog bind:dialogOpen={warningDialogue} {warning} />
+
+<style>
+	.center {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	h2 {
+		text-align: center;
+		color: var(--text-one);
+	}
+
+	p {
+		text-align: center;
+		margin-bottom: 1.5rem;
+	}
+
+	.screenshot :global(img) {
+		margin-top: 2.5rem;
+		margin-bottom: 2.5rem;
+		height: 50rem;
+		width: auto;
+		padding: 0.5rem 0.5rem;
+		border-radius: 2rem;
+		background-color: var(--surface-seven);
+		user-select: none;
+	}
+
+	.buttons {
+		display: flex;
+		gap: 1rem;
+	}
+
+	span {
+		color: var(--primary);
+	}
+</style>

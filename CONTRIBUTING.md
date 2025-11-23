@@ -3,18 +3,18 @@
     <source
       width="256px"
       media="(prefers-color-scheme: dark)"
-      srcset="assets/revanced-headline/revanced-headline-vertical-dark.svg"
+      srcset="src/lib/assets/brand/revanced-headline/revanced-headline-vertical-dark.svg"
     >
     <img
       width="256px"
-      src="assets/revanced-headline/revanced-headline-vertical-light.svg"
+      src="src/lib/assets/brand/revanced-headline/revanced-headline-vertical-light.svg"
     >
   </picture>
   <br>
   <a href="https://revanced.app/">
        <picture>
-           <source height="24px" media="(prefers-color-scheme: dark)" srcset="assets/revanced-logo/revanced-logo.svg" />
-           <img height="24px" src="assets/revanced-logo/revanced-logo.svg" />
+           <source height="24px" media="(prefers-color-scheme: dark)" srcset="src/lib/assets/brand/revanced-logo/revanced-logo.svg" />
+           <img height="24px" src="src/lib/assets/brand/revanced-logo/revanced-logo.svg" />
        </picture>
    </a>&nbsp;&nbsp;&nbsp;
    <a href="https://github.com/ReVanced">
@@ -64,8 +64,8 @@ This document describes how to contribute to ReVanced Website.
 
 ## 📖 Resources to help you get started
 
-* Our [backlog](https://github.com/orgs/ReVanced/projects/12) is where we keep track of what we're working on
-* [Issues](https://github.com/ReVanced/revanced-website/issues) are where we keep track of bugs and feature requests
+- Our [backlog](https://github.com/orgs/ReVanced/projects/12) is where we keep track of what we're working on
+- [Issues](https://github.com/ReVanced/revanced-website/issues) are where we keep track of bugs and feature requests
 
 ## 🙏 Submitting a feature request
 
@@ -84,14 +84,14 @@ If you encounter a bug while using the ReVanced Website, open an issue using the
 ## 📝 How to contribute
 
 1. Before contributing, it is recommended to open an issue to discuss your change
-with the maintainers of ReVanced Website. This will help you determine whether your change is acceptable
-and whether it is worth your time to implement it
+   with the maintainers of ReVanced Website. This will help you determine whether your change is acceptable
+   and whether it is worth your time to implement it
 2. Development happens on the `dev` branch. Fork the repository and create your branch from `dev`
 3. Commit your changes
 4. Submit a pull request to the `dev` branch of the repository and reference issues
-that your pull request closes in the description of your pull request
+   that your pull request closes in the description of your pull request
 5. Our team will review your pull request and provide feedback. Once your pull request is approved,
-it will be merged into the `dev` branch and will be included in the next release of ReVanced Website
+   it will be merged into the `dev` branch and will be included in the next release of ReVanced Website
 
 ❤️ Thank you for considering contributing to ReVanced Website,
 ReVanced

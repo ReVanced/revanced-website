@@ -1,15 +1,22 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
+		// Added a and removed ( Moved to svelte.config.js ) the code that resolved path alias errors
 		"allowImportingTsExtensions": true,
 		"allowJs": true,
 		"checkJs": true,
+		// Explicit ES module settings keep moduleResolution "bundler" valid across editors
+		"module": "es2020",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
+		// Disables JS emission so TypeScript stops overwriting source files when allowJs/checkJs are enabled
+		"noEmit": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
+		// Align output target with module option to avoid TS complaints when using bundler resolution
+		"target": "es2020",
 		"moduleResolution": "bundler"
 	}
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias

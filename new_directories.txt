@@ -1,0 +1,146 @@
+1. old strcutre:
+
+assets/
+  revanced-headline/
+  revanced-logo/
+images/
+  manager.png
+src/
+  app.d.ts
+  app.html
+  app.scss
+  data/
+    routerEvents.ts
+    seo.ts
+    api/
+      index.ts
+      public.ts
+      settings.ts
+  layout/
+    banners/
+      AnnouncementBanner.svelte
+      Banner.svelte
+      StatusBanner.svelte
+    dialogs/
+      ConsentDialog.svelte
+      CryptoDialog.svelte
+      Dialog.svelte
+      DownloadCompatibilityWarningDialog.svelte
+      EmailDialog.svelte
+      ImageDialog.svelte
+      LoginDialog.svelte
+      LoginSuccessfulDialog.svelte
+      MobilePatchesPackagesDialog.svelte
+      SessionExpiredDialog.svelte
+      SettingsDialog.svelte
+    footer/
+      FooterHost.svelte
+      FooterSection.svelte
+    hero/
+      HeroImage.svelte
+      HeroSection.svelte
+      SocialButton.svelte
+    navbar/
+      NavButton.svelte
+      NavHost.svelte
+  lib/
+    auth.ts
+    stores.svelte.ts
+    types.ts
+    components/
+      Button.svelte
+      Divider.svelte
+      FilterChip.svelte
+      Gallery.svelte
+      Head.svelte
+      Input.svelte
+      Picture.svelte
+      QRCode.svelte
+      Query.svelte
+      Search.svelte
+      Snackbar.svelte
+      Spinner.svelte
+      Svg.svelte
+      ToolTip.svelte
+      Wave.svelte
+    styles/
+      ToolTip.scss
+  routes/
+    All routes remain unchanged in location, but imports inside them will update
+  util/
+    DateTrigger.ts
+    debounce.ts
+    dev.ts
+    filter.ts
+    formatUtc.ts
+    fromNow.ts
+    horizontalSlide.js
+    isValidUrl.ts
+    relativeTime.ts
+    supportsWebP.ts
+    themeEvents.ts
+
+2. new structure:
+src/
+  lib/
+    assets/                  New: Consolidated assets
+      brand/                 From root assets/
+      images/                From root images/
+    components/
+      layout/                From src/layout/
+      ui/                    New: Basic UI atoms from src/lib/components/
+      Other complex components remain in src/lib/components/ or are grouped
+    data/                    From src/data/
+    utils/                   From src/util/
+    styles/                  From src/lib/styles/
+    auth.ts
+    stores.svelte.ts
+    types.ts
+
+3. Migration mapping (from old -> new)
+
+Assets
+assets/revanced-headline/*   -> src/lib/assets/brand/revanced-headline/*
+assets/revanced-logo/*       -> src/lib/assets/brand/revanced-logo/*
+images/*                     -> src/lib/assets/images/*
+
+Data
+src/data/*                   -> src/lib/data/*
+
+Utils
+src/util/*                   -> src/lib/utils/*
+
+Layout Components
+src/layout/*                 -> src/lib/components/layout/*
+
+UI Components (Atoms)
+src/lib/components/Button.svelte      -> src/lib/components/ui/Button.svelte
+src/lib/components/Divider.svelte     -> src/lib/components/ui/Divider.svelte
+src/lib/components/FilterChip.svelte  -> src/lib/components/ui/FilterChip.svelte
+src/lib/components/Input.svelte       -> src/lib/components/ui/Input.svelte
+src/lib/components/Spinner.svelte     -> src/lib/components/ui/Spinner.svelte
+src/lib/components/Svg.svelte         -> src/lib/components/ui/Svg.svelte
+src/lib/components/ToolTip.svelte     -> src/lib/components/ui/ToolTip.svelte
+src/lib/components/Snackbar.svelte    -> src/lib/components/ui/Snackbar.svelte
+
+Complex/Shared Components (Remain in src/lib/components for now)
+src/lib/components/Gallery.svelte     -> src/lib/components/Gallery.svelte
+src/lib/components/Head.svelte        -> src/lib/components/Head.svelte
+src/lib/components/Picture.svelte     -> src/lib/components/Picture.svelte
+src/lib/components/QRCode.svelte      -> src/lib/components/QRCode.svelte
+src/lib/components/Query.svelte       -> src/lib/components/Query.svelte
+src/lib/components/Search.svelte      -> src/lib/components/Search.svelte
+src/lib/components/Wave.svelte        -> src/lib/components/Wave.svelte
+
+Styles
+src/lib/styles/*             -> src/lib/styles/* (No change in location, but imports might change)
+
+4. Alias update (svelte.config.js):
+
+$components  -> src/lib/components
+$ui          -> src/lib/components/ui  (new)
+$layout      -> src/lib/components/layout
+$data        -> src/lib/data
+$utils       -> src/lib/utils          Renamed from $util
+$assets      -> src/lib/assets         Updated path
+$images      -> src/lib/assets/images  Updated path
