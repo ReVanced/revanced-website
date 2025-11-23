@@ -19,7 +19,6 @@
 	import FilterChip from '$ui/FilterChip.svelte';
 	import MobilePatchesPackagesDialog from '$layout/dialogs/MobilePatchesPackagesDialog.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import Fuse from 'fuse.js';
 	import createFilter from '$utils/filter';
 	import { debounce } from '$utils/debounce';
 

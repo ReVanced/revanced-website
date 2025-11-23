@@ -8,7 +8,7 @@
 	}: {
 		title?: string;
 		description?: string;
-		schemas?: any[] | undefined;
+		schemas?: Record<string, unknown>[] | undefined;
 	} = $props();
 
 	const title = $derived(_title === '' ? 'ReVanced' : `ReVanced - ${_title}`);

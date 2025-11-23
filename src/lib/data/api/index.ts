@@ -141,7 +141,8 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 	if (options.count) url.searchParams.set('count', String(options.count));
 	if (options.cursor) url.searchParams.set('cursor', String(options.cursor));
 
-	const announcements = (await fetch(url.toString()).then((r) => r.json())) as ResponseAnnouncement[];
+	const response = await fetch(url.toString());
+	const announcements = (await response.json()) as ResponseAnnouncement[];
 
 	return { announcements };
 }
@@ -190,7 +191,7 @@ async function ping(): Promise<boolean> {
 	try {
 		const res = await fetch(`${settings.api_base_url()}/v4/ping`, { method: 'HEAD' });
 		return res.ok;
-	} catch (error) {
+	} catch {
 		return false;
 	}
 }

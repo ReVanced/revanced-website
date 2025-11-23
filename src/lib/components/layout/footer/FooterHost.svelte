@@ -35,10 +35,10 @@
 			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
 			<Query query={aboutQuery}>
 				{#snippet children(data)}
-					{#if data && typeof data === 'object' && 'about' in data && data.about && 'about' in data.about}
+					{#if data?.about?.about}
 						<div>
 							<p>
-								{(data as any).about.about}
+								{data.about.about}
 							</p>
 						</div>
 					{/if}
@@ -56,9 +56,9 @@
 			</FooterSection>
 			<Query query={aboutQuery}>
 				{#snippet children(data)}
-					{#if data && typeof data === 'object' && 'about' in data && data.about && 'socials' in data.about}
+					{#if data?.about?.socials}
 						<FooterSection title="Socials">
-							{#each (data as any).about.socials as { name, url }}
+							{#each data.about.socials as { name, url }}
 								<li>
 									<a href={url} target="_blank" rel="noreferrer">{name}</a>
 								</li>

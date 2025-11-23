@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { quadInOut } from 'svelte/easing';
+	import type { Snippet } from 'svelte';
 
 	import ArrowLeft from 'svelte-material-icons/ArrowLeft.svelte';
 
@@ -17,11 +18,11 @@
 		dialogOpen?: boolean;
 		fullscreen?: boolean;
 		notDismissible?: boolean;
-		icon?: any;
-		title?: any;
-		description?: any;
-		children?: any;
-		buttons?: any;
+		icon?: Snippet;
+		title?: Snippet;
+		description?: Snippet;
+		children?: Snippet;
+		buttons?: Snippet;
 	} = $props();
 
 	let element = $state() as HTMLDialogElement;

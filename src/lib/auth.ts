@@ -22,7 +22,13 @@ export class UnauthenticatedError extends Error {
 export function get_access_token(): AuthToken | null {
 	if (!browser) return null;
 	const data = localStorage.getItem('revanced_api_access_token');
-	if (data) return JSON.parse(data) as AuthToken;
+	if (data) {
+		try {
+			return JSON.parse(data) as AuthToken;
+		} catch {
+			return null;
+		}
+	}
 	return null;
 }
 
@@ -91,18 +97,19 @@ async function digest_fetch(
 	if (initialResponse.ok && initialResponse.status === 200) return initialResponse;
 
 	const authHeader = initialResponse.headers.get('Www-Authenticate');
-	if (!authHeader || !authHeader.startsWith('Digest '))
+	if (!authHeader?.startsWith('Digest '))
 		throw new Error('No Digest authentication header found');
 
 	// Parse the `WWW-Authenticate` header to extract the fields
-	const authParams = authHeader
-		.replace('Digest ', '')
-		.split(',')
-		.reduce((acc: Record<string, string>, item) => {
-			const [key, value] = item.trim().split('=');
-			acc[key] = value.replace(/"/g, '');
-			return acc;
-		}, {});
+	const authParams = Object.fromEntries(
+		authHeader
+			.replace('Digest ', '')
+			.split(',')
+			.map((item) => {
+				const [key, ...value] = item.trim().split('=');
+				return [key, value.join('=').replace(/"/g, '')];
+			})
+	);
 
 	const { realm, nonce, algorithm } = authParams;
 	const method = options.method || 'GET';

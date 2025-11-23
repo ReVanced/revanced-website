@@ -14,7 +14,6 @@
 	import type { ResponseAnnouncement } from '$lib/types';
 	import { admin_login, read_announcements } from '$lib/stores.svelte';
 	import Button from '$ui/Button.svelte';
-	import moment from 'moment';
 	import { debounce } from '$utils/debounce';
 	import createFilter from '$utils/filter';
 
@@ -46,9 +45,9 @@
 	const debouncedUpdate = debounce(update);
 
 	const archivedAnnouncements = (announcements: ResponseAnnouncement[]) =>
-		announcements.filter((a) => a.archived_at && moment(a.archived_at).isBefore(moment()));
+		announcements.filter((a) => a.archived_at && new Date(a.archived_at).getTime() < Date.now());
 	const activeAnnouncements = (announcements: ResponseAnnouncement[]) =>
-		announcements.filter((a) => !a.archived_at || moment(a.archived_at).isAfter(moment()));
+		announcements.filter((a) => !a.archived_at || new Date(a.archived_at).getTime() > Date.now());
 
 	const filterAnnouncements = (
 		announcements: ResponseAnnouncement[],

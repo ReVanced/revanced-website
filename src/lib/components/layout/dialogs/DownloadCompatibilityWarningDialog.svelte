@@ -22,8 +22,8 @@
 	{#snippet buttons()}
 		<Query {query}>
 			{#snippet children(data)}
-				{#if data && typeof data === 'object' && 'release' in data && data.release && 'download_url' in data.release}
-					<Button type="text" href={(data as any).release.download_url} onclick={() => (dialogOpen = false)}>
+				{#if data?.release?.download_url}
+					<Button type="text" href={data.release.download_url} onclick={() => (dialogOpen = false)}>
 						Okay
 					</Button>
 				{/if}

@@ -34,19 +34,17 @@ class AdminLoginStore {
 		const token = get_access_token();
 		const loggedIn = is_logged_in();
 
-		if (loggedIn) {
-			this.value = {
-				logged_in: true,
-				expires: token!.expires,
-				logged_in_previously: !!token?.token
-			};
-		} else {
-			this.value = {
-				logged_in: false,
-				expires: undefined,
-				logged_in_previously: !!token?.token
-			};
-		}
+		this.value = loggedIn
+			? {
+					logged_in: true,
+					expires: token!.expires,
+					logged_in_previously: !!token?.token
+				}
+			: {
+					logged_in: false,
+					expires: undefined,
+					logged_in_previously: !!token?.token
+				};
 	}
 }
 
@@ -58,17 +56,25 @@ class ReadAnnouncementsStore {
 	constructor() {
 		if (browser) {
 			const key = 'read_announcements';
-			const data = localStorage.getItem(key);
-			const parsedArray = data ? JSON.parse(data) : [];
-			this._set = new Set(parsedArray);
+			this.load(key);
 
 			window.addEventListener('storage', (e) => {
 				if (e.key === key) {
-					const data = localStorage.getItem(key);
-					const parsedArray = data ? JSON.parse(data) : [];
-					this._set = new Set(parsedArray);
+					this.load(key);
 				}
 			});
+		}
+	}
+
+	private load(key: string) {
+		const data = localStorage.getItem(key);
+		try {
+			const parsedArray = data ? JSON.parse(data) : [];
+			if (Array.isArray(parsedArray)) {
+				this._set = new Set(parsedArray);
+			}
+		} catch (e) {
+			console.error('Failed to parse read_announcements', e);
 		}
 	}
 
@@ -77,16 +83,12 @@ class ReadAnnouncementsStore {
 	}
 
 	add(id: number) {
-		const newSet = new Set(this._set);
-		newSet.add(id);
-		this._set = newSet;
+		this._set.add(id);
 		this.sync();
 	}
 
 	addAll(ids: number[]) {
-		const newSet = new Set(this._set);
-		ids.forEach((id) => newSet.add(id));
-		this._set = newSet;
+		ids.forEach((id) => this._set.add(id));
 		this.sync();
 	}
 

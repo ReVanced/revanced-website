@@ -1,5 +1,5 @@
 Phase 1: modernization
-I replaced the old Svelte 4 stores in src/lib/stores.ts with a new src/lib/stores.svelte.ts file that uses Svelte 5 Runes for better reactivity. I then updated all dependent components to access the store state via properties like admin_login.value instead of the $ prefix syntax.
+I replaced the old Svelte 4 stores in `src/lib/stores.ts` with a new src/lib/stores.svelte.ts file that uses Svelte 5 Runes for better reactivity. I then updated all dependent components to access the store state via properties like admin_login.value instead of the $ prefix syntax.
 
 Phase 2 performence and best practices
 I removed the inefficient setInterval polling from the authentication store and replaced it with an event-driven approach using a custom revanced-auth-change event. I also refactored the Wave component integration in the home page to use Svelte's bind:this instead of slow and non-idiomatic document.querySelector calls.
@@ -39,8 +39,8 @@ Updated UI components (Button, Dialog, etc) to use Svelte 5 snippets properly
 Fixed the search debounce on announcements and patches pages
 General type improvements and removed a bunch of any casts
 
-Attention to: vite.config.ts line: 8
-Attention to: src/lib/data/api/settings.ts line: 4
+Attention to: `vite.config.ts` line: 8
+Attention to: `src/lib/data/api/settings.ts` line: 4
 
 bug fixes and UI polish
 
@@ -51,3 +51,19 @@ Added spin animation and visual feedback to the settings reset button cuz there 
 
 Forgot to mention that i re-organised the entire structure of directories in this project because it was not very easy to navigate around in this project, hope that does not backfire.....
 If it does backfire, a backup is in: new_directories.txt
+
+Code cleanup and modernization
+
+Went through the whole project file by file to clean things up.
+Updated `auth.ts` to handle tokens better and safer.
+Fixed a bug in `horizontalSlide.ts` where a border width was set twice.
+Swapped `moment.js` for normal Date code in a few places to make things lighter.
+Cleaned up `api/index.ts` to use `async/await` everywhere.
+Made `Head.svelte` types stricter.
+Added some safety checks for `localStorage` so the app doesn't crash if data is bad.
+
+Unresolved stuff
+
+`types.ts`: The `PatchOption` type still uses `any` for `default` and `values`. I didn't have access to the real API data to know for sure what it returns, so I didn't dare to change it.
+`moment.js`: I left this in `relativeTime.ts` and `fromNow.ts` because the "time ago" logic is hard to replace without it. You could switch to `dayjs` later to save space.
+

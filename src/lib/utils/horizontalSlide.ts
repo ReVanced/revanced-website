@@ -40,6 +40,6 @@ export function horizontalSlide(
 			`margin-${direction}-start: ${t * margin_start_value}px;` +
 			`margin-${direction}-end: ${t * margin_end_value}px;` +
 			`border-${direction}-start-width: ${t * border_width_start_value}px;` +
-			`border-${direction}-start-width: ${t * border_width_end_value}px;`
+			`border-${direction}-end-width: ${t * border_width_end_value}px;`
 	};
 }
