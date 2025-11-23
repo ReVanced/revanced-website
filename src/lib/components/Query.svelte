@@ -1,16 +1,16 @@
-<script lang="ts">
+<script lang="ts" generics="TData, TError">
 	import type { CreateQueryResult } from '@tanstack/svelte-query';
 	import { isRestoring } from '../../routes/+layout.svelte';
-	// I might try to get this merged into tanstack query.
+	import type { Snippet } from 'svelte';
 
 	let {
 		query,
 		children,
 		error
 	}: {
-		query: CreateQueryResult<any, any>;
-		children?: (data: any) => any;
-		error?: any;
+		query: CreateQueryResult<TData, TError>;
+		children?: Snippet<[TData]>;
+		error?: Snippet;
 	} = $props();
 </script>
 

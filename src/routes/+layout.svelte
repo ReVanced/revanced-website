@@ -10,17 +10,17 @@
 	import { browser } from '$app/environment';
 
 	import { QueryClient } from '@tanstack/query-core';
-	import { persistQueryClient } from '@tanstack/query-persist-client-core';
+	import * as PersistClientCore from '@tanstack/query-persist-client-core';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
-	import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-	import { DateTrigger } from '$util/DateTrigger';
+	import * as SyncStoragePersister from '@tanstack/query-sync-storage-persister';
+	import { DateTrigger } from '$utils/DateTrigger';
 
 	import NavHost from '$layout/navbar/NavHost.svelte';
-	import Spinner from '$lib/components/Spinner.svelte';
+	import Spinner from '$ui/Spinner.svelte';
 	import ConsentDialog from '$layout/dialogs/ConsentDialog.svelte';
 	import { staleTime } from '$data/api';
 	import RouterEvents from '$data/routerEvents';
-	import { registerThemeEvents } from '$util/themeEvents';
+	import { registerThemeEvents } from '$utils/themeEvents';
 
 	import FooterHost from '$layout/footer/FooterHost.svelte';
 	import { api_base_url, set_about_info } from '$data/api/settings';
@@ -57,9 +57,9 @@
 		registerThemeEvents(dt);
 
 		isRestoring.set(true);
-		const [unsubscribe, promise] = persistQueryClient({
+		const [unsubscribe, promise] = PersistClientCore.persistQueryClient({
 			queryClient,
-			persister: createSyncStoragePersister({ storage: localStorage })
+			persister: SyncStoragePersister.createSyncStoragePersister({ storage: localStorage })
 		});
 		promise.then(() => isRestoring.set(false));
 		return unsubscribe;

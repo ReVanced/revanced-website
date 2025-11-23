@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Button from '$lib/components/Button.svelte';
-	import Divider from '$lib/components/Divider.svelte';
+	import Button from '$ui/Button.svelte';
+	import Divider from '$ui/Divider.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
-	import { isValidUrl } from '$util/isValidUrl';
+	import { isValidUrl } from '$utils/isValidUrl';
 	import Create from 'svelte-material-icons/Plus.svelte';
 	import Delete from 'svelte-material-icons/DeleteOutline.svelte';
 

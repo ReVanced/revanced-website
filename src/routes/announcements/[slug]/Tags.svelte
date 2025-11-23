@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 	import TagChip from '../TagChip.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';

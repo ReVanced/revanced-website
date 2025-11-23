@@ -3,13 +3,13 @@
 	import type { ResponseAnnouncement } from '$lib/types';
 	import NewHeader from './NewHeader.svelte';
 	import { queries } from '$data/api';
-	import { dev_log } from '$util/dev';
+	import { dev_log } from '$utils/dev';
 	import { useQueryClient } from '@tanstack/svelte-query';
 	import { read_announcements } from '$lib/stores.svelte';
 	import TagsHost from './TagsHost.svelte';
 	import Content from './[slug]/Content.svelte';
-	import ToolTip from '$lib/components/ToolTip.svelte';
-	import { relativeTime } from '$util/relativeTime';
+	import ToolTip from '$ui/ToolTip.svelte';
+	import { relativeTime } from '$utils/relativeTime';
 
 	import Archive from 'svelte-material-icons/ArchiveOutline.svelte';
 

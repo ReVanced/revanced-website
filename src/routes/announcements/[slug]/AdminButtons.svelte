@@ -2,11 +2,11 @@
 	import { useQueryClient, type CreateQueryResult } from '@tanstack/svelte-query';
 	import { admin, queries } from '$data/api';
 	import { goto } from '$app/navigation';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 	import Dialog from '$layout/dialogs/Dialog.svelte';
 	import type { Announcement, ResponseAnnouncement } from '$lib/types';
 	import moment from 'moment';
-	import { isValidUrl } from '$util/isValidUrl';
+	import { isValidUrl } from '$utils/isValidUrl';
 
 	import Delete from 'svelte-material-icons/DeleteOutline.svelte';
 	import Edit from 'svelte-material-icons/PencilOutline.svelte';
@@ -16,7 +16,7 @@
 	import Show from 'svelte-material-icons/EyeOutline.svelte';
 	import Hide from 'svelte-material-icons/EyeOffOutline.svelte';
 	import Unarchive from 'svelte-material-icons/ArchiveArrowUpOutline.svelte';
-	import { formatUTC } from '$util/formatUtc';
+	import { formatUTC } from '$utils/formatUtc';
 
 	let {
 		isEditing = $bindable(),

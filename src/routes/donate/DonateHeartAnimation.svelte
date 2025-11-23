@@ -8,7 +8,7 @@
 
 		let lastHeartTime = 0;
 
-		showHeart = (e, behind) => {
+		const handleShowHeart = (e: MouseEvent, behind: boolean) => {
 			const rect = background.getBoundingClientRect();
 			if (Date.now() - lastHeartTime < 100) return;
 			lastHeartTime = Date.now();
@@ -47,13 +47,15 @@
 			}, 1000);
 		};
 
+		showHeart = handleShowHeart;
+
 		let interval: ReturnType<typeof setTimeout> | undefined;
 		function showHeartRandom() {
 			const rect = background.getBoundingClientRect();
 
 			const x = rect.left + Math.floor(Math.random() * rect.width);
 			const y = rect.top + Math.floor(Math.random() * rect.height);
-			showHeart!({ clientX: x, clientY: y } as MouseEvent, true);
+			handleShowHeart({ clientX: x, clientY: y } as MouseEvent, true);
 
 			interval = setTimeout(showHeartRandom, Math.random() * 300);
 		}

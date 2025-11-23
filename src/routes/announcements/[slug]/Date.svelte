@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { relativeTime } from '$util/relativeTime';
+	import { relativeTime } from '$utils/relativeTime';
 	import moment from 'moment';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 

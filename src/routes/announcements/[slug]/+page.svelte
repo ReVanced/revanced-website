@@ -4,6 +4,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { queries } from '$data/api';
 	import { page } from '$app/stores';
+	import { replaceState } from '$app/navigation';
 	import Announcement from './Announcement.svelte';
 	import Query from '$lib/components/Query.svelte';
 
@@ -28,7 +29,7 @@
 	$effect(() => {
 		const slugPathname = `/announcements/${announcementIdNumber}-${slug}`;
 		if (slug && $page.url.pathname !== slugPathname) {
-			window.history.replaceState(null, '', slugPathname);
+			replaceState(slugPathname, {});
 		}
 	});
 </script>

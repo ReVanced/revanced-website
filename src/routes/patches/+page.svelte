@@ -4,6 +4,7 @@
 	import { quintOut } from 'svelte/easing';
 	import { derived, readable, type Readable } from 'svelte/store';
 	import { page } from '$app/stores';
+	import { pushState } from '$app/navigation';
 
 	import type { CompatiblePackage, Patch } from '$lib/types';
 
@@ -15,12 +16,12 @@
 	import Package from './Package.svelte';
 	import PatchItem from './PatchItem.svelte';
 	import Search from '$lib/components/Search.svelte';
-	import FilterChip from '$lib/components/FilterChip.svelte';
+	import FilterChip from '$ui/FilterChip.svelte';
 	import MobilePatchesPackagesDialog from '$layout/dialogs/MobilePatchesPackagesDialog.svelte';
 	import Query from '$lib/components/Query.svelte';
 	import Fuse from 'fuse.js';
-	import createFilter from '$util/filter';
-	import { debounce } from '$util/debounce';
+	import createFilter from '$utils/filter';
+	import { debounce } from '$utils/debounce';
 
 	const query = createQuery(() => queries.patches());
 
@@ -70,11 +71,14 @@
 			url.searchParams.delete('s');
 		}
 
-		window.history.pushState(null, '', url);
+		pushState(url, {});
 	};
 
+	const debouncedUpdate = debounce(update);
+
 	$effect(() => {
-		update();
+		searchTerm;
+		debouncedUpdate();
 	});
 </script>
 
@@ -110,7 +114,6 @@
 			bind:searchTerm
 			bind:displayedTerm
 			title="Search for patches"
-			onkeyup={debounce(update)}
 		/>
 	</div>
 </div>
@@ -127,6 +130,7 @@
 
 	<Query {query}>
 		{#snippet children(data)}
+		{@const filtered = filterPatches(data.patches, selectedPkg || '', displayedTerm)}
 		<MobilePatchesPackagesDialog
 			bind:dialogOpen={mobilePackages}
 			bind:searchTerm
@@ -146,7 +150,7 @@
 		</aside>
 
 		<div class="patches-container">
-			{#each filterPatches(data.patches, selectedPkg || '', displayedTerm) as patch}
+			{#each filtered as patch}
 				{#key selectedPkg || displayedTerm}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<PatchItem {patch} bind:showAllVersions />

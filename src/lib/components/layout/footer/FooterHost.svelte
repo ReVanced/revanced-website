@@ -1,0 +1,200 @@
+<script lang="ts">
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+
+	import { queries } from '$data/api';
+	import { createQuery } from '@tanstack/svelte-query';
+
+	import Query from '$lib/components/Query.svelte';
+	import FooterSection from './FooterSection.svelte';
+	import { RV_DMCA_GUID } from '$data/api/public';
+	import Divider from '$ui/Divider.svelte';
+	import Button from '$ui/Button.svelte';
+	import EmailDialog from '$layout/dialogs/EmailDialog.svelte';
+
+	const aboutQuery = createQuery(() => queries.about());
+
+	let location: string = $state('');
+	let showEmailDialog = $state(false);
+
+	$effect(() => {
+		// DMCA Protection Badge
+		
+		location = document.location.href;
+	});
+
+</script>
+
+<EmailDialog bind:showEmailDialog />
+
+<Divider horizontalPadding={'15px'} />
+<footer in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	<div class="top">
+		<section class="main-content">
+			
+			<img src="/logo.svg" class="logo-image" alt="ReVanced Logo" />
+			<Query query={aboutQuery}>
+				{#snippet children(data)}
+					{#if data && typeof data === 'object' && 'about' in data && data.about && 'about' in data.about}
+						<div>
+							<p>
+								{(data as any).about.about}
+							</p>
+						</div>
+					{/if}
+				{/snippet}
+			</Query>
+		</section>
+
+		<section class="links-container">
+			<FooterSection title="Pages">
+				<li><a href="/">Home</a></li>
+				<li><a href="/download">Download</a></li>
+				<li><a href="/patches">Patches</a></li>
+				<li><a href="/contributors">Contributors</a></li>
+				<li><a href="/donate">Donate</a></li>
+			</FooterSection>
+			<Query query={aboutQuery}>
+				{#snippet children(data)}
+					{#if data && typeof data === 'object' && 'about' in data && data.about && 'socials' in data.about}
+						<FooterSection title="Socials">
+							{#each (data as any).about.socials as { name, url }}
+								<li>
+									<a href={url} target="_blank" rel="noreferrer">{name}</a>
+								</li>
+							{/each}
+						</FooterSection>
+					{/if}
+				{/snippet}
+			</Query>
+		</section>
+	</div>
+
+	<div class="bottom">
+		<div id="logo-name"><span>Re</span>Vanced</div>
+		<Button type="text" style="color: var(--text-four); font-weight: 600;">
+			<a href="/donate">Donate</a>
+		</Button>
+		<Button
+			type="text"
+			style="color: var(--text-four); font-weight: 600;"
+			onclick={() => (showEmailDialog = true)}
+		>
+			E-Mail
+		</Button>
+		<!-- DMCA Protection Badge -->
+		<a
+			href="//www.dmca.com/Protection/Status.aspx?ID={RV_DMCA_GUID}&refurl={location}"
+			title="DMCA.com Protection Status"
+			class="dmca-badge"
+		>
+			<img
+				src="https://images.dmca.com/Badges/dmca-badge-w150-5x1-08.png?ID={RV_DMCA_GUID}"
+				alt="DMCA.com Protection Status"
+			/>
+		</a>
+	</div>
+</footer>
+
+<style lang="scss">
+	footer {
+		max-width: min(87%, 100rem);
+		padding: 5rem 0rem;
+		margin: 0 auto;
+
+		.top {
+			display: flex;
+			gap: 8rem;
+			justify-content: space-between;
+			margin-bottom: 4rem;
+
+			@media (max-width: 1050px) {
+				flex-direction: column;
+				gap: 2rem;
+			}
+		}
+
+		.bottom {
+			display: flex;
+			gap: 2rem;
+			align-items: center;
+
+			a {
+				text-decoration: none;
+				color: var(--text-four);
+				font-weight: 600;
+			}
+
+			@media (max-width: 768px) {
+				flex-wrap: wrap;
+				gap: 1rem;
+			}
+		}
+	}
+
+	.dmca-badge {
+		display: flex;
+		align-items: center;
+	}
+
+	#logo-name {
+		font-size: 1.4rem;
+		color: var(--text-one);
+		font-weight: 600;
+
+		span {
+			color: var(--primary);
+		}
+	}
+
+	li {
+		list-style: none;
+		color: var(--text-four);
+		font-size: 0.9rem;
+		font-weight: 500;
+
+		a {
+			color: var(--primary);
+			font-weight: 600;
+			font-size: 0.95rem;
+		}
+	}
+
+	.main-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		align-items: flex-start;
+	}
+
+	.logo-image {
+		height: 2.5rem;
+	}
+
+	a {
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline var(--secondary);
+			color: var(--text-one);
+		}
+	}
+
+	.links-container {
+		display: flex;
+		gap: 10rem;
+		margin-top: 1rem;
+
+		@media (max-width: 1050px) {
+			display: grid;
+			gap: 2rem;
+			grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+		}
+
+		@media (max-width: 768px) {
+			display: flex;
+			flex-direction: column;
+			gap: initial;
+		}
+	}
+</style>

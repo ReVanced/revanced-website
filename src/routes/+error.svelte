@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Meta from '$lib/components/Head.svelte';
 	import { page } from '$app/stores';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 
 	const status = $derived($page.status);
 </script>

@@ -13,10 +13,10 @@
 	import Search from '$lib/components/Search.svelte';
 	import type { ResponseAnnouncement } from '$lib/types';
 	import { admin_login, read_announcements } from '$lib/stores.svelte';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 	import moment from 'moment';
-	import { debounce } from '$util/debounce';
-	import createFilter from '$util/filter';
+	import { debounce } from '$utils/debounce';
+	import createFilter from '$utils/filter';
 
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 	import Create from 'svelte-material-icons/Plus.svelte';
@@ -43,6 +43,8 @@
 		searchTerm ? url.searchParams.set('s', searchTerm) : url.searchParams.delete('s');
 	};
 
+	const debouncedUpdate = debounce(update);
+
 	const archivedAnnouncements = (announcements: ResponseAnnouncement[]) =>
 		announcements.filter((a) => a.archived_at && moment(a.archived_at).isBefore(moment()));
 	const activeAnnouncements = (announcements: ResponseAnnouncement[]) =>
@@ -64,7 +66,8 @@
 	};
 
 	$effect(() => {
-		debounce(update)();
+		searchTerm;
+		debouncedUpdate();
 
 		if (read_announcements.value.size === 0 && query.data) {
 			read_announcements.addAll(query.data.announcements.map((a) => a.id));
@@ -80,7 +83,7 @@
 				bind:searchTerm
 				bind:displayedTerm
 				title="Search for announcements"
-				onkeyup={debounce(update)}
+				onkeyup={debouncedUpdate}
 			/>
 		</div>
 		{#if admin_login.value.logged_in}
@@ -97,9 +100,13 @@
 
 	<Query {query}>
 		{#snippet children(data)}
-		{#if activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
+		{@const filtered = filterAnnouncements(data.announcements, displayedTerm, selectedTags)}
+		{@const active = activeAnnouncements(filtered)}
+		{@const archived = archivedAnnouncements(filtered)}
+
+		{#if active.length}
 			<div class="cards">
-				{#each activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
+				{#each active as announcement}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 						<AnnouncementCard {announcement} />
 					</div>
@@ -107,7 +114,7 @@
 			</div>
 		{/if}
 
-		{#if archivedAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
+		{#if archived.length}
 			<div
 				role="button"
 				class="expand-archived"
@@ -129,7 +136,7 @@
 					in:slide={{ easing: quintIn, duration: 250 }}
 					out:slide={{ easing: quintOut, duration: 250 }}
 				>
-					{#each archivedAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
+					{#each archived as announcement}
 						<AnnouncementCard {announcement} />
 					{/each}
 				</div>

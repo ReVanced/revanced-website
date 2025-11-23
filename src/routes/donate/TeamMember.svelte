@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	import type { TeamMember } from '$lib/types';
-	import ToolTip from '$lib/components/ToolTip.svelte';
+	import ToolTip from '$ui/ToolTip.svelte';
 
 	import CheckDecagramOutline from 'svelte-material-icons/CheckDecagramOutline.svelte';
 

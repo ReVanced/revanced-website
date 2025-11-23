@@ -10,14 +10,15 @@ const config = {
 		}),
 		alias: {
 			$components: 'src/lib/components',
+			$ui: 'src/lib/components/ui',
+			$layout: 'src/lib/components/layout',
+			$data: 'src/lib/data',
+			$utils: 'src/lib/utils',
 			$assets: 'src/lib/assets',
+			$images: 'src/lib/assets/images',
 			$types: 'src/lib/types.ts',
 			$stores: 'src/lib/stores',
-			$lib: 'src/lib',
-			$layout: 'src/layout',
-			$data: 'src/data',
-			$util: 'src/util',
-			$images: 'images'
+			$lib: 'src/lib'
 		}
 	}
 };

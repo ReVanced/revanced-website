@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 
 	import type { Patch } from '$lib/types';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 

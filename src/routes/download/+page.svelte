@@ -11,7 +11,7 @@
 
 	import Head from '$lib/components/Head.svelte';
 	import Query from '$lib/components/Query.svelte';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 	import Picture from '$lib/components/Picture.svelte';
 	import DownloadCompatibilityWarningDialog from '$layout/dialogs/DownloadCompatibilityWarningDialog.svelte';
 

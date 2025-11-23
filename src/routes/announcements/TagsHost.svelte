@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Tags } from '$lib/types';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$ui/Button.svelte';
 	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	let { tags, expandable = false, clickable = true }: { tags: Tags; expandable?: boolean; clickable?: boolean } = $props();

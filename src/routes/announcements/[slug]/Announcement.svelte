@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { admin_login } from '$lib/stores.svelte';
 	import Title from './Title.svelte';
-	import Divider from '$lib/components/Divider.svelte';
+	import Divider from '$ui/Divider.svelte';
 	import AdminButtons from './AdminButtons.svelte';
 	import Author from './Author.svelte';
 	import Date from './Date.svelte';

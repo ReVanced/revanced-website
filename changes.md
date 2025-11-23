@@ -28,3 +28,26 @@ In Production (Your Main Server):
 The code detects it is not in "dev mode".
 It reverts to using the real URL: https://api.revanced.app.
 Result: Your browser will make requests directly to the API.
+
+
+Modernised codebase and fix types
+
+Went through and cleaned up a lot of the older syntax.
+Switched API calls to use async/await instead of promise chains
+Converted horizontalSlide to TypeScript
+Updated UI components (Button, Dialog, etc) to use Svelte 5 snippets properly
+Fixed the search debounce on announcements and patches pages
+General type improvements and removed a bunch of any casts
+
+Attention to: vite.config.ts line: 8
+Attention to: src/lib/data/api/settings.ts line: 4
+
+bug fixes and UI polish
+
+Fixed infinite loop in donation heart animation by breaking circular dependency
+Replaced direct history manipulation with SvelteKit navigation to fix router conflicts
+Resolved hydration mismatch in Head component by correcting JsonLd placement
+Added spin animation and visual feedback to the settings reset button cuz there was no way to know if it was clicked
+
+Forgot to mention that i re-organised the entire structure of directories in this project because it was not very easy to navigate around in this project, hope that does not backfire.....
+If it does backfire, a backup is in: new_directories.txt

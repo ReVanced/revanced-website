@@ -1,4 +1,4 @@
-import { RV_API_URL } from '../../../data/api/public';
+import { RV_API_URL } from '$data/api/public';
 import type { RequestHandler } from './$types';
 
 const proxy: RequestHandler = async ({ request, params, url, fetch }) => {

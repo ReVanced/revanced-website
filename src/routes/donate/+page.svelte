@@ -12,7 +12,7 @@
 	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
 	import TeamMember from './TeamMember.svelte';
 
-	import { supportsWebP } from '$util/supportsWebP';
+	import { supportsWebP } from '$utils/supportsWebP';
 
 	const teamQuery = createQuery(() => queries.team());
 	const aboutQuery = createQuery(() => queries.about());

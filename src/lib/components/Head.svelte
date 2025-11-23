@@ -26,10 +26,10 @@
 	<!-- Twitter -->
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={description} />
-
-	{#if schemas}
-		{#each schemas as schema}
-			<JsonLd {schema} />
-		{/each}
-	{/if}
 </svelte:head>
+
+{#if schemas}
+	{#each schemas as schema}
+		<JsonLd {schema} />
+	{/each}
+{/if}
