@@ -34,7 +34,7 @@
 	},
 	"dependencies": {
 		"@iconify-json/material-symbols": "^1.2.46",
-		"@madkarma/svelte-storable": "^1.0.4",
+		"runed": "^0.36.0",
 		"unplugin-icons": "^22.5.0"
 	}
 }

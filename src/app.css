@@ -7,6 +7,9 @@
     border: none;
     outline: none;
     background: none;
+}
+
+body {
     font-family: "Manrope", sans-serif;
     font-optical-sizing: auto;
 }
@@ -15,9 +18,14 @@
     border-radius: 10px;
 }
 
-.unselectable, .unselectable * {
+.unselectable,
+.unselectable * {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
+
+[data-theme="light"] {}
+
+[data-theme="dark"] {}

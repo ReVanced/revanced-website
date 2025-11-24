@@ -11,9 +11,9 @@ importers:
       '@iconify-json/material-symbols':
         specifier: ^1.2.46
         version: 1.2.46
-      '@madkarma/svelte-storable':
-        specifier: ^1.0.4
-        version: 1.0.4(svelte@5.43.12)(typescript@5.9.3)
+      runed:
+        specifier: ^0.36.0
+        version: 0.36.0(@sveltejs/kit@2.48.5(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.12)(vite@7.2.2(@types/node@22.19.1)))(svelte@5.43.12)(vite@7.2.2(@types/node@22.19.1)))(svelte@5.43.12)
       unplugin-icons:
         specifier: ^22.5.0
         version: 22.5.0(svelte@5.43.12)
@@ -321,16 +321,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
-
-  '@madkarma/svelte-storable@1.0.4':
-    resolution: {integrity: sha512-E1vyfs89MzEjT4JJwUH23qKuwia50NP48zRXPLuOtEtIqXl46AW0ZbwpBFXGoSaHodhFOrbYROSLQ4iZCjbJag==}
-    peerDependencies:
-      svelte: ^5.0.0
-
-  '@madkarma/ts-utils@1.1.2':
-    resolution: {integrity: sha512-iQqKMtcd0QXSHzHm0L0VNHcUyAuYyd9W05F9fG/pvdB3YZOQzfN85v6pFUH5BdjbjhFGOIs/JwmXBEu290YRww==}
-    peerDependencies:
-      typescript: ^5.9.3
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -671,6 +661,10 @@ packages:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
 
+  dequal@2.0.3:
+    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
+    engines: {node: '>=6'}
+
   devalue@5.5.0:
     resolution: {integrity: sha512-69sM5yrHfFLJt0AZ9QqZXGCPfJ7fQjvpln3Rq5+PS03LD32Ost1Q9N+eEnaQwGRIriKkMImXD56ocjQmfjbV3w==}
 
@@ -908,6 +902,10 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
+  lz-string@1.5.0:
+    resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
+    hasBin: true
+
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -1071,6 +1069,18 @@ packages:
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
+
+  runed@0.36.0:
+    resolution: {integrity: sha512-CK84KPwAausPQEyWF9t6miCuNW5isAKPMswDsz7jhdueiZZ9du/UrgWc/aggLts8QuppT8KucryrHDFBAqk9Ww==}
+    peerDependencies:
+      '@sveltejs/kit': ^2.21.0
+      svelte: ^5.7.0
+      zod: ^4.1.0
+    peerDependenciesMeta:
+      '@sveltejs/kit':
+        optional: true
+      zod:
+        optional: true
 
   sade@1.8.1:
     resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
@@ -1465,17 +1475,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@madkarma/svelte-storable@1.0.4(svelte@5.43.12)(typescript@5.9.3)':
-    dependencies:
-      '@madkarma/ts-utils': 1.1.2(typescript@5.9.3)
-      svelte: 5.43.12
-    transitivePeerDependencies:
-      - typescript
-
-  '@madkarma/ts-utils@1.1.2(typescript@5.9.3)':
-    dependencies:
-      typescript: 5.9.3
-
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -1790,6 +1789,8 @@ snapshots:
 
   deepmerge@4.3.1: {}
 
+  dequal@2.0.3: {}
+
   devalue@5.5.0: {}
 
   esbuild@0.25.12:
@@ -2048,6 +2049,8 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
+  lz-string@1.5.0: {}
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -2209,6 +2212,15 @@ snapshots:
   run-parallel@1.2.0:
     dependencies:
       queue-microtask: 1.2.3
+
+  runed@0.36.0(@sveltejs/kit@2.48.5(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.12)(vite@7.2.2(@types/node@22.19.1)))(svelte@5.43.12)(vite@7.2.2(@types/node@22.19.1)))(svelte@5.43.12):
+    dependencies:
+      dequal: 2.0.3
+      esm-env: 1.2.2
+      lz-string: 1.5.0
+      svelte: 5.43.12
+    optionalDependencies:
+      '@sveltejs/kit': 2.48.5(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.12)(vite@7.2.2(@types/node@22.19.1)))(svelte@5.43.12)(vite@7.2.2(@types/node@22.19.1))
 
   sade@1.8.1:
     dependencies:
