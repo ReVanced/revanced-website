@@ -20,7 +20,7 @@ class ModalStack {
 	}
 
 	closeTop() {
-		if (this.stack.length < 0) return;
+		if (this.stack.length <= 0) return;
 		const topId = this.stack[this.stack.length - 1];
 		this.modals.get(topId)?.();
 	}

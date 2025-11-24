@@ -14,10 +14,7 @@
 	let isTopModal = $derived(modalsStack.isTopModal(id));
 
 	$effect(() => {
-		if (open)
-			modalsStack.push(id, () => {
-				open = false;
-			});
+		if (open) modalsStack.push(id, () => (open = false));
 		else modalsStack.pop(id);
 	});
 </script>
