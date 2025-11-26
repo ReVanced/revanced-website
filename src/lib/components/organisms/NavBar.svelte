@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import logo from '$assets/logo.svg';
-	import Notifications from 'virtual:icons/material-symbols/notifications-outline';
-	import Settings from 'virtual:icons/material-symbols/settings-outline';
+	import Notifications from 'virtual:icons/material-symbols/campaign';
+	import Settings from 'virtual:icons/material-symbols/settings';
 	import Modal from '$components/molecules/Modal.svelte';
 
 	const navItems = [
@@ -34,18 +34,18 @@
 		<a
 			href="/announcements"
 			class="rounded nav-button unselectable"
-			class:active={page.url.pathname === '/announcements'}><Notifications /></a
+			class:active={page.url.pathname === '/announcements'}><Notifications width="24" height="24" /></a
 		>
 		<button
 			class="rounded nav-button unselectable"
 			type="button"
-			onclick={() => (settingsOpen = true)}><Settings /></button
-		>
+			onclick={() => (settingsOpen = true)}><Settings width="20" height="20" /></button>
 	</div>
 </nav>
 
 <Modal id="settings" bind:open={settingsOpen}>
 	<h2>Settings</h2>
+	<p>Configure the API for this website.</p>
 	{#snippet buttons()}
 		<button type="button" onclick={() => (loginOpen = true)}>Login</button>
 	{/snippet}
@@ -66,6 +66,7 @@
 		top: 0;
 		left: 0;
 		z-index: 9997;
+		background-color: var(--nav-bg);
 	}
 
 	.nav-group {
@@ -83,20 +84,36 @@
 		justify-content: center;
 	}
 
+	.nav-item {
+		margin-left: 0.5rem;
+	}
+
 	.nav-button {
 		text-decoration: none;
-		color: #333;
+		color: var(--nav-btn-color);
 		font-weight: 500;
-		padding: 0.5rem 1rem;
-		transition: background-color 0.2s;
+		padding: 0.375rem 0.875rem;
+		transition: background-color 0.4s, color 1s;
 
 		&:hover {
-			background-color: #e0e0e0;
+			background-color: var(--nav-btn-hover-bg);
+			color: var(--nav-btn-hover-color);
+		}
+
+		&:active {
+			background-color: var(--nav-btn-active-bg);
+			color: var(--nav-btn-active-color);
 		}
 
 		&.active {
-			color: #fff;
-			background-color: #333;
+			color: var(--nav-btn-active-color);
+			background-color: var(--nav-btn-active-bg);
+			transition: background-color 0.3s, color 0.3s;
+			cursor: default;
+		}
+
+		&:not(.active) {
+			cursor: pointer;
 		}
 	}
 
