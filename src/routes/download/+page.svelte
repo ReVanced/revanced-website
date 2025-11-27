@@ -15,9 +15,25 @@
 	import Picture from '$lib/components/Picture.svelte';
 	import DownloadCompatibilityWarningDialog from '$layout/Dialogs/DownloadCompatibilityWarningDialog.svelte';
 	import { onMount } from 'svelte';
+	import { derived, readable, type Readable } from 'svelte/store';
+	import { building } from '$app/environment';
+	import { page } from '$app/stores';
 
 	const query = createQuery(queries.manager());
 
+	let searchParams: Readable<URLSearchParams>;
+
+	if (building) {
+		searchParams = readable(new URLSearchParams());
+	} else {
+		searchParams = derived(page, ($page) => $page.url.searchParams);
+	}
+
+	$: displayPrerelease = $searchParams.get('prerelease');
+
+	onMount(() => {
+		console.log(displayPrerelease, typeof displayPrerelease, displayPrerelease == '', 'jh');
+	});
 	let warning: string;
 	let warningDialogue = false;
 
@@ -78,6 +94,12 @@
 				<Button on:click={handleClick} icon={TrayArrowDown} type="filled">
 					{data.release.version}
 				</Button>
+
+				{#if displayPrerelease != null}
+					<Button on:click={handleClick} icon={TrayArrowDown} type="filled">
+						{data.release.version}
+					</Button>
+				{/if}
 			{:else}
 				<Button
 					on:click={handleClick}
