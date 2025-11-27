@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
+:root {
+    --nav-bg: #1f1f26;
+    --nav-btn-color: #acc1d2;
+    --nav-btn-hover-bg: #252b31;
+    --nav-btn-hover-color: #d9d9d9;
+    --nav-btn-active-bg: #293645;
+    --nav-btn-active-color: #93c6ee;
+    --settings-icon-color: #acc1d2;
+    --settings-title-color: #9ed5ff;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -12,6 +23,7 @@
 body {
     font-family: "Manrope", sans-serif;
     font-optical-sizing: auto;
+    background-color: #1a191f;
 }
 
 .rounded {

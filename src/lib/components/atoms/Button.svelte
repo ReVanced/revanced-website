@@ -7,7 +7,7 @@
 		icon?: typeof import('virtual:icons/*').default;
 	} & WithChildren &
 		HTMLButtonAttributes;
-	let { buttonStyle, icon: Icon, children, class: klass, ...rest }: Props = $props();
+	let { buttonStyle, icon: Icon, children, class: klass = '', ...rest }: Props = $props();
 </script>
 
 <button class="{buttonStyle} {klass}" {...rest}>
@@ -25,12 +25,35 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
-		padding: 1rem 1.5rem;
-		border-radius: 9999px;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
 		cursor: pointer;
+		font-family: inherit;
+		font-weight: 500;
+		transition: all 0.2s ease-in-out;
+		border: 1px solid transparent;
 	}
 
-	button:hover {
+	.filled {
+		background-color: var(--nav-btn-active-bg);
+		color: var(--nav-btn-active-color);
+	}
+
+	.filled:hover {
+		background-color: var(--nav-btn-hover-bg);
+	}
+
+	.text {
+		background-color: transparent;
+		color: inherit;
+	}
+
+	.text:hover {
+		opacity: 0.8;
+	}
+
+	.text:active {
+		opacity: 0.6;
 	}
 
 	.content {

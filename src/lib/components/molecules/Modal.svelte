@@ -44,18 +44,21 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		padding: 2rem;
+		padding: 1.5rem;
+		min-width: 400px;
 		max-width: 90vw;
 		max-height: 90vh;
-		overflow-y: auto;
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
 		z-index: 9999;
+		background-color: #1e1f24;
+		border-radius: 32px;
 	}
 
 	.content {
 		flex: 1;
+		overflow-y: auto;
 	}
 
 	.buttons {
