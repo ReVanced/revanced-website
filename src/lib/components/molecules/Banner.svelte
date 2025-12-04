@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { PersistedState } from 'runed';
 	import type { WithChildren } from '$types';
 	import Info from 'virtual:icons/material-symbols/info-outline';
 	import Warning from 'virtual:icons/material-symbols/warning-outline';
 	import Error from 'virtual:icons/material-symbols/error-outline';
 	import Close from 'virtual:icons/material-symbols/close';
-
-	const readBannerIds = new PersistedState<string[]>('read_banner_ids', []);
+	import { readBannerIds } from '$stores';
 
 	type Props = {
 		type: 'info' | 'warning' | 'error';
