@@ -26,14 +26,14 @@
 		"globals": "^16.5.0",
 		"prettier": "^3.7.4",
 		"prettier-plugin-svelte": "^3.4.0",
-		"svelte": "^5.45.4",
+		"svelte": "^5.45.5",
 		"svelte-check": "^4.3.4",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.48.1",
 		"vite": "^7.2.6"
 	},
 	"dependencies": {
-		"@iconify-json/material-symbols": "^1.2.48",
+		"@iconify-json/material-symbols": "^1.2.49",
 		"runed": "^0.36.0",
 		"unplugin-icons": "^22.5.0"
 	}
