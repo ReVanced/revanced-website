@@ -19,10 +19,16 @@
 		children,
 		id,
 		permanent = false,
-		closed = $bindable(readBannerIds.current.includes(id))
+		closed = $bindable(false)
 	}: Props = $props();
 
-	const Icon = type === 'info' ? Info : type === 'warning' ? Warning : Error;
+	$effect(() => {
+		if (readBannerIds.current.includes(id)) {
+			closed = true;
+		}
+	});
+
+	let Icon = $derived(type === 'info' ? Info : type === 'warning' ? Warning : Error);
 </script>
 
 {#if !closed}
