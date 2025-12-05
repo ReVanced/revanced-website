@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import storable from '@madkarma/svelte-storable';
 	import type { WithChildren } from '$types';
 	import Info from 'virtual:icons/material-symbols/info-outline';
 	import Warning from 'virtual:icons/material-symbols/warning-outline';
 	import Error from 'virtual:icons/material-symbols/error-outline';
 	import Close from 'virtual:icons/material-symbols/close';
-
-	const readBannerIds = storable<string[]>('read_banner_ids', []);
+	import { readBannerIds } from '$stores';
 
 	type Props = {
 		type: 'info' | 'warning' | 'error';
@@ -21,10 +19,16 @@
 		children,
 		id,
 		permanent = false,
-		closed = $bindable($readBannerIds.includes(id))
+		closed = $bindable(false)
 	}: Props = $props();
 
-	const Icon = type === 'info' ? Info : type === 'warning' ? Warning : Error;
+	$effect(() => {
+		if (readBannerIds.current.includes(id)) {
+			closed = true;
+		}
+	});
+
+	let Icon = $derived(type === 'info' ? Info : type === 'warning' ? Warning : Error);
 </script>
 
 {#if !closed}
@@ -41,7 +45,7 @@
 				type="button"
 				onclick={() => {
 					closed = true;
-					$readBannerIds = [...$readBannerIds, id];
+					readBannerIds.current = [...readBannerIds.current, id];
 				}}
 			>
 				<Close />

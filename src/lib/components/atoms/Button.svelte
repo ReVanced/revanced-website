@@ -1,36 +1,140 @@
 <script lang="ts">
-	import type { HTMLButtonAttributes } from 'svelte/elements';
-	import type { WithChildren } from '$types';
+	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
+	import type { WithOptionalChildren } from '$types';
+
 
 	type Props = {
-		buttonStyle: 'filled' | 'tonal' | 'text' | 'outlined';
+		buttonStyle?: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
+		variant?: 'default' | 'danger' | 'onDangerBackground';
 		icon?: typeof import('virtual:icons/*').default;
-	} & WithChildren &
-		HTMLButtonAttributes;
-	let { buttonStyle, icon: Icon, children, class: klass, ...rest }: Props = $props();
+		href?: string;
+		target?: string;
+		disabled?: boolean;
+	} & WithOptionalChildren &
+		Omit<HTMLButtonAttributes, 'disabled'> &
+		Omit<HTMLAnchorAttributes, 'href' | 'target'>;
+
+	let {
+		buttonStyle = 'filled',
+		variant = 'default',
+		icon: Icon,
+		href,
+		target,
+		disabled = false,
+		children,
+		class: klass = '',
+		...rest
+	}: Props = $props();
+
+	let hasChildren = $derived(children !== undefined);
+	let computedStyle = $derived(hasChildren ? buttonStyle : 'icon');
 </script>
 
-<button class="{buttonStyle} {klass}" {...rest}>
-	{#if Icon}
-		<Icon />
-	{/if}
-	<span class="content">
-		{@render children()}
-	</span>
-</button>
+{#if href}
+	<a
+		{href}
+		{target}
+		class="{computedStyle} {variant} {klass}"
+		class:disabled
+		{...rest}
+	>
+		{#if Icon}
+			<Icon />
+		{/if}
+		{#if children}
+			<span class="content">{@render children()}</span>
+		{/if}
+	</a>
+{:else}
+	<button
+		class="{computedStyle} {variant} {klass}"
+		class:disabled
+		{disabled}
+		{...rest}
+	>
+		{#if Icon}
+			<Icon />
+		{/if}
+		{#if children}
+			<span class="content">{@render children()}</span>
+		{/if}
+	</button>
+{/if}
 
 <style>
+	a,
 	button {
+		min-width: max-content;
+		font-size: 0.95rem;
+		text-decoration: none;
+		color: var(--text-one);
+		font-weight: 600;
+		border: none;
+		border-radius: 100px;
 		display: inline-flex;
-		align-items: center;
 		justify-content: center;
+		align-items: center;
 		gap: 0.5rem;
-		padding: 1rem 1.5rem;
-		border-radius: 9999px;
 		cursor: pointer;
+		transition:
+			transform 0.4s var(--bezier-one),
+			filter 0.4s var(--bezier-one);
+		user-select: none;
+		padding: 16px 24px;
+		font-family: inherit;
 	}
 
-	button:hover {
+	a:hover:not(.disabled),
+	button:hover:not(.disabled) {
+		filter: brightness(85%);
+	}
+
+	.disabled {
+		filter: grayscale(100%);
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+
+	.filled {
+		background-color: var(--primary);
+		color: var(--text-three);
+	}
+
+	.tonal {
+		background-color: var(--surface-four);
+		color: var(--text-one);
+	}
+
+	.text {
+		background-color: transparent;
+		color: var(--primary);
+		font-weight: 500;
+		padding: 0;
+	}
+
+	.outlined {
+		border: 2px solid var(--primary);
+		background-color: transparent;
+	}
+
+	.icon {
+		background-color: transparent;
+		color: currentColor;
+		padding: 0;
+	}
+
+	.icon:hover {
+		filter: brightness(75%);
+	}
+
+	.danger {
+		background-color: var(--red-one);
+		color: var(--surface-four);
+	}
+
+	.onDangerBackground {
+		background-color: #ffd3d3;
+		color: #601410;
 	}
 
 	.content {

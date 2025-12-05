@@ -8,6 +8,12 @@
 </head>
 
 <body data-sveltekit-preload-data="hover">
+	<script>
+		// inline script to set theme before SvelteKit hydrates
+		const theme = JSON.parse(localStorage.getItem('theme')) || 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+	</script>
+
 	<div style="display: contents">%sveltekit.body%</div>
 </body>
 
