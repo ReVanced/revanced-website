@@ -13,6 +13,7 @@ const config = {
 			$assets: 'src/lib/assets',
 			$types: 'src/lib/types.ts',
 			$stores: 'src/lib/stores',
+			$api: 'src/lib/api',
 			$lib: 'src/lib'
 		}
 	}
