@@ -1,5 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
+:root {
+    --font-main: 'Manrope', sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+
+    --hue: 206;
+
+    --primary: hsl(calc(var(--hue) + 0), 100%, 81%);
+    --secondary: hsl(calc(var(--hue) + 2), 75%, 82%);
+    --tertiary: hsla(calc(var(--hue) - 1), 91%, 69%, 0.15);
+
+    --text-one: hsl(calc(var(--hue) + 0), 100%, 94%);
+    --text-two: hsl(calc(var(--hue) + 6), 19%, 19%);
+    --text-three: hsl(calc(var(--hue) + 20), 48%, 18%);
+    --text-four: hsl(calc(var(--hue) + 2), 30%, 75%);
+
+    --surface-one: hsl(calc(var(--hue) + 0), 100%, 94%);
+    --surface-two: hsl(calc(var(--hue) + 46), 10%, 11%);
+    --surface-three: hsl(calc(var(--hue) + 4), 14%, 17%);
+    --surface-four: hsl(calc(var(--hue) + 6), 19%, 19%);
+    --surface-five: hsl(calc(var(--hue) + 15), 17%, 26%);
+    --surface-six: hsl(calc(var(--hue) + 2), 30%, 75%);
+    --surface-seven: hsl(calc(var(--hue) + 24), 9%, 13%);
+    --surface-eight: hsl(calc(var(--hue) + 34), 9%, 13.5%);
+    --surface-nine: hsl(calc(var(--hue) + 24), 9.5%, 17.5%);
+    --background-one: hsl(calc(var(--hue) + 46), 10%, 11%);
+
+    --border: hsl(calc(var(--hue) + 15), 17%, 26%);
+    --red-one: hsl(333, 84%, 62%);
+    --red-two: hsl(357, 74%, 60%);
+    --red-three: hsl(2, 68%, 83%);
+    --yellow-one: hsl(59, 100%, 72%);
+
+    --bezier-one: ease-out;
+    --drop-shadow-one: 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+                       0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+                       0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+
+    --nav-bg: #1f1f26;
+    --nav-btn-color: #acc1d2;
+    --nav-btn-hover-bg: #252b31;
+    --nav-btn-hover-color: #d9d9d9;
+    --nav-btn-active-bg: #293645;
+    --nav-btn-active-color: #93c6ee;
+    --settings-icon-color: #acc1d2;
+    --settings-title-color: #9ed5ff;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,11 +54,142 @@
     border: none;
     outline: none;
     background: none;
+    font-family: var(--font-main);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html {
+    font-size: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 body {
-    font-family: "Manrope", sans-serif;
+    font-family: var(--font-main);
     font-optical-sizing: auto;
+    background-color: var(--background-one);
+    overflow-x: hidden;
+}
+
+html,
+body {
+    max-width: 100%;
+}
+
+::selection {
+    background-color: var(--tertiary);
+}
+
+mark {
+    background-color: var(--secondary);
+}
+
+h1 {
+    color: var(--text-one);
+    line-height: 4rem;
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    color: var(--text-four);
+    font-size: 2.5rem;
+    letter-spacing: -0.04rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.25rem;
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+h4 {
+    color: var(--secondary);
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.02rem;
+    line-height: 2rem;
+}
+
+h5 {
+    color: var(--text-four);
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 0.02rem;
+}
+
+h6 {
+    color: var(--text-four);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+p {
+    color: var(--text-four);
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.02rem;
+    line-height: 1.75rem;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.6rem;
+        line-height: 3.75rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    background-clip: content-box;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--surface-five);
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+
+textarea {
+    resize: vertical;
+}
+
+input,
+textarea {
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background-color: transparent;
+    color: var(--secondary);
+}
+
+input:focus,
+textarea:focus {
+    outline: 1px solid var(--primary);
+}
+
+.wrapper {
+    margin-inline: auto;
+    width: min(90%, 80rem);
+    margin-top: 2.6rem;
 }
 
 .rounded {
@@ -25,7 +203,3 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
-
-[data-theme="light"] {}
-
-[data-theme="dark"] {}
