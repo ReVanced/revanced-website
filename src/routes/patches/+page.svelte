@@ -85,6 +85,7 @@
 		</div>
 	</div>
 
+	{#if patches.length > 0}
 	<main>
 		<div class="filter-chips">
 			<FilterChip
@@ -129,8 +130,10 @@
 			{/if}
 		</div>
 	</main>
+	{/if}
 </Page>
 
+{#if patches.length > 0}
 <Modal modalId={mobilePackagesModalId} title="Packages" fullscreen>
 	<div class="mobile-packages">
 		<PackageItem
@@ -147,6 +150,7 @@
 		{/each}
 	</div>
 </Modal>
+{/if}
 
 <style>
 	.search-bar {
