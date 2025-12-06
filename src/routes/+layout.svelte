@@ -15,7 +15,8 @@
 		aboutQuery,
 		startRefreshInterval,
 		stopRefreshInterval,
-		refetchAllQueries
+		refetchAllQueries,
+		auth
 	} from '$stores';
 	import { PUBLIC_RV_DMCA_GUID } from '$env/static/public';
 
@@ -42,11 +43,14 @@
 	}
 
 	onMount(() => {
+		auth.startChecking();
+		
 		startRefreshInterval(() => {
 			refetchAllQueries();
 		});
 
 		return () => {
+			auth.stopChecking();
 			stopRefreshInterval();
 		};
 	});

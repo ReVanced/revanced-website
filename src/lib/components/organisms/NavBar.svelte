@@ -14,7 +14,7 @@
 		setApiBaseUrl,
 		clearCacheAndReload
 	} from '$api/settings';
-	import { apiStatus } from '$stores';
+	import { apiStatus, auth } from '$stores';
 
 	const navItems = [
 		{ label: 'Home', href: '/' },
@@ -31,6 +31,7 @@
 	let username = $state('');
 	let password = $state('');
 	let loginError = $state('');
+	let loginLoading = $state(false);
 
 	$effect(() => {
 		page.url.pathname;
@@ -68,16 +69,31 @@
 		loginError = '';
 	}
 
-	function handleLoginSubmit() {
+	async function handleLoginSubmit() {
 		if (!username || !password) {
 			loginError = 'Username and password are required';
 			return;
 		}
+
 		loginError = '';
-		console.log('Login with:', username, password);
-		loginOpen = false;
-		username = '';
-		password = '';
+		loginLoading = true;
+
+		const result = await auth.login(username, password);
+
+		loginLoading = false;
+
+		if (result.success) {
+			loginOpen = false;
+			username = '';
+			password = '';
+		} else {
+			loginError = result.error;
+		}
+	}
+
+	function handleLogout() {
+		auth.logout();
+		settingsOpen = false;
 	}
 </script>
 
@@ -171,9 +187,15 @@
 	</div>
 	{#snippet buttons()}
 		<div class="modal-buttons">
-			<Button buttonStyle="text" type="button" class="modal-btn login-btn rounded" onclick={handleLogin} disabled={apiStatus.isOffline}>
-				Login
-			</Button>
+			{#if auth.isLoggedIn}
+				<Button buttonStyle="text" type="button" class="modal-btn login-btn rounded" onclick={handleLogout}>
+					Logout
+				</Button>
+			{:else}
+				<Button buttonStyle="text" type="button" class="modal-btn login-btn rounded" onclick={handleLogin} disabled={apiStatus.isOffline}>
+					Login
+				</Button>
+			{/if}
 			<div class="right-buttons">
 				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleReset}>
 					Reset
@@ -199,6 +221,7 @@
 					bind:value={username}
 					placeholder=" "
 					class="modal-input rounded"
+					disabled={loginLoading}
 				/>
 				<label for="username" class="login-label">Username</label>
 			</div>
@@ -209,6 +232,7 @@
 					bind:value={password}
 					placeholder=" "
 					class="modal-input rounded"
+					disabled={loginLoading}
 				/>
 				<label for="password" class="login-label">Password</label>
 			</div>
@@ -220,11 +244,11 @@
 	{#snippet buttons()}
 		<div class="modal-buttons login-buttons">
 			<div class="right-buttons">
-				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleCancelLogin}>
+				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleCancelLogin} disabled={loginLoading}>
 					Cancel
 				</Button>
-				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleLoginSubmit}>
-					Login
+				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleLoginSubmit} disabled={loginLoading}>
+					{loginLoading ? 'Logging in...' : 'Login'}
 				</Button>
 			</div>
 		</div>

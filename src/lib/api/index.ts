@@ -1,5 +1,6 @@
 export * from './types';
 export * from './client';
+export * from './auth';
 export { 
 	getApiBaseUrl, 
 	setApiBaseUrl, 

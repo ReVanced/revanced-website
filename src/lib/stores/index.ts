@@ -26,3 +26,5 @@ export {
 export { readAnnouncements } from './readAnnouncements.svelte';
 
 export { footerVisibility } from './footerVisibility.svelte';
+
+export { auth } from './auth.svelte';
