@@ -31,8 +31,6 @@
 	let username = $state('');
 	let password = $state('');
 	let loginError = $state('');
-	let isResetSpinning = $state(false);
-	let isTyping = $state(false);
 
 	$effect(() => {
 		page.url.pathname;
@@ -45,33 +43,8 @@
 		}
 	});
 
-	function typeText(target: string, speed: number = 25) {
-		isTyping = true;
-		apiUrl = '';
-		let index = 0;
-
-		const interval = setInterval(() => {
-			if (index < target.length) {
-				apiUrl += target[index];
-				index++;
-			} else {
-				clearInterval(interval);
-				isTyping = false;
-			}
-		}, speed);
-	}
-
 	function handleResetInput() {
-		if (isResetSpinning || isTyping) return;
-		isResetSpinning = true;
-		
-		setTimeout(() => {
-			typeText(DEFAULT_API_URL, 20);
-		}, 100);
-		
-		setTimeout(() => {
-			isResetSpinning = false;
-		}, 500);
+		apiUrl = DEFAULT_API_URL;
 	}
 
 	function handleReset() {
@@ -185,15 +158,12 @@
 				class="modal-input api-input rounded"
 				placeholder="Enter API URL"
 				bind:value={apiUrl}
-				readonly={isTyping}
 			/>
 			<button
 				type="button"
 				class="reset-icon-btn"
-				class:spinning={isResetSpinning}
 				onclick={handleResetInput}
 				title="Reset to default API URL"
-				disabled={isResetSpinning || isTyping}
 			>
 				<Reset width="20" height="20" />
 			</button>
@@ -569,19 +539,6 @@
 
 		&:disabled {
 			cursor: default;
-		}
-	}
-
-	.reset-icon-btn.spinning :global(svg) {
-		animation: spin 0.5s ease-in-out;
-	}
-
-	@keyframes spin {
-		from {
-			transform: rotate(0deg);
-		}
-		to {
-			transform: rotate(360deg);
 		}
 	}
 
