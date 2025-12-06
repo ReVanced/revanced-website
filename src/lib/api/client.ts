@@ -1,4 +1,5 @@
 import { buildUrl } from './settings';
+import { getToken, isLoggedIn } from './auth';
 import type {
 	About,
 	TeamMember,
@@ -8,12 +9,69 @@ import type {
 	Announcement
 } from './types';
 
+export class UnauthenticatedError extends Error {
+	constructor() {
+		super('Not authenticated');
+		this.name = 'UnauthenticatedError';
+	}
+}
+
+function buildAuthHeaders(): HeadersInit {
+	const token = getToken();
+	if (!token) throw new UnauthenticatedError();
+	return {
+		Authorization: `Bearer ${token}`,
+		'Content-Type': 'application/json'
+	};
+}
+
 async function fetchJson<T>(endpoint: string): Promise<T> {
 	const response = await fetch(buildUrl(endpoint));
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
 	return response.json();
+}
+
+async function postJson<T>(endpoint: string, body?: unknown): Promise<T> {
+	if (!isLoggedIn()) throw new UnauthenticatedError();
+	const response = await fetch(buildUrl(endpoint), {
+		method: 'POST',
+		headers: buildAuthHeaders(),
+		body: body ? JSON.stringify(body) : undefined
+	});
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	const text = await response.text();
+	return text ? JSON.parse(text) : ({} as T);
+}
+
+async function patchJson<T>(endpoint: string, body: unknown): Promise<T> {
+	if (!isLoggedIn()) throw new UnauthenticatedError();
+	const response = await fetch(buildUrl(endpoint), {
+		method: 'PATCH',
+		headers: buildAuthHeaders(),
+		body: JSON.stringify(body)
+	});
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	const text = await response.text();
+	return text ? JSON.parse(text) : ({} as T);
+}
+
+async function deleteJson<T>(endpoint: string): Promise<T> {
+	if (!isLoggedIn()) throw new UnauthenticatedError();
+	const response = await fetch(buildUrl(endpoint), {
+		method: 'DELETE',
+		headers: buildAuthHeaders()
+	});
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	const text = await response.text();
+	return text ? JSON.parse(text) : ({} as T);
 }
 
 export async function fetchAbout(): Promise<About> {
@@ -56,4 +114,32 @@ export async function checkApiHealth(): Promise<boolean> {
 		console.log('API health check failed');
 		return false;
 	}
+}
+
+export type AnnouncementInput = {
+	title: string;
+	content?: string | null;
+	attachments?: string[];
+	tags?: string[];
+	level?: number;
+};
+
+export async function createAnnouncement(announcement: AnnouncementInput): Promise<void> {
+	await postJson('announcements', announcement);
+}
+
+export async function updateAnnouncement(id: number, announcement: AnnouncementInput): Promise<void> {
+	await patchJson(`announcements/${id}`, announcement);
+}
+
+export async function deleteAnnouncement(id: number): Promise<void> {
+	await deleteJson(`announcements/${id}`);
+}
+
+export async function archiveAnnouncement(id: number): Promise<void> {
+	await postJson(`announcements/${id}/archive`);
+}
+
+export async function unarchiveAnnouncement(id: number): Promise<void> {
+	await postJson(`announcements/${id}/unarchive`);
 }

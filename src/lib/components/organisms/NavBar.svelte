@@ -44,6 +44,13 @@
 		}
 	});
 
+	$effect(() => {
+		if (auth.loginModalRequested) {
+			loginOpen = true;
+			auth.clearLoginModalRequest();
+		}
+	});
+
 	function handleResetInput() {
 		apiUrl = DEFAULT_API_URL;
 	}

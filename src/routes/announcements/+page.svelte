@@ -11,7 +11,7 @@
 	import Button from '$components/atoms/Button.svelte';
 	import IconChevron from 'virtual:icons/material-symbols/keyboard-arrow-down';
 	import IconAdd from 'virtual:icons/material-symbols/add';
-	import { announcementsQuery, readAnnouncements } from '$stores';
+	import { announcementsQuery, readAnnouncements, auth } from '$stores';
 	import type { Announcement } from '$api';
 
 	let searchTerm = $state('');
@@ -135,11 +135,7 @@
 		readAnnouncements.markManyAsRead(allIds);
 	}
 
-	let isAdmin = $state(false);
-
-	function handleCreateAnnouncement() {
-		console.log('Create announcement clicked');
-	}
+	let isAdmin = $derived(auth.isLoggedIn);
 </script>
 
 <Page title="Announcements" description="Stay up to date with the latest ReVanced news">
@@ -151,7 +147,7 @@
 					placeholder="Search for announcements"
 				/>
 				{#if isAdmin}
-					<Button buttonStyle="filled" onclick={handleCreateAnnouncement}>
+					<Button buttonStyle="filled" href="/announcements/create">
 						<IconAdd />
 						Create
 					</Button>

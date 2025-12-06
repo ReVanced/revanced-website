@@ -4,11 +4,18 @@ import type { LoginResult } from '$api/auth';
 
 function createAuthStore() {
 	let loggedIn = $state(false);
+	let wasLoggedIn = $state(false);
 	let expiry = $state<number | null>(null);
+	let loginModalRequested = $state(false);
 	let checkInterval: ReturnType<typeof setInterval> | null = null;
 
 	function refresh() {
-		loggedIn = isLoggedIn();
+		const currentlyLoggedIn = isLoggedIn();
+		if (loggedIn && !currentlyLoggedIn) {
+			wasLoggedIn = true;
+		}
+		
+		loggedIn = currentlyLoggedIn;
 		expiry = getTokenExpiry();
 	}
 
@@ -29,6 +36,7 @@ function createAuthStore() {
 	async function login(username: string, password: string): Promise<LoginResult> {
 		const result = await doLogin(username, password);
 		if (result.success) {
+			wasLoggedIn = false;
 			refresh();
 		}
 		return result;
@@ -36,21 +44,43 @@ function createAuthStore() {
 
 	function logout() {
 		doLogout();
+		wasLoggedIn = false;
 		refresh();
+	}
+
+	function clearSessionExpired() {
+		wasLoggedIn = false;
+	}
+
+	function requestLoginModal() {
+		loginModalRequested = true;
+	}
+
+	function clearLoginModalRequest() {
+		loginModalRequested = false;
 	}
 
 	return {
 		get isLoggedIn() {
 			return loggedIn;
 		},
+		get sessionExpired() {
+			return wasLoggedIn && !loggedIn;
+		},
 		get expiry() {
 			return expiry;
+		},
+		get loginModalRequested() {
+			return loginModalRequested;
 		},
 		login,
 		logout,
 		refresh,
 		startChecking,
-		stopChecking
+		stopChecking,
+		clearSessionExpired,
+		requestLoginModal,
+		clearLoginModalRequest
 	};
 }
 

@@ -3,14 +3,42 @@
 	import { quintOut } from 'svelte/easing';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 	import type { Announcement } from '$lib/api/types';
-	import { fetchAnnouncementById } from '$lib/api/client';
+	import {
+		fetchAnnouncementById,
+		updateAnnouncement,
+		deleteAnnouncement,
+		archiveAnnouncement,
+		unarchiveAnnouncement,
+		type AnnouncementInput
+	} from '$lib/api/client';
+	import { auth, announcementsQuery } from '$stores';
 	import TagChip from '$components/atoms/TagChip.svelte';
+	import Button from '$components/atoms/Button.svelte';
+	import Modal from '$components/molecules/Modal.svelte';
 	import IconArchive from 'virtual:icons/material-symbols/inventory-2-outline';
+	import IconEdit from 'virtual:icons/material-symbols/edit-outline';
+	import IconDelete from 'virtual:icons/material-symbols/delete-outline';
+	import IconSave from 'virtual:icons/material-symbols/check';
+	import IconCancel from 'virtual:icons/material-symbols/close';
+	import IconArchiveDown from 'virtual:icons/material-symbols/archive-outline';
+	import IconUnarchive from 'virtual:icons/material-symbols/unarchive-outline';
 
 	let announcement = $state<Announcement | null>(null);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
+
+	// Edit mode state
+	let isEditing = $state(false);
+	let editTitle = $state('');
+	let editContent = $state('');
+	let editTags = $state('');
+	let editAuthor = $state('');
+	let saving = $state(false);
+	let deleteConfirmOpen = $state(false);
+
+	let isAdmin = $derived(auth.isLoggedIn);
 
 	let announcementId = $derived.by(() => {
 		const slug = $page.params.slug ?? '';
@@ -60,6 +88,76 @@
 			day: 'numeric'
 		});
 	}
+
+	function startEditing() {
+		if (!announcement) return;
+		editTitle = announcement.title;
+		editContent = announcement.content ?? '';
+		editTags = announcement.tags?.join(', ') ?? '';
+		editAuthor = announcement.author ?? '';
+		isEditing = true;
+	}
+
+	function cancelEditing() {
+		isEditing = false;
+	}
+
+	async function saveChanges() {
+		if (!announcement || !announcementId) return;
+		saving = true;
+
+		try {
+			const input: AnnouncementInput = {
+				title: editTitle.trim(),
+				content: editContent.trim() || null,
+				tags: editTags.split(',').map((t) => t.trim()).filter(Boolean),
+			};
+
+			await updateAnnouncement(announcementId, input);
+
+			// Update local state
+			announcement = {
+				...announcement,
+				title: input.title,
+				content: input.content ?? null,
+				tags: input.tags ?? []
+			};
+
+			isEditing = false;
+			announcementsQuery.refetch();
+		} catch (err) {
+			alert(err instanceof Error ? err.message : 'Failed to save');
+		} finally {
+			saving = false;
+		}
+	}
+
+	async function handleDelete() {
+		if (!announcementId) return;
+		try {
+			await deleteAnnouncement(announcementId);
+			announcementsQuery.refetch();
+			goto('/announcements');
+		} catch (err) {
+			alert(err instanceof Error ? err.message : 'Failed to delete');
+		}
+	}
+
+	async function toggleArchive() {
+		if (!announcement || !announcementId) return;
+		try {
+			if (isArchived(announcement.archived_at)) {
+				await unarchiveAnnouncement(announcementId);
+				announcement = { ...announcement, archived_at: null };
+			} else {
+				await archiveAnnouncement(announcementId);
+				announcement = { ...announcement, archived_at: new Date().toISOString() };
+			}
+			announcementsQuery.refetch();
+		} catch (err) {
+			alert(err instanceof Error ? err.message : 'Failed to update archive status');
+		}
+	}
 </script>
 
 <svelte:head>
@@ -81,14 +179,23 @@
 		<article class="card">
 			<header class="header">
 				<div class="header-content">
-					<h1 class="title">
-						{announcement.title}
-						{#if isArchived(announcement.archived_at)}
-							<span class="archived-badge" title="Archived">
-								<IconArchive />
-							</span>
-						{/if}
-					</h1>
+					{#if isEditing}
+						<input
+							type="text"
+							class="edit-title"
+							bind:value={editTitle}
+							placeholder="Title"
+						/>
+					{:else}
+						<h1 class="title">
+							{announcement.title}
+							{#if isArchived(announcement.archived_at)}
+								<span class="archived-badge" title="Archived">
+									<IconArchive />
+								</span>
+							{/if}
+						</h1>
+					{/if}
 					<div class="meta">
 						<span class="date">{formatDate(announcement.created_at)}</span>
 						{#if announcement.author}
@@ -96,7 +203,14 @@
 							<span class="author">by {announcement.author}</span>
 						{/if}
 					</div>
-					{#if announcement.tags && announcement.tags.length > 0}
+					{#if isEditing}
+						<input
+							type="text"
+							class="edit-tags"
+							bind:value={editTags}
+							placeholder="Tags (comma separated)"
+						/>
+					{:else if announcement.tags && announcement.tags.length > 0}
 						<div class="tags">
 							{#each announcement.tags as tag}
 								<TagChip {tag} />
@@ -104,13 +218,39 @@
 						</div>
 					{/if}
 				</div>
+
+				{#if isAdmin}
+					<div class="admin-buttons">
+						{#if isEditing}
+							<Button icon={IconCancel} buttonStyle="icon" onclick={cancelEditing} disabled={saving} />
+							<Button icon={IconSave} buttonStyle="icon" onclick={saveChanges} disabled={saving} />
+						{:else}
+							<Button
+								icon={isArchived(announcement.archived_at) ? IconUnarchive : IconArchiveDown}
+								buttonStyle="icon"
+								onclick={toggleArchive}
+							/>
+							<Button icon={IconDelete} buttonStyle="icon" onclick={() => deleteConfirmOpen = true} />
+							<Button icon={IconEdit} buttonStyle="icon" onclick={startEditing} />
+						{/if}
+					</div>
+				{/if}
 			</header>
 
 			<hr class="divider" />
 
-			<div class="content">
-				{@html announcement.content}
-			</div>
+			{#if isEditing}
+				<textarea
+					class="edit-content"
+					bind:value={editContent}
+					placeholder="Content (HTML supported)"
+					rows="10"
+				></textarea>
+			{:else}
+				<div class="content">
+					{@html announcement.content}
+				</div>
+			{/if}
 
 			{#if announcement.attachments && announcement.attachments.length > 0}
 				<hr class="divider" />
@@ -137,6 +277,17 @@
 		</div>
 	{/if}
 </main>
+
+<Modal title="Delete Announcement?" bind:open={deleteConfirmOpen}>
+	<p class="confirm-text">Are you sure you want to delete this announcement? This action cannot be undone.</p>
+
+	{#snippet buttons()}
+		<div class="modal-buttons">
+			<Button onclick={() => deleteConfirmOpen = false}>Cancel</Button>
+			<Button variant="danger" onclick={handleDelete}>Delete</Button>
+		</div>
+	{/snippet}
+</Modal>
 
 <style>
 	.wrapper {
@@ -174,10 +325,24 @@
 		border-radius: 1rem;
 	}
 
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+
 	.header-content {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+		flex: 1;
+	}
+
+	.admin-buttons {
+		display: flex;
+		gap: 0.5rem;
+		flex-shrink: 0;
 	}
 
 	.title {
@@ -188,6 +353,55 @@
 		font-size: 1.75rem;
 		color: var(--text-one);
 		line-height: 1.3;
+	}
+
+	.edit-title {
+		font-size: 1.75rem;
+		font-weight: bold;
+		color: var(--text-one);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		width: 100%;
+	}
+
+	.edit-title:focus {
+		outline: none;
+		border-color: var(--primary);
+	}
+
+	.edit-tags {
+		font-size: 0.9rem;
+		color: var(--text-four);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.5rem 0.75rem;
+		width: 100%;
+	}
+
+	.edit-tags:focus {
+		outline: none;
+		border-color: var(--primary);
+	}
+
+	.edit-content {
+		width: 100%;
+		min-height: 200px;
+		font-size: 1rem;
+		font-family: monospace;
+		color: var(--text-four);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.75rem;
+		resize: vertical;
+	}
+
+	.edit-content:focus {
+		outline: none;
+		border-color: var(--primary);
 	}
 
 	.archived-badge {
@@ -323,6 +537,17 @@
 		border-radius: 0.5rem;
 	}
 
+	.confirm-text {
+		color: var(--text-four);
+		line-height: 1.5;
+	}
+
+	.modal-buttons {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
+	}
+
 	@media (max-width: 768px) {
 		.wrapper {
 			padding-block: 1rem;
@@ -334,7 +559,19 @@
 			border-radius: 0;
 		}
 
+		.header {
+			flex-direction: column;
+		}
+
+		.admin-buttons {
+			align-self: flex-end;
+		}
+
 		.title {
+			font-size: 1.4rem;
+		}
+
+		.edit-title {
 			font-size: 1.4rem;
 		}
 

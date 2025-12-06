@@ -9,6 +9,7 @@
 	import ModalBackground from '$components/atoms/ModalBackground.svelte';
 	import ConsentDialog from '$components/molecules/ConsentDialog.svelte';
 	import EmailVerificationDialog from '$components/molecules/EmailVerificationDialog.svelte';
+	import SessionExpiredDialog from '$components/molecules/SessionExpiredDialog.svelte';
 	import type { WithChildren } from '$types';
 	import {
 		theme,
@@ -86,3 +87,5 @@
 />
 
 <EmailVerificationDialog bind:open={emailDialogOpen} email={contactEmail} />
+
+<SessionExpiredDialog />
