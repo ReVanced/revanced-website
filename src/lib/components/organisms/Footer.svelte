@@ -77,19 +77,27 @@
 		</section>
 
 		<section class="links-container">
-			<FooterSection title="Pages">
-				{#each pageLinks as { label, href }}
-					<li><a {href}>{label}</a></li>
-				{/each}
-			</FooterSection>
+			{#if socials.length > 0}
+				<FooterSection title="Pages">
+					{#each pageLinks as { label, href }}
+						<li><a {href}>{label}</a></li>
+					{/each}
+				</FooterSection>
 
-			<FooterSection title="Socials" bind:sectionRef={socialsSection}>
-				{#each socials as { name, url }}
-					<li>
-						<a href={url} target="_blank" rel="noreferrer">{name}</a>
-					</li>
-				{/each}
-			</FooterSection>
+				<FooterSection title="Socials" bind:sectionRef={socialsSection}>
+					{#each socials as { name, url }}
+						<li>
+							<a href={url} target="_blank" rel="noreferrer">{name}</a>
+						</li>
+					{/each}
+				</FooterSection>
+			{:else}
+				<FooterSection title="Pages" bind:sectionRef={socialsSection}>
+					{#each pageLinks as { label, href }}
+						<li><a {href}>{label}</a></li>
+					{/each}
+				</FooterSection>
+			{/if}
 		</section>
 	</div>
 

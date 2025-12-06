@@ -31,7 +31,7 @@
 
 	const dmcaGuid = PUBLIC_RV_DMCA_GUID;
 
-	let aboutText = $derived(aboutQuery.data?.about ?? 'Loading...');
+	let aboutText = $derived(aboutQuery.data?.about ?? '');
 	let socials = $derived(aboutQuery.data?.socials ?? []);
 	let contactEmail = $derived(aboutQuery.data?.contact?.email ?? '');
 
