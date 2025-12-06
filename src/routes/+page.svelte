@@ -45,7 +45,6 @@
 			</div>
 
 			<div class="phone-showcase">
-				<div class="phone-glow"></div>
 				<div class="phone-frame">
 					<img src={managerImg} alt="ReVanced Manager" />
 				</div>
@@ -116,30 +115,6 @@
 	.phone-showcase {
 		position: relative;
 		flex-shrink: 0;
-	}
-
-	.phone-glow {
-		position: absolute;
-		inset: -20%;
-		background: radial-gradient(
-			ellipse at center,
-			hsla(var(--hue, 206), 100%, 70%, 0.3) 0%,
-			transparent 70%
-		);
-		filter: blur(40px);
-		animation: pulse-glow 4s ease-in-out infinite;
-		z-index: -1;
-	}
-
-	@keyframes pulse-glow {
-		0%, 100% {
-			opacity: 0.6;
-			transform: scale(1);
-		}
-		50% {
-			opacity: 0.8;
-			transform: scale(1.05);
-		}
 	}
 
 	.phone-frame {
