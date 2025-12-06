@@ -121,9 +121,6 @@
 		background: var(--surface-seven);
 		border-radius: 2rem;
 		padding: 0.5rem;
-		box-shadow: 
-			0 25px 50px -12px rgba(0, 0, 0, 0.4),
-			0 0 0 1px rgba(255, 255, 255, 0.05);
 		animation: phone-float 6s ease-in-out infinite;
 	}
 
