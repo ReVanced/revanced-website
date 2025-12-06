@@ -31,12 +31,6 @@
 	});
 
 	function handleDownloadClick() {
-		if (!hasDownloadData) {
-			warningType = 'api-down';
-			warningOpen = true;
-			return;
-		}
-		
 		if (!isAndroid) {
 			warningType = 'not-android';
 			warningOpen = true;
@@ -53,24 +47,27 @@
 		<p>Patch your favourite apps, right on your device.</p>
 
 		<div class="buttons">
-		{#if !hasDownloadData || !isAndroid || androidVersion < 8}
+		{#if hasDownloadData}
+			{#if !isAndroid || androidVersion < 8}
+				<Button
+					buttonStyle="filled"
+					icon={Download}
+					onclick={handleDownloadClick}
+				>
+					{version}
+				</Button>
+			{:else}
+				<Button
+					buttonStyle="filled"
+					icon={Download}
+					href={downloadUrl}
+					onclick={handleDownloadClick}
+				>
+					{version}
+				</Button>
+			{/if}
+		{/if}
 			<Button
-				buttonStyle="filled"
-				icon={Download}
-				onclick={handleDownloadClick}
-			>
-				{version}
-			</Button>
-		{:else}
-			<Button
-				buttonStyle="filled"
-				icon={Download}
-				href={downloadUrl}
-				onclick={handleDownloadClick}
-			>
-				{version}
-			</Button>
-		{/if}			<Button
 				buttonStyle="tonal"
 				href="https://github.com/revanced/revanced-manager"
 				target="_blank"
@@ -125,25 +122,6 @@
 			<button type="button" class="cancel-btn" onclick={() => { warningOpen = false; }}>
 				Cancel
 			</button>
-		</div>
-	{/snippet}
-</Modal>
-{/if}
-
-{#if warningType === 'api-down'}
-<Modal id="api-down-warning" bind:open={warningOpen}>
-	<div class="warning-content">
-		<h3>Download Unavailable</h3>
-		<p>The API service is currently down and downloading is not available. Please try again later.</p>
-	</div>
-	{#snippet buttons()}
-		<div class="warning-buttons">
-			<Button
-				buttonStyle="text"
-				onclick={() => { warningOpen = false; }}
-			>
-				Okay
-			</Button>
 		</div>
 	{/snippet}
 </Modal>
