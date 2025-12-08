@@ -309,7 +309,8 @@
 		text-decoration: none;
 		color: var(--nav-btn-color);
 		font-weight: 500;
-		padding: 0.375rem 0.875rem;
+		padding: 0.625rem 1rem;
+		border-radius: 10px;
 		transition: background-color 0.4s, color 1s;
 		cursor: pointer;
 
@@ -426,7 +427,11 @@
 
 		nav {
 			justify-content: flex-start;
-			gap: 0.5rem;
+			gap: 1rem;
+		}
+
+		.nav-logo {
+			margin-left: 0.5rem;
 		}
 
 		.nav-drawer {
@@ -472,6 +477,12 @@
 			padding: 1rem 0;
 			flex-direction: row;
 			gap: 1rem;
+			align-self: flex-start;
+		}
+
+		.settings-btn {
+			width: auto;
+			padding: 0.625rem 1rem;
 		}
 	}
 

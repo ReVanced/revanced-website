@@ -7,8 +7,6 @@
 	import Download from 'virtual:icons/material-symbols/download';
 	import { managerQuery, apiStatus } from '$stores';
 
-	import managerImg from '$assets/icons/manager.png';
-
 	const manager = $derived(managerQuery.data);
 	const version = $derived(manager?.version ?? 'Download');
 	const downloadUrl = $derived(manager?.download_url ?? '');
@@ -77,7 +75,7 @@
 		</div>
 
 		<div class="screenshot">
-			<img src={managerImg} alt="Screenshot of ReVanced Manager" />
+			<enhanced:img src="$assets/icons/manager.png" alt="Screenshot of ReVanced Manager" />
 		</div>
 	</main>
 </Page>
@@ -166,7 +164,7 @@
 		margin-bottom: 2.5rem;
 	}
 
-	.screenshot img {
+	.screenshot :global(img) {
 		height: 50rem;
 		width: auto;
 		max-width: 100%;
@@ -178,7 +176,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.screenshot img {
+		.screenshot :global(img) {
 			height: auto;
 			max-height: 70vh;
 		}

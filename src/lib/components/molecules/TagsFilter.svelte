@@ -19,7 +19,7 @@
 		onTagClick
 	}: Props = $props();
 
-	let showAllTags = $state(false);
+	let showAllTags = $state(true);
 
 	$effect(() => {
 		showAllTags = !expandable;
@@ -54,11 +54,13 @@
 	{/each}
 
 	{#if expandable && tags.length > 1}
-		<Button buttonStyle="text" onclick={toggleExpand}>
-			<span class="expand-arrow" class:expanded={showAllTags}>
-				<IconChevronDown />
-			</span>
-		</Button>
+		<li>
+			<Button buttonStyle="text" onclick={toggleExpand}>
+				<div class="expand-arrow" class:expanded={showAllTags}>
+					<IconChevronDown />
+				</div>
+			</Button>
+		</li>
 	{/if}
 </div>
 
@@ -71,9 +73,15 @@
 		gap: 4px;
 	}
 
+	li {
+		display: flex;
+		align-items: center;
+	}
+
 	.expand-arrow {
-		display: inline-flex;
-		transition: transform 0.2s var(--bezier-one);
+		transition: all 0.2s var(--bezier-one);
+		user-select: none;
+		height: 1.5rem;
 		transform: rotate(-90deg);
 		color: var(--surface-six);
 	}

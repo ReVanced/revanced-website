@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import IconSearch from 'virtual:icons/material-symbols/search';
 	import IconClose from 'virtual:icons/material-symbols/close';
@@ -29,13 +31,14 @@
 			class="clear-button"
 			onclick={clear}
 			aria-label="Clear search"
+			transition:fade={{ easing: quintOut, duration: 250 }}
 		>
 			<IconClose />
 		</button>
 	{/if}
 	<input
 		type="text"
-		class:has-value={!!value}
+		class:clear={value}
 		{placeholder}
 		bind:value
 		{...rest}
@@ -51,8 +54,7 @@
 		position: absolute;
 		z-index: 1;
 		left: 16px;
-		top: 50%;
-		transform: translateY(-50%);
+		top: 14px;
 		height: 24px;
 		width: 24px;
 		color: var(--surface-six);
@@ -67,8 +69,7 @@
 	.clear-button {
 		position: absolute;
 		right: 16px;
-		top: 50%;
-		transform: translateY(-50%);
+		top: 14px;
 		z-index: 1;
 		height: 24px;
 		width: 24px;
@@ -77,11 +78,6 @@
 		border: none;
 		padding: 0;
 		color: var(--surface-six);
-		transition: color 0.2s var(--bezier-one);
-	}
-
-	.clear-button:hover {
-		color: var(--text-one);
 	}
 
 	.clear-button :global(svg) {
@@ -117,7 +113,7 @@
 		color: var(--text-four);
 		font-size: 0.9rem;
 		font-weight: 500;
-		transition: color 0.2s var(--bezier-one);
+		transition: all 0.2s var(--bezier-one);
 	}
 
 	input:focus::placeholder {

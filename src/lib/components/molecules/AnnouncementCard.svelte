@@ -1,16 +1,15 @@
 <script lang="ts">
 	import type { Announcement } from '$api';
-	import TagChip from '$components/atoms/TagChip.svelte';
+	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
-	import { readAnnouncements } from '$stores';
+	import { readAnnouncements, announcementsQuery } from '$stores';
 	import IconArchive from 'virtual:icons/material-symbols/archive-outline';
 
 	type Props = {
 		announcement: Announcement;
-		isNew?: boolean;
 	};
 
-	let { announcement, isNew = false }: Props = $props();
+	let { announcement }: Props = $props();
 
 	let isRead = $derived(readAnnouncements.isRead(announcement.id));
 
@@ -18,23 +17,38 @@
 		readAnnouncements.markAsRead(announcement.id);
 	}
 
+	function prefetch() {
+		announcementsQuery.refetch();
+	}
+
 	const toSlug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
-	function formatRelativeTime(str: string) {
-		const diff = Date.now() - new Date(str).getTime();
-		const mins = Math.floor(diff / 60000);
-		const hrs = Math.floor(mins / 60);
-		const days = Math.floor(hrs / 24);
+	function relativeTime(dateStr: string, withinDays = 7) {
+		const date = new Date(dateStr);
+		const now = new Date();
+		const diffMs = now.getTime() - date.getTime();
+		const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-		const fmt = (n: number, unit: string) => `${n} ${unit}${n > 1 ? 's' : ''} ago`;
+		if (diffDays <= withinDays) {
+			const diffMins = Math.floor(diffMs / 60000);
+			const diffHrs = Math.floor(diffMins / 60);
 
-		if (days >= 365) return fmt(Math.floor(days / 365), 'year');
-		if (days >= 30) return fmt(Math.floor(days / 30), 'month');
-		if (days >= 7) return fmt(Math.floor(days / 7), 'week');
-		if (days > 0) return fmt(days, 'day');
-		if (hrs > 0) return fmt(hrs, 'hour');
-		if (mins > 0) return fmt(mins, 'minute');
-		return 'just now';
+			if (diffMins < 1) return 'just now';
+			if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+			if (diffHrs < 24) return `${diffHrs} hour${diffHrs !== 1 ? 's' : ''} ago`;
+			return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+		}
+
+		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		const month = months[date.getMonth()];
+		const day = date.getDate();
+		const year = date.getFullYear();
+		let hours = date.getHours();
+		const mins = date.getMinutes().toString().padStart(2, '0');
+		const ampm = hours >= 12 ? 'PM' : 'AM';
+		hours = hours % 12 || 12;
+
+		return `on ${month} ${day}, ${year} at ${hours}:${mins} ${ampm}`;
 	}
 
 	function checkArchived(archivedAt: string | null): boolean {
@@ -45,55 +59,55 @@
 	let href = $derived(`/announcements/${announcement.id}-${toSlug(announcement.title)}`);
 	let hasImage = $derived(announcement.attachments && announcement.attachments.length > 0);
 	let archived = $derived(checkArchived(announcement.archived_at));
-	let createdTime = $derived(formatRelativeTime(announcement.created_at));
-	let archivedTime = $derived(announcement.archived_at ? formatRelativeTime(announcement.archived_at) : '');
+	let createdTime = $derived(relativeTime(announcement.created_at));
+	let archivedTime = $derived(announcement.archived_at ? relativeTime(announcement.archived_at) : '');
 </script>
 
-<a {href} class="card-link" data-sveltekit-preload-data onclick={handleClick}>
-	<article class="card" class:has-image={hasImage} class:is-read={isRead}>
-		{#if isNew}
-			<div class="new-badge">NEW</div>
-		{:else if !isRead}
-			<div class="unread-dot"></div>
+<a
+	{href}
+	class="card-link"
+	data-sveltekit-preload-data
+	onmouseenter={prefetch}
+	onclick={handleClick}
+>
+	<article class="card" class:attachment={hasImage}>
+		{#if !isRead}
+			<span class="new-header">NEW</span>
 		{/if}
 
 		{#if hasImage}
 			<img
 				src={announcement.attachments[0]}
-				alt=""
+				alt="Banner"
 				class="card-image"
-				class:no-top-radius={isNew}
-				loading="lazy"
+				class:no-border-radius={!isRead}
+				onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
 			/>
 		{/if}
 
-		<div class="card-content">
-			<header class="card-header">
-				<h3 class="card-title">{announcement.title}</h3>
-				<div class="card-meta">
-					<span class="card-date">{createdTime}</span>
+		<div class="content">
+			<header class="header">
+				<h3>{announcement.title}</h3>
+				<span class="meta">
+					{createdTime}
 					{#if archived}
-						<ToolTip content="Archived {archivedTime}">
-							<span class="archive-icon">
-								<IconArchive />
-							</span>
+						<ToolTip content="This announcement was archived {archivedTime}">
+							<IconArchive />
 						</ToolTip>
 					{/if}
-				</div>
+				</span>
 			</header>
 
-			<footer class="card-footer">
+			<footer class="footer">
 				{#if announcement.content}
-					<p class="card-excerpt">{@html announcement.content}</p>
+					<div class="content-body">
+						{@html announcement.content}
+					</div>
 				{/if}
 
 				{#if announcement.tags && announcement.tags.length > 0}
-					<hr class="card-divider" />
-					<div class="card-tags">
-						{#each announcement.tags as tag}
-							<TagChip {tag} clickable={false} />
-						{/each}
-					</div>
+					<hr />
+					<TagsFilter tags={announcement.tags} clickable={false} />
 				{/if}
 			</footer>
 		</div>
@@ -102,8 +116,7 @@
 
 <style>
 	.card-link {
-		text-decoration: none;
-		display: block;
+		text-decoration: inherit;
 	}
 
 	.card {
@@ -113,151 +126,101 @@
 		background-color: var(--surface-seven);
 		border: 1px solid var(--border);
 		border-radius: 12px;
-		overflow: hidden;
-		transition: background-color 0.2s var(--bezier-one);
-		position: relative;
 	}
 
 	.card:hover {
 		background-color: var(--surface-four);
+		filter: none;
 	}
 
-	.card.has-image {
+	.card.attachment {
 		grid-row: span 2;
 	}
 
-	.new-badge {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
+	.new-header {
+		text-align: center;
 		background-color: var(--surface-four);
 		color: var(--primary);
-		text-align: center;
-		font-size: 0.75rem;
-		font-weight: 700;
+		font-weight: bold;
 		padding: 4px 0;
-		letter-spacing: 0.05em;
-		z-index: 1;
 		border-radius: 12px 12px 0 0;
-	}
-
-	.unread-dot {
-		position: absolute;
-		top: 12px;
-		right: 12px;
-		width: 10px;
-		height: 10px;
-		background-color: var(--primary);
-		border-radius: 50%;
-		z-index: 1;
-		box-shadow: 0 0 0 3px var(--surface-seven);
-	}
-
-	.card.is-read {
-		opacity: 0.75;
-	}
-
-	.card.is-read:hover {
-		opacity: 1;
+		pointer-events: none;
+		letter-spacing: 0.05em;
 	}
 
 	.card-image {
-		width: 100%;
 		height: 150px;
 		object-fit: cover;
-		border-radius: 12px 12px 0 0;
+		width: 100%;
+		border-radius: 12px 12px 0px 0px;
 	}
 
-	.card-image.no-top-radius {
+	.card-image.no-border-radius {
 		border-radius: 0;
 	}
 
-	.card-content {
+	.content {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		gap: 12px;
-		flex: 1;
+		height: 100%;
 		padding: 12px 16px;
 		color: var(--text-four);
 	}
 
-	.card-header {
+	.header,
+	.footer {
 		display: flex;
 		flex-direction: column;
 		overflow-wrap: anywhere;
 	}
 
-	.card-title {
-		color: var(--text-one);
-		margin: 0 0 4px 0;
-		font-size: 1rem;
+	.header h3 {
+		margin: 0;
 	}
 
-	.card-meta {
+	.meta {
 		display: flex;
-		align-items: center;
-		gap: 6px;
-		font-size: 0.85rem;
-		color: var(--text-four);
+		gap: 4px;
 	}
 
-	.archive-icon {
-		display: flex;
-		align-items: center;
-		color: var(--surface-six);
+	.meta :global(svg) {
+		height: 24px;
+		width: 24px;
 	}
 
-	.archive-icon :global(svg) {
-		width: 20px;
-		height: 20px;
-	}
-
-	.card-footer {
-		display: flex;
-		flex-direction: column;
+	.footer {
 		gap: 12px;
 	}
 
-	.card-excerpt {
-		margin: 0;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
+	.content-body {
+		color: var(--text-four);
+		display: -webkit-inline-box;
 		line-clamp: 3;
+		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
-		font-size: 0.9rem;
-		line-height: 1.5;
-		color: var(--text-four);
 	}
 
-	.card-excerpt :global(a) {
+	.content-body :global(a) {
 		pointer-events: none;
-		color: inherit;
-		text-decoration: none;
 	}
 
-	.card-excerpt :global(h1),
-	.card-excerpt :global(h2),
-	.card-excerpt :global(h3),
-	.card-excerpt :global(h4),
-	.card-excerpt :global(h5),
-	.card-excerpt :global(h6) {
-		font-size: 0.9rem;
-		margin: 0;
+	.content-body :global(h1),
+	.content-body :global(h2),
+	.content-body :global(h3),
+	.content-body :global(h4),
+	.content-body :global(h5),
+	.content-body :global(h6) {
 		color: var(--secondary);
+		line-height: 1.75rem;
+		margin: 0;
 	}
 
-	.card-divider {
+	hr {
 		border: none;
 		border-top: 1px solid var(--border);
 		margin: 0;
-	}
-
-	.card-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px;
 	}
 </style>
