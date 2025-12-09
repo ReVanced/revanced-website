@@ -5,7 +5,7 @@
 
 	type Props = {
 		buttonStyle?: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
-		variant?: 'default' | 'danger' | 'onDangerBackground';
+		variant?: 'default' | 'danger' | 'onDangerBackground' | 'onInfoBackground';
 		icon?: typeof import('virtual:icons/*').default;
 		href?: string;
 		target?: string;
@@ -135,6 +135,11 @@
 	.onDangerBackground {
 		background-color: #ffd3d3;
 		color: #601410;
+	}
+
+	.onInfoBackground {
+		background-color: #0d2d44;
+		color: var(--accent-color);
 	}
 
 	.content {

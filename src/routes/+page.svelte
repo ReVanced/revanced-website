@@ -4,6 +4,7 @@
 	import SocialButton from '$components/molecules/SocialButton.svelte';
 	import WaveBackground from '$components/organisms/WaveBackground.svelte';
 	import { aboutQuery, footerVisibility } from '$stores';
+	import managerImg from '$assets/icons/manager.png';
 	import Download from 'virtual:icons/material-symbols/download';
 	import Description from 'virtual:icons/material-symbols/description-outline';
 
@@ -160,7 +161,7 @@
 
 			<div class="phone-showcase">
 				<div class="phone-frame">
-					<enhanced:img src="$assets/icons/manager.png" alt="ReVanced Manager" />
+					<img src={managerImg} alt="ReVanced Manager" />
 				</div>
 			</div>
 		</section>
@@ -247,7 +248,7 @@
 		}
 	}
 
-	.phone-frame :global(img) {
+	.phone-frame img {
 		display: block;
 		height: clamp(400px, 60vh, 550px);
 		width: auto;
@@ -290,7 +291,7 @@
 			display: none;
 		}
 
-		.phone-frame :global(img) {
+		.phone-frame img {
 			height: clamp(300px, 45vh, 400px);
 		}
 
@@ -320,7 +321,7 @@
 }
 
 	@media (max-height: 700px) {
-		.phone-frame :global(img) {
+		.phone-frame img {
 			height: clamp(250px, 40vh, 350px);
 		}
 	}

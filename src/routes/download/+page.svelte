@@ -6,6 +6,7 @@
 	import Modal from '$components/molecules/Modal.svelte';
 	import Download from 'virtual:icons/material-symbols/download';
 	import { managerQuery, apiStatus } from '$stores';
+	import managerImg from '$assets/icons/manager.png';
 
 	const manager = $derived(managerQuery.data);
 	const version = $derived(manager?.version ?? 'Download');
@@ -18,6 +19,17 @@
 
 	let warningOpen = $state(false);
 	let warningType = $state<'not-android' | 'old-android' | 'api-down'>('not-android');
+
+	const schemas = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Download', item: 'https://revanced.app/download' }
+			]
+		}
+	];
 
 	$effect(() => {
 		if (typeof navigator !== 'undefined') {
@@ -39,7 +51,7 @@
 	}
 </script>
 
-<Page description="Download ReVanced">
+<Page description="Download ReVanced" {schemas}>
 	<main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<h2>ReVanced <span class="highlight">Manager</span></h2>
 		<p>Patch your favourite apps, right on your device.</p>
@@ -75,7 +87,7 @@
 		</div>
 
 		<div class="screenshot">
-			<enhanced:img src="$assets/icons/manager.png" alt="Screenshot of ReVanced Manager" />
+			<img src={managerImg} alt="Screenshot of ReVanced Manager" />
 		</div>
 	</main>
 </Page>
@@ -164,7 +176,7 @@
 		margin-bottom: 2.5rem;
 	}
 
-	.screenshot :global(img) {
+	.screenshot img {
 		height: 50rem;
 		width: auto;
 		max-width: 100%;
@@ -176,7 +188,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.screenshot :global(img) {
+		.screenshot img {
 			height: auto;
 			max-height: 70vh;
 		}

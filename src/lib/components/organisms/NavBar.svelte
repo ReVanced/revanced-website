@@ -32,6 +32,9 @@
 	let password = $state('');
 	let loginError = $state('');
 	let loginLoading = $state(false);
+	let scrollY = $state(0);
+
+	const scrolled = $derived(scrollY > 10);
 
 	$effect(() => {
 		page.url.pathname;
@@ -104,7 +107,9 @@
 	}
 </script>
 
-<nav>
+<svelte:window bind:scrollY={scrollY} />
+
+<nav class:scrolled>
 	<button
 		type="button"
 		class="menu-btn mobile-only"
@@ -274,6 +279,11 @@
 		left: 0;
 		z-index: 9997;
 		background-color: var(--nav-bg);
+		transition: box-shadow 0.3s ease;
+	}
+
+	nav.scrolled {
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 	}
 
 	.nav-logo {

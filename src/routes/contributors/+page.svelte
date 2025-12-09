@@ -2,10 +2,22 @@
 	import Page from '$components/molecules/Page.svelte';
 	import ContributorSection from '$components/organisms/ContributorSection.svelte';
 	import { contributorsQuery } from '$stores';
+
 	const repositories = $derived(contributorsQuery.data ?? []);
+
+	const schemas = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Contributors', item: 'https://revanced.app/contributors' }
+			]
+		}
+	];
 </script>
 
-<Page title="Contributors of ReVanced" description="ReVanced is made possible by the community">
+<Page title="Contributors of ReVanced" description="ReVanced is made possible by the community" {schemas}>
 	<div class="wrapper">
 		<div class="text-container">
 			<h2>Made possible by the community.</h2>

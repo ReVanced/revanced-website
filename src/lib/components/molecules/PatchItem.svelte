@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fade, slide } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$api';
 	import Button from '$components/atoms/Button.svelte';
 	import IconChevronDown from 'virtual:icons/material-symbols/keyboard-arrow-down';
@@ -106,20 +108,22 @@
 	</ul>
 
 	{#if expanded && hasPatchOptions}
-		<div class="options">
-			{#each patch.options as option}
-				<div
-					class="option"
-					role="presentation"
-					onclick={(e) => e.stopPropagation()}
-				>
-					<h5 class="option-title">{option.title}</h5>
-					<h5>
-						<pre class="option-description">{option.description}</pre>
-					</h5>
-				</div>
-			{/each}
-		</div>
+		<span transition:fade={{ easing: quintOut, duration: 1000 }}>
+			<div class="options" transition:slide={{ easing: quintOut, duration: 500 }}>
+				{#each patch.options as option}
+					<div
+						class="option"
+						role="presentation"
+						onclick={(e) => e.stopPropagation()}
+					>
+						<h5 class="option-title">{option.title}</h5>
+						<h5>
+							<pre class="option-description">{option.description}</pre>
+						</h5>
+					</div>
+				{/each}
+			</div>
+		</span>
 	{/if}
 </div>
 

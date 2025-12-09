@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { fly, fade, slide } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import Fuse, { type FuseResult } from 'fuse.js';
 	import Page from '$components/molecules/Page.svelte';
 	import Search from '$components/atoms/Search.svelte';
 	import FilterChip from '$components/atoms/FilterChip.svelte';
@@ -10,9 +15,26 @@
 	import { patchesQuery } from '$stores';
 	import type { Patch } from '$api';
 
+	const schemas = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Patches', item: 'https://revanced.app/patches' }
+			]
+		}
+	];
 
 	const patches = $derived(patchesQuery.data ?? []);
 
+	const fuse = $derived(
+		new Fuse(patches, {
+			keys: ['name', 'description'],
+			threshold: 0.3,
+			ignoreLocation: true
+		})
+	);
 
 	const packages = $derived.by(() => {
 		const pkgSet = new Set<string>();
@@ -26,11 +48,33 @@
 		return Array.from(pkgSet).sort();
 	});
 
-	let selectedPkg = $state<string | null>(null);
-	let searchTerm = $state('');
+	let selectedPkg = $state<string | null>(page.url.searchParams.get('pkg'));
+	let searchTerm = $state(page.url.searchParams.get('s') ?? '');
 
 	let showAllVersions = $state(false);
 	const mobilePackagesModalId = 'mobile-packages';
+
+	function debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number): T {
+		let timeoutId: ReturnType<typeof setTimeout>;
+		return ((...args: unknown[]) => {
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => fn(...args), delay);
+		}) as T;
+	}
+
+	const updateUrl = debounce(() => {
+		const params = new URLSearchParams();
+		if (selectedPkg) params.set('pkg', selectedPkg);
+		if (searchTerm) params.set('s', searchTerm);
+		const queryString = params.toString();
+		goto(queryString ? `?${queryString}` : '/patches', { replaceState: true, keepFocus: true });
+	}, 350);
+
+	$effect(() => {
+		selectedPkg;
+		searchTerm;
+		updateUrl();
+	});
 
 	function filterPatches(patchList: Patch[], pkg: string | null, search: string): Patch[] {
 		let filtered = patchList;
@@ -43,15 +87,13 @@
 		}
 
 		if (search) {
-			const term = search.toLowerCase();
-			filtered = filtered.filter(
-				(patch) =>
-					patch.name.toLowerCase().includes(term) ||
-					patch.description?.toLowerCase().includes(term) ||
-					(patch.compatiblePackages && Object.keys(patch.compatiblePackages).some(
-						(pkgName) => pkgName.toLowerCase().includes(term)
-					))
-			);
+			const fuseInstance = new Fuse(filtered, {
+				keys: ['name', 'description'],
+				threshold: 0.3,
+				ignoreLocation: true
+			});
+			const results: FuseResult<Patch>[] = fuseInstance.search(search);
+			filtered = results.map((r) => r.item);
 		}
 
 		return filtered;
@@ -75,7 +117,7 @@
 	let filteredPatches = $derived(filterPatches(patches, selectedPkg, searchTerm));
 </script>
 
-<Page title="Patches for ReVanced" description="Browse our rich collection of patches for ReVanced">
+<Page title="Patches for ReVanced" description="Browse our rich collection of patches for ReVanced" {schemas}>
 	<div class="search-bar">
 		<div class="search-contain">
 			<Search
@@ -87,7 +129,7 @@
 
 	{#if patches.length > 0}
 	<main>
-		<div class="filter-chips">
+		<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<FilterChip
 				selected={!!selectedPkg}
 				dropdown
@@ -97,7 +139,7 @@
 			</FilterChip>
 		</div>
 
-		<aside>
+		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
 				<PackageItem
 					name="All packages"
@@ -115,13 +157,17 @@
 		</aside>
 
 		<div class="patches-container">
-			{#each filteredPatches as patch (patch.name + (patch.compatiblePackages ? Object.keys(patch.compatiblePackages)[0] ?? '' : ''))}
-				<PatchItem
-					{patch}
-					{showAllVersions}
-					onToggleVersions={() => (showAllVersions = !showAllVersions)}
-				/>
-			{/each}
+			{#key selectedPkg || searchTerm}
+				{#each filteredPatches as patch, i (patch.name + (patch.compatiblePackages ? Object.keys(patch.compatiblePackages)[0] ?? '' : ''))}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750, delay: Math.min(i * 30, 300) }}>
+						<PatchItem
+							{patch}
+							{showAllVersions}
+							onToggleVersions={() => (showAllVersions = !showAllVersions)}
+						/>
+					</div>
+				{/each}
+			{/key}
 
 			{#if filteredPatches.length === 0}
 				<div class="no-results">

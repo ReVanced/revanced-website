@@ -45,6 +45,17 @@
 
 	let shuffledTeam = $derived(browser ? shuffle([...teamMembers]) : teamMembers);
 
+	const schemas = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Donate', item: 'https://revanced.app/donate' }
+			]
+		}
+	];
+
 	function openWalletModal(wallet: CryptoWallet) {
 		selectedWallet = wallet;
 		cryptoModalOpen = false;
@@ -95,7 +106,7 @@
 	}
 </script>
 
-<Page title="Donate to ReVanced" description="Support ReVanced development">
+<Page title="Donate to ReVanced" description="Support ReVanced development" {schemas}>
 	<main class="wrapper">
 		<section class="hero">
 			<div class="hero-text">

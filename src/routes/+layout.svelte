@@ -1,12 +1,15 @@
 <script lang="ts">
 	import '../app.css';
 	import { onMount } from 'svelte';
+	import { navigating } from '$app/stores';
 
 	import favicon from '$assets/icons/favicon.ico';
 	import ApiStatusBanner from '$components/molecules/ApiStatusBanner.svelte';
+	import AnnouncementBanner from '$components/molecules/AnnouncementBanner.svelte';
 	import NavBar from '$components/organisms/NavBar.svelte';
 	import Footer from '$components/organisms/Footer.svelte';
 	import ModalBackground from '$components/atoms/ModalBackground.svelte';
+	import LoadingSpinner from '$components/atoms/LoadingSpinner.svelte';
 	import ConsentDialog from '$components/molecules/ConsentDialog.svelte';
 	import EmailVerificationDialog from '$components/molecules/EmailVerificationDialog.svelte';
 	import SessionExpiredDialog from '$components/molecules/SessionExpiredDialog.svelte';
@@ -22,6 +25,28 @@
 	import { PUBLIC_RV_DMCA_GUID } from '$env/static/public';
 
 	let { children }: WithChildren = $props();
+	let showSpinner = $state(false);
+	let spinnerTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	$effect(() => {
+		if ($navigating) {
+			spinnerTimeout = setTimeout(() => {
+				showSpinner = true;
+			}, 250);
+		} else {
+			if (spinnerTimeout) {
+				clearTimeout(spinnerTimeout);
+				spinnerTimeout = null;
+			}
+			showSpinner = false;
+		}
+
+		return () => {
+			if (spinnerTimeout) {
+				clearTimeout(spinnerTimeout);
+			}
+		};
+	});
 
 	const pageLinks = [
 		{ label: 'Home', href: '/' },
@@ -67,7 +92,14 @@
 	}}
 />
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+{#if showSpinner}
+	<LoadingSpinner />
+{/if}
+
 <ApiStatusBanner />
+<AnnouncementBanner />
 
 <NavBar />
 
@@ -75,7 +107,9 @@
 
 <ConsentDialog />
 
-{@render children()}
+<main id="main-content">
+	{@render children()}
+</main>
 
 <Footer
 	about={aboutText}
@@ -89,3 +123,25 @@
 <EmailVerificationDialog bind:open={emailDialogOpen} email={contactEmail} />
 
 <SessionExpiredDialog />
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -100px;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: var(--accent-color);
+		color: var(--surface-one);
+		padding: 1rem 1.5rem;
+		border-radius: 0 0 8px 8px;
+		font-weight: 600;
+		text-decoration: none;
+		z-index: 99999;
+		transition: top 0.3s ease;
+	}
+
+	.skip-link:focus {
+		top: 0;
+		outline: none;
+	}
+</style>
