@@ -37,15 +37,20 @@
 	);
 
 	const packages = $derived.by(() => {
-		const pkgSet = new Set<string>();
+		const patchCountByPackage: Record<string, number> = {};
+
 		for (const patch of patches) {
 			if (patch.compatiblePackages) {
 				for (const pkgName of Object.keys(patch.compatiblePackages)) {
-					pkgSet.add(pkgName);
+					patchCountByPackage[pkgName] = (patchCountByPackage[pkgName] ?? 0) + 1;
 				}
 			}
 		}
-		return Array.from(pkgSet).sort();
+
+		// Sort by patch count descending so most relevant apps appear first
+		return Object.keys(patchCountByPackage).sort(
+			(a, b) => patchCountByPackage[b] - patchCountByPackage[a]
+		);
 	});
 
 	let selectedPkg = $state<string | null>(page.url.searchParams.get('pkg'));

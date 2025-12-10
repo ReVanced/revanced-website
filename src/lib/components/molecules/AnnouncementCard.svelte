@@ -126,6 +126,7 @@
 		background-color: var(--surface-seven);
 		border: 1px solid var(--border);
 		border-radius: 12px;
+		transition: background-color 0.5s ease, transform 0.2s ease;
 	}
 
 	.card:hover {
@@ -178,11 +179,17 @@
 
 	.header h3 {
 		margin: 0;
+		color: var(--secondary);
+		font-size: 1.17em;
+		font-weight: 600;
 	}
 
 	.meta {
 		display: flex;
 		gap: 4px;
+		align-items: center;
+		font-size: 0.9rem;
+		color: var(--text-four);
 	}
 
 	.meta :global(svg) {
@@ -201,6 +208,8 @@
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+		font-size: 0.95rem;
+		line-height: 1.5;
 	}
 
 	.content-body :global(a) {

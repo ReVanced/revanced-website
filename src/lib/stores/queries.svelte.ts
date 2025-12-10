@@ -52,10 +52,13 @@ function createLazyCachedResource<T>(
 
 	const getResource = () => {
 		if (!res) {
+			const cachedData = cache.current?.data;
+			const hasValidCache = cachedData !== undefined && cachedData !== null;
+			
 			res = resource<true, unknown>(
 				() => true as const,
 				async () => {
-					if (!browser) return cache.current?.data ?? defaultValue;
+					if (!browser) return cachedData ?? defaultValue;
 
 					try {
 						const data = await fetcher();
@@ -64,15 +67,15 @@ function createLazyCachedResource<T>(
 						return data;
 					} catch (error) {
 						staleRefetchTriggered = false;
-						if (cache.current?.data) {
-							return cache.current.data;
+						if (cachedData) {
+							return cachedData;
 						}
 						throw error;
 					}
 				},
 				{
-					initialValue: cache.current?.data ?? defaultValue,
-					once: true
+					initialValue: hasValidCache ? cachedData : defaultValue,
+					once: hasValidCache
 				}
 			);
 		}

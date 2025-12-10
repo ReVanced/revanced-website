@@ -13,6 +13,7 @@
 	import ConsentDialog from '$components/molecules/ConsentDialog.svelte';
 	import EmailVerificationDialog from '$components/molecules/EmailVerificationDialog.svelte';
 	import SessionExpiredDialog from '$components/molecules/SessionExpiredDialog.svelte';
+	import LoginSuccessfulDialog from '$components/molecules/LoginSuccessfulDialog.svelte';
 	import type { WithChildren } from '$types';
 	import {
 		theme,
@@ -23,8 +24,10 @@
 		auth
 	} from '$stores';
 	import { PUBLIC_RV_DMCA_GUID } from '$env/static/public';
+import { useHolidayTheme } from '$lib/utils/themeEvents';
 
 	let { children }: WithChildren = $props();
+	useHolidayTheme();
 	let showSpinner = $state(false);
 	let spinnerTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -94,12 +97,14 @@
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
+<div class="banner-wrapper">
+	<ApiStatusBanner />
+	<AnnouncementBanner />
+</div>
+
 {#if showSpinner}
 	<LoadingSpinner />
 {/if}
-
-<ApiStatusBanner />
-<AnnouncementBanner />
 
 <NavBar />
 
@@ -124,6 +129,8 @@
 
 <SessionExpiredDialog />
 
+<LoginSuccessfulDialog />
+
 <style>
 	.skip-link {
 		position: absolute;
@@ -143,5 +150,10 @@
 	.skip-link:focus {
 		top: 0;
 		outline: none;
+	}
+
+	.banner-wrapper {
+		position: relative;
+		z-index: 10000;
 	}
 </style>

@@ -60,20 +60,17 @@
 			aria-labelledby="consent-title"
 			in:fly={{ y: 20, duration: 300 }}
 		>
-			<h2 id="consent-title">Your Privacy Matters</h2>
+			<h2 id="consent-title">It's your choice</h2>
 			<p>
-				We use analytics to understand how visitors use this site and improve your experience.
-				By allowing analytics, you help us make ReVanced better for everyone.
-			</p>
-			<p class="note">
-				No personal data is collected. You can change this anytime in settings.
+				We use analytics to improve your experience on this site. By clicking "Allow", you allow us to
+				collect anonymous data about your visit.
 			</p>
 			<div class="actions">
 				<Button buttonStyle="text" onclick={() => handleChoice(false)}>
 					Deny
 				</Button>
 				<Button buttonStyle="filled" onclick={() => handleChoice(true)}>
-					Allow Analytics
+					Allow
 				</Button>
 			</div>
 		</div>
@@ -112,12 +109,6 @@
 		color: var(--text-four);
 		line-height: 1.6;
 		font-size: 0.95rem;
-	}
-
-	.note {
-		font-size: 0.85rem;
-		color: var(--text-five, var(--text-four));
-		opacity: 0.8;
 	}
 
 	.actions {

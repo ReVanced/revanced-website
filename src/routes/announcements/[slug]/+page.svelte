@@ -4,7 +4,9 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import type { Announcement } from '$lib/api/types';
+	import { relativeTime } from '$lib/utils/relativeTime';
 	import {
 		fetchAnnouncementById,
 		updateAnnouncement,
@@ -24,6 +26,8 @@
 	import IconCancel from 'virtual:icons/material-symbols/close';
 	import IconArchiveDown from 'virtual:icons/material-symbols/archive-outline';
 	import IconUnarchive from 'virtual:icons/material-symbols/unarchive-outline';
+	import IconPreview from 'virtual:icons/material-symbols/visibility-outline';
+	import IconHidePreview from 'virtual:icons/material-symbols/visibility-off-outline';
 
 	let announcement = $state<Announcement | null>(null);
 	let loading = $state(true);
@@ -31,10 +35,13 @@
 
 	// Edit mode state
 	let isEditing = $state(false);
+	let isPreviewing = $state(false);
 	let editTitle = $state('');
 	let editContent = $state('');
 	let editTags = $state('');
 	let editAuthor = $state('');
+	let editLevel = $state(0);
+	let editAttachments = $state('');
 	let saving = $state(false);
 	let deleteConfirmOpen = $state(false);
 
@@ -46,6 +53,34 @@
 		const idPart = slug.split('-')[0];
 		const parsed = parseInt(idPart, 10);
 		return isNaN(parsed) ? null : parsed;
+	});
+
+	let hasUnsavedChanges = $derived.by(() => {
+		if (!isEditing || !announcement) return false;
+		const originalAttachments = announcement.attachments?.join('\n') ?? '';
+		const originalTags = announcement.tags?.join(', ') ?? '';
+		return (
+			editTitle !== announcement.title ||
+			editContent !== (announcement.content ?? '') ||
+			editTags !== originalTags ||
+			editAuthor !== (announcement.author ?? '') ||
+			editLevel !== (announcement.level ?? 0) ||
+			editAttachments !== originalAttachments
+		);
+	});
+
+	onMount(() => {
+		function handleBeforeUnload(event: BeforeUnloadEvent) {
+			if (hasUnsavedChanges) {
+				event.preventDefault();
+				event.returnValue = '';
+			}
+		}
+
+		window.addEventListener('beforeunload', handleBeforeUnload);
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
 	});
 
 	$effect(() => {
@@ -80,30 +115,61 @@
 		return new Date(archivedAt) < new Date();
 	}
 
-	function formatDate(dateStr: string): string {
-		const date = new Date(dateStr);
-		return date.toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		});
-	}
-
 	function startEditing() {
 		if (!announcement) return;
 		editTitle = announcement.title;
 		editContent = announcement.content ?? '';
 		editTags = announcement.tags?.join(', ') ?? '';
 		editAuthor = announcement.author ?? '';
+		editLevel = announcement.level ?? 0;
+		editAttachments = announcement.attachments?.join('\n') ?? '';
 		isEditing = true;
+		isPreviewing = false;
 	}
 
 	function cancelEditing() {
 		isEditing = false;
+		isPreviewing = false;
+	}
+
+	function togglePreview() {
+		isPreviewing = !isPreviewing;
+	}
+
+	function parseAttachments(raw: string): string[] {
+		return raw
+			.split('\n')
+			.map((line) => line.trim())
+			.filter((line) => line.length > 0 && isValidUrl(line));
+	}
+
+	function isValidUrl(str: string): boolean {
+		try {
+			new URL(str);
+			return true;
+		} catch {
+			return false;
+		}
 	}
 
 	async function saveChanges() {
 		if (!announcement || !announcementId) return;
+
+		if (!editTitle.trim()) {
+			alert('Title is required');
+			return;
+		}
+
+		const attachmentUrls = parseAttachments(editAttachments);
+		const invalidCount = editAttachments
+			.split('\n')
+			.filter((l) => l.trim())
+			.length - attachmentUrls.length;
+
+		if (invalidCount > 0) {
+			alert(`${invalidCount} attachment URL(s) are invalid and will be ignored`);
+		}
+
 		saving = true;
 
 		try {
@@ -111,19 +177,23 @@
 				title: editTitle.trim(),
 				content: editContent.trim() || null,
 				tags: editTags.split(',').map((t) => t.trim()).filter(Boolean),
+				level: editLevel,
+				attachments: attachmentUrls.length > 0 ? attachmentUrls : undefined
 			};
 
 			await updateAnnouncement(announcementId, input);
 
-			// Update local state
 			announcement = {
 				...announcement,
 				title: input.title,
 				content: input.content ?? null,
-				tags: input.tags ?? []
+				tags: input.tags ?? [],
+				level: input.level ?? 0,
+				attachments: input.attachments ?? []
 			};
 
 			isEditing = false;
+			isPreviewing = false;
 			announcementsQuery.refetch();
 		} catch (err) {
 			alert(err instanceof Error ? err.message : 'Failed to save');
@@ -186,6 +256,22 @@
 							bind:value={editTitle}
 							placeholder="Title"
 						/>
+						<div class="edit-meta-row">
+							<input
+								type="text"
+								class="edit-author"
+								bind:value={editAuthor}
+								placeholder="Author"
+							/>
+							<label class="edit-level-label">
+								Level:
+								<select class="edit-level" bind:value={editLevel}>
+									<option value={0}>Info (0)</option>
+									<option value={1}>Warning (1)</option>
+									<option value={2}>Severe (2)</option>
+								</select>
+							</label>
+						</div>
 					{:else}
 						<h1 class="title">
 							{announcement.title}
@@ -194,15 +280,20 @@
 									<IconArchive />
 								</span>
 							{/if}
+							{#if announcement.level && announcement.level > 0}
+								<span class="level-badge level-{announcement.level}" title="Level {announcement.level}">
+									{announcement.level === 1 ? 'Warning' : 'Severe'}
+								</span>
+							{/if}
 						</h1>
 					{/if}
-					<div class="meta">
-						<span class="date">{formatDate(announcement.created_at)}</span>
+					<h4 class="meta">
+						{relativeTime(announcement.created_at)}
 						{#if announcement.author}
-							<span class="separator">•</span>
-							<span class="author">by {announcement.author}</span>
+							·
+							{announcement.author}
 						{/if}
-					</div>
+					</h4>
 					{#if isEditing}
 						<input
 							type="text"
@@ -240,19 +331,51 @@
 			<hr class="divider" />
 
 			{#if isEditing}
-				<textarea
-					class="edit-content"
-					bind:value={editContent}
-					placeholder="Content (HTML supported)"
-					rows="10"
-				></textarea>
+				<div class="edit-section">
+					<label class="field-label">
+						Content (HTML supported)
+						{#if isPreviewing}
+							<button type="button" class="preview-toggle" onclick={togglePreview}>
+								Hide Preview
+							</button>
+						{:else}
+							<button type="button" class="preview-toggle" onclick={togglePreview}>
+								Show Preview
+							</button>
+						{/if}
+					</label>
+					<textarea
+						class="edit-content"
+						bind:value={editContent}
+						placeholder="Content (HTML supported)"
+						rows="10"
+					></textarea>
+					{#if isPreviewing && editContent}
+						<div class="preview-pane">
+							<div class="preview-label">Preview</div>
+							<div class="preview-content">
+								{@html editContent}
+							</div>
+						</div>
+					{/if}
+				</div>
+
+				<div class="edit-section">
+					<span class="field-label">Attachment URLs (one per line)</span>
+					<textarea
+						class="edit-attachments"
+						bind:value={editAttachments}
+						placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.png"
+						rows="4"
+					></textarea>
+				</div>
 			{:else}
 				<div class="content">
 					{@html announcement.content}
 				</div>
 			{/if}
 
-			{#if announcement.attachments && announcement.attachments.length > 0}
+			{#if !isEditing && announcement.attachments && announcement.attachments.length > 0}
 				<hr class="divider" />
 				<div class="attachments">
 					{#each announcement.attachments as src, idx}
@@ -291,7 +414,7 @@
 
 <style>
 	.wrapper {
-		width: min(90%, 60rem);
+		width: min(90%, 80rem);
 		margin-inline: auto;
 		padding-block: 2rem;
 	}
@@ -323,19 +446,20 @@
 		background-color: var(--surface-eight);
 		padding: 2rem;
 		border-radius: 1rem;
+		margin-bottom: 3rem;
 	}
 
 	.header {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
-		align-items: flex-start;
-		gap: 1rem;
+		align-items: center;
+		gap: 2rem;
 	}
 
 	.header-content {
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
 		flex: 1;
 	}
 
@@ -350,13 +474,14 @@
 		align-items: center;
 		gap: 0.75rem;
 		margin: 0;
-		font-size: 1.75rem;
+		font-size: 2.5rem;
 		color: var(--text-one);
-		line-height: 1.3;
+		line-height: 4rem;
+		letter-spacing: -0.025em;
 	}
 
 	.edit-title {
-		font-size: 1.75rem;
+		font-size: 2.5rem;
 		font-weight: bold;
 		color: var(--text-one);
 		background: var(--surface-four);
@@ -416,32 +541,24 @@
 	}
 
 	.meta {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
 		flex-wrap: wrap;
-		gap: 0.5rem;
-		font-size: 0.9rem;
-		color: var(--text-four);
-	}
-
-	.separator {
-		color: var(--surface-six);
-	}
-
-	.author {
-		font-weight: 500;
+		column-gap: 1rem;
 	}
 
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-top: 0.25rem;
+		gap: 4px;
 	}
 
 	.divider {
 		border: none;
-		border-top: 1px solid var(--surface-six);
+		height: 8px;
+		width: 100%;
+		background-image: url("data:image/svg+xml,%3Csvg width='91' height='8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M114 4c-5.067 4.667-10.133 4.667-15.2 0S88.667-.667 83.6 4 73.467 8.667 68.4 4 58.267-.667 53.2 4 43.067 8.667 38 4 27.867-.667 22.8 4 12.667 8.667 7.6 4-2.533-.667-7.6 4s-10.133 4.667-15.2 0S-32.933-.667-38 4s-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0' stroke='%23465969' stroke-linecap='square'/%3E%3C/svg%3E");
+		background-repeat: repeat-x;
 		margin: 1.5rem 0;
 	}
 
@@ -454,11 +571,12 @@
 	.content :global(a) {
 		color: var(--primary);
 		font-weight: 600;
+		font-size: 0.95rem;
 		text-decoration: none;
 	}
 
 	.content :global(a:hover) {
-		text-decoration: underline;
+		text-decoration: underline var(--secondary);
 		color: var(--text-one);
 	}
 
@@ -468,14 +586,16 @@
 	.content :global(h5),
 	.content :global(h6) {
 		color: var(--secondary);
-		margin-top: 1.5rem;
-		margin-bottom: 0.75rem;
+		margin-top: 1.25rem;
+		margin-bottom: 1.25rem;
 	}
 
 	.content :global(h1) { font-size: 1.8rem; }
-	.content :global(h2) { font-size: 1.5rem; }
-	.content :global(h3) { font-size: 1.3rem; }
-	.content :global(h4) { font-size: 1.15rem; }
+	.content :global(h2) { font-size: 1.6rem; }
+	.content :global(h3) { font-size: 1.4rem; }
+	.content :global(h4) { font-size: 1.2rem; }
+	.content :global(h5) { font-size: 1.1rem; }
+	.content :global(h6) { font-size: 1rem; }
 
 	.content :global(ul),
 	.content :global(ol) {
@@ -483,7 +603,10 @@
 	}
 
 	.content :global(li) {
+		list-style-position: inside;
 		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
+		font-weight: 500;
 	}
 
 	.content :global(p) {
@@ -546,6 +669,139 @@
 		display: flex;
 		gap: 0.5rem;
 		justify-content: flex-end;
+	}
+
+	.edit-meta-row {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		flex-wrap: wrap;
+		margin-top: 0.5rem;
+	}
+
+	.edit-author {
+		flex: 1;
+		min-width: 150px;
+		font-size: 0.9rem;
+		color: var(--text-four);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.5rem 0.75rem;
+	}
+
+	.edit-author:focus {
+		outline: none;
+		border-color: var(--primary);
+	}
+
+	.edit-level-label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.9rem;
+		color: var(--text-four);
+	}
+
+	.edit-level {
+		font-size: 0.9rem;
+		color: var(--text-four);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.4rem 0.6rem;
+	}
+
+	.edit-level:focus {
+		outline: none;
+		border-color: var(--primary);
+	}
+
+	.level-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.2rem 0.5rem;
+		border-radius: 0.25rem;
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+
+	.level-badge.level-1 {
+		background: rgba(255, 193, 7, 0.2);
+		color: #ffc107;
+	}
+
+	.level-badge.level-2 {
+		background: rgba(244, 67, 54, 0.2);
+		color: #f44336;
+	}
+
+	.edit-section {
+		margin-bottom: 1.5rem;
+	}
+
+	.field-label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 0.85rem;
+		color: var(--text-four);
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+	}
+
+	.preview-toggle {
+		font-size: 0.8rem;
+		color: var(--primary);
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.2rem 0.4rem;
+		border-radius: 0.25rem;
+	}
+
+	.preview-toggle:hover {
+		background: var(--surface-four);
+	}
+
+	.preview-pane {
+		margin-top: 1rem;
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		overflow: hidden;
+	}
+
+	.preview-label {
+		font-size: 0.75rem;
+		color: var(--text-four);
+		background: var(--surface-four);
+		padding: 0.4rem 0.75rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.preview-content {
+		padding: 0.75rem;
+		color: var(--text-four);
+		line-height: 1.6;
+	}
+
+	.edit-attachments {
+		width: 100%;
+		min-height: 80px;
+		font-size: 0.9rem;
+		font-family: monospace;
+		color: var(--text-four);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.75rem;
+		resize: vertical;
+	}
+
+	.edit-attachments:focus {
+		outline: none;
+		border-color: var(--primary);
 	}
 
 	@media (max-width: 768px) {

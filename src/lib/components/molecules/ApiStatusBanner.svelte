@@ -59,9 +59,7 @@
 		padding: 24px 40px;
 		border-radius: 0;
 		font-size: 0.87rem;
-		position: sticky;
-		top: 0;
-		left: 0;
+		position: relative;
 		z-index: 10000;
 
 		&.caution {

@@ -3,6 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 	import { createAnnouncement, type AnnouncementInput } from '$lib/api/client';
 	import { auth, announcementsQuery } from '$stores';
 	import Button from '$components/atoms/Button.svelte';
@@ -12,9 +13,19 @@
 	let title = $state('');
 	let content = $state('');
 	let tags = $state('');
+	let level = $state(0);
+	let attachments = $state('');
 	let saving = $state(false);
+	let isPreviewing = $state(false);
 
 	let isAdmin = $derived(auth.isLoggedIn);
+
+	let hasContent = $derived(
+		title.trim().length > 0 ||
+		content.trim().length > 0 ||
+		tags.trim().length > 0 ||
+		attachments.trim().length > 0
+	);
 
 	$effect(() => {
 		if (browser && !auth.isLoggedIn) {
@@ -22,10 +33,52 @@
 		}
 	});
 
+	onMount(() => {
+		function handleBeforeUnload(e: BeforeUnloadEvent) {
+			if (hasContent) {
+				e.preventDefault();
+				e.returnValue = '';
+			}
+		}
+
+		window.addEventListener('beforeunload', handleBeforeUnload);
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	});
+
+	function parseAttachments(raw: string): string[] {
+		return raw
+			.split('\n')
+			.map((line) => line.trim())
+			.filter((line) => line.length > 0 && isValidUrl(line));
+	}
+
+	function isValidUrl(str: string): boolean {
+		try {
+			new URL(str);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	function togglePreview() {
+		isPreviewing = !isPreviewing;
+	}
+
 	async function handleCreate() {
 		if (!title.trim()) {
 			alert('Title is required');
 			return;
+		}
+
+		const attachmentUrls = parseAttachments(attachments);
+		const rawLines = attachments.split('\n').filter((l) => l.trim());
+		const invalidCount = rawLines.length - attachmentUrls.length;
+
+		if (invalidCount > 0) {
+			alert(`${invalidCount} attachment URL(s) are invalid and will be ignored`);
 		}
 
 		saving = true;
@@ -34,7 +87,9 @@
 			const input: AnnouncementInput = {
 				title: title.trim(),
 				content: content.trim() || undefined,
-				tags: tags.split(',').map((t) => t.trim()).filter(Boolean)
+				tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+				level: level,
+				attachments: attachmentUrls.length > 0 ? attachmentUrls : undefined
 			};
 
 			await createAnnouncement(input);
@@ -48,6 +103,11 @@
 	}
 
 	function handleCancel() {
+		if (hasContent) {
+			if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
+				return;
+			}
+		}
 		goto('/announcements');
 	}
 </script>
@@ -80,23 +140,58 @@
 					/>
 				</div>
 
-				<div class="field">
-					<label for="tags">Tags</label>
-					<input
-						id="tags"
-						type="text"
-						bind:value={tags}
-						placeholder="Tags (comma separated)"
-					/>
+				<div class="field-row">
+					<div class="field">
+						<label for="tags">Tags</label>
+						<input
+							id="tags"
+							type="text"
+							bind:value={tags}
+							placeholder="Tags (comma separated)"
+						/>
+					</div>
+
+					<div class="field field-level">
+						<label for="level">Level</label>
+						<select id="level" bind:value={level}>
+							<option value={0}>Info (0)</option>
+							<option value={1}>Warning (1)</option>
+							<option value={2}>Severe (2)</option>
+						</select>
+					</div>
 				</div>
 
 				<div class="field">
-					<label for="content">Content</label>
+					<div class="field-header">
+						<label for="content">Content</label>
+						<button type="button" class="preview-toggle" onclick={togglePreview}>
+							{isPreviewing ? 'Hide Preview' : 'Show Preview'}
+						</button>
+					</div>
 					<textarea
 						id="content"
 						bind:value={content}
 						placeholder="Content (HTML supported)"
 						rows="12"
+					></textarea>
+					{#if isPreviewing && content}
+						<div class="preview-pane">
+							<div class="preview-label">Preview</div>
+							<div class="preview-content">
+								{@html content}
+							</div>
+						</div>
+					{/if}
+				</div>
+
+				<div class="field">
+					<label for="attachments">Attachment URLs (one per line)</label>
+					<textarea
+						id="attachments"
+						bind:value={attachments}
+						placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.png"
+						rows="4"
+						class="attachments-textarea"
 					></textarea>
 				</div>
 			</div>
@@ -196,6 +291,81 @@
 		min-height: 200px;
 		font-family: monospace;
 		resize: vertical;
+	}
+
+	.field-row {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.field-row .field {
+		flex: 1;
+		min-width: 200px;
+	}
+
+	.field-level {
+		max-width: 180px;
+	}
+
+	.field select {
+		font-size: 1rem;
+		color: var(--text-one);
+		background: var(--surface-four);
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		padding: 0.75rem;
+		width: 100%;
+	}
+
+	.field select:focus {
+		outline: none;
+		border-color: var(--primary);
+	}
+
+	.field-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.preview-toggle {
+		font-size: 0.85rem;
+		color: var(--primary);
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.25rem;
+	}
+
+	.preview-toggle:hover {
+		background: var(--surface-four);
+	}
+
+	.preview-pane {
+		margin-top: 0.75rem;
+		border: 1px solid var(--border);
+		border-radius: 0.5rem;
+		overflow: hidden;
+	}
+
+	.preview-label {
+		font-size: 0.75rem;
+		color: var(--text-four);
+		background: var(--surface-four);
+		padding: 0.4rem 0.75rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.preview-content {
+		padding: 0.75rem;
+		color: var(--text-four);
+		line-height: 1.6;
+	}
+
+	.attachments-textarea {
+		min-height: 80px;
 	}
 
 	.actions {

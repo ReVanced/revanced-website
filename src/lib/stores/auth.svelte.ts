@@ -7,6 +7,7 @@ function createAuthStore() {
 	let wasLoggedIn = $state(false);
 	let expiry = $state<number | null>(null);
 	let loginModalRequested = $state(false);
+	let loginSuccess = $state(false);
 	let checkInterval: ReturnType<typeof setInterval> | null = null;
 
 	function refresh() {
@@ -37,6 +38,7 @@ function createAuthStore() {
 		const result = await doLogin(username, password);
 		if (result.success) {
 			wasLoggedIn = false;
+			loginSuccess = true;
 			refresh();
 		}
 		return result;
@@ -60,6 +62,10 @@ function createAuthStore() {
 		loginModalRequested = false;
 	}
 
+	function clearLoginSuccess() {
+		loginSuccess = false;
+	}
+
 	return {
 		get isLoggedIn() {
 			return loggedIn;
@@ -73,6 +79,9 @@ function createAuthStore() {
 		get loginModalRequested() {
 			return loginModalRequested;
 		},
+		get loginSuccess() {
+			return loginSuccess;
+		},
 		login,
 		logout,
 		refresh,
@@ -80,7 +89,8 @@ function createAuthStore() {
 		stopChecking,
 		clearSessionExpired,
 		requestLoginModal,
-		clearLoginModalRequest
+		clearLoginModalRequest,
+		clearLoginSuccess
 	};
 }
 

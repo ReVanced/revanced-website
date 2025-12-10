@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import Page from '$components/molecules/Page.svelte';
 	import ContributorSection from '$components/organisms/ContributorSection.svelte';
 	import { contributorsQuery } from '$stores';
@@ -19,7 +21,7 @@
 
 <Page title="Contributors of ReVanced" description="ReVanced is made possible by the community" {schemas}>
 	<div class="wrapper">
-		<div class="text-container">
+		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<h2>Made possible by the community.</h2>
 			<p>
 				Want to show up here?
@@ -31,11 +33,13 @@
 
 		<div class="repos">
 			{#each repositories as repo}
-				<ContributorSection
-					name={repo.name}
-					url={repo.url}
-					contributors={repo.contributors}
-				/>
+				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+					<ContributorSection
+						name={repo.name}
+						url={repo.url}
+						contributors={repo.contributors}
+					/>
+				</div>
 			{/each}
 		</div>
 	</div>

@@ -172,8 +172,7 @@
 
 <style>
 	main {
-		min-height: 100vh;
-		min-height: 100dvh;
+		min-height: max(100vh, 600px);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -181,6 +180,12 @@
 		position: relative;
 		overflow: hidden;
 		padding: 2rem;
+	}
+
+	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+		main {
+			min-height: initial;
+		}
 	}
 
 	/* Hero section */
@@ -232,6 +237,12 @@
 		flex-shrink: 0;
 	}
 
+	@media (max-width: 1100px) {
+		.phone-showcase {
+			display: none;
+		}
+	}
+
 	.phone-frame {
 		background: var(--surface-seven);
 		border-radius: 2rem;
@@ -273,6 +284,27 @@
 		opacity: 0;
 		transform: translateY(10px);
 		pointer-events: none;
+	}
+
+	@media (min-width: 901px) and (min-height: 601px) {
+		.social-buttons:not(.hidden) {
+			position: absolute;
+			bottom: 1rem;
+		}
+	}
+
+	@media (max-width: 450px) {
+		.social-buttons:not(.hidden) {
+			justify-content: center;
+		}
+	}
+
+	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
+		.social-buttons {
+			position: static !important;
+			opacity: 1 !important;
+			transform: none !important;
+		}
 	}
 
 	/* Responsive */

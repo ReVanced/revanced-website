@@ -42,7 +42,29 @@
 		clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(() => {
 			displayedTerm = searchTerm;
+			syncUrlWithSearch();
 		}, 350);
+	}
+
+	function syncUrlWithSearch() {
+		if (!browser) return;
+
+		const url = new URL(window.location.href);
+		url.pathname = '/announcements';
+
+		if (searchTerm.trim()) {
+			url.searchParams.set('s', searchTerm.trim());
+		} else {
+			url.searchParams.delete('s');
+		}
+
+		// Keep existing tag params
+		const currentTags = url.searchParams.getAll('tag');
+		if (currentTags.length > 0 || searchTerm.trim()) {
+			window.history.replaceState({}, '', url.pathname + url.search);
+		} else {
+			window.history.replaceState({}, '', url.pathname);
+		}
 	}
 
 	let announcements = $derived(announcementsQuery.data ?? []);
@@ -181,7 +203,7 @@
 				onclick={toggleArchive}
 			>
 				<h4>Archive</h4>
-				<div class="arrow" class:expanded={archiveExpanded}>
+				<div class="arrow" class:expanded={archiveExpanded} style="color: var(--surface-six);">
 					<IconChevron />
 				</div>
 			</button>
@@ -262,17 +284,18 @@
 
 	.expand-archived h4 {
 		margin: 0;
-		color: var(--text-one);
+		color: var(--secondary);
 	}
 
 	.arrow {
 		height: 1.5rem;
 		transition: all 0.2s var(--bezier-one);
 		color: var(--surface-six);
+		transform: rotate(0deg);
 	}
 
 	.arrow.expanded {
-		transform: rotate(-180deg);
+		transform: rotate(180deg);
 	}
 
 	.arrow :global(svg) {

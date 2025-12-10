@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import Page from '$components/molecules/Page.svelte';
 	import DonateHeartAnimation from '$components/molecules/DonateHeartAnimation.svelte';
 	import TeamMemberCard from '$components/molecules/TeamMemberCard.svelte';
@@ -8,6 +10,7 @@
 	import Modal from '$components/molecules/Modal.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import QRCode from '$components/atoms/QRCode.svelte';
+	import Snackbar from '$components/atoms/Snackbar.svelte';
 	import { aboutQuery, teamQuery } from '$stores';
 	import type { CryptoWallet } from '$api';
 
@@ -34,6 +37,7 @@
 	let walletModalOpen = $state(false);
 	let selectedWallet = $state<CryptoWallet | null>(null);
 	let copySuccess = $state(false);
+	let snackbarOpen = $state(false);
 	let walletLinkClicked = $state(false);
 
 	function shuffle<T>(array: T[]): T[] {
@@ -74,6 +78,7 @@
 		try {
 			await navigator.clipboard.writeText(selectedWallet.address);
 			copySuccess = true;
+			snackbarOpen = true;
 			setTimeout(() => {
 				copySuccess = false;
 				walletModalOpen = false;
@@ -87,7 +92,7 @@
 		ETH: 'ethereum',
 		LTC: 'litecoin',
 		DOGE: 'dogecoin',
-		XMR: 'monero'
+		XMR: 'monero',
 	};
 
 	function getWalletUri(wallet: CryptoWallet): string | null {
@@ -107,7 +112,7 @@
 </script>
 
 <Page title="Donate to ReVanced" description="Support ReVanced development" {schemas}>
-	<main class="wrapper">
+	<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<section class="hero">
 			<div class="hero-text">
 				<h2>🎉 Support <span class="highlight">ReVanced</span></h2>
@@ -188,6 +193,12 @@
 		</Button>
 	{/snippet}
 </Modal>
+
+<Snackbar bind:open={snackbarOpen}>
+	{#snippet text()}
+		Address copied to clipboard
+	{/snippet}
+</Snackbar>
 
 <style>
 	.wrapper {

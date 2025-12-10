@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { browser } from '$app/environment';
 
 	import logo from '$assets/icons/logo.svg';
 	import Notifications from 'virtual:icons/material-symbols/campaign';
 	import Settings from 'virtual:icons/material-symbols/settings';
-	import Reset from 'virtual:icons/material-symbols/refresh';
-	import Modal from '$components/molecules/Modal.svelte';
-	import Button from '$components/atoms/Button.svelte';
+	import SettingsDialog from '$components/molecules/SettingsDialog.svelte';
+	import LoginDialog from '$components/molecules/LoginDialog.svelte';
+	import { auth } from '$stores';
 	import {
-		DEFAULT_API_URL,
-		getDisplayApiUrl,
-		setApiBaseUrl,
-		clearCacheAndReload
-	} from '$api/settings';
-	import { apiStatus, auth } from '$stores';
+		aboutQuery,
+		announcementsQuery,
+		contributorsQuery,
+		managerQuery,
+		patchesQuery,
+		teamQuery
+	} from '$stores';
 
 	const navItems = [
 		{ label: 'Home', href: '/' },
@@ -27,11 +27,6 @@
 	let settingsOpen = $state(false);
 	let loginOpen = $state(false);
 	let menuOpen = $state(false);
-	let apiUrl = $state('');
-	let username = $state('');
-	let password = $state('');
-	let loginError = $state('');
-	let loginLoading = $state(false);
 	let scrollY = $state(0);
 
 	const scrolled = $derived(scrollY > 10);
@@ -42,68 +37,29 @@
 	});
 
 	$effect(() => {
-		if (settingsOpen && browser) {
-			apiUrl = getDisplayApiUrl();
-		}
-	});
-
-	$effect(() => {
 		if (auth.loginModalRequested) {
 			loginOpen = true;
 			auth.clearLoginModalRequest();
 		}
 	});
 
-	function handleResetInput() {
-		apiUrl = DEFAULT_API_URL;
-	}
-
-	function handleReset() {
-		clearCacheAndReload();
-	}
-
-	function handleSave() {
-		const urlToSave = apiUrl.trim() === DEFAULT_API_URL ? undefined : apiUrl.trim();
-		setApiBaseUrl(urlToSave);
-		location.reload();
-	}
-
-	function handleLogin() {
+	function handleLoginRequest() {
 		loginOpen = true;
 	}
 
-	function handleCancelLogin() {
-		loginOpen = false;
-		username = '';
-		password = '';
-		loginError = '';
-	}
-
-	async function handleLoginSubmit() {
-		if (!username || !password) {
-			loginError = 'Username and password are required';
-			return;
+	function prefetchRoute(href: string) {
+		if (href === '/download') {
+			managerQuery.refetch();
+		} else if (href === '/patches') {
+			patchesQuery.refetch();
+		} else if (href === '/announcements') {
+			announcementsQuery.refetch();
+		} else if (href === '/contributors') {
+			contributorsQuery.refetch();
+		} else if (href === '/donate') {
+			aboutQuery.refetch();
+			teamQuery.refetch();
 		}
-
-		loginError = '';
-		loginLoading = true;
-
-		const result = await auth.login(username, password);
-
-		loginLoading = false;
-
-		if (result.success) {
-			loginOpen = false;
-			username = '';
-			password = '';
-		} else {
-			loginError = result.error;
-		}
-	}
-
-	function handleLogout() {
-		auth.logout();
-		settingsOpen = false;
 	}
 </script>
 
@@ -121,7 +77,7 @@
 	</button>
 
 	<!-- Logo -->
-	<a href="/" class="nav-logo unselectable">
+	<a href="/" class="nav-logo unselectable" class:hidden={menuOpen}>
 		<img src={logo} alt="ReVanced Logo" class="logo" />
 	</a>
 
@@ -141,7 +97,12 @@
 	<div class="nav-drawer" class:open={menuOpen}>
 		<div class="nav-group main-nav">
 			{#each navItems as { href, label }}
-				<a {href} class="rounded nav-button unselectable" class:active={page.url.pathname === href}>
+				<a 
+					{href} 
+					class="rounded nav-button unselectable" 
+					class:active={page.url.pathname === href}
+					onmouseenter={() => prefetchRoute(href)}
+				>
 					{label}
 				</a>
 			{/each}
@@ -149,6 +110,7 @@
 				href="/announcements"
 				class="rounded nav-button unselectable mobile-only"
 				class:active={page.url.pathname === '/announcements'}
+				onmouseenter={() => prefetchRoute('/announcements')}
 			>
 				Announcements
 			</a>
@@ -159,6 +121,7 @@
 				href="/announcements"
 				class="rounded nav-button unselectable desktop-only"
 				class:active={page.url.pathname === '/announcements'}
+				onmouseenter={() => prefetchRoute('/announcements')}
 			>
 				<Notifications width="24" height="24" />
 			</a>
@@ -173,99 +136,9 @@
 	</div>
 </nav>
 
-<Modal id="settings" bind:open={settingsOpen}>
-	<div class="modal-content settings-content">
-		<div class="settings-icon">
-			<Settings width="24" height="24" />
-		</div>
-		<h2 class="modal-title settings-title">Settings</h2>
-		<p class="modal-description settings-description">Configure the API for this website.</p>
-		<div class="input-container">
-			<input
-				type="text"
-				class="modal-input api-input rounded"
-				placeholder="Enter API URL"
-				bind:value={apiUrl}
-			/>
-			<button
-				type="button"
-				class="reset-icon-btn"
-				onclick={handleResetInput}
-				title="Reset to default API URL"
-			>
-				<Reset width="20" height="20" />
-			</button>
-		</div>
-	</div>
-	{#snippet buttons()}
-		<div class="modal-buttons">
-			{#if auth.isLoggedIn}
-				<Button buttonStyle="text" type="button" class="modal-btn login-btn rounded" onclick={handleLogout}>
-					Logout
-				</Button>
-			{:else}
-				<Button buttonStyle="text" type="button" class="modal-btn login-btn rounded" onclick={handleLogin} disabled={apiStatus.isOffline}>
-					Login
-				</Button>
-			{/if}
-			<div class="right-buttons">
-				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleReset}>
-					Reset
-				</Button>
-				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleSave}>
-					Save
-				</Button>
-			</div>
-		</div>
-	{/snippet}
-</Modal>
+<SettingsDialog bind:open={settingsOpen} onLoginRequest={handleLoginRequest} />
 
-<Modal id="login" bind:open={loginOpen}>
-	<div class="modal-content login-content">
-		<h2 class="modal-title login-title">Login</h2>
-		<p class="modal-description">This login is reserved for site administrators. Go back!</p>
-
-		<div class="login-form">
-			<div class="input-group">
-				<input
-					type="text"
-					id="username"
-					bind:value={username}
-					placeholder=" "
-					class="modal-input rounded"
-					disabled={loginLoading}
-				/>
-				<label for="username" class="login-label">Username</label>
-			</div>
-			<div class="input-group">
-				<input
-					type="password"
-					id="password"
-					bind:value={password}
-					placeholder=" "
-					class="modal-input rounded"
-					disabled={loginLoading}
-				/>
-				<label for="password" class="login-label">Password</label>
-			</div>
-			{#if loginError}
-				<p class="error-message">{loginError}</p>
-			{/if}
-		</div>
-	</div>
-	{#snippet buttons()}
-		<div class="modal-buttons login-buttons">
-			<div class="right-buttons">
-				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleCancelLogin} disabled={loginLoading}>
-					Cancel
-				</Button>
-				<Button buttonStyle="text" type="button" class="modal-btn rounded" onclick={handleLoginSubmit} disabled={loginLoading}>
-					{loginLoading ? 'Logging in...' : 'Login'}
-				</Button>
-			</div>
-		</div>
-	{/snippet}
-</Modal>
+<LoginDialog bind:open={loginOpen} />
 
 <style>
 	nav {
@@ -274,16 +147,17 @@
 		justify-content: space-between;
 		padding: 1rem 2rem;
 		height: 70px;
+		width: 100%;
 		position: sticky;
 		top: 0;
 		left: 0;
-		z-index: 9997;
-		background-color: var(--nav-bg);
-		transition: box-shadow 0.3s ease;
+		z-index: 9996;
+		background-color: var(--surface-eight);
+		transition: box-shadow 0.3s var(--bezier-one);
 	}
 
 	nav.scrolled {
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		box-shadow: var(--drop-shadow-one);
 	}
 
 	.nav-logo {
@@ -292,6 +166,13 @@
 		justify-content: center;
 		padding: 0.5rem;
 		z-index: 6;
+		transition: opacity 0.3s var(--bezier-one);
+		margin-left: 4rem;
+	}
+
+	.nav-logo.hidden {
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.nav-drawer {
@@ -304,7 +185,7 @@
 	.nav-group {
 		display: flex;
 		align-items: center;
-		gap: 1.5rem;
+		gap: 1rem;
 	}
 
 	.main-nav {
@@ -317,28 +198,28 @@
 		align-items: center;
 		justify-content: center;
 		text-decoration: none;
-		color: var(--nav-btn-color);
-		font-weight: 500;
+		color: var(--text-four);
+		font-weight: 400;
+		font-size: 0.9rem;
+		letter-spacing: 0.02rem;
 		padding: 0.625rem 1rem;
 		border-radius: 10px;
-		transition: background-color 0.4s, color 1s;
+		transition-timing-function: var(--bezier-one);
+		transition-duration: 0.25s;
+		transition-property: background-color, color;
 		cursor: pointer;
+		user-select: none;
+		list-style: none;
 
 		&:hover {
-			background-color: var(--nav-btn-hover-bg);
-			color: var(--nav-btn-hover-color);
-		}
-
-		&:active {
-			background-color: var(--nav-btn-active-bg);
-			color: var(--nav-btn-active-color);
+			background-color: var(--surface-three);
+			color: var(--text-one);
 		}
 
 		&.active {
-			color: var(--nav-btn-active-color);
-			background-color: var(--nav-btn-active-bg);
-			transition: background-color 0.3s, color 0.3s;
-			cursor: default;
+			color: var(--primary);
+			background-color: var(--tertiary);
+			pointer-events: none;
 		}
 	}
 
@@ -376,7 +257,7 @@
 	.menu-btn__burger::after {
 		width: 24px;
 		height: 2px;
-		background: var(--nav-btn-color);
+		background: var(--surface-six);
 		transition: all 0.3s var(--bezier-one);
 	}
 
@@ -437,28 +318,42 @@
 
 		nav {
 			justify-content: flex-start;
-			gap: 1rem;
+			gap: 2rem;
 		}
 
 		.nav-logo {
-			margin-left: 0.5rem;
+			position: relative;
+			z-index: 1;
+		}
+
+		.nav-logo.hidden {
+			display: none !important;
+		}
+
+		.menu-btn {
+			position: fixed;
+			top: 10px;
+			left: 2rem;
+			z-index: 6;
 		}
 
 		.nav-drawer {
-			overflow: hidden;
+			overflow-y: auto;
+			overflow-x: hidden;
 			position: fixed;
 			width: 20rem;
 			max-width: 85vw;
 			top: 0;
 			left: 0;
 			height: 100%;
-			background-color: var(--nav-bg);
+			background-color: var(--surface-eight);
 			z-index: 4;
 			flex-direction: column;
 			align-items: flex-start;
 			padding: 6rem 1rem 1rem;
 			transform: translateX(-100%);
-			transition: transform 0.3s ease-out;
+			transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+			border-radius: 0px 24px 24px 0px;
 		}
 
 		.nav-drawer.open {
@@ -479,12 +374,15 @@
 		.nav-button {
 			width: 100%;
 			justify-content: flex-start;
-			padding: 0.75rem 1rem;
+			padding: 0.75rem 1.25rem;
+			text-align: left;
+			font-size: 1rem;
+			font-weight: 500;
 		}
 
 		.secondary-nav {
 			margin-top: auto;
-			padding: 1rem 0;
+			padding: 1rem;
 			flex-direction: row;
 			gap: 1rem;
 			align-self: flex-start;
@@ -494,195 +392,5 @@
 			width: auto;
 			padding: 0.625rem 1rem;
 		}
-	}
-
-	.modal-content {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-	}
-
-	.modal-title {
-		color: var(--settings-title-color);
-		font-weight: 600;
-		margin: 0;
-	}
-
-	.modal-description {
-		color: var(--nav-btn-color);
-		font-size: 0.95rem;
-		margin: 0;
-	}
-
-	.modal-input {
-		width: 100%;
-		padding: 0.75rem 1rem;
-		background-color: var(--nav-btn-hover-bg);
-		color: var(--nav-btn-hover-color);
-		border: 1px solid #3a4149;
-		font-family: inherit;
-		font-size: 0.95rem;
-		transition: border-color 0.3s;
-
-		&:focus {
-			border-color: var(--nav-btn-active-color);
-			outline: none;
-		}
-	}
-
-	.settings-content {
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.settings-icon {
-		color: var(--settings-icon-color);
-		margin-bottom: 0.1rem;
-	}
-
-	.settings-title {
-		font-size: 1.25rem;
-	}
-
-	.settings-description {
-		text-align: left;
-		align-self: flex-start;
-		margin: 0 0 0.5rem 0.5rem;
-	}
-
-	.input-container {
-		position: relative;
-		width: 100%;
-		max-width: 400px;
-	}
-
-	.api-input {
-		padding: 0.75rem 3rem 0.75rem 1rem;
-
-		&::placeholder {
-			color: #6b7280;
-		}
-	}
-
-	.input-container :global(.reset-button),
-	.reset-icon-btn {
-		position: absolute;
-		right: 0.5rem;
-		top: 50%;
-		transform: translateY(-50%);
-		padding: 0.5rem;
-		background-color: transparent;
-		color: var(--settings-title-color);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: opacity 0.3s;
-		border: none;
-		border-radius: 6px;
-
-		&:hover:not(:disabled) {
-			opacity: 0.6;
-		}
-
-		&:active:not(:disabled) {
-			opacity: 0.4;
-		}
-
-		&:disabled {
-			cursor: default;
-		}
-	}
-
-	.modal-buttons {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-		max-width: 400px;
-	}
-
-	.right-buttons {
-		display: flex;
-		gap: 0.75rem;
-	}
-
-	.modal-buttons :global(.modal-btn) {
-		padding: 0.5rem 0.75rem;
-		background-color: transparent;
-		color: var(--settings-title-color);
-		font-family: inherit;
-		font-size: 0.95rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: color 0.3s, opacity 0.3s;
-		border: none;
-
-		&:hover {
-			color: #c5e0f7;
-			opacity: 0.8;
-		}
-
-		&:active {
-			opacity: 0.6;
-		}
-	}
-
-	.login-content {
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.login-title {
-		font-size: 2.5rem;
-	}
-
-	.login-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		width: 100%;
-		margin-top: 0.5rem;
-	}
-
-	.input-group {
-		position: relative;
-		width: 100%;
-	}
-
-	.login-label {
-		position: absolute;
-		left: 1rem;
-		top: 50%;
-		transform: translateY(-50%);
-		color: var(--nav-btn-color);
-		pointer-events: none;
-		user-select: none;
-		transition: 0.2s ease all;
-		background-color: transparent;
-		padding: 0 0.25rem;
-	}
-
-	.modal-input:focus ~ .login-label,
-	.modal-input:not(:placeholder-shown) ~ .login-label {
-		top: 0;
-		font-size: 0.8rem;
-		color: var(--nav-btn-active-color);
-		background-color: #1e1f24;
-	}
-
-	.login-buttons {
-		justify-content: flex-end;
-	}
-
-	.error-message {
-		color: #ff6b6b;
-		font-size: 0.9rem;
-		margin: 0;
-		text-align: center;
-		background-color: rgba(255, 107, 107, 0.1);
-		padding: 0.5rem;
-		border-radius: 0.5rem;
-		border: 1px solid rgba(255, 107, 107, 0.2);
 	}
 </style>
