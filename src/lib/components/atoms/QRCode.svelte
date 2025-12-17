@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	type Props = {
 		value: string;
@@ -9,16 +9,22 @@
 	let { value, size = 150 }: Props = $props();
 
 	let canvasElement: HTMLCanvasElement;
+	let QRiousClass: typeof import('qrious').default | null = null;
 
-	onMount(async () => {
-		const QRious = (await import('qrious')).default;
+	$effect(() => {
+		if (!browser || !canvasElement) return;
+		(async () => {
+			if (!QRiousClass) {
+				QRiousClass = (await import('qrious')).default;
+			}
 
-		new QRious({
-			element: canvasElement,
-			value: value,
-			size: size,
-			level: 'M'
-		});
+			new QRiousClass({
+				element: canvasElement,
+				value: value,
+				size: size,
+				level: 'M'
+			});
+		})();
 	});
 </script>
 
