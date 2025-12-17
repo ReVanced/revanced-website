@@ -56,7 +56,6 @@
 	let selectedPkg = $state<string | null>(page.url.searchParams.get('pkg'));
 	let searchTerm = $state(page.url.searchParams.get('s') ?? '');
 
-	let showAllVersions = $state(false);
 	const mobilePackagesModalId = 'mobile-packages';
 
 	function debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number): T {
@@ -165,11 +164,7 @@
 			{#key selectedPkg || searchTerm}
 				{#each filteredPatches as patch, i (patch.name + (patch.compatiblePackages ? Object.keys(patch.compatiblePackages)[0] ?? '' : ''))}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750, delay: Math.min(i * 30, 300) }}>
-						<PatchItem
-							{patch}
-							{showAllVersions}
-							onToggleVersions={() => (showAllVersions = !showAllVersions)}
-						/>
+						<PatchItem {patch} />
 					</div>
 				{/each}
 			{/key}
