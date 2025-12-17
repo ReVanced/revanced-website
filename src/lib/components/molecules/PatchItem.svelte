@@ -7,13 +7,12 @@
 
 	type Props = {
 		patch: Patch;
-		showAllVersions?: boolean;
-		onToggleVersions?: () => void;
 	};
 
-	let { patch, showAllVersions = false, onToggleVersions }: Props = $props();
+	let { patch }: Props = $props();
 
 	let expanded = $state(false);
+	let showAllVersions = $state(false);
 
 	let hasPatchOptions = $derived(patch.options.length > 0);
 
@@ -31,7 +30,7 @@
 
 	function handleVersionToggle(e: MouseEvent) {
 		e.stopPropagation();
-		onToggleVersions?.();
+		showAllVersions = !showAllVersions;
 	}
 </script>
 
