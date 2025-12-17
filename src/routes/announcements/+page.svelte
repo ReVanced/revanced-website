@@ -13,13 +13,14 @@
 	import IconChevron from 'virtual:icons/material-symbols/keyboard-arrow-down';
 	import IconAdd from 'virtual:icons/material-symbols/add';
 	import { announcementsQuery, readAnnouncements, auth } from '$stores';
+	import { debounce } from '$lib/utils/debounce';
+	import { isArchived } from '$lib/utils/announcement';
 	import type { Announcement } from '$api';
 
 	let searchTerm = $state('');
 	let displayedTerm = $state('');
 	let selectedTags = $state<string[]>([]);
 	let archiveExpanded = $state(false);
-	let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
 	$effect(() => {
 		if (!browser) return;
@@ -37,13 +38,10 @@
 		}
 	});
 
-	function debouncedUpdate() {
-		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(() => {
-			displayedTerm = searchTerm;
-			syncUrlWithSearch();
-		}, 350);
-	}
+	const debouncedUpdate = debounce(() => {
+		displayedTerm = searchTerm;
+		syncUrlWithSearch();
+	});
 
 	function syncUrlWithSearch() {
 		if (!browser) return;
@@ -80,17 +78,12 @@
 		return Array.from(tagSet).sort();
 	});
 
-	function isArchivedNow(archivedAt: string | null): boolean {
-		if (!archivedAt) return false;
-		return new Date(archivedAt) < new Date();
-	}
-
 	let activeItems = $derived(
-		announcements.filter((item: Announcement) => !isArchivedNow(item.archived_at))
+		announcements.filter((item: Announcement) => !isArchived(item.archived_at))
 	);
 
 	let archivedItems = $derived(
-		announcements.filter((item: Announcement) => isArchivedNow(item.archived_at))
+		announcements.filter((item: Announcement) => isArchived(item.archived_at))
 	);
 
 	function applyFilters(items: Announcement[]) {
@@ -184,6 +177,8 @@
 					</div>
 				{/each}
 			</div>
+		{:else if announcementsQuery.error && announcements.length === 0}
+			<p class="empty-state">Failed to load announcements. Please try again later.</p>
 		{:else if isLoading}
 			<p class="empty-state">Loading announcements...</p>
 		{/if}

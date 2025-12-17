@@ -7,16 +7,21 @@ class ReadAnnouncementsTracker {
 		return readIds.current;
 	}
 
+	private get idSet() {
+		return new Set(readIds.current);
+	}
+
 	isRead(id: number) {
-		return readIds.current.includes(id);
+		return this.idSet.has(id);
 	}
 
 	markAsRead(id: number) {
-		if (!this.isRead(id)) readIds.current = [...readIds.current, id];
+		if (!this.idSet.has(id)) readIds.current = [...readIds.current, id];
 	}
 
 	markManyAsRead(ids: number[]) {
-		const newIds = ids.filter((id) => !this.isRead(id));
+		const current = this.idSet;
+		const newIds = ids.filter((id) => !current.has(id));
 		if (newIds.length) readIds.current = [...readIds.current, ...newIds];
 	}
 

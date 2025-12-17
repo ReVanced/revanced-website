@@ -21,13 +21,16 @@
 		startRefreshInterval,
 		stopRefreshInterval,
 		refetchAllQueries,
+		initializeAllQueries,
 		auth
 	} from '$stores';
-	import { PUBLIC_RV_DMCA_GUID } from '$env/static/public';
-import { useHolidayTheme } from '$lib/utils/themeEvents';
+	import { useHolidayTheme } from '$lib/utils/themeEvents';
+	import { fetchDynamicSettings } from '$lib/api/settings';
 
 	let { children }: WithChildren = $props();
 	useHolidayTheme();
+	initializeAllQueries();
+	
 	let showSpinner = $state(false);
 	let spinnerTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -59,8 +62,6 @@ import { useHolidayTheme } from '$lib/utils/themeEvents';
 		{ label: 'Donate', href: '/donate' }
 	];
 
-	const dmcaGuid = PUBLIC_RV_DMCA_GUID;
-
 	let aboutText = $derived(aboutQuery.data?.about ?? '');
 	let socials = $derived(aboutQuery.data?.socials ?? []);
 	let contactEmail = $derived(aboutQuery.data?.contact?.email ?? '');
@@ -73,6 +74,7 @@ import { useHolidayTheme } from '$lib/utils/themeEvents';
 
 	onMount(() => {
 		auth.startChecking();
+		fetchDynamicSettings();
 		
 		startRefreshInterval(() => {
 			refetchAllQueries();
@@ -121,7 +123,6 @@ import { useHolidayTheme } from '$lib/utils/themeEvents';
 	{pageLinks}
 	{socials}
 	{contactEmail}
-	{dmcaGuid}
 	onEmailClick={handleEmailClick}
 />
 

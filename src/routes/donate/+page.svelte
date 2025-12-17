@@ -33,6 +33,12 @@
 
 	let teamMembers = $derived(teamQuery.data ?? []);
 
+	// Loading/error states
+	let isDonateLoading = $derived(aboutQuery.loading && donationLinks.length === 0);
+	let isDonateError = $derived(aboutQuery.error && donationLinks.length === 0);
+	let isTeamLoading = $derived(teamQuery.loading && teamMembers.length === 0);
+	let isTeamError = $derived(teamQuery.error && teamMembers.length === 0);
+
 	let cryptoModalOpen = $state(false);
 	let walletModalOpen = $state(false);
 	let selectedWallet = $state<CryptoWallet | null>(null);
@@ -132,29 +138,53 @@
 		</section>
 
 		<h3>Donate</h3>
-		<div class="donate-cards">
-			{#each donationLinks as link}
-				<DonateCard
-					name={link.name}
-					image={donateImages[link.name] ?? fallbackImg}
-					href={link.url}
-				/>
-			{/each}
-			{#if cryptoWallets.length > 0}
-				<DonateCard
-					name="Cryptocurrencies"
-					image={donateImages['Cryptocurrencies']}
-					onclick={() => (cryptoModalOpen = true)}
-				/>
-			{/if}
-		</div>
+		{#if isDonateLoading}
+			<div class="loading-state">
+				<div class="skeleton-cards">
+					<div class="skeleton-card"></div>
+					<div class="skeleton-card"></div>
+					<div class="skeleton-card"></div>
+				</div>
+			</div>
+		{:else if isDonateError}
+			<p class="error-state">Failed to load donation options. Please try again later.</p>
+		{:else}
+			<div class="donate-cards">
+				{#each donationLinks as link}
+					<DonateCard
+						name={link.name}
+						image={donateImages[link.name] ?? fallbackImg}
+						href={link.url}
+					/>
+				{/each}
+				{#if cryptoWallets.length > 0}
+					<DonateCard
+						name="Cryptocurrencies"
+						image={donateImages['Cryptocurrencies']}
+						onclick={() => (cryptoModalOpen = true)}
+					/>
+				{/if}
+			</div>
+		{/if}
 
 		<h3>Meet the team</h3>
-		<section class="team">
-			{#each shuffledTeam as member}
-				<TeamMemberCard {member} />
-			{/each}
-		</section>
+		{#if isTeamLoading}
+			<div class="loading-state">
+				<div class="skeleton-team">
+					{#each Array(6) as _}
+						<div class="skeleton-member"></div>
+					{/each}
+				</div>
+			</div>
+		{:else if isTeamError}
+			<p class="error-state">Failed to load team members. Please try again later.</p>
+		{:else}
+			<section class="team">
+				{#each shuffledTeam as member}
+					<TeamMemberCard {member} />
+				{/each}
+			</section>
+		{/if}
 	</main>
 </Page>
 
@@ -244,6 +274,53 @@
 		display: flex;
 		gap: 1rem;
 		margin-bottom: 3rem;
+	}
+
+	.loading-state {
+		margin-bottom: 3rem;
+	}
+
+	.error-state {
+		color: var(--text-four);
+		margin-bottom: 3rem;
+	}
+
+	.skeleton-cards {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.skeleton-card {
+		width: 200px;
+		height: 120px;
+		background: linear-gradient(90deg, var(--surface-three) 25%, var(--surface-four) 50%, var(--surface-three) 75%);
+		background-size: 200% 100%;
+		border-radius: 12px;
+		animation: shimmer 1.5s infinite;
+	}
+
+	.skeleton-team {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+		gap: 1rem;
+	}
+
+	.skeleton-member {
+		height: 80px;
+		background: linear-gradient(90deg, var(--surface-three) 25%, var(--surface-four) 50%, var(--surface-three) 75%);
+		background-size: 200% 100%;
+		border-radius: 12px;
+		animation: shimmer 1.5s infinite;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
 	}
 
 	.team {

@@ -12,8 +12,15 @@ export {
 	patchesQuery,
 	announcementsQuery,
 	allQueries,
+	initializeAllQueries,
 	refetchAllQueries,
-	invalidateAllQueries
+	invalidateAllQueries,
+	prefetchAnnouncementById,
+	getCachedAnnouncement,
+	hasValidCachedAnnouncement,
+	cacheAnnouncement,
+	invalidateAnnouncementCache,
+	invalidateAllAnnouncementCache
 } from './queries.svelte';
 
 export {

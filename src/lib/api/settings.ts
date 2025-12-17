@@ -8,13 +8,46 @@ const DEV_PROXY_URL = '/api/revanced';
 // to be removed in production
 const API_VERSION = 'v4';
 const URL_KEY = 'revanced_api_url';
+const STATUS_KEY = 'revanced_status_url';
+const EMAIL_KEY = 'revanced_email';
+let dynamicSettingsFetched = false;
+
+export async function fetchDynamicSettings(): Promise<void> {
+	if (!browser || dynamicSettingsFetched) return;
+	dynamicSettingsFetched = true;
+	if (localStorage.getItem(STATUS_KEY) && localStorage.getItem(EMAIL_KEY)) {
+		return;
+	}
+	try {
+		const response = await fetch(`${getApiBaseUrl()}/${API_VERSION}/about`);
+		if (!response.ok) return;
+
+		const data = await response.json();
+
+		if (data?.status) {
+			localStorage.setItem(STATUS_KEY, data.status);
+		}
+		if (data?.contact?.email) {
+			localStorage.setItem(EMAIL_KEY, data.contact.email);
+		}
+	} catch {
+	}
+}
 
 export function getStatusUrl(): string {
+	if (browser) {
+		const cached = localStorage.getItem(STATUS_KEY);
+		if (cached) return cached;
+	}
 	return DEFAULT_STATUS_URL;
 }
 
 
 export function getContactEmail(): string {
+	if (browser) {
+		const cached = localStorage.getItem(EMAIL_KEY);
+		if (cached) return cached;
+	}
 	return DEFAULT_EMAIL;
 }
 
@@ -47,6 +80,9 @@ export function setApiBaseUrl(url?: string): void {
 	} else {
 		localStorage.setItem(URL_KEY, url);
 	}
+	localStorage.removeItem(STATUS_KEY);
+	localStorage.removeItem(EMAIL_KEY);
+	dynamicSettingsFetched = false;
 }
 
 export function clearCacheAndReload(): void {

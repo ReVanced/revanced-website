@@ -16,7 +16,8 @@
 		unarchiveAnnouncement,
 		type AnnouncementInput
 	} from '$lib/api/client';
-	import { auth, announcementsQuery } from '$stores';
+	import { auth, announcementsQuery, getCachedAnnouncement, cacheAnnouncement, hasValidCachedAnnouncement } from '$stores';
+	import { isArchived, toSlug } from '$lib/utils/announcement';
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
@@ -88,7 +89,28 @@
 	$effect(() => {
 		if (!browser || announcementId === null) return;
 
-		loading = true;
+		// Check cache first
+		const cached = getCachedAnnouncement(announcementId);
+		if (cached) {
+			announcement = cached;
+			loading = false;
+			
+			// Update URL if needed
+			if (cached.title) {
+				const expectedPath = `/announcements/${cached.id}-${toSlug(cached.title)}`;
+				if ($page.url.pathname !== expectedPath) {
+					history.replaceState({}, '', expectedPath);
+				}
+			}
+			
+			// If cache is valid, we're done; otherwise refetch in background
+			if (hasValidCachedAnnouncement(announcementId)) {
+				return;
+			}
+		} else {
+			loading = true;
+		}
+		
 		error = null;
 
 		const abortController = new AbortController();
@@ -97,13 +119,10 @@
 			.then((data) => {
 				if (abortController.signal.aborted) return;
 				announcement = data;
+				cacheAnnouncement(data);
 				loading = false;
 				if (data?.title) {
-					const titleSlug = data.title
-						.toLowerCase()
-						.replace(/[^a-z0-9]+/g, '-')
-						.replace(/^-+|-+$/g, '');
-					const expectedPath = `/announcements/${data.id}-${titleSlug}`;
+					const expectedPath = `/announcements/${data.id}-${toSlug(data.title)}`;
 					if ($page.url.pathname !== expectedPath) {
 						history.replaceState({}, '', expectedPath);
 					}
@@ -111,7 +130,10 @@
 			})
 			.catch((err) => {
 				if (abortController.signal.aborted) return;
-				error = err instanceof Error ? err.message : 'Failed to load announcement';
+				// Only show error if we don't have cached data to display
+				if (!announcement) {
+					error = err instanceof Error ? err.message : 'Failed to load announcement';
+				}
 				loading = false;
 			});
 
@@ -119,11 +141,6 @@
 			abortController.abort();
 		};
 	});
-
-	function isArchived(archivedAt: string | null): boolean {
-		if (!archivedAt) return false;
-		return new Date(archivedAt) < new Date();
-	}
 
 	function startEditing() {
 		if (!announcement) return;
@@ -172,7 +189,8 @@
 				content: editContent.trim() || null,
 				tags: editTags.split(',').map((t) => t.trim()).filter(Boolean),
 				level: editLevel,
-				attachments: attachmentUrls.length > 0 ? attachmentUrls : undefined
+				attachments: attachmentUrls.length > 0 ? attachmentUrls : undefined,
+				author: editAuthor.trim() || undefined
 			};
 
 			await updateAnnouncement(announcementId, input);

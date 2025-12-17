@@ -9,7 +9,7 @@ function createAuthStore() {
 	let loginModalRequested = $state(false);
 	let loginSuccess = $state(false);
 	let checkInterval: ReturnType<typeof setInterval> | null = null;
-	let initialCheckDone = false;
+	let initialized = $state(false);
 
 	function refresh() {
 		const currentlyLoggedIn = isLoggedIn();
@@ -23,17 +23,17 @@ function createAuthStore() {
 
 	function startChecking() {
 		if (!browser || checkInterval) return;
-		if (!initialCheckDone) {
-			initialCheckDone = true;
+		if (!initialized) {
 			const storedExpiry = getTokenExpiry();
 			if (storedExpiry !== null && Date.now() >= storedExpiry) {
 				wasLoggedIn = true;
 			}
+			initialized = true;
 		}
 		
 		refresh();
-		// check every 10 seconds if token expired
-		checkInterval = setInterval(refresh, 10_000);
+		// check every 3 seconds if token expired
+		checkInterval = setInterval(refresh, 3_000);
 	}
 
 	function stopChecking() {
@@ -78,6 +78,9 @@ function createAuthStore() {
 	return {
 		get isLoggedIn() {
 			return loggedIn;
+		},
+		get isInitialized() {
+			return initialized;
 		},
 		get sessionExpired() {
 			return wasLoggedIn && !loggedIn;

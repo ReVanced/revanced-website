@@ -2,7 +2,9 @@
 	import type { Announcement } from '$api';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
-	import { readAnnouncements, announcementsQuery } from '$stores';
+	import { readAnnouncements, prefetchAnnouncementById } from '$stores';
+	import { relativeTime } from '$lib/utils/relativeTime';
+	import { isArchived, buildAnnouncementPath } from '$lib/utils/announcement';
 	import IconArchive from 'virtual:icons/material-symbols/archive-outline';
 
 	type Props = {
@@ -18,47 +20,12 @@
 	}
 
 	function prefetch() {
-		announcementsQuery.refetch();
+		prefetchAnnouncementById(announcement.id);
 	}
 
-	const toSlug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-
-	function relativeTime(dateStr: string, withinDays = 7) {
-		const date = new Date(dateStr);
-		const now = new Date();
-		const diffMs = now.getTime() - date.getTime();
-		const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-		if (diffDays <= withinDays) {
-			const diffMins = Math.floor(diffMs / 60000);
-			const diffHrs = Math.floor(diffMins / 60);
-
-			if (diffMins < 1) return 'just now';
-			if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-			if (diffHrs < 24) return `${diffHrs} hour${diffHrs !== 1 ? 's' : ''} ago`;
-			return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-		}
-
-		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const month = months[date.getMonth()];
-		const day = date.getDate();
-		const year = date.getFullYear();
-		let hours = date.getHours();
-		const mins = date.getMinutes().toString().padStart(2, '0');
-		const ampm = hours >= 12 ? 'PM' : 'AM';
-		hours = hours % 12 || 12;
-
-		return `on ${month} ${day}, ${year} at ${hours}:${mins} ${ampm}`;
-	}
-
-	function checkArchived(archivedAt: string | null): boolean {
-		if (!archivedAt) return false;
-		return new Date(archivedAt) < new Date();
-	}
-
-	let href = $derived(`/announcements/${announcement.id}-${toSlug(announcement.title)}`);
+	let href = $derived(buildAnnouncementPath(announcement.id, announcement.title));
 	let hasImage = $derived(announcement.attachments && announcement.attachments.length > 0);
-	let archived = $derived(checkArchived(announcement.archived_at));
+	let archived = $derived(isArchived(announcement.archived_at));
 	let createdTime = $derived(relativeTime(announcement.created_at));
 	let archivedTime = $derived(announcement.archived_at ? relativeTime(announcement.archived_at) : '');
 </script>

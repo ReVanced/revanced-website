@@ -13,6 +13,7 @@
 	import Modal from '$components/molecules/Modal.svelte';
 	import { modalsStack } from '$stores/modals.svelte';
 	import { patchesQuery } from '$stores';
+	import { debounce } from '$lib/utils/debounce';
 	import type { Patch } from '$api';
 
 	const schemas = [
@@ -58,14 +59,6 @@
 
 	const mobilePackagesModalId = 'mobile-packages';
 
-	function debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number): T {
-		let timeoutId: ReturnType<typeof setTimeout>;
-		return ((...args: unknown[]) => {
-			clearTimeout(timeoutId);
-			timeoutId = setTimeout(() => fn(...args), delay);
-		}) as T;
-	}
-
 	const updateUrl = debounce(() => {
 		const params = new URLSearchParams();
 		if (selectedPkg) params.set('pkg', selectedPkg);
@@ -80,6 +73,19 @@
 		updateUrl();
 	});
 
+	function getCompatiblePackageNames(patch: Patch): string {
+		if (!patch.compatiblePackages) return '';
+		return Object.keys(patch.compatiblePackages).join(' ');
+	}
+
+	function getCompatibleVersions(patch: Patch): string {
+		if (!patch.compatiblePackages) return '';
+		return Object.values(patch.compatiblePackages)
+			.filter((versions): versions is string[] => versions !== null)
+			.flat()
+			.join(' ');
+	}
+
 	function filterPatches(patchList: Patch[], pkg: string | null, search: string): Patch[] {
 		let filtered = patchList;
 
@@ -92,7 +98,12 @@
 
 		if (search) {
 			const fuseInstance = new Fuse(filtered, {
-				keys: ['name', 'description'],
+				keys: [
+					'name',
+					'description',
+					{ name: 'packageNames', getFn: getCompatiblePackageNames },
+					{ name: 'versions', getFn: getCompatibleVersions }
+				],
 				threshold: 0.3,
 				ignoreLocation: true
 			});
@@ -131,7 +142,15 @@
 		</div>
 	</div>
 
-	{#if patches.length > 0}
+	{#if patchesQuery.loading && patches.length === 0}
+		<div class="loading-state">
+			<p>Loading patches...</p>
+		</div>
+	{:else if patchesQuery.error && patches.length === 0}
+		<div class="error-state">
+			<p>Failed to load patches. Please try again later.</p>
+		</div>
+	{:else if patches.length > 0}
 	<main>
 		<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<FilterChip
@@ -179,7 +198,7 @@
 	{/if}
 </Page>
 
-{#if patches.length > 0}
+{#if patches.length > 0 || patchesQuery.hasData}
 <Modal modalId={mobilePackagesModalId} title="Packages" fullscreen>
 	<div class="mobile-packages">
 		<PackageItem
@@ -243,6 +262,19 @@
 	.no-results {
 		text-align: center;
 		padding: 3rem;
+		color: var(--text-four);
+	}
+
+	.loading-state,
+	.error-state {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 200px;
+		width: min(90%, 80rem);
+		margin-inline: auto;
+		padding: 3rem;
+		text-align: center;
 		color: var(--text-four);
 	}
 

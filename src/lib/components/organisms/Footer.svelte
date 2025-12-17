@@ -7,6 +7,7 @@
 	import Divider from '$components/atoms/Divider.svelte';
 	import FooterSection from '$components/molecules/FooterSection.svelte';
 	import { footerVisibility } from '$stores';
+	import { PUBLIC_RV_DMCA_GUID as dmcaGuid } from '$env/static/public';
 	import type { Social } from '$api';
 
 	type FooterLink = {
@@ -19,7 +20,6 @@
 		pageLinks: FooterLink[];
 		socials: Social[];
 		contactEmail?: string;
-		dmcaGuid?: string;
 		onEmailClick?: () => void;
 	};
 
@@ -28,7 +28,6 @@
 		pageLinks,
 		socials,
 		contactEmail,
-		dmcaGuid,
 		onEmailClick
 	}: Props = $props();
 

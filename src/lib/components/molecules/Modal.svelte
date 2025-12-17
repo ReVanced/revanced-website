@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 	import type { WithChildren } from '$types';
 	import { modalsStack } from '$stores/modals.svelte';
@@ -29,6 +30,9 @@
 	let isVisible = $derived(modalsStack.isOpen(effectiveId) || open);
 	let isTopModal = $derived(modalsStack.isTopModal(effectiveId));
 
+	let dialogElement: HTMLDialogElement | null = $state(null);
+	let previousActiveElement: Element | null = null;
+
 	$effect(() => {
 		if (open && !modalsStack.isOpen(effectiveId)) {
 			modalsStack.push(effectiveId, () => (open = false));
@@ -37,22 +41,74 @@
 		}
 	});
 
+	// Focus management: save focus, restore on close
+	$effect(() => {
+		if (isVisible && isTopModal) {
+			previousActiveElement = document.activeElement;
+			// Focus the dialog or first focusable element
+			queueMicrotask(() => {
+				const focusable = dialogElement?.querySelector<HTMLElement>(
+					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				);
+				focusable?.focus();
+			});
+		} else if (previousActiveElement && previousActiveElement instanceof HTMLElement) {
+			previousActiveElement.focus();
+			previousActiveElement = null;
+		}
+	});
+
 	function closeModal() {
 		open = false;
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && isTopModal) {
+			event.preventDefault();
+			closeModal();
+			return;
+		}
+
+		// Focus trap: Tab key cycles within modal
+		if (event.key === 'Tab' && dialogElement) {
+			const focusableElements = dialogElement.querySelectorAll<HTMLElement>(
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+			);
+			const firstElement = focusableElements[0];
+			const lastElement = focusableElements[focusableElements.length - 1];
+
+			if (event.shiftKey) {
+				// Shift+Tab: if on first element, go to last
+				if (document.activeElement === firstElement) {
+					event.preventDefault();
+					lastElement?.focus();
+				}
+			} else {
+				// Tab: if on last element, go to first
+				if (document.activeElement === lastElement) {
+					event.preventDefault();
+					firstElement?.focus();
+				}
+			}
+		}
 	}
 </script>
 
 {#if isVisible && isTopModal}
 	<dialog
+		bind:this={dialogElement}
 		class="modal"
 		class:fullscreen
+		aria-modal="true"
+		aria-labelledby={title ? 'modal-title' : undefined}
 		transition:fade={{ duration: 200 }}
 		onclick={(e) => e.stopPropagation()}
+		onkeydown={handleKeydown}
 	>
 		{#if title || fullscreen}
 			<header class="header">
 				{#if title}
-					<h2 class="title">{title}</h2>
+					<h2 id="modal-title" class="title">{title}</h2>
 				{/if}
 				<button type="button" class="close-button" onclick={closeModal} aria-label="Close">
 					<IconClose />

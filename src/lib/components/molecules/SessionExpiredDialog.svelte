@@ -3,8 +3,8 @@
 	import Button from '../atoms/Button.svelte';
 	import { auth } from '$stores';
 
-	function handleOk() {
-		auth.clearSessionExpired();
+	function handleLogout() {
+		auth.logout();
 	}
 
 	function handleLogin() {
@@ -19,7 +19,7 @@
 
 		{#snippet buttons()}
 			<div class="button-row">
-				<Button onclick={handleOk}>OK</Button>
+				<Button onclick={handleLogout}>Logout</Button>
 				<Button onclick={handleLogin}>Login</Button>
 			</div>
 		{/snippet}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { onMount } from 'svelte';
 	import Page from '$components/molecules/Page.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
@@ -31,13 +32,11 @@
 		}
 	];
 
-	$effect(() => {
-		if (typeof navigator !== 'undefined') {
-			const userAgent = navigator.userAgent;
-			const match = /Android\s([\d.]+)/i.exec(userAgent);
-			androidVersion = match ? parseInt(match[1]) : 0;
-			isAndroid = androidVersion > 0;
-		}
+	onMount(() => {
+		const userAgent = navigator.userAgent;
+		const match = /Android\s([\d.]+)/i.exec(userAgent);
+		androidVersion = match ? parseInt(match[1]) : 0;
+		isAndroid = androidVersion > 0;
 	});
 
 	function handleDownloadClick() {

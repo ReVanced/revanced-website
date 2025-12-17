@@ -111,10 +111,32 @@ export async function fetchPatches(): Promise<Patch[]> {
 	return fetchJson<Patch[]>('patches/list');
 }
 
-export async function fetchAnnouncements(): Promise<Announcement[]> {
-	return fetchJson<Announcement[]>('announcements');
-}
+export type FetchAnnouncementsOptions = {
+	tags?: string[];
+	count?: number;
+	cursor?: number;
+};
 
+export async function fetchAnnouncements(options: FetchAnnouncementsOptions = {}): Promise<Announcement[]> {
+	const baseUrl = buildUrl('announcements');
+	const url = new URL(baseUrl, window.location.origin);
+
+	if (options.tags && options.tags.length > 0) {
+		url.searchParams.set('tags', options.tags.join(','));
+	}
+	if (options.count !== undefined) {
+		url.searchParams.set('count', String(options.count));
+	}
+	if (options.cursor !== undefined) {
+		url.searchParams.set('cursor', String(options.cursor));
+	}
+
+	const response = await fetch(url.toString());
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	return response.json();
+}
 
 export async function fetchAnnouncementById(id: number): Promise<Announcement> {
 	return fetchJson<Announcement>(`announcements/${id}`);
@@ -139,6 +161,7 @@ export type AnnouncementInput = {
 	attachments?: string[];
 	tags?: string[];
 	level?: number;
+	author?: string;
 };
 
 export async function createAnnouncement(announcement: AnnouncementInput): Promise<void> {

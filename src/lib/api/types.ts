@@ -77,12 +77,6 @@ export type Contributable = {
 	contributors: Contributor[];
 };
 
-
-export type CompatiblePackage = {
-	name: string;
-	versions: string[] | null;
-};
-
 export type PatchOption = {
 	key: string;
 	title: string;
@@ -112,4 +106,8 @@ export type Announcement = {
 	created_at: string;
 	archived_at: string | null;
 	level: number;
+};
+
+export type AnnouncementTag = {
+	name: string;
 };

@@ -6,7 +6,8 @@ import {
 	fetchManager,
 	fetchContributors,
 	fetchPatches,
-	fetchAnnouncements
+	fetchAnnouncements,
+	fetchAnnouncementById
 } from '$api/client';
 import type {
 	About,
@@ -19,6 +20,7 @@ import type {
 
 const CACHE_PREFIX = 'rv_cache_';
 const STALE_TIME = 5 * 60 * 1000;
+const ANNOUNCEMENT_CACHE_KEY = `${CACHE_PREFIX}announcements_by_id`;
 
 type QueryResult<T> = {
 	readonly data: T | null;
@@ -41,8 +43,9 @@ function createLazyCachedResource<T>(
 		null
 	);
 
-	let res: any = null;
-	
+	let res: ReturnType<typeof resource<[true], T>> | null = null;
+	let manualLoading = $state(false);
+	let manualError = $state<Error | null>(null);
 	let staleRefetchTriggered = false;
 
 	const isStale = () => {
@@ -93,6 +96,32 @@ function createLazyCachedResource<T>(
 		}
 	};
 
+	const manualRefetch = async (): Promise<T | undefined> => {
+		if (!browser) return undefined;
+
+		if (res) {
+			try {
+				return res.refetch() as Promise<T | undefined>;
+			} catch {
+				// fall through
+			}
+		}
+
+		manualLoading = true;
+		manualError = null;
+		try {
+			const data = await fetcher();
+			cache.current = { data, timestamp: Date.now() };
+			staleRefetchTriggered = false;
+			return data;
+		} catch (error) {
+			manualError = error instanceof Error ? error : new Error(String(error));
+			return undefined;
+		} finally {
+			manualLoading = false;
+		}
+	};
+
 	return {
 		get data() {
 			const r = getResource();
@@ -102,15 +131,15 @@ function createLazyCachedResource<T>(
 		get loading() {
 			const r = getResource();
 			const hasData = r.current !== undefined || cache.current?.data !== undefined;
-			return r.loading && !hasData;
+			return (r.loading || manualLoading) && !hasData;
 		},
 		get refreshing() {
 			const r = getResource();
 			const hasData = r.current !== undefined || cache.current?.data !== undefined;
-			return r.loading && hasData;
+			return (r.loading || manualLoading) && hasData;
 		},
 		get error() {
-			return getResource().error ?? null;
+			return getResource().error ?? manualError ?? null;
 		},
 		get hasData() {
 			return getResource().current !== undefined || cache.current?.data !== undefined;
@@ -118,10 +147,7 @@ function createLazyCachedResource<T>(
 		get isStale() {
 			return isStale();
 		},
-		refetch: () => {
-			staleRefetchTriggered = false;
-			return getResource().refetch();
-		},
+		refetch: manualRefetch,
 		invalidate: () => {
 			cache.current = null;
 			staleRefetchTriggered = false;
@@ -174,14 +200,62 @@ export const allQueries = [
 	announcementsQuery
 ] as const;
 
-export function refetchAllQueries(): void {
+// must be called in component setup to avoid effect_orphan errors
+export function initializeAllQueries() {
 	for (const query of allQueries) {
-		query.refetch();
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		query.data;
 	}
 }
 
-export function invalidateAllQueries(): void {
-	for (const query of allQueries) {
-		query.invalidate();
+export function refetchAllQueries() {
+	allQueries.forEach(q => q.refetch());
+}
+
+export function invalidateAllQueries() {
+	allQueries.forEach(q => q.invalidate());
+}
+
+type AnnouncementCache = { [id: number]: { data: Announcement; timestamp: number } };
+
+const announcementByIdCache = new PersistedState<AnnouncementCache>(ANNOUNCEMENT_CACHE_KEY, {});
+
+const isAnnouncementStale = (id: number) => {
+	const cached = announcementByIdCache.current[id];
+	return !cached || Date.now() - cached.timestamp > STALE_TIME;
+};
+
+export function getCachedAnnouncement(id: number) {
+	return announcementByIdCache.current[id]?.data ?? null;
+}
+
+export const hasValidCachedAnnouncement = (id: number) => !isAnnouncementStale(id);
+
+export async function prefetchAnnouncementById(id: number) {
+	if (!browser) return null;
+	if (!isAnnouncementStale(id)) return announcementByIdCache.current[id]?.data ?? null;
+
+	try {
+		const data = await fetchAnnouncementById(id);
+		announcementByIdCache.current = { ...announcementByIdCache.current, [id]: { data, timestamp: Date.now() } };
+		return data;
+	} catch (e) {
+		console.error(`Failed to prefetch announcement ${id}:`, e);
+		return announcementByIdCache.current[id]?.data ?? null;
 	}
+}
+
+export function cacheAnnouncement(announcement: Announcement) {
+	if (!browser) return;
+	announcementByIdCache.current = { ...announcementByIdCache.current, [announcement.id]: { data: announcement, timestamp: Date.now() } };
+}
+
+export function invalidateAnnouncementCache(id: number) {
+	if (!browser) return;
+	const { [id]: _, ...rest } = announcementByIdCache.current;
+	announcementByIdCache.current = rest;
+}
+
+export function invalidateAllAnnouncementCache() {
+	if (browser) announcementByIdCache.current = {};
 }

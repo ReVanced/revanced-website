@@ -14,22 +14,26 @@
 	let title = $state('');
 	let content = $state('');
 	let tags = $state('');
+	let author = $state('');
 	let level = $state(0);
 	let attachments = $state('');
 	let saving = $state(false);
 	let isPreviewing = $state(false);
 
 	let isAdmin = $derived(auth.isLoggedIn);
+	let isAuthInitialized = $derived(auth.isInitialized);
 
 	let hasContent = $derived(
 		title.trim().length > 0 ||
 		content.trim().length > 0 ||
 		tags.trim().length > 0 ||
+		author.trim().length > 0 ||
 		attachments.trim().length > 0
 	);
 
 	$effect(() => {
-		if (browser && !auth.isLoggedIn) {
+		// Only redirect after auth state is initialized
+		if (browser && isAuthInitialized && !auth.isLoggedIn) {
 			goto('/announcements');
 		}
 	});
@@ -74,7 +78,8 @@
 				content: content.trim() || undefined,
 				tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
 				level: level,
-				attachments: attachmentUrls.length > 0 ? attachmentUrls : undefined
+				attachments: attachmentUrls.length > 0 ? attachmentUrls : undefined,
+				author: author.trim() || undefined
 			};
 
 			await createAnnouncement(input);
@@ -101,7 +106,14 @@
 	<title>Create Announcement - ReVanced</title>
 </svelte:head>
 
-{#if isAdmin}
+{#if !isAuthInitialized}
+	<main class="wrapper loading-state">
+		<div class="loading-container">
+			<div class="spinner"></div>
+			<p>Checking authentication...</p>
+		</div>
+	</main>
+{:else if isAdmin}
 	<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<article class="card">
 			<header class="header">
@@ -133,6 +145,16 @@
 							type="text"
 							bind:value={tags}
 							placeholder="Tags (comma separated)"
+						/>
+					</div>
+
+					<div class="field">
+						<label for="author">Author</label>
+						<input
+							id="author"
+							type="text"
+							bind:value={author}
+							placeholder="Author name"
 						/>
 					</div>
 
@@ -357,6 +379,36 @@
 		display: flex;
 		gap: 0.75rem;
 		justify-content: flex-end;
+	}
+
+	.loading-state {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 50vh;
+	}
+
+	.loading-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		color: var(--text-four);
+	}
+
+	.spinner {
+		width: 2rem;
+		height: 2rem;
+		border: 3px solid var(--text-four);
+		border-top-color: var(--primary);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.error-state {
