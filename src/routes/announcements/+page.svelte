@@ -4,7 +4,6 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 	import Fuse, { type FuseResult } from 'fuse.js';
 	import Page from '$components/molecules/Page.svelte';
 	import Search from '$components/atoms/Search.svelte';
@@ -141,12 +140,6 @@
 	}
 
 	let isAdmin = $derived(auth.isLoggedIn);
-
-	onMount(() => {
-		if (readAnnouncements.ids.length === 0 && announcements.length > 0) {
-			readAnnouncements.markManyAsRead(announcements.map((a) => a.id));
-		}
-	});
 
 	$effect(() => {
 		if (readAnnouncements.ids.length === 0 && announcements.length > 0) {
