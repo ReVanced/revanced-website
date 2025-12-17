@@ -10,6 +10,7 @@
 		setApiBaseUrl,
 		clearCacheAndReload
 	} from '$api/settings';
+	import { isValidUrl } from '$lib/utils/url';
 	import { apiStatus, auth } from '$stores';
 
 	interface Props {
@@ -20,10 +21,12 @@
 	let { open = $bindable(), onLoginRequest }: Props = $props();
 
 	let apiUrl = $state('');
+	let urlError = $state('');
 
 	$effect(() => {
 		if (open && browser) {
 			apiUrl = getDisplayApiUrl();
+			urlError = '';
 		}
 	});
 
@@ -36,20 +39,21 @@
 		const hours = Math.floor(minutes / 60);
 		const days = Math.floor(hours / 24);
 		if (days > 0) {
-			return `in ${days} day${days > 1 ? 's' : ''}`;
+			return `${days} day${days > 1 ? 's' : ''} remaining`;
 		}
 		if (hours > 0) {
-			return `in ${hours} hour${hours > 1 ? 's' : ''}`;
+			return `${hours} hour${hours > 1 ? 's' : ''} remaining`;
 		}
-		return `in ${minutes} minute${minutes > 1 ? 's' : ''}`;
+		return `${minutes} minute${minutes > 1 ? 's' : ''} remaining`;
 	}
 
 	let expiryText = $derived(
-		auth.isLoggedIn ? `Logged in for ${formatExpiry(auth.expiry)}` : 'Login'
+		auth.isLoggedIn ? `Logged in · ${formatExpiry(auth.expiry)}` : 'Login'
 	);
 
 	function handleResetInput() {
 		apiUrl = DEFAULT_API_URL;
+		urlError = '';
 	}
 
 	function handleReset() {
@@ -57,7 +61,16 @@
 	}
 
 	function handleSave() {
-		const urlToSave = apiUrl.trim() === DEFAULT_API_URL ? undefined : apiUrl.trim();
+		const trimmedUrl = apiUrl.trim();
+		if (trimmedUrl && trimmedUrl !== DEFAULT_API_URL) {
+			if (!isValidUrl(trimmedUrl)) {
+				urlError = 'Please enter a valid URL';
+				return;
+			}
+		}
+		
+		urlError = '';
+		const urlToSave = trimmedUrl === DEFAULT_API_URL ? undefined : trimmedUrl;
 		setApiBaseUrl(urlToSave);
 		location.reload();
 	}
@@ -83,6 +96,7 @@
 			<input
 				type="text"
 				class="api-input rounded"
+				class:error={urlError}
 				placeholder="Enter API URL"
 				bind:value={apiUrl}
 			/>
@@ -95,6 +109,9 @@
 				<Reset width="20" height="20" />
 			</button>
 		</div>
+		{#if urlError}
+			<p class="url-error">{urlError}</p>
+		{/if}
 	</div>
 	{#snippet buttons()}
 		<div class="modal-buttons">
@@ -173,6 +190,17 @@
 	.api-input:focus {
 		border-color: var(--primary);
 		outline: none;
+	}
+
+	.api-input.error {
+		border-color: var(--error, #f44336);
+	}
+
+	.url-error {
+		color: var(--error, #f44336);
+		font-size: 0.85rem;
+		margin: 0;
+		text-align: center;
 	}
 
 	.reset-icon-btn {
