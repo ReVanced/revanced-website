@@ -27,6 +27,10 @@
 				countdown -= 1;
 			}, 1000);
 		}
+
+		return () => {
+			clearCountdownInterval();
+		};
 	});
 
 	function clearCountdownInterval() {
