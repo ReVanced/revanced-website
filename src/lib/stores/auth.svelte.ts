@@ -9,6 +9,7 @@ function createAuthStore() {
 	let loginModalRequested = $state(false);
 	let loginSuccess = $state(false);
 	let checkInterval: ReturnType<typeof setInterval> | null = null;
+	let initialCheckDone = false;
 
 	function refresh() {
 		const currentlyLoggedIn = isLoggedIn();
@@ -22,6 +23,14 @@ function createAuthStore() {
 
 	function startChecking() {
 		if (!browser || checkInterval) return;
+		if (!initialCheckDone) {
+			initialCheckDone = true;
+			const storedExpiry = getTokenExpiry();
+			if (storedExpiry !== null && Date.now() >= storedExpiry) {
+				wasLoggedIn = true;
+			}
+		}
+		
 		refresh();
 		// check every 10 seconds if token expired
 		checkInterval = setInterval(refresh, 10_000);
