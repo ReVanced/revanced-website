@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import type { Announcement } from '$lib/api/types';
 	import { relativeTime } from '$lib/utils/relativeTime';
+	import { isValidUrl, parseAttachmentUrls } from '$lib/utils/url';
 	import {
 		fetchAnnouncementById,
 		updateAnnouncement,
@@ -19,6 +20,7 @@
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
+	import Gallery from '$components/molecules/Gallery.svelte';
 	import IconArchive from 'virtual:icons/material-symbols/inventory-2-outline';
 	import IconEdit from 'virtual:icons/material-symbols/edit-outline';
 	import IconDelete from 'virtual:icons/material-symbols/delete-outline';
@@ -89,8 +91,11 @@
 		loading = true;
 		error = null;
 
+		const abortController = new AbortController();
+
 		fetchAnnouncementById(announcementId)
 			.then((data) => {
+				if (abortController.signal.aborted) return;
 				announcement = data;
 				loading = false;
 				if (data?.title) {
@@ -105,9 +110,14 @@
 				}
 			})
 			.catch((err) => {
+				if (abortController.signal.aborted) return;
 				error = err instanceof Error ? err.message : 'Failed to load announcement';
 				loading = false;
 			});
+
+		return () => {
+			abortController.abort();
+		};
 	});
 
 	function isArchived(archivedAt: string | null): boolean {
@@ -136,22 +146,6 @@
 		isPreviewing = !isPreviewing;
 	}
 
-	function parseAttachments(raw: string): string[] {
-		return raw
-			.split('\n')
-			.map((line) => line.trim())
-			.filter((line) => line.length > 0 && isValidUrl(line));
-	}
-
-	function isValidUrl(str: string): boolean {
-		try {
-			new URL(str);
-			return true;
-		} catch {
-			return false;
-		}
-	}
-
 	async function saveChanges() {
 		if (!announcement || !announcementId) return;
 
@@ -160,7 +154,7 @@
 			return;
 		}
 
-		const attachmentUrls = parseAttachments(editAttachments);
+		const attachmentUrls = parseAttachmentUrls(editAttachments);
 		const invalidCount = editAttachments
 			.split('\n')
 			.filter((l) => l.trim())
@@ -378,16 +372,7 @@
 			{#if !isEditing && announcement.attachments && announcement.attachments.length > 0}
 				<hr class="divider" />
 				<div class="attachments">
-					{#each announcement.attachments as src, idx}
-						<button
-							type="button"
-							class="attachment-item"
-							onclick={() => window.open(src, '_blank')}
-							aria-label={`View attachment ${idx + 1}`}
-						>
-							<img {src} alt={`Attachment ${idx + 1}`} loading="lazy" />
-						</button>
-					{/each}
+					<Gallery images={announcement.attachments} columns={3} gap="0.75rem" />
 				</div>
 			{/if}
 		</article>
@@ -633,31 +618,7 @@
 	}
 
 	.attachments {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 1rem;
-	}
-
-	.attachment-item {
-		display: block;
-		padding: 0;
-		border: none;
-		background: none;
-		cursor: pointer;
-		overflow: hidden;
-		border-radius: 0.5rem;
-		transition: transform 0.2s var(--bezier-one);
-	}
-
-	.attachment-item:hover {
-		transform: scale(1.02);
-	}
-
-	.attachment-item img {
-		width: 100%;
-		height: auto;
-		display: block;
-		border-radius: 0.5rem;
+		margin-top: 1rem;
 	}
 
 	.confirm-text {
