@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { createAnnouncement, type AnnouncementInput } from '$lib/api/client';
 	import { auth, announcementsQuery } from '$stores';
+	import { parseAttachmentUrls } from '$lib/utils/url';
 	import Button from '$components/atoms/Button.svelte';
 	import IconSave from 'virtual:icons/material-symbols/check';
 	import IconCancel from 'virtual:icons/material-symbols/close';
@@ -47,22 +48,6 @@
 		};
 	});
 
-	function parseAttachments(raw: string): string[] {
-		return raw
-			.split('\n')
-			.map((line) => line.trim())
-			.filter((line) => line.length > 0 && isValidUrl(line));
-	}
-
-	function isValidUrl(str: string): boolean {
-		try {
-			new URL(str);
-			return true;
-		} catch {
-			return false;
-		}
-	}
-
 	function togglePreview() {
 		isPreviewing = !isPreviewing;
 	}
@@ -73,7 +58,7 @@
 			return;
 		}
 
-		const attachmentUrls = parseAttachments(attachments);
+		const attachmentUrls = parseAttachmentUrls(attachments);
 		const rawLines = attachments.split('\n').filter((l) => l.trim());
 		const invalidCount = rawLines.length - attachmentUrls.length;
 
