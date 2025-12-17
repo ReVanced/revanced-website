@@ -9,6 +9,7 @@
 
 	let { open = $bindable() }: Props = $props();
 
+	let loginForm: HTMLFormElement | undefined = $state();
 	let username = $state('');
 	let password = $state('');
 	let error = $state('');
@@ -21,11 +22,8 @@
 		error = '';
 	}
 
-	async function handleSubmit() {
-		if (!username || !password) {
-			error = 'Username and password are required';
-			return;
-		}
+	async function handleFormSubmit(event: SubmitEvent) {
+		event.preventDefault();
 
 		error = '';
 		loading = true;
@@ -43,10 +41,13 @@
 		}
 	}
 
+	function handleLoginClick() {
+		loginForm?.requestSubmit();
+	}
+
 	function handlePasswordKeydown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && !loading) {
-			event.preventDefault();
-			handleSubmit();
+			loginForm?.requestSubmit();
 		}
 	}
 </script>
@@ -56,7 +57,11 @@
 		<h2 class="login-title">Login</h2>
 		<p class="login-description">This login is reserved for site administrators. Go back!</p>
 
-		<div class="login-form">
+		{#if error}
+			<p class="error-message">{error}</p>
+		{/if}
+
+		<form class="login-form" bind:this={loginForm} onsubmit={handleFormSubmit}>
 			<div class="input-group">
 				<input
 					type="text"
@@ -67,6 +72,7 @@
 					placeholder=" "
 					class="login-input rounded"
 					disabled={loading}
+					required
 				/>
 				<label for="login-username" class="login-label">Username</label>
 			</div>
@@ -81,20 +87,18 @@
 					class="login-input rounded"
 					disabled={loading}
 					onkeydown={handlePasswordKeydown}
+					required
 				/>
 				<label for="login-password" class="login-label">Password</label>
 			</div>
-			{#if error}
-				<p class="error-message">{error}</p>
-			{/if}
-		</div>
+		</form>
 	</div>
 	{#snippet buttons()}
 		<div class="login-buttons">
 			<Button buttonStyle="text" onclick={handleCancel} disabled={loading}>
 				Cancel
 			</Button>
-			<Button buttonStyle="text" onclick={handleSubmit} disabled={loading}>
+			<Button buttonStyle="text" onclick={handleLoginClick} disabled={loading}>
 				{loading ? 'Logging in...' : 'Login'}
 			</Button>
 		</div>
