@@ -3,7 +3,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import Button from '$components/atoms/Button.svelte';
 
-	const STORAGE_KEY = 'analytics_consent';
+	const STORAGE_KEY = 'analytics';
 	const GTM_ID = import.meta.env.VITE_GOOGLE_TAG_MANAGER_ID ?? '';
 
 	let visible = $state(false);
