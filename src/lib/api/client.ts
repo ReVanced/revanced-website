@@ -1,5 +1,5 @@
 import { buildUrl } from './settings';
-import { getToken, isLoggedIn } from './auth';
+import { getToken, isLoggedIn, logout } from './auth';
 import type {
 	About,
 	TeamMember,
@@ -16,6 +16,13 @@ export class UnauthenticatedError extends Error {
 	}
 }
 
+export class SessionExpiredError extends Error {
+	constructor() {
+		super('Session expired');
+		this.name = 'SessionExpiredError';
+	}
+}
+
 function buildAuthHeaders(): HeadersInit {
 	const token = getToken();
 	if (!token) throw new UnauthenticatedError();
@@ -23,6 +30,13 @@ function buildAuthHeaders(): HeadersInit {
 		Authorization: `Bearer ${token}`,
 		'Content-Type': 'application/json'
 	};
+}
+
+function handleAuthError(response: Response): void {
+	if (response.status === 401) {
+		logout();
+		throw new SessionExpiredError();
+	}
 }
 
 async function fetchJson<T>(endpoint: string): Promise<T> {
@@ -41,6 +55,7 @@ async function postJson<T>(endpoint: string, body?: unknown): Promise<T> {
 		body: body ? JSON.stringify(body) : undefined
 	});
 	if (!response.ok) {
+		handleAuthError(response);
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
 	const text = await response.text();
@@ -55,6 +70,7 @@ async function patchJson<T>(endpoint: string, body: unknown): Promise<T> {
 		body: JSON.stringify(body)
 	});
 	if (!response.ok) {
+		handleAuthError(response);
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
 	const text = await response.text();
@@ -68,6 +84,7 @@ async function deleteJson<T>(endpoint: string): Promise<T> {
 		headers: buildAuthHeaders()
 	});
 	if (!response.ok) {
+		handleAuthError(response);
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
 	const text = await response.text();
