@@ -61,6 +61,8 @@
 				<input
 					type="text"
 					id="login-username"
+					name="username"
+					autocomplete="username"
 					bind:value={username}
 					placeholder=" "
 					class="login-input rounded"
@@ -72,6 +74,8 @@
 				<input
 					type="password"
 					id="login-password"
+					name="password"
+					autocomplete="current-password"
 					bind:value={password}
 					placeholder=" "
 					class="login-input rounded"
