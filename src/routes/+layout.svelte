@@ -130,6 +130,6 @@
 <style>
 	.banner-wrapper {
 		position: relative;
-		z-index: 10000;
+		z-index: var(--z-toast);
 	}
 </style>

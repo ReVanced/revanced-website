@@ -108,7 +108,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 gap: 1rem;
-z-index: 9999;
+z-index: var(--z-modal);
 padding: 32px;
 white-space: normal;
 box-shadow:

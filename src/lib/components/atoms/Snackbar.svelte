@@ -44,7 +44,7 @@
 		bottom: 2rem;
 		left: 50%;
 		transform: translateX(-50%);
-		z-index: 10001;
+		z-index: var(--z-toast);
 		pointer-events: none;
 	}
 

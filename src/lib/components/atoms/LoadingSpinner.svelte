@@ -24,7 +24,7 @@
 		justify-content: center;
 		background-color: rgba(var(--surface-one-rgb), 0.7);
 		backdrop-filter: blur(2px);
-		z-index: 99998;
+		z-index: var(--z-top);
 	}
 
 	.spinner {

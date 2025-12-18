@@ -113,7 +113,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 9998;
+		z-index: var(--z-modal-backdrop);
 	}
 
 	.dialog {
@@ -131,7 +131,7 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
-		z-index: 9999;
+		z-index: var(--z-modal);
 		padding: 32px;
 		box-shadow:
 			0px 4px 5px 0px rgba(0, 0, 0, 0.14),

@@ -52,7 +52,7 @@
 
 	.search-icon {
 		position: absolute;
-		z-index: 1;
+		z-index: var(--z-base);
 		left: 16px;
 		top: 14px;
 		height: 24px;
@@ -70,7 +70,7 @@
 		position: absolute;
 		right: 16px;
 		top: 14px;
-		z-index: 1;
+		z-index: var(--z-base);
 		height: 24px;
 		width: 24px;
 		cursor: pointer;

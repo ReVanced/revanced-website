@@ -42,7 +42,7 @@ background: rgba(0, 0, 0, 0.85);
 display: flex;
 justify-content: center;
 align-items: center;
-z-index: 1000;
+z-index: var(--z-modal-backdrop);
 padding: 2rem;
 box-sizing: border-box;
 }
@@ -70,7 +70,7 @@ font-size: 2rem;
 cursor: pointer;
 padding: 0.5rem;
 line-height: 1;
-z-index: 1001;
+z-index: var(--z-modal);
 }
 
 .close-button:hover {

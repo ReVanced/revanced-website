@@ -247,7 +247,7 @@
 		gap: 0.5rem;
 		width: 100%;
 		position: sticky;
-		z-index: 1;
+		z-index: var(--z-base);
 		min-height: calc(100vh - 6rem);
 		margin-bottom: 3rem;
 	}

@@ -81,7 +81,7 @@
 	.backdrop {
 		position: fixed;
 		inset: 0;
-		z-index: 10000;
+		z-index: var(--z-modal);
 		background-color: rgba(0, 0, 0, 0.6);
 		display: flex;
 		align-items: center;

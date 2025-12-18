@@ -60,7 +60,7 @@
 		border-radius: 0;
 		font-size: 0.87rem;
 		position: relative;
-		z-index: 10000;
+		z-index: var(--z-toast);
 
 		&.caution {
 			background-color: var(--red-three);

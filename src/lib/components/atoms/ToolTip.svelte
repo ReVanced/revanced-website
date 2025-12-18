@@ -46,7 +46,7 @@
 		transition:
 			opacity 0.2s ease,
 			visibility 0.2s ease;
-		z-index: 1000;
+		z-index: var(--z-dropdown);
 		pointer-events: none;
 	}
 

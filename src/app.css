@@ -4,6 +4,16 @@
     --font-main: 'Manrope', sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 
+    --z-behind: -1;
+    --z-base: 1;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-overlay: 30;
+    --z-modal-backdrop: 40;
+    --z-modal: 50;
+    --z-toast: 60;
+    --z-top: 70;
+
     --hue: 206;
 
     --primary: hsl(calc(var(--hue) + 0), 100%, 81%);

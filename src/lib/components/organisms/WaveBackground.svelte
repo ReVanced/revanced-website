@@ -21,7 +21,7 @@
 	.wave-container {
 		position: absolute;
 		bottom: -1px;
-		z-index: -1;
+		z-index: var(--z-behind);
 		width: 100%;
 		height: 40vh;
 		opacity: 1;
