@@ -1,24 +1,10 @@
 <script lang="ts">
+import { fromNow } from '$lib/utils/relativeTime';
 import Modal from './Modal.svelte';
 import Button from '../atoms/Button.svelte';
 import { auth } from '$stores';
 
 let open = $state(false);
-
-function fromNow(timestamp: number): string {
-const now = Date.now();
-const diff = timestamp - now;
-if (diff <= 0) return 'expired';
-
-const diffMins = Math.floor(diff / 6e4);
-const diffHours = Math.floor(diff / 36e5);
-const diffDays = Math.floor(diff / 864e5);
-
-if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''}`;
-if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
-if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''}`;
-return 'a few seconds';
-}
 
 $effect(() => {
 if (auth.loginSuccess) {

@@ -121,9 +121,11 @@
 				</Button>
 				<span class="expiry-text">{expiryText}</span>
 			{:else}
-				<Button buttonStyle="text" onclick={handleLoginClick} disabled={apiStatus.isOffline}>
-					Login
-				</Button>
+				<span title={apiStatus.isOffline ? 'API is offline' : ''}>
+					<Button buttonStyle="text" onclick={handleLoginClick} disabled={apiStatus.isOffline}>
+						Login
+					</Button>
+				</span>
 			{/if}
 			<div class="right-buttons">
 				<Button buttonStyle="text" onclick={handleReset}>
