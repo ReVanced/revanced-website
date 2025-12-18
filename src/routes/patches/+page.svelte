@@ -11,7 +11,6 @@
 	import PackageItem from '$components/molecules/PackageItem.svelte';
 	import PatchItem from '$components/molecules/PatchItem.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
-	import { modalsStack } from '$stores/modals.svelte';
 	import { patchesQuery } from '$stores';
 	import { debounce } from '$lib/utils/debounce';
 	import type { Patch } from '$api';
@@ -56,8 +55,7 @@
 
 	let selectedPkg = $state<string | null>(page.url.searchParams.get('pkg'));
 	let searchTerm = $state(page.url.searchParams.get('s') ?? '');
-
-	const mobilePackagesModalId = 'mobile-packages';
+	let mobilePackagesOpen = $state(false);
 
 	const updateUrl = debounce(() => {
 		const params = new URLSearchParams();
@@ -117,16 +115,11 @@
 	function selectPackage(pkgName: string | null) {
 		selectedPkg = pkgName && pkgName !== 'All packages' ? pkgName : null;
 		window.scrollTo({ top: 0, behavior: 'smooth' });
-
-		modalsStack.close(mobilePackagesModalId);
+		mobilePackagesOpen = false;
 	}
 
 	function toggleMobilePackages() {
-		if (modalsStack.isOpen(mobilePackagesModalId)) {
-			modalsStack.close(mobilePackagesModalId);
-		} else {
-			modalsStack.open(mobilePackagesModalId);
-		}
+		mobilePackagesOpen = !mobilePackagesOpen;
 	}
 
 	let filteredPatches = $derived(filterPatches(patches, selectedPkg, searchTerm));
@@ -199,7 +192,7 @@
 </Page>
 
 {#if patches.length > 0 || patchesQuery.hasData}
-<Modal modalId={mobilePackagesModalId} title="Packages" fullscreen>
+<Modal bind:open={mobilePackagesOpen} title="Packages" fullscreen>
 	<div class="mobile-packages">
 		<PackageItem
 			name="All packages"

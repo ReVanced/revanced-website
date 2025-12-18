@@ -52,7 +52,7 @@
 	}
 </script>
 
-<Modal id="login" bind:open>
+<Modal bind:open>
 	<div class="login-content">
 		<h2 class="login-title">Login</h2>
 		<p class="login-description">This login is reserved for site administrators. Go back!</p>

@@ -85,7 +85,7 @@
 	}
 </script>
 
-<Modal id="settings" bind:open>
+<Modal bind:open>
 	<div class="settings-content">
 		<div class="settings-icon">
 			<Settings width="24" height="24" />

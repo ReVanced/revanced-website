@@ -1,16 +1,30 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Page from '$components/molecules/Page.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import SocialButton from '$components/molecules/SocialButton.svelte';
 	import WaveBackground from '$components/organisms/WaveBackground.svelte';
-	import { aboutQuery, footerVisibility } from '$stores';
+	import { aboutQuery } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
 	import Download from 'virtual:icons/material-symbols/download';
 	import Description from 'virtual:icons/material-symbols/description-outline';
 
 	let socials = $derived(aboutQuery.data?.socials ?? []);
 	let filteredSocials = $derived(socials.filter((s) => s.name !== 'Website'));
-	let heroSocialsVisible = $derived(!footerVisibility.isFooterSocialsVisible);
+	
+	let bottomVisibility = $state(true);
+
+	function checkVisibility() {
+		const footerSocials = document.getElementById('footer-socials');
+		if (footerSocials) {
+			const rect = footerSocials.getBoundingClientRect();
+			bottomVisibility = rect.top > window.innerHeight;
+		}
+	}
+
+	onMount(() => {
+		checkVisibility();
+	});
 
 	const schemas = [
 		{
@@ -128,8 +142,10 @@
 	{/each}
 </svelte:head>
 
+<svelte:window onscroll={checkVisibility} onresize={checkVisibility} />
+
 <Page>
-	<main>
+	<main class:visibility={!bottomVisibility}>
 		<section class="hero">
 			<div class="hero-content">
 				<h1>
@@ -151,7 +167,7 @@
 
 				<div 
 					class="social-buttons"
-					class:hidden={!heroSocialsVisible}
+					class:hidden={!bottomVisibility}
 				>
 					{#each filteredSocials as social (social.name)}
 						<SocialButton {social} />
@@ -166,7 +182,7 @@
 			</div>
 		</section>
 
-		<WaveBackground />
+		<WaveBackground visibility={bottomVisibility} />
 	</main>
 </Page>
 
@@ -179,12 +195,22 @@
 		justify-content: center;
 		position: relative;
 		overflow: hidden;
-		padding: 2rem;
+		padding: 5rem 2rem;
+	}
+
+	main.visibility {
+		min-height: initial;
 	}
 
 	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
 		main {
 			min-height: initial;
+		}
+	}
+
+	@media (max-width: 335px) {
+		main {
+			padding: 2rem 0 !important;
 		}
 	}
 
@@ -296,6 +322,7 @@
 	@media (max-width: 450px) {
 		.social-buttons:not(.hidden) {
 			justify-content: center;
+			left: 0;
 		}
 	}
 

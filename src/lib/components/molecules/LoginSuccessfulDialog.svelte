@@ -1,72 +1,59 @@
 <script lang="ts">
-	import Modal from './Modal.svelte';
-	import Button from '../atoms/Button.svelte';
-	import { auth } from '$stores';
+import Modal from './Modal.svelte';
+import Button from '../atoms/Button.svelte';
+import { auth } from '$stores';
 
-	let open = $state(false);
+let open = $state(false);
 
-function formatExpiry(expiry: number | null): string {
-	if (!expiry) return '';
-	const now = Date.now();
-	const diff = expiry - now;
-	if (diff <= 0) return 'expired';
-	const hours = Math.floor(diff / (1000 * 60 * 60));
-	const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-	if (hours > 0) {
-		return `${hours}h ${minutes}m`;
-	}
-	return `${minutes}m`;
+function fromNow(timestamp: number): string {
+const now = Date.now();
+const diff = timestamp - now;
+if (diff <= 0) return 'expired';
+
+const diffMins = Math.floor(diff / 6e4);
+const diffHours = Math.floor(diff / 36e5);
+const diffDays = Math.floor(diff / 864e5);
+
+if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''}`;
+if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''}`;
+return 'a few seconds';
 }
 
 $effect(() => {
-	if (auth.loginSuccess) {
-		open = true;
-		const timer = setTimeout(() => {
-			auth.clearLoginSuccess();
-		}, 100);
-		return () => clearTimeout(timer);
-	}
+if (auth.loginSuccess) {
+open = true;
+const timer = setTimeout(() => {
+auth.clearLoginSuccess();
+}, 100);
+return () => clearTimeout(timer);
+}
 });
 
 function handleClose() {
-	open = false;
-	auth.clearLoginSuccess();
+open = false;
+auth.clearLoginSuccess();
 }
 </script>
 
 {#if open}
-	<Modal title="Login successful" bind:open>
-		<p>You have successfully logged in to the admin panel.</p>
-		{#if auth.expiry}
-			<p class="expiry-info">Session expires in <span>{formatExpiry(auth.expiry)}</span></p>
-		{/if}
-		{#snippet buttons()}
-			<div class="button-row">
-				<Button buttonStyle="filled" onclick={handleClose}>OK</Button>
-			</div>
-		{/snippet}
-	</Modal>
+<Modal title="Successfully logged in!" bind:open>
+<div>
+This session will expire in
+<span>{auth.expiry ? fromNow(auth.expiry) : '...'}</span>
+</div>
+{#snippet buttons()}
+<Button buttonStyle="filled" onclick={handleClose}>OK</Button>
+{/snippet}
+</Modal>
 {/if}
 
 <style>
-	p {
-		color: var(--text-four);
-		line-height: 1.6;
-		margin: 0;
-	}
+div {
+color: var(--text-one);
+}
 
-	.button-row {
-		display: flex;
-		gap: 0.5rem;
-		justify-content: flex-end;
-	}
-	.expiry-info {
-		color: var(--text-four);
-		font-size: 0.95rem;
-		margin: 0.5rem 0 0.5rem 0;
-	}
-	.expiry-info span {
-		color: var(--primary);
-		font-weight: 500;
-	}
+div span {
+color: var(--primary);
+}
 </style>

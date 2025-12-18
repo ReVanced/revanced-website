@@ -18,10 +18,10 @@
 	import {
 		theme,
 		aboutQuery,
+		initializeAllQueries,
+		refetchAllQueries,
 		startRefreshInterval,
 		stopRefreshInterval,
-		refetchAllQueries,
-		initializeAllQueries,
 		auth
 	} from '$stores';
 	import { useHolidayTheme } from '$lib/utils/themeEvents';
@@ -75,10 +75,7 @@
 	onMount(() => {
 		auth.startChecking();
 		fetchDynamicSettings();
-		
-		startRefreshInterval(() => {
-			refetchAllQueries();
-		});
+		startRefreshInterval(refetchAllQueries);
 
 		return () => {
 			auth.stopChecking();
@@ -96,8 +93,6 @@
 		document.documentElement.setAttribute('data-theme', theme.current);
 	}}
 />
-
-<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <div class="banner-wrapper">
 	<ApiStatusBanner />
@@ -133,26 +128,6 @@
 <LoginSuccessfulDialog />
 
 <style>
-	.skip-link {
-		position: absolute;
-		top: -100px;
-		left: 50%;
-		transform: translateX(-50%);
-		background-color: var(--accent-color);
-		color: var(--surface-one);
-		padding: 1rem 1.5rem;
-		border-radius: 0 0 8px 8px;
-		font-weight: 600;
-		text-decoration: none;
-		z-index: 99999;
-		transition: top 0.3s ease;
-	}
-
-	.skip-link:focus {
-		top: 0;
-		outline: none;
-	}
-
 	.banner-wrapper {
 		position: relative;
 		z-index: 10000;

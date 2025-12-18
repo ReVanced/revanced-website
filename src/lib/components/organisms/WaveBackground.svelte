@@ -1,13 +1,14 @@
 <script lang="ts">
-	let scrollY = $state(0);
-	let waveVisible = $derived(scrollY <= 10);
-</script>
+	interface Props {
+		visibility?: boolean;
+	}
 
-<svelte:window bind:scrollY />
+	let { visibility = true }: Props = $props();
+</script>
 
 <svg
 	class="wave-container"
-	class:visible={waveVisible}
+	class:visible={visibility}
 	viewBox="0 0 1440 500"
 	xmlns="http://www.w3.org/2000/svg"
 	preserveAspectRatio="none"
@@ -24,12 +25,11 @@
 		width: 100%;
 		height: 40vh;
 		opacity: 1;
-		transition: opacity 0.1s var(--bezier-one), height 0.1s var(--bezier-one);
+		transition: opacity 0.1s var(--bezier-one);
 	}
 
 	.wave-container:not(.visible) {
 		opacity: 0;
-		height: 0px;
 	}
 
 	@media (max-height: 780px) {

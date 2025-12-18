@@ -7,14 +7,6 @@
 	import SettingsDialog from '$components/molecules/SettingsDialog.svelte';
 	import LoginDialog from '$components/molecules/LoginDialog.svelte';
 	import { auth } from '$stores';
-	import {
-		aboutQuery,
-		announcementsQuery,
-		contributorsQuery,
-		managerQuery,
-		patchesQuery,
-		teamQuery
-	} from '$stores';
 
 	const navItems = [
 		{ label: 'Home', href: '/' },
@@ -46,24 +38,11 @@
 	function handleLoginRequest() {
 		loginOpen = true;
 	}
-
-	function prefetchRoute(href: string) {
-		if (href === '/download') {
-			managerQuery.refetch();
-		} else if (href === '/patches') {
-			patchesQuery.refetch();
-		} else if (href === '/announcements') {
-			announcementsQuery.refetch();
-		} else if (href === '/contributors') {
-			contributorsQuery.refetch();
-		} else if (href === '/donate') {
-			aboutQuery.refetch();
-			teamQuery.refetch();
-		}
-	}
 </script>
 
 <svelte:window bind:scrollY={scrollY} />
+
+<a class="skip-nav" href="#main-content">Skip navigation</a>
 
 <nav class:scrolled>
 	<button
@@ -101,7 +80,6 @@
 					{href} 
 					class="rounded nav-button unselectable" 
 					class:active={page.url.pathname === href}
-					onmouseenter={() => prefetchRoute(href)}
 				>
 					{label}
 				</a>
@@ -110,7 +88,6 @@
 				href="/announcements"
 				class="rounded nav-button unselectable mobile-only"
 				class:active={page.url.pathname === '/announcements'}
-				onmouseenter={() => prefetchRoute('/announcements')}
 			>
 				Announcements
 			</a>
@@ -121,7 +98,6 @@
 				href="/announcements"
 				class="rounded nav-button unselectable desktop-only"
 				class:active={page.url.pathname === '/announcements'}
-				onmouseenter={() => prefetchRoute('/announcements')}
 			>
 				<Notifications width="24" height="24" />
 			</a>
@@ -141,6 +117,27 @@
 <LoginDialog bind:open={loginOpen} />
 
 <style>
+	.skip-nav {
+		position: absolute;
+		top: -100%;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: var(--primary);
+		color: var(--text-three);
+		padding: 0.75rem 1.5rem;
+		border-radius: 0 0 8px 8px;
+		text-decoration: none;
+		font-weight: 500;
+		z-index: 9999;
+		transition: top 0.2s var(--bezier-one);
+	}
+
+	.skip-nav:focus {
+		top: 0;
+		outline: 2px solid var(--text-one);
+		outline-offset: 2px;
+	}
+
 	nav {
 		display: flex;
 		align-items: center;
@@ -167,7 +164,6 @@
 		padding: 0.5rem;
 		z-index: 6;
 		transition: opacity 0.3s var(--bezier-one);
-		margin-left: 4rem;
 	}
 
 	.nav-logo.hidden {
@@ -189,7 +185,7 @@
 	}
 
 	.main-nav {
-		margin-left: 1rem;
+		margin-left: 2rem;
 	}
 
 	.nav-button,
@@ -202,7 +198,7 @@
 		font-weight: 400;
 		font-size: 0.9rem;
 		letter-spacing: 0.02rem;
-		padding: 0.625rem 1rem;
+		padding: 10px 16px;
 		border-radius: 10px;
 		transition-timing-function: var(--bezier-one);
 		transition-duration: 0.25s;
@@ -317,7 +313,7 @@
 		}
 
 		nav {
-			justify-content: flex-start;
+			justify-content: normal;
 			gap: 2rem;
 		}
 
@@ -331,9 +327,7 @@
 		}
 
 		.menu-btn {
-			position: fixed;
-			top: 10px;
-			left: 2rem;
+			position: relative;
 			z-index: 6;
 		}
 
@@ -350,7 +344,8 @@
 			z-index: 4;
 			flex-direction: column;
 			align-items: flex-start;
-			padding: 6rem 1rem 1rem;
+			padding: 1rem;
+			padding-top: 6rem;
 			transform: translateX(-100%);
 			transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 			border-radius: 0px 24px 24px 0px;

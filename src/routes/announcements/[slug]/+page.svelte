@@ -292,11 +292,6 @@
 									<IconArchive />
 								</span>
 							{/if}
-							{#if announcement.level && announcement.level > 0}
-								<span class="level-badge level-{announcement.level}" title="Level {announcement.level}">
-									{announcement.level === 1 ? 'Warning' : 'Severe'}
-								</span>
-							{/if}
 						</h1>
 					{/if}
 					<h4 class="meta">
@@ -694,26 +689,6 @@
 	.edit-level:focus {
 		outline: none;
 		border-color: var(--primary);
-	}
-
-	.level-badge {
-		display: inline-flex;
-		align-items: center;
-		padding: 0.2rem 0.5rem;
-		border-radius: 0.25rem;
-		font-size: 0.7rem;
-		font-weight: 600;
-		text-transform: uppercase;
-	}
-
-	.level-badge.level-1 {
-		background: rgba(255, 193, 7, 0.2);
-		color: #ffc107;
-	}
-
-	.level-badge.level-2 {
-		background: rgba(244, 67, 54, 0.2);
-		color: #f44336;
 	}
 
 	.edit-section {

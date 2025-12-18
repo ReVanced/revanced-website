@@ -6,7 +6,6 @@
 	import logo from '$assets/icons/logo.svg';
 	import Divider from '$components/atoms/Divider.svelte';
 	import FooterSection from '$components/molecules/FooterSection.svelte';
-	import { footerVisibility } from '$stores';
 	import { PUBLIC_RV_DMCA_GUID as dmcaGuid } from '$env/static/public';
 	import type { Social } from '$api';
 
@@ -32,27 +31,11 @@
 	}: Props = $props();
 
 	let currentUrl = $state('');
-	let socialsSection: HTMLElement | null = $state(null);
 
 	$effect(() => {
 		if (typeof window !== 'undefined') {
 			currentUrl = window.location.href;
 		}
-	});
-
-	onMount(() => {
-		if (!socialsSection) return;
-
-		const observer = new IntersectionObserver(
-			(entries) => entries.forEach((e) => footerVisibility.set(e.isIntersecting)),
-			{ threshold: 0 }
-		);
-		observer.observe(socialsSection);
-
-		return () => {
-			observer.disconnect();
-			footerVisibility.set(false);
-		};
 	});
 
 	function buildDmcaStatusUrl(guid: string): string {
@@ -83,15 +66,17 @@
 					{/each}
 				</FooterSection>
 
-				<FooterSection title="Socials" bind:sectionRef={socialsSection}>
-					{#each socials as { name, url }}
-						<li>
-							<a href={url} target="_blank" rel="noreferrer">{name}</a>
-						</li>
-					{/each}
-				</FooterSection>
+				<div id="footer-socials">
+					<FooterSection title="Socials">
+							{#each socials as { name, url }}
+							<li>
+								<a href={url} target="_blank" rel="noreferrer">{name}</a>
+							</li>
+						{/each}
+					</FooterSection>
+				</div>
 			{:else}
-				<FooterSection title="Pages" bind:sectionRef={socialsSection}>
+				<FooterSection title="Pages">
 					{#each pageLinks as { label, href }}
 						<li><a {href}>{label}</a></li>
 					{/each}
@@ -209,6 +194,7 @@
 	.links-container {
 		display: flex;
 		gap: 10rem;
+		margin-top: 1rem;
 	}
 
 	@media (max-width: 1050px) {

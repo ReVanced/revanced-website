@@ -9,23 +9,17 @@
 
 	let { images, columns = 3, gap = '1rem' }: Props = $props();
 
-	let lightboxOpen = $state(false);
-	let selectedIndex = $state(0);
+	let selectedImage: { src: string; alt: string } | null = $state(null);
 
-	function openLightbox(index: number) {
-		selectedIndex = index;
-		lightboxOpen = true;
+	function openDialog(image: string, index: number) {
+		selectedImage = {
+			src: image,
+			alt: `Gallery image ${index + 1}`
+		};
 	}
 
-	function closeLightbox() {
-		lightboxOpen = false;
-	}
-
-	function handleKeydown(event: KeyboardEvent, index: number) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			openLightbox(index);
-		}
+	function closeDialog() {
+		selectedImage = null;
 	}
 </script>
 
@@ -34,8 +28,8 @@
 		<button
 			type="button"
 			class="image-container"
-			onclick={() => openLightbox(i)}
-			onkeydown={(e) => handleKeydown(e, i)}
+			onclick={() => openDialog(image, i)}
+			onkeydown={(e) => e.key === 'Enter' && openDialog(image, i)}
 			aria-label={`View image ${i + 1} of ${images.length}`}
 		>
 			<img
@@ -47,12 +41,8 @@
 	{/each}
 </div>
 
-{#if lightboxOpen}
-	<ImageDialog
-		{images}
-		currentIndex={selectedIndex}
-		onclose={closeLightbox}
-	/>
+{#if selectedImage}
+	<ImageDialog src={selectedImage.src} alt={selectedImage.alt} onclose={closeDialog} />
 {/if}
 
 <style>

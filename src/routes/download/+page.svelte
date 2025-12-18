@@ -91,7 +91,7 @@
 	</main>
 </Page>
 {#if warningType === 'not-android'}
-<Modal id="download-warning" bind:open={warningOpen}>
+<Modal bind:open={warningOpen}>
 	<div class="warning-content">
 		<h3>Warning</h3>
 		<p>Your device is not running Android. Do you still want to download?</p>
@@ -114,7 +114,7 @@
 {/if}
 
 {#if warningType === 'old-android'}
-<Modal id="download-warning" bind:open={warningOpen}>
+<Modal bind:open={warningOpen}>
 	<div class="warning-content">
 		<h3>Warning</h3>
 		<p>Your device is running Android {androidVersion}. ReVanced only supports Android versions 8 and above. Do you still want to download?</p>

@@ -19,32 +19,10 @@ class ModalStack {
 		}
 	}
 
-	open(id: string) {
-		const callback = this.modals.get(id);
-		if (!this.stack.includes(id)) {
-			this.stack.push(id);
-			if (!callback) {
-				this.modals.set(id, () => this.close(id));
-			}
-		}
-	}
-
-	close(id: string) {
-		const callback = this.modals.get(id);
-		if (callback) {
-			callback();
-		}
-		this.pop(id);
-	}
-
 	closeTop() {
 		if (this.stack.length <= 0) return;
 		const topId = this.stack[this.stack.length - 1];
-		this.close(topId);
-	}
-
-	isOpen(id: string): boolean {
-		return this.stack.includes(id);
+		this.modals.get(topId)?.();
 	}
 
 	isTopModal(id: string): boolean {

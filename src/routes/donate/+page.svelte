@@ -44,7 +44,6 @@
 	let selectedWallet = $state<CryptoWallet | null>(null);
 	let copySuccess = $state(false);
 	let snackbarOpen = $state(false);
-	let walletLinkClicked = $state(false);
 
 	function shuffle<T>(array: T[]): T[] {
 		return array
@@ -70,7 +69,6 @@
 		selectedWallet = wallet;
 		cryptoModalOpen = false;
 		walletModalOpen = true;
-		walletLinkClicked = false;
 	}
 
 	function backToCryptoList() {
@@ -91,28 +89,6 @@
 			}, 1500);
 		} catch (error) {
 			console.error('Failed to copy address:', error);
-		}
-	}
-	const walletSchemes: Record<string, string> = {
-		BTC: 'bitcoin',
-		ETH: 'ethereum',
-		LTC: 'litecoin',
-		DOGE: 'dogecoin',
-		XMR: 'monero',
-	};
-
-	function getWalletUri(wallet: CryptoWallet): string | null {
-		const scheme = walletSchemes[wallet.currency_code];
-		if (!scheme) return null;
-		return `${scheme}:${wallet.address}`;
-	}
-
-	function handleWalletLinkClick() {
-		if (!walletLinkClicked) {
-			walletLinkClicked = true;
-			setTimeout(() => {
-				walletLinkClicked = false;
-			}, 5000);
 		}
 	}
 </script>
@@ -188,32 +164,18 @@
 	</main>
 </Page>
 
-<Modal id="crypto-modal" bind:open={cryptoModalOpen} title="Cryptocurrencies">
+<Modal bind:open={cryptoModalOpen} title="Cryptocurrencies">
 	<CryptoWalletList wallets={cryptoWallets} onSelect={openWalletModal} />
 	{#snippet buttons()}
 		<Button buttonStyle="filled" onclick={() => (cryptoModalOpen = false)}>Close</Button>
 	{/snippet}
 </Modal>
 
-<Modal id="wallet-modal" bind:open={walletModalOpen} title="{selectedWallet?.currency_code ?? ''} Wallet">
+<Modal bind:open={walletModalOpen} title="{selectedWallet?.currency_code ?? ''} Wallet">
 	{#if selectedWallet}
 		<div class="wallet-details">
 			<p class="address">{selectedWallet.address}</p>
 			<QRCode value={selectedWallet.address} size={180} />
-			{#if getWalletUri(selectedWallet)}
-				<a 
-					href={getWalletUri(selectedWallet)} 
-					class="open-wallet-link"
-					onclick={handleWalletLinkClick}
-				>
-					Open in Wallet App
-				</a>
-				<div class="wallet-hint-container" class:visible={walletLinkClicked}>
-					<p class="wallet-hint">
-						Nothing happened? You may need a wallet app or browser extension installed.
-					</p>
-				</div>
-			{/if}
 		</div>
 	{/if}
 	{#snippet buttons()}
@@ -349,53 +311,6 @@
 		background-color: var(--surface-seven);
 		border-radius: 8px;
 		max-width: 100%;
-	}
-
-	.open-wallet-link {
-		color: var(--primary);
-		font-size: 0.9rem;
-		font-weight: 500;
-		text-decoration: none;
-		padding: 0.5rem 1rem;
-		border-radius: 8px;
-		background-color: var(--surface-seven);
-		transition: background-color 0.2s ease;
-	}
-
-	.open-wallet-link:hover {
-		background-color: var(--surface-five);
-		text-decoration: underline;
-	}
-
-	.wallet-hint-container {
-		display: grid;
-		grid-template-rows: 0fr;
-		transition: grid-template-rows 0.3s ease, margin-top 0.3s ease;
-		margin-top: 0;
-	}
-
-	.wallet-hint-container.visible {
-		grid-template-rows: 1fr;
-		margin-top: 0.5rem;
-	}
-
-	.wallet-hint-container > .wallet-hint {
-		overflow: hidden;
-		min-height: 0;
-	}
-
-	.wallet-hint {
-		font-size: 0.8rem;
-		color: var(--warning, #f0a020);
-		background-color: color-mix(in srgb, var(--warning, #f0a020) 15%, transparent);
-		padding: 0.5rem 0.75rem;
-		border-radius: 6px;
-		opacity: 0;
-		transition: opacity 0.3s ease;
-	}
-
-	.wallet-hint-container.visible > .wallet-hint {
-		opacity: 1;
 	}
 
 	@media (max-width: 1200px) {
