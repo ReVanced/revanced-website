@@ -198,9 +198,6 @@
 		padding: 5rem 2rem;
 	}
 
-	main.visibility {
-		min-height: initial;
-	}
 
 	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
 		main {
@@ -230,6 +227,8 @@
 		gap: 1.5rem;
 		flex: 1;
 		max-width: 550px;
+		min-height: 340px;
+		min-height: 340px;
 	}
 
 	.hero-content h1 {
@@ -301,14 +300,13 @@
 		margin-top: 0.5rem;
 		max-width: 30rem;
 		opacity: 1;
-		transition: 
-			opacity 0.25s var(--bezier-one),
-			transform 0.3s var(--bezier-one);
+		visibility: visible;
+		transition: opacity 0.25s var(--bezier-one);
 	}
 
 	.social-buttons.hidden {
 		opacity: 0;
-		transform: translateY(10px);
+		visibility: hidden;
 		pointer-events: none;
 	}
 
@@ -366,6 +364,7 @@
 	@media (max-width: 480px) {
 		main {
 			padding: 1.5rem;
+			padding-top: 0rem;
 		}
 
 		.cta-buttons {

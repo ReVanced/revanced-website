@@ -71,19 +71,18 @@
 html {
     font-size: 100%;
     overflow-y: scroll;
-    overflow-x: hidden;
 }
 
 body {
     font-family: var(--font-main);
     font-optical-sizing: auto;
     background-color: var(--background-one);
-    overflow-x: hidden;
 }
 
 html,
 body {
     max-width: 100%;
+    overflow-x: clip;
 }
 
 ::selection {

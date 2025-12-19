@@ -99,11 +99,11 @@
 	<AnnouncementBanner />
 </div>
 
+<NavBar />
+
 {#if showSpinner}
 	<LoadingSpinner />
 {/if}
-
-<NavBar />
 
 <ModalBackground />
 
@@ -130,6 +130,6 @@
 <style>
 	.banner-wrapper {
 		position: relative;
-		z-index: var(--z-toast);
+		z-index: var(--z-dropdown);
 	}
 </style>

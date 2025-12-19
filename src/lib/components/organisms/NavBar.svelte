@@ -292,7 +292,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
-		z-index: var(--z-overlay);
+		z-index: 1;
 	}
 
 	.mobile-only {
@@ -328,7 +328,14 @@
 
 		.menu-btn {
 			position: relative;
-			z-index: var(--z-base);
+			z-index: 5;
+		}
+
+		.menu-btn.open {
+			position: fixed;
+			top: 1rem;
+			left: 2rem;
+			z-index: 5;
 		}
 
 		.nav-drawer {
@@ -341,7 +348,7 @@
 			left: 0;
 			height: 100%;
 			background-color: var(--surface-eight);
-			z-index: calc(var(--z-overlay) + 1);
+			z-index: 2;
 			flex-direction: column;
 			align-items: flex-start;
 			padding: 1rem;
@@ -357,7 +364,7 @@
 
 		.nav-group {
 			flex-direction: column;
-			align-items: flex-start;
+			align-items: stretch;
 			gap: 0.5rem;
 			width: 100%;
 		}
@@ -366,11 +373,10 @@
 			margin-left: 0;
 		}
 
-		.nav-button {
-			width: 100%;
+		.main-nav .nav-button {
 			justify-content: flex-start;
-			padding: 0.75rem 1.25rem;
 			text-align: left;
+			padding: 0.75rem 1.25rem;
 			font-size: 1rem;
 			font-weight: 500;
 		}
