@@ -170,17 +170,19 @@
 
 	.content-body {
 		color: var(--text-four);
-		display: -webkit-inline-box;
+		display: -webkit-box;
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
-		font-size: 0.95rem;
-		line-height: 1.5;
 	}
 
 	.content-body :global(a) {
 		pointer-events: none;
+		color: var(--primary);
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
 	}
 
 	.content-body :global(h1),
@@ -191,6 +193,40 @@
 	.content-body :global(h6) {
 		color: var(--secondary);
 		line-height: 1.75rem;
+		margin: 0;
+	}
+
+	.content-body :global(h1) {
+		font-size: 1.8rem;
+	}
+
+	.content-body :global(h2) {
+		font-size: 1.6rem;
+	}
+
+	.content-body :global(h3) {
+		font-size: 1.4rem;
+	}
+
+	.content-body :global(h4) {
+		font-size: 1.2rem;
+	}
+
+	.content-body :global(h5) {
+		font-size: 1.1rem;
+	}
+
+	.content-body :global(h6) {
+		font-size: 1rem;
+	}
+
+	.content-body :global(li) {
+		list-style-position: inside;
+		font-size: 0.9rem;
+		font-weight: 500;
+	}
+
+	.content-body :global(p) {
 		margin: 0;
 	}
 
