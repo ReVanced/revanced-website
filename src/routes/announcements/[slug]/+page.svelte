@@ -115,7 +115,7 @@
 
 		const abortController = new AbortController();
 
-		fetchAnnouncementById(announcementId)
+		fetchAnnouncementById(announcementId, abortController.signal)
 			.then((data) => {
 				if (abortController.signal.aborted) return;
 				announcement = data;

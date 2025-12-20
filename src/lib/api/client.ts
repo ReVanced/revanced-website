@@ -39,8 +39,8 @@ function handleAuthError(response: Response): void {
 	}
 }
 
-async function fetchJson<T>(endpoint: string): Promise<T> {
-	const response = await fetch(buildUrl(endpoint));
+async function fetchJson<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
+	const response = await fetch(buildUrl(endpoint), signal ? { signal } : undefined);
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
@@ -138,8 +138,8 @@ export async function fetchAnnouncements(options: FetchAnnouncementsOptions = {}
 	return response.json();
 }
 
-export async function fetchAnnouncementById(id: number): Promise<Announcement> {
-	return fetchJson<Announcement>(`announcements/${id}`);
+export async function fetchAnnouncementById(id: number, signal?: AbortSignal): Promise<Announcement> {
+	return fetchJson<Announcement>(`announcements/${id}`, signal);
 }
 
 export async function checkApiHealth(): Promise<boolean> {
