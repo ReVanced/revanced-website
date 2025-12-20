@@ -155,10 +155,10 @@ function createLazyCachedResource<T>(
 	};
 }
 
-export const aboutQuery = createLazyCachedResource<About>(
+export const aboutQuery = createLazyCachedResource<About | null>(
 	'about',
 	fetchAbout,
-	{} as About
+	null
 );
 
 export const teamQuery = createLazyCachedResource<TeamMember[]>(
@@ -167,10 +167,10 @@ export const teamQuery = createLazyCachedResource<TeamMember[]>(
 	[]
 );
 
-export const managerQuery = createLazyCachedResource<ManagerRelease>(
+export const managerQuery = createLazyCachedResource<ManagerRelease | null>(
 	'manager',
 	fetchManager,
-	{} as ManagerRelease
+	null
 );
 
 export const contributorsQuery = createLazyCachedResource<Contributable[]>(
