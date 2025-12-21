@@ -169,9 +169,11 @@
 					class="social-buttons"
 					class:hidden={!bottomVisibility}
 				>
-					{#each filteredSocials as social (social.name)}
-						<SocialButton {social} />
-					{/each}
+					{#if filteredSocials.length > 0}
+						{#each filteredSocials as social (social.name)}
+							<SocialButton {social} />
+						{/each}
+					{/if}
 				</div>
 			</div>
 

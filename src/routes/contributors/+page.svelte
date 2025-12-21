@@ -6,6 +6,8 @@
 	import { contributorsQuery } from '$stores';
 
 	const repositories = $derived(contributorsQuery.data ?? []);
+	const isLoading = $derived(contributorsQuery.loading && repositories.length === 0);
+	const isError = $derived(contributorsQuery.error && repositories.length === 0);
 
 	const schemas = [
 		{
@@ -32,15 +34,27 @@
 		</div>
 
 		<div class="repos">
-			{#each repositories as repo}
-				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorSection
-						name={repo.name}
-						url={repo.url}
-						contributors={repo.contributors}
-					/>
+			{#if isLoading}
+				<div class="loading-state">
+					<div class="skeleton-repos">
+						{#each Array(3) as _}
+							<div class="skeleton-repo"></div>
+						{/each}
+					</div>
 				</div>
-			{/each}
+			{:else if isError}
+				<p class="error-state">Failed to load contributors. Please try again later.</p>
+			{:else}
+				{#each repositories as repo}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<ContributorSection
+							name={repo.name}
+							url={repo.url}
+							contributors={repo.contributors}
+						/>
+					</div>
+				{/each}
+			{/if}
 		</div>
 	</div>
 </Page>
@@ -100,6 +114,46 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
+	}
+
+	.loading-state {
+		display: flex;
+		justify-content: center;
+	}
+
+	.skeleton-repos {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		width: 100%;
+	}
+
+	.skeleton-repo {
+		height: 200px;
+		background: linear-gradient(
+			90deg,
+			var(--surface-three) 25%,
+			var(--surface-five) 50%,
+			var(--surface-three) 75%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
+		border-radius: 16px;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+
+	.error-state {
+		text-align: center;
+		color: var(--text-four);
+		padding: 2rem;
 	}
 
 	@media (max-width: 768px) {
