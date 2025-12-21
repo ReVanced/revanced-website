@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { navigating } from '$app/stores';
+	import { derived } from 'svelte/store';
 
 	import favicon from '$assets/icons/favicon.ico';
 	import ApiStatusBanner from '$components/molecules/ApiStatusBanner.svelte';
@@ -9,7 +10,6 @@
 	import NavBar from '$components/organisms/NavBar.svelte';
 	import Footer from '$components/organisms/Footer.svelte';
 	import ModalBackground from '$components/atoms/ModalBackground.svelte';
-	import LoadingSpinner from '$components/atoms/LoadingSpinner.svelte';
 	import ConsentDialog from '$components/molecules/ConsentDialog.svelte';
 	import EmailVerificationDialog from '$components/molecules/EmailVerificationDialog.svelte';
 	import SessionExpiredDialog from '$components/molecules/SessionExpiredDialog.svelte';
@@ -30,29 +30,19 @@
 	let { children }: WithChildren = $props();
 	useHolidayTheme();
 	initializeAllQueries();
-	
-	let showSpinner = $state(false);
-	let spinnerTimeout: ReturnType<typeof setTimeout> | null = null;
 
-	$effect(() => {
-		if ($navigating) {
-			spinnerTimeout = setTimeout(() => {
-				showSpinner = true;
-			}, 250);
-		} else {
-			if (spinnerTimeout) {
-				clearTimeout(spinnerTimeout);
-				spinnerTimeout = null;
+	const showLoading = derived(
+		navigating,
+		($nav, set) => {
+			if ($nav) {
+				const timeout = setTimeout(() => set(true), 250);
+				return () => clearTimeout(timeout);
+			} else {
+				set(false);
 			}
-			showSpinner = false;
-		}
-
-		return () => {
-			if (spinnerTimeout) {
-				clearTimeout(spinnerTimeout);
-			}
-		};
-	});
+		},
+		false
+	);
 
 	const pageLinks = [
 		{ label: 'Home', href: '/' },
@@ -101,16 +91,18 @@
 
 <NavBar />
 
-{#if showSpinner}
-	<LoadingSpinner />
-{/if}
-
 <ModalBackground />
 
 <ConsentDialog />
 
 <main id="main-content">
-	{@render children()}
+	{#if $showLoading}
+		<div class="page-spinner">
+			<div class="spinner"></div>
+		</div>
+	{:else}
+		{@render children()}
+	{/if}
 </main>
 
 <Footer
@@ -131,5 +123,36 @@
 	.banner-wrapper {
 		position: relative;
 		z-index: var(--z-dropdown);
+	}
+
+	.page-spinner {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 50vh;
+	}
+
+	.spinner {
+		width: 50px;
+		height: 50px;
+		position: relative;
+	}
+
+	.spinner::before {
+		content: '';
+		box-sizing: border-box;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		border: 4.5px solid transparent;
+		border-top-color: var(--primary);
+		animation: spin 0.6s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>
