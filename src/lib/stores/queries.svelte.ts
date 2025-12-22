@@ -22,7 +22,22 @@ const CACHE_PREFIX = 'rv_cache_';
 const STALE_TIME = 5 * 60 * 1000;
 const ANNOUNCEMENT_CACHE_KEY = `${CACHE_PREFIX}announcements_by_id`;
 
-type QueryResult<T> = {
+let isRestoringCache = $state(browser);
+let restoringPromiseResolve: (() => void) | null = null;
+const restoringPromise = browser ? new Promise<void>((resolve) => {
+	restoringPromiseResolve = resolve;
+}) : Promise.resolve();
+
+export const hydrationState = {
+	get isRestoring() {
+		return isRestoringCache;
+	},
+	get promise() {
+		return restoringPromise;
+	}
+};
+
+export type QueryResult<T> = {
 	readonly data: T | null;
 	readonly loading: boolean;
 	readonly refreshing: boolean;
@@ -65,7 +80,9 @@ function createLazyCachedResource<T>(
 
 					try {
 						const data = await fetcher();
-						cache.current = { data, timestamp: Date.now() };
+						queueMicrotask(() => { // Defer cache update to avoid reactivity issues during hydration
+							cache.current = { data, timestamp: Date.now() };
+						});
 						staleRefetchTriggered = false;
 						return data;
 					} catch (error) {
@@ -111,7 +128,10 @@ function createLazyCachedResource<T>(
 		manualError = null;
 		try {
 			const data = await fetcher();
-			cache.current = { data, timestamp: Date.now() };
+			queueMicrotask(() => {
+				// Defer cache update to avoid reactivity issues during hydration
+				cache.current = { data, timestamp: Date.now() };
+			});
 			staleRefetchTriggered = false;
 			return data;
 		} catch (error) {
@@ -206,6 +226,13 @@ export function initializeAllQueries() {
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		query.data;
 	}
+	
+	if (browser && isRestoringCache) {
+		queueMicrotask(() => {
+			isRestoringCache = false;
+			restoringPromiseResolve?.();
+		});
+	}
 }
 
 export function refetchAllQueries() {
@@ -237,7 +264,9 @@ export async function prefetchAnnouncementById(id: number) {
 
 	try {
 		const data = await fetchAnnouncementById(id);
-		announcementByIdCache.current = { ...announcementByIdCache.current, [id]: { data, timestamp: Date.now() } };
+		queueMicrotask(() => {
+			announcementByIdCache.current = { ...announcementByIdCache.current, [id]: { data, timestamp: Date.now() } };
+		});
 		return data;
 	} catch (e) {
 		console.error(`Failed to prefetch announcement ${id}:`, e);
@@ -247,7 +276,9 @@ export async function prefetchAnnouncementById(id: number) {
 
 export function cacheAnnouncement(announcement: Announcement) {
 	if (!browser) return;
-	announcementByIdCache.current = { ...announcementByIdCache.current, [announcement.id]: { data: announcement, timestamp: Date.now() } };
+	queueMicrotask(() => {
+		announcementByIdCache.current = { ...announcementByIdCache.current, [announcement.id]: { data: announcement, timestamp: Date.now() } };
+	});
 }
 
 export function invalidateAnnouncementCache(id: number) {

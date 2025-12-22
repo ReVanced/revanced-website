@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
 	import type { WithOptionalChildren } from '$types';
-
+	import ToolTip from './ToolTip.svelte';
 
 	type Props = {
 		buttonStyle?: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
@@ -10,6 +10,7 @@
 		href?: string;
 		target?: string;
 		disabled?: boolean;
+		tooltip?: string;
 	} & WithOptionalChildren &
 		Omit<HTMLButtonAttributes, 'disabled'> &
 		Omit<HTMLAnchorAttributes, 'href' | 'target'>;
@@ -21,6 +22,7 @@
 		href,
 		target,
 		disabled = false,
+		tooltip,
 		children,
 		class: klass = '',
 		...rest
@@ -30,7 +32,39 @@
 	let computedStyle = $derived(hasChildren ? buttonStyle : 'icon');
 </script>
 
-{#if href}
+{#snippet buttonContent()}
+	{#if Icon}
+		<Icon />
+	{/if}
+	{#if children}
+		<span class="content">{@render children()}</span>
+	{/if}
+{/snippet}
+
+{#if tooltip}
+	<ToolTip content={tooltip}>
+		{#if href}
+			<a
+				{href}
+				{target}
+				class="{computedStyle} {variant} {klass}"
+				class:disabled
+				{...rest}
+			>
+				{@render buttonContent()}
+			</a>
+		{:else}
+			<button
+				class="{computedStyle} {variant} {klass}"
+				class:disabled
+				{disabled}
+				{...rest}
+			>
+				{@render buttonContent()}
+			</button>
+		{/if}
+	</ToolTip>
+{:else if href}
 	<a
 		{href}
 		{target}
@@ -38,12 +72,7 @@
 		class:disabled
 		{...rest}
 	>
-		{#if Icon}
-			<Icon />
-		{/if}
-		{#if children}
-			<span class="content">{@render children()}</span>
-		{/if}
+		{@render buttonContent()}
 	</a>
 {:else}
 	<button
@@ -52,12 +81,7 @@
 		{disabled}
 		{...rest}
 	>
-		{#if Icon}
-			<Icon />
-		{/if}
-		{#if children}
-			<span class="content">{@render children()}</span>
-		{/if}
+		{@render buttonContent()}
 	</button>
 {/if}
 
@@ -138,8 +162,8 @@
 	}
 
 	.onInfoBackground {
-		background-color: #0d2d44;
-		color: var(--accent-color);
+		background-color: rgba(0, 0, 0, 0.15);
+		color: var(--text-one);
 	}
 
 	.content {

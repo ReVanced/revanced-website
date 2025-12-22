@@ -1,8 +1,13 @@
 import { browser, dev } from '$app/environment';
 
-export const DEFAULT_API_URL = 'https://api.revanced.app';
-export const DEFAULT_STATUS_URL = 'https://status.revanced.app';
-export const DEFAULT_EMAIL = 'contact@revanced.app';
+
+const ENV_API_URL = import.meta.env.VITE_RV_API_URL ?? import.meta.env.PUBLIC_RV_API_URL;
+const ENV_STATUS_URL = import.meta.env.VITE_RV_STATUS_URL ?? import.meta.env.PUBLIC_RV_STATUS_URL;
+const ENV_EMAIL = import.meta.env.VITE_RV_EMAIL ?? import.meta.env.PUBLIC_RV_EMAIL;
+
+export const DEFAULT_API_URL = ENV_API_URL || 'https://api.revanced.app';
+export const DEFAULT_STATUS_URL = ENV_STATUS_URL || 'https://status.revanced.app';
+export const DEFAULT_EMAIL = ENV_EMAIL || 'contact@revanced.app';
 
 const DEV_PROXY_URL = '/api/revanced';
 // to be removed in production

@@ -2,7 +2,6 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { navigating } from '$app/stores';
-	import { derived } from 'svelte/store';
 
 	import favicon from '$assets/icons/favicon.ico';
 	import ApiStatusBanner from '$components/molecules/ApiStatusBanner.svelte';
@@ -14,6 +13,7 @@
 	import EmailVerificationDialog from '$components/molecules/EmailVerificationDialog.svelte';
 	import SessionExpiredDialog from '$components/molecules/SessionExpiredDialog.svelte';
 	import LoginSuccessfulDialog from '$components/molecules/LoginSuccessfulDialog.svelte';
+	import Spinner from '$components/atoms/Spinner.svelte';
 	import type { WithChildren } from '$types';
 	import {
 		theme,
@@ -22,7 +22,8 @@
 		refetchAllQueries,
 		startRefreshInterval,
 		stopRefreshInterval,
-		auth
+		auth,
+		hydrationState
 	} from '$stores';
 	import { useHolidayTheme } from '$lib/utils/themeEvents';
 	import { fetchDynamicSettings } from '$lib/api/settings';
@@ -30,19 +31,6 @@
 	let { children }: WithChildren = $props();
 	useHolidayTheme();
 	initializeAllQueries();
-
-	const showLoading = derived(
-		navigating,
-		($nav, set) => {
-			if ($nav) {
-				const timeout = setTimeout(() => set(true), 250);
-				return () => clearTimeout(timeout);
-			} else {
-				set(false);
-			}
-		},
-		false
-	);
 
 	const pageLinks = [
 		{ label: 'Home', href: '/' },
@@ -57,6 +45,26 @@
 	let contactEmail = $derived(aboutQuery.data?.contact?.email ?? '');
 
 	let emailDialogOpen = $state(false);
+	let showLoadingSpinner = $state(false);
+	let isRestoring = $derived(hydrationState.isRestoring);
+
+	// Show loading spinner after 250ms delay during navigation
+	$effect(() => {
+		const isNavigating = $navigating !== null;
+		let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+		if (isNavigating) {
+			timeoutId = setTimeout(() => {
+				showLoadingSpinner = true;
+			}, 250);
+		} else {
+			showLoadingSpinner = false;
+		}
+
+		return () => {
+			if (timeoutId) clearTimeout(timeoutId);
+		};
+	});
 
 	function handleEmailClick() {
 		emailDialogOpen = true;
@@ -96,10 +104,8 @@
 <ConsentDialog />
 
 <main id="main-content">
-	{#if $showLoading}
-		<div class="page-spinner">
-			<div class="spinner"></div>
-		</div>
+	{#if isRestoring || showLoadingSpinner}
+		<Spinner />
 	{:else}
 		{@render children()}
 	{/if}
@@ -123,36 +129,5 @@
 	.banner-wrapper {
 		position: relative;
 		z-index: var(--z-dropdown);
-	}
-
-	.page-spinner {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		min-height: 50vh;
-	}
-
-	.spinner {
-		width: 50px;
-		height: 50px;
-		position: relative;
-	}
-
-	.spinner::before {
-		content: '';
-		box-sizing: border-box;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		border-radius: 50%;
-		border: 4.5px solid transparent;
-		border-top-color: var(--primary);
-		animation: spin 0.6s linear infinite;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
 	}
 </style>
