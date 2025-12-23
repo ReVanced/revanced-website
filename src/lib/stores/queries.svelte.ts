@@ -7,7 +7,8 @@ import {
 	fetchContributors,
 	fetchPatches,
 	fetchAnnouncements,
-	fetchAnnouncementById
+	fetchAnnouncementById,
+	fetchAnnouncementTags
 } from '$api/client';
 import type {
 	About,
@@ -15,7 +16,8 @@ import type {
 	ManagerRelease,
 	Contributable,
 	Patch,
-	Announcement
+	Announcement,
+	AnnouncementTag
 } from '$api/types';
 
 const CACHE_PREFIX = 'rv_cache_';
@@ -211,13 +213,20 @@ export const announcementsQuery = createLazyCachedResource<Announcement[]>(
 	[]
 );
 
+export const announcementTagsQuery = createLazyCachedResource<AnnouncementTag[]>(
+	'announcement_tags',
+	fetchAnnouncementTags,
+	[]
+);
+
 export const allQueries = [
 	aboutQuery,
 	teamQuery,
 	managerQuery,
 	contributorsQuery,
 	patchesQuery,
-	announcementsQuery
+	announcementsQuery,
+	announcementTagsQuery
 ] as const;
 
 // must be called in component setup to avoid effect_orphan errors

@@ -9,6 +9,7 @@ export {
 	contributorsQuery,
 	patchesQuery,
 	announcementsQuery,
+	announcementTagsQuery,
 	allQueries,
 	initializeAllQueries,
 	refetchAllQueries,
@@ -18,8 +19,11 @@ export {
 	hasValidCachedAnnouncement,
 	cacheAnnouncement,
 	invalidateAnnouncementCache,
-	invalidateAllAnnouncementCache
+	invalidateAllAnnouncementCache,
+	hydrationState
 } from './queries.svelte';
+
+export type { QueryResult } from './queries.svelte';
 
 export {
 	apiStatus,

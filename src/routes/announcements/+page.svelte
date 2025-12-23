@@ -9,10 +9,8 @@
 	import Search from '$components/atoms/Search.svelte';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import AnnouncementCard from '$components/molecules/AnnouncementCard.svelte';
-	import Button from '$components/atoms/Button.svelte';
 	import IconChevron from 'virtual:icons/material-symbols/keyboard-arrow-down';
-	import IconAdd from 'virtual:icons/material-symbols/add';
-	import { announcementsQuery, readAnnouncements, auth } from '$stores';
+	import { announcementsQuery, announcementTagsQuery, readAnnouncements } from '$stores';
 	import { debounce } from '$lib/utils/debounce';
 	import { isArchived } from '$lib/utils/announcement';
 	import type { Announcement } from '$api';
@@ -66,17 +64,9 @@
 
 	let announcements = $derived(announcementsQuery.data ?? []);
 
-	let allTags = $derived.by(() => {
-		const tagSet = new Set<string>();
-		for (const item of announcements) {
-			if (item.tags) {
-				for (const tag of item.tags) {
-					tagSet.add(tag);
-				}
-			}
-		}
-		return Array.from(tagSet).sort();
-	});
+	let allTags = $derived(
+		(announcementTagsQuery.data ?? []).map(tag => tag.name)
+	);
 
 	let activeItems = $derived(
 		announcements.filter((item: Announcement) => !isArchived(item.archived_at))
@@ -132,8 +122,6 @@
 		archiveExpanded = !archiveExpanded;
 	}
 
-	let isAdmin = $derived(auth.isLoggedIn);
-
 	$effect(() => {
 		if (readAnnouncements.ids.length === 0 && announcements.length > 0) {
 			readAnnouncements.markManyAsRead(announcements.map((a) => a.id));
@@ -150,12 +138,6 @@
 					placeholder="Search for announcements"
 					onkeyup={debouncedUpdate}
 				/>
-				{#if isAdmin}
-					<Button buttonStyle="filled" href="/announcements/create">
-						<IconAdd />
-						Create
-					</Button>
-				{/if}
 			</div>
 		</div>
 	</div>
