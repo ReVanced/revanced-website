@@ -143,9 +143,6 @@
 		outline: none;
 	}
 
-	.title-input.empty {
-		border-bottom: 2px solid var(--red-one);
-	}
 
 	.title-input::placeholder {
 		color: var(--text-four);
@@ -166,7 +163,7 @@
 		outline: none;
 		border-radius: 0;
 		background-color: transparent;
-		color: var(--text-one);
+		color: var(--secondary);
 		font-size: 1rem;
 		font-family: inherit;
 		letter-spacing: 0.02rem;
@@ -202,7 +199,7 @@
 		outline: none;
 		border-radius: 0;
 		background-color: transparent;
-		color: var(--text-one);
+		color: var(--secondary);
 		font-size: 1rem;
 		font-family: inherit;
 		letter-spacing: 0.02rem;

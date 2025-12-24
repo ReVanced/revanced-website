@@ -1,6 +1,5 @@
 <script lang="ts">
 	import TagChip from '$components/atoms/TagChip.svelte';
-	import Button from '$components/atoms/Button.svelte';
 	import Gallery from '$components/molecules/Gallery.svelte';
 	import { announcementTagsQuery } from '$stores';
 	import { isValidUrl } from '$lib/utils/url';
@@ -98,12 +97,12 @@
 					type="text"
 					bind:value={newTag}
 					class="tag-input"
-					placeholder=""
+					placeholder="Add tag"
 					onkeydown={handleTagKeydown}
 					onblur={handleAddTag}
 				/>
 				<span class="add-icon">
-					<Button buttonStyle="icon" icon={IconAdd} onclick={handleAddTag} />
+					<IconAdd />
 				</span>
 			</div>
 		</div>
@@ -138,11 +137,12 @@
 					bind:value={newAttachment}
 					class="attachment-input new"
 					class:invalid={newAttachment.trim() !== '' && !isValidUrl(newAttachment)}
+					placeholder="Add attachment URL"
 					onkeydown={handleAttachmentKeydown}
 					onblur={addAttachment}
 				/>
 				<span class="add-icon">
-					<Button buttonStyle="icon" icon={IconAdd} onclick={addAttachment} />
+					<IconAdd />
 				</span>
 			</div>
 		</div>
@@ -161,12 +161,14 @@
 
 	.new-tag {
 		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		position: relative;
 	}
 
 	.tag-input {
 		height: 32px;
-		width: 38px;
+		width: 32px;
 		padding: 0 8px;
 		border: none;
 		outline: none;
@@ -177,14 +179,27 @@
 		font-family: inherit;
 		letter-spacing: 0.02rem;
 		transition: width 0.2s var(--bezier-one);
+		cursor: pointer;
+	}
+
+	.tag-input::placeholder {
+		color: transparent;
+		transition: color 0.2s var(--bezier-one);
 	}
 
 	.tag-input:focus {
 		width: 120px;
+		cursor: text;
+	}
+
+	.tag-input:focus::placeholder {
+		color: var(--text-four);
+		opacity: 0.6;
 	}
 
 	.tag-input:focus + .add-icon {
-		display: none;
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.attachments-editor {
@@ -264,15 +279,28 @@
 		padding-right: 0;
 		border: 1px solid var(--border);
 		transition: all 0.2s var(--bezier-one);
+		cursor: pointer;
+	}
+
+	.new-attachment .attachment-input.new::placeholder {
+		color: transparent;
+		transition: color 0.2s var(--bezier-one);
 	}
 
 	.new-attachment .attachment-input.new:focus {
 		width: 100%;
 		padding-right: 0.75rem;
+		cursor: text;
+	}
+
+	.new-attachment .attachment-input.new:focus::placeholder {
+		color: var(--text-four);
+		opacity: 0.6;
 	}
 
 	.new-attachment .attachment-input.new:focus + .add-icon {
-		display: none;
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.new-attachment .attachment-input.new.invalid {
@@ -281,15 +309,19 @@
 
 	.add-icon {
 		position: absolute;
-		left: 14px;
+		left: 50%;
 		top: 50%;
-		transform: translateY(-50%);
+		transform: translate(-50%, -50%);
 		pointer-events: none;
 		color: var(--text-four);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: opacity 0.2s var(--bezier-one);
 	}
 
-	.new-tag .add-icon {
-		left: 8px;
+	.new-attachment .add-icon {
+		left: 26px;
 	}
 
 	.add-icon :global(svg) {
