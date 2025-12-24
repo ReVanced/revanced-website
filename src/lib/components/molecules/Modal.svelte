@@ -11,6 +11,7 @@ id?: string;
 open?: boolean;
 fullscreen?: boolean;
 notDismissible?: boolean;
+onclose?: () => void;
 icon?: Snippet;
 title?: string;
 description?: Snippet;
@@ -22,12 +23,21 @@ id = crypto.randomUUID(),
 open = $bindable(false),
 fullscreen = false,
 notDismissible = false,
+onclose,
 icon,
 title,
 description,
 buttons,
 children
 }: Props = $props();
+
+function handleClose() {
+if (onclose) {
+onclose();
+} else {
+open = false;
+}
+}
 
 let isTopModal = $derived(modalsStack.isTopModal(id));
 
@@ -37,7 +47,7 @@ let scrollY = $state(0);
 $effect(() => {
 if (open) {
 modalsStack.push(id, () => {
-if (!notDismissible) open = false;
+if (!notDismissible) handleClose();
 });
 } else {
 modalsStack.pop(id);
@@ -64,7 +74,7 @@ transition:fade={{ easing: quadInOut, duration: 150 }}
 >
 <div class="title" class:hasIcon={icon}>
 {#if fullscreen}
-<button id="back-button" type="button" onclick={() => (open = false)}>
+<button id="back-button" type="button" onclick={handleClose}>
 <IconArrowLeft style="width: 24px; height: 24px; color: var(--surface-six);" />
 </button>
 {/if}
