@@ -69,8 +69,8 @@
 		<p class="description">Do you want to delete this announcement?</p>
 
 		<div class="buttons">
-			<Button buttonStyle="text" onclick={handleCancel}>Cancel</Button>
-			<Button buttonStyle="filled" onclick={handleConfirm}>OK</Button>
+			<Button buttonStyle="text" onclick={handleCancel}>No</Button>
+			<Button buttonStyle="filled" onclick={handleConfirm}>Yes</Button>
 		</div>
 	</div>
 {/if}
@@ -119,11 +119,11 @@
 	.title h3 {
 		margin: 0;
 		font-size: 1.5rem;
-		color: var(--text-one);
+		color: var(--secondary);
 	}
 
 	.description {
-		color: var(--text-two);
+		color: var(--text-four);
 		text-align: center;
 		margin: 0;
 	}
