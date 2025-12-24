@@ -1,4 +1,5 @@
 import { buildUrl } from './settings';
+import { getToken, isLoggedIn } from './auth';
 import type {
 	About,
 	TeamMember,
@@ -15,6 +16,52 @@ async function fetchJson<T>(endpoint: string, signal?: AbortSignal): Promise<T> 
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
 	return response.json();
+}
+
+function buildAuthHeaders(): Record<string, string> {
+	const token = getToken();
+	return {
+		'Content-Type': 'application/json',
+		...(token ? { Authorization: `Bearer ${token}` } : {})
+	};
+}
+
+async function postJson<T>(endpoint: string, body?: unknown): Promise<T | null> {
+	if (!isLoggedIn()) throw new Error('Unauthenticated');
+	const response = await fetch(buildUrl(endpoint), {
+		method: 'POST',
+		headers: buildAuthHeaders(),
+		body: body ? JSON.stringify(body) : ''
+	});
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	return response.headers.get('content-length') === '0' ? null : response.json();
+}
+
+async function patchJson<T>(endpoint: string, body?: unknown): Promise<T | null> {
+	if (!isLoggedIn()) throw new Error('Unauthenticated');
+	const response = await fetch(buildUrl(endpoint), {
+		method: 'PATCH',
+		headers: buildAuthHeaders(),
+		body: body ? JSON.stringify(body) : ''
+	});
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	return response.headers.get('content-length') === '0' ? null : response.json();
+}
+
+async function deleteJson<T>(endpoint: string): Promise<T | null> {
+	if (!isLoggedIn()) throw new Error('Unauthenticated');
+	const response = await fetch(buildUrl(endpoint), {
+		method: 'DELETE',
+		headers: buildAuthHeaders()
+	});
+	if (!response.ok) {
+		throw new Error(`API error: ${response.status} ${response.statusText}`);
+	}
+	return response.headers.get('content-length') === '0' ? null : response.json();
 }
 
 export async function fetchAbout(): Promise<About> {
@@ -83,4 +130,31 @@ export async function checkApiHealth(): Promise<boolean> {
 		console.log('API health check failed');
 		return false;
 	}
+}
+
+export type AnnouncementPayload = {
+	title: string;
+	content?: string;
+	author?: string;
+	tags?: string[];
+	attachments?: string[];
+	created_at?: string;
+	archived_at?: string | null;
+	level?: number;
+};
+
+export async function createAnnouncement(announcement: AnnouncementPayload): Promise<Announcement> {
+	const result = await postJson<Announcement>('announcements', announcement);
+	if (!result) throw new Error('Failed to create announcement');
+	return result;
+}
+
+export async function updateAnnouncement(id: number, announcement: AnnouncementPayload): Promise<Announcement> {
+	const result = await patchJson<Announcement>(`announcements/${id}`, announcement);
+	if (!result) throw new Error('Failed to update announcement');
+	return result;
+}
+
+export async function deleteAnnouncement(id: number): Promise<void> {
+	await deleteJson(`announcements/${id}`);
 }
