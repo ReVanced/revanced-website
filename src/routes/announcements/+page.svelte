@@ -2,7 +2,7 @@
 	import { slide, fly } from 'svelte/transition';
 	import { quintIn, quintOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
+	import { goto, replaceState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Fuse, { type FuseResult } from 'fuse.js';
 	import Page from '$components/molecules/Page.svelte';
@@ -15,22 +15,16 @@
 	import { isArchived } from '$lib/utils/announcement';
 	import type { Announcement } from '$api';
 
-	let searchTerm = $state('');
-	let displayedTerm = $state('');
-	let selectedTags = $state<string[]>([]);
+	const initialParams = browser ? new URL(window.location.href).searchParams : new URLSearchParams();
+	let searchTerm = $state(initialParams.get('s') ?? '');
+	let displayedTerm = $state(initialParams.get('s') ?? '');
+	let selectedTags = $state<string[]>(initialParams.getAll('tag'));
 	let archiveExpanded = $state(false);
 
 	$effect(() => {
 		if (!browser) return;
 		
-		const params = $page.url.searchParams;
-		const urlSearch = params.get('s') ?? '';
-		const urlTags = params.getAll('tag');
-		
-		if (urlSearch !== searchTerm) {
-			searchTerm = urlSearch;
-			displayedTerm = urlSearch;
-		}
+		const urlTags = $page.url.searchParams.getAll('tag');
 		if (JSON.stringify(urlTags) !== JSON.stringify(selectedTags)) {
 			selectedTags = urlTags;
 		}
@@ -44,7 +38,7 @@
 	function syncUrlWithSearch() {
 		if (!browser) return;
 
-		const url = new URL(window.location.href);
+		const url = new URL($page.url);
 		url.pathname = '/announcements';
 
 		if (searchTerm.trim()) {
@@ -53,13 +47,7 @@
 			url.searchParams.delete('s');
 		}
 
-		// Keep existing tag params
-		const currentTags = url.searchParams.getAll('tag');
-		if (currentTags.length > 0 || searchTerm.trim()) {
-			window.history.replaceState({}, '', url.pathname + url.search);
-		} else {
-			window.history.replaceState({}, '', url.pathname);
-		}
+		replaceState(url.pathname + url.search, {});
 	}
 
 	let announcements = $derived(announcementsQuery.data ?? []);
@@ -137,6 +125,10 @@
 					bind:value={searchTerm}
 					placeholder="Search for announcements"
 					onkeyup={debouncedUpdate}
+					onclear={() => {
+						displayedTerm = '';
+						syncUrlWithSearch();
+					}}
 				/>
 			</div>
 		</div>
@@ -153,11 +145,13 @@
 
 		{#if filteredActive.length > 0}
 			<div class="cards">
-				{#each filteredActive as item (item.id)}
-					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<AnnouncementCard announcement={item} />
-					</div>
-				{/each}
+				{#key filteredActive.length}
+					{#each filteredActive as item (item.id)}
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+							<AnnouncementCard announcement={item} />
+						</div>
+					{/each}
+				{/key}
 			</div>
 		{:else if announcementsQuery.error && announcements.length === 0}
 			<p class="empty-state">Failed to load announcements. Please try again later.</p>
@@ -184,9 +178,11 @@
 					in:slide={{ easing: quintIn, duration: 250 }}
 					out:slide={{ easing: quintOut, duration: 250 }}
 				>
-					{#each filteredArchived as item (item.id)}
-						<AnnouncementCard announcement={item} />
-					{/each}
+					{#key filteredArchived.length}
+						{#each filteredArchived as item (item.id)}
+							<AnnouncementCard announcement={item} />
+						{/each}
+					{/key}
 				</div>
 			{/if}
 		{/if}
