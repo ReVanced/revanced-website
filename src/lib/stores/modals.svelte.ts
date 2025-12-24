@@ -1,8 +1,30 @@
 import { SvelteMap } from 'svelte/reactivity';
+import { browser } from '$app/environment';
 
 class ModalStack {
 	private stack = $state<string[]>([]);
 	private modals = new SvelteMap<string, () => void>();
+	private keydownHandler: ((e: KeyboardEvent) => void) | null = null;
+
+	constructor() {
+		if (browser) {
+			this.setupKeyboardHandler();
+		}
+	}
+
+	private setupKeyboardHandler() {
+		this.keydownHandler = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' || e.key === 'Esc') {
+				if (this.stack.length > 0) {
+					e.preventDefault();
+					e.stopPropagation();
+					this.closeTop();
+				}
+			}
+		};
+		
+		document.addEventListener('keydown', this.keydownHandler);
+	}
 
 	push(id: string, closeCallback: () => void) {
 		if (!this.modals.has(id)) {
@@ -31,6 +53,10 @@ class ModalStack {
 
 	getStack(): readonly string[] {
 		return this.stack;
+	}
+
+	hasModals(): boolean {
+		return this.stack.length > 0;
 	}
 }
 
