@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { WithChildren } from '$types';
+	import { JsonLd } from 'svelte-meta-tags';
 
 	type Schema = Record<string, unknown>;
 
@@ -31,7 +32,7 @@
 
 	{#if schemas}
 		{#each schemas as schema}
-			{@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
+			<JsonLd {schema} />
 		{/each}
 	{/if}
 </svelte:head>
