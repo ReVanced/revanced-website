@@ -2,7 +2,7 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { TeamMember } from '$api';
-	import IconVerified from 'virtual:icons/material-symbols/verified';
+	import IconVerified from 'svelte-material-icons/CheckDecagramOutline.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
 
 	type Props = {

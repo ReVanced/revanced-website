@@ -5,7 +5,7 @@
 	import Page from '$components/molecules/Page.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
-	import Download from 'virtual:icons/material-symbols/download';
+	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
 	import { managerQuery, apiStatus } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
 

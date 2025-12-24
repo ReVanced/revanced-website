@@ -3,8 +3,8 @@
 	import Gallery from '$components/molecules/Gallery.svelte';
 	import { announcementTagsQuery } from '$stores';
 	import { isValidUrl } from '$lib/utils/url';
-	import IconAdd from 'virtual:icons/material-symbols/add';
-	import IconDelete from 'virtual:icons/material-symbols/delete-outline';
+	import IconAdd from 'svelte-material-icons/Plus.svelte';
+	import IconDelete from 'svelte-material-icons/DeleteOutline.svelte';
 
 	type Props = {
 		field: 'tags' | 'attachments';
@@ -102,7 +102,7 @@
 					onblur={handleAddTag}
 				/>
 				<span class="add-icon">
-					<IconAdd />
+					<IconAdd size={18} />
 				</span>
 			</div>
 		</div>
@@ -126,7 +126,7 @@
 							onclick={() => removeAttachment(index)}
 							aria-label="Remove attachment"
 						>
-							<IconDelete />
+							<IconDelete size={20} />
 						</button>
 					</div>
 				{/each}
@@ -142,7 +142,7 @@
 					onblur={addAttachment}
 				/>
 				<span class="add-icon">
-					<IconAdd />
+					<IconAdd size={18} />
 				</span>
 			</div>
 		</div>

@@ -26,7 +26,7 @@
 	import { isArchived, toSlug } from '$lib/utils/announcement';
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import Gallery from '$components/molecules/Gallery.svelte';
-	import IconArchive from 'virtual:icons/material-symbols/inventory-2-outline';
+	import IconArchive from 'svelte-material-icons/ArchiveArrowDownOutline.svelte';
 	import AdminButtons from './AdminButtons.svelte';
 	import EditableHeader from './EditableHeader.svelte';
 	import EditableContent from './EditableContent.svelte';
@@ -315,7 +315,7 @@
 							/>
 							{#if archivedAtInput && isPreviewing}
 								<span class="archived-badge" title="Archived">
-									<IconArchive />
+									<IconArchive size={20} />
 								</span>
 							{/if}
 						</h1>
@@ -324,7 +324,7 @@
 							{announcement?.title}
 							{#if isArchived(announcement?.archived_at ?? null)}
 								<span class="archived-badge" title="Archived">
-									<IconArchive />
+									<IconArchive size={20} />
 								</span>
 							{/if}
 						</h1>

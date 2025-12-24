@@ -2,8 +2,8 @@
 	import { announcementsQuery, readAnnouncements } from '$stores';
 	import { goto } from '$app/navigation';
 	import Button from '$components/atoms/Button.svelte';
-	import ArrowRight from 'virtual:icons/material-symbols/arrow-right-alt';
-	import CloseIcon from 'virtual:icons/material-symbols/close';
+	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
+	import CloseIcon from 'svelte-material-icons/Close.svelte';
 
 	const latestUnreadAnnouncement = $derived.by(() => {
 		const announcements = announcementsQuery.data ?? [];
@@ -43,14 +43,14 @@
 		</div>
 		<div class="actions">
 			<button class="dismiss" onclick={handleDismiss} aria-label="Dismiss announcement">
-				<CloseIcon />
+				<CloseIcon size={24} />
 			</button>
 			<Button
 				variant={bannerLevel === 'caution' ? 'onDangerBackground' : 'default'}
 				onclick={handleClick}
 			>
 				<span class="read-more-text">Read more</span>
-				<ArrowRight />
+				<ArrowRight size={20} />
 			</Button>
 		</div>
 	</div>

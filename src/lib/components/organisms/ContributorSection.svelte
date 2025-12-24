@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Contributor } from '$api';
 	import ContributorCard from '$components/molecules/ContributorCard.svelte';
-	import IconChevronUp from 'virtual:icons/material-symbols/keyboard-arrow-up';
+	import IconChevronUp from 'svelte-material-icons/ChevronUp.svelte';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 
@@ -41,7 +41,7 @@
 			<h4>{name}</h4>
 		</a>
 		<div class="arrow" class:rotated={!expanded}>
-			<IconChevronUp />
+			<IconChevronUp size={24} />
 		</div>
 	</button>
 

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 	import { relativeTime } from '$lib/utils/relativeTime';
-	import IconArrowRight from 'virtual:icons/material-symbols/arrow-right-alt';
+	import IconArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import moment from 'moment';
 
 	type Props = {
@@ -102,7 +102,7 @@
 				class="date-input"
 			/>
 			{#if archivedAtInput}
-				<IconArrowRight />
+				<IconArrowRight size={16} />
 				<input
 					type="datetime-local"
 					max="9999-12-31T23:59"
@@ -115,7 +115,7 @@
 		<span class="date-display">
 			{relativeTime(displayCreatedAt)}
 			{#if displayArchivedAt}
-				<IconArrowRight />
+				<IconArrowRight size={16} />
 				{relativeTime(displayArchivedAt)}
 			{/if}
 		</span>

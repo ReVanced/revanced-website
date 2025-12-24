@@ -5,7 +5,7 @@ import { modalsStack } from '$stores/modals.svelte';
 import { browser } from '$app/environment';
 import { fade } from 'svelte/transition';
 import { quadInOut } from 'svelte/easing';
-import IconArrowLeft from 'virtual:icons/material-symbols/arrow-back';
+import IconArrowLeft from 'svelte-material-icons/ArrowLeft.svelte';
 
 type Props = {
 id?: string;
@@ -85,7 +85,7 @@ transition:fade={{ easing: quadInOut, duration: 150 }}
 <div class="title" class:hasIcon={icon}>
 {#if fullscreen}
 <button id="back-button" type="button" onclick={handleClose}>
-<IconArrowLeft style="width: 24px; height: 24px; color: var(--surface-six);" />
+<IconArrowLeft size={24} color="var(--surface-six)" />
 </button>
 {/if}
 {#if icon}

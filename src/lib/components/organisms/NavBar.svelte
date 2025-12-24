@@ -5,8 +5,8 @@
 	import { horizontalSlide } from '$lib/utils/horizontalSlide';
 
 	import logo from '$assets/icons/logo.svg';
-	import Notifications from 'virtual:icons/material-symbols/campaign';
-	import Settings from 'virtual:icons/material-symbols/settings';
+	import Notifications from 'svelte-material-icons/Bullhorn.svelte';
+	import Settings from 'svelte-material-icons/Cog.svelte';
 	import SettingsDialog from '$components/molecules/SettingsDialog.svelte';
 	import LoginDialog from '$components/molecules/LoginDialog.svelte';
 	import { auth } from '$stores';
@@ -118,7 +118,7 @@
 				class="rounded nav-button unselectable desktop-only"
 				class:active={page.url.pathname === '/announcements'}
 			>
-				<Notifications width="24" height="24" />
+				<Notifications size={24} />
 			</a>
 			<button
 				type="button"
@@ -126,7 +126,7 @@
 				class:selected={settingsOpen}
 				onclick={() => (settingsOpen = true)}
 			>
-				<Settings width="24" height="24" />
+				<Settings size={24} />
 			</button>
 		</div>
 	</div>

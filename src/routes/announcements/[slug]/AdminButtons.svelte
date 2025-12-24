@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Button from '$components/atoms/Button.svelte';
-	import IconDelete from 'virtual:icons/material-symbols/delete-outline';
-	import IconEdit from 'virtual:icons/material-symbols/edit-outline';
-	import IconArchive from 'virtual:icons/material-symbols/inventory-2-outline';
-	import IconUnarchive from 'virtual:icons/material-symbols/unarchive-outline';
-	import IconClose from 'virtual:icons/material-symbols/close';
-	import IconCheck from 'virtual:icons/material-symbols/check';
-	import IconPreview from 'virtual:icons/material-symbols/visibility-outline';
-	import IconPreviewOff from 'virtual:icons/material-symbols/visibility-off-outline';
+	import IconDelete from 'svelte-material-icons/DeleteOutline.svelte';
+	import IconEdit from 'svelte-material-icons/PencilOutline.svelte';
+	import IconArchive from 'svelte-material-icons/ArchiveArrowDownOutline.svelte';
+	import IconUnarchive from 'svelte-material-icons/ArchiveArrowUpOutline.svelte';
+	import IconClose from 'svelte-material-icons/Close.svelte';
+	import IconCheck from 'svelte-material-icons/Check.svelte';
+	import IconPreview from 'svelte-material-icons/EyeOutline.svelte';
+	import IconPreviewOff from 'svelte-material-icons/EyeOffOutline.svelte';
 
 	type Props = {
 		isEditing: boolean;

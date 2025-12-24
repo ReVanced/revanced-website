@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 	import type { WithOptionalChildren } from '$types';
-	import IconCheck from 'virtual:icons/material-symbols/check';
-	import IconChevronDown from 'virtual:icons/material-symbols/keyboard-arrow-down';
+	import IconCheck from 'svelte-material-icons/Check.svelte';
+	import IconChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 
 	type Props = {
@@ -23,13 +23,13 @@
 
 <button class:selected {...rest}>
 	{#if check && selected}
-		<IconCheck class="chip-icon" />
+		<IconCheck size={18} class="chip-icon" />
 	{/if}
 	{#if children}
 		{@render children()}
 	{/if}
 	{#if dropdown}
-		<IconChevronDown class="chip-icon dropdown-icon" />
+		<IconChevronDown size={18} class="chip-icon dropdown-icon" />
 	{/if}
 </button>
 

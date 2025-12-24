@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CryptoWallet } from '$api';
-	import IconChevronRight from 'virtual:icons/material-symbols/chevron-right';
+	import IconChevronRight from 'svelte-material-icons/ChevronRight.svelte';
 
 	const cryptoIcons = import.meta.glob('$assets/donate/crypto/*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 	import fallbackIcon from '$assets/donate/crypto/fallback.svg';
@@ -27,7 +27,7 @@
 					<span>{wallet.network} ({wallet.currency_code})</span>
 				</div>
 				<div class="arrow">
-					<IconChevronRight />
+					<IconChevronRight size={24} />
 				</div>
 			</button>
 		{/each}

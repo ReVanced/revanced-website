@@ -1,12 +1,15 @@
 <script lang="ts">
 	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
 	import type { WithOptionalChildren } from '$types';
+	import type { ComponentType } from 'svelte';
 	import ToolTip from './ToolTip.svelte';
 
 	type Props = {
 		buttonStyle?: 'filled' | 'tonal' | 'text' | 'outlined' | 'icon';
 		variant?: 'default' | 'danger' | 'onDangerBackground' | 'onInfoBackground';
-		icon?: typeof import('virtual:icons/*').default;
+		icon?: ComponentType;
+		iconSize?: number;
+		iconColor?: string;
 		href?: string;
 		target?: string;
 		disabled?: boolean;
@@ -18,7 +21,9 @@
 	let {
 		buttonStyle = 'filled',
 		variant = 'default',
-		icon: Icon,
+		icon,
+		iconSize = 20,
+		iconColor = 'currentColor',
 		href,
 		target,
 		disabled = false,
@@ -30,11 +35,13 @@
 
 	let hasChildren = $derived(children !== undefined);
 	let computedStyle = $derived(hasChildren ? buttonStyle : 'icon');
+
+	const Icon = $derived(icon);
 </script>
 
 {#snippet buttonContent()}
 	{#if Icon}
-		<Icon />
+		<Icon size={iconSize} color={iconColor} />
 	{/if}
 	{#if children}
 		<span class="content">{@render children()}</span>

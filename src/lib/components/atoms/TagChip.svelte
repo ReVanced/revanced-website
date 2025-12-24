@@ -1,5 +1,5 @@
 <script lang="ts">
-	import IconCheck from 'virtual:icons/material-symbols/check';
+	import IconCheck from 'svelte-material-icons/Check.svelte';
 
 	type Props = {
 		tag: string;
@@ -32,7 +32,7 @@
 >
 	{#if selected && clickable}
 		<span class="check-icon">
-			<IconCheck />
+			<IconCheck size={16} />
 		</span>
 	{/if}
 	{tag}

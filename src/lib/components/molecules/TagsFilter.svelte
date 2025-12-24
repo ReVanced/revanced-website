@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import Button from '$components/atoms/Button.svelte';
-	import IconChevronDown from 'virtual:icons/material-symbols/keyboard-arrow-down';
+	import IconChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	type Props = {
 		tags: string[];
@@ -57,7 +57,7 @@
 		<li>
 			<Button buttonStyle="text" onclick={toggleExpand}>
 				<div class="expand-arrow" class:expanded={showAllTags}>
-					<IconChevronDown />
+					<IconChevronDown size={20} />
 				</div>
 			</Button>
 		</li>

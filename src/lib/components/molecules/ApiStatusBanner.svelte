@@ -2,7 +2,7 @@
 	import { apiStatus } from '$stores';
 	import { getStatusUrl, getContactEmail } from '$api';
 	import Button from '$components/atoms/Button.svelte';
-	import ArrowRight from 'virtual:icons/material-symbols/arrow-right-alt';
+	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 
 	const statusUrl = getStatusUrl();
 	const email = getContactEmail();
@@ -24,7 +24,7 @@
 				target="_blank"
 			>
 				Check status
-				<span class="arrow-icon"><ArrowRight /></span>
+				<span class="arrow-icon"><ArrowRight size={20} /></span>
 			</Button>
 		</div>
 	</div>

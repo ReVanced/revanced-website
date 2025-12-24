@@ -6,8 +6,8 @@
 	import WaveBackground from '$components/organisms/WaveBackground.svelte';
 	import { aboutQuery } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
-	import Download from 'virtual:icons/material-symbols/download';
-	import Description from 'virtual:icons/material-symbols/description-outline';
+	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
+	import Description from 'svelte-material-icons/FileDocumentOutline.svelte';
 
 	let showSocials = $state(true);
 	let rafId: number | null = null;

@@ -3,7 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 	import type { Patch } from '$api';
 	import Button from '$components/atoms/Button.svelte';
-	import IconChevronDown from 'virtual:icons/material-symbols/keyboard-arrow-down';
+	import IconChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
 	type Props = {
 		patch: Patch;
@@ -49,7 +49,7 @@
 		</div>
 		{#if hasPatchOptions}
 			<div class="expand-arrow">
-				<IconChevronDown />
+				<IconChevronDown size={24} />
 			</div>
 		{/if}
 	</div>

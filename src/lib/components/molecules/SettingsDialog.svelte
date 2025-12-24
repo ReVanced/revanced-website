@@ -2,8 +2,8 @@
 	import { browser } from '$app/environment';
 	import Modal from '$components/molecules/Modal.svelte';
 	import Button from '$components/atoms/Button.svelte';
-	import Settings from 'virtual:icons/material-symbols/settings';
-	import Reset from 'virtual:icons/material-symbols/refresh';
+	import Settings from 'svelte-material-icons/Cog.svelte';
+	import Reset from 'svelte-material-icons/Replay.svelte';
 	import {
 		DEFAULT_API_URL,
 		getDisplayApiUrl,
@@ -83,7 +83,7 @@
 <Modal bind:open>
 	<div class="settings-content">
 		<div class="settings-icon">
-			<Settings width="24" height="24" />
+			<Settings size={24} />
 		</div>
 		<h2 class="settings-title">Settings</h2>
 		<p class="settings-description">Configure the API for this website.</p>
@@ -101,7 +101,7 @@
 				onclick={handleResetInput}
 				title="Reset to default API URL"
 			>
-				<Reset width="20" height="20" />
+				<Reset size={20} />
 			</button>
 		</div>
 		{#if urlError}

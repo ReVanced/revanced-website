@@ -14,8 +14,8 @@
 	import { aboutQuery, teamQuery } from '$stores';
 	import type { CryptoWallet } from '$api';
 
-	import IconCircles from 'virtual:icons/material-symbols/circles-ext';
-	import IconWallet from 'virtual:icons/material-symbols/account-balance-wallet-outline';
+	import IconCircles from 'svelte-material-icons/CircleMultipleOutline.svelte';
+	import IconWallet from 'svelte-material-icons/WalletOutline.svelte';
 
 	import openCollectiveImg from '$assets/donate/card-images/Open Collective.webp';
 	import githubSponsorsImg from '$assets/donate/card-images/GitHub Sponsors.webp';
@@ -173,7 +173,7 @@
 
 <Modal bind:open={cryptoModalOpen} title="Cryptocurrencies">
 	{#snippet icon()}
-		<IconCircles style="width: 32px; height: 32px; color: var(--surface-six);" />
+		<IconCircles size={32} color="var(--surface-six)" />
 	{/snippet}
 	<CryptoWalletList wallets={cryptoWallets} onSelect={openWalletModal} />
 	{#snippet buttons()}
@@ -183,7 +183,7 @@
 
 <Modal bind:open={walletModalOpen} title="{selectedWallet?.currency_code ?? ''} Wallet" onclose={closeWalletModal}>
 	{#snippet icon()}
-		<IconWallet style="width: 32px; height: 32px; color: var(--surface-six);" />
+		<IconWallet size={32} color="var(--surface-six)" />
 	{/snippet}
 	{#if selectedWallet}
 		<div class="wallet-details">

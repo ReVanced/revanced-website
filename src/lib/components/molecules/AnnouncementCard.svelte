@@ -5,7 +5,7 @@
 	import { readAnnouncements, prefetchAnnouncementById } from '$stores';
 	import { relativeTime } from '$lib/utils/relativeTime';
 	import { isArchived, buildAnnouncementPath } from '$lib/utils/announcement';
-	import IconArchive from 'virtual:icons/material-symbols/archive-outline';
+	import IconArchive from 'svelte-material-icons/ArchiveOutline.svelte';
 
 	type Props = {
 		announcement: Announcement;
@@ -59,7 +59,7 @@
 					{createdTime}
 					{#if archived}
 						<ToolTip content="This announcement was archived {archivedTime}">
-							<IconArchive />
+							<IconArchive size={18} />
 						</ToolTip>
 					{/if}
 				</span>

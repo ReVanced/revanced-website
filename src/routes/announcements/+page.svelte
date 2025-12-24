@@ -10,8 +10,8 @@
 	import Button from '$components/atoms/Button.svelte';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import AnnouncementCard from '$components/molecules/AnnouncementCard.svelte';
-	import IconChevron from 'virtual:icons/material-symbols/keyboard-arrow-down';
-	import IconAdd from 'virtual:icons/material-symbols/add';
+	import IconChevron from 'svelte-material-icons/ChevronDown.svelte';
+	import IconAdd from 'svelte-material-icons/Plus.svelte';
 	import { announcementsQuery, announcementTagsQuery, readAnnouncements, auth } from '$stores';
 	import { debounce } from '$lib/utils/debounce';
 	import { isArchived } from '$lib/utils/announcement';
@@ -175,7 +175,7 @@
 			>
 				<h4>Archive</h4>
 				<div class="arrow" class:expanded={archiveExpanded} style="color: var(--surface-six);">
-					<IconChevron />
+					<IconChevron size={24} />
 				</div>
 			</button>
 

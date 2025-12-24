@@ -2,8 +2,8 @@
 	import { fade } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import IconSearch from 'virtual:icons/material-symbols/search';
-	import IconClose from 'virtual:icons/material-symbols/close';
+	import IconSearch from 'svelte-material-icons/Magnify.svelte';
+	import IconClose from 'svelte-material-icons/Close.svelte';
 
 	type Props = {
 		value?: string;
@@ -26,7 +26,7 @@
 
 <div class="search-container">
 	<div class="search-icon">
-		<IconSearch />
+		<IconSearch size={20} />
 	</div>
 	{#if value}
 		<button
@@ -36,7 +36,7 @@
 			aria-label="Clear search"
 			transition:fade={{ easing: quintOut, duration: 250 }}
 		>
-			<IconClose />
+			<IconClose size={20} />
 		</button>
 	{/if}
 	<input
