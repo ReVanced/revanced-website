@@ -9,24 +9,40 @@
 	import Download from 'virtual:icons/material-symbols/download';
 	import Description from 'virtual:icons/material-symbols/description-outline';
 
-	let socials = $derived(aboutQuery.data?.socials ?? []);
-	let filteredSocials = $derived(socials.filter((s) => s.name !== 'Website'));
-	
-	let bottomVisibility = $state(true);
+	let showSocials = $state(true);
+	let rafId: number | null = null;
 
-	function checkVisibility() {
-		const footerSocials = document.getElementById('footer-socials');
-		if (footerSocials) {
-			const rect = footerSocials.getBoundingClientRect();
-			bottomVisibility = rect.top > window.innerHeight;
-		}
+	let socialLinks = $derived(
+		(aboutQuery.data?.socials ?? []).filter((item) => item.name !== 'Website')
+	);
+
+	function updateSocialsVisibility() {
+		if (rafId !== null) return;
+		
+		rafId = requestAnimationFrame(() => {
+			rafId = null;
+			const footerSection = document.getElementById('footer-socials');
+			if (!footerSection) {
+				showSocials = true;
+				return;
+			}
+			
+			const bounds = footerSection.getBoundingClientRect();
+			showSocials = bounds.top > window.innerHeight + 50;
+		});
 	}
 
 	onMount(() => {
-		checkVisibility();
+		updateSocialsVisibility();
+		
+		return () => {
+			if (rafId !== null) {
+				cancelAnimationFrame(rafId);
+			}
+		};
 	});
 
-	const schemas = [
+	const structuredData = [
 		{
 			'@context': 'https://schema.org',
 			'@type': 'Organization',
@@ -134,255 +150,167 @@
 			}
 		}
 	];
+
+	let socialsOpacity = $derived(showSocials ? 1 : 0);
 </script>
 
 <svelte:head>
-	{#each schemas as schema}
-		{@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
+	{#each structuredData as data}
+		{@html `<script type="application/ld+json">${JSON.stringify(data)}</script>`}
 	{/each}
 </svelte:head>
 
-<svelte:window onscroll={checkVisibility} onresize={checkVisibility} />
+<svelte:window onscroll={updateSocialsVisibility} onresize={updateSocialsVisibility} />
 
 <Page>
-	<main class:visibility={!bottomVisibility}>
-		<section class="hero">
-			<div class="hero-content">
-				<h1>
-					Continuing the<br />legacy of <span class="highlight">Vanced.</span>
-				</h1>
-				<p class="tagline">
-					Customize your mobile experience through ReVanced<br />
-					by applying patches to your applications.
+	<main class:collapsed={!showSocials}>
+		<div class="landing-wrapper">
+			<article class="intro">
+				<h1>Continuing the <br />legacy of <span class="accent">Vanced.</span></h1>
+				<p class="description">
+					Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
 				</p>
 
-				<div class="cta-buttons">
-					<Button buttonStyle="filled" icon={Download} href="/download">
-						Download
-					</Button>
-					<Button buttonStyle="tonal" icon={Description} href="/patches">
-						View patches
-					</Button>
-				</div>
+				<nav class="actions">
+					<div class="primary-actions btn-row">
+						<Button buttonStyle="filled" icon={Download} href="/download">Download</Button>
+						<Button buttonStyle="tonal" icon={Description} href="/patches">View patches</Button>
+					</div>
 
-				<div 
-					class="social-buttons"
-					class:hidden={!bottomVisibility}
-				>
-					{#if filteredSocials.length > 0}
-						{#each filteredSocials as social (social.name)}
-							<SocialButton {social} />
-						{/each}
-					{/if}
-				</div>
-			</div>
+					<div class="external-links btn-row" style="opacity: {socialsOpacity}">
+						{#key socialLinks.length}
+							{#each socialLinks as link (link.name)}
+								<SocialButton social={link} />
+							{/each}
+						{/key}
+					</div>
+				</nav>
+			</article>
 
-			<div class="phone-showcase">
-				<div class="phone-frame">
-					<img src={managerImg} alt="ReVanced Manager" />
-				</div>
-			</div>
-		</section>
-
-		<WaveBackground visibility={bottomVisibility} />
+			<aside class="preview">
+				<figure class="device-frame">
+					<img src={managerImg} alt="Screenshot of ReVanced Manager" />
+				</figure>
+			</aside>
+		</div>
 	</main>
+	<WaveBackground visibility={showSocials} />
 </Page>
 
 <style>
 	main {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
 		min-height: max(100vh, 600px);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		position: relative;
 		overflow: hidden;
-		padding: 5rem 2rem;
+		padding-block: 5rem;
 	}
 
-
-	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
-		main {
-			min-height: initial;
-		}
+	main.collapsed {
+		min-height: auto;
 	}
 
-	@media (max-width: 335px) {
-		main {
-			padding: 2rem 0 !important;
-		}
-	}
-
-	/* Hero section */
-	.hero {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 4rem;
-		width: 100%;
-		max-width: 1200px;
-	}
-
-	.hero-content {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-		flex: 1;
-		max-width: 550px;
-		min-height: 340px;
-		min-height: 340px;
-	}
-
-	.hero-content h1 {
-		font-size: clamp(2.5rem, 5vw, 3.5rem);
-		line-height: 1.1;
-		font-weight: 700;
-		color: var(--text-one);
-		letter-spacing: -0.02em;
-	}
-
-	.highlight {
-		color: var(--primary);
-		position: relative;
-	}
-
-	.tagline {
-		font-size: clamp(1rem, 2vw, 1.15rem);
-		line-height: 1.7;
-		color: var(--text-four);
-	}
-
-	.cta-buttons {
+	.landing-wrapper {
 		display: flex;
 		gap: 1rem;
-		margin-top: 0.5rem;
+		width: min(87%, 80rem);
+		align-items: flex-start;
+		justify-content: space-evenly;
 	}
 
-	/* Phone showcase */
-	.phone-showcase {
-		position: relative;
-		flex-shrink: 0;
+	.intro {
+		display: flex;
+		flex-direction: column;
+		row-gap: 1rem;
 	}
 
-	@media (max-width: 1100px) {
-		.phone-showcase {
-			display: none;
-		}
+	.intro h1 {
+		color: var(--text-one);
 	}
 
-	.phone-frame {
-		background: var(--surface-seven);
-		border-radius: 2rem;
-		padding: 0.5rem;
-		animation: phone-float 6s ease-in-out infinite;
+	.accent {
+		color: var(--primary);
 	}
 
-	@keyframes phone-float {
-		0%, 100% {
-			transform: translateY(0);
-		}
-		50% {
-			transform: translateY(-12px);
-		}
+	.actions {
+		display: flex;
+		flex-direction: column;
+		row-gap: 2.5rem;
 	}
 
-	.phone-frame img {
-		display: block;
-		height: clamp(400px, 60vh, 550px);
-		width: auto;
-		border-radius: 1.5rem;
-		object-fit: contain;
-	}
-
-	/* Social buttons */
-	.social-buttons {
+	.btn-row {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem;
-		margin-top: 0.5rem;
+		column-gap: 1rem;
+		row-gap: 1rem;
+		user-select: none;
+	}
+
+	.external-links {
 		max-width: 30rem;
-		opacity: 1;
-		visibility: visible;
-		transition: opacity 0.25s var(--bezier-one);
+		position: absolute;
+		bottom: 1rem;
+		transition: opacity 0.1s var(--bezier-one);
 	}
 
-	.social-buttons.hidden {
-		opacity: 0;
-		visibility: hidden;
-		pointer-events: none;
+	.preview {
+		z-index: 0;
 	}
 
-	@media (min-width: 901px) and (min-height: 601px) {
-		.social-buttons:not(.hidden) {
-			position: absolute;
-			bottom: 1rem;
+	.device-frame {
+		height: max(100vh, 600px);
+		margin: 0;
+		padding: 0.5rem;
+		border-radius: 1.75rem;
+		background: var(--surface-seven);
+		user-select: none;
+	}
+
+	.device-frame img {
+		height: 100%;
+		border-radius: 1.75rem;
+	}
+
+	@media screen and (min-width: 1100px) {
+		.intro {
+			padding-top: 10vh;
 		}
 	}
 
-	@media (max-width: 450px) {
-		.social-buttons:not(.hidden) {
-			justify-content: center;
-			left: 0;
-		}
-	}
-
-	@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
-		.social-buttons {
-			position: static !important;
-			opacity: 1 !important;
-			transform: none !important;
-		}
-	}
-
-	/* Responsive */
-	@media (max-width: 900px) {
-		.hero {
-			flex-direction: column;
-			text-align: center;
-			gap: 3rem;
-		}
-
-		.hero-content {
-			align-items: center;
-		}
-
-		.tagline br {
+	@media screen and (max-width: 1100px) {
+		.preview {
 			display: none;
 		}
+	}
 
-		.phone-frame img {
-			height: clamp(300px, 45vh, 400px);
+	@media screen and (max-width: 450px) {
+		.primary-actions {
+			flex-direction: column;
 		}
 
-		.cta-buttons {
-			justify-content: center;
-		}
-
-		.social-buttons {
+		.external-links {
+			left: 0;
 			justify-content: center;
 		}
 	}
 
-	@media (max-width: 480px) {
+
+	@media screen and (max-width: 335px) {
 		main {
-			padding: 1.5rem;
-			padding-top: 0rem;
+			padding-block: 2rem !important;
+		}
+	}
+
+	@media screen and (max-height: 600px), 
+	       screen and (max-width: 450px) and (max-height: 780px) {
+		main {
+			min-height: auto;
 		}
 
-		.cta-buttons {
-			flex-direction: column;
-			width: 100%;
-		}
-
-		.cta-buttons :global(a),
-		.cta-buttons :global(button) {
-			width: 100%;
-		}
-}
-
-	@media (max-height: 700px) {
-		.phone-frame img {
-			height: clamp(250px, 40vh, 350px);
+		.external-links {
+			position: static;
+			opacity: 1 !important;
 		}
 	}
 </style>
