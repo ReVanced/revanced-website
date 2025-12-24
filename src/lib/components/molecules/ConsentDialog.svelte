@@ -82,7 +82,7 @@
 		position: fixed;
 		inset: 0;
 		z-index: var(--z-modal);
-		background-color: rgba(0, 0, 0, 0.6);
+		background-color: rgba(0, 0, 0, 0.5);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -90,18 +90,17 @@
 	}
 
 	.dialog {
-		background-color: var(--surface-eight);
-		border: 1px solid var(--border);
-		border-radius: 1.5rem;
-		padding: 2rem;
-		max-width: 28rem;
-		width: 100%;
+		background-color: var(--surface-seven);
+		border-radius: 26px;
+		padding: 32px;
+		width: min(85%, 425px);
 	}
 
 	h2 {
 		margin: 0 0 1rem;
-		font-size: 1.4rem;
-		color: var(--text-one);
+		font-size: 1.25rem;
+		color: var(--secondary);
+		font-weight: 600;
 	}
 
 	p {
