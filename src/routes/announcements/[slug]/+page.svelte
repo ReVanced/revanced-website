@@ -81,11 +81,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{announcement?.title ?? 'Announcement'} - ReVanced</title>
-	<meta name="description" content={announcement?.content?.slice(0, 160) ?? 'ReVanced announcement'} />
-</svelte:head>
-
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	{#if loading}
 		<div class="loading-state">
