@@ -9,8 +9,6 @@ export const DEFAULT_API_URL = ENV_API_URL || 'https://api.revanced.app';
 export const DEFAULT_STATUS_URL = ENV_STATUS_URL || 'https://status.revanced.app';
 export const DEFAULT_EMAIL = ENV_EMAIL || 'contact@revanced.app';
 
-const DEV_PROXY_URL = '/api/revanced';
-// to be removed in production
 const API_VERSION = 'v4';
 const URL_KEY = 'revanced_api_url';
 const STATUS_KEY = 'revanced_status_url';
@@ -60,9 +58,6 @@ export function getApiBaseUrl(): string {
 	if (browser) {
 		const customUrl = localStorage.getItem(URL_KEY);
 		if (customUrl) return customUrl;
-		
-		// In development, use proxy to bypass CORS
-		if (dev) return DEV_PROXY_URL;
 	}
 	return DEFAULT_API_URL;
 }
