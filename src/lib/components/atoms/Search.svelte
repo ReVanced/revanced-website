@@ -8,16 +8,19 @@
 	type Props = {
 		value?: string;
 		placeholder?: string;
+		onclear?: () => void;
 	} & Omit<HTMLInputAttributes, 'value' | 'type' | 'placeholder'>;
 
 	let {
 		value = $bindable(''),
 		placeholder = 'Search...',
+		onclear,
 		...rest
 	}: Props = $props();
 
 	function clear() {
 		value = '';
+		onclear?.();
 	}
 </script>
 
@@ -95,9 +98,9 @@
 		font-size: 0.92rem;
 		font-family: inherit;
 		border-radius: 100px;
-		border: none;
+		border: none !important;
 		background-color: var(--surface-nine);
-		outline: none;
+		outline: none !important;
 		transition: background-color 0.3s var(--bezier-one);
 	}
 
