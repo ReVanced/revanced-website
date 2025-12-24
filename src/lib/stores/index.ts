@@ -35,3 +35,5 @@ export {
 export { readAnnouncements } from './readAnnouncements.svelte';
 
 export { auth } from './auth.svelte';
+
+export { modalsStack } from './modals.svelte';

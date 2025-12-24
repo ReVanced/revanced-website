@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { fade } from 'svelte/transition';
+	import { expoOut } from 'svelte/easing';
+	import { horizontalSlide } from '$lib/utils/horizontalSlide';
 
 	import logo from '$assets/icons/logo.svg';
 	import Notifications from 'virtual:icons/material-symbols/campaign';
@@ -7,6 +10,12 @@
 	import SettingsDialog from '$components/molecules/SettingsDialog.svelte';
 	import LoginDialog from '$components/molecules/LoginDialog.svelte';
 	import { auth } from '$stores';
+
+	type Props = {
+		inert?: boolean;
+	};
+
+	let { inert = false }: Props = $props();
 
 	const navItems = [
 		{ label: 'Home', href: '/' },
@@ -44,7 +53,7 @@
 
 <a class="skip-nav" href="#main-content">Skip navigation</a>
 
-<nav class:scrolled>
+<nav class:scrolled inert={inert ? true : undefined}>
 	<button
 		type="button"
 		class="menu-btn mobile-only"
@@ -70,14 +79,22 @@
 			aria-label="Close menu"
 			onclick={() => (menuOpen = false)}
 			onkeydown={(e) => e.key === 'Enter' && (menuOpen = false)}
+			transition:fade={{ duration: 350 }}
 		></div>
 	{/if}
 
-	<div class="nav-drawer" class:open={menuOpen}>
+	{#key menuOpen}
+	<div 
+		class="nav-drawer" 
+		class:open={menuOpen}
+		class:desktop-only={!menuOpen}
+		transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
+	>
 		<div class="nav-group main-nav">
 			{#each navItems as { href, label }}
 				<a 
-					{href} 
+					{href}
+					data-sveltekit-preload-data="hover"
 					class="rounded nav-button unselectable" 
 					class:active={page.url.pathname === href}
 				>
@@ -86,6 +103,7 @@
 			{/each}
 			<a
 				href="/announcements"
+				data-sveltekit-preload-data="hover"
 				class="rounded nav-button unselectable mobile-only"
 				class:active={page.url.pathname === '/announcements'}
 			>
@@ -96,6 +114,7 @@
 		<div class="nav-group secondary-nav">
 			<a
 				href="/announcements"
+				data-sveltekit-preload-data="hover"
 				class="rounded nav-button unselectable desktop-only"
 				class:active={page.url.pathname === '/announcements'}
 			>
@@ -104,12 +123,14 @@
 			<button
 				type="button"
 				class="rounded nav-button unselectable settings-btn"
+				class:selected={settingsOpen}
 				onclick={() => (settingsOpen = true)}
 			>
 				<Settings width="24" height="24" />
 			</button>
 		</div>
 	</div>
+	{/key}
 </nav>
 
 <SettingsDialog bind:open={settingsOpen} onLoginRequest={handleLoginRequest} />
@@ -223,6 +244,15 @@
 		background: transparent;
 		border: none;
 		font-family: inherit;
+	}
+
+	.settings-btn:hover {
+		background-color: var(--surface-three);
+	}
+
+	.settings-btn.selected {
+		background-color: var(--tertiary);
+		color: var(--primary);
 	}
 
 	.logo {
@@ -353,13 +383,11 @@
 			align-items: flex-start;
 			padding: 1rem;
 			padding-top: 6rem;
-			transform: translateX(-100%);
-			transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 			border-radius: 0px 24px 24px 0px;
 		}
 
 		.nav-drawer.open {
-			transform: translateX(0);
+			display: flex;
 		}
 
 		.nav-group {

@@ -23,7 +23,8 @@
 		startRefreshInterval,
 		stopRefreshInterval,
 		auth,
-		hydrationState
+		hydrationState,
+		modalsStack
 	} from '$stores';
 	import { useHolidayTheme } from '$lib/utils/themeEvents';
 	import { fetchDynamicSettings } from '$lib/api/settings';
@@ -47,6 +48,7 @@
 	let emailDialogOpen = $state(false);
 	let showLoadingSpinner = $state(false);
 	let isRestoring = $derived(hydrationState.isRestoring);
+	let hasModals = $derived(modalsStack.hasModals());
 
 	// Show loading spinner after 250ms delay during navigation
 	$effect(() => {
@@ -92,18 +94,18 @@
 	}}
 />
 
-<div class="banner-wrapper">
+<div class="banner-wrapper" inert={hasModals ? true : undefined}>
 	<ApiStatusBanner />
 	<AnnouncementBanner />
 </div>
 
-<NavBar />
+<NavBar inert={hasModals} />
 
 <ModalBackground />
 
 <ConsentDialog />
 
-<main id="main-content">
+<main id="main-content" inert={hasModals ? true : undefined}>
 	{#if isRestoring || showLoadingSpinner}
 		<Spinner />
 	{:else}
@@ -117,6 +119,7 @@
 	{socials}
 	{contactEmail}
 	onEmailClick={handleEmailClick}
+	inert={hasModals}
 />
 
 <EmailVerificationDialog bind:open={emailDialogOpen} email={contactEmail} />

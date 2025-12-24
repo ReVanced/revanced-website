@@ -19,6 +19,7 @@
 		socials: Social[];
 		contactEmail?: string;
 		onEmailClick?: () => void;
+		inert?: boolean;
 	};
 
 	let {
@@ -26,7 +27,8 @@
 		pageLinks,
 		socials,
 		contactEmail,
-		onEmailClick
+		onEmailClick,
+		inert = false
 	}: Props = $props();
 
 	let currentUrl = $state('');
@@ -48,7 +50,7 @@
 
 <Divider padding="15px" />
 
-<footer transition:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+<footer transition:fly={{ y: 10, easing: quintOut, duration: 750 }} inert={inert ? true : undefined}>
 	<div class="top">
 		<section class="main-content">
 			<img src={logo} class="logo-image" alt="ReVanced Logo" />
