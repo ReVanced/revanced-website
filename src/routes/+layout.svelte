@@ -113,6 +113,8 @@
 	{/if}
 </main>
 
+<div id="modal-portal"></div>
+
 <Footer
 	about={aboutText}
 	{pageLinks}

@@ -2,6 +2,7 @@
 import type { Snippet } from 'svelte';
 import type { WithChildren } from '$types';
 import { modalsStack } from '$stores/modals.svelte';
+import { browser } from '$app/environment';
 import { fade } from 'svelte/transition';
 import { quadInOut } from 'svelte/easing';
 import IconArrowLeft from 'virtual:icons/material-symbols/arrow-back';
@@ -51,6 +52,15 @@ if (!notDismissible) handleClose();
 });
 } else {
 modalsStack.pop(id);
+}
+});
+
+$effect(() => {
+if (browser && dialogElement) {
+const portalTarget = document.getElementById('modal-portal');
+if (portalTarget && dialogElement.parentElement !== portalTarget) {
+portalTarget.appendChild(dialogElement);
+}
 }
 });
 
