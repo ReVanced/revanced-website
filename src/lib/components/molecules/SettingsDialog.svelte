@@ -78,11 +78,6 @@
 	function handleLoginClick() {
 		onLoginRequest?.();
 	}
-
-	function handleLogout() {
-		auth.logout();
-		open = false;
-	}
 </script>
 
 <Modal bind:open>
@@ -116,9 +111,6 @@
 	{#snippet buttons()}
 		<div class="modal-buttons">
 			{#if auth.isLoggedIn}
-				<Button buttonStyle="text" onclick={handleLogout}>
-					Logout
-				</Button>
 				<span class="expiry-text">{expiryText}</span>
 			{:else}
 				<span title={apiStatus.isOffline ? 'API is offline' : ''}>

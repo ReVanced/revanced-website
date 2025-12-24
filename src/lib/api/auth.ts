@@ -2,11 +2,24 @@ import { browser } from '$app/environment';
 import { buildUrl } from './settings';
 
 const TOKEN_KEY = 'revanced_api_access_token';
+const CHANNEL_NAME = 'revanced_auth_channel';
+
+let authChannel: BroadcastChannel | null = null;
+
+if (browser && typeof BroadcastChannel !== 'undefined') {
+	authChannel = new BroadcastChannel(CHANNEL_NAME);
+}
 
 export type AuthToken = {
 	token: string;
 	expires: number;
 };
+
+type AuthMessage =
+	| { type: 'login'; token: AuthToken }
+	| { type: 'logout' }
+	| { type: 'request_session' }
+	| { type: 'session_response'; token: AuthToken | null };
 
 type JwtPayload = {
 	exp: number;
@@ -26,9 +39,48 @@ function parseJwt(token: string): JwtPayload {
 	return JSON.parse(decoded);
 }
 
+function isValidToken(token: unknown): token is AuthToken {
+	if (!token || typeof token !== 'object') return false;
+	const t = token as Partial<AuthToken>;
+	
+	if (typeof t.token !== 'string' || typeof t.expires !== 'number') return false;
+	
+	const parts = t.token.split('.');
+	if (parts.length !== 3) return false;
+	try {
+		const payload = parseJwt(t.token);
+		if (Math.abs(payload.exp * 1000 - t.expires) > 1000) return false;
+	} catch {
+		return false;
+	}
+	if (Date.now() >= t.expires) return false;
+	
+	return true;
+}
+
+function isValidAuthMessage(data: unknown): data is AuthMessage {
+	if (!data || typeof data !== 'object') return false;
+	const msg = data as Partial<AuthMessage>;
+	
+	if (typeof msg.type !== 'string') return false;
+	
+	switch (msg.type) {
+		case 'login':
+			return isValidToken((msg as any).token);
+		case 'logout':
+		case 'request_session':
+			return true;
+		case 'session_response':
+			const token = (msg as any).token;
+			return token === null || isValidToken(token);
+		default:
+			return false;
+	}
+}
+
 function getStoredToken(): AuthToken | null {
 	if (!browser) return null;
-	const raw = localStorage.getItem(TOKEN_KEY);
+	const raw = sessionStorage.getItem(TOKEN_KEY);
 	if (!raw) return null;
 	try {
 		return JSON.parse(raw);
@@ -40,10 +92,45 @@ function getStoredToken(): AuthToken | null {
 function storeToken(token: AuthToken | null): void {
 	if (!browser) return;
 	if (token) {
-		localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+		sessionStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+		authChannel?.postMessage({ type: 'login', token } as AuthMessage);
 	} else {
-		localStorage.removeItem(TOKEN_KEY);
+		sessionStorage.removeItem(TOKEN_KEY);
+		authChannel?.postMessage({ type: 'logout' } as AuthMessage);
 	}
+}
+
+if (authChannel) {
+	authChannel.onmessage = (event: MessageEvent) => {
+		if (!isValidAuthMessage(event.data)) {
+			console.warn('[Auth] Received invalid auth message, ignoring');
+			return;
+		}
+		
+		const message = event.data;
+		
+		if (message.type === 'login') {
+			sessionStorage.setItem(TOKEN_KEY, JSON.stringify(message.token));
+			window.dispatchEvent(new CustomEvent('auth-changed'));
+		} else if (message.type === 'logout') {
+			sessionStorage.removeItem(TOKEN_KEY);
+			window.dispatchEvent(new CustomEvent('auth-changed'));
+		} else if (message.type === 'request_session') {
+			const token = getStoredToken();
+			if (token && Date.now() < token.expires) {
+				authChannel?.postMessage({ type: 'session_response', token } as AuthMessage);
+			}
+		} else if (message.type === 'session_response' && message.token) {
+			if (!getStoredToken()) {
+				sessionStorage.setItem(TOKEN_KEY, JSON.stringify(message.token));
+				window.dispatchEvent(new CustomEvent('auth-changed'));
+			}
+		}
+	};
+}
+
+if (browser && authChannel && !getStoredToken()) {
+	authChannel.postMessage({ type: 'request_session' } as AuthMessage);
 }
 
 export function isLoggedIn(): boolean {
@@ -88,9 +175,14 @@ async function digestAuth(
 		throw new Error(`Unexpected status: ${initial.status}`);
 	}
 
-	const wwwAuth = initial.headers.get('Www-Authenticate');
+	const wwwAuth = initial.headers.get('WWW-Authenticate') ?? initial.headers.get('Www-Authenticate');
 	if (!wwwAuth?.startsWith('Digest ')) {
-		throw new Error('Server does not support digest auth');
+		const headerNames = [...initial.headers.keys()];
+		throw new Error(
+			wwwAuth 
+				? `Unsupported auth type: ${wwwAuth.split(' ')[0]}`
+				: `Server does not support digest auth (accessible headers: ${headerNames.join(', ') || 'none'})`
+		);
 	}
 
 	// parse challenge params

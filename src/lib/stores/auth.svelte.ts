@@ -34,6 +34,7 @@ function createAuthStore() {
 		refresh();
 		// check every 3 seconds if token expired
 		checkInterval = setInterval(refresh, 3_000);
+		window.addEventListener('auth-changed', refresh);
 	}
 
 	function stopChecking() {
@@ -41,6 +42,7 @@ function createAuthStore() {
 			clearInterval(checkInterval);
 			checkInterval = null;
 		}
+		window.removeEventListener('auth-changed', refresh);
 	}
 
 	async function login(username: string, password: string): Promise<LoginResult> {
