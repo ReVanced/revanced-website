@@ -1,16 +1,26 @@
 <script lang="ts">
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import type { TeamMember } from '$api';
 	import IconVerified from 'virtual:icons/material-symbols/verified';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
 
 	type Props = {
 		member: TeamMember;
+		i?: number;
 	};
 
-	let { member }: Props = $props();
+	let { member, i = 0 }: Props = $props();
+
+	let transitionOptions = $derived({
+		y: 10,
+		easing: quintOut,
+		duration: 750,
+		delay: 50 * i
+	});
 </script>
 
-<div class="member">
+<div class="member" in:fly={transitionOptions}>
 	<a href={member.url} rel="noreferrer" target="_blank" class="avatar-link">
 		<img src={member.avatar_url} alt="{member.name}'s profile picture" loading="lazy" />
 	</a>
@@ -22,7 +32,7 @@
 			{#if member.gpg_key}
 				{@const gpgKey = member.gpg_key}
 				<div class="verified-badge">
-					<ToolTip>
+					<ToolTip interactive>
 						{#snippet children()}
 							<a href={gpgKey.url} rel="noreferrer" target="_blank" class="badge-link desktop">
 								<IconVerified />

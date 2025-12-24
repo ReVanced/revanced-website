@@ -5,14 +5,15 @@
 		content?: string;
 		children: Snippet;
 		tooltipContent?: Snippet;
+		interactive?: boolean;
 	};
 
-	let { content, children, tooltipContent }: Props = $props();
+	let { content, children, tooltipContent, interactive = false }: Props = $props();
 </script>
 
 <div class="tooltip-wrapper">
 	{@render children()}
-	<div class="tooltip" role="tooltip">
+	<div class="tooltip" class:interactive role="tooltip">
 		{#if tooltipContent}
 			{@render tooltipContent()}
 		{:else if content}
@@ -63,6 +64,10 @@
 	.tooltip-wrapper:focus-within .tooltip {
 		opacity: 1;
 		visibility: visible;
+	}
+
+	.tooltip-wrapper:hover .tooltip.interactive,
+	.tooltip-wrapper:focus-within .tooltip.interactive {
 		pointer-events: auto;
 	}
 
