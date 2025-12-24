@@ -167,6 +167,8 @@
 	}
 
 	.content {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
 	}
 </style>

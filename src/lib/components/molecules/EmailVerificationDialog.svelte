@@ -154,7 +154,7 @@
 
 	.title h3 {
 		margin: 0;
-		color: var(--text-one);
+		color: var(--secondary);
 		font-size: 1.25rem;
 	}
 
@@ -169,7 +169,7 @@
 	}
 
 	.description b {
-		color: var(--text-one);
+		color: var(--text-four);
 	}
 
 	.keyword-hint {
