@@ -38,6 +38,7 @@
 		"moment": "^2.30.1",
 		"qrious": "^4.0.2",
 		"runed": "^0.37.0",
+		"svelte-meta-tags": "^4.5.0",
 		"unplugin-icons": "^22.5.0"
 	}
 }
