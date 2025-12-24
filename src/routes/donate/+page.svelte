@@ -14,6 +14,9 @@
 	import { aboutQuery, teamQuery } from '$stores';
 	import type { CryptoWallet } from '$api';
 
+	import IconCircles from 'virtual:icons/material-symbols/circles-ext';
+	import IconWallet from 'virtual:icons/material-symbols/account-balance-wallet-outline';
+
 	import openCollectiveImg from '$assets/donate/card-images/Open Collective.webp';
 	import githubSponsorsImg from '$assets/donate/card-images/GitHub Sponsors.webp';
 	import cryptocurrenciesImg from '$assets/donate/card-images/Cryptocurrencies.webp';
@@ -71,7 +74,7 @@
 		walletModalOpen = true;
 	}
 
-	function backToCryptoList() {
+	function closeWalletModal() {
 		walletModalOpen = false;
 		cryptoModalOpen = true;
 	}
@@ -126,13 +129,15 @@
 			<p class="error-state">Failed to load donation options. Please try again later.</p>
 		{:else}
 			<div class="donate-cards">
-				{#each donationLinks as link}
-					<DonateCard
-						name={link.name}
-						image={donateImages[link.name] ?? fallbackImg}
-						href={link.url}
-					/>
-				{/each}
+				{#key donationLinks.length}
+					{#each donationLinks as link}
+						<DonateCard
+							name={link.name}
+							image={donateImages[link.name] ?? fallbackImg}
+							href={link.url}
+						/>
+					{/each}
+				{/key}
 				{#if cryptoWallets.length > 0}
 					<DonateCard
 						name="Cryptocurrencies"
@@ -156,22 +161,30 @@
 			<p class="error-state">Failed to load team members. Please try again later.</p>
 		{:else}
 			<section class="team">
-				{#each shuffledTeam as member}
-					<TeamMemberCard {member} />
-				{/each}
+				{#key shuffledTeam.length}
+					{#each shuffledTeam as member, i}
+						<TeamMemberCard {member} {i} />
+					{/each}
+				{/key}
 			</section>
 		{/if}
 	</main>
 </Page>
 
 <Modal bind:open={cryptoModalOpen} title="Cryptocurrencies">
+	{#snippet icon()}
+		<IconCircles style="width: 32px; height: 32px; color: var(--surface-six);" />
+	{/snippet}
 	<CryptoWalletList wallets={cryptoWallets} onSelect={openWalletModal} />
 	{#snippet buttons()}
 		<Button buttonStyle="filled" onclick={() => (cryptoModalOpen = false)}>Close</Button>
 	{/snippet}
 </Modal>
 
-<Modal bind:open={walletModalOpen} title="{selectedWallet?.currency_code ?? ''} Wallet">
+<Modal bind:open={walletModalOpen} title="{selectedWallet?.currency_code ?? ''} Wallet" onclose={closeWalletModal}>
+	{#snippet icon()}
+		<IconWallet style="width: 32px; height: 32px; color: var(--surface-six);" />
+	{/snippet}
 	{#if selectedWallet}
 		<div class="wallet-details">
 			<p class="address">{selectedWallet.address}</p>
@@ -179,7 +192,7 @@
 		</div>
 	{/if}
 	{#snippet buttons()}
-		<Button buttonStyle="text" onclick={backToCryptoList}>Back</Button>
+		<Button buttonStyle="text" onclick={closeWalletModal}>Back</Button>
 		<Button buttonStyle="filled" onclick={copyAddress}>
 			{copySuccess ? 'Copied!' : 'Copy Address'}
 		</Button>
