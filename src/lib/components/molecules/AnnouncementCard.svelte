@@ -38,7 +38,7 @@
 	onclick={handleClick}
 >
 	<article class="card" class:attachment={hasImage}>
-		{#if !isRead}
+		{#if !isRead && !archived}
 			<span class="new-header">NEW</span>
 		{/if}
 
