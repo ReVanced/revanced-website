@@ -2,6 +2,8 @@
 	import type { Contributor } from '$api';
 	import ContributorCard from '$components/molecules/ContributorCard.svelte';
 	import IconChevronUp from 'virtual:icons/material-symbols/keyboard-arrow-up';
+	import { slide } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 
 	type Props = {
 		name: string;
@@ -44,14 +46,16 @@
 	</button>
 
 	{#if expanded}
-		<div class="contributors">
-			{#each filteredContributors as contributor}
-				<ContributorCard
-					name={contributor.name}
-					avatarUrl={contributor.avatar_url}
-					url={contributor.url}
-				/>
-			{/each}
+		<div class="contributors" transition:slide={{ easing: quintOut, duration: 500 }}>
+			{#key filteredContributors.length}
+				{#each filteredContributors as contributor}
+					<ContributorCard
+						name={contributor.name}
+						avatarUrl={contributor.avatar_url}
+						url={contributor.url}
+					/>
+				{/each}
+			{/key}
 		</div>
 	{/if}
 </div>

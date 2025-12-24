@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { fly, fade, slide } from 'svelte/transition';
@@ -12,7 +13,6 @@
 	import PatchItem from '$components/molecules/PatchItem.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
 	import { patchesQuery } from '$stores';
-	import { debounce } from '$lib/utils/debounce';
 	import type { Patch } from '$api';
 
 	const schemas = [
@@ -53,22 +53,52 @@
 		);
 	});
 
-	let selectedPkg = $state<string | null>(page.url.searchParams.get('pkg'));
-	let searchTerm = $state(page.url.searchParams.get('s') ?? '');
+	let selectedPkg = $state<string | null>(null);
+	let searchTerm = $state('');
 	let mobilePackagesOpen = $state(false);
+	let urlUpdateTimeout: ReturnType<typeof setTimeout> | null = null;
+	let isMounted = $state(true);
 
-	const updateUrl = debounce(() => {
-		const params = new URLSearchParams();
-		if (selectedPkg) params.set('pkg', selectedPkg);
-		if (searchTerm) params.set('s', searchTerm);
-		const queryString = params.toString();
-		goto(queryString ? `?${queryString}` : '/patches', { replaceState: true, keepFocus: true });
-	}, 350);
+	$effect(() => {
+		if (!browser) return;
+		const pkgParam = page.url.searchParams.get('pkg');
+		const searchParam = page.url.searchParams.get('s') ?? '';
+		if (selectedPkg === null && pkgParam) {
+			selectedPkg = pkgParam;
+		}
+		if (searchTerm === '' && searchParam) {
+			searchTerm = searchParam;
+		}
+	});
+
+	function updateUrl() {
+		if (!browser) return;
+		if (urlUpdateTimeout) {
+			clearTimeout(urlUpdateTimeout);
+		}
+		urlUpdateTimeout = setTimeout(() => {
+			if (!isMounted || !page.url.pathname.startsWith('/patches')) return;
+			
+			const params = new URLSearchParams();
+			if (selectedPkg) params.set('pkg', selectedPkg);
+			if (searchTerm) params.set('s', searchTerm);
+			const queryString = params.toString();
+			goto(queryString ? `?${queryString}` : '/patches', { replaceState: true, keepFocus: true });
+		}, 350);
+	}
 
 	$effect(() => {
 		selectedPkg;
 		searchTerm;
 		updateUrl();
+		
+		return () => {
+			isMounted = false;
+			if (urlUpdateTimeout) {
+				clearTimeout(urlUpdateTimeout);
+				urlUpdateTimeout = null;
+			}
+		};
 	});
 
 	function getCompatiblePackageNames(patch: Patch): string {
@@ -162,13 +192,15 @@
 					selected={!selectedPkg}
 					onclick={() => selectPackage(null)}
 				/>
-				{#each packages as pkg}
-					<PackageItem
-						name={pkg}
-						selected={selectedPkg === pkg}
-						onclick={() => selectPackage(pkg)}
-					/>
-				{/each}
+				{#key packages.length}
+					{#each packages as pkg}
+						<PackageItem
+							name={pkg}
+							selected={selectedPkg === pkg}
+							onclick={() => selectPackage(pkg)}
+						/>
+					{/each}
+				{/key}
 			</PackageMenu>
 		</aside>
 
@@ -199,13 +231,15 @@
 			selected={!selectedPkg}
 			onclick={() => selectPackage(null)}
 		/>
-		{#each packages as pkg}
-			<PackageItem
-				name={pkg}
-				selected={selectedPkg === pkg}
-				onclick={() => selectPackage(pkg)}
-			/>
-		{/each}
+		{#key packages.length}
+			{#each packages as pkg}
+				<PackageItem
+					name={pkg}
+					selected={selectedPkg === pkg}
+					onclick={() => selectPackage(pkg)}
+				/>
+			{/each}
+		{/key}
 	</div>
 </Modal>
 {/if}

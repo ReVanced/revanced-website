@@ -45,15 +45,17 @@
 			{:else if isError}
 				<p class="error-state">Failed to load contributors. Please try again later.</p>
 			{:else}
-				{#each repositories as repo}
-					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<ContributorSection
-							name={repo.name}
-							url={repo.url}
-							contributors={repo.contributors}
-						/>
-					</div>
-				{/each}
+				{#key repositories.length}
+					{#each repositories as repo}
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+							<ContributorSection
+								name={repo.name}
+								url={repo.url}
+								contributors={repo.contributors}
+							/>
+						</div>
+					{/each}
+				{/key}
 			{/if}
 		</div>
 	</div>

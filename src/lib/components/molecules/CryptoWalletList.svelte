@@ -19,17 +19,19 @@
 </script>
 
 <div class="wallets">
-	{#each wallets as wallet}
-		<button type="button" class="wallet" onclick={() => onSelect?.(wallet)}>
-			<div class="wallet-name">
-				<img src={getCryptoIcon(wallet.currency_code)} alt="{wallet.network} icon" />
-				<span>{wallet.network} ({wallet.currency_code})</span>
-			</div>
-			<div class="arrow">
-				<IconChevronRight />
-			</div>
-		</button>
-	{/each}
+	{#key wallets.length}
+		{#each wallets as wallet}
+			<button type="button" class="wallet" onclick={() => onSelect?.(wallet)}>
+				<div class="wallet-name">
+					<img src={getCryptoIcon(wallet.currency_code)} alt="{wallet.network} icon" />
+					<span>{wallet.network} ({wallet.currency_code})</span>
+				</div>
+				<div class="arrow">
+					<IconChevronRight />
+				</div>
+			</button>
+		{/each}
+	{/key}
 </div>
 
 <style>

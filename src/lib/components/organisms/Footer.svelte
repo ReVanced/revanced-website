@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
 
 	import logo from '$assets/icons/logo.svg';
 	import Divider from '$components/atoms/Divider.svelte';
@@ -68,11 +67,13 @@
 
 				<div id="footer-socials">
 					<FooterSection title="Socials">
+						{#key socials.length}
 							{#each socials as { name, url }}
 							<li>
 								<a href={url} target="_blank" rel="noreferrer">{name}</a>
 							</li>
 						{/each}
+						{/key}
 					</FooterSection>
 				</div>
 			{:else}
