@@ -7,10 +7,12 @@
 	import Fuse, { type FuseResult } from 'fuse.js';
 	import Page from '$components/molecules/Page.svelte';
 	import Search from '$components/atoms/Search.svelte';
+	import Button from '$components/atoms/Button.svelte';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import AnnouncementCard from '$components/molecules/AnnouncementCard.svelte';
 	import IconChevron from 'virtual:icons/material-symbols/keyboard-arrow-down';
-	import { announcementsQuery, announcementTagsQuery, readAnnouncements } from '$stores';
+	import IconAdd from 'virtual:icons/material-symbols/add';
+	import { announcementsQuery, announcementTagsQuery, readAnnouncements, auth } from '$stores';
 	import { debounce } from '$lib/utils/debounce';
 	import { isArchived } from '$lib/utils/announcement';
 	import type { Announcement } from '$api';
@@ -130,6 +132,11 @@
 						syncUrlWithSearch();
 					}}
 				/>
+				{#if auth.isLoggedIn}
+					<Button buttonStyle="filled" icon={IconAdd} href="/announcements/create">
+						Create
+					</Button>
+				{/if}
 			</div>
 		</div>
 	</div>

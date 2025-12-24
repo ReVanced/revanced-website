@@ -1,22 +1,50 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
+	import moment from 'moment';
 	import type { Announcement } from '$lib/api/types';
-	import { relativeTime } from '$lib/utils/relativeTime';
-	import { fetchAnnouncementById } from '$lib/api/client';
-	import { getCachedAnnouncement, cacheAnnouncement, hasValidCachedAnnouncement } from '$stores';
+	import { relativeTime, formatUTC } from '$lib/utils/relativeTime';
+	import { isValidUrl } from '$lib/utils/url';
+	import {
+		fetchAnnouncementById,
+		createAnnouncement,
+		updateAnnouncement,
+		deleteAnnouncement,
+		type AnnouncementPayload
+	} from '$lib/api/client';
+	import {
+		getCachedAnnouncement,
+		cacheAnnouncement,
+		hasValidCachedAnnouncement,
+		announcementsQuery,
+		invalidateAnnouncementCache,
+		auth
+	} from '$stores';
 	import { isArchived, toSlug } from '$lib/utils/announcement';
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import Gallery from '$components/molecules/Gallery.svelte';
 	import IconArchive from 'virtual:icons/material-symbols/inventory-2-outline';
+	import AdminButtons from './AdminButtons.svelte';
+	import EditableHeader from './EditableHeader.svelte';
+	import EditableContent from './EditableContent.svelte';
+	import EditableLists from './EditableLists.svelte';
+	import DeleteConfirmDialog from './DeleteConfirmDialog.svelte';
 
 	let announcement = $state<Announcement | null>(null);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 
+	let isEditing = $state(false);
+	let isPreviewing = $state(false);
+	let showDeleteConfirm = $state(false);
+
+	let isCreating = $derived($page.params.slug === 'create');
+
 	let announcementId = $derived.by(() => {
+		if (isCreating) return null;
 		const slug = $page.params.slug ?? '';
 		if (!slug) return null;
 		const idPart = slug.split('-')[0];
@@ -24,15 +52,58 @@
 		return isNaN(parsed) ? null : parsed;
 	});
 
+	let titleInput = $state('');
+	let contentInput = $state('');
+	let authorInput = $state('');
+	let createdAtInput = $state('');
+	let archivedAtInput = $state('');
+	let tagsInput = $state<string[]>([]);
+	let attachmentsInput = $state<string[]>([]);
+
+	function initializeDraft() {
+		if (isCreating) {
+			titleInput = '';
+			contentInput = '';
+			authorInput = '';
+			createdAtInput = moment().format('YYYY-MM-DDTHH:mm');
+			archivedAtInput = '';
+			tagsInput = [];
+			attachmentsInput = [];
+		} else if (announcement) {
+			titleInput = announcement.title ?? '';
+			contentInput = announcement.content ?? '';
+			authorInput = announcement.author ?? '';
+			createdAtInput = announcement.created_at
+				? moment(announcement.created_at).format('YYYY-MM-DDTHH:mm')
+				: moment().format('YYYY-MM-DDTHH:mm');
+			archivedAtInput = announcement.archived_at
+				? moment(announcement.archived_at).format('YYYY-MM-DDTHH:mm')
+				: '';
+			tagsInput = [...(announcement.tags ?? [])];
+			attachmentsInput = [...(announcement.attachments ?? [])];
+		}
+	}
+
 	$effect(() => {
-		if (!browser || announcementId === null) return;
+		if (isCreating && browser) {
+			if (!auth.isLoggedIn) {
+				goto('/announcements');
+				return;
+			}
+			initializeDraft();
+			loading = false;
+		}
+	});
+
+	$effect(() => {
+		if (!browser || announcementId === null || isCreating) return;
 
 		// Check cache first
 		const cached = getCachedAnnouncement(announcementId);
 		if (cached) {
 			announcement = cached;
 			loading = false;
-			
+
 			// Update URL if needed
 			if (cached.title) {
 				const expectedPath = `/announcements/${cached.id}-${toSlug(cached.title)}`;
@@ -40,7 +111,7 @@
 					history.replaceState({}, '', expectedPath);
 				}
 			}
-			
+
 			// If cache is valid, we're done; otherwise refetch in background
 			if (hasValidCachedAnnouncement(announcementId)) {
 				return;
@@ -48,7 +119,7 @@
 		} else {
 			loading = true;
 		}
-		
+
 		error = null;
 
 		const abortController = new AbortController();
@@ -68,9 +139,9 @@
 			})
 			.catch((err) => {
 				if (abortController.signal.aborted) return;
-				// Only show error if we don't have cached data to display
 				if (!announcement) {
-					error = err instanceof Error ? err.message : 'Failed to load announcement';
+					goto('/announcements');
+					return;
 				}
 				loading = false;
 			});
@@ -79,56 +150,272 @@
 			abortController.abort();
 		};
 	});
+
+	function validateInputs(): boolean {
+		const hasEmptyTitle = !titleInput.trim();
+		const hasInvalidAttachments = attachmentsInput.some((a) => a && !isValidUrl(a));
+
+		if (hasEmptyTitle || hasInvalidAttachments) {
+			const issues = [
+				hasEmptyTitle && 'Title',
+				hasInvalidAttachments && 'Attachments'
+			].filter(Boolean);
+			alert(`${issues.join(' and ')} must be filled properly`);
+			return false;
+		}
+		return true;
+	}
+
+	function buildPayload(): AnnouncementPayload {
+		const createdAtFormatted = createdAtInput ? formatUTC(createdAtInput) : undefined;
+		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : undefined;
+		
+		return {
+			title: titleInput.trim(),
+			content: contentInput.trim() || undefined,
+			author: authorInput.trim() || undefined,
+			tags: tagsInput.length > 0 ? tagsInput : undefined,
+			attachments: attachmentsInput.filter((a) => a && isValidUrl(a)).length > 0
+				? attachmentsInput.filter((a) => a && isValidUrl(a))
+				: undefined,
+			created_at: createdAtFormatted || undefined,
+			archived_at: archivedAtFormatted || undefined
+		};
+	}
+
+	function onEdit() {
+		initializeDraft();
+		isEditing = true;
+	}
+
+	function onCancel() {
+		isEditing = false;
+		isPreviewing = false;
+	}
+
+	async function onSave() {
+		auth.refresh();
+		if (!auth.isLoggedIn) {
+			goto('/');
+			return;
+		}
+
+		if (!validateInputs()) return;
+
+		const payload = buildPayload();
+
+		try {
+			if (isCreating) {
+				await createAnnouncement(payload);
+				await announcementsQuery.refetch();
+				goto('/announcements');
+			} else if (announcementId !== null) {
+				const updated = await updateAnnouncement(announcementId, payload);
+				announcement = updated;
+				cacheAnnouncement(updated);
+				invalidateAnnouncementCache(announcementId);
+				await announcementsQuery.refetch();
+				isEditing = false;
+				isPreviewing = false;
+			}
+		} catch (err) {
+			if (err instanceof Error && err.message === 'Unauthenticated') {
+				goto('/');
+				return;
+			}
+			alert(err instanceof Error ? err.message : 'An error occurred');
+		}
+	}
+
+	function onDelete() {
+		showDeleteConfirm = true;
+	}
+
+	async function confirmDelete() {
+		if (announcementId === null) return;
+		auth.refresh();
+		if (!auth.isLoggedIn) {
+			showDeleteConfirm = false;
+			goto('/');
+			return;
+		}
+
+		try {
+			await deleteAnnouncement(announcementId);
+			invalidateAnnouncementCache(announcementId);
+			await announcementsQuery.refetch();
+			goto('/announcements');
+		} catch (err) {
+			if (err instanceof Error && err.message === 'Unauthenticated') {
+				showDeleteConfirm = false;
+				goto('/');
+				return;
+			}
+			alert(err instanceof Error ? err.message : 'Failed to delete announcement');
+		}
+		showDeleteConfirm = false;
+	}
+
+	function cancelDelete() {
+		showDeleteConfirm = false;
+	}
+
+	function onTogglePreview() {
+		isPreviewing = !isPreviewing;
+	}
+
+	function onToggleArchive() {
+		if (archivedAtInput) {
+			archivedAtInput = '';
+		} else {
+			archivedAtInput = moment().format('YYYY-MM-DDTHH:mm');
+		}
+	}
+
+	function handleBeforeUnload(e: BeforeUnloadEvent) {
+		if (isEditing || isCreating) {
+			e.preventDefault();
+			e.returnValue = '';
+		}
+	}
+
+	let isEditMode = $derived(isEditing || isCreating);
 </script>
 
+<svelte:window onbeforeunload={handleBeforeUnload} />
+
+<DeleteConfirmDialog
+	bind:open={showDeleteConfirm}
+	onConfirm={confirmDelete}
+	onCancel={cancelDelete}
+/>
+
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	{#if loading}
+	{#if loading && !isCreating}
 		<div class="loading-state">
 			<p>Loading announcement...</p>
 		</div>
-	{:else if error}
+	{:else if error && !isCreating}
 		<div class="error-state">
 			<p>{error}</p>
 			<a href="/announcements">← Back to announcements</a>
 		</div>
-	{:else if announcement}
+	{:else if announcement || isCreating}
 		<article class="card">
 			<header class="header">
 				<div class="header-content">
-					<h1 class="title">
-						{announcement.title}
-						{#if isArchived(announcement.archived_at)}
-							<span class="archived-badge" title="Archived">
-								<IconArchive />
-							</span>
-						{/if}
-					</h1>
+					{#if isEditMode}
+						<h1 class="title">
+							<EditableHeader
+								field="title"
+								isEditing={isEditMode}
+								{isPreviewing}
+								title={announcement?.title ?? ''}
+								bind:titleInput
+							/>
+							{#if archivedAtInput && isPreviewing}
+								<span class="archived-badge" title="Archived">
+									<IconArchive />
+								</span>
+							{/if}
+						</h1>
+					{:else}
+						<h1 class="title">
+							{announcement?.title}
+							{#if isArchived(announcement?.archived_at ?? null)}
+								<span class="archived-badge" title="Archived">
+									<IconArchive />
+								</span>
+							{/if}
+						</h1>
+					{/if}
+
 					<h4 class="meta">
-						{relativeTime(announcement.created_at)}
-						{#if announcement.author}
-							·
-							{announcement.author}
+						{#if isEditMode}
+							<EditableHeader
+								field="date"
+								isEditing={isEditMode}
+								{isPreviewing}
+								createdAt={announcement?.created_at ?? ''}
+								bind:createdAtInput
+								archivedAt={announcement?.archived_at ?? null}
+								bind:archivedAtInput
+							/>
+							<EditableHeader
+								field="author"
+								isEditing={isEditMode}
+								{isPreviewing}
+								author={announcement?.author ?? null}
+								bind:authorInput
+							/>
+						{:else}
+							{relativeTime(announcement?.created_at ?? '')}
+							{#if announcement?.author}
+								·
+								{announcement.author}
+							{/if}
 						{/if}
 					</h4>
-					{#if announcement.tags && announcement.tags.length > 0}
+
+					{#if isEditMode}
+						<EditableLists
+							field="tags"
+							isEditing={isEditMode}
+							{isPreviewing}
+							bind:tagsInput
+						/>
+					{:else if announcement?.tags && announcement.tags.length > 0}
 						<div class="tags">
 							{#key announcement.tags.length}
 								{#each announcement.tags as tag}
-									<TagChip {tag} />
+									<TagChip {tag} clickable={false} />
 								{/each}
 							{/key}
 						</div>
 					{/if}
 				</div>
+
+				{#if auth.isLoggedIn}
+					<AdminButtons
+						{isEditing}
+						{isCreating}
+						{isPreviewing}
+						hasArchivedAt={!!archivedAtInput}
+						{onEdit}
+						{onCancel}
+						{onSave}
+						{onDelete}
+						{onTogglePreview}
+						{onToggleArchive}
+					/>
+				{/if}
 			</header>
 
 			<hr class="divider" />
 
-			<div class="content">
-				{@html announcement.content}
-			</div>
+			{#if isEditMode}
+				<EditableContent
+					isEditing={isEditMode}
+					{isPreviewing}
+					content={announcement?.content ?? null}
+					bind:contentInput
+				/>
+			{:else}
+				<div class="content">
+					{@html announcement?.content}
+				</div>
+			{/if}
 
-			{#if announcement.attachments && announcement.attachments.length > 0}
+			{#if isEditMode}
+				<hr class="divider" />
+				<EditableLists
+					field="attachments"
+					isEditing={isEditMode}
+					{isPreviewing}
+					attachments={announcement?.attachments ?? []}
+					bind:attachmentsInput
+				/>
+			{:else if announcement?.attachments && announcement.attachments.length > 0}
 				<hr class="divider" />
 				<div class="attachments">
 					<Gallery images={announcement.attachments} columns={3} gap="0.75rem" />
