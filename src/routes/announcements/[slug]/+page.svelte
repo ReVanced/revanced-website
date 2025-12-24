@@ -168,7 +168,7 @@
 
 	function buildPayload(): AnnouncementPayload {
 		const createdAtFormatted = createdAtInput ? formatUTC(createdAtInput) : undefined;
-		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : undefined;
+		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : null;
 		
 		return {
 			title: titleInput.trim(),
@@ -179,7 +179,7 @@
 				? attachmentsInput.filter((a) => a && isValidUrl(a))
 				: undefined,
 			created_at: createdAtFormatted || undefined,
-			archived_at: archivedAtFormatted || undefined
+			archived_at: typeof archivedAtFormatted === 'string' ? archivedAtFormatted : null
 		};
 	}
 
