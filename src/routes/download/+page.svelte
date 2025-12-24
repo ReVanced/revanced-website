@@ -19,7 +19,15 @@
 	let androidVersion = $state(0);
 
 	let warningOpen = $state(false);
-	let warningType = $state<'not-android' | 'old-android' | 'api-down'>('not-android');
+	let warningType = $state<'not-android' | 'old-android'>('not-android');
+	let warningMessage = $derived.by(() => {
+		if (warningType === 'not-android') {
+			return 'Your device is not running Android. Do you still want to download?';
+		} else if (warningType === 'old-android') {
+			return `Your device is running Android ${androidVersion}. ReVanced only supports Android versions 8 and above. Do you still want to download?`;
+		}
+		return '';
+	});
 
 	const schemas = [
 		{
@@ -47,6 +55,10 @@
 			warningType = 'old-android';
 			warningOpen = true;
 		}
+	}
+
+	function closeWarning() {
+		warningOpen = false;
 	}
 </script>
 
@@ -90,51 +102,25 @@
 		</div>
 	</main>
 </Page>
-{#if warningType === 'not-android'}
-<Modal bind:open={warningOpen}>
-	<div class="warning-content">
-		<h3>Warning</h3>
-		<p>Your device is not running Android. Do you still want to download?</p>
-	</div>
-	{#snippet buttons()}
-		<div class="warning-buttons">
-			<Button
-				buttonStyle="text"
-				href={downloadUrl}
-				onclick={() => { warningOpen = false; }}
-			>
-				Okay
-			</Button>
-			<button type="button" class="cancel-btn" onclick={() => { warningOpen = false; }}>
-				Cancel
-			</button>
-		</div>
-	{/snippet}
-</Modal>
-{/if}
 
-{#if warningType === 'old-android'}
 <Modal bind:open={warningOpen}>
 	<div class="warning-content">
 		<h3>Warning</h3>
-		<p>Your device is running Android {androidVersion}. ReVanced only supports Android versions 8 and above. Do you still want to download?</p>
+		<p>{warningMessage}</p>
 	</div>
 	{#snippet buttons()}
-		<div class="warning-buttons">
-			<Button
-				buttonStyle="text"
-				href={downloadUrl}
-				onclick={() => { warningOpen = false; }}
-			>
-				Okay
-			</Button>
-			<button type="button" class="cancel-btn" onclick={() => { warningOpen = false; }}>
-				Cancel
-			</button>
-		</div>
+		<Button buttonStyle="text" onclick={closeWarning}>
+			Cancel
+		</Button>
+		<Button
+			buttonStyle="text"
+			href={downloadUrl}
+			onclick={closeWarning}
+		>
+			Okay
+		</Button>
 	{/snippet}
 </Modal>
-{/if}
 
 <style>
 	.wrapper {
@@ -206,26 +192,5 @@
 
 	.warning-content p {
 		margin-bottom: 0;
-	}
-
-	.warning-buttons {
-		display: flex;
-		gap: 1rem;
-		justify-content: flex-end;
-	}
-
-	.cancel-btn {
-		background: transparent;
-		border: none;
-		color: var(--primary);
-		font-weight: 500;
-		font-size: 0.95rem;
-		cursor: pointer;
-		font-family: inherit;
-		padding: 0;
-	}
-
-	.cancel-btn:hover {
-		filter: brightness(85%);
 	}
 </style>
