@@ -18,11 +18,12 @@
 
 	function handleClick() {
 		if (!latestUnreadAnnouncement) return;
-		readAnnouncements.markAsRead(latestUnreadAnnouncement.id);
 		goto(`/announcements/${latestUnreadAnnouncement.id}`);
+		readAnnouncements.markAsRead(latestUnreadAnnouncement.id);
 	}
 
-	function handleDismiss() {
+	function handleDismiss(e: MouseEvent) {
+		e.stopPropagation();
 		if (!latestUnreadAnnouncement) return;
 		readAnnouncements.markAsRead(latestUnreadAnnouncement.id);
 	}
@@ -41,16 +42,16 @@
 			</h2>
 		</div>
 		<div class="actions">
-			<Button
-				variant={bannerLevel === 'caution' ? 'onDangerBackground' : 'onInfoBackground'}
-				onclick={handleClick}
-			>
-				Read more
-				<span class="arrow-icon"><ArrowRight /></span>
-			</Button>
 			<button class="dismiss" onclick={handleDismiss} aria-label="Dismiss announcement">
 				<CloseIcon />
 			</button>
+			<Button
+				variant={bannerLevel === 'caution' ? 'onDangerBackground' : 'default'}
+				onclick={handleClick}
+			>
+				<span class="read-more-text">Read more</span>
+				<ArrowRight />
+			</Button>
 		</div>
 	</div>
 {/if}
@@ -58,19 +59,14 @@
 <style>
 	.title {
 		line-height: 26px;
-		color: currentColor;
 		font-size: 20px;
 		margin: 0;
-		font-weight: 500;
 	}
 
 	.description {
-		line-height: 24px;
-		color: currentColor;
-		font-size: 15px;
+		line-height: 20px;
+		font-size: 14px;
 		margin: 0;
-		font-weight: 400;
-		letter-spacing: 0.01em;
 	}
 
 	.banner {
@@ -89,8 +85,12 @@
 	}
 
 	.banner.info {
-		background-color: var(--accent-color);
-		color: #0d2d44;
+		background-color: var(--surface-four);
+		color: var(--text-one);
+	}
+
+	.banner.info .description {
+		color: var(--text-four);
 	}
 
 	.banner.caution {
@@ -121,29 +121,28 @@
 		gap: 1rem;
 	}
 
-	.arrow-icon {
+	.read-more-text {
 		display: inline-flex;
 		align-items: center;
-		vertical-align: middle;
 	}
 
 	.dismiss {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.5rem;
+		padding: 0.65rem;
 		background: transparent;
 		border: none;
 		cursor: pointer;
 		color: currentColor;
 		opacity: 0.7;
-		transition: opacity 0.2s ease;
+		transition: filter 0.2s ease;
 		border-radius: 4px;
+		font-size: 1rem;
 	}
 
 	.dismiss:hover {
-		opacity: 1;
-		background: rgba(0, 0, 0, 0.1);
+		filter: brightness(0.75);
 	}
 
 	.dismiss:focus-visible {
