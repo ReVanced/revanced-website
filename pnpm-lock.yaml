@@ -11,6 +11,15 @@ importers:
       '@iconify-json/material-symbols':
         specifier: ^1.2.50
         version: 1.2.50
+      '@tanstack/query-persist-client-core':
+        specifier: ^5.91.11
+        version: 5.91.11
+      '@tanstack/query-sync-storage-persister':
+        specifier: ^5.90.14
+        version: 5.90.14
+      '@tanstack/svelte-query':
+        specifier: ^6.0.10
+        version: 6.0.10(svelte@5.46.0)
       fuse.js:
         specifier: ^7.1.0
         version: 7.1.0
@@ -491,6 +500,20 @@ packages:
     peerDependencies:
       svelte: ^5.0.0
       vite: ^6.3.0 || ^7.0.0
+
+  '@tanstack/query-core@5.90.12':
+    resolution: {integrity: sha512-T1/8t5DhV/SisWjDnaiU2drl6ySvsHj1bHBCWNXd+/T+Hh1cf6JodyEYMd5sgwm+b/mETT4EV3H+zCVczCU5hg==}
+
+  '@tanstack/query-persist-client-core@5.91.11':
+    resolution: {integrity: sha512-NNpRGxQY/nVOdzfs5QbevPjGsUVoEiFwqxxaopLyu6todwtDOCfIOfhXSmpMVXBiCxUn7kqaUB1iwaBKqoAVRQ==}
+
+  '@tanstack/query-sync-storage-persister@5.90.14':
+    resolution: {integrity: sha512-gqQy7VFNUcFnD61mr1sqvMLdL3MXrTzMmjuQqRVyItb9FgEKzMSyBfo8cLZPiWWrz29eAVlQs1rEYUNLZRRMqg==}
+
+  '@tanstack/svelte-query@6.0.10':
+    resolution: {integrity: sha512-J0kM3JNvRcRCM6cbHLeICs73aLp98N/nsihdVEtiNo3MEN4pAnO45qZ2yxX70MrEZ9vffXaCXMCChwgXs1lZ/Q==}
+    peerDependencies:
+      svelte: ^5.25.0
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -1555,6 +1578,22 @@ snapshots:
       vitefu: 1.1.1(vite@7.3.0(@types/node@25.0.3))
     transitivePeerDependencies:
       - supports-color
+
+  '@tanstack/query-core@5.90.12': {}
+
+  '@tanstack/query-persist-client-core@5.91.11':
+    dependencies:
+      '@tanstack/query-core': 5.90.12
+
+  '@tanstack/query-sync-storage-persister@5.90.14':
+    dependencies:
+      '@tanstack/query-core': 5.90.12
+      '@tanstack/query-persist-client-core': 5.91.11
+
+  '@tanstack/svelte-query@6.0.10(svelte@5.46.0)':
+    dependencies:
+      '@tanstack/query-core': 5.90.12
+      svelte: 5.46.0
 
   '@types/cookie@0.6.0': {}
 
