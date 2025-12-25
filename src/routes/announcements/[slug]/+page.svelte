@@ -4,9 +4,8 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import moment from 'moment';
 	import type { Announcement } from '$lib/api/types';
-	import { relativeTime, formatUTC } from '$lib/utils/relativeTime';
+	import { relativeTime, formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
 	import { isValidUrl } from '$lib/utils/url';
 	import {
 		fetchAnnouncementById,
@@ -20,8 +19,7 @@
 		refetchAnnouncements,
 		auth
 	} from '$stores';
-	import { isArchived, toSlug } from '$lib/utils/announcement';
-	import TagChip from '$components/atoms/TagChip.svelte';
+	import { toSlug } from '$lib/utils/announcement';
 	import Gallery from '$components/molecules/Gallery.svelte';
 	import IconArchive from 'svelte-material-icons/ArchiveArrowDownOutline.svelte';
 	import AdminButtons from './AdminButtons.svelte';
@@ -65,7 +63,7 @@
 			titleInput = '';
 			contentInput = '';
 			authorInput = '';
-			createdAtInput = moment().format('YYYY-MM-DDTHH:mm');
+			createdAtInput = formatDateTimeLocal(new Date());
 			archivedAtInput = '';
 			tagsInput = [];
 			attachmentsInput = [];
@@ -74,10 +72,10 @@
 			contentInput = announcement.content ?? '';
 			authorInput = announcement.author ?? '';
 			createdAtInput = announcement.created_at
-				? moment(announcement.created_at).format('YYYY-MM-DDTHH:mm')
-				: moment().format('YYYY-MM-DDTHH:mm');
+				? formatDateTimeLocal(announcement.created_at)
+				: formatDateTimeLocal(new Date());
 			archivedAtInput = announcement.archived_at
-				? moment(announcement.archived_at).format('YYYY-MM-DDTHH:mm')
+				? formatDateTimeLocal(announcement.archived_at)
 				: '';
 			tagsInput = [...(announcement.tags ?? [])];
 			attachmentsInput = [...(announcement.attachments ?? [])];
@@ -240,7 +238,7 @@
 		if (archivedAtInput) {
 			archivedAtInput = '';
 		} else {
-			archivedAtInput = moment().format('YYYY-MM-DDTHH:mm');
+			archivedAtInput = formatDateTimeLocal(new Date());
 		}
 	}
 
@@ -289,11 +287,6 @@
 					{:else}
 						<h1 class="title">
 							{announcement?.title}
-							{#if isArchived(announcement?.archived_at ?? null)}
-								<span class="archived-badge" title="Archived">
-									<IconArchive size={20} />
-								</span>
-							{/if}
 						</h1>
 					{/if}
 
@@ -331,14 +324,6 @@
 							{isPreviewing}
 							bind:tagsInput
 						/>
-					{:else if announcement?.tags && announcement.tags.length > 0}
-						<div class="tags">
-							{#key announcement.tags.length}
-								{#each announcement.tags as tag}
-									<TagChip {tag} clickable={false} />
-								{/each}
-							{/key}
-						</div>
 					{/if}
 				</div>
 
@@ -433,13 +418,9 @@
 	.header-content {
 		display: flex;
 		flex-direction: column;
-		flex: 1;
 	}
 
 	.title {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
 		margin: 0;
 		font-size: 2.5rem;
 		color: var(--text-one);
@@ -448,14 +429,15 @@
 	}
 
 	.archived-badge {
-		display: flex;
+		display: inline-flex;
 		align-items: center;
+		gap: 0.5rem;
 		color: var(--text-four);
 	}
 
 	.archived-badge :global(svg) {
-		width: 24px;
-		height: 24px;
+		width: 20px;
+		height: 20px;
 	}
 
 	.meta {
@@ -463,12 +445,6 @@
 		align-items: center;
 		flex-wrap: wrap;
 		column-gap: 1rem;
-	}
-
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 4px;
 	}
 
 	.divider {
@@ -495,16 +471,12 @@
 			border-radius: 0;
 		}
 
-		.header {
-			flex-direction: column;
+		.header-content {
+			flex: 1 1 100%;
 		}
 
-		.title {
-			font-size: 1.4rem;
-		}
-
-		.divider {
-			margin: 1rem 0;
+		.back-link {
+			display: none;
 		}
 	}
 </style>
