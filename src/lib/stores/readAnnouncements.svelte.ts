@@ -1,6 +1,11 @@
-import { PersistedState } from 'runed';
+import { ReadAnnouncementIdsSchema } from '$api/schemas';
+import { createValidatedPersistedState } from './validatedPersistedState';
 
-const readIds = new PersistedState<number[]>('read_announcements', []);
+const readIds = createValidatedPersistedState<number[]>(
+	'read_announcements',
+	[],
+	ReadAnnouncementIdsSchema
+);
 
 class ReadAnnouncementsTracker {
 	get ids(): readonly number[] {
@@ -35,6 +40,15 @@ class ReadAnnouncementsTracker {
 
 	countUnread(ids: number[]) {
 		return ids.filter((id) => !this.isRead(id)).length;
+	}
+
+	cleanup(currentAnnouncementIds: number[]) {
+		const currentSet = new Set(currentAnnouncementIds);
+		const storedIds = readIds.current;
+		const validIds = storedIds.filter((id) => currentSet.has(id));
+		if (validIds.length !== storedIds.length) {
+			readIds.current = validIds;
+		}
 	}
 }
 

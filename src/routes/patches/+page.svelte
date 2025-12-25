@@ -223,7 +223,7 @@
 	{/if}
 </Page>
 
-{#if patches.length > 0 || patchesQuery.hasData}
+{#if patches.length > 0 || patchesQuery.data !== null}
 <Modal bind:open={mobilePackagesOpen} title="Packages" fullscreen>
 	<div class="mobile-packages">
 		<PackageItem

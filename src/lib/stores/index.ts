@@ -12,15 +12,8 @@ export {
 	announcementTagsQuery,
 	allQueries,
 	initializeAllQueries,
-	refetchAllQueries,
-	invalidateAllQueries,
-	prefetchAnnouncementById,
-	getCachedAnnouncement,
-	hasValidCachedAnnouncement,
-	cacheAnnouncement,
-	invalidateAnnouncementCache,
-	invalidateAllAnnouncementCache,
-	hydrationState
+	refetchAnnouncements,
+	getAnnouncementById
 } from './queries.svelte';
 
 export type { QueryResult } from './queries.svelte';
@@ -28,11 +21,13 @@ export type { QueryResult } from './queries.svelte';
 export {
 	apiStatus,
 	manualRefresh,
-	startRefreshInterval,
-	stopRefreshInterval
+	startApiHealthPolling,
+	stopApiHealthPolling
 } from './apiHealth.svelte';
 
 export { readAnnouncements } from './readAnnouncements.svelte';
+
+export { announcementPolling } from './announcementPolling.svelte';
 
 export { auth } from './auth.svelte';
 

@@ -174,7 +174,7 @@
 				onclick={toggleArchive}
 			>
 				<h4>Archive</h4>
-				<div class="arrow" class:expanded={archiveExpanded} style="color: var(--surface-six);">
+				<div class="arrow" class:expanded={archiveExpanded}>
 					<IconChevron size={24} />
 				</div>
 			</button>

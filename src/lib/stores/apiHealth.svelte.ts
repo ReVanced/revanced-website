@@ -1,56 +1,75 @@
-import { browser } from '$app/environment';
+﻿import { browser } from '$app/environment';
 import { checkApiHealth } from '$api/client';
 
-const refreshInterval = 5 * 60 * 1000; 
+const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const MAX_BACKOFF = 15 * 60 * 1000; // 15 minutes max
+const BASE_RETRY_DELAY = 30 * 1000; // 30 seconds
 
-let isOnline = $state(true);
-let lastCheckTime = $state<number | null>(null);
-let intervalId: ReturnType<typeof setInterval> | null = null;
+let _isOnline = $state(true);
+let _lastCheckTime = $state<number | null>(null);
+let _intervalId: ReturnType<typeof setInterval> | null = null;
+let _initialized = false;
+let _consecutiveFailures = 0;
 
-let refetchDataCallback: (() => void) | null = null;
-
-async function pingAndRefresh(): Promise<void> {
-	const healthy = await checkApiHealth();
-
-	isOnline = healthy;
-	lastCheckTime = Date.now();
-	if (healthy && refetchDataCallback) {
-		refetchDataCallback();
+async function checkStatus(): Promise<void> {
+	try {
+		const healthy = await checkApiHealth();
+		_isOnline = healthy;
+		_lastCheckTime = Date.now();
+		
+		if (healthy) {
+			_consecutiveFailures = 0;
+			if (_intervalId && _consecutiveFailures > 0) {
+				clearInterval(_intervalId);
+				_intervalId = setInterval(checkStatus, REFRESH_INTERVAL);
+			}
+		} else {
+			_consecutiveFailures++;
+		}
+	} catch {
+		_isOnline = false;
+		_lastCheckTime = Date.now();
+		_consecutiveFailures++;
+		
+		if (_consecutiveFailures >= 3 && _intervalId) {
+			const backoffTime = Math.min(BASE_RETRY_DELAY * Math.pow(2, _consecutiveFailures - 3), MAX_BACKOFF);
+			clearInterval(_intervalId);
+			_intervalId = setInterval(checkStatus, backoffTime);
+		}
 	}
 }
 
-export function startRefreshInterval(onRefetch: () => void): void {
-	if (!browser || intervalId) return;
+export function startApiHealthPolling(): void {
+	if (!browser || _initialized) return;
+	_initialized = true;
+	_consecutiveFailures = 0;
 
-	refetchDataCallback = onRefetch;
+	checkStatus();
 
-	checkApiHealth().then((healthy) => {
-		isOnline = healthy;
-		lastCheckTime = Date.now();
-	});
-
-	intervalId = setInterval(pingAndRefresh, refreshInterval);
+	_intervalId = setInterval(checkStatus, REFRESH_INTERVAL);
 }
 
-export function stopRefreshInterval(): void {
-	if (intervalId) {
-		clearInterval(intervalId);
-		intervalId = null;
+export function stopApiHealthPolling(): void {
+	if (_intervalId) {
+		clearInterval(_intervalId);
+		_intervalId = null;
 	}
-	refetchDataCallback = null;
+	_initialized = false;
+	_consecutiveFailures = 0;
 }
 
 export async function manualRefresh(): Promise<void> {
-	await pingAndRefresh();
+	await checkStatus();
 }
+
 export const apiStatus = {
 	get isOnline() {
-		return isOnline;
+		return _isOnline;
 	},
 	get isOffline() {
-		return !isOnline;
+		return !_isOnline;
 	},
 	get lastCheckTime() {
-		return lastCheckTime;
+		return _lastCheckTime;
 	}
 };

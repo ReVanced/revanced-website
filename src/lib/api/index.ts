@@ -1,24 +1,7 @@
 export * from './types';
 export * from './client';
 export * from './auth';
-export { 
-	queryKeys, 
-	queryOptions,
-	useAboutQuery,
-	useTeamQuery,
-	useManagerQuery,
-	useContributorsQuery,
-	usePatchesQuery,
-	useAnnouncementsQuery,
-	useAnnouncementByIdQuery,
-	useAnnouncementTagsQuery,
-	useHealthQuery,
-	useCreateAnnouncementMutation,
-	useUpdateAnnouncementMutation,
-	useDeleteAnnouncementMutation,
-	prefetchAnnouncement
-} from './queries';
-export { createQueryClient, setupQueryPersistence } from './queryClient';
+export * from './schemas';
 export { 
 	getApiBaseUrl, 
 	setApiBaseUrl, 

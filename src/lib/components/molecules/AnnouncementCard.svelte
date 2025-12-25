@@ -2,7 +2,7 @@
 	import type { Announcement } from '$api';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
-	import { readAnnouncements, prefetchAnnouncementById } from '$stores';
+	import { readAnnouncements } from '$stores';
 	import { relativeTime } from '$lib/utils/relativeTime';
 	import { isArchived, buildAnnouncementPath } from '$lib/utils/announcement';
 	import IconArchive from 'svelte-material-icons/ArchiveOutline.svelte';
@@ -19,10 +19,6 @@
 		readAnnouncements.markAsRead(announcement.id);
 	}
 
-	function prefetch() {
-		prefetchAnnouncementById(announcement.id);
-	}
-
 	let href = $derived(buildAnnouncementPath(announcement.id, announcement.title));
 	let hasImage = $derived(announcement.attachments && announcement.attachments.length > 0);
 	let archived = $derived(isArchived(announcement.archived_at));
@@ -34,7 +30,6 @@
 	{href}
 	class="card-link"
 	data-sveltekit-preload-data
-	onmouseenter={prefetch}
 	onclick={handleClick}
 >
 	<article class="card" class:attachment={hasImage}>

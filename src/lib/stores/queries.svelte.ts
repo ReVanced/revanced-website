@@ -1,4 +1,4 @@
-import { resource, PersistedState } from 'runed';
+﻿import { resource } from 'runed';
 import { browser } from '$app/environment';
 import {
 	fetchAbout,
@@ -6,7 +6,6 @@ import {
 	fetchManager,
 	fetchContributors,
 	fetchPatches,
-	fetchAnnouncements,
 	fetchAnnouncementById,
 	fetchAnnouncementTags
 } from '$api/client';
@@ -19,206 +18,164 @@ import type {
 	Announcement,
 	AnnouncementTag
 } from '$api/types';
-
-const CACHE_PREFIX = 'rv_cache_';
-const STALE_TIME = 5 * 60 * 1000;
-const ANNOUNCEMENT_CACHE_KEY = `${CACHE_PREFIX}announcements_by_id`;
-
-let isRestoringCache = $state(browser);
-let restoringPromiseResolve: (() => void) | null = null;
-const restoringPromise = browser ? new Promise<void>((resolve) => {
-	restoringPromiseResolve = resolve;
-}) : Promise.resolve();
-
-export const hydrationState = {
-	get isRestoring() {
-		return isRestoringCache;
-	},
-	get promise() {
-		return restoringPromise;
-	}
-};
+import { announcementPolling } from './announcementPolling.svelte';
 
 export type QueryResult<T> = {
 	readonly data: T | null;
 	readonly loading: boolean;
-	readonly refreshing: boolean;
 	readonly error: Error | null;
-	readonly hasData: boolean;
-	readonly isStale: boolean;
-	refetch: () => Promise<T | undefined>;
-	invalidate: () => void;
 };
 
-function createLazyCachedResource<T>(
-	key: string,
+export type RefetchableQueryResult<T> = QueryResult<T> & {
+	refetch: () => Promise<T>;
+};
+function createQuery<T>(
 	fetcher: () => Promise<T>,
 	defaultValue: T
-): QueryResult<T> {
-	const cache = new PersistedState<{ data: T; timestamp: number } | null>(
-		`${CACHE_PREFIX}${key}`,
-		null
-	);
+) {
+	let data = $state<T>(defaultValue);
+	let loading = $state(false);
+	let error = $state<Error | null>(null);
+	let fetched = false;
 
-	let res: ReturnType<typeof resource<[true], T>> | null = null;
-	let manualLoading = $state(false);
-	let manualError = $state<Error | null>(null);
-	let staleRefetchTriggered = false;
-
-	const isStale = () => {
-		if (!cache.current) return true;
-		return Date.now() - cache.current.timestamp > STALE_TIME;
-	};
-
-	const getResource = () => {
-		if (!res) {
-			const cachedData = cache.current?.data;
-			const hasValidCache = cachedData !== undefined && cachedData !== null;
-			
-			res = resource<true, unknown>(
-				() => true as const,
-				async () => {
-					if (!browser) return cachedData ?? defaultValue;
-
-					try {
-						const data = await fetcher();
-						queueMicrotask(() => { // Defer cache update to avoid reactivity issues during hydration
-							cache.current = { data, timestamp: Date.now() };
-						});
-						staleRefetchTriggered = false;
-						return data;
-					} catch (error) {
-						staleRefetchTriggered = false;
-						if (cachedData) {
-							return cachedData;
-						}
-						throw error;
-					}
-				},
-				{
-					initialValue: hasValidCache ? cachedData : defaultValue,
-					once: hasValidCache
-				}
-			);
-		}
-		return res;
-	};
-
-	const checkAndRefetchIfStale = () => {
-		if (browser && isStale() && !staleRefetchTriggered && res && !res.loading) {
-			queueMicrotask(() => {
-				if (!staleRefetchTriggered && res && !res.loading) {
-					staleRefetchTriggered = true;
-					res.refetch();
-				}
-			});
-		}
-	};
-
-	const manualRefetch = async (): Promise<T | undefined> => {
-		if (!browser) return undefined;
-
-		if (res) {
-			try {
-				return res.refetch() as Promise<T | undefined>;
-			} catch {
-				// fall through
-			}
-		}
-
-		manualLoading = true;
-		manualError = null;
+	async function doFetch() {
+		if (!browser || fetched) return;
+		fetched = true;
+		loading = true;
+		error = null;
 		try {
-			const data = await fetcher();
-			queueMicrotask(() => {
-				// Defer cache update to avoid reactivity issues during hydration
-				cache.current = { data, timestamp: Date.now() };
-			});
-			staleRefetchTriggered = false;
-			return data;
-		} catch (error) {
-			manualError = error instanceof Error ? error : new Error(String(error));
-			return undefined;
+			data = await fetcher();
+		} catch (e) {
+			error = e instanceof Error ? e : new Error(String(e));
+			console.error('[Query] Fetch failed:', e);
 		} finally {
-			manualLoading = false;
+			loading = false;
 		}
-	};
+	}
+
+	if (browser) {
+		doFetch();
+	}
 
 	return {
 		get data() {
-			const r = getResource();
-			checkAndRefetchIfStale();
-			return (r.current as T) ?? cache.current?.data ?? null;
+			return data;
 		},
 		get loading() {
-			const r = getResource();
-			const hasData = r.current !== undefined || cache.current?.data !== undefined;
-			return (r.loading || manualLoading) && !hasData;
-		},
-		get refreshing() {
-			const r = getResource();
-			const hasData = r.current !== undefined || cache.current?.data !== undefined;
-			return (r.loading || manualLoading) && hasData;
+			return loading;
 		},
 		get error() {
-			return getResource().error ?? manualError ?? null;
+			return error;
 		},
-		get hasData() {
-			return getResource().current !== undefined || cache.current?.data !== undefined;
-		},
-		get isStale() {
-			return isStale();
-		},
-		refetch: manualRefetch,
-		invalidate: () => {
-			cache.current = null;
-			staleRefetchTriggered = false;
+		async refetch() {
+			fetched = false;
+			await doFetch();
+			return data;
 		}
 	};
 }
+const _aboutQuery = createQuery<About | null>(fetchAbout, null);
+const _teamQuery = createQuery<TeamMember[]>(fetchTeam, []);
+const _managerQuery = createQuery<ManagerRelease | null>(fetchManager, null);
+const _contributorsQuery = createQuery<Contributable[]>(fetchContributors, []);
+const _patchesQuery = createQuery<Patch[]>(fetchPatches, []);
+const _announcementTagsQuery = createQuery<AnnouncementTag[]>(fetchAnnouncementTags, []);
 
-export const aboutQuery = createLazyCachedResource<About | null>(
-	'about',
-	fetchAbout,
-	null
-);
+const announcementCache = new Map<number, ReturnType<typeof createQuery<Announcement | null>>>();
+export const aboutQuery: QueryResult<About | null> = {
+	get data() {
+		return _aboutQuery.data;
+	},
+	get loading() {
+		return _aboutQuery.loading;
+	},
+	get error() {
+		return _aboutQuery.error;
+	}
+};
 
-export const teamQuery = createLazyCachedResource<TeamMember[]>(
-	'team',
-	fetchTeam,
-	[]
-);
+export const teamQuery: QueryResult<TeamMember[]> = {
+	get data() {
+		return _teamQuery.data;
+	},
+	get loading() {
+		return _teamQuery.loading;
+	},
+	get error() {
+		return _teamQuery.error;
+	}
+};
 
-export const managerQuery = createLazyCachedResource<ManagerRelease | null>(
-	'manager',
-	fetchManager,
-	null
-);
+export const managerQuery: QueryResult<ManagerRelease | null> = {
+	get data() {
+		return _managerQuery.data;
+	},
+	get loading() {
+		return _managerQuery.loading;
+	},
+	get error() {
+		return _managerQuery.error;
+	}
+};
 
-export const contributorsQuery = createLazyCachedResource<Contributable[]>(
-	'contributors',
-	fetchContributors,
-	[]
-);
+export const contributorsQuery: QueryResult<Contributable[]> = {
+	get data() {
+		return _contributorsQuery.data;
+	},
+	get loading() {
+		return _contributorsQuery.loading;
+	},
+	get error() {
+		return _contributorsQuery.error;
+	}
+};
 
-export const patchesQuery = createLazyCachedResource<Patch[]>(
-	'patches',
-	fetchPatches,
-	[]
-);
+export const patchesQuery: QueryResult<Patch[]> = {
+	get data() {
+		return _patchesQuery.data;
+	},
+	get loading() {
+		return _patchesQuery.loading;
+	},
+	get error() {
+		return _patchesQuery.error;
+	}
+};
 
-export const announcementsQuery = createLazyCachedResource<Announcement[]>(
-	'announcements',
-	fetchAnnouncements,
-	[]
-);
+export const announcementTagsQuery: QueryResult<AnnouncementTag[]> = {
+	get data() {
+		return _announcementTagsQuery.data;
+	},
+	get loading() {
+		return _announcementTagsQuery.loading;
+	},
+	get error() {
+		return _announcementTagsQuery.error;
+	}
+};
 
-export const announcementTagsQuery = createLazyCachedResource<AnnouncementTag[]>(
-	'announcement_tags',
-	fetchAnnouncementTags,
-	[]
-);
+export const announcementsQuery = announcementPolling;
 
+export function getAnnouncementById(id: number): QueryResult<Announcement | null> {
+	if (!announcementCache.has(id)) {
+		announcementCache.set(id, createQuery<Announcement | null>(
+			() => fetchAnnouncementById(id),
+			null
+		));
+	}
+	const query = announcementCache.get(id)!;
+	return {
+		get data() {
+			return query.data;
+		},
+		get loading() {
+			return query.loading;
+		},
+		get error() {
+			return query.error;
+		}
+	};
+}
 export const allQueries = [
 	aboutQuery,
 	teamQuery,
@@ -229,73 +186,8 @@ export const allQueries = [
 	announcementTagsQuery
 ] as const;
 
-// must be called in component setup to avoid effect_orphan errors
 export function initializeAllQueries() {
-	for (const query of allQueries) {
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		query.data;
-	}
-	
-	if (browser && isRestoringCache) {
-		queueMicrotask(() => {
-			isRestoringCache = false;
-			restoringPromiseResolve?.();
-		});
-	}
 }
-
-export function refetchAllQueries() {
-	allQueries.forEach(q => q.refetch());
-}
-
-export function invalidateAllQueries() {
-	allQueries.forEach(q => q.invalidate());
-}
-
-type AnnouncementCache = { [id: number]: { data: Announcement; timestamp: number } };
-
-const announcementByIdCache = new PersistedState<AnnouncementCache>(ANNOUNCEMENT_CACHE_KEY, {});
-
-const isAnnouncementStale = (id: number) => {
-	const cached = announcementByIdCache.current[id];
-	return !cached || Date.now() - cached.timestamp > STALE_TIME;
-};
-
-export function getCachedAnnouncement(id: number) {
-	return announcementByIdCache.current[id]?.data ?? null;
-}
-
-export const hasValidCachedAnnouncement = (id: number) => !isAnnouncementStale(id);
-
-export async function prefetchAnnouncementById(id: number) {
-	if (!browser) return null;
-	if (!isAnnouncementStale(id)) return announcementByIdCache.current[id]?.data ?? null;
-
-	try {
-		const data = await fetchAnnouncementById(id);
-		queueMicrotask(() => {
-			announcementByIdCache.current = { ...announcementByIdCache.current, [id]: { data, timestamp: Date.now() } };
-		});
-		return data;
-	} catch (e) {
-		console.error(`Failed to prefetch announcement ${id}:`, e);
-		return announcementByIdCache.current[id]?.data ?? null;
-	}
-}
-
-export function cacheAnnouncement(announcement: Announcement) {
-	if (!browser) return;
-	queueMicrotask(() => {
-		announcementByIdCache.current = { ...announcementByIdCache.current, [announcement.id]: { data: announcement, timestamp: Date.now() } };
-	});
-}
-
-export function invalidateAnnouncementCache(id: number) {
-	if (!browser) return;
-	const { [id]: _, ...rest } = announcementByIdCache.current;
-	announcementByIdCache.current = rest;
-}
-
-export function invalidateAllAnnouncementCache() {
-	if (browser) announcementByIdCache.current = {};
+export function refetchAnnouncements() {
+	return announcementsQuery.refetch();
 }

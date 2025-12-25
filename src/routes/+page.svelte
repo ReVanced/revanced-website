@@ -150,8 +150,6 @@
 			}
 		}
 	];
-
-	let socialsOpacity = $derived(showSocials ? 1 : 0);
 </script>
 
 <svelte:head>
@@ -177,7 +175,7 @@
 						<Button buttonStyle="tonal" icon={Description} href="/patches">View patches</Button>
 					</div>
 
-					<div class="external-links btn-row" style="opacity: {socialsOpacity}">
+					<div class="external-links btn-row" class:hidden={!showSocials}>
 						{#key socialLinks.length}
 							{#each socialLinks as link (link.name)}
 								<SocialButton social={link} />
@@ -252,6 +250,11 @@
 		position: absolute;
 		bottom: 1rem;
 		transition: opacity 0.1s var(--bezier-one);
+	}
+
+	.external-links.hidden {
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.preview {

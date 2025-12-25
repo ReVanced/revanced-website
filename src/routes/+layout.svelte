@@ -19,19 +19,17 @@
 		theme,
 		aboutQuery,
 		initializeAllQueries,
-		refetchAllQueries,
-		startRefreshInterval,
-		stopRefreshInterval,
 		auth,
-		hydrationState,
-		modalsStack
+		modalsStack,
+		announcementPolling,
+		startApiHealthPolling,
+		stopApiHealthPolling
 	} from '$stores';
 	import { useHolidayTheme } from '$lib/utils/themeEvents';
 	import { fetchDynamicSettings } from '$lib/api/settings';
 
 	let { children }: WithChildren = $props();
 	useHolidayTheme();
-	initializeAllQueries();
 
 	const pageLinks = [
 		{ label: 'Home', href: '/' },
@@ -47,7 +45,6 @@
 
 	let emailDialogOpen = $state(false);
 	let showLoadingSpinner = $state(false);
-	let isRestoring = $derived(hydrationState.isRestoring);
 	let hasModals = $derived(modalsStack.hasModals());
 
 	// Show loading spinner after 250ms delay during navigation
@@ -73,13 +70,18 @@
 	}
 
 	onMount(() => {
+		initializeAllQueries();
+		
+		announcementPolling.start();
+		startApiHealthPolling();
+		
 		auth.startChecking();
 		fetchDynamicSettings();
-		startRefreshInterval(refetchAllQueries);
 
 		return () => {
 			auth.stopChecking();
-			stopRefreshInterval();
+			announcementPolling.stop();
+			stopApiHealthPolling();
 		};
 	});
 </script>
@@ -106,7 +108,7 @@
 <ConsentDialog />
 
 <main id="main-content" inert={hasModals ? true : undefined}>
-	{#if isRestoring || showLoadingSpinner}
+	{#if showLoadingSpinner}
 		<Spinner />
 	{:else}
 		{@render children()}

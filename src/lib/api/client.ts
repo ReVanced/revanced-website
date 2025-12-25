@@ -9,13 +9,46 @@ import type {
 	Announcement,
 	AnnouncementTag
 } from './types';
+import {
+	AboutSchema,
+	TeamMembersSchema,
+	ManagerReleaseSchema,
+	ContributablesSchema,
+	PatchesSchema,
+	AnnouncementsSchema,
+	AnnouncementTagsSchema,
+	AnnouncementSchema
+} from './schemas';
+import type { z } from 'zod';
 
-async function fetchJson<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
+class ApiValidationError extends Error {
+	constructor(
+		endpoint: string,
+		public readonly issues: z.ZodIssue[]
+	) {
+		super(`Invalid response from ${endpoint}. Please try again later.`);
+		this.name = 'ApiValidationError';
+	}
+}
+
+async function fetchJson<T>(
+	endpoint: string,
+	schema: z.ZodType<T>,
+	signal?: AbortSignal
+): Promise<T> {
 	const response = await fetch(buildUrl(endpoint), signal ? { signal } : undefined);
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
-	return response.json();
+	const data = await response.json();
+
+	// Validate with Zod
+	const result = schema.safeParse(data);
+	if (!result.success) {
+		console.error(`[API] Validation failed for ${endpoint}:`, result.error.issues);
+		throw new ApiValidationError(endpoint, result.error.issues);
+	}
+	return result.data;
 }
 
 function buildAuthHeaders(): Record<string, string> {
@@ -26,7 +59,12 @@ function buildAuthHeaders(): Record<string, string> {
 	};
 }
 
-async function postJson<T>(endpoint: string, body?: unknown): Promise<T | null> {
+
+async function postJson<T>(
+	endpoint: string,
+	body?: unknown,
+	schema?: z.ZodType<T>
+): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
 	const response = await fetch(buildUrl(endpoint), {
 		method: 'POST',
@@ -36,10 +74,26 @@ async function postJson<T>(endpoint: string, body?: unknown): Promise<T | null> 
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
-	return response.headers.get('content-length') === '0' ? null : response.json();
+	if (response.headers.get('content-length') === '0') {
+		return null;
+	}
+	const data = await response.json();
+	if (schema) {
+		const result = schema.safeParse(data);
+		if (!result.success) {
+			console.error(`[API] Validation failed for POST ${endpoint}:`, result.error.issues);
+			throw new ApiValidationError(endpoint, result.error.issues);
+		}
+		return result.data;
+	}
+	return data as T;
 }
 
-async function patchJson<T>(endpoint: string, body?: unknown): Promise<T | null> {
+async function patchJson<T>(
+	endpoint: string,
+	body?: unknown,
+	schema?: z.ZodType<T>
+): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
 	const response = await fetch(buildUrl(endpoint), {
 		method: 'PATCH',
@@ -49,10 +103,25 @@ async function patchJson<T>(endpoint: string, body?: unknown): Promise<T | null>
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
-	return response.headers.get('content-length') === '0' ? null : response.json();
+	if (response.headers.get('content-length') === '0') {
+		return null;
+	}
+	const data = await response.json();
+	if (schema) {
+		const result = schema.safeParse(data);
+		if (!result.success) {
+			console.error(`[API] Validation failed for PATCH ${endpoint}:`, result.error.issues);
+			throw new ApiValidationError(endpoint, result.error.issues);
+		}
+		return result.data;
+	}
+	return data as T;
 }
 
-async function deleteJson<T>(endpoint: string): Promise<T | null> {
+async function deleteJson<T>(
+	endpoint: string,
+	schema?: z.ZodType<T>
+): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
 	const response = await fetch(buildUrl(endpoint), {
 		method: 'DELETE',
@@ -61,27 +130,39 @@ async function deleteJson<T>(endpoint: string): Promise<T | null> {
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
-	return response.headers.get('content-length') === '0' ? null : response.json();
+	if (response.headers.get('content-length') === '0') {
+		return null;
+	}
+	const data = await response.json();
+	if (schema) {
+		const result = schema.safeParse(data);
+		if (!result.success) {
+			console.error(`[API] Validation failed for DELETE ${endpoint}:`, result.error.issues);
+			throw new ApiValidationError(endpoint, result.error.issues);
+		}
+		return result.data;
+	}
+	return data as T;
 }
 
 export async function fetchAbout(): Promise<About> {
-	return fetchJson<About>('about');
+	return fetchJson<About>('about', AboutSchema);
 }
 
 export async function fetchTeam(): Promise<TeamMember[]> {
-	return fetchJson<TeamMember[]>('team');
+	return fetchJson<TeamMember[]>('team', TeamMembersSchema);
 }
 
 export async function fetchManager(): Promise<ManagerRelease> {
-	return fetchJson<ManagerRelease>('manager');
+	return fetchJson<ManagerRelease>('manager', ManagerReleaseSchema);
 }
 
 export async function fetchContributors(): Promise<Contributable[]> {
-	return fetchJson<Contributable[]>('contributors');
+	return fetchJson<Contributable[]>('contributors', ContributablesSchema);
 }
 
 export async function fetchPatches(): Promise<Patch[]> {
-	return fetchJson<Patch[]>('patches/list');
+	return fetchJson<Patch[]>('patches/list', PatchesSchema);
 }
 
 export type FetchAnnouncementsOptions = {
@@ -91,32 +172,44 @@ export type FetchAnnouncementsOptions = {
 };
 
 export async function fetchAnnouncements(options: FetchAnnouncementsOptions = {}): Promise<Announcement[]> {
-	const baseUrl = buildUrl('announcements');
-	const url = new URL(baseUrl, window.location.origin);
+	let endpoint = 'announcements';
+	const params = new URLSearchParams();
 
 	if (options.tags && options.tags.length > 0) {
-		url.searchParams.set('tags', options.tags.join(','));
+		params.set('tags', options.tags.join(','));
 	}
 	if (options.count !== undefined) {
-		url.searchParams.set('count', String(options.count));
+		params.set('count', String(options.count));
 	}
 	if (options.cursor !== undefined) {
-		url.searchParams.set('cursor', String(options.cursor));
+		params.set('cursor', String(options.cursor));
 	}
 
-	const response = await fetch(url.toString());
+	const queryString = params.toString();
+	if (queryString) {
+		endpoint = `${endpoint}?${queryString}`;
+	}
+
+	const response = await fetch(buildUrl(endpoint));
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
-	return response.json();
+	const data = await response.json();
+
+	const result = AnnouncementsSchema.safeParse(data);
+	if (!result.success) {
+		console.error('[API] Validation failed for announcements:', result.error.issues);
+		throw new Error('Invalid response from announcements. Please try again later.');
+	}
+	return result.data;
 }
 
 export async function fetchAnnouncementById(id: number, signal?: AbortSignal): Promise<Announcement> {
-	return fetchJson<Announcement>(`announcements/${id}`, signal);
+	return fetchJson<Announcement>(`announcements/${id}`, AnnouncementSchema, signal);
 }
 
 export async function fetchAnnouncementTags(): Promise<AnnouncementTag[]> {
-	return fetchJson<AnnouncementTag[]>('announcements/tags');
+	return fetchJson<AnnouncementTag[]>('announcements/tags', AnnouncementTagsSchema);
 }
 
 export async function checkApiHealth(): Promise<boolean> {
@@ -144,13 +237,13 @@ export type AnnouncementPayload = {
 };
 
 export async function createAnnouncement(announcement: AnnouncementPayload): Promise<Announcement> {
-	const result = await postJson<Announcement>('announcements', announcement);
+	const result = await postJson<Announcement>('announcements', announcement, AnnouncementSchema);
 	if (!result) throw new Error('Failed to create announcement');
 	return result;
 }
 
 export async function updateAnnouncement(id: number, announcement: AnnouncementPayload): Promise<Announcement> {
-	const result = await patchJson<Announcement>(`announcements/${id}`, announcement);
+	const result = await patchJson<Announcement>(`announcements/${id}`, announcement, AnnouncementSchema);
 	if (!result) throw new Error('Failed to update announcement');
 	return result;
 }
