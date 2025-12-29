@@ -129,7 +129,7 @@
 	});
 </script>
 
-<Page title="Announcements" description="Stay up to date with the latest ReVanced news">
+<Page title="" description="">
 	<div class="search-section">
 		<div class="search-inner">
 			<div class="search-row">

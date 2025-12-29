@@ -11,15 +11,18 @@ importers:
       '@iconify-json/material-symbols':
         specifier: ^1.2.50
         version: 1.2.50
+      '@tanstack/query-persist-client-core':
+        specifier: ^5.91.13
+        version: 5.91.13
       '@tanstack/query-sync-storage-persister':
-        specifier: ^5.90.14
-        version: 5.90.14
+        specifier: ^5.90.16
+        version: 5.90.16
       '@tanstack/svelte-query':
-        specifier: ^6.0.10
-        version: 6.0.10(svelte@5.46.0)
-      '@tanstack/svelte-query-persist-client':
         specifier: ^6.0.12
-        version: 6.0.12(@tanstack/svelte-query@6.0.10(svelte@5.46.0))(svelte@5.46.0)
+        version: 6.0.12(svelte@5.46.0)
+      '@tanstack/svelte-query-persist-client':
+        specifier: ^6.0.14
+        version: 6.0.14(@tanstack/svelte-query@6.0.12(svelte@5.46.0))(svelte@5.46.0)
       fuse.js:
         specifier: ^7.1.0
         version: 7.1.0
@@ -504,23 +507,23 @@ packages:
       svelte: ^5.0.0
       vite: ^6.3.0 || ^7.0.0
 
-  '@tanstack/query-core@5.90.12':
-    resolution: {integrity: sha512-T1/8t5DhV/SisWjDnaiU2drl6ySvsHj1bHBCWNXd+/T+Hh1cf6JodyEYMd5sgwm+b/mETT4EV3H+zCVczCU5hg==}
+  '@tanstack/query-core@5.90.14':
+    resolution: {integrity: sha512-/6di2yNI+YxpVrH9Ig74Q+puKnkCE+D0LGyagJEGndJHJc6ahkcc/UqirHKy8zCYE/N9KLggxcQvzYCsUBWgdw==}
 
-  '@tanstack/query-persist-client-core@5.91.11':
-    resolution: {integrity: sha512-NNpRGxQY/nVOdzfs5QbevPjGsUVoEiFwqxxaopLyu6todwtDOCfIOfhXSmpMVXBiCxUn7kqaUB1iwaBKqoAVRQ==}
+  '@tanstack/query-persist-client-core@5.91.13':
+    resolution: {integrity: sha512-0pximJKPb4Tp61v94QYo/Ia/BZuV76XsKvtw+sPBBLBw2iqBSvR8vyP3S5qa7DeICApckktAvIlpDxSxqyouAw==}
 
-  '@tanstack/query-sync-storage-persister@5.90.14':
-    resolution: {integrity: sha512-gqQy7VFNUcFnD61mr1sqvMLdL3MXrTzMmjuQqRVyItb9FgEKzMSyBfo8cLZPiWWrz29eAVlQs1rEYUNLZRRMqg==}
+  '@tanstack/query-sync-storage-persister@5.90.16':
+    resolution: {integrity: sha512-8QdQ1nf1TxDx1Mh5jEGvD3aihwZJ+Q+bdPwun/jmxTwqPl1UoZr3lkxTK8IQO2ud5j6jQ4eCQMe/ouPpefPyuQ==}
 
-  '@tanstack/svelte-query-persist-client@6.0.12':
-    resolution: {integrity: sha512-eBPByyOu0jkFa4GWe9vukf1tqPXbeQ78V6y/EHrYiGjfA2txnwwAf+anyOcyjMtlZFO2N2X9rEUOXelG/77Xjg==}
+  '@tanstack/svelte-query-persist-client@6.0.14':
+    resolution: {integrity: sha512-ef6EOQavo5cfxwlQ27lyvhFxrWMkOoOWC1fuBAvgvg/d2YoT6R2Bu1totJNgymQwH1VMVPme9asvR9QDpX78qQ==}
     peerDependencies:
-      '@tanstack/svelte-query': ^6.0.10
+      '@tanstack/svelte-query': ^6.0.12
       svelte: ^5.25.0
 
-  '@tanstack/svelte-query@6.0.10':
-    resolution: {integrity: sha512-J0kM3JNvRcRCM6cbHLeICs73aLp98N/nsihdVEtiNo3MEN4pAnO45qZ2yxX70MrEZ9vffXaCXMCChwgXs1lZ/Q==}
+  '@tanstack/svelte-query@6.0.12':
+    resolution: {integrity: sha512-BelMexz1IYu8eXBhQBJJl1BAcYT08CByD88mqmjdojmpCBWn9kntFJXKcKUwqEdpZ9Y5JjeIBAJsiRhOCWyldg==}
     peerDependencies:
       svelte: ^5.25.0
 
@@ -1591,26 +1594,26 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tanstack/query-core@5.90.12': {}
+  '@tanstack/query-core@5.90.14': {}
 
-  '@tanstack/query-persist-client-core@5.91.11':
+  '@tanstack/query-persist-client-core@5.91.13':
     dependencies:
-      '@tanstack/query-core': 5.90.12
+      '@tanstack/query-core': 5.90.14
 
-  '@tanstack/query-sync-storage-persister@5.90.14':
+  '@tanstack/query-sync-storage-persister@5.90.16':
     dependencies:
-      '@tanstack/query-core': 5.90.12
-      '@tanstack/query-persist-client-core': 5.91.11
+      '@tanstack/query-core': 5.90.14
+      '@tanstack/query-persist-client-core': 5.91.13
 
-  '@tanstack/svelte-query-persist-client@6.0.12(@tanstack/svelte-query@6.0.10(svelte@5.46.0))(svelte@5.46.0)':
+  '@tanstack/svelte-query-persist-client@6.0.14(@tanstack/svelte-query@6.0.12(svelte@5.46.0))(svelte@5.46.0)':
     dependencies:
-      '@tanstack/query-persist-client-core': 5.91.11
-      '@tanstack/svelte-query': 6.0.10(svelte@5.46.0)
+      '@tanstack/query-persist-client-core': 5.91.13
+      '@tanstack/svelte-query': 6.0.12(svelte@5.46.0)
       svelte: 5.46.0
 
-  '@tanstack/svelte-query@6.0.10(svelte@5.46.0)':
+  '@tanstack/svelte-query@6.0.12(svelte@5.46.0)':
     dependencies:
-      '@tanstack/query-core': 5.90.12
+      '@tanstack/query-core': 5.90.14
       svelte: 5.46.0
 
   '@types/cookie@0.6.0': {}

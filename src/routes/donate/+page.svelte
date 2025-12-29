@@ -98,7 +98,7 @@
 	}
 </script>
 
-<Page title="Donate to ReVanced" description="Support ReVanced development" {schemas}>
+<Page title="Donate to ReVanced" description="Donate to ReVanced with a variety of donation methods, including cryptocurrencies in order to allow us to maintain our servers and develop new features." {schemas}>
 	<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<section class="hero">
 			<div class="hero-text">

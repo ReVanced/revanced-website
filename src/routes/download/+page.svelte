@@ -77,7 +77,7 @@
 	}
 </script>
 
-<Page description="Download ReVanced" {schemas}>
+<Page title="Download ReVanced" description="Download ReVanced Manager to patch your favourite apps, right on your device." {schemas}>
 	<main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 		<h2>ReVanced <span class="highlight">Manager</span></h2>
 		<p>Patch your favourite apps, right on your device.</p>

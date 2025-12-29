@@ -23,7 +23,7 @@
 	];
 </script>
 
-<Page title="Contributors of ReVanced" description="ReVanced is made possible by the community" {schemas}>
+<Page title="Contributors of ReVanced" description="ReVanced is made possible by the community. Check out the people who have contributed to the project and how you can contribute too." {schemas}>
 	<div class="wrapper">
 		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<h2>Made possible by the community.</h2>

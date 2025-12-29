@@ -4,7 +4,6 @@
 	import { PersistQueryClientProvider } from '@tanstack/svelte-query-persist-client';
 	import { browser } from '$app/environment';
 
-	import favicon from '$assets/icons/favicon.ico';
 	import AppShell from '$components/organisms/AppShell.svelte';
 	import Spinner from '$components/atoms/Spinner.svelte';
 	import type { WithChildren } from '$types';
@@ -26,10 +25,6 @@
 		}
 	});
 </script>
-
-<svelte:head>
-	<link rel="icon" href={favicon} />
-</svelte:head>
 
 {#if persister}
 <PersistQueryClientProvider 

@@ -129,7 +129,7 @@
 	);
 </script>
 
-<Page title="Patches for ReVanced" description="Browse our rich collection of patches for ReVanced" {schemas}>
+<Page title="Patches for ReVanced" description="Browse our rich collection of patches for ReVanced you can use to patch your favourite apps." {schemas}>
 	<div class="search-bar">
 		<div class="search-contain">
 			<Search
