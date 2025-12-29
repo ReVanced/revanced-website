@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { PUBLIC_GOOGLE_TAG_MANAGER_ID } from '$env/static/public';
 	import { fade, fly } from 'svelte/transition';
 	import Button from '$components/atoms/Button.svelte';
 
 	const STORAGE_KEY = 'analytics';
-	const GTM_ID = import.meta.env.VITE_GOOGLE_TAG_MANAGER_ID ?? '';
+	const GTM_ID = PUBLIC_GOOGLE_TAG_MANAGER_ID;
 
 	let visible = $state(false);
 	let consent = $state<boolean | null>(null);
