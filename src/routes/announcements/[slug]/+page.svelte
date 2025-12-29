@@ -6,8 +6,8 @@
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
-	import { relativeTime, formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
-	import { isValidUrl, toSlug, isArchived, isScheduled } from '$lib/utils';
+	import { formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
+	import { isValidUrl, toSlug, isScheduled } from '$lib/utils';
 	import {
 		fetchAnnouncementById,
 		createAnnouncement,
@@ -20,17 +20,8 @@
 		useInvalidateAnnouncements,
 		auth
 	} from '$stores';
-	import Gallery from '$components/molecules/Gallery.svelte';
-	import IconArchive from 'svelte-material-icons/ArchiveArrowDownOutline.svelte';
-	import IconEyeOff from 'svelte-material-icons/EyeOffOutline.svelte';
-	import AdminButtons from './AdminButtons.svelte';
-	import EditableHeader from './EditableHeader.svelte';
-	import EditableContent from './EditableContent.svelte';
-	import EditableLists from './EditableLists.svelte';
+	import Content from './Content.svelte';
 	import DeleteConfirmDialog from './DeleteConfirmDialog.svelte';
-	import AnnouncementSkeleton from './AnnouncementSkeleton.svelte';
-	import AnnouncementError from './AnnouncementError.svelte';
-	import AnnouncementContentView from './AnnouncementContentView.svelte';
 
 	const announcementsQuery = useAnnouncementsQuery();
 	const invalidateAnnouncements = useInvalidateAnnouncements();
@@ -256,17 +247,6 @@
 			e.returnValue = '';
 		}
 	}
-
-	let isEditMode = $derived(isEditing || isCreating);
-	let showArchivedBadge = $derived.by(() => {
-		if (!archivedAtInput || !isPreviewing) return false;
-		return isArchived(archivedAtInput);
-	});
-
-	let showScheduledBadge = $derived.by(() => {
-		if (!createdAtInput || !isPreviewing) return false;
-		return isScheduled(createdAtInput);
-	});
 </script>
 
 <svelte:window onbeforeunload={handleBeforeUnload} />
@@ -279,127 +259,35 @@
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	{#if isInvalidSlug}
-		<AnnouncementError message="Announcement not found." />
+		<p class="error-state">Announcement not found.</p>
 	{:else if loading && !isCreating}
-		<AnnouncementSkeleton />
+		<p class="loading-state">Loading...</p>
 	{:else if error && !isCreating}
-		<AnnouncementError message={error} />
+		<p class="error-state">{error}</p>
 	{:else if announcement || isCreating}
 		<article class="card">
-			<header class="header">
-				<div class="header-content">
-					{#if isEditMode}
-						<h1 class="title">
-							<EditableHeader
-								field="title"
-								isEditing={isEditMode}
-								{isPreviewing}
-								title={announcement?.title ?? ''}
-								bind:titleInput
-							/>
-							{#if showArchivedBadge}
-									<span title="Archived announcement" class="archived-badge">
-										<IconArchive size={20} />
-									</span>
-							{/if}
-							{#if showScheduledBadge}
-							<span title="Not visible to non-logged-in users yet" class="scheduled-badge">
-										<IconEyeOff size={20} />
-							 </span>
-							{/if}
-						</h1>
-					{:else}
-						<h1 class="title">
-							{announcement?.title}
-						</h1>
-					{/if}
-
-					<h4 class="meta">
-						{#if isEditMode}
-							<EditableHeader
-								field="date"
-								isEditing={isEditMode}
-								{isPreviewing}
-								createdAt={announcement?.created_at ?? ''}
-								bind:createdAtInput
-								archivedAt={announcement?.archived_at ?? null}
-								bind:archivedAtInput
-							/>
-							<EditableHeader
-								field="author"
-								isEditing={isEditMode}
-								{isPreviewing}
-								author={announcement?.author ?? null}
-								bind:authorInput
-							/>
-						{:else}
-							{relativeTime(announcement?.created_at ?? '')}
-							{#if announcement?.author}
-								·
-								{announcement.author}
-							{/if}
-						{/if}
-					</h4>
-
-					{#if isEditMode}
-						<EditableLists
-							field="tags"
-							isEditing={isEditMode}
-							{isPreviewing}
-							bind:tagsInput
-						/>
-					{/if}
-				</div>
-
-				{#if auth.isLoggedIn}
-					<AdminButtons
-						{isEditing}
-						{isCreating}
-						{isPreviewing}
-						hasArchivedAt={!!archivedAtInput}
-						{onEdit}
-						{onCancel}
-						{onSave}
-						{onDelete}
-						{onTogglePreview}
-						{onToggleArchive}
-					/>
-				{/if}
-			</header>
-
-			<hr class="divider" />
-
-			{#if isEditMode}
-				<EditableContent
-					isEditing={isEditMode}
-					{isPreviewing}
-					content={announcement?.content ?? null}
-					bind:contentInput
-				/>
-			{:else}
-				<AnnouncementContentView html={announcement?.content ?? null} />
-			{/if}
-
-			{#if isEditMode}
-				<hr class="divider" />
-				<EditableLists
-					field="attachments"
-					isEditing={isEditMode}
-					{isPreviewing}
-					attachments={announcement?.attachments ?? []}
-					bind:attachmentsInput
-				/>
-			{:else if announcement?.attachments && announcement.attachments.length > 0}
-				<hr class="divider" />
-				<div class="attachments">
-					<Gallery images={announcement.attachments} columns={3} gap="0.75rem" />
-				</div>
-			{/if}
+			<Content
+				{announcement}
+				{isEditing}
+				{isCreating}
+				{isPreviewing}
+				bind:titleInput
+				bind:contentInput
+				bind:authorInput
+				bind:createdAtInput
+				bind:archivedAtInput
+				bind:tagsInput
+				bind:attachmentsInput
+				{onEdit}
+				{onCancel}
+				{onSave}
+				{onDelete}
+				{onTogglePreview}
+				{onToggleArchive}
+			/>
 		</article>
-
-		<a href="/announcements" class="back-link">← Back to announcements</a>
 	{:else}
-		<AnnouncementError message="Announcement not found." />
+		<p class="error-state">Announcement not found.</p>
 	{/if}
 </main>
 
@@ -410,18 +298,11 @@
 		padding-block: 2rem;
 	}
 
-	.back-link {
-		display: inline-block;
-		margin-top: 1.5rem;
-		color: var(--primary);
-		font-weight: 500;
-		text-decoration: none;
-		transition: color 0.2s var(--bezier-one);
-	}
-
-	.back-link:hover {
-		color: var(--text-one);
-		text-decoration: underline;
+	.error-state,
+	.loading-state {
+		text-align: center;
+		color: var(--text-four);
+		padding: 4rem 1rem;
 	}
 
 	.card {
@@ -429,71 +310,6 @@
 		padding: 2rem;
 		border-radius: 1rem;
 		margin-bottom: 3rem;
-	}
-
-	.header {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
-		gap: 2rem;
-	}
-
-	.header-content {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.title {
-		margin: 0;
-		font-size: 2.5rem;
-		color: var(--text-one);
-		line-height: 4rem;
-		letter-spacing: -0.025em;
-	}
-
-	.archived-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--text-four);
-	}
-
-	.archived-badge :global(svg) {
-		width: 20px;
-		height: 20px;
-	}
-
-	.scheduled-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--text-four);
-	}
-
-	.scheduled-badge :global(svg) {
-		width: 20px;
-		height: 20px;
-	}
-
-	.meta {
-		display: inline-flex;
-		align-items: center;
-		flex-wrap: wrap;
-		column-gap: 1rem;
-	}
-
-	.divider {
-		border: none;
-		height: 8px;
-		width: 100%;
-		background-image: url("data:image/svg+xml,%3Csvg width='91' height='8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M114 4c-5.067 4.667-10.133 4.667-15.2 0S88.667-.667 83.6 4 73.467 8.667 68.4 4 58.267-.667 53.2 4 43.067 8.667 38 4 27.867-.667 22.8 4 12.667 8.667 7.6 4-2.533-.667-7.6 4s-10.133 4.667-15.2 0S-32.933-.667-38 4s-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0-10.133-4.667-15.2 0-10.133 4.667-15.2 0' stroke='%23465969' stroke-linecap='square'/%3E%3C/svg%3E");
-		background-repeat: repeat-x;
-		margin: 1.5rem 0;
-	}
-
-	.attachments {
-		margin-top: 1rem;
 	}
 
 	@media (max-width: 768px) {
@@ -505,14 +321,6 @@
 			background-color: transparent;
 			padding: 0;
 			border-radius: 0;
-		}
-
-		.header-content {
-			flex: 1 1 100%;
-		}
-
-		.back-link {
-			display: none;
 		}
 	}
 </style>

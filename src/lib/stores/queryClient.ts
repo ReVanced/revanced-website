@@ -28,7 +28,6 @@ export const queryKeys = {
 	announcements: ['announcements'] as const,
 	announcementTags: ['announcement-tags'] as const,
 	announcement: (id: number) => ['announcement', id] as const,
-	apiHealth: ['api-health'] as const,
 } as const;
 
 export function createQueryClient() {

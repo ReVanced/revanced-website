@@ -11,7 +11,7 @@
 		clearCacheAndReload
 	} from '$api/settings';
 	import { isValidUrl } from '$lib/utils';
-	import { apiStatus, auth } from '$stores';
+	import { auth } from '$stores';
 
 	interface Props {
 		open: boolean;
@@ -95,6 +95,7 @@
 	}
 
 	function handleLoginClick() {
+		open = false;
 		onLoginRequest?.();
 	}
 </script>
@@ -131,11 +132,9 @@
 			{#if auth.isLoggedIn}
 				<span class="expiry-text">{expiryText}</span>
 			{:else}
-				<span title={apiStatus.isOffline ? 'API is offline' : ''}>
-					<Button buttonStyle="text" onclick={handleLoginClick} disabled={apiStatus.isOffline}>
-						Login
-					</Button>
-				</span>
+				<Button buttonStyle="text" onclick={handleLoginClick}>
+					Login
+				</Button>
 			{/if}
 			<div class="right-buttons">
 				<Button buttonStyle="text" onclick={handleReset}>

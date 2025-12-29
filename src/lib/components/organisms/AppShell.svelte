@@ -15,9 +15,7 @@
 	import {
 		useAboutQuery,
 		auth,
-		modalsStack,
-		startApiHealthPolling,
-		stopApiHealthPolling
+		modalsStack
 	} from '$stores';
 	import { populateDynamicSettings } from '$lib/api/settings';
 
@@ -69,12 +67,10 @@
 	}
 
 	$effect(() => {
-		startApiHealthPolling();
 		auth.startChecking();
 
 		return () => {
 			auth.stopChecking();
-			stopApiHealthPolling();
 		};
 	});
 </script>

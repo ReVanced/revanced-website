@@ -1,5 +1,7 @@
 import { browser } from '$app/environment';
-import { buildUrl, AUTH_TOKEN_KEY } from './settings';
+import { buildUrl } from './settings';
+
+const AUTH_TOKEN_KEY = 'revanced_api_access_token';
 
 
 export type AuthToken = {

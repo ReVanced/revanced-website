@@ -39,10 +39,10 @@
 		padding: 0.25rem;
 		opacity: 0;
 		transition: opacity 0.15s ease-in-out;
-	}
 
-	canvas.ready {
-		background-color: white;
-		opacity: 1;
+		&.ready {
+			background-color: white;
+			opacity: 1;
+		}
 	}
 </style>

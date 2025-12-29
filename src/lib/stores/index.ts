@@ -23,13 +23,6 @@ export {
 	createPersister
 } from './queryClient';
 
-export {
-	apiStatus,
-	manualRefresh,
-	startApiHealthPolling,
-	stopApiHealthPolling
-} from './apiHealth.svelte';
-
 export { readAnnouncements, announcementPolling } from './readAnnouncements.svelte';
 
 export { auth } from './auth.svelte';

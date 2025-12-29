@@ -1,4 +1,5 @@
 export * from './types';
+export * from './patchUtils';
 export * from './client';
 export * from './auth';
 export * from './schemas';
@@ -13,7 +14,6 @@ export {
 	useAnnouncementsQuery,
 	useAnnouncementByIdQuery,
 	useAnnouncementTagsQuery,
-	useHealthQuery,
 	useCreateAnnouncementMutation,
 	useUpdateAnnouncementMutation,
 	useDeleteAnnouncementMutation,

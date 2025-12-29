@@ -17,7 +17,6 @@ import {
 	fetchAnnouncements,
 	fetchAnnouncementById,
 	fetchAnnouncementTags,
-	checkApiHealth,
 	createAnnouncement,
 	updateAnnouncement,
 	deleteAnnouncement,
@@ -38,8 +37,7 @@ export const queryKeys = {
 			[...queryKeys.announcements.all(), 'list', options] as const,
 		detail: (id: number) => [...queryKeys.announcements.all(), 'detail', id] as const,
 		tags: () => [...queryKeys.announcements.all(), 'tags'] as const
-	},
-	health: () => [...queryKeys.all, 'health'] as const
+	}
 };
 
 
@@ -75,13 +73,6 @@ export const queryOptions = {
 	announcementTags: () => ({
 		queryKey: queryKeys.announcements.tags(),
 		queryFn: fetchAnnouncementTags
-	}),
-	health: () => ({
-		queryKey: queryKeys.health(),
-		queryFn: checkApiHealth,
-		staleTime: 30 * 1000,
-		gcTime: 60 * 1000,
-		refetchInterval: 5 * 60 * 1000
 	})
 };
 
@@ -119,10 +110,6 @@ export function useAnnouncementByIdQuery(id: () => number, enabled: () => boolea
 
 export function useAnnouncementTagsQuery() {
 	return createQuery<AnnouncementTag[], Error, AnnouncementTag[], readonly unknown[]>(() => queryOptions.announcementTags());
-}
-
-export function useHealthQuery() {
-	return createQuery<boolean, Error, boolean, readonly unknown[]>(() => queryOptions.health());
 }
 
 export function useCreateAnnouncementMutation() {

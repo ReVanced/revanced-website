@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { apiStatus } from '$stores';
+	import { useAboutQuery } from '$stores';
 	import { getStatusUrl, getContactEmail } from '$api';
 	import Button from '$components/atoms/Button.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 
 	const statusUrl = getStatusUrl();
 	const email = getContactEmail();
-	let visible = $derived(apiStatus.isOffline);
+	const aboutQuery = useAboutQuery();
+	
+	// Show banner when API query fails (indicates API is down)
+	let visible = $derived(aboutQuery.isError);
 </script>
 
 {#if visible}
