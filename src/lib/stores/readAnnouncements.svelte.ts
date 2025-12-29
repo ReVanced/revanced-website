@@ -1,3 +1,5 @@
+import { browser } from '$app/environment';
+import type { Announcement } from '$api/types';
 import { ReadAnnouncementIdsSchema } from '$api/schemas';
 import { createValidatedPersistedState } from './validatedPersistedState';
 
@@ -6,6 +8,21 @@ const readIds = createValidatedPersistedState<number[]>(
 	[],
 	ReadAnnouncementIdsSchema
 );
+
+let _announcements = $state<Announcement[]>([]);
+
+export const announcementPolling = {
+	get data(): Announcement[] {
+		return _announcements;
+	},
+
+	syncData(announcements: Announcement[]) {
+		_announcements = announcements;
+		if (browser && announcements.length > 0) {
+			readAnnouncements.cleanup(announcements.map((a) => a.id));
+		}
+	}
+};
 
 class ReadAnnouncementsTracker {
 	get ids(): readonly number[] {

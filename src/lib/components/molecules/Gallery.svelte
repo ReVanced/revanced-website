@@ -51,22 +51,18 @@
 		grid-template-columns: repeat(var(--columns), 1fr);
 		gap: var(--gap);
 		width: 100%;
+		padding: 1rem;
 	}
 
 	.image-container {
 		aspect-ratio: 4 / 3;
 		overflow: hidden;
-		border-radius: 12px;
-		border: 1px solid var(--border);
-		background: var(--surface-three);
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		cursor: pointer;
 		padding: 0;
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
-	}
-
-	.image-container:hover {
-		transform: scale(1.02);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		background: transparent;
+		border: none;
 	}
 
 	.image-container:focus-visible {
@@ -79,6 +75,11 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
+		transition: transform 0.3s ease;
+	}
+
+	img:hover {
+		transform: scale(1.05);
 	}
 
 	@media (max-width: 768px) {

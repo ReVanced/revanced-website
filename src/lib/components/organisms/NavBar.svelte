@@ -5,25 +5,25 @@
 	import { horizontalSlide } from '$lib/utils/horizontalSlide';
 
 	import logo from '$assets/icons/logo.svg';
-	import Notifications from 'svelte-material-icons/Bullhorn.svelte';
 	import Settings from 'svelte-material-icons/Cog.svelte';
-	import SettingsDialog from '$components/molecules/SettingsDialog.svelte';
-	import LoginDialog from '$components/molecules/LoginDialog.svelte';
-	import { auth } from '$stores';
+	import SettingsDialog from '$components/organisms/SettingsDialog.svelte';
+	import LoginDialog from '$components/organisms/LoginDialog.svelte';
+	import { auth, usePrefetchNavQueries } from '$stores';
 
 	type Props = {
 		inert?: boolean;
 	};
 
 	let { inert = false }: Props = $props();
+	const prefetch = usePrefetchNavQueries();
 
 	const navItems = [
-		{ label: 'Home', href: '/' },
-		{ label: 'Download', href: '/download' },
-		{ label: 'Patches', href: '/patches' },
-		{ label: 'Contributors', href: '/contributors' },
-		{ label: 'Donate', href: '/donate' }
-	] as const satisfies { label: string; href: string }[];
+		{ label: 'Home', href: '/', prefetch: undefined },
+		{ label: 'Download', href: '/download', prefetch: prefetch.prefetchManager },
+		{ label: 'Patches', href: '/patches', prefetch: prefetch.prefetchPatches },
+		{ label: 'Contributors', href: '/contributors', prefetch: prefetch.prefetchContributors },
+		{ label: 'Donate', href: '/donate', prefetch: undefined }
+	] as const satisfies { label: string; href: string; prefetch: (() => void) | undefined }[];
 
 	let settingsOpen = $state(false);
 	let loginOpen = $state(false);
@@ -91,10 +91,12 @@
 		transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
 	>
 		<div class="nav-group main-nav">
-			{#each navItems as { href, label }}
+			{#each navItems as { href, label, prefetch: prefetchFn }}
 				<a 
 					{href}
 					data-sveltekit-preload-data="hover"
+					onmouseenter={prefetchFn}
+					onfocus={prefetchFn}
 					class="rounded nav-button unselectable" 
 					class:active={page.url.pathname === href}
 				>
@@ -104,6 +106,8 @@
 			<a
 				href="/announcements"
 				data-sveltekit-preload-data="hover"
+				onmouseenter={prefetch.prefetchAnnouncements}
+				onfocus={prefetch.prefetchAnnouncements}
 				class="rounded nav-button unselectable mobile-only"
 				class:active={page.url.pathname === '/announcements'}
 			>
@@ -115,18 +119,33 @@
 			<a
 				href="/announcements"
 				data-sveltekit-preload-data="hover"
-				class="rounded nav-button unselectable desktop-only"
+				onmouseenter={prefetch.prefetchAnnouncements}
+				onfocus={prefetch.prefetchAnnouncements}
+				class="rounded nav-button unselectable desktop-only icon-btn"
 				class:active={page.url.pathname === '/announcements'}
+				aria-label="Announcements"
 			>
-				<Notifications size={24} />
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					height="24px"
+					viewBox="0 -960 960 960"
+					width="24px"
+					fill="currentColor"
+				>
+					<path
+						d="M720-440v-80h160v80H720Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM200-200v-160h-40q-33 0-56.5-23.5T80-440v-80q0-33 23.5-56.5T160-600h160l200-120v480L320-360h-40v160h-80Zm360-146v-268q27 24 43.5 58.5T620-480q0 41-16.5 75.5T560-346Z"
+					/>
+				</svg>
 			</a>
 			<button
 				type="button"
-				class="rounded nav-button unselectable settings-btn"
+				class="rounded nav-button unselectable settings-btn icon-btn"
 				class:selected={settingsOpen}
 				onclick={() => (settingsOpen = true)}
 			>
-				<Settings size={24} />
+				<span class="icon-wrapper">
+					<Settings size={20} />
+				</span>
 			</button>
 		</div>
 	</div>
@@ -240,14 +259,58 @@
 		}
 	}
 
+	.secondary-nav .nav-button {
+		color: var(--surface-six);
+	}
+
+	.secondary-nav .nav-button:hover {
+		background-color: var(--surface-three);
+		color: var(--text-one);
+	}
+
+	.secondary-nav .nav-button.active {
+		color: var(--primary);
+	}
+
+	.icon-btn {
+		color: var(--surface-six);
+	}
+
+	.icon-btn:hover {
+		color: var(--text-one);
+	}
+
+	.icon-btn.active {
+		color: var(--primary);
+	}
+
+	.icon-btn svg,
+	.icon-btn :global(svg) {
+		fill: currentColor;
+		transition: fill 0.25s var(--bezier-one);
+	}
+
+	.icon-wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: inherit;
+	}
+
+	.icon-wrapper :global(svg) {
+		fill: currentColor;
+	}
+
 	.settings-btn {
 		background: transparent;
 		border: none;
 		font-family: inherit;
+		color: var(--surface-six);
 	}
 
 	.settings-btn:hover {
 		background-color: var(--surface-three);
+		color: var(--text-one);
 	}
 
 	.settings-btn.selected {

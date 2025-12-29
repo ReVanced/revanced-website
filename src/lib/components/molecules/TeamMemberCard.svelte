@@ -34,13 +34,13 @@
 				<div class="verified-badge">
 					<ToolTip interactive>
 						{#snippet children()}
-							<a href={gpgKey.url} rel="noreferrer" target="_blank" class="badge-link desktop">
+							<a href={gpgKey.url} rel="noreferrer" target="_blank" class="badge-link desktop-only">
 								<IconVerified />
 							</a>
-							<span class="badge-mobile mobile">
+							<button type="button" class="badge-button mobile-only" aria-label="View GPG key">
 								<IconVerified />
 								<span class="gpg-label">GPG key</span>
-							</span>
+							</button>
 						{/snippet}
 						{#snippet tooltipContent()}
 							<p>GPG key ID:</p>
@@ -119,8 +119,7 @@
 		align-items: center;
 	}
 
-	.badge-link,
-	.badge-mobile {
+	.badge-link {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
@@ -129,13 +128,29 @@
 		line-height: 1;
 	}
 
-	.badge-link:hover,
-	.badge-mobile:hover {
+	.badge-link:hover {
 		color: var(--primary);
 	}
 
-	.badge-link :global(svg),
-	.badge-mobile :global(svg) {
+	.badge-link :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	.badge-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		color: var(--secondary);
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		line-height: 1;
+		font-family: inherit;
+	}
+
+	.badge-button :global(svg) {
 		width: 20px;
 		height: 20px;
 	}
@@ -145,11 +160,11 @@
 		font-weight: 500;
 	}
 
-	.desktop {
+	.desktop-only {
 		display: inline-flex;
 	}
 
-	.mobile {
+	.mobile-only {
 		display: none;
 	}
 
@@ -176,11 +191,11 @@
 			width: 48px;
 		}
 
-		.desktop {
+		.desktop-only {
 			display: none;
 		}
 
-		.mobile {
+		.mobile-only {
 			display: inline-flex;
 		}
 	}

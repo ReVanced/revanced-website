@@ -11,7 +11,7 @@
 	let { content, children, tooltipContent, interactive = false }: Props = $props();
 </script>
 
-<div class="tooltip-wrapper">
+<div class="tooltip-wrapper" tabindex="-1" role="presentation">
 	{@render children()}
 	<div class="tooltip" class:interactive role="tooltip">
 		{#if tooltipContent}
@@ -26,6 +26,7 @@
 	.tooltip-wrapper {
 		position: relative;
 		display: inline-flex;
+		outline: none;
 	}
 
 	.tooltip {
@@ -60,15 +61,26 @@
 		height: 12px;
 	}
 
-	.tooltip-wrapper:hover .tooltip,
-	.tooltip-wrapper:focus-within .tooltip {
-		opacity: 1;
-		visibility: visible;
+	@media (hover: hover) {
+		.tooltip-wrapper:hover .tooltip {
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.tooltip-wrapper:hover .tooltip.interactive {
+			pointer-events: auto;
+		}
 	}
 
-	.tooltip-wrapper:hover .tooltip.interactive,
-	.tooltip-wrapper:focus-within .tooltip.interactive {
-		pointer-events: auto;
+	@media (hover: none) {
+		.tooltip-wrapper:focus-within .tooltip {
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.tooltip-wrapper:focus-within .tooltip.interactive {
+			pointer-events: auto;
+		}
 	}
 
 	.tooltip :global(a) {

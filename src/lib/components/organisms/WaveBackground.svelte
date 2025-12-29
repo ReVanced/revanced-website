@@ -30,6 +30,7 @@
 
 	.wave-container:not(.visible) {
 		opacity: 0;
+		height: 0;
 	}
 
 	@media (max-height: 780px) {

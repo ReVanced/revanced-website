@@ -10,3 +10,6 @@ export const fromNow = (timestamp: number) => moment(timestamp).fromNow(true);
 
 export const formatUTC = (d: string | number | Date) =>
 	d && moment(d).utc().format('YYYY-MM-DDTHH:mm[Z]');
+
+export const formatDateTimeLocal = (d: string | number | Date) =>
+	moment(d).format('YYYY-MM-DDTHH:mm');

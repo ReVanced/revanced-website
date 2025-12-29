@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import Page from '$components/molecules/Page.svelte';
+	import Page from '$components/templates/Page.svelte';
 	import ContributorSection from '$components/organisms/ContributorSection.svelte';
-	import { contributorsQuery } from '$stores';
+	import { useContributorsQuery } from '$stores';
+
+	const contributorsQuery = useContributorsQuery();
 
 	const repositories = $derived(contributorsQuery.data ?? []);
-	const isLoading = $derived(contributorsQuery.loading && repositories.length === 0);
-	const isError = $derived(contributorsQuery.error && repositories.length === 0);
+	const isLoading = $derived(contributorsQuery.isPending && repositories.length === 0);
+	const isError = $derived(contributorsQuery.isError && repositories.length === 0);
 
 	const schemas = [
 		{
@@ -66,7 +68,7 @@
 		width: min(90%, 80rem);
 		margin-inline: auto;
 		margin-bottom: 5rem;
-		padding-top: 2rem;
+		margin-top: 2.6rem;
 	}
 
 	.text-container {

@@ -10,6 +10,7 @@
 
 	let canvasElement: HTMLCanvasElement;
 	let QRiousClass: typeof import('qrious').default | null = null;
+	let isReady = $state(false);
 
 	$effect(() => {
 		if (!browser || !canvasElement) return;
@@ -24,16 +25,24 @@
 				size: size,
 				level: 'M'
 			});
+			isReady = true;
 		})();
 	});
 </script>
 
-<canvas bind:this={canvasElement}></canvas>
+<canvas bind:this={canvasElement} class:ready={isReady}></canvas>
 
 <style>
 	canvas {
-		border-radius: 8px;
+		border-radius: 0.5rem;
+		background-color: transparent;
+		padding: 0.25rem;
+		opacity: 0;
+		transition: opacity 0.15s ease-in-out;
+	}
+
+	canvas.ready {
 		background-color: white;
-		padding: 0.5rem;
+		opacity: 1;
 	}
 </style>

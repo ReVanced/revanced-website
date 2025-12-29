@@ -3,20 +3,25 @@ import { PersistedState } from 'runed';
 export const theme = new PersistedState<'light' | 'dark'>('theme', 'light');
 
 export {
-	aboutQuery,
-	teamQuery,
-	managerQuery,
-	contributorsQuery,
-	patchesQuery,
-	announcementsQuery,
-	announcementTagsQuery,
-	allQueries,
-	initializeAllQueries,
-	refetchAnnouncements,
-	getAnnouncementById
+	useAboutQuery,
+	useTeamQuery,
+	useManagerQuery,
+	useContributorsQuery,
+	usePatchesQuery,
+	useAnnouncementsQuery,
+	useAnnouncementTagsQuery,
+	useAnnouncementByIdQuery,
+	useInvalidateAnnouncements,
+	useInvalidateAnnouncement,
+	usePrefetchAnnouncement,
+	usePrefetchNavQueries
 } from './queries.svelte';
 
-export type { QueryResult } from './queries.svelte';
+export {
+	queryKeys,
+	getQueryClient,
+	createPersister
+} from './queryClient';
 
 export {
 	apiStatus,
@@ -25,9 +30,7 @@ export {
 	stopApiHealthPolling
 } from './apiHealth.svelte';
 
-export { readAnnouncements } from './readAnnouncements.svelte';
-
-export { announcementPolling } from './announcementPolling.svelte';
+export { readAnnouncements, announcementPolling } from './readAnnouncements.svelte';
 
 export { auth } from './auth.svelte';
 

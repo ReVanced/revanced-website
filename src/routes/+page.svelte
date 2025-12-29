@@ -1,45 +1,29 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Page from '$components/molecules/Page.svelte';
+	import { browser } from '$app/environment';
+	import Page from '$components/templates/Page.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import SocialButton from '$components/molecules/SocialButton.svelte';
 	import WaveBackground from '$components/organisms/WaveBackground.svelte';
-	import { aboutQuery } from '$stores';
+	import { useAboutQuery } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
 	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
 	import Description from 'svelte-material-icons/FileDocumentOutline.svelte';
 
+	const aboutQuery = useAboutQuery();
 	let showSocials = $state(true);
-	let rafId: number | null = null;
 
 	let socialLinks = $derived(
 		(aboutQuery.data?.socials ?? []).filter((item) => item.name !== 'Website')
 	);
 
 	function updateSocialsVisibility() {
-		if (rafId !== null) return;
-		
-		rafId = requestAnimationFrame(() => {
-			rafId = null;
-			const footerSection = document.getElementById('footer-socials');
-			if (!footerSection) {
-				showSocials = true;
-				return;
-			}
-			
-			const bounds = footerSection.getBoundingClientRect();
-			showSocials = bounds.top > window.innerHeight + 50;
-		});
+		const wave = document.querySelector('.wave-container');
+		showSocials = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
 	}
 
-	onMount(() => {
+	$effect(() => {
+		if (!browser) return;
 		updateSocialsVisibility();
-		
-		return () => {
-			if (rafId !== null) {
-				cancelAnimationFrame(rafId);
-			}
-		};
 	});
 
 	const structuredData = [
@@ -314,6 +298,7 @@
 		.external-links {
 			position: static;
 			opacity: 1 !important;
+			pointer-events: auto;
 		}
 	}
 </style>

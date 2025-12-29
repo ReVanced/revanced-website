@@ -1,4 +1,4 @@
-import { onMount } from 'svelte';
+import { browser } from '$app/environment';
 
 const setHue = (hue: number) => document.documentElement.style.setProperty('--hue', String(hue));
 
@@ -44,7 +44,9 @@ function getMsUntilMidnight(): number {
 }
 
 export function useHolidayTheme() {
-	onMount(() => {
+	$effect(() => {
+		if (!browser) return;
+		
 		checkAndApplyHolidayTheme();
 
 		let midnightTimeout: ReturnType<typeof setTimeout>;

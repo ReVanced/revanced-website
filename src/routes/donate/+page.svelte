@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import Page from '$components/molecules/Page.svelte';
+	import Page from '$components/templates/Page.svelte';
 	import DonateHeartAnimation from '$components/molecules/DonateHeartAnimation.svelte';
 	import TeamMemberCard from '$components/molecules/TeamMemberCard.svelte';
 	import DonateCard from '$components/molecules/DonateCard.svelte';
@@ -11,7 +11,7 @@
 	import Button from '$components/atoms/Button.svelte';
 	import QRCode from '$components/atoms/QRCode.svelte';
 	import Snackbar from '$components/atoms/Snackbar.svelte';
-	import { aboutQuery, teamQuery } from '$stores';
+	import { useAboutQuery, useTeamQuery } from '$stores';
 	import type { CryptoWallet } from '$api';
 
 	import IconCircles from 'svelte-material-icons/CircleMultipleOutline.svelte';
@@ -25,6 +25,9 @@
 	import revancedLogoBg from '$assets/icons/revanced-logo-background.svg';
 	import heartIcon from '$assets/icons/heart.svg';
 
+	const aboutQuery = useAboutQuery();
+	const teamQuery = useTeamQuery();
+
 	const donateImages: Record<string, string> = {
 		'Open Collective': openCollectiveImg,
 		'GitHub Sponsors': githubSponsorsImg,
@@ -36,11 +39,10 @@
 
 	let teamMembers = $derived(teamQuery.data ?? []);
 
-	// Loading/error states
-	let isDonateLoading = $derived(aboutQuery.loading && donationLinks.length === 0);
-	let isDonateError = $derived(aboutQuery.error && donationLinks.length === 0);
-	let isTeamLoading = $derived(teamQuery.loading && teamMembers.length === 0);
-	let isTeamError = $derived(teamQuery.error && teamMembers.length === 0);
+	let isDonateLoading = $derived(aboutQuery.isPending && donationLinks.length === 0);
+	let isDonateError = $derived(aboutQuery.isError && donationLinks.length === 0);
+	let isTeamLoading = $derived(teamQuery.isPending && teamMembers.length === 0);
+	let isTeamError = $derived(teamQuery.isError && teamMembers.length === 0);
 
 	let cryptoModalOpen = $state(false);
 	let walletModalOpen = $state(false);
@@ -175,6 +177,7 @@
 	{#snippet icon()}
 		<IconCircles size={32} color="var(--surface-six)" />
 	{/snippet}
+	<hr class="crypto-divider" />
 	<CryptoWalletList wallets={cryptoWallets} onSelect={openWalletModal} />
 	{#snippet buttons()}
 		<Button buttonStyle="filled" onclick={() => (cryptoModalOpen = false)}>Close</Button>
@@ -188,7 +191,7 @@
 	{#if selectedWallet}
 		<div class="wallet-details">
 			<p class="address">{selectedWallet.address}</p>
-			<QRCode value={selectedWallet.address} size={180} />
+			<QRCode value={selectedWallet.address} size={150} />
 		</div>
 	{/if}
 	{#snippet buttons()}
@@ -212,7 +215,7 @@
 		display: flex;
 		flex-direction: column;
 		margin-bottom: 5rem;
-		padding-top: 2rem;
+		margin-top: 2.6rem;
 	}
 
 	.hero {
@@ -312,18 +315,19 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 1rem;
+		word-break: break-word;
 		text-align: center;
 	}
 
 	.address {
-		word-break: break-all;
-		font-family: monospace;
-		font-size: 0.85rem;
+		font-family: inherit;
+		font-size: 1rem;
 		color: var(--text-four);
-		padding: 1rem;
-		background-color: var(--surface-seven);
-		border-radius: 8px;
-		max-width: 100%;
+	}
+
+	.crypto-divider {
+		margin: 1rem 0;
+		width: 100%;
 	}
 
 	@media (max-width: 1200px) {

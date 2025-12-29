@@ -54,7 +54,6 @@ export function stopApiHealthPolling(): void {
 		clearInterval(_intervalId);
 		_intervalId = null;
 	}
-	_initialized = false;
 	_consecutiveFailures = 0;
 }
 

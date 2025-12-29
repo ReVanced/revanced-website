@@ -36,11 +36,7 @@
 
 <style>
 	.wallets {
-		width: 100%;
-		max-width: 375px;
-		border-radius: 12px;
-		overflow: hidden;
-		border: 1px solid var(--border);
+		width: clamp(200px, 75vw, 375px);
 	}
 
 	.wallet {
@@ -57,10 +53,6 @@
 		align-items: center;
 		padding: 0.75rem 1.25rem;
 		transition: filter 0.4s var(--bezier-one);
-	}
-
-	.wallet:not(:last-child) {
-		border-bottom: 1px solid var(--border);
 	}
 
 	.wallet:hover {
@@ -81,6 +73,7 @@
 	.arrow {
 		height: 20px;
 		color: var(--surface-six);
+		transform: rotate(0deg);
 	}
 
 	.arrow :global(svg) {

@@ -1,8 +1,8 @@
 <script lang="ts">
-import { page } from '$app/stores';
+import { page } from '$app/state';
 import Button from '$components/atoms/Button.svelte';
 
-let status = $derived($page.status);
+let status = $derived(page.status);
 </script>
 
 <svelte:head>
@@ -17,7 +17,7 @@ let status = $derived($page.status);
 <Button buttonStyle="filled" href="/">Return home</Button>
 {:else}
 <p>
-{$page.error?.message}
+{page.error?.message}
 </p>
 {/if}
 </section>

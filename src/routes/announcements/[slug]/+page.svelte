@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { goto, replaceState } from '$app/navigation';
+	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
 	import { relativeTime, formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
-	import { isValidUrl } from '$lib/utils/url';
+	import { isValidUrl, toSlug, isArchived, isScheduled } from '$lib/utils';
 	import {
 		fetchAnnouncementById,
 		createAnnouncement,
@@ -15,13 +16,13 @@
 		type AnnouncementPayload
 	} from '$lib/api/client';
 	import {
-		announcementsQuery,
-		refetchAnnouncements,
+		useAnnouncementsQuery,
+		useInvalidateAnnouncements,
 		auth
 	} from '$stores';
-	import { toSlug } from '$lib/utils/announcement';
 	import Gallery from '$components/molecules/Gallery.svelte';
 	import IconArchive from 'svelte-material-icons/ArchiveArrowDownOutline.svelte';
+	import IconEyeOff from 'svelte-material-icons/EyeOffOutline.svelte';
 	import AdminButtons from './AdminButtons.svelte';
 	import EditableHeader from './EditableHeader.svelte';
 	import EditableContent from './EditableContent.svelte';
@@ -31,6 +32,9 @@
 	import AnnouncementError from './AnnouncementError.svelte';
 	import AnnouncementContentView from './AnnouncementContentView.svelte';
 
+	const announcementsQuery = useAnnouncementsQuery();
+	const invalidateAnnouncements = useInvalidateAnnouncements();
+
 	let announcement = $state<Announcement | null>(null);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
@@ -39,16 +43,17 @@
 	let isPreviewing = $state(false);
 	let showDeleteConfirm = $state(false);
 
-	let isCreating = $derived($page.params.slug === 'create');
+	let isCreating = $derived(page.params.slug === 'create');
 
 	let announcementId = $derived.by(() => {
 		if (isCreating) return null;
-		const slug = $page.params.slug ?? '';
+		const slug = page.params.slug ?? '';
 		if (!slug) return null;
 		const idPart = slug.split('-')[0];
 		const parsed = parseInt(idPart, 10);
 		return isNaN(parsed) ? null : parsed;
 	});
+	let isInvalidSlug = $derived(!isCreating && announcementId === null);
 
 	let titleInput = $state('');
 	let contentInput = $state('');
@@ -57,6 +62,7 @@
 	let archivedAtInput = $state('');
 	let tagsInput = $state<string[]>([]);
 	let attachmentsInput = $state<string[]>([]);
+	let draftInitialized = $state(false);
 
 	function initializeDraft() {
 		if (isCreating) {
@@ -83,12 +89,9 @@
 	}
 
 	$effect(() => {
-		if (isCreating && browser) {
-			if (!auth.isLoggedIn) {
-				goto('/announcements');
-				return;
-			}
+		if (isCreating && browser && auth.isLoggedIn && !draftInitialized) {
 			initializeDraft();
+			draftInitialized = true;
 			loading = false;
 		}
 	});
@@ -104,18 +107,31 @@
 		fetchAnnouncementById(announcementId, abortController.signal)
 			.then((data) => {
 				if (abortController.signal.aborted) return;
+				if (data && isScheduled(data.created_at) && !auth.isLoggedIn) {
+					error = 'Announcement not found.';
+					loading = false;
+					return;
+				}
+				
 				announcement = data;
 				loading = false;
 				if (data?.title) {
 					const expectedPath = `/announcements/${data.id}-${toSlug(data.title)}`;
-					if ($page.url.pathname !== expectedPath) {
-						history.replaceState({}, '', expectedPath);
+					if (page.url.pathname !== expectedPath) {
+						replaceState(expectedPath, {});
 					}
 				}
 			})
 			.catch((err) => {
 				if (abortController.signal.aborted) return;
-				error = err instanceof Error ? err.message : 'Failed to load announcement';
+				const message = err instanceof Error ? err.message : 'Failed to load announcement';
+				if (message.includes('404')) {
+					error = 'Announcement not found.';
+				} else if (message.includes('401') || message.includes('403')) {
+					error = 'You do not have permission to view this announcement.';
+				} else {
+					error = 'Failed to load announcement. Please try again later.';
+				}
 				loading = false;
 			});
 
@@ -126,11 +142,13 @@
 
 	function validateInputs(): boolean {
 		const hasEmptyTitle = !titleInput.trim();
+		const hasEmptyContent = !contentInput.trim();
 		const hasInvalidAttachments = attachmentsInput.some((a) => a && !isValidUrl(a));
 
-		if (hasEmptyTitle || hasInvalidAttachments) {
+		if (hasEmptyTitle || hasEmptyContent || hasInvalidAttachments) {
 			const issues = [
 				hasEmptyTitle && 'Title',
+				hasEmptyContent && 'Content',
 				hasInvalidAttachments && 'Attachments'
 			].filter(Boolean);
 			alert(`${issues.join(' and ')} must be filled properly`);
@@ -167,12 +185,6 @@
 	}
 
 	async function onSave() {
-		auth.refresh();
-		if (!auth.isLoggedIn) {
-			goto('/');
-			return;
-		}
-
 		if (!validateInputs()) return;
 
 		const payload = buildPayload();
@@ -180,18 +192,18 @@
 		try {
 			if (isCreating) {
 				await createAnnouncement(payload);
-				await refetchAnnouncements();
+				invalidateAnnouncements();
 				goto('/announcements');
 			} else if (announcementId !== null) {
 				const updated = await updateAnnouncement(announcementId, payload);
 				announcement = updated;
-				await refetchAnnouncements();
+				invalidateAnnouncements();
 				isEditing = false;
 				isPreviewing = false;
 			}
 		} catch (err) {
 			if (err instanceof Error && err.message === 'Unauthenticated') {
-				goto('/');
+				auth.requestLoginModal();
 				return;
 			}
 			alert(err instanceof Error ? err.message : 'An error occurred');
@@ -204,26 +216,22 @@
 
 	async function confirmDelete() {
 		if (announcementId === null) return;
-		auth.refresh();
-		if (!auth.isLoggedIn) {
-			showDeleteConfirm = false;
-			goto('/');
-			return;
-		}
 
 		try {
 			await deleteAnnouncement(announcementId);
-			await refetchAnnouncements();
-			goto('/announcements');
+			showDeleteConfirm = false;
+			await tick();
+			invalidateAnnouncements();
+			await goto('/announcements');
 		} catch (err) {
 			if (err instanceof Error && err.message === 'Unauthenticated') {
 				showDeleteConfirm = false;
-				goto('/');
+				auth.requestLoginModal();
 				return;
 			}
 			alert(err instanceof Error ? err.message : 'Failed to delete announcement');
+			showDeleteConfirm = false;
 		}
-		showDeleteConfirm = false;
 	}
 
 	function cancelDelete() {
@@ -250,6 +258,15 @@
 	}
 
 	let isEditMode = $derived(isEditing || isCreating);
+	let showArchivedBadge = $derived.by(() => {
+		if (!archivedAtInput || !isPreviewing) return false;
+		return isArchived(archivedAtInput);
+	});
+
+	let showScheduledBadge = $derived.by(() => {
+		if (!createdAtInput || !isPreviewing) return false;
+		return isScheduled(createdAtInput);
+	});
 </script>
 
 <svelte:window onbeforeunload={handleBeforeUnload} />
@@ -261,7 +278,9 @@
 />
 
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	{#if loading && !isCreating}
+	{#if isInvalidSlug}
+		<AnnouncementError message="Announcement not found." />
+	{:else if loading && !isCreating}
 		<AnnouncementSkeleton />
 	{:else if error && !isCreating}
 		<AnnouncementError message={error} />
@@ -278,10 +297,15 @@
 								title={announcement?.title ?? ''}
 								bind:titleInput
 							/>
-							{#if archivedAtInput && isPreviewing}
-								<span class="archived-badge" title="Archived">
-									<IconArchive size={20} />
-								</span>
+							{#if showArchivedBadge}
+									<span title="Archived announcement" class="archived-badge">
+										<IconArchive size={20} />
+									</span>
+							{/if}
+							{#if showScheduledBadge}
+							<span title="Not visible to non-logged-in users yet" class="scheduled-badge">
+										<IconEyeOff size={20} />
+							 </span>
 							{/if}
 						</h1>
 					{:else}
@@ -436,6 +460,18 @@
 	}
 
 	.archived-badge :global(svg) {
+		width: 20px;
+		height: 20px;
+	}
+
+	.scheduled-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--text-four);
+	}
+
+	.scheduled-badge :global(svg) {
 		width: 20px;
 		height: 20px;
 	}

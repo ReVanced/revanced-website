@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import type { Patch } from '$api';
+	import { type Patch, getCompatiblePackagesAsArray } from '$api';
 	import Button from '$components/atoms/Button.svelte';
 	import IconChevronDown from 'svelte-material-icons/ChevronDown.svelte';
 
@@ -16,11 +16,7 @@
 
 	let hasPatchOptions = $derived(patch.options.length > 0);
 
-	let compatiblePackagesArray = $derived(
-		patch.compatiblePackages
-			? Object.entries(patch.compatiblePackages).map(([name, versions]) => ({ name, versions }))
-			: null
-	);
+	let compatiblePackagesArray = $derived(getCompatiblePackagesAsArray(patch));
 
 	function toggleExpand() {
 		if (hasPatchOptions) {

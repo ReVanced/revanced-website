@@ -1,19 +1,22 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
-	import Page from '$components/molecules/Page.svelte';
+	import { browser } from '$app/environment';
+	import Page from '$components/templates/Page.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
 	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
-	import { managerQuery, apiStatus } from '$stores';
+	import { useManagerQuery, apiStatus } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
+
+	const managerQuery = useManagerQuery();
 
 	const manager = $derived(managerQuery.data);
 	const version = $derived(manager?.version ?? 'Download');
 	const downloadUrl = $derived(manager?.download_url ?? '');
 	
 	const hasDownloadData = $derived(!!manager?.download_url);
+	const isApiDown = $derived(apiStatus.isOffline && !hasDownloadData);
 
 	let isAndroid = $state(false);
 	let androidVersion = $state(0);
@@ -29,6 +32,8 @@
 		return '';
 	});
 
+	let apiDownOpen = $state(false);
+
 	const schemas = [
 		{
 			'@context': 'https://schema.org',
@@ -40,7 +45,8 @@
 		}
 	];
 
-	onMount(() => {
+	$effect(() => {
+		if (!browser) return;
 		const userAgent = navigator.userAgent;
 		const match = /Android\s([\d.]+)/i.exec(userAgent);
 		androidVersion = match ? parseInt(match[1]) : 0;
@@ -48,6 +54,11 @@
 	});
 
 	function handleDownloadClick() {
+		if (isApiDown) {
+			apiDownOpen = true;
+			return;
+		}
+		
 		if (!isAndroid) {
 			warningType = 'not-android';
 			warningOpen = true;
@@ -59,6 +70,10 @@
 
 	function closeWarning() {
 		warningOpen = false;
+	}
+
+	function closeApiDown() {
+		apiDownOpen = false;
 	}
 </script>
 
@@ -87,6 +102,14 @@
 					{version}
 				</Button>
 			{/if}
+		{:else}
+			<Button
+				buttonStyle="filled"
+				icon={Download}
+				onclick={handleDownloadClick}
+			>
+				Download
+			</Button>
 		{/if}
 			<Button
 				buttonStyle="tonal"
@@ -118,6 +141,18 @@
 			onclick={closeWarning}
 		>
 			Okay
+		</Button>
+	{/snippet}
+</Modal>
+
+<Modal bind:open={apiDownOpen}>
+	<div class="api-down-content">
+		<h3>Service Unavailable</h3>
+		<p>The API is currently down and download functionality is not available. Please try again later.</p>
+	</div>
+	{#snippet buttons()}
+		<Button buttonStyle="text" onclick={closeApiDown}>
+			Close
 		</Button>
 	{/snippet}
 </Modal>
@@ -192,5 +227,25 @@
 
 	.warning-content p {
 		margin-bottom: 0;
+	}
+
+	.api-down-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		text-align: center;
+	}
+
+
+
+	.api-down-content h3 {
+		color: var(--secondary);
+		margin: 0;
+	}
+
+	.api-down-content p {
+		margin-bottom: 0;
+		color: var(--text-four);
 	}
 </style>

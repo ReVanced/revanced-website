@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
-import type { WithChildren } from '$types';
+import type { WithOptionalChildren } from '$types';
 import { modalsStack } from '$stores/modals.svelte';
 import { browser } from '$app/environment';
 import { fade } from 'svelte/transition';
@@ -17,7 +17,7 @@ icon?: Snippet;
 title?: string;
 description?: Snippet;
 buttons?: Snippet;
-} & WithChildren;
+} & WithOptionalChildren;
 
 let {
 id = crypto.randomUUID(),
@@ -62,6 +62,13 @@ if (portalTarget && dialogElement.parentElement !== portalTarget) {
 portalTarget.appendChild(dialogElement);
 }
 }
+
+return () => {
+if (browser && dialogElement && dialogElement.parentElement) {
+dialogElement.parentElement.removeChild(dialogElement);
+}
+modalsStack.pop(id);
+};
 });
 
 function parseScroll() {
@@ -71,7 +78,7 @@ scrollY = dialogElement.scrollTop;
 }
 </script>
 
-{#if isTopModal}
+{#if open}
 <dialog
 bind:this={dialogElement}
 class="modal"
@@ -102,7 +109,9 @@ transition:fade={{ easing: quadInOut, duration: 150 }}
 </p>
 {/if}
 
+{#if children}
 <div class="slot">{@render children()}</div>
+{/if}
 
 {#if buttons}
 <div class="buttons">

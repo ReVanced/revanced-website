@@ -1,10 +1,11 @@
 <script lang="ts">
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import Gallery from '$components/molecules/Gallery.svelte';
-	import { announcementTagsQuery } from '$stores';
-	import { isValidUrl } from '$lib/utils/url';
+	import { useAnnouncementTagsQuery } from '$stores';
+	import { isValidUrl } from '$lib/utils';
 	import IconAdd from 'svelte-material-icons/Plus.svelte';
 	import IconDelete from 'svelte-material-icons/DeleteOutline.svelte';
+	const announcementTagsQuery = useAnnouncementTagsQuery();
 
 	type Props = {
 		field: 'tags' | 'attachments';
@@ -26,8 +27,8 @@
 
 	let newTag = $state('');
 	let availableTags = $derived.by(() => {
-		const apiTags = (announcementTagsQuery.data ?? []).map(t => t.name);
-		const customTags = (tagsInput ?? []).filter(t => !apiTags.includes(t));
+		const apiTags = (announcementTagsQuery.data ?? []).map((t) => t.name);
+		const customTags = (tagsInput ?? []).filter((t) => !apiTags.includes(t));
 		return [...apiTags, ...customTags];
 	});
 
@@ -63,7 +64,10 @@
 
 	function addAttachment() {
 		const trimmed = newAttachment.trim();
-		if (!trimmed || !isValidUrl(trimmed)) return;
+		if (!trimmed || !isValidUrl(trimmed)) {
+			newAttachment = '';
+			return;
+		}
 		
 		attachmentsInput = [...(attachmentsInput ?? []), trimmed];
 		newAttachment = '';

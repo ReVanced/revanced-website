@@ -2,9 +2,9 @@
 	import type { Announcement } from '$api';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
-	import { readAnnouncements } from '$stores';
+	import { readAnnouncements, usePrefetchAnnouncement } from '$stores';
 	import { relativeTime } from '$lib/utils/relativeTime';
-	import { isArchived, buildAnnouncementPath } from '$lib/utils/announcement';
+	import { isArchived, buildAnnouncementPath } from '$lib/utils';
 	import IconArchive from 'svelte-material-icons/ArchiveOutline.svelte';
 
 	type Props = {
@@ -13,10 +13,16 @@
 
 	let { announcement }: Props = $props();
 
+	const prefetchAnnouncement = usePrefetchAnnouncement();
+
 	let isRead = $derived(readAnnouncements.isRead(announcement.id));
 
 	function handleClick() {
 		readAnnouncements.markAsRead(announcement.id);
+	}
+
+	function handlePrefetch() {
+		prefetchAnnouncement(announcement.id);
 	}
 
 	let href = $derived(buildAnnouncementPath(announcement.id, announcement.title));
@@ -31,6 +37,8 @@
 	class="card-link"
 	data-sveltekit-preload-data
 	onclick={handleClick}
+	onmouseenter={handlePrefetch}
+	onfocus={handlePrefetch}
 >
 	<article class="card" class:attachment={hasImage}>
 		{#if !isRead && !archived}

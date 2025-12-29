@@ -10,7 +10,7 @@
 		setApiBaseUrl,
 		clearCacheAndReload
 	} from '$api/settings';
-	import { isValidUrl } from '$lib/utils/url';
+	import { isValidUrl } from '$lib/utils';
 	import { apiStatus, auth } from '$stores';
 
 	interface Props {
@@ -22,33 +22,49 @@
 
 	let apiUrl = $state('');
 	let urlError = $state('');
+	let tick = $state(0);
+	let tickInterval: ReturnType<typeof setInterval> | null = null;
 
 	$effect(() => {
 		if (open && browser) {
 			apiUrl = getDisplayApiUrl();
 			urlError = '';
+			tickInterval = setInterval(() => {
+				tick++;
+			}, 1000);
 		}
+		return () => {
+			if (tickInterval) {
+				clearInterval(tickInterval);
+				tickInterval = null;
+			}
+		};
 	});
 
-	function formatExpiry(expiry: number | null): string {
+	function formatExpiry(expiry: number | null, _tick: number): string {
 		if (!expiry) return '';
 		const now = Date.now();
 		const diff = expiry - now;
 		if (diff <= 0) return 'expired';
-		const minutes = Math.floor(diff / (1000 * 60));
+		const totalSeconds = Math.floor(diff / 1000);
+		const minutes = Math.floor(totalSeconds / 60);
 		const hours = Math.floor(minutes / 60);
 		const days = Math.floor(hours / 24);
 		if (days > 0) {
 			return `${days} day${days > 1 ? 's' : ''} remaining`;
 		}
 		if (hours > 0) {
+			const remainingMinutes = minutes % 60;
+			if (remainingMinutes > 0) {
+				return `${hours}h ${remainingMinutes}m remaining`;
+			}
 			return `${hours} hour${hours > 1 ? 's' : ''} remaining`;
 		}
-		return `${minutes} minute${minutes > 1 ? 's' : ''} remaining`;
+		return `${minutes} minute${minutes !== 1 ? 's' : ''} remaining`;
 	}
 
 	let expiryText = $derived(
-		auth.isLoggedIn ? `Logged in · ${formatExpiry(auth.expiry)}` : 'Login'
+		auth.isLoggedIn ? `Logged in · ${formatExpiry(auth.expiry, tick)}` : 'Login'
 	);
 
 	function handleResetInput() {
@@ -57,6 +73,9 @@
 	}
 
 	function handleReset() {
+		if (auth.isLoggedIn) {
+			auth.logout();
+		}
 		clearCacheAndReload();
 	}
 
@@ -80,17 +99,16 @@
 	}
 </script>
 
-<Modal bind:open>
-	<div class="settings-content">
-		<div class="settings-icon">
-			<Settings size={24} />
-		</div>
-		<h2 class="settings-title">Settings</h2>
-		<p class="settings-description">Configure the API for this website.</p>
+<Modal bind:open title="Settings">
+	{#snippet icon()}
+		<Settings size={24} color="var(--surface-six)" />
+	{/snippet}
+	<div id="settings-content">
+		<p>Configure the API for this website.</p>
 		<div class="input-container">
 			<input
 				type="text"
-				class="api-input rounded"
+				class="api-input"
 				class:error={urlError}
 				placeholder="Enter API URL"
 				bind:value={apiUrl}
@@ -101,7 +119,7 @@
 				onclick={handleResetInput}
 				title="Reset to default API URL"
 			>
-				<Reset size={20} />
+				<Reset size={24} color="var(--surface-six)" />
 			</button>
 		</div>
 		{#if urlError}
@@ -132,46 +150,29 @@
 </Modal>
 
 <style>
-	.settings-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 1rem;
+	#settings-content {
 		width: 100%;
 	}
 
-	.settings-icon {
-		color: var(--surface-six);
-		margin-bottom: 0.1rem;
-	}
-
-	.settings-title {
-		color: var(--secondary);
-		font-weight: 600;
-		font-size: 1.25rem;
-		margin: 0;
-	}
-
-	.settings-description {
+	#settings-content p {
 		color: var(--text-four);
-		font-size: 0.95rem;
-		text-align: left;
-		align-self: flex-start;
-		margin: 0 0 0.5rem 0.5rem;
 	}
 
 	.input-container {
 		position: relative;
 		width: 100%;
-		max-width: 400px;
+		margin-bottom: 0.75rem;
 	}
 
 	.api-input {
 		width: 100%;
-		padding: 0.75rem 3rem 0.75rem 1rem;
-		background-color: var(--surface-three);
+		padding: 1rem;
+		padding-right: 3rem;
+		margin-top: 1rem;
+		background-color: transparent;
 		color: var(--secondary);
 		border: 1px solid var(--border);
+		border-radius: 12px;
 		font-family: inherit;
 		font-size: 0.95rem;
 		transition: border-color 0.3s var(--bezier-one);
@@ -199,12 +200,14 @@
 
 	.reset-icon-btn {
 		position: absolute;
-		right: 0.5rem;
-		top: 50%;
-		transform: translateY(-50%);
-		padding: 0.5rem;
+		right: 12px;
+		top: 1rem;
+		bottom: 0;
+		height: fit-content;
+		margin: auto 0;
+		padding: 0;
 		background-color: transparent;
-		color: var(--text-one);
+		color: var(--surface-six);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -226,13 +229,14 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
 		width: 100%;
-		max-width: 400px;
 	}
 
 	.right-buttons {
 		display: flex;
-		gap: 0.75rem;
+		gap: 2rem;
 	}
 
 	.expiry-text {

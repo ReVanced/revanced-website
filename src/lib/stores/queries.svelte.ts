@@ -1,5 +1,6 @@
-﻿import { resource } from 'runed';
+﻿import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 import { browser } from '$app/environment';
+import { dev_log } from '$lib/utils/dev';
 import {
 	fetchAbout,
 	fetchTeam,
@@ -7,7 +8,8 @@ import {
 	fetchContributors,
 	fetchPatches,
 	fetchAnnouncementById,
-	fetchAnnouncementTags
+	fetchAnnouncementTags,
+	fetchAnnouncements
 } from '$api/client';
 import type {
 	About,
@@ -18,176 +20,150 @@ import type {
 	Announcement,
 	AnnouncementTag
 } from '$api/types';
-import { announcementPolling } from './announcementPolling.svelte';
+import { queryKeys, STALE_TIMES, GC_TIMES, REFETCH_INTERVALS } from './queryClient';
 
-export type QueryResult<T> = {
-	readonly data: T | null;
-	readonly loading: boolean;
-	readonly error: Error | null;
-};
+export function useAboutQuery() {
+	return createQuery(() => ({
+		queryKey: queryKeys.about,
+		queryFn: fetchAbout,
+		staleTime: STALE_TIMES.STATIC,
+		gcTime: GC_TIMES.LONG,
+		enabled: browser,
+	}));
+}
 
-export type RefetchableQueryResult<T> = QueryResult<T> & {
-	refetch: () => Promise<T>;
-};
-function createQuery<T>(
-	fetcher: () => Promise<T>,
-	defaultValue: T
-) {
-	let data = $state<T>(defaultValue);
-	let loading = $state(false);
-	let error = $state<Error | null>(null);
-	let fetched = false;
+export function useTeamQuery() {
+	return createQuery(() => ({
+		queryKey: queryKeys.team,
+		queryFn: fetchTeam,
+		staleTime: STALE_TIMES.STATIC,
+		gcTime: GC_TIMES.LONG,
+		enabled: browser,
+	}));
+}
 
-	async function doFetch() {
-		if (!browser || fetched) return;
-		fetched = true;
-		loading = true;
-		error = null;
-		try {
-			data = await fetcher();
-		} catch (e) {
-			error = e instanceof Error ? e : new Error(String(e));
-			console.error('[Query] Fetch failed:', e);
-		} finally {
-			loading = false;
-		}
-	}
+export function useManagerQuery() {
+	return createQuery(() => ({
+		queryKey: queryKeys.manager,
+		queryFn: fetchManager,
+		staleTime: STALE_TIMES.SEMI_DYNAMIC,
+		gcTime: GC_TIMES.MEDIUM,
+		enabled: browser,
+	}));
+}
 
-	if (browser) {
-		doFetch();
-	}
+export function useContributorsQuery() {
+	return createQuery(() => ({
+		queryKey: queryKeys.contributors,
+		queryFn: fetchContributors,
+		staleTime: STALE_TIMES.STATIC,
+		gcTime: GC_TIMES.LONG,
+		enabled: browser,
+	}));
+}
 
-	return {
-		get data() {
-			return data;
-		},
-		get loading() {
-			return loading;
-		},
-		get error() {
-			return error;
-		},
-		async refetch() {
-			fetched = false;
-			await doFetch();
-			return data;
-		}
+export function usePatchesQuery() {
+	return createQuery(() => ({
+		queryKey: queryKeys.patches,
+		queryFn: fetchPatches,
+		staleTime: STALE_TIMES.SEMI_DYNAMIC,
+		gcTime: GC_TIMES.MEDIUM,
+		enabled: browser,
+	}));
+}
+
+export function useAnnouncementTagsQuery() {
+	return createQuery(() => ({
+		queryKey: queryKeys.announcementTags,
+		queryFn: fetchAnnouncementTags,
+		staleTime: STALE_TIMES.STATIC,
+		gcTime: GC_TIMES.LONG,
+		enabled: browser,
+	}));
+}
+
+export function useAnnouncementsQuery(options?: { enablePolling?: boolean }) {
+	return createQuery(() => ({
+		queryKey: queryKeys.announcements,
+		queryFn: () => fetchAnnouncements(),
+		staleTime: STALE_TIMES.DYNAMIC,
+		gcTime: GC_TIMES.SHORT,
+		refetchInterval: options?.enablePolling ? REFETCH_INTERVALS.ANNOUNCEMENTS : false,
+		refetchIntervalInBackground: false,
+		enabled: browser,
+	}));
+}
+
+export function useAnnouncementByIdQuery(id: () => number | null) {
+	return createQuery(() => ({
+		queryKey: queryKeys.announcement(id() ?? 0),
+		queryFn: () => fetchAnnouncementById(id()!),
+		staleTime: STALE_TIMES.DYNAMIC,
+		gcTime: GC_TIMES.SHORT,
+		enabled: browser && id() !== null,
+	}));
+}
+
+export function useInvalidateAnnouncements() {
+	const queryClient = useQueryClient();
+	return () => {
+		queryClient.invalidateQueries({ queryKey: queryKeys.announcements });
 	};
 }
-const _aboutQuery = createQuery<About | null>(fetchAbout, null);
-const _teamQuery = createQuery<TeamMember[]>(fetchTeam, []);
-const _managerQuery = createQuery<ManagerRelease | null>(fetchManager, null);
-const _contributorsQuery = createQuery<Contributable[]>(fetchContributors, []);
-const _patchesQuery = createQuery<Patch[]>(fetchPatches, []);
-const _announcementTagsQuery = createQuery<AnnouncementTag[]>(fetchAnnouncementTags, []);
 
-const announcementCache = new Map<number, ReturnType<typeof createQuery<Announcement | null>>>();
-export const aboutQuery: QueryResult<About | null> = {
-	get data() {
-		return _aboutQuery.data;
-	},
-	get loading() {
-		return _aboutQuery.loading;
-	},
-	get error() {
-		return _aboutQuery.error;
-	}
-};
-
-export const teamQuery: QueryResult<TeamMember[]> = {
-	get data() {
-		return _teamQuery.data;
-	},
-	get loading() {
-		return _teamQuery.loading;
-	},
-	get error() {
-		return _teamQuery.error;
-	}
-};
-
-export const managerQuery: QueryResult<ManagerRelease | null> = {
-	get data() {
-		return _managerQuery.data;
-	},
-	get loading() {
-		return _managerQuery.loading;
-	},
-	get error() {
-		return _managerQuery.error;
-	}
-};
-
-export const contributorsQuery: QueryResult<Contributable[]> = {
-	get data() {
-		return _contributorsQuery.data;
-	},
-	get loading() {
-		return _contributorsQuery.loading;
-	},
-	get error() {
-		return _contributorsQuery.error;
-	}
-};
-
-export const patchesQuery: QueryResult<Patch[]> = {
-	get data() {
-		return _patchesQuery.data;
-	},
-	get loading() {
-		return _patchesQuery.loading;
-	},
-	get error() {
-		return _patchesQuery.error;
-	}
-};
-
-export const announcementTagsQuery: QueryResult<AnnouncementTag[]> = {
-	get data() {
-		return _announcementTagsQuery.data;
-	},
-	get loading() {
-		return _announcementTagsQuery.loading;
-	},
-	get error() {
-		return _announcementTagsQuery.error;
-	}
-};
-
-export const announcementsQuery = announcementPolling;
-
-export function getAnnouncementById(id: number): QueryResult<Announcement | null> {
-	if (!announcementCache.has(id)) {
-		announcementCache.set(id, createQuery<Announcement | null>(
-			() => fetchAnnouncementById(id),
-			null
-		));
-	}
-	const query = announcementCache.get(id)!;
-	return {
-		get data() {
-			return query.data;
-		},
-		get loading() {
-			return query.loading;
-		},
-		get error() {
-			return query.error;
-		}
+export function useInvalidateAnnouncement() {
+	const queryClient = useQueryClient();
+	return (id: number) => {
+		queryClient.invalidateQueries({ queryKey: queryKeys.announcement(id) });
 	};
 }
-export const allQueries = [
-	aboutQuery,
-	teamQuery,
-	managerQuery,
-	contributorsQuery,
-	patchesQuery,
-	announcementsQuery,
-	announcementTagsQuery
-] as const;
 
-export function initializeAllQueries() {
+export function usePrefetchAnnouncement() {
+	const queryClient = useQueryClient();
+	return (id: number) => {
+		dev_log('Prefetch', 'announcement', id);
+		queryClient.prefetchQuery({
+			queryKey: queryKeys.announcement(id),
+			queryFn: () => fetchAnnouncementById(id),
+			staleTime: STALE_TIMES.DYNAMIC,
+		});
+	};
 }
-export function refetchAnnouncements() {
-	return announcementsQuery.refetch();
+export function usePrefetchNavQueries() {
+	const queryClient = useQueryClient();
+
+	return {
+		prefetchPatches: () => {
+			dev_log('Prefetch', 'patches');
+			queryClient.prefetchQuery({
+				queryKey: queryKeys.patches,
+				queryFn: fetchPatches,
+				staleTime: STALE_TIMES.SEMI_DYNAMIC,
+			});
+		},
+		prefetchContributors: () => {
+			dev_log('Prefetch', 'contributors');
+			queryClient.prefetchQuery({
+				queryKey: queryKeys.contributors,
+				queryFn: fetchContributors,
+				staleTime: STALE_TIMES.STATIC,
+			});
+		},
+		prefetchManager: () => {
+			dev_log('Prefetch', 'manager');
+			queryClient.prefetchQuery({
+				queryKey: queryKeys.manager,
+				queryFn: fetchManager,
+				staleTime: STALE_TIMES.SEMI_DYNAMIC,
+			});
+		},
+		prefetchAnnouncements: () => {
+			dev_log('Prefetch', 'announcements');
+			queryClient.prefetchQuery({
+				queryKey: queryKeys.announcements,
+				queryFn: () => fetchAnnouncements(),
+				staleTime: STALE_TIMES.DYNAMIC,
+			});
+		},
+	};
 }

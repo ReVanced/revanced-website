@@ -4,16 +4,18 @@
 	import { goto } from '$app/navigation';
 	import { fly, fade, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import Fuse, { type FuseResult } from 'fuse.js';
-	import Page from '$components/molecules/Page.svelte';
+	import Page from '$components/templates/Page.svelte';
 	import Search from '$components/atoms/Search.svelte';
 	import FilterChip from '$components/atoms/FilterChip.svelte';
 	import PackageMenu from '$components/organisms/PackageMenu.svelte';
 	import PackageItem from '$components/molecules/PackageItem.svelte';
 	import PatchItem from '$components/molecules/PatchItem.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
-	import { patchesQuery } from '$stores';
+	import { usePatchesQuery } from '$stores';
+	import { createFilter } from '$lib/utils/filter';
 	import type { Patch } from '$api';
+
+	const patchesQuery = usePatchesQuery();
 
 	const schemas = [
 		{
@@ -28,12 +30,35 @@
 
 	const patches = $derived(patchesQuery.data ?? []);
 
-	const fuse = $derived(
-		new Fuse(patches, {
-			keys: ['name', 'description'],
+	function getCompatiblePackageNames(patch: Patch): string {
+		if (!patch.compatiblePackages) return '';
+		return Object.keys(patch.compatiblePackages).join(' ');
+	}
+
+	function getCompatibleVersions(patch: Patch): string {
+		if (!patch.compatiblePackages) return '';
+		return Object.values(patch.compatiblePackages)
+			.filter((versions): versions is string[] => versions !== null)
+			.flat()
+			.join(' ');
+	}
+
+	const patchFilter = createFilter<Patch, { selectedPkg: string | null }>(
+		{
+			keys: [
+				'name',
+				'description',
+				{ name: 'packageNames', getFn: getCompatiblePackageNames },
+				{ name: 'versions', getFn: getCompatibleVersions }
+			],
 			threshold: 0.3,
 			ignoreLocation: true
-		})
+		},
+		(patch, { selectedPkg }) => {
+			if (!selectedPkg) return true;
+			if (!patch.compatiblePackages) return false;
+			return Object.keys(patch.compatiblePackages).includes(selectedPkg);
+		}
 	);
 
 	const packages = $derived.by(() => {
@@ -56,91 +81,38 @@
 	let selectedPkg = $state<string | null>(null);
 	let searchTerm = $state('');
 	let mobilePackagesOpen = $state(false);
-	let urlUpdateTimeout: ReturnType<typeof setTimeout> | null = null;
-	let isMounted = $state(true);
+	let initialized = $state(false);
 
 	$effect(() => {
-		if (!browser) return;
+		if (!browser || initialized) return;
 		const pkgParam = page.url.searchParams.get('pkg');
 		const searchParam = page.url.searchParams.get('s') ?? '';
-		if (selectedPkg === null && pkgParam) {
+		if (pkgParam) {
 			selectedPkg = pkgParam;
 		}
-		if (searchTerm === '' && searchParam) {
+		if (searchParam) {
 			searchTerm = searchParam;
 		}
+		initialized = true;
 	});
 
-	function updateUrl() {
+	$effect(() => {
+		const pkg = selectedPkg;
+		const search = searchTerm;
+		
 		if (!browser) return;
-		if (urlUpdateTimeout) {
-			clearTimeout(urlUpdateTimeout);
-		}
-		urlUpdateTimeout = setTimeout(() => {
-			if (!isMounted || !page.url.pathname.startsWith('/patches')) return;
+		const timeoutId = setTimeout(() => {
+			if (!page.url.pathname.startsWith('/patches')) return;
 			
 			const params = new URLSearchParams();
-			if (selectedPkg) params.set('pkg', selectedPkg);
-			if (searchTerm) params.set('s', searchTerm);
+			if (pkg) params.set('pkg', pkg);
+			if (search) params.set('s', search);
 			const queryString = params.toString();
 			goto(queryString ? `?${queryString}` : '/patches', { replaceState: true, keepFocus: true });
 		}, 350);
-	}
-
-	$effect(() => {
-		selectedPkg;
-		searchTerm;
-		updateUrl();
 		
-		return () => {
-			isMounted = false;
-			if (urlUpdateTimeout) {
-				clearTimeout(urlUpdateTimeout);
-				urlUpdateTimeout = null;
-			}
-		};
+		return () => clearTimeout(timeoutId);
 	});
-
-	function getCompatiblePackageNames(patch: Patch): string {
-		if (!patch.compatiblePackages) return '';
-		return Object.keys(patch.compatiblePackages).join(' ');
-	}
-
-	function getCompatibleVersions(patch: Patch): string {
-		if (!patch.compatiblePackages) return '';
-		return Object.values(patch.compatiblePackages)
-			.filter((versions): versions is string[] => versions !== null)
-			.flat()
-			.join(' ');
-	}
-
-	function filterPatches(patchList: Patch[], pkg: string | null, search: string): Patch[] {
-		let filtered = patchList;
-
-		if (pkg) {
-			filtered = filtered.filter((patch) => {
-				if (!patch.compatiblePackages) return false;
-				return Object.keys(patch.compatiblePackages).includes(pkg);
-			});
-		}
-
-		if (search) {
-			const fuseInstance = new Fuse(filtered, {
-				keys: [
-					'name',
-					'description',
-					{ name: 'packageNames', getFn: getCompatiblePackageNames },
-					{ name: 'versions', getFn: getCompatibleVersions }
-				],
-				threshold: 0.3,
-				ignoreLocation: true
-			});
-			const results: FuseResult<Patch>[] = fuseInstance.search(search);
-			filtered = results.map((r) => r.item);
-		}
-
-		return filtered;
-	}
 
 	function selectPackage(pkgName: string | null) {
 		selectedPkg = pkgName && pkgName !== 'All packages' ? pkgName : null;
@@ -152,7 +124,9 @@
 		mobilePackagesOpen = !mobilePackagesOpen;
 	}
 
-	let filteredPatches = $derived(filterPatches(patches, selectedPkg, searchTerm));
+	let filteredPatches = $derived(
+		patchFilter(patches, searchTerm, { selectedPkg })
+	);
 </script>
 
 <Page title="Patches for ReVanced" description="Browse our rich collection of patches for ReVanced" {schemas}>
@@ -165,11 +139,11 @@
 		</div>
 	</div>
 
-	{#if patchesQuery.loading && patches.length === 0}
+	{#if patchesQuery.isPending && patches.length === 0}
 		<div class="loading-state">
 			<p>Loading patches...</p>
 		</div>
-	{:else if patchesQuery.error && patches.length === 0}
+	{:else if patchesQuery.isError && patches.length === 0}
 		<div class="error-state">
 			<p>Failed to load patches. Please try again later.</p>
 		</div>

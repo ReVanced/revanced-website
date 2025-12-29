@@ -59,89 +59,41 @@ function buildAuthHeaders(): Record<string, string> {
 	};
 }
 
+type HttpMethod = 'POST' | 'PATCH' | 'DELETE';
 
-async function postJson<T>(
+async function mutateJson<T>(
+	method: HttpMethod,
 	endpoint: string,
 	body?: unknown,
 	schema?: z.ZodType<T>
 ): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
+	
 	const response = await fetch(buildUrl(endpoint), {
-		method: 'POST',
+		method,
 		headers: buildAuthHeaders(),
-		body: body ? JSON.stringify(body) : ''
+		...(body !== undefined ? { body: JSON.stringify(body) } : {})
 	});
+	
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
+	
 	if (response.headers.get('content-length') === '0') {
 		return null;
 	}
+	
 	const data = await response.json();
+	
 	if (schema) {
 		const result = schema.safeParse(data);
 		if (!result.success) {
-			console.error(`[API] Validation failed for POST ${endpoint}:`, result.error.issues);
+			console.error(`[API] Validation failed for ${method} ${endpoint}:`, result.error.issues);
 			throw new ApiValidationError(endpoint, result.error.issues);
 		}
 		return result.data;
 	}
-	return data as T;
-}
-
-async function patchJson<T>(
-	endpoint: string,
-	body?: unknown,
-	schema?: z.ZodType<T>
-): Promise<T | null> {
-	if (!isLoggedIn()) throw new Error('Unauthenticated');
-	const response = await fetch(buildUrl(endpoint), {
-		method: 'PATCH',
-		headers: buildAuthHeaders(),
-		body: body ? JSON.stringify(body) : ''
-	});
-	if (!response.ok) {
-		throw new Error(`API error: ${response.status} ${response.statusText}`);
-	}
-	if (response.headers.get('content-length') === '0') {
-		return null;
-	}
-	const data = await response.json();
-	if (schema) {
-		const result = schema.safeParse(data);
-		if (!result.success) {
-			console.error(`[API] Validation failed for PATCH ${endpoint}:`, result.error.issues);
-			throw new ApiValidationError(endpoint, result.error.issues);
-		}
-		return result.data;
-	}
-	return data as T;
-}
-
-async function deleteJson<T>(
-	endpoint: string,
-	schema?: z.ZodType<T>
-): Promise<T | null> {
-	if (!isLoggedIn()) throw new Error('Unauthenticated');
-	const response = await fetch(buildUrl(endpoint), {
-		method: 'DELETE',
-		headers: buildAuthHeaders()
-	});
-	if (!response.ok) {
-		throw new Error(`API error: ${response.status} ${response.statusText}`);
-	}
-	if (response.headers.get('content-length') === '0') {
-		return null;
-	}
-	const data = await response.json();
-	if (schema) {
-		const result = schema.safeParse(data);
-		if (!result.success) {
-			console.error(`[API] Validation failed for DELETE ${endpoint}:`, result.error.issues);
-			throw new ApiValidationError(endpoint, result.error.issues);
-		}
-		return result.data;
-	}
+	
 	return data as T;
 }
 
@@ -220,7 +172,7 @@ export async function checkApiHealth(): Promise<boolean> {
 		});
 		return response.ok;
 	} catch {
-		console.log('API health check failed');
+		console.warn('[API] Health check failed');
 		return false;
 	}
 }
@@ -237,17 +189,17 @@ export type AnnouncementPayload = {
 };
 
 export async function createAnnouncement(announcement: AnnouncementPayload): Promise<Announcement> {
-	const result = await postJson<Announcement>('announcements', announcement, AnnouncementSchema);
+	const result = await mutateJson<Announcement>('POST', 'announcements', announcement, AnnouncementSchema);
 	if (!result) throw new Error('Failed to create announcement');
 	return result;
 }
 
 export async function updateAnnouncement(id: number, announcement: AnnouncementPayload): Promise<Announcement> {
-	const result = await patchJson<Announcement>(`announcements/${id}`, announcement, AnnouncementSchema);
+	const result = await mutateJson<Announcement>('PATCH', `announcements/${id}`, announcement, AnnouncementSchema);
 	if (!result) throw new Error('Failed to update announcement');
 	return result;
 }
 
 export async function deleteAnnouncement(id: number): Promise<void> {
-	await deleteJson(`announcements/${id}`);
+	await mutateJson('DELETE', `announcements/${id}`);
 }
