@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
 import { isLoggedIn, getTokenExpiry, logout as doLogout, login as doLogin } from '$api/auth';
 import type { LoginResult } from '$api/auth';
+const INTENTIONAL_LOGOUT_KEY = 'revanced_intentional_logout';
 
 function createAuthStore() {
 	let loggedIn = $state(false);
@@ -24,9 +25,14 @@ function createAuthStore() {
 	function startChecking() {
 		if (!browser || checkInterval) return;
 		if (!initialized) {
-			const storedExpiry = getTokenExpiry();
-			if (storedExpiry !== null && Date.now() >= storedExpiry) {
-				wasLoggedIn = true;
+			const wasIntentionalLogout = sessionStorage.getItem(INTENTIONAL_LOGOUT_KEY);
+			if (wasIntentionalLogout) {
+				sessionStorage.removeItem(INTENTIONAL_LOGOUT_KEY);
+			} else {
+				const storedExpiry = getTokenExpiry();
+				if (storedExpiry !== null && Date.now() >= storedExpiry) {
+					wasLoggedIn = true;
+				}
 			}
 			initialized = true;
 		}

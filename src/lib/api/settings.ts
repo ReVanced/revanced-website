@@ -82,7 +82,8 @@ export function clearCacheAndReload(): void {
 	
 	localStorage.clear();
 	sessionStorage.clear();
-
+	
+	sessionStorage.setItem('revanced_intentional_logout', 'true');
 	location.reload();
 }
 

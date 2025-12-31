@@ -95,7 +95,6 @@
 	}
 
 	function handleLoginClick() {
-		open = false;
 		onLoginRequest?.();
 	}
 </script>

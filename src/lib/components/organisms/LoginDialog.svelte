@@ -5,9 +5,10 @@
 
 	interface Props {
 		open: boolean;
+		onclose?: () => void;
 	}
 
-	let { open = $bindable() }: Props = $props();
+	let { open = $bindable(), onclose }: Props = $props();
 
 	let loginForm: HTMLFormElement | undefined = $state();
 	let username = $state('');
@@ -20,6 +21,7 @@
 		username = '';
 		password = '';
 		error = '';
+		onclose?.();
 	}
 
 	async function handleFormSubmit(event: SubmitEvent) {
@@ -52,7 +54,7 @@
 	}
 </script>
 
-<Modal bind:open>
+<Modal bind:open onclose={handleCancel}>
 	<div class="login-content">
 		<h2 class="login-title">Login</h2>
 		<p class="login-description">This login is reserved for site administrators. Go back!</p>

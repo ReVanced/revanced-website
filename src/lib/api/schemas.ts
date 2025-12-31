@@ -116,5 +116,3 @@ export const ContributablesSchema = z.array(ContributableSchema);
 export const PatchesSchema = z.array(PatchSchema);
 export const AnnouncementsSchema = z.array(AnnouncementSchema);
 export const AnnouncementTagsSchema = z.array(AnnouncementTagSchema);
-
-export const ReadAnnouncementIdsSchema = z.array(z.number());

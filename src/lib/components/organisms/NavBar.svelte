@@ -27,6 +27,7 @@
 
 	let settingsOpen = $state(false);
 	let loginOpen = $state(false);
+	let loginFromSettings = $state(false);
 	let menuOpen = $state(false);
 	let scrollY = $state(0);
 
@@ -39,13 +40,24 @@
 
 	$effect(() => {
 		if (auth.loginModalRequested) {
+			loginFromSettings = false;
 			loginOpen = true;
 			auth.clearLoginModalRequest();
 		}
 	});
 
 	function handleLoginRequest() {
+		settingsOpen = false;
+		loginFromSettings = true;
 		loginOpen = true;
+	}
+
+	function handleLoginClose() {
+		loginOpen = false;
+		if (loginFromSettings) {
+			settingsOpen = true;
+			loginFromSettings = false;
+		}
 	}
 </script>
 
@@ -154,7 +166,7 @@
 
 <SettingsDialog bind:open={settingsOpen} onLoginRequest={handleLoginRequest} />
 
-<LoginDialog bind:open={loginOpen} />
+<LoginDialog bind:open={loginOpen} onclose={handleLoginClose} />
 
 <style>
 	.skip-nav {

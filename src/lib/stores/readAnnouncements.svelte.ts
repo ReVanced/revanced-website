@@ -1,13 +1,25 @@
 import { browser } from '$app/environment';
+import { PersistedState } from 'runed';
 import type { Announcement } from '$api/types';
-import { ReadAnnouncementIdsSchema } from '$api/schemas';
-import { createValidatedPersistedState } from './validatedPersistedState';
 
-const readIds = createValidatedPersistedState<number[]>(
-	'read_announcements',
-	[],
-	ReadAnnouncementIdsSchema
-);
+const STORAGE_KEY = 'read_announcements';
+
+const readIds = new PersistedState<number[]>(STORAGE_KEY, [], {
+	serializer: {
+		serialize: JSON.stringify,
+		deserialize: (str: string) => {
+			try {
+				const parsed = JSON.parse(str);
+				if (Array.isArray(parsed) && parsed.every((id) => typeof id === 'number')) {
+					return parsed;
+				}
+			} catch {
+				// ignore
+				}
+			return [];
+		}
+	}
+});
 
 let _announcements = $state<Announcement[]>([]);
 
