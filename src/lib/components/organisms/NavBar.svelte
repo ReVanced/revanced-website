@@ -151,13 +151,11 @@
 			</a>
 			<button
 				type="button"
-				class="rounded nav-button unselectable settings-btn icon-btn"
+				class="rounded nav-button unselectable settings-btn"
 				class:selected={settingsOpen}
 				onclick={() => (settingsOpen = true)}
 			>
-				<span class="icon-wrapper">
-					<Settings size={20} />
-				</span>
+				<Settings size={20} color={settingsOpen ? 'var(--primary)' : 'var(--surface-six)'} />
 			</button>
 		</div>
 	</div>
@@ -253,7 +251,7 @@
 		padding: 10px 16px;
 		border-radius: 10px;
 		transition-timing-function: var(--bezier-one);
-		transition-duration: 0.25s;
+		transition-duration: 0.5s;
 		transition-property: background-color, color;
 		cursor: pointer;
 		user-select: none;
@@ -299,35 +297,20 @@
 	.icon-btn svg,
 	.icon-btn :global(svg) {
 		fill: currentColor;
-		transition: fill 0.25s var(--bezier-one);
-	}
-
-	.icon-wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: inherit;
-	}
-
-	.icon-wrapper :global(svg) {
-		fill: currentColor;
 	}
 
 	.settings-btn {
 		background: transparent;
 		border: none;
 		font-family: inherit;
-		color: var(--surface-six);
 	}
 
 	.settings-btn:hover {
 		background-color: var(--surface-three);
-		color: var(--text-one);
 	}
 
 	.settings-btn.selected {
 		background-color: var(--tertiary);
-		color: var(--primary);
 	}
 
 	.logo {
