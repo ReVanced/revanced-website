@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@sveltejs/kit'
+  - datetrigger
+  - esbuild
+  - sharp

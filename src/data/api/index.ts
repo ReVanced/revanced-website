@@ -145,7 +145,7 @@ async function announcements(options: GetAnnouncementsOptions = {}): Promise<Ann
 	if (options.count) url.searchParams.set('count', String(options.count));
 	if (options.cursor) url.searchParams.set('cursor', String(options.cursor));
 
-	const announcements = (await get_json('announcements')) as ResponseAnnouncement[];
+	const announcements = (await fetch(url).then((r) => r.json())) as ResponseAnnouncement[];
 
 	return { announcements };
 }

@@ -83,12 +83,13 @@
 		if (!isValid()) return;
 
 		Object.assign(draftInputs, {
-			created_at: formatUTC(draftInputs.created_at),
 			archived_at: formatUTC(draftInputs.archived_at)
 		});
+		const { created_at, ...dataWithoutCreatedAt } = draftInputs;
 
-		await admin.create_announcement(sanitize(draftInputs));
+		await admin.create_announcement(sanitize(dataWithoutCreatedAt as Announcement));
 		await client.invalidateQueries(queries.announcements());
+
 		goto('/announcements', { invalidateAll: true });
 	};
 
