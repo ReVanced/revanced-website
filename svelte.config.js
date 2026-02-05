@@ -17,6 +17,9 @@ const config = {
 			$stores: 'src/lib/stores',
 			$api: 'src/lib/api',
 			$lib: 'src/lib'
+		},
+		env: {
+			publicPrefix: 'RV_'
 		}
 	}
 };

@@ -5,7 +5,7 @@
 	import logo from '$assets/icons/logo.svg';
 	import Divider from '$components/atoms/Divider.svelte';
 	import FooterSection from '$components/molecules/FooterSection.svelte';
-	import { PUBLIC_RV_DMCA_GUID as dmcaGuid } from '$env/static/public';
+	import { RV_DMCA_GUID as dmcaGuid } from '$env/static/public';
 	import type { Social } from '$api';
 
 	type FooterLink = {
