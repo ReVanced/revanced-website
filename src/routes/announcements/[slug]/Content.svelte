@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { relativeTime } from '$lib/utils/relativeTime';
-	import { isValidUrl } from '$lib/utils';
 	import { useAnnouncementTagsQuery, auth } from '$stores';
 	import TagChip from '$components/atoms/TagChip.svelte';
-	import Gallery from '$components/molecules/Gallery.svelte';
 	import AdminButtons from './AdminButtons.svelte';
 	import IconArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import IconAdd from 'svelte-material-icons/Plus.svelte';
-	import IconDelete from 'svelte-material-icons/DeleteOutline.svelte';
 	import moment from 'moment';
 
 	import type { Announcement } from '$lib/api/types';
@@ -23,7 +20,6 @@
 		createdAtInput: string;
 		archivedAtInput: string;
 		tagsInput: string[];
-		attachmentsInput: string[];
 		onEdit: () => void;
 		onCancel: () => void;
 		onSave: () => void;
@@ -43,7 +39,6 @@
 		createdAtInput = $bindable(''),
 		archivedAtInput = $bindable(''),
 		tagsInput = $bindable([]),
-		attachmentsInput = $bindable([]),
 		onEdit,
 		onCancel,
 		onSave,
@@ -65,7 +60,6 @@
 		const date = isPreviewing ? archivedAtInput : announcement?.archived_at;
 		return date && moment(date).isBefore() ? date : null;
 	});
-	let displayAttachments = $derived(isPreviewing ? attachmentsInput : announcement?.attachments ?? []);
 
 	// Tags
 	let newTag = $state('');
@@ -99,31 +93,6 @@
 		if (e.key === 'Enter') {
 			e.preventDefault();
 			handleAddTag();
-		}
-	}
-
-	// Attachments
-	let newAttachment = $state('');
-
-	function addAttachment() {
-		const trimmed = newAttachment.trim();
-		if (!trimmed || !isValidUrl(trimmed)) {
-			newAttachment = '';
-			return;
-		}
-
-		attachmentsInput = [...(attachmentsInput ?? []), trimmed];
-		newAttachment = '';
-	}
-
-	function removeAttachment(index: number) {
-		attachmentsInput = attachmentsInput.filter((_, i) => i !== index);
-	}
-
-	function handleAttachmentKeydown(e: KeyboardEvent) {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			addAttachment();
 		}
 	}
 </script>
@@ -186,7 +155,6 @@
 				{/if}
 			{/if}
 		</h4>
-
 		<!-- Tags -->
 		{#if isEditMode && !isPreviewing}
 			<div class="tags-editor">
@@ -211,6 +179,12 @@
 						<IconAdd size={18} />
 					</span>
 				</div>
+			</div>
+		{:else if (isPreviewing ? tagsInput : announcement?.tags ?? []).length > 0}
+			<div class="tags-editor">
+				{#each (isPreviewing ? tagsInput : announcement?.tags ?? []) as tag}
+					<TagChip {tag} />
+				{/each}
 			</div>
 		{/if}
 	</div>
@@ -244,53 +218,6 @@
 {:else if displayContent}
 	<div class="content-display">
 		{@html displayContent}
-	</div>
-{/if}
-
-<!-- Attachments -->
-{#if isEditMode && !isPreviewing}
-	<hr class="divider" />
-	<div class="attachments-editor">
-		{#if attachmentsInput && attachmentsInput.length > 0}
-			{#each attachmentsInput as attachment, index}
-				<div class="attachment-row">
-					<input
-						type="text"
-						bind:value={attachmentsInput[index]}
-						class="attachment-input"
-						class:invalid={!isValidUrl(attachment)}
-						placeholder="Attachment URL"
-					/>
-					<button
-						type="button"
-						class="remove-btn"
-						onclick={() => removeAttachment(index)}
-						aria-label="Remove attachment"
-					>
-						<IconDelete size={20} />
-					</button>
-				</div>
-			{/each}
-		{/if}
-		<div class="new-attachment">
-			<input
-				type="text"
-				bind:value={newAttachment}
-				class="attachment-input new"
-				class:invalid={newAttachment.trim() !== '' && !isValidUrl(newAttachment)}
-				placeholder="Add attachment URL"
-				onkeydown={handleAttachmentKeydown}
-				onblur={addAttachment}
-			/>
-			<span class="add-icon">
-				<IconAdd size={18} />
-			</span>
-		</div>
-	</div>
-{:else if displayAttachments && displayAttachments.length > 0}
-	<hr class="divider" />
-	<div class="attachments">
-		<Gallery images={displayAttachments} columns={3} gap="0.75rem" />
 	</div>
 {/if}
 
@@ -535,116 +462,6 @@
 		pointer-events: none;
 	}
 
-	/* Attachments */
-	.attachments {
-		margin-top: 1rem;
-	}
-
-	.attachments-editor {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		width: 100%;
-	}
-
-	.attachment-row {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		position: relative;
-	}
-
-	.attachment-input {
-		flex: 1;
-		padding: 0.75rem 2.5rem 0.75rem 0.75rem;
-		border: 1px solid var(--border);
-		border-radius: 8px;
-		background-color: transparent;
-		color: var(--secondary);
-		font-size: 0.85rem;
-		font-family: inherit;
-		letter-spacing: 0.02rem;
-		transition: border-color 0.2s var(--bezier-one);
-	}
-
-	.attachment-input:focus {
-		outline: none;
-		border-color: var(--primary);
-	}
-
-	.attachment-input.invalid {
-		border-color: var(--red-one);
-	}
-
-	.attachment-input::placeholder {
-		color: var(--secondary);
-		opacity: 0.6;
-	}
-
-	.remove-btn {
-		position: absolute;
-		right: 8px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 4px;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		color: var(--text-four);
-		transition: color 0.2s var(--bezier-one);
-	}
-
-	.remove-btn:hover {
-		color: var(--red-one);
-	}
-
-	.remove-btn :global(svg) {
-		width: 20px;
-		height: 20px;
-	}
-
-	.new-attachment {
-		display: inline-flex;
-		align-items: center;
-		position: relative;
-	}
-
-	.new-attachment .attachment-input.new {
-		width: 52px;
-		flex: none;
-		padding: 0.75rem;
-		padding-right: 0;
-		border: 1px solid var(--border);
-		transition: all 0.2s var(--bezier-one);
-		cursor: pointer;
-	}
-
-	.new-attachment .attachment-input.new::placeholder {
-		color: transparent;
-		transition: color 0.2s var(--bezier-one);
-	}
-
-	.new-attachment .attachment-input.new:focus {
-		width: 100%;
-		padding-right: 0.75rem;
-		cursor: text;
-	}
-
-	.new-attachment .attachment-input.new:focus::placeholder {
-		color: var(--secondary);
-		opacity: 0.6;
-	}
-
-	.new-attachment .attachment-input.new:focus + .add-icon {
-		opacity: 0;
-		pointer-events: none;
-	}
-
-	.new-attachment .attachment-input.new.invalid {
-		border-color: var(--red-one);
-	}
-
 	.add-icon {
 		position: absolute;
 		left: 50%;
@@ -656,10 +473,6 @@
 		align-items: center;
 		justify-content: center;
 		transition: opacity 0.2s var(--bezier-one);
-	}
-
-	.new-attachment .add-icon {
-		left: 26px;
 	}
 
 	.add-icon :global(svg) {

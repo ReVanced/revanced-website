@@ -11,33 +11,30 @@
 	let { open = $bindable(), onclose }: Props = $props();
 
 	let loginForm: HTMLFormElement | undefined = $state();
-	let username = $state('');
-	let password = $state('');
+	let token = $state('');
 	let error = $state('');
 	let loading = $state(false);
 
 	function handleCancel() {
 		open = false;
-		username = '';
-		password = '';
+		token = '';
 		error = '';
 		onclose?.();
 	}
 
-	async function handleFormSubmit(event: SubmitEvent) {
+	function handleFormSubmit(event: SubmitEvent) {
 		event.preventDefault();
 
 		error = '';
 		loading = true;
 
-		const result = await auth.login(username, password);
+		const result = auth.login(token);
 
 		loading = false;
 
 		if (result.success) {
 			open = false;
-			username = '';
-			password = '';
+			token = '';
 		} else {
 			error = result.error;
 		}
@@ -47,7 +44,7 @@
 		loginForm?.requestSubmit();
 	}
 
-	function handlePasswordKeydown(event: KeyboardEvent) {
+	function handleTokenKeydown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && !loading) {
 			loginForm?.requestSubmit();
 		}
@@ -66,32 +63,18 @@
 		<form class="login-form" bind:this={loginForm} onsubmit={handleFormSubmit}>
 			<div class="input-group">
 				<input
-					type="text"
-					id="login-username"
-					name="username"
-					autocomplete="username"
-					bind:value={username}
-					placeholder=" "
-					class="login-input rounded"
-					disabled={loading}
-					required
-				/>
-				<label for="login-username" class="login-label">Username</label>
-			</div>
-			<div class="input-group">
-				<input
 					type="password"
-					id="login-password"
-					name="password"
-					autocomplete="current-password"
-					bind:value={password}
+					id="login-token"
+					name="token"
+					autocomplete="off"
+					bind:value={token}
 					placeholder=" "
 					class="login-input rounded"
 					disabled={loading}
-					onkeydown={handlePasswordKeydown}
+					onkeydown={handleTokenKeydown}
 					required
 				/>
-				<label for="login-password" class="login-label">Password</label>
+				<label for="login-token" class="login-label">API Token</label>
 			</div>
 		</form>
 	</div>

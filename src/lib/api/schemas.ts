@@ -100,7 +100,6 @@ export const AnnouncementSchema = z.object({
 	author: z.string().nullable().optional().default(null),
 	title: z.string(),
 	content: z.string().nullable().optional().default(null),
-	attachments: z.array(z.string()).optional().default([]),
 	tags: z.array(z.string()).optional().default([]),
 	created_at: z.string(),
 	archived_at: z.string().nullable().optional().default(null),

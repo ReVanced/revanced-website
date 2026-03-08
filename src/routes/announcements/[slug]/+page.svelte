@@ -7,7 +7,7 @@
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
 	import { formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
-	import { isValidUrl, toSlug, isScheduled } from '$lib/utils';
+	import { toSlug, isScheduled } from '$lib/utils';
 	import {
 		fetchAnnouncementById,
 		createAnnouncement,
@@ -52,7 +52,6 @@
 	let createdAtInput = $state('');
 	let archivedAtInput = $state('');
 	let tagsInput = $state<string[]>([]);
-	let attachmentsInput = $state<string[]>([]);
 	let draftInitialized = $state(false);
 
 	function initializeDraft() {
@@ -63,7 +62,6 @@
 			createdAtInput = formatDateTimeLocal(new Date());
 			archivedAtInput = '';
 			tagsInput = [];
-			attachmentsInput = [];
 		} else if (announcement) {
 			titleInput = announcement.title ?? '';
 			contentInput = announcement.content ?? '';
@@ -75,7 +73,6 @@
 				? formatDateTimeLocal(announcement.archived_at)
 				: '';
 			tagsInput = [...(announcement.tags ?? [])];
-			attachmentsInput = [...(announcement.attachments ?? [])];
 		}
 	}
 
@@ -134,13 +131,11 @@
 	function validateInputs(): boolean {
 		const hasEmptyTitle = !titleInput.trim();
 		const hasEmptyContent = !contentInput.trim();
-		const hasInvalidAttachments = attachmentsInput.some((a) => a && !isValidUrl(a));
 
-		if (hasEmptyTitle || hasEmptyContent || hasInvalidAttachments) {
+		if (hasEmptyTitle || hasEmptyContent) {
 			const issues = [
 				hasEmptyTitle && 'Title',
-				hasEmptyContent && 'Content',
-				hasInvalidAttachments && 'Attachments'
+				hasEmptyContent && 'Content'
 			].filter(Boolean);
 			alert(`${issues.join(' and ')} must be filled properly`);
 			return false;
@@ -149,7 +144,6 @@
 	}
 
 	function buildPayload(): AnnouncementPayload {
-		const createdAtFormatted = createdAtInput ? formatUTC(createdAtInput) : undefined;
 		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : null;
 		
 		return {
@@ -157,10 +151,6 @@
 			content: contentInput.trim() || undefined,
 			author: authorInput.trim() || undefined,
 			tags: tagsInput.length > 0 ? tagsInput : undefined,
-			attachments: attachmentsInput.filter((a) => a && isValidUrl(a)).length > 0
-				? attachmentsInput.filter((a) => a && isValidUrl(a))
-				: undefined,
-			created_at: createdAtFormatted || undefined,
 			archived_at: typeof archivedAtFormatted === 'string' ? archivedAtFormatted : null
 		};
 	}
@@ -183,12 +173,12 @@
 		try {
 			if (isCreating) {
 				await createAnnouncement(payload);
-				invalidateAnnouncements();
+				await invalidateAnnouncements();
 				goto('/announcements');
 			} else if (announcementId !== null) {
 				const updated = await updateAnnouncement(announcementId, payload);
 				announcement = updated;
-				invalidateAnnouncements();
+				await invalidateAnnouncements();
 				isEditing = false;
 				isPreviewing = false;
 			}
@@ -212,7 +202,7 @@
 			await deleteAnnouncement(announcementId);
 			showDeleteConfirm = false;
 			await tick();
-			invalidateAnnouncements();
+			await invalidateAnnouncements();
 			await goto('/announcements');
 		} catch (err) {
 			if (err instanceof Error && err.message === 'Unauthenticated') {
@@ -277,7 +267,6 @@
 				bind:createdAtInput
 				bind:archivedAtInput
 				bind:tagsInput
-				bind:attachmentsInput
 				{onEdit}
 				{onCancel}
 				{onSave}

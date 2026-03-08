@@ -2,7 +2,7 @@
 	import type { Announcement } from '$api';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
-	import { readAnnouncements, usePrefetchAnnouncement } from '$stores';
+	import { readAnnouncements } from '$stores';
 	import { relativeTime } from '$lib/utils/relativeTime';
 	import { isArchived, buildAnnouncementPath } from '$lib/utils';
 	import IconArchive from 'svelte-material-icons/ArchiveOutline.svelte';
@@ -13,20 +13,13 @@
 
 	let { announcement }: Props = $props();
 
-	const prefetchAnnouncement = usePrefetchAnnouncement();
-
 	let isRead = $derived(readAnnouncements.isRead(announcement.id));
 
 	function handleClick() {
 		readAnnouncements.markAsRead(announcement.id);
 	}
 
-	function handlePrefetch() {
-		prefetchAnnouncement(announcement.id);
-	}
-
 	let href = $derived(buildAnnouncementPath(announcement.id, announcement.title));
-	let hasImage = $derived(announcement.attachments && announcement.attachments.length > 0);
 	let archived = $derived(isArchived(announcement.archived_at));
 	let createdTime = $derived(relativeTime(announcement.created_at));
 	let archivedTime = $derived(announcement.archived_at ? relativeTime(announcement.archived_at) : '');
@@ -37,22 +30,10 @@
 	class="card-link"
 	data-sveltekit-preload-data
 	onclick={handleClick}
-	onmouseenter={handlePrefetch}
-	onfocus={handlePrefetch}
 >
-	<article class="card" class:attachment={hasImage}>
+	<article class="card">
 		{#if !isRead && !archived}
 			<span class="new-header">NEW</span>
-		{/if}
-
-		{#if hasImage}
-			<img
-				src={announcement.attachments[0]}
-				alt="Banner"
-				class="card-image"
-				class:no-border-radius={!isRead}
-				onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-			/>
 		{/if}
 
 		<div class="content">
@@ -104,10 +85,6 @@
 		filter: none;
 	}
 
-	.card.attachment {
-		grid-row: span 2;
-	}
-
 	.new-header {
 		text-align: center;
 		background-color: var(--surface-four);
@@ -117,17 +94,6 @@
 		border-radius: 12px 12px 0 0;
 		pointer-events: none;
 		letter-spacing: 0.05em;
-	}
-
-	.card-image {
-		height: 150px;
-		object-fit: cover;
-		width: 100%;
-		border-radius: 12px 12px 0px 0px;
-	}
-
-	.card-image.no-border-radius {
-		border-radius: 0;
 	}
 
 	.content {
@@ -230,12 +196,6 @@
 	}
 
 	.content-body :global(p) {
-		margin: 0;
-	}
-
-	hr {
-		border: none;
-		border-top: 1px solid var(--border);
 		margin: 0;
 	}
 </style>

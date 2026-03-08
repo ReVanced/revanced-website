@@ -1,15 +1,29 @@
 import { browser } from '$app/environment';
-import { RV_API_URL, RV_STATUS_URL, RV_EMAIL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
+
+function requireEnv(key: `RV_${string}`): string {
+	const value = env[key];
+	if (value === undefined) {
+		throw new Error(
+			`Missing environment variable "${key}". ` +
+			`Make sure a .env file exists in the project root with "${key}" defined. ` +
+			`See .env.example for reference.`
+		);
+	}
+	return value;
+}
 
 const URL_KEY = 'revanced_api_url';
 const STATUS_KEY = 'revanced_status_url';
 const EMAIL_KEY = 'revanced_email';
 
-export const DEFAULT_API_URL = RV_API_URL;
-export const DEFAULT_STATUS_URL = RV_STATUS_URL;
-export const DEFAULT_EMAIL = RV_EMAIL;
+export const DEFAULT_API_URL = requireEnv('RV_API_URL');
+export const DEFAULT_STATUS_URL = requireEnv('RV_STATUS_URL');
+export const DEFAULT_EMAIL = requireEnv('RV_EMAIL');
+export const DMCA_GUID = requireEnv('RV_DMCA_GUID');
+export const GOOGLE_TAG_MANAGER_ID = requireEnv('RV_GOOGLE_TAG_MANAGER_ID');
 
-const API_VERSION = 'v4';
+const API_VERSION = 'v5';
 let dynamicSettingsFetched = false;
 
 export function populateDynamicSettings(aboutData: { status?: string; contact?: { email?: string } } | null): void {

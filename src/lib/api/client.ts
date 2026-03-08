@@ -36,7 +36,10 @@ async function fetchJson<T>(
 	schema: z.ZodType<T>,
 	signal?: AbortSignal
 ): Promise<T> {
-	const response = await fetch(buildUrl(endpoint), signal ? { signal } : undefined);
+	const response = await fetch(buildUrl(endpoint), {
+		cache: 'no-store',
+		...(signal ? { signal } : {})
+	});
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
@@ -79,7 +82,7 @@ async function mutateJson<T>(
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
 	
-	if (response.headers.get('content-length') === '0') {
+	if (response.status === 204 || response.headers.get('content-length') === '0') {
 		return null;
 	}
 	
@@ -117,47 +120,15 @@ export async function fetchPatches(): Promise<Patch[]> {
 	return fetchJson<Patch[]>('patches/list', PatchesSchema);
 }
 
-export type FetchAnnouncementsOptions = {
-	tags?: string[];
-	count?: number;
-	cursor?: number;
-};
-
-export async function fetchAnnouncements(options: FetchAnnouncementsOptions = {}): Promise<Announcement[]> {
-	let endpoint = 'announcements';
-	const params = new URLSearchParams();
-
-	if (options.tags && options.tags.length > 0) {
-		params.set('tags', options.tags.join(','));
-	}
-	if (options.count !== undefined) {
-		params.set('count', String(options.count));
-	}
-	if (options.cursor !== undefined) {
-		params.set('cursor', String(options.cursor));
-	}
-
-	const queryString = params.toString();
-	if (queryString) {
-		endpoint = `${endpoint}?${queryString}`;
-	}
-
-	const response = await fetch(buildUrl(endpoint));
-	if (!response.ok) {
-		throw new Error(`API error: ${response.status} ${response.statusText}`);
-	}
-	const data = await response.json();
-
-	const result = AnnouncementsSchema.safeParse(data);
-	if (!result.success) {
-		console.error('[API] Validation failed for announcements:', result.error.issues);
-		throw new Error('Invalid response from announcements. Please try again later.');
-	}
-	return result.data;
+export async function fetchAnnouncements(): Promise<Announcement[]> {
+	return fetchJson<Announcement[]>('announcements', AnnouncementsSchema);
 }
 
 export async function fetchAnnouncementById(id: number, signal?: AbortSignal): Promise<Announcement> {
-	return fetchJson<Announcement>(`announcements/${id}`, AnnouncementSchema, signal);
+	const all = await fetchJson<Announcement[]>('announcements', AnnouncementsSchema, signal);
+	const found = all.find((a) => a.id === id);
+	if (!found) throw new Error('API error: 404 Not Found');
+	return found;
 }
 
 export async function fetchAnnouncementTags(): Promise<AnnouncementTag[]> {
@@ -182,8 +153,6 @@ export type AnnouncementPayload = {
 	content?: string;
 	author?: string;
 	tags?: string[];
-	attachments?: string[];
-	created_at?: string;
 	archived_at?: string | null;
 	level?: number;
 };

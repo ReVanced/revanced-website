@@ -106,7 +106,6 @@ export type Announcement = {
 	author: string | null;
 	title: string;
 	content: string | null;
-	attachments: string[];
 	tags: string[];
 	created_at: string;
 	archived_at: string | null;

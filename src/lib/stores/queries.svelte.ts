@@ -106,8 +106,11 @@ export function useAnnouncementByIdQuery(id: () => number | null) {
 
 export function useInvalidateAnnouncements() {
 	const queryClient = useQueryClient();
-	return () => {
-		queryClient.invalidateQueries({ queryKey: queryKeys.announcements });
+	return async () => {
+		await Promise.all([
+			queryClient.refetchQueries({ queryKey: queryKeys.announcements }),
+			queryClient.refetchQueries({ queryKey: queryKeys.announcementTags }),
+		]);
 	};
 }
 

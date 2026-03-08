@@ -1,58 +1,30 @@
 import { browser } from '$app/environment';
-import { isLoggedIn, getTokenExpiry, logout as doLogout, login as doLogin } from '$api/auth';
+import { isLoggedIn, logout as doLogout, login as doLogin } from '$api/auth';
 import type { LoginResult } from '$api/auth';
-const INTENTIONAL_LOGOUT_KEY = 'revanced_intentional_logout';
 
 function createAuthStore() {
 	let loggedIn = $state(false);
-	let wasLoggedIn = $state(false);
-	let expiry = $state<number | null>(null);
 	let loginModalRequested = $state(false);
 	let loginSuccess = $state(false);
-	let checkInterval: ReturnType<typeof setInterval> | null = null;
 	let initialized = $state(false);
 
 	function refresh() {
-		const currentlyLoggedIn = isLoggedIn();
-		if (loggedIn && !currentlyLoggedIn) {
-			wasLoggedIn = true;
-		}
-		
-		loggedIn = currentlyLoggedIn;
-		expiry = getTokenExpiry();
+		loggedIn = isLoggedIn();
 	}
 
 	function startChecking() {
-		if (!browser || checkInterval) return;
-		if (!initialized) {
-			const wasIntentionalLogout = sessionStorage.getItem(INTENTIONAL_LOGOUT_KEY);
-			if (wasIntentionalLogout) {
-				sessionStorage.removeItem(INTENTIONAL_LOGOUT_KEY);
-			} else {
-				const storedExpiry = getTokenExpiry();
-				if (storedExpiry !== null && Date.now() >= storedExpiry) {
-					wasLoggedIn = true;
-				}
-			}
-			initialized = true;
-		}
-		
+		if (!browser) return;
+		initialized = true;
 		refresh();
-		// check every 3 seconds if token expired
-		checkInterval = setInterval(refresh, 3_000);
 	}
 
 	function stopChecking() {
-		if (checkInterval) {
-			clearInterval(checkInterval);
-			checkInterval = null;
-		}
+		// No-op: static tokens don't expire
 	}
 
-	async function login(username: string, password: string): Promise<LoginResult> {
-		const result = await doLogin(username, password);
+	function login(token: string): LoginResult {
+		const result = doLogin(token);
 		if (result.success) {
-			wasLoggedIn = false;
 			loginSuccess = true;
 			refresh();
 		}
@@ -61,12 +33,11 @@ function createAuthStore() {
 
 	function logout() {
 		doLogout();
-		wasLoggedIn = false;
 		refresh();
 	}
 
 	function clearSessionExpired() {
-		wasLoggedIn = false;
+		// No-op: static tokens don't expire
 	}
 
 	function requestLoginModal() {
@@ -89,10 +60,10 @@ function createAuthStore() {
 			return initialized;
 		},
 		get sessionExpired() {
-			return wasLoggedIn && !loggedIn;
+			return false;
 		},
 		get expiry() {
-			return expiry;
+			return null;
 		},
 		get loginModalRequested() {
 			return loginModalRequested;
