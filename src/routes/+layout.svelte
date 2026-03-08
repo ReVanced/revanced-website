@@ -1,79 +1,61 @@
-<script lang="ts" context="module">
-	import { writable } from 'svelte/store';
-	// There might be a better place to put this, but I am not entirely sure...
-	export const isRestoring = writable(false);
-</script>
-
 <script lang="ts">
-	import '../app.scss';
-	import { derived } from 'svelte/store';
-	import { onMount } from 'svelte';
+	import '../app.css';
+	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import { PersistQueryClientProvider } from '@tanstack/svelte-query-persist-client';
 	import { browser } from '$app/environment';
 
-	import { QueryClient } from '@tanstack/query-core';
-	import { persistQueryClient } from '@tanstack/query-persist-client-core';
-	import { QueryClientProvider } from '@tanstack/svelte-query';
-	import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-	import { DateTriggerEventHandler } from 'datetrigger';
+	import AppShell from '$components/organisms/AppShell.svelte';
+	import Spinner from '$components/atoms/Spinner.svelte';
+	import type { WithChildren } from '$types';
+	import { theme } from '$stores';
+	import { getQueryClient, createPersister } from '$stores/queryClient';
+	import { useHolidayTheme } from '$lib/utils/themeEvents.svelte';
 
-	import NavHost from '$layout/Navbar/NavHost.svelte';
-	import Spinner from '$lib/components/Spinner.svelte';
-	import ConsentDialog from '$layout/Dialogs/ConsentDialog.svelte';
-	import { staleTime } from '$data/api';
-	import RouterEvents from '$data/RouterEvents';
-	import { events as themeEvents } from '$util/themeEvents';
+	const queryClient = getQueryClient();
+	const persister = createPersister();
 
-	import FooterHost from '$layout/Footer/FooterHost.svelte';
-	import { api_base_url, set_about_info } from '$data/api/settings';
+	let { children }: WithChildren = $props();
+	useHolidayTheme();
+	
+	let isRestoring = $state(true);
 
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				enabled: browser,
-				cacheTime: staleTime
-			}
+	$effect(() => {
+		if (browser) {
+			document.documentElement.setAttribute('data-theme', theme.current);
 		}
-	});
-
-	// Just like the set/clearInterval example found here: https://svelte.dev/docs#run-time-svelte-store-derived
-	const show_loading_animation = derived(
-		RouterEvents,
-		($event, set) => {
-			if ($event.navigating) {
-				// Wait 250 ms before showing the animation.
-				const timeout = setTimeout(() => set(true), 250);
-				return () => clearTimeout(timeout);
-			} else {
-				set(false);
-			}
-		},
-		false
-	);
-
-	onMount(() => {
-		set_about_info(api_base_url());
-		new DateTriggerEventHandler(themeEvents);
-
-		isRestoring.set(true);
-		const [unsubscribe, promise] = persistQueryClient({
-			queryClient,
-			persister: createSyncStoragePersister({ storage: localStorage })
-		});
-		promise.then(() => isRestoring.set(false));
-		return unsubscribe;
 	});
 </script>
 
-<ConsentDialog />
-
-<QueryClientProvider client={queryClient}>
-	<NavHost />
-	<div id="skiptab">
-		{#if $show_loading_animation}
+{#if persister}
+<PersistQueryClientProvider 
+	client={queryClient} 
+	persistOptions={{ persister }}
+	onSuccess={() => { isRestoring = false; }}
+>
+	{#if isRestoring}
+		<div class="restore-loading">
 			<Spinner />
-		{:else}
-			<slot />
-		{/if}
-	</div>
-	<FooterHost />
+		</div>
+	{:else}
+		<AppShell>
+			{@render children()}
+		</AppShell>
+	{/if}
+</PersistQueryClientProvider>
+{:else}
+<QueryClientProvider client={queryClient}>
+	<AppShell>
+		{@render children()}
+	</AppShell>
 </QueryClientProvider>
+{/if}
+
+<style>
+	.restore-loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		background: var(--background);
+	}
+</style>

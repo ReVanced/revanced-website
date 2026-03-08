@@ -1,170 +1,225 @@
 <script lang="ts">
-	import { building } from '$app/environment';
-	import { fly } from 'svelte/transition';
+	import { browser } from '$app/environment';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { fly, fade, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { derived, readable, type Readable } from 'svelte/store';
-	import { page } from '$app/stores';
+	import Page from '$components/templates/Page.svelte';
+	import Search from '$components/atoms/Search.svelte';
+	import FilterChip from '$components/atoms/FilterChip.svelte';
+	import PackageMenu from '$components/organisms/PackageMenu.svelte';
+	import PackageItem from '$components/molecules/PackageItem.svelte';
+	import PatchItem from '$components/molecules/PatchItem.svelte';
+	import Modal from '$components/molecules/Modal.svelte';
+	import { usePatchesQuery } from '$stores';
+	import { createFilter } from '$lib/utils/filter';
+	import type { Patch } from '$api';
 
-	import type { CompatiblePackage, Patch } from '$lib/types';
+	const patchesQuery = usePatchesQuery();
 
-	import { createQuery } from '@tanstack/svelte-query';
-	import { queries } from '$data/api';
-
-	import Head from '$lib/components/Head.svelte';
-	import PackageMenu from './PackageMenu.svelte';
-	import Package from './Package.svelte';
-	import PatchItem from './PatchItem.svelte';
-	import Search from '$lib/components/Search.svelte';
-	import FilterChip from '$lib/components/FilterChip.svelte';
-	import MobilePatchesPackagesDialog from '$layout/Dialogs/MobilePatchesPackagesDialog.svelte';
-	import Query from '$lib/components/Query.svelte';
-	import Fuse from 'fuse.js';
-	import { onMount } from 'svelte';
-	import createFilter from '$util/filter';
-	import { debounce } from '$util/debounce';
-
-	const query = createQuery(queries.patches());
-
-	let searchParams: Readable<URLSearchParams>;
-	if (building) {
-		searchParams = readable(new URLSearchParams());
-	} else {
-		searchParams = derived(page, ($page) => $page.url.searchParams);
-	}
-
-	$: selectedPkg = $searchParams.get('pkg');
-	let searchTerm = $searchParams.get('s') || '';
-
-	let mobilePackages = false;
-	let showAllVersions = false;
-
-	function filterPatches(patches: Patch[], pkg: string, search?: string): Patch[] {
-		const patchFilter = createFilter(patches, {
-			searcherOptions: {
-				keys: ['name', 'description', 'compatiblePackages.name', 'compatiblePackages.versions']
-			},
-			additionalFilter: (patch: Patch, pkg: string): boolean => {
-				if (!pkg) return true;
-				return (
-					patch.compatiblePackages?.some(
-						(compatiblePackage: CompatiblePackage) =>
-							compatiblePackage.name === pkg || compatiblePackage.versions?.includes(pkg)
-					) || false
-				);
-			}
-		});
-
-		return patchFilter(pkg, search);
-	}
-
-	// Make sure we don't have to filter the patches after every key press
-	let displayedTerm = '';
-	const update = () => {
-		displayedTerm = searchTerm;
-
-		const url = new URL(window.location.href);
-		url.pathname = '/patches';
-
-		if (searchTerm) {
-			url.searchParams.set('s', searchTerm);
-		} else {
-			url.searchParams.delete('s');
-		}
-
-		window.history.pushState(null, '', url);
-	};
-
-	onMount(update);
-</script>
-
-<Head
-	title="Patches for ReVanced"
-	description="Browse our rich collection of patches for ReVanced you can use to patch your favourite apps."
-	schemas={[
+	const schemas = [
 		{
 			'@context': 'https://schema.org',
 			'@type': 'BreadcrumbList',
 			itemListElement: [
-				{
-					'@type': 'ListItem',
-					position: 1,
-					name: 'Home',
-					item: 'https://revanced.app/'
-				},
-				{
-					'@type': 'ListItem',
-					position: 2,
-					name: 'Patches',
-					item: 'https://revanced.app/patches'
-				}
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Patches', item: 'https://revanced.app/patches' }
 			]
 		}
-	]}
-/>
+	];
 
-<div class="search">
-	<div class="search-contain">
-		<!-- Must bind both variables: we get searchTerm from the text input, -->
-		<Search
-			bind:searchTerm
-			bind:displayedTerm
-			title="Search for patches"
-			on:keyup={debounce(update)}
-		/>
-	</div>
-</div>
-<main>
-	<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<FilterChip
-			selected={!!selectedPkg}
-			dropdown
-			on:click={() => (mobilePackages = !mobilePackages)}
-		>
-			{selectedPkg || 'Packages'}
-		</FilterChip>
+	const patches = $derived(patchesQuery.data ?? []);
+
+	function getCompatiblePackageNames(patch: Patch): string {
+		if (!patch.compatiblePackages) return '';
+		return Object.keys(patch.compatiblePackages).join(' ');
+	}
+
+	function getCompatibleVersions(patch: Patch): string {
+		if (!patch.compatiblePackages) return '';
+		return Object.values(patch.compatiblePackages)
+			.filter((versions): versions is string[] => versions !== null)
+			.flat()
+			.join(' ');
+	}
+
+	const patchFilter = createFilter<Patch, { selectedPkg: string | null }>(
+		{
+			keys: [
+				'name',
+				'description',
+				{ name: 'packageNames', getFn: getCompatiblePackageNames },
+				{ name: 'versions', getFn: getCompatibleVersions }
+			],
+			threshold: 0.3,
+			ignoreLocation: true
+		},
+		(patch, { selectedPkg }) => {
+			if (!selectedPkg) return true;
+			if (!patch.compatiblePackages) return false;
+			return Object.keys(patch.compatiblePackages).includes(selectedPkg);
+		}
+	);
+
+	const packages = $derived.by(() => {
+		const patchCountByPackage: Record<string, number> = {};
+
+		for (const patch of patches) {
+			if (patch.compatiblePackages) {
+				for (const pkgName of Object.keys(patch.compatiblePackages)) {
+					patchCountByPackage[pkgName] = (patchCountByPackage[pkgName] ?? 0) + 1;
+				}
+			}
+		}
+
+		// Sort by patch count descending so most relevant apps appear first
+		return Object.keys(patchCountByPackage).sort(
+			(a, b) => patchCountByPackage[b] - patchCountByPackage[a]
+		);
+	});
+
+	let selectedPkg = $state<string | null>(null);
+	let searchTerm = $state('');
+	let mobilePackagesOpen = $state(false);
+	let initialized = $state(false);
+
+	$effect(() => {
+		if (!browser || initialized) return;
+		const pkgParam = page.url.searchParams.get('pkg');
+		const searchParam = page.url.searchParams.get('s') ?? '';
+		if (pkgParam) {
+			selectedPkg = pkgParam;
+		}
+		if (searchParam) {
+			searchTerm = searchParam;
+		}
+		initialized = true;
+	});
+
+	$effect(() => {
+		const pkg = selectedPkg;
+		const search = searchTerm;
+		
+		if (!browser) return;
+		const timeoutId = setTimeout(() => {
+			if (!page.url.pathname.startsWith('/patches')) return;
+			
+			const params = new URLSearchParams();
+			if (pkg) params.set('pkg', pkg);
+			if (search) params.set('s', search);
+			const queryString = params.toString();
+			goto(queryString ? `?${queryString}` : '/patches', { replaceState: true, keepFocus: true });
+		}, 350);
+		
+		return () => clearTimeout(timeoutId);
+	});
+
+	function selectPackage(pkgName: string | null) {
+		selectedPkg = pkgName && pkgName !== 'All packages' ? pkgName : null;
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		mobilePackagesOpen = false;
+	}
+
+	function toggleMobilePackages() {
+		mobilePackagesOpen = !mobilePackagesOpen;
+	}
+
+	let filteredPatches = $derived(
+		patchFilter(patches, searchTerm, { selectedPkg })
+	);
+</script>
+
+<Page title="Patches for ReVanced" description="Browse our rich collection of patches for ReVanced you can use to patch your favourite apps." {schemas}>
+	<div class="search-bar">
+		<div class="search-contain">
+			<Search
+				bind:value={searchTerm}
+				placeholder="Search for patches"
+			/>
+		</div>
 	</div>
 
-	<Query {query} let:data>
-		<MobilePatchesPackagesDialog
-			bind:dialogOpen={mobilePackages}
-			bind:searchTerm
-			{data}
-			{selectedPkg}
-		/>
+	{#if patchesQuery.isPending && patches.length === 0}
+		<div class="loading-state">
+			<p>Loading patches...</p>
+		</div>
+	{:else if patchesQuery.isError && patches.length === 0}
+		<div class="error-state">
+			<p>Failed to load patches. Please try again later.</p>
+		</div>
+	{:else if patches.length > 0}
+	<main>
+		<div class="filter-chips" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			<FilterChip
+				selected={!!selectedPkg}
+				dropdown
+				onclick={toggleMobilePackages}
+			>
+				{selectedPkg || 'Packages'}
+			</FilterChip>
+		</div>
 
 		<aside in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 			<PackageMenu>
-				<span class="packages">
-					<Package {selectedPkg} name="All packages" bind:searchTerm />
-					{#each data.packages as pkg}
-						<Package {selectedPkg} name={pkg} bind:searchTerm />
+				<PackageItem
+					name="All packages"
+					selected={!selectedPkg}
+					onclick={() => selectPackage(null)}
+				/>
+				{#key packages.length}
+					{#each packages as pkg}
+						<PackageItem
+							name={pkg}
+							selected={selectedPkg === pkg}
+							onclick={() => selectPackage(pkg)}
+						/>
 					{/each}
-				</span>
+				{/key}
 			</PackageMenu>
 		</aside>
 
 		<div class="patches-container">
-			{#each filterPatches(data.patches, selectedPkg || '', displayedTerm) as patch}
-				{#key selectedPkg || displayedTerm}
-					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<PatchItem {patch} bind:showAllVersions />
+			{#key selectedPkg || searchTerm}
+				{#each filteredPatches as patch, i (patch.name + (patch.compatiblePackages ? Object.keys(patch.compatiblePackages)[0] ?? '' : ''))}
+					<div in:fly={{ y: 10, easing: quintOut, duration: 750, delay: Math.min(i * 30, 300) }}>
+						<PatchItem {patch} />
 					</div>
-				{/key}
-			{/each}
+				{/each}
+			{/key}
+
+			{#if filteredPatches.length === 0}
+				<div class="no-results">
+					<p>No patches found matching your criteria.</p>
+				</div>
+			{/if}
 		</div>
-	</Query>
-</main>
+	</main>
+	{/if}
+</Page>
+
+{#if patches.length > 0 || patchesQuery.data !== null}
+<Modal bind:open={mobilePackagesOpen} title="Packages" fullscreen>
+	<div class="mobile-packages">
+		<PackageItem
+			name="All packages"
+			selected={!selectedPkg}
+			onclick={() => selectPackage(null)}
+		/>
+		{#key packages.length}
+			{#each packages as pkg}
+				<PackageItem
+					name={pkg}
+					selected={selectedPkg === pkg}
+					onclick={() => selectPackage(pkg)}
+				/>
+			{/each}
+		{/key}
+	</div>
+</Modal>
+{/if}
 
 <style>
-	main {
-		display: grid;
-		grid-template-columns: 300px 3fr;
-		width: min(90%, 80rem);
-		margin-inline: auto;
-		gap: 1.5rem;
-	}
-
-	.search {
+	.search-bar {
 		padding-top: 0.6rem;
 		padding-bottom: 1.25rem;
 		background-color: var(--surface-eight);
@@ -173,6 +228,22 @@
 	.search-contain {
 		width: min(90%, 80rem);
 		margin-inline: auto;
+	}
+
+	main {
+		display: grid;
+		grid-template-columns: 300px 3fr;
+		width: min(90%, 80rem);
+		margin-inline: auto;
+		gap: 1.5rem;
+	}
+
+	.filter-chips {
+		display: none;
+	}
+
+	aside {
+		display: block;
 	}
 
 	.patches-container {
@@ -184,18 +255,40 @@
 		gap: 0.5rem;
 		width: 100%;
 		position: sticky;
-		z-index: 1;
+		z-index: var(--z-base);
 		min-height: calc(100vh - 6rem);
 		margin-bottom: 3rem;
 	}
 
-	.filter-chips {
-		display: none;
+	.no-results {
+		text-align: center;
+		padding: 3rem;
+		color: var(--text-four);
+	}
+
+	.loading-state,
+	.error-state {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 200px;
+		width: min(90%, 80rem);
+		margin-inline: auto;
+		padding: 3rem;
+		text-align: center;
+		color: var(--text-four);
+	}
+
+	.mobile-packages {
+		margin-bottom: -1px;
+		overflow: hidden;
+		border-radius: 12px;
+		border: 1px solid var(--border);
 	}
 
 	@media (max-width: 768px) {
 		main {
-			grid-template-columns: none;
+			display: flex;
 			flex-direction: column;
 			gap: 0;
 		}
@@ -215,7 +308,6 @@
 			flex-wrap: wrap;
 			margin-top: 1rem;
 			gap: 0.75rem;
-			padding-bottom: 0rem;
 		}
 	}
 </style>

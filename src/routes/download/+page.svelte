@@ -1,106 +1,169 @@
 <script lang="ts">
-	import { queries } from '$data/api';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { browser } from '$app/environment';
+	import Page from '$components/templates/Page.svelte';
+	import Button from '$components/atoms/Button.svelte';
+	import Modal from '$components/molecules/Modal.svelte';
+	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
+	import { useManagerQuery } from '$stores';
+	import managerImg from '$assets/icons/manager.png';
 
-	import { createQuery } from '@tanstack/svelte-query';
+	const managerQuery = useManagerQuery();
 
-	import manager_screenshot from '$images/manager.png?format=avif;webp;png&as=picture';
+	const manager = $derived(managerQuery.data);
+	const version = $derived(manager?.version ?? 'Download');
+	const downloadUrl = $derived(manager?.download_url ?? '');
+	
+	const hasDownloadData = $derived(!!manager?.download_url);
+	const isApiDown = $derived(managerQuery.isError && !hasDownloadData);
 
-	import TrayArrowDown from 'svelte-material-icons/TrayArrowDown.svelte';
+	let isAndroid = $state(false);
+	let androidVersion = $state(0);
 
-	import Head from '$lib/components/Head.svelte';
-	import Query from '$lib/components/Query.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import Picture from '$lib/components/Picture.svelte';
-	import DownloadCompatibilityWarningDialog from '$layout/Dialogs/DownloadCompatibilityWarningDialog.svelte';
-	import { onMount } from 'svelte';
-
-	const query = createQuery(queries.manager());
-
-	let warning: string;
-	let warningDialogue = false;
-
-	let userAgent: string;
-	let isAndroid: boolean;
-	let androidVersionMatch: RegExpExecArray | null;
-	let androidVersion: number;
-
-	onMount(() => {
-		userAgent = navigator.userAgent;
-		androidVersionMatch = /Android\s([\d.]+)/i.exec(userAgent);
-		androidVersion = androidVersionMatch ? parseInt(androidVersionMatch[1]) : 0;
-		isAndroid = !!androidVersion;
+	let warningOpen = $state(false);
+	let warningType = $state<'not-android' | 'old-android'>('not-android');
+	let warningMessage = $derived.by(() => {
+		if (warningType === 'not-android') {
+			return 'Your device is not running Android. Do you still want to download?';
+		} else if (warningType === 'old-android') {
+			return `Your device is running Android ${androidVersion}. ReVanced only supports Android versions 8 and above. Do you still want to download?`;
+		}
+		return '';
 	});
 
-	function handleClick() {
-		if (!isAndroid) {
-			warning = 'Your device is not running Android.';
-			warningDialogue = true;
-		} else if (androidVersion < 8) {
-			warning = `Your device is running ${androidVersion}. ReVanced only supports Android versions 8 and above.`;
-			warningDialogue = true;
-		}
-	}
-</script>
+	let apiDownOpen = $state(false);
 
-<Head
-	title="Download ReVanced"
-	description="Download ReVanced Manager to patch your favourite apps, right on your device."
-	schemas={[
+	const schemas = [
 		{
 			'@context': 'https://schema.org',
 			'@type': 'BreadcrumbList',
 			itemListElement: [
-				{
-					'@type': 'ListItem',
-					position: 1,
-					name: 'Home',
-					item: 'https://revanced.app/'
-				},
-				{
-					'@type': 'ListItem',
-					position: 2,
-					name: 'Download',
-					item: 'https://revanced.app/download'
-				}
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Download', item: 'https://revanced.app/download' }
 			]
 		}
-	]}
-/>
+	];
 
-<main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<h2>ReVanced <span>Manager</span></h2>
-	<p>Patch your favourite apps, right on your device.</p>
-	<div class="buttons">
-		<Query {query} let:data>
+	$effect(() => {
+		if (!browser) return;
+		const userAgent = navigator.userAgent;
+		const match = /Android\s([\d.]+)/i.exec(userAgent);
+		androidVersion = match ? parseInt(match[1]) : 0;
+		isAndroid = androidVersion > 0;
+	});
+
+	function handleDownloadClick() {
+		if (isApiDown) {
+			apiDownOpen = true;
+			return;
+		}
+		
+		if (!isAndroid) {
+			warningType = 'not-android';
+			warningOpen = true;
+		} else if (androidVersion < 8) {
+			warningType = 'old-android';
+			warningOpen = true;
+		}
+	}
+
+	function closeWarning() {
+		warningOpen = false;
+	}
+
+	function closeApiDown() {
+		apiDownOpen = false;
+	}
+</script>
+
+<Page title="Download ReVanced" description="Download ReVanced Manager to patch your favourite apps, right on your device." {schemas}>
+	<main class="wrapper center" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		<h2>ReVanced <span class="highlight">Manager</span></h2>
+		<p>Patch your favourite apps, right on your device.</p>
+
+		<div class="buttons">
+		{#if hasDownloadData}
 			{#if !isAndroid || androidVersion < 8}
-				<Button on:click={handleClick} icon={TrayArrowDown} type="filled">
-					{data.release.version}
+				<Button
+					buttonStyle="filled"
+					icon={Download}
+					onclick={handleDownloadClick}
+				>
+					{version}
 				</Button>
 			{:else}
 				<Button
-					on:click={handleClick}
-					icon={TrayArrowDown}
-					type="filled"
-					href={data.release.download_url}
+					buttonStyle="filled"
+					icon={Download}
+					href={downloadUrl}
+					onclick={handleDownloadClick}
 				>
-					{data.release.version}
+					{version}
 				</Button>
 			{/if}
-		</Query>
-		<Button type="tonal" href="https://github.com/revanced/revanced-manager" target="_blank">
-			View source
-		</Button>
-	</div>
-	<div class="screenshot">
-		<Picture data={manager_screenshot} alt="Manager Screenshot" />
-	</div>
-</main>
+		{:else}
+			<Button
+				buttonStyle="filled"
+				icon={Download}
+				onclick={handleDownloadClick}
+			>
+				Download
+			</Button>
+		{/if}
+			<Button
+				buttonStyle="tonal"
+				href="https://github.com/revanced/revanced-manager"
+				target="_blank"
+			>
+				View source
+			</Button>
+		</div>
 
-<DownloadCompatibilityWarningDialog bind:dialogOpen={warningDialogue} {warning} />
+		<div class="screenshot">
+			<img src={managerImg} alt="Screenshot of ReVanced Manager" />
+		</div>
+	</main>
+</Page>
+
+<Modal bind:open={warningOpen}>
+	<div class="warning-content">
+		<h3>Warning</h3>
+		<p>{warningMessage}</p>
+	</div>
+	{#snippet buttons()}
+		<Button buttonStyle="text" onclick={closeWarning}>
+			Cancel
+		</Button>
+		<Button
+			buttonStyle="text"
+			href={downloadUrl}
+			onclick={closeWarning}
+		>
+			Okay
+		</Button>
+	{/snippet}
+</Modal>
+
+<Modal bind:open={apiDownOpen}>
+	<div class="api-down-content">
+		<h3>Service Unavailable</h3>
+		<p>The API is currently down and download functionality is not available. Please try again later.</p>
+	</div>
+	{#snippet buttons()}
+		<Button buttonStyle="text" onclick={closeApiDown}>
+			Close
+		</Button>
+	{/snippet}
+</Modal>
 
 <style>
+	.wrapper {
+		margin-inline: auto;
+		width: min(90%, 80rem);
+		margin-top: 2.6rem;
+	}
+
 	.center {
 		display: flex;
 		flex-direction: column;
@@ -112,28 +175,77 @@
 		color: var(--text-one);
 	}
 
+	.highlight {
+		color: var(--primary);
+	}
+
 	p {
 		text-align: center;
 		margin-bottom: 1.5rem;
 	}
 
-	.screenshot :global(img) {
-		margin-top: 2.5rem;
-		margin-bottom: 2.5rem;
-		height: 50rem;
-		width: auto;
-		padding: 0.5rem 0.5rem;
-		border-radius: 2rem;
-		background-color: var(--surface-seven);
-		user-select: none;
-	}
-
 	.buttons {
 		display: flex;
 		gap: 1rem;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
-	span {
-		color: var(--primary);
+	.screenshot {
+		margin-top: 2.5rem;
+		margin-bottom: 2.5rem;
+	}
+
+	.screenshot img {
+		height: 50rem;
+		width: auto;
+		max-width: 100%;
+		padding: 0.5rem;
+		border-radius: 2rem;
+		background-color: var(--surface-seven);
+		user-select: none;
+		object-fit: contain;
+	}
+
+	@media (max-width: 768px) {
+		.screenshot img {
+			height: auto;
+			max-height: 70vh;
+		}
+	}
+
+	.warning-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		text-align: center;
+	}
+
+	.warning-content h3 {
+		color: var(--text-one);
+	}
+
+	.warning-content p {
+		margin-bottom: 0;
+	}
+
+	.api-down-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		text-align: center;
+	}
+
+
+
+	.api-down-content h3 {
+		color: var(--secondary);
+		margin: 0;
+	}
+
+	.api-down-content p {
+		margin-bottom: 0;
+		color: var(--text-four);
 	}
 </style>

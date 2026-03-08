@@ -1,27 +1,35 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta
-			name="robots"
-			content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-		/>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<!-- OpenGraph -->
-		<meta property="og:type" content="website" />
-		<meta property="og:image" content="/logo.png" />
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="/favicon.ico" />
+	<meta
+		name="robots"
+		content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+	/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<!-- Twitter -->
-		<meta name="twitter:image" itemprop="image" content="/logo.png" />
-		<meta name="twitter:card" content="summary" />
+	<!-- OpenGraph -->
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="/logo.png" />
 
-		%sveltekit.head%
-	</head>
+	<!-- Twitter -->
+	<meta name="twitter:image" itemprop="image" content="/logo.png" />
+	<meta name="twitter:card" content="summary" />
 
-	<body style="background-color: var(--background-one)">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+	%sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<script>
+		// inline script to set theme before SvelteKit hydrates
+		const theme = JSON.parse(localStorage.getItem('theme')) || 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+	</script>
+
+	<div style="display: contents">%sveltekit.body%</div>
+</body>
+
 </html>

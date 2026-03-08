@@ -1,213 +1,226 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import Page from '$components/templates/Page.svelte';
+	import DonateHeartAnimation from '$components/molecules/DonateHeartAnimation.svelte';
+	import TeamMemberCard from '$components/molecules/TeamMemberCard.svelte';
+	import DonateCard from '$components/molecules/DonateCard.svelte';
+	import CryptoWalletList from '$components/molecules/CryptoWalletList.svelte';
+	import Modal from '$components/molecules/Modal.svelte';
+	import Button from '$components/atoms/Button.svelte';
+	import QRCode from '$components/atoms/QRCode.svelte';
+	import Snackbar from '$components/atoms/Snackbar.svelte';
+	import { useAboutQuery, useTeamQuery } from '$stores';
+	import type { CryptoWallet } from '$api';
 
-	import { queries } from '$data/api';
-	import { createQuery } from '@tanstack/svelte-query';
+	import IconCircles from 'svelte-material-icons/CircleMultipleOutline.svelte';
+	import IconWallet from 'svelte-material-icons/WalletOutline.svelte';
 
-	import Head from '$lib/components/Head.svelte';
-	import Query from '$lib/components/Query.svelte';
-	import CryptoDialog from '$layout/Dialogs/CryptoDialog.svelte';
+	import openCollectiveImg from '$assets/donate/card-images/Open Collective.webp';
+	import githubSponsorsImg from '$assets/donate/card-images/GitHub Sponsors.webp';
+	import cryptocurrenciesImg from '$assets/donate/card-images/Cryptocurrencies.webp';
+	import fallbackImg from '$assets/donate/card-images/fallback.svg';
 
-	import DonateHeartAnimation from './DonateHeartAnimation.svelte';
-	import TeamMember from './TeamMember.svelte';
+	import revancedLogoBg from '$assets/icons/revanced-logo-background.svg';
+	import heartIcon from '$assets/icons/heart.svg';
 
-	import { supportsWebP } from '$util/supportsWebP';
+	const aboutQuery = useAboutQuery();
+	const teamQuery = useTeamQuery();
 
-	const teamQuery = createQuery(queries.team());
-	const aboutQuery = createQuery(queries.about());
+	const donateImages: Record<string, string> = {
+		'Open Collective': openCollectiveImg,
+		'GitHub Sponsors': githubSponsorsImg,
+		'Cryptocurrencies': cryptocurrenciesImg
+	};
 
-	let cryptoDialogue = false;
+	let donationLinks = $derived(aboutQuery.data?.donations?.links ?? []);
+	let cryptoWallets = $derived(aboutQuery.data?.donations?.wallets ?? []);
 
-	const shuffle = <T,>(array: T[]) =>
-		array
+	let teamMembers = $derived(teamQuery.data ?? []);
+
+	let cryptoModalOpen = $state(false);
+	let walletModalOpen = $state(false);
+	let selectedWallet = $state<CryptoWallet | null>(null);
+	let copySuccess = $state(false);
+	let snackbarOpen = $state(false);
+
+	function shuffle<T>(array: T[]): T[] {
+		return array
 			.map((value) => ({ value, sort: Math.random() }))
 			.sort((a, b) => a.sort - b.sort)
 			.map(({ value }) => value);
-</script>
+	}
 
-<Head
-	title="Donate to ReVanced"
-	description="Donate to ReVanced with a variety of donation methods, including cryptocurrencies in order to allow us to maintain our servers and develop new features."
-	schemas={[
+	let shuffledTeam = $derived(browser ? shuffle([...teamMembers]) : teamMembers);
+
+	const schemas = [
 		{
 			'@context': 'https://schema.org',
 			'@type': 'BreadcrumbList',
 			itemListElement: [
-				{
-					'@type': 'ListItem',
-					position: 1,
-					name: 'Home',
-					item: 'https://revanced.app/'
-				},
-				{
-					'@type': 'ListItem',
-					position: 2,
-					name: 'Download',
-					item: 'https://revanced.app/donate'
-				}
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Donate', item: 'https://revanced.app/donate' }
 			]
 		}
-	]}
-/>
+	];
 
-<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<section>
-		<div>
-			<h2>🎉 Support <span style="color: var(--primary);">ReVanced</span></h2>
-			<p>
-				ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
-				features. All of which is completely open source and free of charge. Donating will allow
-				ReVanced maintain our servers and develop new features.
-			</p>
-		</div>
-		<div id="heart">
-			<DonateHeartAnimation
-				backgroundImageUrl="/revanced-logo-background.svg"
-				foregroundImageUrl="/icons/heart.svg"
-				alt="ReVanced Logo"
-			/>
-		</div>
-	</section>
-	<h3>Donate</h3>
-	<Query query={aboutQuery} let:data>
+	function openWalletModal(wallet: CryptoWallet) {
+		selectedWallet = wallet;
+		cryptoModalOpen = false;
+		walletModalOpen = true;
+	}
+
+	function closeWalletModal() {
+		walletModalOpen = false;
+		cryptoModalOpen = true;
+	}
+
+	async function copyAddress() {
+		if (!selectedWallet || !browser) return;
+
+		try {
+			await navigator.clipboard.writeText(selectedWallet.address);
+			copySuccess = true;
+			snackbarOpen = true;
+			setTimeout(() => {
+				copySuccess = false;
+				walletModalOpen = false;
+			}, 1500);
+		} catch (error) {
+			console.error('Failed to copy address:', error);
+		}
+	}
+</script>
+
+<Page title="Donate to ReVanced" description="Donate to ReVanced with a variety of donation methods, including cryptocurrencies in order to allow us to maintain our servers and develop new features." {schemas}>
+	<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		<section class="hero">
+			<div class="hero-text">
+				<h2>🎉 Support <span class="highlight">ReVanced</span></h2>
+				<p>
+					ReVanced offers a variety of patches, including ad-blocking, custom themes, and innovative
+					features. All of which is completely open source and free of charge. Donating will allow
+					ReVanced maintain our servers and develop new features.
+				</p>
+			</div>
+		<div class="heart-animation">
+				<DonateHeartAnimation
+					backgroundImageUrl={revancedLogoBg}
+					foregroundImageUrl={heartIcon}
+					alt="ReVanced Logo"
+				/>
+			</div>
+		</section>
+
+		<h3>Donate</h3>
 		<div class="donate-cards">
-			{#if data.about.donations.links}
-				{#each data.about.donations.links as link}
-					<a class="donate-card" target="_blank" rel="noreferrer" href={link.url}>
-						<!-- not using <img/> because we want the image height to always be 200px -->
-						<div
-							style="background-image: url('/donate/card-images/{link.name}.{supportsWebP()
-								? 'webp'
-								: 'png'}'), url('/donate/card-images/fallback.svg');"
-							role="img"
-							aria-label="{link.name} preview image"
-						/>
-						<span>{link.name}</span>
-					</a>
-				{/each}
-			{/if}
-			{#if data.about.donations.wallets}
-				<button class="donate-card" on:click={() => (cryptoDialogue = !cryptoDialogue)}>
-					<div
-						style="background-image: url('/donate/card-images/Cryptocurrencies.{supportsWebP()
-							? 'webp'
-							: 'png'}'), url('/donate/card-images/fallback.svg');"
-						role="img"
-						aria-label="Cryptocurrencies preview image"
-					/>
-					<span>Cryptocurrencies</span>
-				</button>
+			{#each donationLinks as link}
+				<DonateCard
+					name={link.name}
+					image={donateImages[link.name] ?? fallbackImg}
+					href={link.url}
+				/>
+			{/each}
+			{#if cryptoWallets.length > 0}
+				<DonateCard
+					name="Cryptocurrencies"
+					image={donateImages['Cryptocurrencies']}
+					onclick={() => (cryptoModalOpen = true)}
+				/>
 			{/if}
 		</div>
-	</Query>
-	<Query query={teamQuery} let:data>
+
 		<h3>Meet the team</h3>
-		{#if data.members.length > 0}
-			<section class="team">
-				<!-- randomize team members because equality -->
-				{#each shuffle(data.members) as member, i}
-					<TeamMember {member} {i} />
-				{/each}
-			</section>
-		{/if}
-	</Query>
-</main>
+		<section class="team">
+			{#each shuffledTeam as member, i}
+				<TeamMemberCard {member} {i} />
+			{/each}
+		</section>
+	</main>
+</Page>
 
-<Query query={aboutQuery} let:data>
-	<CryptoDialog bind:dialogOpen={cryptoDialogue} wallets={data.about.donations.wallets} />
-</Query>
+<Modal bind:open={cryptoModalOpen} title="Cryptocurrencies">
+	{#snippet icon()}
+		<IconCircles size={32} color="var(--surface-six)" />
+	{/snippet}
+	<hr class="crypto-divider" />
+	<CryptoWalletList wallets={cryptoWallets} onSelect={openWalletModal} />
+	{#snippet buttons()}
+		<Button buttonStyle="filled" onclick={() => (cryptoModalOpen = false)}>Close</Button>
+	{/snippet}
+</Modal>
 
-<style lang="scss">
-	main {
+<Modal bind:open={walletModalOpen} title="{selectedWallet?.currency_code ?? ''} Wallet" onclose={closeWalletModal}>
+	{#snippet icon()}
+		<IconWallet size={32} color="var(--surface-six)" />
+	{/snippet}
+	{#if selectedWallet}
+		<div class="wallet-details">
+			<p class="address">{selectedWallet.address}</p>
+			<QRCode value={selectedWallet.address} size={150} />
+		</div>
+	{/if}
+	{#snippet buttons()}
+		<Button buttonStyle="text" onclick={closeWalletModal}>Back</Button>
+		<Button buttonStyle="filled" onclick={copyAddress}>
+			{copySuccess ? 'Copied!' : 'Copy Address'}
+		</Button>
+	{/snippet}
+</Modal>
+
+<Snackbar bind:open={snackbarOpen}>
+	{#snippet text()}
+		Address copied to clipboard
+	{/snippet}
+</Snackbar>
+
+<style>
+	.wrapper {
+		width: min(90%, 80rem);
+		margin-inline: auto;
 		display: flex;
 		flex-direction: column;
 		margin-bottom: 5rem;
+		margin-top: 2.6rem;
+	}
 
-		section {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+	.hero {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 2rem;
 
-			@media (max-width: 768px) {
-				flex-direction: column-reverse;
+		.hero-text {
+			h2 {
+				margin-bottom: 0.5rem;
+				color: var(--text-one);
+			}
+
+			p {
+				margin-bottom: 2rem;
+				width: 60%;
+				color: var(--text-four);
 			}
 		}
 	}
 
-	h2 {
-		margin-bottom: 0.5rem;
-		color: var(--text-one);
+	.highlight {
+		color: var(--primary);
+	}
+
+	.heart-animation {
+		flex-shrink: 0;
 	}
 
 	h3 {
 		margin-bottom: 1.5rem;
 	}
 
-	p {
-		margin-bottom: 2rem;
-		width: 60%;
-
-		@media (max-width: 1200px) {
-			width: 90%;
-		}
-
-		@media (max-width: 768px) {
-			width: 100%;
-		}
-	}
-
-	@media (max-width: 768px) {
-		#heart {
-			display: none;
-		}
-	}
-
 	.donate-cards {
 		display: flex;
 		gap: 1rem;
 		margin-bottom: 3rem;
-
-		@media (max-width: 768px) {
-			flex-direction: column;
-		}
-	}
-
-	.donate-card {
-		text-decoration: none;
-		background-color: var(--surface-nine);
-		border-radius: 1.5rem;
-		width: 100%;
-		cursor: pointer;
-		text-align: left;
-		border: none;
-		overflow: hidden;
-		transition:
-			0.3s border-radius var(--bezier-one),
-			0.3s background-color var(--bezier-one);
-
-		&:hover {
-			background-color: var(--tertiary);
-		}
-
-		&:active {
-			border-radius: 2.75rem;
-		}
-
-		span {
-			display: block;
-			color: var(--text-four);
-			font-size: 1.05rem;
-			font-weight: 500;
-			padding: 1.5rem;
-		}
-
-		div {
-			height: 200px;
-			background-size: cover;
-			background-position: center;
-			max-width: 100%;
-		}
 	}
 
 	.team {
@@ -217,5 +230,49 @@
 		justify-content: space-between;
 		align-items: stretch;
 		gap: 1rem;
+	}
+
+	.wallet-details {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		word-break: break-word;
+		text-align: center;
+	}
+
+	.address {
+		font-family: inherit;
+		font-size: 1rem;
+		color: var(--text-four);
+	}
+
+	.crypto-divider {
+		margin: 1rem 0;
+		width: 100%;
+	}
+
+	@media (max-width: 1200px) {
+		.hero-text p {
+			width: 90%;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.hero {
+			flex-direction: column-reverse;
+		}
+
+		.hero-text p {
+			width: 100%;
+		}
+
+		.heart-animation {
+			display: none;
+		}
+
+		.donate-cards {
+			flex-direction: column;
+		}
 	}
 </style>

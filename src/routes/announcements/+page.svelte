@@ -1,184 +1,242 @@
 <script lang="ts">
-	import { createQuery } from '@tanstack/svelte-query';
-	import { derived, readable, type Readable } from 'svelte/store';
-	import { building } from '$app/environment';
-	import { page } from '$app/stores';
-	import { fly, slide } from 'svelte/transition';
-	import { quintIn, quintOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import { browser } from '$app/environment';
+	import { goto, replaceState } from '$app/navigation';
+	import { page } from '$app/state';
+	import Page from '$components/templates/Page.svelte';
+	import Search from '$components/atoms/Search.svelte';
+	import Button from '$components/atoms/Button.svelte';
+	import TagsFilter from '$components/molecules/TagsFilter.svelte';
+	import AnnouncementCard from '$components/organisms/AnnouncementCard.svelte';
+	import IconChevron from 'svelte-material-icons/ChevronDown.svelte';
+	import IconAdd from 'svelte-material-icons/Plus.svelte';
+	import { useAnnouncementsQuery, useAnnouncementTagsQuery, readAnnouncements, auth, announcementPolling } from '$stores';
+	import { debounce, isArchived, isScheduled } from '$lib/utils';
+	import { createFilter } from '$lib/utils/filter';
+	import type { Announcement } from '$api';
+	const announcementsQuery = useAnnouncementsQuery({ enablePolling: true });
+	const announcementTagsQuery = useAnnouncementTagsQuery();
 
-	import Query from '$lib/components/Query.svelte';
-	import AnnouncementCard from './AnnouncementCard.svelte';
-	import { queries } from '$data/api';
-	import TagsHost from './TagsHost.svelte';
-	import Search from '$lib/components/Search.svelte';
-	import { onMount } from 'svelte';
-	import type { ResponseAnnouncement } from '$lib/types';
-	import { admin_login, read_announcements } from '$lib/stores';
-	import Button from '$lib/components/Button.svelte';
-	import moment from 'moment';
-	import { debounce } from '$util/debounce';
-	import createFilter from '$util/filter';
+	const initialParams = browser ? new URL(window.location.href).searchParams : new URLSearchParams();
+	let searchTerm = $state(initialParams.get('s') ?? '');
+	let displayedTerm = $state(initialParams.get('s') ?? '');
+	let selectedTags = $state<string[]>(initialParams.getAll('tag'));
+	let archiveOpen = $state(false);
+	let archiveContentElement = $state<HTMLElement>();	
+	let archiveContentHeight = $derived(
+		archiveContentElement?.scrollHeight ?? 0
+	);
+	const announcementFilter = createFilter<Announcement, { selectedTags: string[] }>(
+		{
+			keys: ['title', 'content', 'tags'],
+			threshold: 0.3,
+			shouldSort: true
+		},
+		(item, { selectedTags }) => {
+			if (selectedTags.length === 0) return true;
+			return selectedTags.some((tag) => item.tags?.includes(tag) ?? false);
+		}
+	);
 
-	import ChevronDown from 'svelte-material-icons/ChevronDown.svelte';
-	import Create from 'svelte-material-icons/Plus.svelte';
+	$effect(() => {
+		if (!browser) return;
+		
+		const urlTags = page.url.searchParams.getAll('tag');
+		if (JSON.stringify(urlTags) !== JSON.stringify(selectedTags)) {
+			selectedTags = urlTags;
+		}
+	});
 
-	let expanded = false;
-
-	const searchParams: Readable<URLSearchParams> = building
-		? readable(new URLSearchParams())
-		: derived(page, ($page) => $page.url.searchParams);
-
-	let searchTerm = $searchParams.get('s') || '';
-	let displayedTerm = '';
-
-	$: query = createQuery(queries.announcements());
-	$: tagsQuery = createQuery(queries.announcementTags());
-	$: selectedTags = $searchParams.getAll('tag');
-
-	const update = () => {
+	const debouncedUpdate = debounce(() => {
 		displayedTerm = searchTerm;
+		syncUrlWithSearch();
+	});
 
-		const url = new URL(window.location.href);
+	function syncUrlWithSearch() {
+		if (!browser) return;
+
+		const url = new URL(page.url);
 		url.pathname = '/announcements';
 
-		searchTerm ? url.searchParams.set('s', searchTerm) : url.searchParams.delete('s');
-	};
+		if (searchTerm.trim()) {
+			url.searchParams.set('s', searchTerm.trim());
+		} else {
+			url.searchParams.delete('s');
+		}
 
-	const archivedAnnouncements = (announcements: ResponseAnnouncement[]) =>
-		announcements.filter((a) => a.archived_at && moment(a.archived_at).isBefore(moment()));
-	const activeAnnouncements = (announcements: ResponseAnnouncement[]) =>
-		announcements.filter((a) => !a.archived_at || moment(a.archived_at).isAfter(moment()));
+		replaceState(url.pathname + url.search, {});
+	}
 
-	const filterAnnouncements = (
-		announcements: ResponseAnnouncement[],
-		search: string,
-		tags: string[]
-	): ResponseAnnouncement[] => {
-		const announcementFilter = createFilter(announcements, {
-			searcherOptions: { keys: ['title', 'content'] },
+	let announcements = $derived(announcementsQuery.data ?? []);
+	$effect(() => {
+		if (announcementsQuery.data) {
+			announcementPolling.syncData(announcementsQuery.data);
+		}
+	});
+	let visibleAnnouncements = $derived(
+		auth.isLoggedIn
+			? announcements
+			: announcements.filter((item: Announcement) => !isScheduled(item.created_at))
+	);
 
-			additionalFilter: (a: ResponseAnnouncement, tags: string[]) =>
-				tags.length === 0 || tags.some((tag) => a.tags?.includes(tag))
-		});
+	let allTags = $derived(
+		(announcementTagsQuery.data ?? []).map(tag => tag.name)
+	);
 
-		return announcementFilter(tags, search);
-	};
+	let activeItems = $derived(
+		visibleAnnouncements.filter((item: Announcement) => !isArchived(item.archived_at))
+	);
 
-	onMount(() => {
-		debounce(update)();
+	let archivedItems = $derived(
+		visibleAnnouncements.filter((item: Announcement) => isArchived(item.archived_at))
+	);
 
-		if ($read_announcements.size === 0) {
-			query.subscribe((data) => {
-				read_announcements.update((set) => {
-					const updated = new Set(set);
-					data.data?.announcements.forEach((a) => updated.add(a.id));
-					return updated;
-				});
-			});
+	let filteredActive = $derived(
+		announcementFilter(activeItems, displayedTerm, { selectedTags })
+	);
+	
+	let filteredArchived = $derived(
+		announcementFilter(archivedItems, displayedTerm, { selectedTags })
+	);
+
+	let isLoading = $derived(announcementsQuery.isPending);
+
+	function onTagSelect(tag: string) {
+		const url = new URL(window.location.href);
+		const params = url.searchParams;
+
+		if (params.getAll('tag').includes(tag)) {
+			const allTags = params.getAll('tag').filter((t) => t !== tag);
+			params.delete('tag');
+			allTags.forEach((t) => params.append('tag', t));
+		} else {
+			params.append('tag', tag);
+		}
+
+		goto(url.pathname + '?' + params.toString(), { keepFocus: true });
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
+	function toggleArchive() {
+		archiveOpen = !archiveOpen;
+	}
+
+	$effect(() => {
+		if (readAnnouncements.ids.length === 0 && announcements.length > 0) {
+			readAnnouncements.markManyAsRead(announcements.map((a) => a.id));
 		}
 	});
 </script>
 
-<div class="search">
-	<div class="search-contain">
-		<!-- Must bind both variables: we get searchTerm from the text input, -->
-		<div class="search-bar">
-			<Search
-				bind:searchTerm
-				bind:displayedTerm
-				title="Search for announcements"
-				on:keyup={debounce(update)}
-			/>
+<Page title="" description="">
+	<div class="search-section">
+		<div class="search-inner">
+			<div class="search-row">
+				<Search
+					bind:value={searchTerm}
+					placeholder="Search for announcements"
+					onkeyup={debouncedUpdate}
+					onclear={() => {
+						displayedTerm = '';
+						syncUrlWithSearch();
+					}}
+				/>
+				{#if auth.isLoggedIn}
+					<Button buttonStyle="filled" icon={IconAdd} href="/announcements/create">
+						Create
+					</Button>
+				{/if}
+			</div>
 		</div>
-		{#if $admin_login.logged_in}
-			<Button type="filled" icon={Create} href="/announcements/create">Create</Button>
-		{/if}
 	</div>
-</div>
-<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	<Query query={tagsQuery} let:data>
-		<TagsHost tags={data.tags} />
-	</Query>
 
-	<Query {query} let:data>
-		{#if activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
+	<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+		{#if allTags.length > 0}
+			<TagsFilter
+				tags={allTags}
+				{selectedTags}
+				onTagClick={onTagSelect}
+			/>
+		{/if}
+
+		{#if filteredActive.length > 0}
 			<div class="cards">
-				{#each activeAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
+				{#each filteredActive as item (item.id)}
 					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<AnnouncementCard {announcement} />
+						<AnnouncementCard announcement={item} />
 					</div>
 				{/each}
 			</div>
+		{:else if announcementsQuery.isError && announcements.length === 0}
+			<p class="empty-state">Failed to load announcements. Please try again later.</p>
+		{:else if isLoading && announcements.length === 0}
+			<p class="empty-state">Loading announcements...</p>
 		{/if}
 
-		{#if archivedAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)).length}
-			<div
-				role="button"
-				class="expand-archived"
-				aria-expanded={expanded}
-				on:click={() => (expanded = !expanded)}
-				on:keypress={() => (expanded = !expanded)}
-				tabindex="0"
-			>
-				<h4>Archive</h4>
+{#if filteredArchived.length > 0}
+    <button
+        type="button"
+        class="archive-toggle"
+        aria-expanded={archiveOpen}
+        onclick={toggleArchive}
+    >
+        <h4>Archive</h4>
+        <span class="archive-chevron" class:open={archiveOpen}>
+            <IconChevron size={24} />
+        </span>
+    </button>
 
-				<div id="arrow" style:transform={expanded ? 'rotate(-180deg)' : 'rotate(0deg)'}>
-					<ChevronDown size="24px" color="var(--surface-six)" />
-				</div>
-			</div>
+    <section
+        bind:this={archiveContentElement}
+        class="archive-content"
+        class:open={archiveOpen}
+        style="max-height: {archiveOpen ? `${archiveContentHeight}px` : '0px'}"
+        aria-hidden={!archiveOpen}
+    >
+        <div class="cards">
+            {#each filteredArchived as item (item.id)}
+                <AnnouncementCard announcement={item} />
+            {/each}
+        </div>
+    </section>
+{/if}
 
-			{#if expanded}
-				<div
-					class="cards"
-					in:slide={{ easing: quintIn, duration: 250 }}
-					out:slide={{ easing: quintOut, duration: 250 }}
-				>
-					{#each archivedAnnouncements(filterAnnouncements(data.announcements, displayedTerm, selectedTags)) as announcement}
-						<AnnouncementCard {announcement} />
-					{/each}
-				</div>
-			{/if}
-		{/if}
-	</Query>
-</main>
+	</main>
+</Page>
 
-<style lang="scss">
-	main {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.expand-archived {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		cursor: pointer;
-		user-select: none;
-		padding-inline: 0.25rem;
-
-		#arrow {
-			height: 1.5rem;
-			transition: all 0.2s var(--bezier-one);
-		}
-	}
-
-	.search {
+<style>
+	.search-section {
 		padding-top: 0.6rem;
 		padding-bottom: 1.25rem;
 		background-color: var(--surface-eight);
+	}
 
-		.search-contain {
-			display: flex;
-			justify-content: center;
-			gap: 1rem;
-			margin-inline: auto;
-			width: min(90%, 80rem);
+	.search-inner {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		margin-inline: auto;
+		width: min(90%, 80rem);
+	}
 
-			.search-bar {
-				flex: 1;
-			}
-		}
+	.search-row {
+		display: flex;
+		flex: 1;
+		gap: 1rem;
+	}
+
+	.search-row :global(.search-container) {
+		flex: 1;
+	}
+
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		width: min(90%, 80rem);
+		margin-inline: auto;
+		padding-bottom: 0.2rem;
 	}
 
 	.cards {
@@ -186,8 +244,52 @@
 		grid-template-columns: repeat(3, 1fr);
 		width: 100%;
 		gap: 16px;
+	}
 
-		@media (max-width: 768px) {
+	.empty-state {
+		text-align: center;
+		color: var(--text-four);
+		padding: 3rem 1rem;
+	}
+
+.archive-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.archive-toggle h4 {
+    margin: 0;
+    color: var(--secondary);
+}
+
+.archive-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--surface-six);
+    transition: transform 0.25s var(--bezier-one);
+}
+
+.archive-chevron.open {
+    transform: rotate(180deg);
+}
+
+.archive-content {
+    overflow: hidden;
+    transition: max-height 0.5s var(--bezier-one);
+    will-change: max-height;
+}
+
+
+	@media (max-width: 768px) {
+		.cards {
 			display: flex;
 			flex-direction: column;
 		}

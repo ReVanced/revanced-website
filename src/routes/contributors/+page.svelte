@@ -1,85 +1,58 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import Page from '$components/templates/Page.svelte';
+	import ContributorSection from '$components/organisms/ContributorSection.svelte';
+	import { useContributorsQuery } from '$stores';
 
-	import ContributorHost from './ContributorSection.svelte';
-	import Head from '$lib/components/Head.svelte';
-	import Query from '$lib/components/Query.svelte';
+	const contributorsQuery = useContributorsQuery();
 
-	import { queries } from '$data/api';
-	import { createQuery } from '@tanstack/svelte-query';
+	const repositories = $derived(contributorsQuery.data ?? []);
 
-	const query = createQuery(queries.contributors());
-</script>
-
-<Head
-	title="Contributors of ReVanced"
-	description="ReVanced is made possible by the community. Check out the people who have contributed to the project and how you can contribute too."
-	schemas={[
+	const schemas = [
 		{
 			'@context': 'https://schema.org',
 			'@type': 'BreadcrumbList',
 			itemListElement: [
-				{
-					'@type': 'ListItem',
-					position: 1,
-					name: 'Home',
-					item: 'https://revanced.app/'
-				},
-				{
-					'@type': 'ListItem',
-					position: 2,
-					name: 'Contributors',
-					item: 'https://revanced.app/contributors'
-				}
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://revanced.app/' },
+				{ '@type': 'ListItem', position: 2, name: 'Contributors', item: 'https://revanced.app/contributors' }
 			]
 		}
-	]}
-/>
+	];
+</script>
 
-<div class="wrapper">
-	<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		<h2>Made possible by the community.</h2>
-		<p>
-			Want to show up here? <span>
-				<a href="https://github.com/revanced" target="_blank" rel="noreferrer"
-					>Become a contributor
+<Page title="Contributors of ReVanced" description="ReVanced is made possible by the community. Check out the people who have contributed to the project and how you can contribute too." {schemas}>
+	<div class="wrapper">
+		<div class="text-container" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			<h2>Made possible by the community.</h2>
+			<p>
+				Want to show up here?
+				<a href="https://github.com/revanced" target="_blank" rel="noreferrer">
+					Become a contributor
 				</a>
-			</span>
-		</p>
-	</div>
+			</p>
+		</div>
 
-	<div class="repos">
-		<Query {query} let:data>
-			{#each data.contributables as { name, url, contributors }}
+		<div class="repos">
+			{#each repositories as repo}
 				<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-					<ContributorHost {name} {url} {contributors} />
+					<ContributorSection
+						name={repo.name}
+						url={repo.url}
+						contributors={repo.contributors}
+					/>
 				</div>
 			{/each}
-		</Query>
+		</div>
 	</div>
-</div>
+</Page>
 
 <style>
 	.wrapper {
+		width: min(90%, 80rem);
+		margin-inline: auto;
 		margin-bottom: 5rem;
-	}
-
-	.repos {
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
-
-	h2 {
-		text-align: center;
-		color: var(--text-three);
-		margin-bottom: 0.3rem;
-	}
-
-	p {
-		text-align: center;
-		color: var(--text-three);
+		margin-top: 2.6rem;
 	}
 
 	.text-container {
@@ -92,25 +65,45 @@
 		border-radius: 20px;
 	}
 
-	a {
+	.text-container h2 {
+		text-align: center;
+		color: var(--text-three);
+		margin-bottom: 0.3rem;
+	}
+
+	.text-container p {
+		text-align: center;
+		color: var(--text-three);
+		margin: 0;
+	}
+
+	.text-container a {
 		text-decoration: none;
 		color: var(--text-three);
+		position: relative;
 	}
 
-	a::after {
-		padding-left: 5px;
+	.text-container a::after {
 		content: '→';
+		padding-left: 5px;
 		position: absolute;
-		transition: all 0.3s var(--bezier-one);
+		transition: transform 0.3s var(--bezier-one);
 	}
 
-	a:hover {
+	.text-container a:hover {
 		text-decoration: underline var(--text-three);
 	}
 
-	a:hover::after {
+	.text-container a:hover::after {
 		transform: translateX(5px);
 	}
+
+	.repos {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
 	@media (max-width: 768px) {
 		.text-container {
 			padding: 2rem 1.75rem;
