@@ -3,20 +3,20 @@ import { z } from 'zod';
 export const SocialSchema = z.object({
 	name: z.string(),
 	url: z.string(),
-	preferred: z.boolean()
+	preferred: z.boolean().optional()
 });
 
 export const CryptoWalletSchema = z.object({
 	network: z.string(),
 	currency_code: z.string(),
 	address: z.string(),
-	preferred: z.boolean()
+	preferred: z.boolean().optional()
 });
 
 export const DonationLinkSchema = z.object({
 	name: z.string(),
 	url: z.string(),
-	preferred: z.boolean()
+	preferred: z.boolean().optional()
 });
 
 export const DonationsSchema = z.object({
@@ -52,8 +52,8 @@ export const TeamMemberSchema = z.object({
 	name: z.string(),
 	avatar_url: z.string(),
 	url: z.string(),
-	bio: z.string().optional(),
-	gpg_key: GpgKeySchema.optional()
+	bio: z.string().nullable().optional(),
+	gpg_key: GpgKeySchema.nullable().optional()
 });
 
 export const ManagerReleaseSchema = z.object({
@@ -76,25 +76,6 @@ export const ContributableSchema = z.object({
 	contributors: z.array(ContributorSchema)
 });
 
-export const PatchOptionSchema = z.object({
-	key: z.string(),
-	title: z.string(),
-	description: z.string(),
-	required: z.boolean(),
-	type: z.string(),
-	default: z.unknown(),
-	values: z.record(z.string(), z.unknown()).nullable()
-});
-
-export const PatchSchema = z.object({
-	name: z.string(),
-	description: z.string().nullable(),
-	use: z.boolean(),
-	dependencies: z.array(z.string()),
-	compatiblePackages: z.record(z.string(), z.array(z.string()).nullable()).nullable(),
-	options: z.array(PatchOptionSchema)
-});
-
 export const AnnouncementSchema = z.object({
 	id: z.number(),
 	author: z.string().nullable().optional().default(null),
@@ -106,12 +87,6 @@ export const AnnouncementSchema = z.object({
 	level: z.number().optional().default(0)
 });
 
-export const AnnouncementTagSchema = z.object({
-	name: z.string()
-});
-
 export const TeamMembersSchema = z.array(TeamMemberSchema);
 export const ContributablesSchema = z.array(ContributableSchema);
-export const PatchesSchema = z.array(PatchSchema);
 export const AnnouncementsSchema = z.array(AnnouncementSchema);
-export const AnnouncementTagsSchema = z.array(AnnouncementTagSchema);

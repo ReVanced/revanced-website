@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { relativeTime } from '$lib/utils/relativeTime';
-	import { useAnnouncementTagsQuery, auth } from '$stores';
+	import { useAnnouncementsQuery, auth } from '$stores';
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import AdminButtons from './AdminButtons.svelte';
 	import IconArrowRight from 'svelte-material-icons/ArrowRight.svelte';
@@ -47,7 +47,7 @@
 		onToggleArchive
 	}: Props = $props();
 
-	const announcementTagsQuery = useAnnouncementTagsQuery();
+	const announcementsQuery = useAnnouncementsQuery();
 
 	let isEditMode = $derived(isEditing || isCreating);
 
@@ -61,12 +61,13 @@
 		return date && moment(date).isBefore() ? date : null;
 	});
 
-	// Tags
+	// Tags - derive available tags from all announcements
 	let newTag = $state('');
 	let availableTags = $derived.by(() => {
-		const apiTags = (announcementTagsQuery.data ?? []).map((t) => t.name);
-		const customTags = (tagsInput ?? []).filter((t) => !apiTags.includes(t));
-		return [...apiTags, ...customTags];
+		const allAnnouncements = announcementsQuery.data ?? [];
+		const existingTags = [...new Set(allAnnouncements.flatMap((a) => a.tags ?? []))];
+		const customTags = (tagsInput ?? []).filter((t) => !existingTags.includes(t));
+		return [...existingTags, ...customTags];
 	});
 
 	function handleTagClick(tag: string) {

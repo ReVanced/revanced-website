@@ -1,20 +1,20 @@
 export type Social = {
 	name: string;
 	url: string;
-	preferred: boolean;
+	preferred?: boolean;
 };
 
 export type CryptoWallet = {
 	network: string;
 	currency_code: string;
 	address: string;
-	preferred: boolean;
+	preferred?: boolean;
 };
 
 export type DonationLink = {
 	name: string;
 	url: string;
-	preferred: boolean;
+	preferred?: boolean;
 };
 
 export type Donations = {
@@ -51,8 +51,8 @@ export type TeamMember = {
 	name: string;
 	avatar_url: string;
 	url: string;
-	bio?: string;
-	gpg_key?: GpgKey;
+	bio?: string | null;
+	gpg_key?: GpgKey | null;
 };
 
 
@@ -77,30 +77,6 @@ export type Contributable = {
 	contributors: Contributor[];
 };
 
-export type PatchOption = {
-	key: string;
-	title: string;
-	description: string;
-	required: boolean;
-	type: string;
-	default: unknown;
-	values: Record<string, unknown> | null;
-};
-
-export type CompatiblePackage = {
-	name: string;
-	versions: string[] | null;
-};
-
-export type Patch = {
-	name: string;
-	description: string | null;
-	use: boolean;
-	dependencies: string[];
-	compatiblePackages: Record<string, string[] | null> | null;
-	options: PatchOption[];
-};
-
 export type Announcement = {
 	id: number;
 	author: string | null;
@@ -110,8 +86,4 @@ export type Announcement = {
 	created_at: string;
 	archived_at: string | null;
 	level: number;
-};
-
-export type AnnouncementTag = {
-	name: string;
 };

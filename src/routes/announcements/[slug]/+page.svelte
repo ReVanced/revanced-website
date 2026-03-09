@@ -145,12 +145,14 @@
 
 	function buildPayload(): AnnouncementPayload {
 		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : null;
+		const createdAtFormatted = createdAtInput ? String(formatUTC(createdAtInput)) : undefined;
 		
 		return {
 			title: titleInput.trim(),
 			content: contentInput.trim() || undefined,
 			author: authorInput.trim() || undefined,
 			tags: tagsInput.length > 0 ? tagsInput : undefined,
+			created_at: createdAtFormatted,
 			archived_at: typeof archivedAtFormatted === 'string' ? archivedAtFormatted : null
 		};
 	}

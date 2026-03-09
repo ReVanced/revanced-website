@@ -20,7 +20,6 @@
 	const navItems = [
 		{ label: 'Home', href: '/', prefetch: undefined },
 		{ label: 'Download', href: '/download', prefetch: prefetch.prefetchManager },
-		{ label: 'Patches', href: '/patches', prefetch: prefetch.prefetchPatches },
 		{ label: 'Contributors', href: '/contributors', prefetch: prefetch.prefetchContributors },
 		{ label: 'Donate', href: '/donate', prefetch: undefined }
 	] as const satisfies { label: string; href: string; prefetch: (() => void) | undefined }[];

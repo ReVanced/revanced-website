@@ -7,7 +7,6 @@
 	import { useAboutQuery } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
 	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
-	import Description from 'svelte-material-icons/FileDocumentOutline.svelte';
 
 	const aboutQuery = useAboutQuery();
 	let showSocials = $state(true);
@@ -156,7 +155,6 @@
 				<nav class="actions">
 					<div class="primary-actions btn-row">
 						<Button buttonStyle="filled" icon={Download} href="/download">Download</Button>
-						<Button buttonStyle="tonal" icon={Description} href="/patches">View patches</Button>
 					</div>
 
 					<div class="external-links btn-row" class:hidden={!showSocials}>

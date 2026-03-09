@@ -5,18 +5,14 @@ import type {
 	TeamMember,
 	ManagerRelease,
 	Contributable,
-	Patch,
-	Announcement,
-	AnnouncementTag
+	Announcement
 } from './types';
 import {
 	AboutSchema,
 	TeamMembersSchema,
 	ManagerReleaseSchema,
 	ContributablesSchema,
-	PatchesSchema,
 	AnnouncementsSchema,
-	AnnouncementTagsSchema,
 	AnnouncementSchema
 } from './schemas';
 import type { z } from 'zod';
@@ -116,10 +112,6 @@ export async function fetchContributors(): Promise<Contributable[]> {
 	return fetchJson<Contributable[]>('contributors', ContributablesSchema);
 }
 
-export async function fetchPatches(): Promise<Patch[]> {
-	return fetchJson<Patch[]>('patches/list', PatchesSchema);
-}
-
 export async function fetchAnnouncements(): Promise<Announcement[]> {
 	return fetchJson<Announcement[]>('announcements', AnnouncementsSchema);
 }
@@ -131,28 +123,13 @@ export async function fetchAnnouncementById(id: number, signal?: AbortSignal): P
 	return found;
 }
 
-export async function fetchAnnouncementTags(): Promise<AnnouncementTag[]> {
-	return fetchJson<AnnouncementTag[]>('announcements/tags', AnnouncementTagsSchema);
-}
-
-export async function checkApiHealth(): Promise<boolean> {
-	try {
-		const response = await fetch(buildUrl('ping'), {
-			method: 'HEAD',
-			signal: AbortSignal.timeout(5000)
-		});
-		return response.ok;
-	} catch {
-		console.warn('[API] Health check failed');
-		return false;
-	}
-}
 
 export type AnnouncementPayload = {
 	title: string;
 	content?: string;
 	author?: string;
 	tags?: string[];
+	created_at?: string;
 	archived_at?: string | null;
 	level?: number;
 };
