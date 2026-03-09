@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { readAnnouncements } from '$stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import Button from '$components/atoms/Button.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import CloseIcon from 'svelte-material-icons/Close.svelte';
@@ -36,7 +37,7 @@
 	);
 </script>
 
-{#if latestUnreadAnnouncement}
+{#if browser && latestUnreadAnnouncement}
 	<div class="banner {bannerLevel}">
 		<div class="text">
 			<h1 class="title">We have an announcement</h1>

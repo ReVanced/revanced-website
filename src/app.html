@@ -4,6 +4,8 @@
 <head>
 	<meta charset="utf-8" />
 	<link rel="icon" href="/favicon.ico" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<meta
 		name="robots"
 		content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
@@ -27,6 +29,12 @@
 		// inline script to set theme before SvelteKit hydrates
 		const theme = JSON.parse(localStorage.getItem('theme')) || 'light';
 		document.documentElement.setAttribute('data-theme', theme);
+		// Enable transitions only after first paint to avoid load flash
+		requestAnimationFrame(function() {
+			requestAnimationFrame(function() {
+				document.documentElement.classList.add('themed');
+			});
+		});
 	</script>
 
 	<div style="display: contents">%sveltekit.body%</div>

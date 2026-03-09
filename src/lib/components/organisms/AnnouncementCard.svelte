@@ -3,6 +3,7 @@
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
 	import { readAnnouncements } from '$stores';
+	import { browser } from '$app/environment';
 	import { relativeTime } from '$lib/utils/relativeTime';
 	import { isArchived, buildAnnouncementPath } from '$lib/utils';
 	import IconArchive from 'svelte-material-icons/ArchiveOutline.svelte';
@@ -32,7 +33,7 @@
 	onclick={handleClick}
 >
 	<article class="card">
-		{#if !isRead && !archived}
+		{#if browser && !isRead && !archived}
 			<span class="new-header">NEW</span>
 		{/if}
 

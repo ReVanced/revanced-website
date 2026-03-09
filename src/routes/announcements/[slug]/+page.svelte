@@ -208,7 +208,7 @@
 	}
 
 	function handleBeforeUnload(e: BeforeUnloadEvent) {
-		if (isEditing || isCreating) {
+		if (isEditing || (isCreating && (titleInput.trim() || contentInput.trim() || authorInput.trim()))) {
 			e.preventDefault();
 			e.returnValue = '';
 		}

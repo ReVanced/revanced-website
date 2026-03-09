@@ -120,7 +120,7 @@
 		</div>
 
 		<div class="screenshot">
-			<img src={managerImg} alt="Screenshot of ReVanced Manager" />
+			<img src={managerImg} alt="Screenshot of ReVanced Manager" width="300" height="600" />
 		</div>
 	</main>
 </Page>

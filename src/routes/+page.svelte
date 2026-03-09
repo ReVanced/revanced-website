@@ -168,7 +168,7 @@
 
 			<aside class="preview">
 				<figure class="device-frame">
-					<img src={managerImg} alt="Screenshot of ReVanced Manager" />
+					<img src={managerImg} alt="Screenshot of ReVanced Manager" width="2880" height="6122" />
 				</figure>
 			</aside>
 		</div>
@@ -253,6 +253,7 @@
 
 	.device-frame img {
 		height: 100%;
+		width: auto;
 		border-radius: 1.75rem;
 	}
 
