@@ -4,15 +4,14 @@
 	import Button from '$components/atoms/Button.svelte';
 	import SocialButton from '$components/molecules/SocialButton.svelte';
 	import WaveBackground from '$components/organisms/WaveBackground.svelte';
-	import { useAboutQuery } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
 	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
 
-	const aboutQuery = useAboutQuery();
+	let { data } = $props();
 	let showSocials = $state(true);
 
 	let socialLinks = $derived(
-		(aboutQuery.data?.socials ?? []).filter((item) => item.name !== 'Website')
+		(data.about?.socials ?? []).filter((item) => item.name !== 'Website')
 	);
 
 	function updateSocialsVisibility() {

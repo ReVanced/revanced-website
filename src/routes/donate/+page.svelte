@@ -11,7 +11,6 @@
 	import Button from '$components/atoms/Button.svelte';
 	import QRCode from '$components/atoms/QRCode.svelte';
 	import Snackbar from '$components/atoms/Snackbar.svelte';
-	import { useAboutQuery, useTeamQuery } from '$stores';
 	import type { CryptoWallet } from '$api';
 
 	import IconCircles from 'svelte-material-icons/CircleMultipleOutline.svelte';
@@ -25,8 +24,7 @@
 	import revancedLogoBg from '$assets/icons/revanced-logo-background.svg';
 	import heartIcon from '$assets/icons/heart.svg';
 
-	const aboutQuery = useAboutQuery();
-	const teamQuery = useTeamQuery();
+	let { data } = $props();
 
 	const donateImages: Record<string, string> = {
 		'Open Collective': openCollectiveImg,
@@ -34,10 +32,10 @@
 		'Cryptocurrencies': cryptocurrenciesImg
 	};
 
-	let donationLinks = $derived(aboutQuery.data?.donations?.links ?? []);
-	let cryptoWallets = $derived(aboutQuery.data?.donations?.wallets ?? []);
+	let donationLinks = $derived(data.about?.donations?.links ?? []);
+	let cryptoWallets = $derived(data.about?.donations?.wallets ?? []);
 
-	let teamMembers = $derived(teamQuery.data ?? []);
+	let teamMembers = $derived(data.team ?? []);
 
 	let cryptoModalOpen = $state(false);
 	let walletModalOpen = $state(false);

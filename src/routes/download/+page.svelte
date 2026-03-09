@@ -6,17 +6,16 @@
 	import Button from '$components/atoms/Button.svelte';
 	import Modal from '$components/molecules/Modal.svelte';
 	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
-	import { useManagerQuery } from '$stores';
 	import managerImg from '$assets/icons/manager.png';
 
-	const managerQuery = useManagerQuery();
+	let { data } = $props();
 
-	const manager = $derived(managerQuery.data);
+	const manager = $derived(data.manager);
 	const version = $derived(manager?.version ?? 'Download');
 	const downloadUrl = $derived(manager?.download_url ?? '');
 	
 	const hasDownloadData = $derived(!!manager?.download_url);
-	const isApiDown = $derived(managerQuery.isError && !hasDownloadData);
+	const isApiDown = $derived(!manager);
 
 	let isAndroid = $state(false);
 	let androidVersion = $state(0);

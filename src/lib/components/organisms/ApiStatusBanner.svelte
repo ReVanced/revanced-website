@@ -1,18 +1,15 @@
 <script lang="ts">
-	import { useAboutQuery } from '$stores';
 	import { getStatusUrl, getContactEmail } from '$api';
 	import Button from '$components/atoms/Button.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 
+	let { apiIsDown = false }: { apiIsDown: boolean } = $props();
+
 	const statusUrl = getStatusUrl();
 	const email = getContactEmail();
-	const aboutQuery = useAboutQuery();
-	
-	// Show banner when API query fails (indicates API is down)
-	let visible = $derived(aboutQuery.isError);
 </script>
 
-{#if visible}
+{#if apiIsDown}
 	<div class="banner caution">
 		<div class="text">
 			<h1 class="title">API service is currently down</h1>

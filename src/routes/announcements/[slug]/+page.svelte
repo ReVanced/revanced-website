@@ -1,40 +1,33 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { goto, replaceState } from '$app/navigation';
+	import { goto, replaceState, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
 	import { formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
 	import { toSlug, isScheduled } from '$lib/utils';
 	import {
-		fetchAnnouncementById,
 		createAnnouncement,
 		updateAnnouncement,
 		deleteAnnouncement,
 		type AnnouncementPayload
 	} from '$lib/api/client';
-	import {
-		useAnnouncementsQuery,
-		useInvalidateAnnouncements,
-		auth
-	} from '$stores';
+	import { auth } from '$stores';
 	import Content from './Content.svelte';
 	import DeleteConfirmDialog from './DeleteConfirmDialog.svelte';
 
-	const announcementsQuery = useAnnouncementsQuery();
-	const invalidateAnnouncements = useInvalidateAnnouncements();
+	let { data } = $props();
 
 	let announcement = $state<Announcement | null>(null);
-	let loading = $state(true);
 	let error = $state<string | null>(null);
 
 	let isEditing = $state(false);
 	let isPreviewing = $state(false);
 	let showDeleteConfirm = $state(false);
 
-	let isCreating = $derived(page.params.slug === 'create');
+	let isCreating = $derived(data.isCreating);
 
 	let announcementId = $derived.by(() => {
 		if (isCreating) return null;
@@ -53,6 +46,32 @@
 	let archivedAtInput = $state('');
 	let tagsInput = $state<string[]>([]);
 	let draftInitialized = $state(false);
+
+	// Initialize from server data
+	$effect(() => {
+		if (data.announcement) {
+			announcement = data.announcement;
+			if (isScheduled(data.announcement.created_at) && !auth.isLoggedIn) {
+				error = 'Announcement not found.';
+			} else {
+				error = null;
+			}
+		} else if (!isCreating) {
+			error = 'Announcement not found.';
+		}
+	});
+
+	// Correct URL slug without creating a reactive loop
+	$effect(() => {
+		if (!browser || !data.announcement?.title) return;
+		const { id, title } = data.announcement;
+		const expectedPath = `/announcements/${id}-${toSlug(title)}`;
+		untrack(() => {
+			if (page.url.pathname !== expectedPath) {
+				replaceState(expectedPath, {});
+			}
+		});
+	});
 
 	function initializeDraft() {
 		if (isCreating) {
@@ -80,52 +99,7 @@
 		if (isCreating && browser && auth.isLoggedIn && !draftInitialized) {
 			initializeDraft();
 			draftInitialized = true;
-			loading = false;
 		}
-	});
-
-	$effect(() => {
-		if (!browser || announcementId === null || isCreating) return;
-
-		loading = true;
-		error = null;
-
-		const abortController = new AbortController();
-
-		fetchAnnouncementById(announcementId, abortController.signal)
-			.then((data) => {
-				if (abortController.signal.aborted) return;
-				if (data && isScheduled(data.created_at) && !auth.isLoggedIn) {
-					error = 'Announcement not found.';
-					loading = false;
-					return;
-				}
-				
-				announcement = data;
-				loading = false;
-				if (data?.title) {
-					const expectedPath = `/announcements/${data.id}-${toSlug(data.title)}`;
-					if (page.url.pathname !== expectedPath) {
-						replaceState(expectedPath, {});
-					}
-				}
-			})
-			.catch((err) => {
-				if (abortController.signal.aborted) return;
-				const message = err instanceof Error ? err.message : 'Failed to load announcement';
-				if (message.includes('404')) {
-					error = 'Announcement not found.';
-				} else if (message.includes('401') || message.includes('403')) {
-					error = 'You do not have permission to view this announcement.';
-				} else {
-					error = 'Failed to load announcement. Please try again later.';
-				}
-				loading = false;
-			});
-
-		return () => {
-			abortController.abort();
-		};
 	});
 
 	function validateInputs(): boolean {
@@ -175,12 +149,12 @@
 		try {
 			if (isCreating) {
 				await createAnnouncement(payload);
-				await invalidateAnnouncements();
+				await invalidateAll();
 				goto('/announcements');
 			} else if (announcementId !== null) {
 				const updated = await updateAnnouncement(announcementId, payload);
 				announcement = updated;
-				await invalidateAnnouncements();
+				await invalidateAll();
 				isEditing = false;
 				isPreviewing = false;
 			}
@@ -204,7 +178,7 @@
 			await deleteAnnouncement(announcementId);
 			showDeleteConfirm = false;
 			await tick();
-			await invalidateAnnouncements();
+			await invalidateAll();
 			await goto('/announcements');
 		} catch (err) {
 			if (err instanceof Error && err.message === 'Unauthenticated') {
@@ -252,14 +226,13 @@
 <main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
 	{#if isInvalidSlug}
 		<p class="error-state">Announcement not found.</p>
-	{:else if loading && !isCreating}
-		<p class="loading-state">Loading...</p>
 	{:else if error && !isCreating}
 		<p class="error-state">{error}</p>
 	{:else if announcement || isCreating}
 		<article class="card">
 			<Content
 				{announcement}
+				allAnnouncements={data.announcements ?? []}
 				{isEditing}
 				{isCreating}
 				{isPreviewing}
@@ -289,8 +262,7 @@
 		padding-block: 2rem;
 	}
 
-	.error-state,
-	.loading-state {
+	.error-state {
 		text-align: center;
 		color: var(--text-four);
 		padding: 4rem 1rem;

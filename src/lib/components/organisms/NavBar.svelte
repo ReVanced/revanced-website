@@ -8,21 +8,20 @@
 	import Settings from 'svelte-material-icons/Cog.svelte';
 	import SettingsDialog from '$components/organisms/SettingsDialog.svelte';
 	import LoginDialog from '$components/organisms/LoginDialog.svelte';
-	import { auth, usePrefetchNavQueries } from '$stores';
+	import { auth } from '$stores';
 
 	type Props = {
 		inert?: boolean;
 	};
 
 	let { inert = false }: Props = $props();
-	const prefetch = usePrefetchNavQueries();
 
 	const navItems = [
-		{ label: 'Home', href: '/', prefetch: undefined },
-		{ label: 'Download', href: '/download', prefetch: prefetch.prefetchManager },
-		{ label: 'Contributors', href: '/contributors', prefetch: prefetch.prefetchContributors },
-		{ label: 'Donate', href: '/donate', prefetch: undefined }
-	] as const satisfies { label: string; href: string; prefetch: (() => void) | undefined }[];
+		{ label: 'Home', href: '/' },
+		{ label: 'Download', href: '/download' },
+		{ label: 'Contributors', href: '/contributors' },
+		{ label: 'Donate', href: '/donate' }
+	] as const;
 
 	let settingsOpen = $state(false);
 	let loginOpen = $state(false);
@@ -102,12 +101,10 @@
 		transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
 	>
 		<div class="nav-group main-nav">
-			{#each navItems as { href, label, prefetch: prefetchFn }}
+			{#each navItems as { href, label }}
 				<a 
 					{href}
 					data-sveltekit-preload-data="hover"
-					onmouseenter={prefetchFn}
-					onfocus={prefetchFn}
 					class="rounded nav-button unselectable" 
 					class:active={page.url.pathname === href}
 				>
@@ -117,8 +114,6 @@
 			<a
 				href="/announcements"
 				data-sveltekit-preload-data="hover"
-				onmouseenter={prefetch.prefetchAnnouncements}
-				onfocus={prefetch.prefetchAnnouncements}
 				class="rounded nav-button unselectable mobile-only"
 				class:active={page.url.pathname === '/announcements'}
 			>
@@ -130,8 +125,6 @@
 			<a
 				href="/announcements"
 				data-sveltekit-preload-data="hover"
-				onmouseenter={prefetch.prefetchAnnouncements}
-				onfocus={prefetch.prefetchAnnouncements}
 				class="rounded nav-button unselectable desktop-only icon-btn"
 				class:active={page.url.pathname === '/announcements'}
 				aria-label="Announcements"

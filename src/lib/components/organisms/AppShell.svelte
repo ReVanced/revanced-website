@@ -12,14 +12,17 @@
 	import LoginSuccessfulDialog from '$components/organisms/LoginSuccessfulDialog.svelte';
 	import Spinner from '$components/atoms/Spinner.svelte';
 	import type { WithChildren } from '$types';
+	import type { About, Announcement } from '$lib/api/types';
 	import {
-		useAboutQuery,
 		auth,
 		modalsStack
 	} from '$stores';
 	import { populateDynamicSettings } from '$lib/api/settings';
 
-	let { children }: WithChildren = $props();
+	let { children, about = null, announcements = [] }: WithChildren & {
+		about: About | null;
+		announcements: Announcement[];
+	} = $props();
 
 	const pageLinks = [
 		{ label: 'Home', href: '/' },
@@ -28,19 +31,18 @@
 		{ label: 'Donate', href: '/donate' }
 	];
 
-	const aboutQuery = useAboutQuery();
-
-	let aboutText = $derived(aboutQuery.data?.about ?? '');
-	let socials = $derived(aboutQuery.data?.socials ?? []);
-	let contactEmail = $derived(aboutQuery.data?.contact?.email ?? '');
+	let aboutText = $derived(about?.about ?? '');
+	let socials = $derived(about?.socials ?? []);
+	let contactEmail = $derived(about?.contact?.email ?? '');
+	let apiIsDown = $derived(about === null);
 
 	let emailDialogOpen = $state(false);
 	let showLoadingSpinner = $state(false);
 	let hasModals = $derived(modalsStack.hasModals());
 
 	$effect(() => {
-		if (aboutQuery.data) {
-			populateDynamicSettings(aboutQuery.data);
+		if (about) {
+			populateDynamicSettings(about);
 		}
 	});
 
@@ -75,8 +77,8 @@
 </script>
 
 <div class="banner-wrapper" inert={hasModals ? true : undefined}>
-	<ApiStatusBanner />
-	<AnnouncementBanner />
+	<ApiStatusBanner {apiIsDown} />
+	<AnnouncementBanner {announcements} />
 </div>
 
 <NavBar inert={hasModals} />
