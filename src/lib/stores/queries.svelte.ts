@@ -6,9 +6,7 @@ import {
 	fetchTeam,
 	fetchManager,
 	fetchContributors,
-	fetchPatches,
 	fetchAnnouncementById,
-	fetchAnnouncementTags,
 	fetchAnnouncements
 } from '$api/client';
 import type {
@@ -16,9 +14,7 @@ import type {
 	TeamMember,
 	ManagerRelease,
 	Contributable,
-	Patch,
-	Announcement,
-	AnnouncementTag
+	Announcement
 } from '$api/types';
 import { queryKeys, STALE_TIMES, GC_TIMES, REFETCH_INTERVALS } from './queryClient';
 
@@ -62,26 +58,6 @@ export function useContributorsQuery() {
 	}));
 }
 
-export function usePatchesQuery() {
-	return createQuery(() => ({
-		queryKey: queryKeys.patches,
-		queryFn: fetchPatches,
-		staleTime: STALE_TIMES.SEMI_DYNAMIC,
-		gcTime: GC_TIMES.MEDIUM,
-		enabled: browser,
-	}));
-}
-
-export function useAnnouncementTagsQuery() {
-	return createQuery(() => ({
-		queryKey: queryKeys.announcementTags,
-		queryFn: fetchAnnouncementTags,
-		staleTime: STALE_TIMES.STATIC,
-		gcTime: GC_TIMES.LONG,
-		enabled: browser,
-	}));
-}
-
 export function useAnnouncementsQuery(options?: { enablePolling?: boolean }) {
 	return createQuery(() => ({
 		queryKey: queryKeys.announcements,
@@ -107,10 +83,7 @@ export function useAnnouncementByIdQuery(id: () => number | null) {
 export function useInvalidateAnnouncements() {
 	const queryClient = useQueryClient();
 	return async () => {
-		await Promise.all([
-			queryClient.refetchQueries({ queryKey: queryKeys.announcements }),
-			queryClient.refetchQueries({ queryKey: queryKeys.announcementTags }),
-		]);
+		await queryClient.refetchQueries({ queryKey: queryKeys.announcements });
 	};
 }
 
@@ -136,14 +109,6 @@ export function usePrefetchNavQueries() {
 	const queryClient = useQueryClient();
 
 	return {
-		prefetchPatches: () => {
-			dev_log('Prefetch', 'patches');
-			queryClient.prefetchQuery({
-				queryKey: queryKeys.patches,
-				queryFn: fetchPatches,
-				staleTime: STALE_TIMES.SEMI_DYNAMIC,
-			});
-		},
 		prefetchContributors: () => {
 			dev_log('Prefetch', 'contributors');
 			queryClient.prefetchQuery({

@@ -24,9 +24,7 @@ export const queryKeys = {
 	team: ['team'] as const,
 	manager: ['manager'] as const,
 	contributors: ['contributors'] as const,
-	patches: ['patches'] as const,
 	announcements: ['announcements'] as const,
-	announcementTags: ['announcement-tags'] as const,
 	announcement: (id: number) => ['announcement', id] as const,
 } as const;
 

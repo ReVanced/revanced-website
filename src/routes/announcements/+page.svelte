@@ -11,12 +11,11 @@
 	import AnnouncementCard from '$components/organisms/AnnouncementCard.svelte';
 	import IconChevron from 'svelte-material-icons/ChevronDown.svelte';
 	import IconAdd from 'svelte-material-icons/Plus.svelte';
-	import { useAnnouncementsQuery, useAnnouncementTagsQuery, readAnnouncements, auth, announcementPolling } from '$stores';
+	import { useAnnouncementsQuery, readAnnouncements, auth, announcementPolling } from '$stores';
 	import { debounce, isArchived, isScheduled } from '$lib/utils';
 	import { createFilter } from '$lib/utils/filter';
 	import type { Announcement } from '$api';
 	const announcementsQuery = useAnnouncementsQuery({ enablePolling: true });
-	const announcementTagsQuery = useAnnouncementTagsQuery();
 
 	const initialParams = browser ? new URL(window.location.href).searchParams : new URLSearchParams();
 	let searchTerm = $state(initialParams.get('s') ?? '');
@@ -81,7 +80,7 @@
 	);
 
 	let allTags = $derived(
-		(announcementTagsQuery.data ?? []).map(tag => tag.name)
+		[...new Set(announcements.flatMap((a: Announcement) => a.tags ?? []))]
 	);
 
 	let activeItems = $derived(

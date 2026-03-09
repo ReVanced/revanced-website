@@ -24,7 +24,6 @@
 	const pageLinks = [
 		{ label: 'Home', href: '/' },
 		{ label: 'Download', href: '/download' },
-		{ label: 'Patches', href: '/patches' },
 		{ label: 'Contributors', href: '/contributors' },
 		{ label: 'Donate', href: '/donate' }
 	];
