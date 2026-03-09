@@ -37,28 +37,28 @@ async function fetchJsonServer<T>(
 	const data = await response.json();
 	const result = schema.safeParse(data);
 	if (!result.success) {
-		console.error(`[API Server] Validation failed for ${endpoint}:`, result.error.issues);
+		console.error(`Validation failed for ${endpoint}:`, result.error.issues);
 		throw new Error(`Invalid response from ${endpoint}`);
 	}
 	return result.data;
 }
 
-export async function fetchAboutServer(fetchFn?: typeof fetch): Promise<About> {
+export async function fetchAbout(fetchFn?: typeof fetch): Promise<About> {
 	return fetchJsonServer('about', AboutSchema, fetchFn);
 }
 
-export async function fetchTeamServer(fetchFn?: typeof fetch): Promise<TeamMember[]> {
+export async function fetchTeam(fetchFn?: typeof fetch): Promise<TeamMember[]> {
 	return fetchJsonServer('team', TeamMembersSchema, fetchFn);
 }
 
-export async function fetchManagerServer(fetchFn?: typeof fetch): Promise<ManagerRelease> {
+export async function fetchManager(fetchFn?: typeof fetch): Promise<ManagerRelease> {
 	return fetchJsonServer('manager', ManagerReleaseSchema, fetchFn);
 }
 
-export async function fetchContributorsServer(fetchFn?: typeof fetch): Promise<Contributable[]> {
+export async function fetchContributors(fetchFn?: typeof fetch): Promise<Contributable[]> {
 	return fetchJsonServer('contributors', ContributablesSchema, fetchFn);
 }
 
-export async function fetchAnnouncementsServer(fetchFn?: typeof fetch): Promise<Announcement[]> {
+export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announcement[]> {
 	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn);
 }

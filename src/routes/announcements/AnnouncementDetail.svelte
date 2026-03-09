@@ -18,26 +18,38 @@
 	import Content from './Content.svelte';
 	import DeleteConfirmDialog from './DeleteConfirmDialog.svelte';
 
-	let { data } = $props();
+	type Props = {
+		id: string;
+		allAnnouncements: Announcement[];
+	};
 
-	let announcement = $state<Announcement | null>(null);
-	let error = $state<string | null>(null);
+	let { id, allAnnouncements }: Props = $props();
+
+	let isCreating = $derived(id === 'create');
+
+	let announcementId = $derived.by(() => {
+		if (isCreating) return null;
+		const idPart = id.split('-')[0];
+		const parsed = parseInt(idPart, 10);
+		return isNaN(parsed) ? null : parsed;
+	});
+
+	let announcement = $derived.by(() => {
+		if (isCreating || announcementId === null) return null;
+		return allAnnouncements.find((a) => a.id === announcementId) ?? null;
+	});
+
+	let error = $derived.by(() => {
+		if (isCreating) return null;
+		if (announcementId === null) return 'Announcement not found.';
+		if (!announcement) return 'Announcement not found.';
+		if (isScheduled(announcement.created_at) && !auth.isLoggedIn) return 'Announcement not found.';
+		return null;
+	});
 
 	let isEditing = $state(false);
 	let isPreviewing = $state(false);
 	let showDeleteConfirm = $state(false);
-
-	let isCreating = $derived(data.isCreating);
-
-	let announcementId = $derived.by(() => {
-		if (isCreating) return null;
-		const slug = page.params.slug ?? '';
-		if (!slug) return null;
-		const idPart = slug.split('-')[0];
-		const parsed = parseInt(idPart, 10);
-		return isNaN(parsed) ? null : parsed;
-	});
-	let isInvalidSlug = $derived(!isCreating && announcementId === null);
 
 	let titleInput = $state('');
 	let contentInput = $state('');
@@ -47,28 +59,13 @@
 	let tagsInput = $state<string[]>([]);
 	let draftInitialized = $state(false);
 
-	// Initialize from server data
+	// Correct URL slug
 	$effect(() => {
-		if (data.announcement) {
-			announcement = data.announcement;
-			if (isScheduled(data.announcement.created_at) && !auth.isLoggedIn) {
-				error = 'Announcement not found.';
-			} else {
-				error = null;
-			}
-		} else if (!isCreating) {
-			error = 'Announcement not found.';
-		}
-	});
-
-	// Correct URL slug without creating a reactive loop
-	$effect(() => {
-		if (!browser || !data.announcement?.title) return;
-		const { id, title } = data.announcement;
-		const expectedPath = `/announcements/${id}-${toSlug(title)}`;
+		if (!browser || !announcement?.title) return;
+		const expectedQuery = `?id=${announcement.id}-${toSlug(announcement.title)}`;
 		untrack(() => {
-			if (page.url.pathname !== expectedPath) {
-				replaceState(expectedPath, {});
+			if (page.url.search !== expectedQuery) {
+				replaceState(`/announcements${expectedQuery}`, {});
 			}
 		});
 	});
@@ -153,7 +150,6 @@
 				goto('/announcements');
 			} else if (announcementId !== null) {
 				const updated = await updateAnnouncement(announcementId, payload);
-				announcement = updated;
 				await invalidateAll();
 				isEditing = false;
 				isPreviewing = false;
@@ -223,16 +219,14 @@
 	onCancel={cancelDelete}
 />
 
-<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	{#if isInvalidSlug}
-		<p class="error-state">Announcement not found.</p>
-	{:else if error && !isCreating}
+<main class="detail-wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	{#if error}
 		<p class="error-state">{error}</p>
 	{:else if announcement || isCreating}
 		<article class="card">
 			<Content
 				{announcement}
-				allAnnouncements={data.announcements ?? []}
+				{allAnnouncements}
 				{isEditing}
 				{isCreating}
 				{isPreviewing}
@@ -256,7 +250,7 @@
 </main>
 
 <style>
-	.wrapper {
+	.detail-wrapper {
 		width: min(90%, 80rem);
 		margin-inline: auto;
 		padding-block: 2rem;
@@ -276,7 +270,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.wrapper {
+		.detail-wrapper {
 			padding-block: 1rem;
 		}
 

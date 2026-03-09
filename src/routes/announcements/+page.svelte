@@ -9,6 +9,7 @@
 	import Button from '$components/atoms/Button.svelte';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import AnnouncementCard from '$components/organisms/AnnouncementCard.svelte';
+	import AnnouncementDetail from './AnnouncementDetail.svelte';
 	import IconChevron from 'svelte-material-icons/ChevronDown.svelte';
 	import IconAdd from 'svelte-material-icons/Plus.svelte';
 	import { readAnnouncements, auth, announcementPolling } from '$stores';
@@ -17,6 +18,8 @@
 	import type { Announcement } from '$api';
 
 	let { data } = $props();
+
+	let selectedId = $derived(data.id);
 
 	const initialParams = browser ? new URL(window.location.href).searchParams : new URLSearchParams();
 	let searchTerm = $state(initialParams.get('s') ?? '');
@@ -128,6 +131,9 @@
 </script>
 
 <Page title="" description="">
+	{#if selectedId}
+		<AnnouncementDetail id={selectedId} allAnnouncements={announcements} />
+	{:else}
 	<div class="search-section">
 		<div class="search-inner">
 			<div class="search-row">
@@ -141,7 +147,7 @@
 					}}
 				/>
 				{#if auth.isLoggedIn}
-					<Button buttonStyle="filled" icon={IconAdd} href="/announcements/create">
+					<Button buttonStyle="filled" icon={IconAdd} href="/announcements?id=create">
 						Create
 					</Button>
 				{/if}
@@ -199,6 +205,7 @@
 {/if}
 
 	</main>
+	{/if}
 </Page>
 
 <style>
