@@ -16,7 +16,27 @@ import type {
 	Contributable,
 	Announcement
 } from '$api/types';
-import { queryKeys, STALE_TIMES, GC_TIMES, REFETCH_INTERVALS } from './queryClient';
+import { queryKeys } from './queryClient';
+
+// NOTE: This file is no longer used. All data fetching has been moved to
+// server load functions (+page.server.ts / +layout.server.ts).
+// Kept for reference only.
+
+const STALE_TIMES = {
+	STATIC: 5 * 60 * 1000,
+	SEMI_DYNAMIC: 2 * 60 * 1000,
+	DYNAMIC: 1 * 60 * 1000,
+} as const;
+
+const GC_TIMES = {
+	LONG: 24 * 60 * 60 * 1000,
+	MEDIUM: 60 * 60 * 1000,
+	SHORT: 30 * 60 * 1000,
+} as const;
+
+const REFETCH_INTERVALS = {
+	ANNOUNCEMENTS: 2 * 60 * 1000,
+} as const;
 
 export function useAboutQuery() {
 	return createQuery(() => ({

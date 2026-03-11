@@ -1,50 +1,55 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { goto, replaceState } from '$app/navigation';
+	import { goto, replaceState, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
 	import { formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
 	import { toSlug, isScheduled } from '$lib/utils';
 	import {
-		fetchAnnouncementById,
 		createAnnouncement,
 		updateAnnouncement,
 		deleteAnnouncement,
 		type AnnouncementPayload
 	} from '$lib/api/client';
-	import {
-		useAnnouncementsQuery,
-		useInvalidateAnnouncements,
-		auth
-	} from '$stores';
+	import { auth } from '$stores';
 	import Content from './Content.svelte';
 	import DeleteConfirmDialog from './DeleteConfirmDialog.svelte';
 
-	const announcementsQuery = useAnnouncementsQuery();
-	const invalidateAnnouncements = useInvalidateAnnouncements();
+	type Props = {
+		id: string;
+		allAnnouncements: Announcement[];
+	};
 
-	let announcement = $state<Announcement | null>(null);
-	let loading = $state(true);
-	let error = $state<string | null>(null);
+	let { id, allAnnouncements }: Props = $props();
+
+	let isCreating = $derived(id === 'create');
+
+	let announcementId = $derived.by(() => {
+		if (isCreating) return null;
+		const idPart = id.split('-')[0];
+		const parsed = parseInt(idPart, 10);
+		return isNaN(parsed) ? null : parsed;
+	});
+
+	let announcement = $derived.by(() => {
+		if (isCreating || announcementId === null) return null;
+		return allAnnouncements.find((a) => a.id === announcementId) ?? null;
+	});
+
+	let error = $derived.by(() => {
+		if (isCreating) return null;
+		if (announcementId === null) return 'Announcement not found.';
+		if (!announcement) return 'Announcement not found.';
+		if (isScheduled(announcement.created_at) && !auth.isLoggedIn) return 'Announcement not found.';
+		return null;
+	});
 
 	let isEditing = $state(false);
 	let isPreviewing = $state(false);
 	let showDeleteConfirm = $state(false);
-
-	let isCreating = $derived(page.params.slug === 'create');
-
-	let announcementId = $derived.by(() => {
-		if (isCreating) return null;
-		const slug = page.params.slug ?? '';
-		if (!slug) return null;
-		const idPart = slug.split('-')[0];
-		const parsed = parseInt(idPart, 10);
-		return isNaN(parsed) ? null : parsed;
-	});
-	let isInvalidSlug = $derived(!isCreating && announcementId === null);
 
 	let titleInput = $state('');
 	let contentInput = $state('');
@@ -53,6 +58,17 @@
 	let archivedAtInput = $state('');
 	let tagsInput = $state<string[]>([]);
 	let draftInitialized = $state(false);
+
+	// Correct URL slug
+	$effect(() => {
+		if (!browser || !announcement?.title) return;
+		const expectedQuery = `?id=${announcement.id}-${toSlug(announcement.title)}`;
+		untrack(() => {
+			if (page.url.search !== expectedQuery) {
+				replaceState(`/announcements${expectedQuery}`, {});
+			}
+		});
+	});
 
 	function initializeDraft() {
 		if (isCreating) {
@@ -80,52 +96,7 @@
 		if (isCreating && browser && auth.isLoggedIn && !draftInitialized) {
 			initializeDraft();
 			draftInitialized = true;
-			loading = false;
 		}
-	});
-
-	$effect(() => {
-		if (!browser || announcementId === null || isCreating) return;
-
-		loading = true;
-		error = null;
-
-		const abortController = new AbortController();
-
-		fetchAnnouncementById(announcementId, abortController.signal)
-			.then((data) => {
-				if (abortController.signal.aborted) return;
-				if (data && isScheduled(data.created_at) && !auth.isLoggedIn) {
-					error = 'Announcement not found.';
-					loading = false;
-					return;
-				}
-				
-				announcement = data;
-				loading = false;
-				if (data?.title) {
-					const expectedPath = `/announcements/${data.id}-${toSlug(data.title)}`;
-					if (page.url.pathname !== expectedPath) {
-						replaceState(expectedPath, {});
-					}
-				}
-			})
-			.catch((err) => {
-				if (abortController.signal.aborted) return;
-				const message = err instanceof Error ? err.message : 'Failed to load announcement';
-				if (message.includes('404')) {
-					error = 'Announcement not found.';
-				} else if (message.includes('401') || message.includes('403')) {
-					error = 'You do not have permission to view this announcement.';
-				} else {
-					error = 'Failed to load announcement. Please try again later.';
-				}
-				loading = false;
-			});
-
-		return () => {
-			abortController.abort();
-		};
 	});
 
 	function validateInputs(): boolean {
@@ -175,12 +146,11 @@
 		try {
 			if (isCreating) {
 				await createAnnouncement(payload);
-				await invalidateAnnouncements();
+				await invalidateAll();
 				goto('/announcements');
 			} else if (announcementId !== null) {
 				const updated = await updateAnnouncement(announcementId, payload);
-				announcement = updated;
-				await invalidateAnnouncements();
+				await invalidateAll();
 				isEditing = false;
 				isPreviewing = false;
 			}
@@ -204,7 +174,7 @@
 			await deleteAnnouncement(announcementId);
 			showDeleteConfirm = false;
 			await tick();
-			await invalidateAnnouncements();
+			await invalidateAll();
 			await goto('/announcements');
 		} catch (err) {
 			if (err instanceof Error && err.message === 'Unauthenticated') {
@@ -234,7 +204,7 @@
 	}
 
 	function handleBeforeUnload(e: BeforeUnloadEvent) {
-		if (isEditing || isCreating) {
+		if (isEditing || (isCreating && (titleInput.trim() || contentInput.trim() || authorInput.trim()))) {
 			e.preventDefault();
 			e.returnValue = '';
 		}
@@ -249,17 +219,14 @@
 	onCancel={cancelDelete}
 />
 
-<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-	{#if isInvalidSlug}
-		<p class="error-state">Announcement not found.</p>
-	{:else if loading && !isCreating}
-		<p class="loading-state">Loading...</p>
-	{:else if error && !isCreating}
+<main class="detail-wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+	{#if error}
 		<p class="error-state">{error}</p>
 	{:else if announcement || isCreating}
 		<article class="card">
 			<Content
 				{announcement}
+				{allAnnouncements}
 				{isEditing}
 				{isCreating}
 				{isPreviewing}
@@ -283,14 +250,13 @@
 </main>
 
 <style>
-	.wrapper {
+	.detail-wrapper {
 		width: min(90%, 80rem);
 		margin-inline: auto;
 		padding-block: 2rem;
 	}
 
-	.error-state,
-	.loading-state {
+	.error-state {
 		text-align: center;
 		color: var(--text-four);
 		padding: 4rem 1rem;
@@ -304,7 +270,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.wrapper {
+		.detail-wrapper {
 			padding-block: 1rem;
 		}
 

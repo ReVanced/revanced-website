@@ -27,6 +27,12 @@
 		// inline script to set theme before SvelteKit hydrates
 		const theme = JSON.parse(localStorage.getItem('theme')) || 'light';
 		document.documentElement.setAttribute('data-theme', theme);
+		// Enable transitions only after first paint to avoid load flash
+		requestAnimationFrame(function() {
+			requestAnimationFrame(function() {
+				document.documentElement.classList.add('themed');
+			});
+		});
 	</script>
 
 	<div style="display: contents">%sveltekit.body%</div>

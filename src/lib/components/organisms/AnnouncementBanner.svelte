@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { useAnnouncementsQuery, readAnnouncements } from '$stores';
+	import { readAnnouncements } from '$stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import Button from '$components/atoms/Button.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 	import CloseIcon from 'svelte-material-icons/Close.svelte';
-	import { isScheduled } from '$lib/utils';
+	import { isScheduled, buildAnnouncementPath } from '$lib/utils';
+	import type { Announcement } from '$lib/api/types';
 
-	const announcementsQuery = useAnnouncementsQuery();
+	let { announcements = [] }: { announcements: Announcement[] } = $props();
 
 	const latestUnreadAnnouncement = $derived.by(() => {
-		const announcements = announcementsQuery.data ?? [];
-
 		const nonArchived = announcements.filter(
 			(a) => !a.archived_at || new Date(a.archived_at) > new Date()
 		);
@@ -22,7 +22,7 @@
 
 	function handleClick() {
 		if (!latestUnreadAnnouncement) return;
-		goto(`/announcements/${latestUnreadAnnouncement.id}`);
+		goto(buildAnnouncementPath(latestUnreadAnnouncement.id, latestUnreadAnnouncement.title));
 		readAnnouncements.markAsRead(latestUnreadAnnouncement.id);
 	}
 
@@ -37,7 +37,7 @@
 	);
 </script>
 
-{#if latestUnreadAnnouncement}
+{#if browser && latestUnreadAnnouncement}
 	<div class="banner {bannerLevel}">
 		<div class="text">
 			<h1 class="title">We have an announcement</h1>

@@ -3,11 +3,10 @@
 	import { quintOut } from 'svelte/easing';
 	import Page from '$components/templates/Page.svelte';
 	import ContributorSection from '$components/organisms/ContributorSection.svelte';
-	import { useContributorsQuery } from '$stores';
 
-	const contributorsQuery = useContributorsQuery();
+	let { data } = $props();
 
-	const repositories = $derived(contributorsQuery.data ?? []);
+	const repositories = $derived(data.contributors ?? []);
 
 	const schemas = [
 		{

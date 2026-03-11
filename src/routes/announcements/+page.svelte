@@ -9,13 +9,17 @@
 	import Button from '$components/atoms/Button.svelte';
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import AnnouncementCard from '$components/organisms/AnnouncementCard.svelte';
+	import AnnouncementDetail from './AnnouncementDetail.svelte';
 	import IconChevron from 'svelte-material-icons/ChevronDown.svelte';
 	import IconAdd from 'svelte-material-icons/Plus.svelte';
-	import { useAnnouncementsQuery, readAnnouncements, auth, announcementPolling } from '$stores';
+	import { readAnnouncements, auth, announcementPolling } from '$stores';
 	import { debounce, isArchived, isScheduled } from '$lib/utils';
 	import { createFilter } from '$lib/utils/filter';
 	import type { Announcement } from '$api';
-	const announcementsQuery = useAnnouncementsQuery({ enablePolling: true });
+
+	let { data } = $props();
+
+	let selectedId = $derived(data.id);
 
 	const initialParams = browser ? new URL(window.location.href).searchParams : new URLSearchParams();
 	let searchTerm = $state(initialParams.get('s') ?? '');
@@ -67,10 +71,10 @@
 		replaceState(url.pathname + url.search, {});
 	}
 
-	let announcements = $derived(announcementsQuery.data ?? []);
+	let announcements = $derived(data.announcements ?? []);
 	$effect(() => {
-		if (announcementsQuery.data) {
-			announcementPolling.syncData(announcementsQuery.data);
+		if (announcements.length > 0) {
+			announcementPolling.syncData(announcements);
 		}
 	});
 	let visibleAnnouncements = $derived(
@@ -98,8 +102,6 @@
 	let filteredArchived = $derived(
 		announcementFilter(archivedItems, displayedTerm, { selectedTags })
 	);
-
-	let isLoading = $derived(announcementsQuery.isPending);
 
 	function onTagSelect(tag: string) {
 		const url = new URL(window.location.href);
@@ -129,6 +131,9 @@
 </script>
 
 <Page title="" description="">
+	{#if selectedId}
+		<AnnouncementDetail id={selectedId} allAnnouncements={announcements} />
+	{:else}
 	<div class="search-section">
 		<div class="search-inner">
 			<div class="search-row">
@@ -142,7 +147,7 @@
 					}}
 				/>
 				{#if auth.isLoggedIn}
-					<Button buttonStyle="filled" icon={IconAdd} href="/announcements/create">
+					<Button buttonStyle="filled" icon={IconAdd} href="/announcements?id=create">
 						Create
 					</Button>
 				{/if}
@@ -167,10 +172,8 @@
 					</div>
 				{/each}
 			</div>
-		{:else if announcementsQuery.isError && announcements.length === 0}
-			<p class="empty-state">Failed to load announcements. Please try again later.</p>
-		{:else if isLoading && announcements.length === 0}
-			<p class="empty-state">Loading announcements...</p>
+		{:else if announcements.length === 0}
+			<p class="empty-state">No announcements available.</p>
 		{/if}
 
 {#if filteredArchived.length > 0}
@@ -202,6 +205,7 @@
 {/if}
 
 	</main>
+	{/if}
 </Page>
 
 <style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { relativeTime } from '$lib/utils/relativeTime';
-	import { useAnnouncementsQuery, auth } from '$stores';
+	import { auth } from '$stores';
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import AdminButtons from './AdminButtons.svelte';
 	import IconArrowRight from 'svelte-material-icons/ArrowRight.svelte';
@@ -11,6 +11,7 @@
 
 	type Props = {
 		announcement: Announcement | null;
+		allAnnouncements: Announcement[];
 		isEditing: boolean;
 		isCreating: boolean;
 		isPreviewing: boolean;
@@ -30,6 +31,7 @@
 
 	let {
 		announcement,
+		allAnnouncements = [],
 		isEditing,
 		isCreating,
 		isPreviewing,
@@ -47,8 +49,6 @@
 		onToggleArchive
 	}: Props = $props();
 
-	const announcementsQuery = useAnnouncementsQuery();
-
 	let isEditMode = $derived(isEditing || isCreating);
 
 	// Derived display values
@@ -64,7 +64,6 @@
 	// Tags - derive available tags from all announcements
 	let newTag = $state('');
 	let availableTags = $derived.by(() => {
-		const allAnnouncements = announcementsQuery.data ?? [];
 		const existingTags = [...new Set(allAnnouncements.flatMap((a) => a.tags ?? []))];
 		const customTags = (tagsInput ?? []).filter((t) => !existingTags.includes(t));
 		return [...existingTags, ...customTags];
