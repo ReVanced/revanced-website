@@ -1,24 +1,30 @@
-<script>
-	import HeroImage from '$layout/Hero/HeroImage.svelte';
-	import Home from '$layout/Hero/HeroSection.svelte';
-	import Head from '$lib/components/Head.svelte';
-	import Wave from '$lib/components/Wave.svelte';
-	import { onMount } from 'svelte';
+<script lang="ts">
+	import { browser } from '$app/environment';
+	import Page from '$components/templates/Page.svelte';
+	import Button from '$components/atoms/Button.svelte';
+	import SocialButton from '$components/molecules/SocialButton.svelte';
+	import WaveBackground from '$components/organisms/WaveBackground.svelte';
+	import managerImg from '$assets/icons/manager.png';
+	import Download from 'svelte-material-icons/TrayArrowDown.svelte';
 
-	let bottomVisibility = true;
+	let { data } = $props();
+	let showSocials = $state(true);
 
-	const checkVisibility = () => {
-		const wave = document.querySelector('.wave');
-		bottomVisibility = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
-	};
+	let socialLinks = $derived(
+		(data.about?.socials ?? []).filter((item) => item.name !== 'Website')
+	);
 
-	onMount(() => {
-		checkVisibility(); // Initial check
+	function updateSocialsVisibility() {
+		const wave = document.querySelector('.wave-container');
+		showSocials = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
+	}
+
+	$effect(() => {
+		if (!browser) return;
+		updateSocialsVisibility();
 	});
-</script>
 
-<Head
-	schemas={[
+	const structuredData = [
 		{
 			'@context': 'https://schema.org',
 			'@type': 'Organization',
@@ -125,55 +131,172 @@
 				priceCurrency: 'USD'
 			}
 		}
-	]}
-/>
+	];
+</script>
 
-<svelte:window on:scroll={checkVisibility} on:resize={checkVisibility} />
+<svelte:head>
+	{#each structuredData as data}
+		{@html `<script type="application/ld+json">${JSON.stringify(data)}</script>`}
+	{/each}
+</svelte:head>
 
-<main class:visibility={!bottomVisibility}>
-	<div class="content">
-		<Home socialsVisibility={bottomVisibility} />
-		<div class="hero-img-container">
-			<HeroImage />
+<svelte:window onscroll={updateSocialsVisibility} onresize={updateSocialsVisibility} />
+
+<Page>
+	<main class:collapsed={!showSocials}>
+		<div class="landing-wrapper">
+			<article class="intro">
+				<h1>Continuing the <br />legacy of <span class="accent">Vanced.</span></h1>
+				<p class="description">
+					Customize your mobile experience through ReVanced <br /> by applying patches to your applications.
+				</p>
+
+				<nav class="actions">
+					<div class="primary-actions btn-row">
+						<Button buttonStyle="filled" icon={Download} href="/download">Download</Button>
+					</div>
+
+					<div class="external-links btn-row" class:hidden={!showSocials}>
+						{#key socialLinks.length}
+							{#each socialLinks as link (link.name)}
+								<SocialButton social={link} />
+							{/each}
+						{/key}
+					</div>
+				</nav>
+			</article>
+
+			<aside class="preview">
+				<figure class="device-frame">
+					<img src={managerImg} alt="Screenshot of ReVanced Manager" width="2880" height="6122" />
+				</figure>
+			</aside>
 		</div>
-	</div>
-</main>
-<Wave visibility={bottomVisibility} />
+	</main>
+	<WaveBackground visibility={showSocials} />
+</Page>
 
-<style lang="scss">
-	.content {
+<style>
+	main {
 		display: flex;
+		align-items: center;
+		flex-direction: column;
+		min-height: max(100vh, 600px);
+		overflow: hidden;
+		padding-block: 5rem;
+	}
+
+	main.collapsed {
+		min-height: auto;
+	}
+
+	.landing-wrapper {
+		display: flex;
+		gap: 1rem;
+		width: min(87%, 80rem);
 		align-items: flex-start;
 		justify-content: space-evenly;
-		width: min(87%, 80rem);
-		gap: 1rem;
 	}
-	main {
-		overflow: hidden;
-		padding: 5rem 0;
-		min-height: max(100vh, 600px);
+
+	.intro {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		row-gap: 1rem;
+	}
 
-		@media (max-height: 600px), (max-width: 450px) and (max-height: 780px) {
-			min-height: initial;
-		}
+	.intro h1 {
+		color: var(--text-one);
+	}
 
-		@media (max-width: 335px) {
-			padding: 2rem 0 !important;
-		}
+	.accent {
+		color: var(--primary);
+	}
 
-		&.visibility {
-			min-height: initial;
+	.actions {
+		display: flex;
+		flex-direction: column;
+		row-gap: 2.5rem;
+	}
+
+	.btn-row {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 1rem;
+		row-gap: 1rem;
+		user-select: none;
+	}
+
+	.external-links {
+		max-width: 30rem;
+		position: absolute;
+		bottom: 1rem;
+		transition: opacity 0.1s var(--bezier-one);
+	}
+
+	.external-links.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.preview {
+		z-index: 0;
+	}
+
+	.device-frame {
+		height: max(100vh, 600px);
+		margin: 0;
+		padding: 0.5rem;
+		border-radius: 1.75rem;
+		background: var(--surface-seven);
+		user-select: none;
+	}
+
+	.device-frame img {
+		height: 100%;
+		width: auto;
+		border-radius: 1.75rem;
+	}
+
+	@media screen and (min-width: 1100px) {
+		.intro {
+			padding-top: 10vh;
 		}
 	}
 
-	.hero-img-container {
-		z-index: 0;
-
-		@media (max-width: 1100px) {
+	@media screen and (max-width: 1100px) {
+		.preview {
 			display: none;
+		}
+	}
+
+	@media screen and (max-width: 450px) {
+		.primary-actions {
+			flex-direction: column;
+		}
+
+		.external-links {
+			left: 0;
+			justify-content: center;
+		}
+	}
+
+
+	@media screen and (max-width: 335px) {
+		main {
+			padding-block: 2rem !important;
+		}
+	}
+
+	@media screen and (max-height: 600px), 
+	       screen and (max-width: 450px) and (max-height: 780px) {
+		main {
+			min-height: auto;
+		}
+
+		.external-links {
+			position: static;
+			opacity: 1 !important;
+			pointer-events: auto;
 		}
 	}
 </style>
