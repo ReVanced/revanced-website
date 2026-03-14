@@ -1,7 +1,7 @@
 @import '@fontsource-variable/manrope';
 
 :root {
-    --font-main: 'Manrope', sans-serif;
+    --font-main: 'Manrope Variable', sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
 
     --z-behind: -1;
