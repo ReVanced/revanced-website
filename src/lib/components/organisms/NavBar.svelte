@@ -115,7 +115,7 @@
 				href="/announcements"
 				data-sveltekit-preload-data="hover"
 				class="rounded nav-button unselectable mobile-only"
-				class:active={page.url.pathname === '/announcements'}
+				class:active={page.url.pathname === '/announcements' && !page.url.searchParams.has('id')}
 			>
 				Announcements
 			</a>
@@ -126,7 +126,7 @@
 				href="/announcements"
 				data-sveltekit-preload-data="hover"
 				class="rounded nav-button unselectable desktop-only icon-btn"
-				class:active={page.url.pathname === '/announcements'}
+				class:active={page.url.pathname === '/announcements' && !page.url.searchParams.has('id')}
 				aria-label="Announcements"
 			>
 				<svg
