@@ -15,6 +15,7 @@
 	);
 
 	function updateSocialsVisibility() {
+		if (!browser) return;
 		const wave = document.querySelector('.wave-container');
 		showSocials = !(wave && wave.getBoundingClientRect().bottom < window.innerHeight - 1);
 	}
