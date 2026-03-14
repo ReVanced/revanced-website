@@ -100,7 +100,7 @@ Follow the steps below to build ReVanced Website:
 3. Run `npm i` to install the dependencies
 4. Run `npm run build` to build the project
 
-## 📜 Licence
+## 📜 License
 
 ReVanced Website is licensed under the GPLv3 license. Please see the [license file](LICENSE) for more information.
 [tl;dr](https://www.tldrlegal.com/license/gnu-general-public-license-v3-gpl-3) you may copy, distribute and modify ReVanced Website as long as you track changes/dates in source files.

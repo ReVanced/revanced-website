@@ -21,13 +21,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm i
+        run: pnpm install
 
       - name: Build
         env:
@@ -36,7 +41,7 @@ jobs:
           RV_DMCA_GUID: ${{ vars.RV_DMCA_GUID }}
           RV_STATUS_URL: ${{ vars.RV_STATUS_URL }}
           RV_EMAIL: ${{ vars.RV_EMAIL }}
-        run: npm run build
+        run: pnpm run build
 
       - name: Deploy
         id: deploy
@@ -44,7 +49,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=revanced-website
+          command: pages deploy .svelte-kit/cloudflare --project-name=revanced-website
 
       - name: Comment deployment URL
         if: ${{ github.event_name == 'pull_request' }}

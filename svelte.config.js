@@ -1,27 +1,23 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: [vitePreprocess()],
-
+	// Consult https://svelte.dev/docs/kit/integrations
+	// for more information about preprocessors
+	preprocess: vitePreprocess(),
 	kit: {
-		// adapter-static has vercel detection, but that does not let you set a custom 404 page easily.
-		// Instead, we have to use a wrapper that generates a vercel config if on vercel...
-		adapter: adapter({
-			pages: 'public',
-			fallback: '404.html'
-		}),
-		env: {
-			publicPrefix: 'RV'
-		},
+		adapter: adapter(),
 		alias: {
-			'$data/*': './src/data/*',
-			$lib: './src/lib',
-			'$lib/*': './src/lib/*',
-			'$layout/*': './src/layout/*',
-			'$images/*': './images/*',
-			'$util/*': './src/util/*'
+			$components: 'src/lib/components',
+			$assets: 'src/lib/assets',
+			$types: 'src/lib/types.ts',
+			$stores: 'src/lib/stores',
+			$api: 'src/lib/api',
+			$lib: 'src/lib'
+		},
+		env: {
+			publicPrefix: 'RV_'
 		}
 	}
 };
