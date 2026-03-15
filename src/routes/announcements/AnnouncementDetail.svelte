@@ -203,15 +203,30 @@
 		}
 	}
 
+	function hasUnsavedContent(): boolean {
+		return isEditing || (isCreating && (titleInput.trim() || contentInput.trim() || authorInput.trim()) ? true : false);
+	}
+
 	function handleBeforeUnload(e: BeforeUnloadEvent) {
-		if (isEditing || (isCreating && (titleInput.trim() || contentInput.trim() || authorInput.trim()))) {
+		if (hasUnsavedContent()) {
 			e.preventDefault();
 			e.returnValue = '';
 		}
 	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key !== 'Escape') return;
+
+		if (hasUnsavedContent()) {
+			if (!confirm('You have unsaved changes. Are you sure you want to leave?')) return;
+		}
+
+		e.preventDefault();
+		goto('/announcements');
+	}
 </script>
 
-<svelte:window onbeforeunload={handleBeforeUnload} />
+<svelte:window onbeforeunload={handleBeforeUnload} onkeydown={handleKeydown} />
 
 <DeleteConfirmDialog
 	bind:open={showDeleteConfirm}

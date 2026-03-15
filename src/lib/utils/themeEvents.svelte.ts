@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
 
-const setHue = (hue: number) => document.documentElement.style.setProperty('--hue', String(hue));
+const setHue = (hue: number) => {
+	if (browser) document.documentElement.style.setProperty('--hue', String(hue));
+};
 
 // comptus algorithm
 function getEaster(Y: number) {
