@@ -7,7 +7,7 @@
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
 	import { formatUTC, formatDateTimeLocal } from '$lib/utils/relativeTime';
-	import { toSlug, isScheduled } from '$lib/utils';
+	import { toSlug } from '$lib/utils';
 	import {
 		createAnnouncement,
 		updateAnnouncement,
@@ -43,7 +43,6 @@
 		if (isCreating) return null;
 		if (announcementId === null) return 'Announcement not found.';
 		if (!announcement) return 'Announcement not found.';
-		if (isScheduled(announcement.created_at) && !auth.isLoggedIn) return 'Announcement not found.';
 		return null;
 	});
 
@@ -104,10 +103,7 @@
 		const hasEmptyContent = !contentInput.trim();
 
 		if (hasEmptyTitle || hasEmptyContent) {
-			const issues = [
-				hasEmptyTitle && 'Title',
-				hasEmptyContent && 'Content'
-			].filter(Boolean);
+			const issues = [hasEmptyTitle && 'Title', hasEmptyContent && 'Content'].filter(Boolean);
 			alert(`${issues.join(' and ')} must be filled properly`);
 			return false;
 		}
@@ -117,7 +113,7 @@
 	function buildPayload(): AnnouncementPayload {
 		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : null;
 		const createdAtFormatted = createdAtInput ? String(formatUTC(createdAtInput)) : undefined;
-		
+
 		return {
 			title: titleInput.trim(),
 			content: contentInput.trim() || undefined,
