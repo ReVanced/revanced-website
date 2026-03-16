@@ -21,15 +21,15 @@
 
 	let selectedId = $derived(data.id);
 
-	const initialParams = browser ? new URL(window.location.href).searchParams : new URLSearchParams();
+	const initialParams = browser
+		? new URL(window.location.href).searchParams
+		: new URLSearchParams();
 	let searchTerm = $state(initialParams.get('s') ?? '');
 	let displayedTerm = $state(initialParams.get('s') ?? '');
 	let selectedTags = $state<string[]>(initialParams.getAll('tag'));
 	let archiveOpen = $state(false);
-	let archiveContentElement = $state<HTMLElement>();	
-	let archiveContentHeight = $derived(
-		archiveContentElement?.scrollHeight ?? 0
-	);
+	let archiveContentElement = $state<HTMLElement>();
+	let archiveContentHeight = $derived(archiveContentElement?.scrollHeight ?? 0);
 	const announcementFilter = createFilter<Announcement, { selectedTags: string[] }>(
 		{
 			keys: ['title', 'content', 'tags'],
@@ -44,7 +44,7 @@
 
 	$effect(() => {
 		if (!browser) return;
-		
+
 		const urlTags = page.url.searchParams.getAll('tag');
 		if (JSON.stringify(urlTags) !== JSON.stringify(selectedTags)) {
 			selectedTags = urlTags;
@@ -71,10 +71,13 @@
 		replaceState(url.pathname + url.search, {});
 	}
 
-	let announcements = $derived(data.announcements ?? []);
+	let announcements = $derived(
+		announcementPolling.data.length > 0 ? announcementPolling.data : (data.announcements ?? [])
+	);
+
 	$effect(() => {
-		if (announcements.length > 0) {
-			announcementPolling.syncData(announcements);
+		if ((data.announcements?.length ?? 0) > 0) {
+			announcementPolling.syncData(data.announcements);
 		}
 	});
 	let visibleAnnouncements = $derived(
@@ -83,9 +86,7 @@
 			: announcements.filter((item: Announcement) => !isScheduled(item.created_at))
 	);
 
-	let allTags = $derived(
-		[...new Set(announcements.flatMap((a: Announcement) => a.tags ?? []))]
-	);
+	let allTags = $derived([...new Set(announcements.flatMap((a: Announcement) => a.tags ?? []))]);
 
 	let activeItems = $derived(
 		visibleAnnouncements.filter((item: Announcement) => !isArchived(item.archived_at))
@@ -95,10 +96,8 @@
 		visibleAnnouncements.filter((item: Announcement) => isArchived(item.archived_at))
 	);
 
-	let filteredActive = $derived(
-		announcementFilter(activeItems, displayedTerm, { selectedTags })
-	);
-	
+	let filteredActive = $derived(announcementFilter(activeItems, displayedTerm, { selectedTags }));
+
 	let filteredArchived = $derived(
 		announcementFilter(archivedItems, displayedTerm, { selectedTags })
 	);
@@ -124,8 +123,8 @@
 	}
 
 	$effect(() => {
-		if (readAnnouncements.ids.length === 0 && announcements.length > 0) {
-			readAnnouncements.markManyAsRead(announcements.map((a) => a.id));
+		if (!readAnnouncements.hasTrackedAnnouncements && announcements.length > 0) {
+			readAnnouncements.markManyAsRead(announcements);
 		}
 	});
 </script>
@@ -134,77 +133,72 @@
 	{#if selectedId}
 		<AnnouncementDetail id={selectedId} allAnnouncements={announcements} />
 	{:else}
-	<div class="search-section">
-		<div class="search-inner">
-			<div class="search-row">
-				<Search
-					bind:value={searchTerm}
-					placeholder="Search for announcements"
-					onkeyup={debouncedUpdate}
-					onclear={() => {
-						displayedTerm = '';
-						syncUrlWithSearch();
-					}}
-				/>
-				{#if auth.isLoggedIn}
-					<Button buttonStyle="filled" icon={IconAdd} href="/announcements?id=create">
-						Create
-					</Button>
-				{/if}
+		<div class="search-section">
+			<div class="search-inner">
+				<div class="search-row">
+					<Search
+						bind:value={searchTerm}
+						placeholder="Search for announcements"
+						onkeyup={debouncedUpdate}
+						onclear={() => {
+							displayedTerm = '';
+							syncUrlWithSearch();
+						}}
+					/>
+					{#if auth.isLoggedIn}
+						<Button buttonStyle="filled" icon={IconAdd} href="/announcements?id=create">
+							Create
+						</Button>
+					{/if}
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-		{#if allTags.length > 0}
-			<TagsFilter
-				tags={allTags}
-				{selectedTags}
-				onTagClick={onTagSelect}
-			/>
-		{/if}
+		<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+			{#if allTags.length > 0}
+				<TagsFilter tags={allTags} {selectedTags} onTagClick={onTagSelect} />
+			{/if}
 
-		{#if filteredActive.length > 0}
-			<div class="cards">
-				{#each filteredActive as item (item.id)}
-					<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-						<AnnouncementCard announcement={item} />
+			{#if filteredActive.length > 0}
+				<div class="cards">
+					{#each filteredActive as item (item.id)}
+						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+							<AnnouncementCard announcement={item} />
+						</div>
+					{/each}
+				</div>
+			{:else if announcements.length === 0}
+				<p class="empty-state">No announcements available.</p>
+			{/if}
+
+			{#if filteredArchived.length > 0}
+				<button
+					type="button"
+					class="archive-toggle"
+					aria-expanded={archiveOpen}
+					onclick={toggleArchive}
+				>
+					<h4>Archive</h4>
+					<span class="archive-chevron" class:open={archiveOpen}>
+						<IconChevron size={24} />
+					</span>
+				</button>
+
+				<section
+					bind:this={archiveContentElement}
+					class="archive-content"
+					class:open={archiveOpen}
+					style="max-height: {archiveOpen ? `${archiveContentHeight}px` : '0px'}"
+					aria-hidden={!archiveOpen}
+				>
+					<div class="cards">
+						{#each filteredArchived as item (item.id)}
+							<AnnouncementCard announcement={item} />
+						{/each}
 					</div>
-				{/each}
-			</div>
-		{:else if announcements.length === 0}
-			<p class="empty-state">No announcements available.</p>
-		{/if}
-
-{#if filteredArchived.length > 0}
-    <button
-        type="button"
-        class="archive-toggle"
-        aria-expanded={archiveOpen}
-        onclick={toggleArchive}
-    >
-        <h4>Archive</h4>
-        <span class="archive-chevron" class:open={archiveOpen}>
-            <IconChevron size={24} />
-        </span>
-    </button>
-
-    <section
-        bind:this={archiveContentElement}
-        class="archive-content"
-        class:open={archiveOpen}
-        style="max-height: {archiveOpen ? `${archiveContentHeight}px` : '0px'}"
-        aria-hidden={!archiveOpen}
-    >
-        <div class="cards">
-            {#each filteredArchived as item (item.id)}
-                <AnnouncementCard announcement={item} />
-            {/each}
-        </div>
-    </section>
-{/if}
-
-	</main>
+				</section>
+			{/if}
+		</main>
 	{/if}
 </Page>
 
@@ -255,41 +249,40 @@
 		padding: 3rem 1rem;
 	}
 
-.archive-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.25rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-}
+	.archive-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 0.25rem;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		user-select: none;
+	}
 
-.archive-toggle h4 {
-    margin: 0;
-    color: var(--secondary);
-}
+	.archive-toggle h4 {
+		margin: 0;
+		color: var(--secondary);
+	}
 
-.archive-chevron {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--surface-six);
-    transition: transform 0.25s var(--bezier-one);
-}
+	.archive-chevron {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--surface-six);
+		transition: transform 0.25s var(--bezier-one);
+	}
 
-.archive-chevron.open {
-    transform: rotate(180deg);
-}
+	.archive-chevron.open {
+		transform: rotate(180deg);
+	}
 
-.archive-content {
-    overflow: hidden;
-    transition: max-height 0.5s var(--bezier-one);
-    will-change: max-height;
-}
-
+	.archive-content {
+		overflow: hidden;
+		transition: max-height 0.5s var(--bezier-one);
+		will-change: max-height;
+	}
 
 	@media (max-width: 768px) {
 		.cards {

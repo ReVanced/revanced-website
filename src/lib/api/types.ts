@@ -41,7 +41,6 @@ export type About = {
 	status: string;
 };
 
-
 export type GpgKey = {
 	id: string;
 	url: string;
@@ -55,14 +54,12 @@ export type TeamMember = {
 	gpg_key?: GpgKey | null;
 };
 
-
 export type ManagerRelease = {
 	version: string;
 	created_at: string;
 	description: string;
 	download_url: string;
 };
-
 
 export type Contributor = {
 	name: string;
@@ -86,4 +83,14 @@ export type Announcement = {
 	created_at: string;
 	archived_at: string | null;
 	level: number;
+};
+
+export type LatestAnnouncementId = {
+	tag: string | null;
+	id: number;
+};
+
+export type TaggedLatestAnnouncement = {
+	tag: string | null;
+	announcement: Announcement;
 };

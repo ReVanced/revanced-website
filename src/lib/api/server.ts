@@ -4,14 +4,16 @@ import type {
 	TeamMember,
 	ManagerRelease,
 	Contributable,
-	Announcement
+	Announcement,
+	TaggedLatestAnnouncement
 } from './types';
 import {
 	AboutSchema,
 	TeamMembersSchema,
 	ManagerReleaseSchema,
 	ContributablesSchema,
-	AnnouncementsSchema
+	AnnouncementsSchema,
+	LatestAnnouncementsSchema
 } from './schemas';
 import type { z } from 'zod';
 
@@ -61,4 +63,10 @@ export async function fetchContributors(fetchFn?: typeof fetch): Promise<Contrib
 
 export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announcement[]> {
 	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn);
+}
+
+export async function fetchLatestAnnouncements(
+	fetchFn?: typeof fetch
+): Promise<TaggedLatestAnnouncement[]> {
+	return fetchJsonServer('announcement/latest', LatestAnnouncementsSchema, fetchFn);
 }

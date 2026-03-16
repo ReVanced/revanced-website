@@ -87,6 +87,18 @@ export const AnnouncementSchema = z.object({
 	level: z.number().optional().default(0)
 });
 
+export const LatestAnnouncementIdSchema = z.object({
+	tag: z.string().nullable().optional().default(null),
+	id: z.number()
+});
+
+export const TaggedLatestAnnouncementSchema = z.object({
+	tag: z.string().nullable().optional().default(null),
+	announcement: AnnouncementSchema
+});
+
 export const TeamMembersSchema = z.array(TeamMemberSchema);
 export const ContributablesSchema = z.array(ContributableSchema);
 export const AnnouncementsSchema = z.array(AnnouncementSchema);
+export const LatestAnnouncementIdsSchema = z.array(LatestAnnouncementIdSchema);
+export const LatestAnnouncementsSchema = z.array(TaggedLatestAnnouncementSchema);

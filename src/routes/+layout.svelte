@@ -23,7 +23,7 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-	<AppShell about={data.about} announcements={data.announcements}>
+	<AppShell about={data.about} latestAnnouncements={data.latestAnnouncements}>
 		{@render children()}
 	</AppShell>
 </QueryClientProvider>

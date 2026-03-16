@@ -12,16 +12,17 @@
 	import LoginSuccessfulDialog from '$components/organisms/LoginSuccessfulDialog.svelte';
 	import Spinner from '$components/atoms/Spinner.svelte';
 	import type { WithChildren } from '$types';
-	import type { About, Announcement } from '$lib/api/types';
-	import {
-		auth,
-		modalsStack
-	} from '$stores';
+	import type { About, TaggedLatestAnnouncement } from '$lib/api/types';
+	import { auth, announcementPolling, modalsStack } from '$stores';
 	import { populateDynamicSettings } from '$lib/api/settings';
 
-	let { children, about = null, announcements = [] }: WithChildren & {
+	let {
+		children,
+		about = null,
+		latestAnnouncements = []
+	}: WithChildren & {
 		about: About | null;
-		announcements: Announcement[];
+		latestAnnouncements: TaggedLatestAnnouncement[];
 	} = $props();
 
 	const pageLinks = [
@@ -35,6 +36,14 @@
 	let socials = $derived(about?.socials ?? []);
 	let contactEmail = $derived(about?.contact?.email ?? '');
 	let apiIsDown = $derived(about === null);
+	let bannerAnnouncements = $derived(
+		announcementPolling.data.length > 0
+			? announcementPolling.data
+			: latestAnnouncements
+					.map(({ announcement }) => announcement)
+					.sort((left, right) => right.id - left.id)
+					.slice(0, 1)
+	);
 
 	let emailDialogOpen = $state(false);
 	let showLoadingSpinner = $state(false);
@@ -44,6 +53,14 @@
 		if (about) {
 			populateDynamicSettings(about);
 		}
+	});
+
+	$effect(() => {
+		announcementPolling.start();
+
+		return () => {
+			announcementPolling.stop();
+		};
 	});
 
 	$effect(() => {
@@ -78,7 +95,7 @@
 
 <div class="banner-wrapper" inert={hasModals ? true : undefined}>
 	<ApiStatusBanner {apiIsDown} />
-	<AnnouncementBanner {announcements} />
+	<AnnouncementBanner announcements={bannerAnnouncements} />
 </div>
 
 <NavBar inert={hasModals} />
