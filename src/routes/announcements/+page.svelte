@@ -71,9 +71,7 @@
 		replaceState(url.pathname + url.search, {});
 	}
 
-	let announcements = $derived(
-		announcementPolling.data.length > 0 ? announcementPolling.data : (data.announcements ?? [])
-	);
+	let announcements = $derived(data.announcements ?? []);
 
 	$effect(() => {
 		if ((data.announcements?.length ?? 0) > 0) {
