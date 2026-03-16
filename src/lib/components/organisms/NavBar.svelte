@@ -7,7 +7,6 @@
 	import logo from '$assets/icons/logo.svg';
 	import Settings from 'svelte-material-icons/Cog.svelte';
 	import SettingsDialog from '$components/organisms/SettingsDialog.svelte';
-	import LoginDialog from '$components/organisms/LoginDialog.svelte';
 	import { auth } from '$stores';
 
 	type Props = {
@@ -24,8 +23,6 @@
 	] as const;
 
 	let settingsOpen = $state(false);
-	let loginOpen = $state(false);
-	let loginFromSettings = $state(false);
 	let menuOpen = $state(false);
 	let scrollY = $state(0);
 
@@ -38,28 +35,13 @@
 
 	$effect(() => {
 		if (auth.loginModalRequested) {
-			loginFromSettings = false;
-			loginOpen = true;
+			settingsOpen = true;
 			auth.clearLoginModalRequest();
 		}
 	});
-
-	function handleLoginRequest() {
-		settingsOpen = false;
-		loginFromSettings = true;
-		loginOpen = true;
-	}
-
-	function handleLoginClose() {
-		loginOpen = false;
-		if (loginFromSettings) {
-			settingsOpen = true;
-			loginFromSettings = false;
-		}
-	}
 </script>
 
-<svelte:window bind:scrollY={scrollY} />
+<svelte:window bind:scrollY />
 
 <a class="skip-nav" href="#main-content">Skip navigation</a>
 
@@ -94,69 +76,67 @@
 	{/if}
 
 	{#key menuOpen}
-	<div 
-		class="nav-drawer" 
-		class:open={menuOpen}
-		class:desktop-only={!menuOpen}
-		transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
-	>
-		<div class="nav-group main-nav">
-			{#each navItems as { href, label }}
-				<a 
-					{href}
+		<div
+			class="nav-drawer"
+			class:open={menuOpen}
+			class:desktop-only={!menuOpen}
+			transition:horizontalSlide={{ direction: 'inline', easing: expoOut, duration: 400 }}
+		>
+			<div class="nav-group main-nav">
+				{#each navItems as { href, label }}
+					<a
+						{href}
+						data-sveltekit-preload-data="hover"
+						class="rounded nav-button unselectable"
+						class:active={page.url.pathname === href}
+					>
+						{label}
+					</a>
+				{/each}
+				<a
+					href="/announcements"
 					data-sveltekit-preload-data="hover"
-					class="rounded nav-button unselectable" 
-					class:active={page.url.pathname === href}
+					class="rounded nav-button unselectable mobile-only"
+					class:active={page.url.pathname === '/announcements' && !page.url.searchParams.has('id')}
 				>
-					{label}
+					Announcements
 				</a>
-			{/each}
-			<a
-				href="/announcements"
-				data-sveltekit-preload-data="hover"
-				class="rounded nav-button unselectable mobile-only"
-				class:active={page.url.pathname === '/announcements' && !page.url.searchParams.has('id')}
-			>
-				Announcements
-			</a>
-		</div>
+			</div>
 
-		<div class="nav-group secondary-nav">
-			<a
-				href="/announcements"
-				data-sveltekit-preload-data="hover"
-				class="rounded nav-button unselectable desktop-only icon-btn"
-				class:active={page.url.pathname === '/announcements' && !page.url.searchParams.has('id')}
-				aria-label="Announcements"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					height="24px"
-					viewBox="0 -960 960 960"
-					width="24px"
-					fill="currentColor"
+			<div class="nav-group secondary-nav">
+				<a
+					href="/announcements"
+					data-sveltekit-preload-data="hover"
+					class="rounded nav-button unselectable desktop-only icon-btn"
+					class:active={page.url.pathname === '/announcements' && !page.url.searchParams.has('id')}
+					aria-label="Announcements"
 				>
-					<path
-						d="M720-440v-80h160v80H720Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM200-200v-160h-40q-33 0-56.5-23.5T80-440v-80q0-33 23.5-56.5T160-600h160l200-120v480L320-360h-40v160h-80Zm360-146v-268q27 24 43.5 58.5T620-480q0 41-16.5 75.5T560-346Z"
-					/>
-				</svg>
-			</a>
-			<button
-				type="button"
-				class="rounded nav-button unselectable settings-btn"
-				class:selected={settingsOpen}
-				onclick={() => (settingsOpen = true)}
-			>
-				<Settings size={20} color={settingsOpen ? 'var(--primary)' : 'var(--surface-six)'} />
-			</button>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						height="24px"
+						viewBox="0 -960 960 960"
+						width="24px"
+						fill="currentColor"
+					>
+						<path
+							d="M720-440v-80h160v80H720Zm48 280-128-96 48-64 128 96-48 64Zm-80-480-48-64 128-96 48 64-128 96ZM200-200v-160h-40q-33 0-56.5-23.5T80-440v-80q0-33 23.5-56.5T160-600h160l200-120v480L320-360h-40v160h-80Zm360-146v-268q27 24 43.5 58.5T620-480q0 41-16.5 75.5T560-346Z"
+						/>
+					</svg>
+				</a>
+				<button
+					type="button"
+					class="rounded nav-button unselectable settings-btn"
+					class:selected={settingsOpen}
+					onclick={() => (settingsOpen = true)}
+				>
+					<Settings size={20} color={settingsOpen ? 'var(--primary)' : 'var(--surface-six)'} />
+				</button>
+			</div>
 		</div>
-	</div>
 	{/key}
 </nav>
 
-<SettingsDialog bind:open={settingsOpen} onLoginRequest={handleLoginRequest} />
-
-<LoginDialog bind:open={loginOpen} onclose={handleLoginClose} />
+<SettingsDialog bind:open={settingsOpen} />
 
 <style>
 	.skip-nav {
