@@ -16,20 +16,19 @@
 		);
 		const visible = nonArchived.filter((a) => !isScheduled(a.created_at));
 
-		const latest = visible[0];
-		return latest && !readAnnouncements.isRead(latest.id) ? latest : undefined;
+		return visible.find((announcement) => !readAnnouncements.isRead(announcement));
 	});
 
 	function handleClick() {
 		if (!latestUnreadAnnouncement) return;
 		goto(buildAnnouncementPath(latestUnreadAnnouncement.id, latestUnreadAnnouncement.title));
-		readAnnouncements.markAsRead(latestUnreadAnnouncement.id);
+		readAnnouncements.markAsRead(latestUnreadAnnouncement);
 	}
 
 	function handleDismiss(e: MouseEvent) {
 		e.stopPropagation();
 		if (!latestUnreadAnnouncement) return;
-		readAnnouncements.markAsRead(latestUnreadAnnouncement.id);
+		readAnnouncements.markAsRead(latestUnreadAnnouncement);
 	}
 
 	const bannerLevel = $derived(

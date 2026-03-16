@@ -1,10 +1,89 @@
 import { browser } from '$app/environment';
 import { PersistedState } from 'runed';
-import type { Announcement } from '$api/types';
+import { fetchLatestAnnouncementIds, fetchLatestAnnouncements } from '$api/client';
+import type { Announcement, TaggedLatestAnnouncement } from '$api/types';
 
-const STORAGE_KEY = 'read_announcements';
+const STORAGE_KEY = 'read_announcements_latest_id';
+const LEGACY_STORAGE_KEY = 'read_announcements';
+const POLL_INTERVAL_MS = 2 * 60 * 1000;
 
-const readIds = new PersistedState<number[]>(STORAGE_KEY, [], {
+function sortAnnouncements(announcements: Announcement[]): Announcement[] {
+	return [...announcements].sort((left, right) => {
+		const rightTime = new Date(right.created_at).getTime();
+		const leftTime = new Date(left.created_at).getTime();
+
+		if (rightTime !== leftTime) {
+			return rightTime - leftTime;
+		}
+
+		return right.id - left.id;
+	});
+}
+
+function getHighestAnnouncementId(announcements: Array<{ id: number }>): number {
+	return announcements.reduce((highestId, announcement) => Math.max(highestId, announcement.id), 0);
+}
+
+function getLatestAnnouncement(
+	latestAnnouncements: TaggedLatestAnnouncement[]
+): Announcement | null {
+	if (latestAnnouncements.length === 0) return null;
+
+	return latestAnnouncements.reduce<Announcement | null>((latest, { announcement }) => {
+		if (!latest || announcement.id > latest.id) {
+			return announcement;
+		}
+
+		return latest;
+	}, null);
+}
+
+function mergeLatestAnnouncements(
+	announcements: Announcement[],
+	latestAnnouncements: Announcement[]
+): Announcement[] {
+	const byId = new Map(announcements.map((announcement) => [announcement.id, announcement]));
+
+	for (const announcement of latestAnnouncements) {
+		byId.set(announcement.id, announcement);
+	}
+
+	return sortAnnouncements([...byId.values()]);
+}
+
+const latestReadId = new PersistedState<number>(STORAGE_KEY, 0, {
+	serializer: {
+		serialize: (value: number) => JSON.stringify(value),
+		deserialize: (str: string) => {
+			try {
+				const parsed = JSON.parse(str);
+				if (typeof parsed === 'number') {
+					return parsed;
+				}
+
+				if (
+					parsed &&
+					typeof parsed === 'object' &&
+					!Array.isArray(parsed) &&
+					Object.values(parsed).every((id) => typeof id === 'number')
+				) {
+					const ids = Object.values(parsed).filter((id): id is number => typeof id === 'number');
+					return getHighestAnnouncementId(ids.map((id) => ({ id })));
+				}
+
+				if (Array.isArray(parsed) && parsed.every((id) => typeof id === 'number')) {
+					return getHighestAnnouncementId(parsed.map((id) => ({ id })));
+				}
+
+				return 0;
+			} catch {
+				return 0;
+			}
+		}
+	}
+});
+
+const legacyReadIds = new PersistedState<number[]>(LEGACY_STORAGE_KEY, [], {
 	serializer: {
 		serialize: JSON.stringify,
 		deserialize: (str: string) => {
@@ -15,13 +94,16 @@ const readIds = new PersistedState<number[]>(STORAGE_KEY, [], {
 				}
 			} catch {
 				// ignore
-				}
+			}
 			return [];
 		}
 	}
 });
 
 let _announcements = $state<Announcement[]>([]);
+let latestFetchedId = $state(0);
+let pollingHandle = $state<ReturnType<typeof setInterval> | null>(null);
+let pollInFlight = $state(false);
 
 export const announcementPolling = {
 	get data(): Announcement[] {
@@ -29,55 +111,117 @@ export const announcementPolling = {
 	},
 
 	syncData(announcements: Announcement[]) {
-		_announcements = announcements;
+		_announcements = sortAnnouncements(announcements);
 		if (browser && announcements.length > 0) {
-			readAnnouncements.cleanup(announcements.map((a) => a.id));
+			readAnnouncements.migrateLegacyReads(announcements);
+		}
+	},
+
+	start() {
+		if (!browser || pollingHandle) return;
+
+		void this.pollLatest();
+		pollingHandle = setInterval(() => {
+			void this.pollLatest();
+		}, POLL_INTERVAL_MS);
+	},
+
+	stop() {
+		if (!pollingHandle) return;
+
+		clearInterval(pollingHandle);
+		pollingHandle = null;
+	},
+
+	async pollLatest() {
+		if (!browser || pollInFlight) return;
+
+		pollInFlight = true;
+
+		try {
+			const latestIds = await fetchLatestAnnouncementIds();
+			const latestId = getHighestAnnouncementId(latestIds);
+
+			if (
+				latestId === 0 ||
+				readAnnouncements.hasSeenLatest(latestId) ||
+				latestFetchedId >= latestId
+			) {
+				return;
+			}
+
+			const latestAnnouncements = await fetchLatestAnnouncements();
+			const latestAnnouncement = getLatestAnnouncement(latestAnnouncements);
+			if (!latestAnnouncement) return;
+
+			latestFetchedId = latestAnnouncement.id;
+
+			if (readAnnouncements.hasSeenLatest(latestAnnouncement.id)) return;
+
+			_announcements = mergeLatestAnnouncements(_announcements, [latestAnnouncement]);
+		} catch {
+			// ignore polling failures; announcements already degrade gracefully elsewhere
+		} finally {
+			pollInFlight = false;
 		}
 	}
 };
 
 class ReadAnnouncementsTracker {
-	get ids(): readonly number[] {
-		return readIds.current;
+	get latestId(): number {
+		return latestReadId.current;
 	}
 
-	private get idSet() {
-		return new Set(readIds.current);
+	get hasTrackedAnnouncements(): boolean {
+		return latestReadId.current > 0;
 	}
 
-	isRead(id: number) {
-		return this.idSet.has(id);
+	hasSeenLatest(id: number) {
+		return latestReadId.current >= id;
 	}
 
-	markAsRead(id: number) {
-		if (!this.idSet.has(id)) readIds.current = [...readIds.current, id];
+	isRead(announcement: Announcement) {
+		return latestReadId.current >= announcement.id;
 	}
 
-	markManyAsRead(ids: number[]) {
-		const current = this.idSet;
-		const newIds = ids.filter((id) => !current.has(id));
-		if (newIds.length) readIds.current = [...readIds.current, ...newIds];
+	markAsRead(announcement: Announcement) {
+		latestReadId.current = Math.max(latestReadId.current, announcement.id);
 	}
 
-	markAsUnread(id: number) {
-		readIds.current = readIds.current.filter((rid) => rid !== id);
+	markManyAsRead(announcements: Announcement[]) {
+		latestReadId.current = Math.max(latestReadId.current, getHighestAnnouncementId(announcements));
+	}
+
+	markAsUnread(announcement: Announcement) {
+		if (latestReadId.current === announcement.id) {
+			latestReadId.current = Math.max(
+				0,
+				..._announcements.filter((item) => item.id < announcement.id).map((item) => item.id)
+			);
+		}
 	}
 
 	clearAll() {
-		readIds.current = [];
+		latestReadId.current = 0;
 	}
 
-	countUnread(ids: number[]) {
-		return ids.filter((id) => !this.isRead(id)).length;
+	countUnread(announcements: Announcement[]) {
+		return announcements.filter((announcement) => !this.isRead(announcement)).length;
 	}
 
-	cleanup(currentAnnouncementIds: number[]) {
-		const currentSet = new Set(currentAnnouncementIds);
-		const storedIds = readIds.current;
-		const validIds = storedIds.filter((id) => currentSet.has(id));
-		if (validIds.length !== storedIds.length) {
-			readIds.current = validIds;
+	migrateLegacyReads(currentAnnouncements: Announcement[]) {
+		if (this.hasTrackedAnnouncements || legacyReadIds.current.length === 0) return;
+
+		const legacyReadIdSet = new Set(legacyReadIds.current);
+		const matchingAnnouncements = currentAnnouncements.filter((announcement) =>
+			legacyReadIdSet.has(announcement.id)
+		);
+
+		if (matchingAnnouncements.length > 0) {
+			this.markManyAsRead(matchingAnnouncements);
 		}
+
+		legacyReadIds.current = [];
 	}
 }
 

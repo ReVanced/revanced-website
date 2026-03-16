@@ -14,24 +14,21 @@
 
 	let { announcement }: Props = $props();
 
-	let isRead = $derived(readAnnouncements.isRead(announcement.id));
+	let isRead = $derived(readAnnouncements.isRead(announcement));
 
 	function handleClick() {
-		readAnnouncements.markAsRead(announcement.id);
+		readAnnouncements.markAsRead(announcement);
 	}
 
 	let href = $derived(buildAnnouncementPath(announcement.id, announcement.title));
 	let archived = $derived(isArchived(announcement.archived_at));
 	let createdTime = $derived(relativeTime(announcement.created_at));
-	let archivedTime = $derived(announcement.archived_at ? relativeTime(announcement.archived_at) : '');
+	let archivedTime = $derived(
+		announcement.archived_at ? relativeTime(announcement.archived_at) : ''
+	);
 </script>
 
-<a
-	{href}
-	class="card-link"
-	data-sveltekit-preload-data
-	onclick={handleClick}
->
+<a {href} class="card-link" data-sveltekit-preload-data onclick={handleClick}>
 	<article class="card">
 		{#if browser && !isRead && !archived}
 			<span class="new-header">NEW</span>
@@ -78,7 +75,9 @@
 		background-color: var(--surface-seven);
 		border: 1px solid var(--border);
 		border-radius: 12px;
-		transition: background-color 0.5s ease, transform 0.2s ease;
+		transition:
+			background-color 0.5s ease,
+			transform 0.2s ease;
 	}
 
 	.card:hover {

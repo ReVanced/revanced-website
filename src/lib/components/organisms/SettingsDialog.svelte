@@ -1,101 +1,59 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import Modal from '$components/molecules/Modal.svelte';
 	import Button from '$components/atoms/Button.svelte';
 	import Settings from 'svelte-material-icons/Cog.svelte';
-	import Reset from 'svelte-material-icons/Replay.svelte';
-	import {
-		DEFAULT_API_URL,
-		getDisplayApiUrl,
-		setApiBaseUrl,
-		clearCacheAndReload
-	} from '$api/settings';
-	import { isValidUrl } from '$lib/utils';
 	import { auth } from '$stores';
 
 	interface Props {
 		open: boolean;
-		onLoginRequest?: () => void;
 	}
 
-	let { open = $bindable(), onLoginRequest }: Props = $props();
+	let { open = $bindable() }: Props = $props();
 
-	let apiUrl = $state('');
-	let urlError = $state('');
-	let tick = $state(0);
-	let tickInterval: ReturnType<typeof setInterval> | null = null;
+	let loginForm: HTMLFormElement | undefined = $state();
+	let token = $state('');
+	let error = $state('');
+	let loading = $state(false);
 
 	$effect(() => {
-		if (open && browser) {
-			apiUrl = getDisplayApiUrl();
-			urlError = '';
-			tickInterval = setInterval(() => {
-				tick++;
-			}, 1000);
+		if (!open) {
+			token = '';
+			error = '';
+			loading = false;
 		}
-		return () => {
-			if (tickInterval) {
-				clearInterval(tickInterval);
-				tickInterval = null;
-			}
-		};
 	});
 
-	function formatExpiry(expiry: number | null, _tick: number): string {
-		if (!expiry) return '';
-		const now = Date.now();
-		const diff = expiry - now;
-		if (diff <= 0) return 'expired';
-		const totalSeconds = Math.floor(diff / 1000);
-		const minutes = Math.floor(totalSeconds / 60);
-		const hours = Math.floor(minutes / 60);
-		const days = Math.floor(hours / 24);
-		if (days > 0) {
-			return `${days} day${days > 1 ? 's' : ''} remaining`;
-		}
-		if (hours > 0) {
-			const remainingMinutes = minutes % 60;
-			if (remainingMinutes > 0) {
-				return `${hours}h ${remainingMinutes}m remaining`;
-			}
-			return `${hours} hour${hours > 1 ? 's' : ''} remaining`;
-		}
-		return `${minutes} minute${minutes !== 1 ? 's' : ''} remaining`;
-	}
-
-	let expiryText = $derived(
-		auth.isLoggedIn ? `Logged in · ${formatExpiry(auth.expiry, tick)}` : 'Login'
-	);
-
-	function handleResetInput() {
-		apiUrl = DEFAULT_API_URL;
-		urlError = '';
-	}
-
-	function handleReset() {
-		if (auth.isLoggedIn) {
-			auth.logout();
-		}
-		clearCacheAndReload();
-	}
-
-	function handleSave() {
-		const trimmedUrl = apiUrl.trim();
-		if (trimmedUrl && trimmedUrl !== DEFAULT_API_URL) {
-			if (!isValidUrl(trimmedUrl)) {
-				urlError = 'Please enter a valid URL';
-				return;
-			}
-		}
-		
-		urlError = '';
-		const urlToSave = trimmedUrl === DEFAULT_API_URL ? undefined : trimmedUrl;
-		setApiBaseUrl(urlToSave);
-		location.reload();
-	}
-
 	function handleLoginClick() {
-		onLoginRequest?.();
+		loginForm?.requestSubmit();
+	}
+
+	function handleLogoutClick() {
+		auth.logout();
+		open = false;
+	}
+
+	function handleFormSubmit(event: SubmitEvent) {
+		event.preventDefault();
+
+		error = '';
+		loading = true;
+
+		const result = auth.login(token);
+
+		loading = false;
+
+		if (result.success) {
+			open = false;
+			token = '';
+		} else {
+			error = result.error;
+		}
+	}
+
+	function handleTokenKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter' && !loading) {
+			loginForm?.requestSubmit();
+		}
 	}
 </script>
 
@@ -104,45 +62,46 @@
 		<Settings size={24} color="var(--surface-six)" />
 	{/snippet}
 	<div id="settings-content">
-		<p>Configure the API for this website.</p>
-		<div class="input-container">
-			<input
-				type="text"
-				class="api-input"
-				class:error={urlError}
-				placeholder="Enter API URL"
-				bind:value={apiUrl}
-			/>
-			<button
-				type="button"
-				class="reset-icon-btn"
-				onclick={handleResetInput}
-				title="Reset to default API URL"
-			>
-				<Reset size={24} color="var(--surface-six)" />
-			</button>
-		</div>
-		{#if urlError}
-			<p class="url-error">{urlError}</p>
+		{#if auth.isLoggedIn}
+			<p>You are logged in as a site administrator.</p>
+		{:else}
+			<div class="login-content">
+				<p>Site administrator access requires login.</p>
+
+				{#if error}
+					<p class="error-message">{error}</p>
+				{/if}
+
+				<form class="login-form" bind:this={loginForm} onsubmit={handleFormSubmit}>
+					<div class="input-group">
+						<input
+							type="password"
+							id="settings-login-token"
+							name="token"
+							autocomplete="off"
+							bind:value={token}
+							placeholder=" "
+							class="login-input rounded"
+							disabled={loading}
+							onkeydown={handleTokenKeydown}
+							required
+						/>
+						<label for="settings-login-token" class="login-label">API Token</label>
+					</div>
+				</form>
+			</div>
 		{/if}
 	</div>
 	{#snippet buttons()}
 		<div class="modal-buttons">
 			{#if auth.isLoggedIn}
-				<span class="expiry-text">{expiryText}</span>
+				<span class="status-text">Logged in</span>
+				<Button buttonStyle="text" onclick={handleLogoutClick}>Logout</Button>
 			{:else}
-				<Button buttonStyle="text" onclick={handleLoginClick}>
-					Login
+				<Button buttonStyle="text" onclick={handleLoginClick} disabled={loading}>
+					{loading ? 'Logging in...' : 'Login'}
 				</Button>
 			{/if}
-			<div class="right-buttons">
-				<Button buttonStyle="text" onclick={handleReset}>
-					Reset
-				</Button>
-				<Button buttonStyle="text" onclick={handleSave}>
-					Save
-				</Button>
-			</div>
 		</div>
 	{/snippet}
 </Modal>
@@ -156,89 +115,86 @@
 		color: var(--text-four);
 	}
 
-	.input-container {
-		position: relative;
+	.login-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 		width: 100%;
-		margin-bottom: 0.75rem;
+		margin-top: 0.5rem;
 	}
 
-	.api-input {
+	.login-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 		width: 100%;
-		padding: 1rem;
-		padding-right: 3rem;
-		margin-top: 1rem;
-		background-color: transparent;
+	}
+
+	.input-group {
+		position: relative;
+		width: 100%;
+	}
+
+	.login-input {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		background-color: var(--surface-three);
 		color: var(--secondary);
 		border: 1px solid var(--border);
-		border-radius: 12px;
 		font-family: inherit;
 		font-size: 0.95rem;
 		transition: border-color 0.3s var(--bezier-one);
 	}
 
-	.api-input::placeholder {
-		color: #6b7280;
-	}
-
-	.api-input:focus {
+	.login-input:focus {
 		border-color: var(--primary);
 		outline: none;
 	}
 
-	.api-input.error {
-		border-color: var(--error, #f44336);
-	}
-
-	.url-error {
-		color: var(--error, #f44336);
-		font-size: 0.85rem;
-		margin: 0;
-		text-align: center;
-	}
-
-	.reset-icon-btn {
+	.login-label {
 		position: absolute;
-		right: 12px;
-		top: 1rem;
-		bottom: 0;
-		height: fit-content;
-		margin: auto 0;
-		padding: 0;
-		background-color: transparent;
+		left: 1rem;
+		top: 50%;
+		transform: translateY(-50%);
 		color: var(--surface-six);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: opacity 0.3s var(--bezier-one);
-		border: none;
-		border-radius: 6px;
+		pointer-events: none;
+		user-select: none;
+		transition: 0.2s ease all;
+		background-color: transparent;
+		padding: 0 0.25rem;
 	}
 
-	.reset-icon-btn:hover {
-		opacity: 0.6;
-	}
-
-	.reset-icon-btn:active {
-		opacity: 0.4;
+	.login-input:focus ~ .login-label,
+	.login-input:not(:placeholder-shown) ~ .login-label {
+		top: 0;
+		font-size: 0.8rem;
+		color: var(--primary);
+		background-color: var(--surface-eight);
 	}
 
 	.modal-buttons {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-end;
 		align-items: center;
 		flex-wrap: wrap;
 		gap: 1rem;
 		width: 100%;
 	}
 
-	.right-buttons {
-		display: flex;
-		gap: 2rem;
-	}
-
-	.expiry-text {
+	.status-text {
 		color: var(--text-four);
 		font-size: 0.85rem;
+		margin-right: auto;
+	}
+
+	.error-message {
+		color: #ff6b6b;
+		font-size: 0.9rem;
+		margin: 0;
+		text-align: center;
+		background-color: rgba(255, 107, 107, 0.1);
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+		border: 1px solid rgba(255, 107, 107, 0.2);
 	}
 </style>

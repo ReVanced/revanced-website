@@ -5,7 +5,9 @@ import type {
 	TeamMember,
 	ManagerRelease,
 	Contributable,
-	Announcement
+	Announcement,
+	LatestAnnouncementId,
+	TaggedLatestAnnouncement
 } from './types';
 import {
 	AboutSchema,
@@ -13,7 +15,9 @@ import {
 	ManagerReleaseSchema,
 	ContributablesSchema,
 	AnnouncementsSchema,
-	AnnouncementSchema
+	AnnouncementSchema,
+	LatestAnnouncementIdsSchema,
+	LatestAnnouncementsSchema
 } from './schemas';
 import type { z } from 'zod';
 
@@ -67,23 +71,23 @@ async function mutateJson<T>(
 	schema?: z.ZodType<T>
 ): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
-	
+
 	const response = await fetch(buildUrl(endpoint), {
 		method,
 		headers: buildAuthHeaders(),
 		...(body !== undefined ? { body: JSON.stringify(body) } : {})
 	});
-	
+
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
-	
+
 	if (response.status === 204 || response.headers.get('content-length') === '0') {
 		return null;
 	}
-	
+
 	const data = await response.json();
-	
+
 	if (schema) {
 		const result = schema.safeParse(data);
 		if (!result.success) {
@@ -92,7 +96,7 @@ async function mutateJson<T>(
 		}
 		return result.data;
 	}
-	
+
 	return data as T;
 }
 
@@ -116,13 +120,35 @@ export async function fetchAnnouncements(): Promise<Announcement[]> {
 	return fetchJson<Announcement[]>('announcements', AnnouncementsSchema);
 }
 
-export async function fetchAnnouncementById(id: number, signal?: AbortSignal): Promise<Announcement> {
+export async function fetchLatestAnnouncementIds(
+	signal?: AbortSignal
+): Promise<LatestAnnouncementId[]> {
+	return fetchJson<LatestAnnouncementId[]>(
+		'announcements/latest/id',
+		LatestAnnouncementIdsSchema,
+		signal
+	);
+}
+
+export async function fetchLatestAnnouncements(
+	signal?: AbortSignal
+): Promise<TaggedLatestAnnouncement[]> {
+	return fetchJson<TaggedLatestAnnouncement[]>(
+		'announcement/latest',
+		LatestAnnouncementsSchema,
+		signal
+	);
+}
+
+export async function fetchAnnouncementById(
+	id: number,
+	signal?: AbortSignal
+): Promise<Announcement> {
 	const all = await fetchJson<Announcement[]>('announcements', AnnouncementsSchema, signal);
 	const found = all.find((a) => a.id === id);
 	if (!found) throw new Error('API error: 404 Not Found');
 	return found;
 }
-
 
 export type AnnouncementPayload = {
 	title: string;
@@ -135,13 +161,26 @@ export type AnnouncementPayload = {
 };
 
 export async function createAnnouncement(announcement: AnnouncementPayload): Promise<Announcement> {
-	const result = await mutateJson<Announcement>('POST', 'announcements', announcement, AnnouncementSchema);
+	const result = await mutateJson<Announcement>(
+		'POST',
+		'announcements',
+		announcement,
+		AnnouncementSchema
+	);
 	if (!result) throw new Error('Failed to create announcement');
 	return result;
 }
 
-export async function updateAnnouncement(id: number, announcement: AnnouncementPayload): Promise<Announcement> {
-	const result = await mutateJson<Announcement>('PATCH', `announcements/${id}`, announcement, AnnouncementSchema);
+export async function updateAnnouncement(
+	id: number,
+	announcement: AnnouncementPayload
+): Promise<Announcement> {
+	const result = await mutateJson<Announcement>(
+		'PATCH',
+		`announcements/${id}`,
+		announcement,
+		AnnouncementSchema
+	);
 	if (!result) throw new Error('Failed to update announcement');
 	return result;
 }
