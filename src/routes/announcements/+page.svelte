@@ -19,7 +19,7 @@
 
 	let { data } = $props();
 
-	let selectedId = $derived(data.id);
+	let selectedId = $derived(page.url.searchParams.get('id'));
 
 	const initialParams = browser
 		? new URL(window.location.href).searchParams
