@@ -5,7 +5,7 @@ import type {
 	ManagerRelease,
 	Contributable,
 	Announcement,
-	TaggedLatestAnnouncement
+	TaggedLatestAnnouncements
 } from './types';
 import {
 	AboutSchema,
@@ -67,6 +67,6 @@ export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announ
 
 export async function fetchLatestAnnouncements(
 	fetchFn?: typeof fetch
-): Promise<TaggedLatestAnnouncement[]> {
+): Promise<TaggedLatestAnnouncements[]> {
 	return fetchJsonServer('announcement/latest', LatestAnnouncementsSchema, fetchFn);
 }
