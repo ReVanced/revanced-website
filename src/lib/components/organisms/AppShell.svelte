@@ -12,7 +12,7 @@
 	import LoginSuccessfulDialog from '$components/organisms/LoginSuccessfulDialog.svelte';
 	import Spinner from '$components/atoms/Spinner.svelte';
 	import type { WithChildren } from '$types';
-	import type { About, TaggedLatestAnnouncement } from '$lib/api/types';
+	import type { About, TaggedLatestAnnouncements } from '$lib/api/types';
 	import { auth, announcementPolling, modalsStack } from '$stores';
 	import { populateDynamicSettings } from '$lib/api/settings';
 
@@ -22,7 +22,7 @@
 		latestAnnouncements = []
 	}: WithChildren & {
 		about: About | null;
-		latestAnnouncements: TaggedLatestAnnouncement[];
+		latestAnnouncements: TaggedLatestAnnouncements[];
 	} = $props();
 
 	const pageLinks = [

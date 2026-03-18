@@ -90,7 +90,7 @@ export type LatestAnnouncementId = {
 	id: number;
 };
 
-export type TaggedLatestAnnouncement = {
+export type TaggedLatestAnnouncements = {
 	tag: string | null;
 	announcement: Announcement;
 };

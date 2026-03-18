@@ -1,9 +1,7 @@
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = ({ url, data }) => {
-	const id = url.searchParams.get('id');
+export const load: PageLoad = ({ data }) => {
 	return {
-		id,
 		announcements: data.announcements
 	};
 };

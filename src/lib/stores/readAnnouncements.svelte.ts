@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { PersistedState } from 'runed';
 import { fetchLatestAnnouncementIds, fetchLatestAnnouncements } from '$api/client';
-import type { Announcement, TaggedLatestAnnouncement } from '$api/types';
+import type { Announcement, TaggedLatestAnnouncements } from '$api/types';
 
 const STORAGE_KEY = 'read_announcements_latest_id';
 const LEGACY_STORAGE_KEY = 'read_announcements';
@@ -25,7 +25,7 @@ function getHighestAnnouncementId(announcements: Array<{ id: number }>): number 
 }
 
 function getLatestAnnouncement(
-	latestAnnouncements: TaggedLatestAnnouncement[]
+	latestAnnouncements: TaggedLatestAnnouncements[]
 ): Announcement | null {
 	if (latestAnnouncements.length === 0) return null;
 

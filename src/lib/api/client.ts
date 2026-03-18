@@ -7,7 +7,7 @@ import type {
 	Contributable,
 	Announcement,
 	LatestAnnouncementId,
-	TaggedLatestAnnouncement
+	TaggedLatestAnnouncements
 } from './types';
 import {
 	AboutSchema,
@@ -132,9 +132,9 @@ export async function fetchLatestAnnouncementIds(
 
 export async function fetchLatestAnnouncements(
 	signal?: AbortSignal
-): Promise<TaggedLatestAnnouncement[]> {
-	return fetchJson<TaggedLatestAnnouncement[]>(
-		'announcement/latest',
+): Promise<TaggedLatestAnnouncements[]> {
+	return fetchJson<TaggedLatestAnnouncements[]>(
+		'announcements/latest',
 		LatestAnnouncementsSchema,
 		signal
 	);
