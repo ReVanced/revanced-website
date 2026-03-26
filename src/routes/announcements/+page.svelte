@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
 	import { goto, replaceState } from '$app/navigation';
 	import { page } from '$app/state';
@@ -84,8 +82,6 @@
 			: announcements.filter((item: Announcement) => !isScheduled(item.created_at))
 	);
 
-	let allTags = $derived([...new Set(announcements.flatMap((a: Announcement) => a.tags ?? []))]);
-
 	let activeItems = $derived(
 		visibleAnnouncements.filter((item: Announcement) => !isArchived(item.archived_at))
 	);
@@ -94,10 +90,20 @@
 		visibleAnnouncements.filter((item: Announcement) => isArchived(item.archived_at))
 	);
 
+	let activeTags = $derived(
+		[...new Set(activeItems.flatMap((a: Announcement) => a.tags ?? []))]
+	);
+
+	let archivedTags = $derived(
+		[...new Set(archivedItems.flatMap((a: Announcement) => a.tags ?? []))]
+	);
+
 	let filteredActive = $derived(announcementFilter(activeItems, displayedTerm, { selectedTags }));
 
+	let selectedArchivedTags = $state<string[]>([]);
+
 	let filteredArchived = $derived(
-		announcementFilter(archivedItems, displayedTerm, { selectedTags })
+		announcementFilter(archivedItems, displayedTerm, { selectedTags: selectedArchivedTags })
 	);
 
 	function onTagSelect(tag: string) {
@@ -114,6 +120,14 @@
 
 		goto(url.pathname + '?' + params.toString(), { keepFocus: true });
 		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
+	function onArchivedTagSelect(tag: string) {
+		if (selectedArchivedTags.includes(tag)) {
+			selectedArchivedTags = selectedArchivedTags.filter((t) => t !== tag);
+		} else {
+			selectedArchivedTags = [...selectedArchivedTags, tag];
+		}
 	}
 
 	function toggleArchive() {
@@ -152,15 +166,15 @@
 			</div>
 		</div>
 
-		<main class="wrapper" in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
-			{#if allTags.length > 0}
-				<TagsFilter tags={allTags} {selectedTags} onTagClick={onTagSelect} />
+		<section class="wrapper">
+			{#if activeTags.length > 0}
+				<TagsFilter tags={activeTags} {selectedTags} onTagClick={onTagSelect} />
 			{/if}
 
 			{#if filteredActive.length > 0}
 				<div class="cards">
 					{#each filteredActive as item (item.id)}
-						<div in:fly={{ y: 10, easing: quintOut, duration: 750 }}>
+						<div>
 							<AnnouncementCard announcement={item} />
 						</div>
 					{/each}
@@ -189,6 +203,15 @@
 					style="max-height: {archiveOpen ? `${archiveContentHeight}px` : '0px'}"
 					aria-hidden={!archiveOpen}
 				>
+					{#if archivedTags.length > 0}
+						<div class="archived-tags">
+							<TagsFilter
+								tags={archivedTags}
+								selectedTags={selectedArchivedTags}
+								onTagClick={onArchivedTagSelect}
+							/>
+						</div>
+					{/if}
 					<div class="cards">
 						{#each filteredArchived as item (item.id)}
 							<AnnouncementCard announcement={item} />
@@ -196,7 +219,7 @@
 					</div>
 				</section>
 			{/if}
-		</main>
+		</section>
 	{/if}
 </Page>
 
@@ -280,6 +303,10 @@
 		overflow: hidden;
 		transition: max-height 0.5s var(--bezier-one);
 		will-change: max-height;
+	}
+
+	.archived-tags {
+		padding-bottom: 1rem;
 	}
 
 	@media (max-width: 768px) {

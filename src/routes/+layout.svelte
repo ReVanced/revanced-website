@@ -16,7 +16,7 @@
 	useHolidayTheme();
 
 	let publishedAnnouncements = $derived(
-        (data.latestAnnouncements ?? []).filter(item => !isScheduled(item.created_at))
+        (data.latestAnnouncements ?? []).filter(item => !isScheduled(item.announcement.created_at))
     );
 
 	$effect(() => {

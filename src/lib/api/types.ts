@@ -38,7 +38,7 @@ export type About = {
 	contact: Contact;
 	socials: Social[];
 	donations: Donations;
-	status: string;
+	status?: string;
 };
 
 export type GpgKey = {
