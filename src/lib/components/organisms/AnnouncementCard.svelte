@@ -26,6 +26,17 @@
 	let archivedTime = $derived(
 		announcement.archived_at ? relativeTime(announcement.archived_at) : ''
 	);
+
+	let textContent = $derived(
+		announcement.content
+			? announcement.content
+					.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+					.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+					.replace(/<[^>]*>/g, ' ')
+					.replace(/\s+/g, ' ')
+					.trim()
+			: ''
+	);
 </script>
 
 <a {href} class="card-link" data-sveltekit-preload-data onclick={handleClick}>
@@ -48,15 +59,17 @@
 			</header>
 
 			<footer class="footer">
-				{#if announcement.content}
+				{#if textContent}
 					<div class="content-body">
-						{@html announcement.content}
+						{textContent}
 					</div>
 				{/if}
 
 				{#if announcement.tags && announcement.tags.length > 0}
-					<hr />
-					<TagsFilter tags={announcement.tags} clickable={false} />
+					<div class="tags-wrapper">
+						<hr />
+						<TagsFilter tags={announcement.tags} clickable={false} />
+					</div>
 				{/if}
 			</footer>
 		</div>
@@ -99,7 +112,6 @@
 	.content {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
 		gap: 12px;
 		height: 100%;
 		padding: 12px 16px;
@@ -134,7 +146,15 @@
 	}
 
 	.footer {
+		flex: 1;
 		gap: 12px;
+	}
+
+	.tags-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin-top: auto;
 	}
 
 	.content-body {

@@ -68,5 +68,5 @@ export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announ
 export async function fetchLatestAnnouncements(
 	fetchFn?: typeof fetch
 ): Promise<TaggedLatestAnnouncements[]> {
-	return fetchJsonServer('announcement/latest', LatestAnnouncementsSchema, fetchFn);
+	return fetchJsonServer('announcements/latest', LatestAnnouncementsSchema, fetchFn);
 }

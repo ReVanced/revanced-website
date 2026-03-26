@@ -118,7 +118,7 @@
 			title: titleInput.trim(),
 			content: contentInput.trim() || undefined,
 			author: authorInput.trim() || undefined,
-			tags: tagsInput.length > 0 ? tagsInput : undefined,
+			tags: tagsInput,
 			created_at: createdAtFormatted,
 			archived_at: typeof archivedAtFormatted === 'string' ? archivedAtFormatted : null
 		};

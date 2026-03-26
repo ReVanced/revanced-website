@@ -95,6 +95,15 @@
 			handleAddTag();
 		}
 	}
+
+	function renderHtml(node: HTMLElement, html: string) {
+		node.innerHTML = html;
+		return {
+			update(html: string) {
+				node.innerHTML = html;
+			}
+		};
+	}
 </script>
 
 <header class="header">
@@ -216,9 +225,7 @@
 		rows="8"
 	></textarea>
 {:else if displayContent}
-	<div class="content-display">
-		{@html displayContent}
-	</div>
+	<div class="content-display" use:renderHtml={displayContent}></div>
 {/if}
 
 <style>
