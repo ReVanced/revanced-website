@@ -39,8 +39,8 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5(svelte@5.53.12)
       svelte-meta-tags:
-        specifier: ^4.5.0
-        version: 4.5.0(svelte@5.53.12)
+        specifier: ^4.5.2
+        version: 4.5.2(svelte@5.53.12)
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -1528,8 +1528,8 @@ packages:
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0
 
-  svelte-meta-tags@4.5.0:
-    resolution: {integrity: sha512-E1/ULp4j8qwYFQeYBR0WypgOIsZkOnywAExFhufyl07eTvyCDQVW1HaNTSA0n2sX/Hw0jtti+TKuOml5dt2v9A==}
+  svelte-meta-tags@4.5.2:
+    resolution: {integrity: sha512-zU22mSbj0y/hr2neP6K+aGsXX3Ul7retfLOlr4Yq2Edm7PbZatCi4qYQvbK38/StbN6G0FQLR0cVlWN1RPhyyA==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -2911,7 +2911,7 @@ snapshots:
     dependencies:
       svelte: 5.53.12
 
-  svelte-meta-tags@4.5.0(svelte@5.53.12):
+  svelte-meta-tags@4.5.2(svelte@5.53.12):
     dependencies:
       schema-dts: 1.1.5
       svelte: 5.53.12
