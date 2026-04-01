@@ -18,11 +18,11 @@ importers:
         specifier: ^5.90.24
         version: 5.90.24
       '@tanstack/svelte-query':
-        specifier: ^6.1.0
-        version: 6.1.0(svelte@5.53.12)
+        specifier: ^6.1.12
+        version: 6.1.12(svelte@5.53.12)
       '@tanstack/svelte-query-persist-client':
         specifier: ^6.0.22
-        version: 6.0.22(@tanstack/svelte-query@6.1.0(svelte@5.53.12))(svelte@5.53.12)
+        version: 6.0.22(@tanstack/svelte-query@6.1.12(svelte@5.53.12))(svelte@5.53.12)
       fuse.js:
         specifier: ^7.1.0
         version: 7.1.0
@@ -852,6 +852,9 @@ packages:
   '@tanstack/query-core@5.90.20':
     resolution: {integrity: sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg==}
 
+  '@tanstack/query-core@5.96.1':
+    resolution: {integrity: sha512-u1yBgtavSy+N8wgtW3PiER6UpxcplMje65yXnnVgiHTqiMwLlxiw4WvQDrXyn+UD6lnn8kHaxmerJUzQcV/MMg==}
+
   '@tanstack/query-persist-client-core@5.92.1':
     resolution: {integrity: sha512-XGzB1lulFrGc8UwQnMI12r71R7ock/XOZvDaz3Fu3xrxCFwLHuFcABAOkIolS/6hFHe0pRdsBRXd4Q8ECqiCug==}
 
@@ -864,8 +867,8 @@ packages:
       '@tanstack/svelte-query': ^6.0.18
       svelte: ^5.25.0
 
-  '@tanstack/svelte-query@6.1.0':
-    resolution: {integrity: sha512-iKeMaBalk5NeRvp1Y2LgtG3j9HCeLcTEpfsyM+jL1wASnW/EYdCqyyotMKkOY4SNsnBpPDM5zrmstMn6tOzKFQ==}
+  '@tanstack/svelte-query@6.1.12':
+    resolution: {integrity: sha512-VCw4AtkBg8E8clDJKPn5anDONIrZfdMfaTfTWT3UKMs7gbouihDJPhA/wMb9RjOGFJHODTLrugxZ6XYw4bmhqw==}
     peerDependencies:
       svelte: ^5.25.0
 
@@ -2193,6 +2196,8 @@ snapshots:
 
   '@tanstack/query-core@5.90.20': {}
 
+  '@tanstack/query-core@5.96.1': {}
+
   '@tanstack/query-persist-client-core@5.92.1':
     dependencies:
       '@tanstack/query-core': 5.90.20
@@ -2202,15 +2207,15 @@ snapshots:
       '@tanstack/query-core': 5.90.20
       '@tanstack/query-persist-client-core': 5.92.1
 
-  '@tanstack/svelte-query-persist-client@6.0.22(@tanstack/svelte-query@6.1.0(svelte@5.53.12))(svelte@5.53.12)':
+  '@tanstack/svelte-query-persist-client@6.0.22(@tanstack/svelte-query@6.1.12(svelte@5.53.12))(svelte@5.53.12)':
     dependencies:
       '@tanstack/query-persist-client-core': 5.92.1
-      '@tanstack/svelte-query': 6.1.0(svelte@5.53.12)
+      '@tanstack/svelte-query': 6.1.12(svelte@5.53.12)
       svelte: 5.53.12
 
-  '@tanstack/svelte-query@6.1.0(svelte@5.53.12)':
+  '@tanstack/svelte-query@6.1.12(svelte@5.53.12)':
     dependencies:
-      '@tanstack/query-core': 5.90.20
+      '@tanstack/query-core': 5.96.1
       svelte: 5.53.12
 
   '@tybys/wasm-util@0.10.1':
