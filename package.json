@@ -45,6 +45,6 @@
 		"runed": "^0.37.1",
 		"svelte-material-icons": "^3.0.5",
 		"svelte-meta-tags": "^4.5.0",
-		"zod": "^4.3.6"
+		"zod": "^4.4.1"
 	}
 }
