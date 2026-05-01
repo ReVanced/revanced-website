@@ -35,7 +35,7 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/manrope": "^5.2.8",
-		"@tanstack/query-persist-client-core": "^5.92.1",
+		"@tanstack/query-persist-client-core": "^5.100.7",
 		"@tanstack/query-sync-storage-persister": "^5.90.24",
 		"@tanstack/svelte-query": "^6.1.0",
 		"@tanstack/svelte-query-persist-client": "^6.0.22",
