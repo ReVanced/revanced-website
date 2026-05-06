@@ -15,7 +15,7 @@
 
 	let expanded = $state(true);
 
-	const botNames = ['semantic-release-bot', 'revanced-bot'];
+	const botNames = ['semantic-release-bot', 'revanced-bot', 'dependabot[bot]', 'github-actions[bot]', 'pre-commit-ci[bot]'];
 	let filteredContributors = $derived(
 		contributors.filter((c) => !botNames.includes(c.name))
 	);
