@@ -1,54 +1,11 @@
-import { browser } from '$app/environment';
 import { PersistedState } from 'runed';
-import { fetchLatestAnnouncementIds, fetchLatestAnnouncements } from '$api/client';
-import type { Announcement, TaggedLatestAnnouncements } from '$api/types';
+import type { Announcement } from '$api/types';
 
 const STORAGE_KEY = 'read_announcements_latest_id';
 const LEGACY_STORAGE_KEY = 'read_announcements';
-const POLL_INTERVAL_MS = 2 * 60 * 1000;
-
-function sortAnnouncements(announcements: Announcement[]): Announcement[] {
-	return [...announcements].sort((left, right) => {
-		const rightTime = new Date(right.created_at).getTime();
-		const leftTime = new Date(left.created_at).getTime();
-
-		if (rightTime !== leftTime) {
-			return rightTime - leftTime;
-		}
-
-		return right.id - left.id;
-	});
-}
 
 function getHighestAnnouncementId(announcements: Array<{ id: number }>): number {
 	return announcements.reduce((highestId, announcement) => Math.max(highestId, announcement.id), 0);
-}
-
-function getLatestAnnouncement(
-	latestAnnouncements: TaggedLatestAnnouncements[]
-): Announcement | null {
-	if (latestAnnouncements.length === 0) return null;
-
-	return latestAnnouncements.reduce<Announcement | null>((latest, { announcement }) => {
-		if (!latest || announcement.id > latest.id) {
-			return announcement;
-		}
-
-		return latest;
-	}, null);
-}
-
-function mergeLatestAnnouncements(
-	announcements: Announcement[],
-	latestAnnouncements: Announcement[]
-): Announcement[] {
-	const byId = new Map(announcements.map((announcement) => [announcement.id, announcement]));
-
-	for (const announcement of latestAnnouncements) {
-		byId.set(announcement.id, announcement);
-	}
-
-	return sortAnnouncements([...byId.values()]);
 }
 
 const latestReadId = new PersistedState<number>(STORAGE_KEY, 0, {
@@ -100,73 +57,6 @@ const legacyReadIds = new PersistedState<number[]>(LEGACY_STORAGE_KEY, [], {
 	}
 });
 
-let _announcements = $state<Announcement[]>([]);
-let latestFetchedId = $state(0);
-let pollingHandle = $state<ReturnType<typeof setInterval> | null>(null);
-let pollInFlight = $state(false);
-
-export const announcementPolling = {
-	get data(): Announcement[] {
-		return _announcements;
-	},
-
-	syncData(announcements: Announcement[]) {
-		_announcements = sortAnnouncements(announcements);
-		if (browser && announcements.length > 0) {
-			readAnnouncements.migrateLegacyReads(announcements);
-		}
-	},
-
-	start() {
-		if (!browser || pollingHandle) return;
-
-		void this.pollLatest();
-		pollingHandle = setInterval(() => {
-			void this.pollLatest();
-		}, POLL_INTERVAL_MS);
-	},
-
-	stop() {
-		if (!pollingHandle) return;
-
-		clearInterval(pollingHandle);
-		pollingHandle = null;
-	},
-
-	async pollLatest() {
-		if (!browser || pollInFlight) return;
-
-		pollInFlight = true;
-
-		try {
-			const latestIds = await fetchLatestAnnouncementIds();
-			const latestId = getHighestAnnouncementId(latestIds);
-
-			if (
-				latestId === 0 ||
-				readAnnouncements.hasSeenLatest(latestId) ||
-				latestFetchedId >= latestId
-			) {
-				return;
-			}
-
-			const latestAnnouncements = await fetchLatestAnnouncements();
-			const latestAnnouncement = getLatestAnnouncement(latestAnnouncements);
-			if (!latestAnnouncement) return;
-
-			latestFetchedId = latestAnnouncement.id;
-
-			if (readAnnouncements.hasSeenLatest(latestAnnouncement.id)) return;
-
-			_announcements = mergeLatestAnnouncements(_announcements, [latestAnnouncement]);
-		} catch {
-			// ignore polling failures; announcements already degrade gracefully elsewhere
-		} finally {
-			pollInFlight = false;
-		}
-	}
-};
-
 class ReadAnnouncementsTracker {
 	get latestId(): number {
 		return latestReadId.current;
@@ -190,15 +80,6 @@ class ReadAnnouncementsTracker {
 
 	markManyAsRead(announcements: Announcement[]) {
 		latestReadId.current = Math.max(latestReadId.current, getHighestAnnouncementId(announcements));
-	}
-
-	markAsUnread(announcement: Announcement) {
-		if (latestReadId.current === announcement.id) {
-			latestReadId.current = Math.max(
-				0,
-				..._announcements.filter((item) => item.id < announcement.id).map((item) => item.id)
-			);
-		}
 	}
 
 	clearAll() {

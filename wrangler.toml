@@ -2,3 +2,9 @@ name = "revanced-website"
 compatibility_date = "2026-03-14"
 pages_build_output_dir = ".svelte-kit/cloudflare"
 compatibility_flags = ["nodejs_compat"]
+
+# server-side persistence for the fallback URL from the /about endpoint.
+# We need this for the "recover: false" capture mechanism to also bite at the SSR layer (without it capture is browser-only)
+# [[kv_namespaces]]
+# binding = "FALLBACK_STORAGE"
+# id = ""

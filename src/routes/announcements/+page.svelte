@@ -12,7 +12,7 @@
 	import AnnouncementDetail from './AnnouncementDetail.svelte';
 	import IconChevron from 'svelte-material-icons/ChevronDown.svelte';
 	import IconAdd from 'svelte-material-icons/Plus.svelte';
-	import { readAnnouncements, auth, announcementPolling } from '$stores';
+	import { readAnnouncements, auth } from '$stores';
 	import { debounce, isArchived, isScheduled } from '$lib/utils';
 	import { createFilter } from '$lib/utils/filter';
 	import type { Announcement } from '$api';
@@ -73,11 +73,6 @@
 
 	let announcements = $derived(data.announcements ?? []);
 
-	$effect(() => {
-		if ((data.announcements?.length ?? 0) > 0) {
-			announcementPolling.syncData(data.announcements);
-		}
-	});
 	let visibleAnnouncements = $derived(
 		auth.isLoggedIn
 			? announcements
@@ -121,7 +116,9 @@
 	}
 
 	$effect(() => {
-		if (!readAnnouncements.hasTrackedAnnouncements && announcements.length > 0) {
+		if (announcements.length === 0) return;
+		readAnnouncements.migrateLegacyReads(announcements);
+		if (!readAnnouncements.hasTrackedAnnouncements) {
 			readAnnouncements.markManyAsRead(announcements);
 		}
 	});

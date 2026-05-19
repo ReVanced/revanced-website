@@ -13,7 +13,7 @@
 	import Spinner from '$components/atoms/Spinner.svelte';
 	import type { WithChildren } from '$types';
 	import type { About, TaggedLatestAnnouncements } from '$lib/api/types';
-	import { auth, announcementPolling, modalsStack } from '$stores';
+	import { auth, modalsStack } from '$stores';
 	import { populateDynamicSettings } from '$lib/api/settings';
 
 	let {
@@ -37,12 +37,10 @@
 	let contactEmail = $derived(about?.contact?.email ?? '');
 	let apiIsDown = $derived(about === null);
 	let bannerAnnouncements = $derived(
-		announcementPolling.data.length > 0
-			? announcementPolling.data
-			: latestAnnouncements
-					.map(({ announcement }) => announcement)
-					.sort((left, right) => right.id - left.id)
-					.slice(0, 1)
+		latestAnnouncements
+			.map(({ announcement }) => announcement)
+			.sort((left, right) => right.id - left.id)
+			.slice(0, 1)
 	);
 
 	let emailDialogOpen = $state(false);
@@ -53,14 +51,6 @@
 		if (about) {
 			populateDynamicSettings(about);
 		}
-	});
-
-	$effect(() => {
-		announcementPolling.start();
-
-		return () => {
-			announcementPolling.stop();
-		};
 	});
 
 	$effect(() => {
