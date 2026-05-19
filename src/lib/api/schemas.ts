@@ -32,6 +32,11 @@ export const BrandingSchema = z.object({
 	logo: z.string()
 });
 
+export const FallbackSchema = z.object({
+	url: z.url().nullable(),
+	recover: z.boolean()
+});
+
 export const AboutSchema = z.object({
 	name: z.string(),
 	about: z.string(),
@@ -41,7 +46,7 @@ export const AboutSchema = z.object({
 	socials: z.array(SocialSchema),
 	donations: DonationsSchema,
 	status: z.string(),
-	fallback_api_url: z.url().nullable().optional()
+	fallback: FallbackSchema.nullable().optional()
 });
 
 export const GpgKeySchema = z.object({
