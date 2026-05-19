@@ -1,4 +1,4 @@
-import { RV_API_URL } from '$env/static/public';
+import { RV_API_URL, RV_API_URL_FALLBACK } from '$env/static/public';
 import type {
 	About,
 	TeamMember,
@@ -15,15 +15,11 @@ import {
 	AnnouncementsSchema,
 	LatestAnnouncementsSchema
 } from './schemas';
+import { composeApiUrl } from './settings';
 import type { z } from 'zod';
 
-const API_VERSION = 'v5';
 const DEFAULT_MAX_AGE_SECONDS = 300;
-
-function buildServerUrl(endpoint: string): string {
-	endpoint = endpoint.replace(/^\/+/, '');
-	return `${RV_API_URL}/${API_VERSION}/${endpoint}`;
-}
+const MAX_RETRIES = 3;
 
 async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<Response> {
 	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
@@ -53,13 +49,33 @@ async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<R
 	return fresh;
 }
 
+async function fetchWithRetries(url: string, fetchFn: typeof fetch): Promise<Response> {
+	let lastError: unknown;
+	for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+		try {
+			return await fetchWithEdgeCache(url, fetchFn);
+		} catch (err) {
+			lastError = err;
+		}
+	}
+	throw lastError;
+}
+
+async function resilientFetch(endpoint: string, fetchFn: typeof fetch): Promise<Response> {
+	try {
+		return await fetchWithRetries(composeApiUrl(RV_API_URL, endpoint), fetchFn);
+	} catch (primaryErr) {
+		if (!RV_API_URL_FALLBACK) throw primaryErr;
+		return fetchWithRetries(composeApiUrl(RV_API_URL_FALLBACK, endpoint), fetchFn);
+	}
+}
+
 async function fetchJsonServer<T>(
 	endpoint: string,
 	schema: z.ZodType<T>,
 	fetchFn: typeof fetch = fetch
 ): Promise<T> {
-	const url = buildServerUrl(endpoint);
-	const response = await fetchWithEdgeCache(url, fetchFn);
+	const response = await resilientFetch(endpoint, fetchFn);
 
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
