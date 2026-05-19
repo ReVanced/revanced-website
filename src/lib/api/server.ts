@@ -16,10 +16,12 @@ import {
 	LatestAnnouncementsSchema
 } from './schemas';
 import { composeApiUrl } from './settings';
+import { getCurrentStorage } from './storage';
 import type { z } from 'zod';
 
 const DEFAULT_MAX_AGE_SECONDS = 300;
 const MAX_RETRIES = 3;
+const FALLBACK_STORAGE_KEY = 'fallback';
 
 async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<Response> {
 	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
@@ -61,12 +63,39 @@ async function fetchWithRetries(url: string, fetchFn: typeof fetch): Promise<Res
 	throw lastError;
 }
 
-async function resilientFetch(endpoint: string, fetchFn: typeof fetch): Promise<Response> {
+async function getServerActiveUrls(): Promise<{ primary: string; fallback: string | null }> {
+	const envFallback = RV_API_URL_FALLBACK || null;
+	const storage = getCurrentStorage();
+	if (!storage) return { primary: RV_API_URL, fallback: envFallback };
+
+	let stored: { url: string | null; recover: boolean } | null = null;
 	try {
-		return await fetchWithRetries(composeApiUrl(RV_API_URL, endpoint), fetchFn);
+		const raw = await storage.get(FALLBACK_STORAGE_KEY);
+		if (raw) {
+			const parsed = JSON.parse(raw);
+			if (typeof parsed === 'object' && parsed !== null) {
+				stored = {
+					url: typeof parsed.url === 'string' ? parsed.url : null,
+					recover: parsed.recover !== false
+				};
+			}
+		}
+	} catch {
+	}
+
+	if (stored && stored.recover === false && stored.url) {
+		return { primary: stored.url, fallback: null };
+	}
+	return { primary: RV_API_URL, fallback: stored?.url || envFallback };
+}
+
+async function resilientFetch(endpoint: string, fetchFn: typeof fetch): Promise<Response> {
+	const { primary, fallback } = await getServerActiveUrls();
+	try {
+		return await fetchWithRetries(composeApiUrl(primary, endpoint), fetchFn);
 	} catch (primaryErr) {
-		if (!RV_API_URL_FALLBACK) throw primaryErr;
-		return fetchWithRetries(composeApiUrl(RV_API_URL_FALLBACK, endpoint), fetchFn);
+		if (!fallback) throw primaryErr;
+		return fetchWithRetries(composeApiUrl(fallback, endpoint), fetchFn);
 	}
 }
 
@@ -91,7 +120,21 @@ async function fetchJsonServer<T>(
 }
 
 export async function fetchAbout(fetchFn?: typeof fetch): Promise<About> {
-	return fetchJsonServer('about', AboutSchema, fetchFn);
+	const about = await fetchJsonServer('about', AboutSchema, fetchFn);
+
+	const storage = getCurrentStorage();
+	if (storage) {
+		try {
+			if (about.fallback === null) {
+				await storage.delete(FALLBACK_STORAGE_KEY);
+			} else if (about.fallback !== undefined) {
+				await storage.set(FALLBACK_STORAGE_KEY, JSON.stringify(about.fallback));
+			}
+		} catch { // persistince failures must not break /about
+		}
+	}
+
+	return about;
 }
 
 export async function fetchTeam(fetchFn?: typeof fetch): Promise<TeamMember[]> {
