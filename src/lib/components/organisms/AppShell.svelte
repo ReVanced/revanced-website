@@ -15,6 +15,7 @@
 	import type { About, TaggedLatestAnnouncements } from '$lib/api/types';
 	import { auth, modalsStack } from '$stores';
 	import { populateDynamicSettings } from '$lib/api/settings';
+	import { startLatestAnnouncementsPolling } from '$stores/readAnnouncements.svelte';
 
 	let {
 		children,
@@ -36,8 +37,22 @@
 	let socials = $derived(about?.socials ?? []);
 	let contactEmail = $derived(about?.contact?.email ?? '');
 	let apiIsDown = $derived(about === null);
+
+	let polledLatest = $state<TaggedLatestAnnouncements[] | null>(null);
+
+	$effect(() => {
+		latestAnnouncements;
+		polledLatest = null;
+	});
+
+	$effect(() => {
+		return startLatestAnnouncementsPolling((data) => {
+			polledLatest = data;
+		});
+	});
+
 	let bannerAnnouncements = $derived(
-		latestAnnouncements
+		(polledLatest ?? latestAnnouncements)
 			.map(({ announcement }) => announcement)
 			.sort((left, right) => right.id - left.id)
 			.slice(0, 1)

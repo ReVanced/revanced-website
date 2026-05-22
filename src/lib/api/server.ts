@@ -16,46 +16,22 @@ import {
 	LatestAnnouncementsSchema
 } from './schemas';
 import { composeApiUrl } from './settings';
-import { getCurrentStorage } from './storage';
+import { createStorageFromPlatform, type Storage } from './storage';
 import type { z } from 'zod';
 
-const DEFAULT_MAX_AGE_SECONDS = 300;
+const CACHE_TTL_SECONDS = 300;
 const MAX_RETRIES = 3;
 const FALLBACK_STORAGE_KEY = 'fallback';
 
-async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<Response> {
-	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
-	if (!cache) return fetchFn(url);
-
-	const cacheKey = new Request(url);
-	const cached = await cache.match(cacheKey);
-	if (cached) return cached;
-
-	const fresh = await fetchFn(url);
-	if (!fresh.ok) return fresh;
-
-	const cc = fresh.headers.get('Cache-Control') ?? '';
-	if (/\bno-store\b/i.test(cc)) return fresh;
-
-	if (/\bmax-age\b/i.test(cc)) {
-		await cache.put(cacheKey, fresh.clone());
-	} else {
-		const body = await fresh.clone().arrayBuffer();
-		const headers = new Headers(fresh.headers);
-		headers.set('Cache-Control', `public, max-age=${DEFAULT_MAX_AGE_SECONDS}`);
-		await cache.put(
-			cacheKey,
-			new Response(body, { status: fresh.status, statusText: fresh.statusText, headers })
-		);
-	}
-	return fresh;
-}
+const CACHE_INIT = {
+	cf: { cacheTtlByStatus: { '200-299': CACHE_TTL_SECONDS } }
+} as RequestInit;
 
 async function fetchWithRetries(url: string, fetchFn: typeof fetch): Promise<Response> {
 	let lastError: unknown;
 	for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
 		try {
-			return await fetchWithEdgeCache(url, fetchFn);
+			return await fetchFn(url, CACHE_INIT);
 		} catch (err) {
 			lastError = err;
 		}
@@ -63,9 +39,10 @@ async function fetchWithRetries(url: string, fetchFn: typeof fetch): Promise<Res
 	throw lastError;
 }
 
-async function getServerActiveUrls(): Promise<{ primary: string; fallback: string | null }> {
+async function getServerActiveUrls(
+	storage: Storage | null
+): Promise<{ primary: string; fallback: string | null }> {
 	const envFallback = RV_API_URL_FALLBACK || null;
-	const storage = getCurrentStorage();
 	if (!storage) return { primary: RV_API_URL, fallback: envFallback };
 
 	let stored: { url: string | null; recover: boolean } | null = null;
@@ -89,8 +66,12 @@ async function getServerActiveUrls(): Promise<{ primary: string; fallback: strin
 	return { primary: RV_API_URL, fallback: stored?.url || envFallback };
 }
 
-async function resilientFetch(endpoint: string, fetchFn: typeof fetch): Promise<Response> {
-	const { primary, fallback } = await getServerActiveUrls();
+async function resilientFetch(
+	endpoint: string,
+	fetchFn: typeof fetch,
+	storage: Storage | null
+): Promise<Response> {
+	const { primary, fallback } = await getServerActiveUrls(storage);
 	try {
 		return await fetchWithRetries(composeApiUrl(primary, endpoint), fetchFn);
 	} catch (primaryErr) {
@@ -102,9 +83,10 @@ async function resilientFetch(endpoint: string, fetchFn: typeof fetch): Promise<
 async function fetchJsonServer<T>(
 	endpoint: string,
 	schema: z.ZodType<T>,
-	fetchFn: typeof fetch = fetch
+	fetchFn: typeof fetch = fetch,
+	storage: Storage | null = null
 ): Promise<T> {
-	const response = await resilientFetch(endpoint, fetchFn);
+	const response = await resilientFetch(endpoint, fetchFn, storage);
 
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
@@ -119,10 +101,13 @@ async function fetchJsonServer<T>(
 	return result.data;
 }
 
-export async function fetchAbout(fetchFn?: typeof fetch): Promise<About> {
-	const about = await fetchJsonServer('about', AboutSchema, fetchFn);
+export async function fetchAbout(
+	fetchFn?: typeof fetch,
+	platform?: App.Platform
+): Promise<About> {
+	const storage = createStorageFromPlatform(platform);
+	const about = await fetchJsonServer('about', AboutSchema, fetchFn, storage);
 
-	const storage = getCurrentStorage();
 	if (storage) {
 		try {
 			if (about.fallback === null) {
@@ -130,31 +115,50 @@ export async function fetchAbout(fetchFn?: typeof fetch): Promise<About> {
 			} else if (about.fallback !== undefined) {
 				await storage.set(FALLBACK_STORAGE_KEY, JSON.stringify(about.fallback));
 			}
-		} catch { // persistince failures must not break /about
+		} catch {
+			// persistence failures must not break /about
 		}
 	}
 
 	return about;
 }
 
-export async function fetchTeam(fetchFn?: typeof fetch): Promise<TeamMember[]> {
-	return fetchJsonServer('team', TeamMembersSchema, fetchFn);
-}
-
-export async function fetchManager(fetchFn?: typeof fetch): Promise<ManagerRelease> {
-	return fetchJsonServer('manager', ManagerReleaseSchema, fetchFn);
-}
-
-export async function fetchContributors(fetchFn?: typeof fetch): Promise<Contributable[]> {
-	return fetchJsonServer('contributors', ContributablesSchema, fetchFn);
-}
-
-export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announcement[]> {
-	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn);
-}
-
 export async function fetchLatestAnnouncements(
-	fetchFn?: typeof fetch
+	fetchFn?: typeof fetch,
+	platform?: App.Platform
 ): Promise<TaggedLatestAnnouncements[]> {
-	return fetchJsonServer('announcements/latest', LatestAnnouncementsSchema, fetchFn);
+	const storage = createStorageFromPlatform(platform);
+	return fetchJsonServer('announcements/latest', LatestAnnouncementsSchema, fetchFn, storage);
+}
+
+export async function fetchTeam(
+	fetchFn?: typeof fetch,
+	platform?: App.Platform
+): Promise<TeamMember[]> {
+	const storage = createStorageFromPlatform(platform);
+	return fetchJsonServer('team', TeamMembersSchema, fetchFn, storage);
+}
+
+export async function fetchManager(
+	fetchFn?: typeof fetch,
+	platform?: App.Platform
+): Promise<ManagerRelease> {
+	const storage = createStorageFromPlatform(platform);
+	return fetchJsonServer('manager', ManagerReleaseSchema, fetchFn, storage);
+}
+
+export async function fetchContributors(
+	fetchFn?: typeof fetch,
+	platform?: App.Platform
+): Promise<Contributable[]> {
+	const storage = createStorageFromPlatform(platform);
+	return fetchJsonServer('contributors', ContributablesSchema, fetchFn, storage);
+}
+
+export async function fetchAnnouncements(
+	fetchFn?: typeof fetch,
+	platform?: App.Platform
+): Promise<Announcement[]> {
+	const storage = createStorageFromPlatform(platform);
+	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn, storage);
 }
