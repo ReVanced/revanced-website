@@ -5,6 +5,9 @@ compatibility_flags = ["nodejs_compat"]
 
 # server-side persistence for the fallback URL from the /about endpoint.
 # We need this for the "recover: false" capture mechanism to also bite at the SSR layer (without it capture is browser-only)
-# [[kv_namespaces]]
-# binding = "FALLBACK_STORAGE"
-# id = ""
+# Pages cant define Durable Object classes in-project so the FallbackStorage class lives in a standalone Worker under workers/storage/
+# deploy that worker first then uncomment.
+# [[durable_objects.bindings]]
+# name = "FALLBACK_STORAGE"
+# class_name = "FallbackStorage"
+# script_name = "revanced-website-storage"

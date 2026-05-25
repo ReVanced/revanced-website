@@ -1,0 +1,11 @@
+name = "revanced-website-storage"
+main = "src/index.ts"
+compatibility_date = "2026-03-14"
+
+[[durable_objects.bindings]]
+name = "STORAGE"
+class_name = "FallbackStorage"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["FallbackStorage"]
