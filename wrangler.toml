@@ -5,9 +5,10 @@ compatibility_flags = ["nodejs_compat"]
 
 # server-side persistence for the fallback URL from the /about endpoint.
 # We need this for the "recover: false" capture mechanism to also bite at the SSR layer (without it capture is browser-only)
-# Pages cant define Durable Object classes in-project so the FallbackStorage class lives in a standalone Worker under workers/storage/
-# deploy that worker first then uncomment.
-# [[durable_objects.bindings]]
-# name = "FALLBACK_STORAGE"
-# class_name = "FallbackStorage"
-# script_name = "revanced-website-storage"
+# Pages cant host Durable Object classes and we agreed not to deploy a separate worker just for this so KV is the persistence layer.
+# the Storage interface in src/lib/api/storage.ts keeps the impl swappable if we ever migrate to DO.
+# Create the namespace with "wrangler kv namespace create FALLBACK_STORAGE", paste the returned id below, then uncomment.
+# until then the SSR path falls through to env-only behavior.
+# [[kv_namespaces]]
+# binding = "FALLBACK_STORAGE"
+# id = ""

@@ -10,10 +10,9 @@ declare global {
 		interface Platform {
 			env?: {
 				FALLBACK_STORAGE?: {
-					idFromName(name: string): unknown;
-					get(id: unknown): {
-						fetch(input: string, init?: RequestInit): Promise<Response>;
-					};
+					get(key: string): Promise<string | null>;
+					put(key: string, value: string): Promise<unknown>;
+					delete(key: string): Promise<unknown>;
 				};
 			};
 		}
