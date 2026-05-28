@@ -19,19 +19,43 @@ import { composeApiUrl } from './settings';
 import { createStorageFromPlatform, type Storage } from './storage';
 import type { z } from 'zod';
 
-const CACHE_TTL_SECONDS = 300;
+const DEFAULT_MAX_AGE_SECONDS = 300;
 const MAX_RETRIES = 3;
 const FALLBACK_STORAGE_KEY = 'fallback';
 
-const CACHE_INIT = {
-	cf: { cacheTtlByStatus: { '200-299': CACHE_TTL_SECONDS } }
-} as RequestInit;
+async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<Response> {
+	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
+	if (!cache) return fetchFn(url);
+
+	const cacheKey = new Request(url);
+	const cached = await cache.match(cacheKey);
+	if (cached) return cached;
+
+	const fresh = await fetchFn(url);
+	if (!fresh.ok) return fresh;
+
+	const cc = fresh.headers.get('Cache-Control')?.toLowerCase() ?? '';
+	if (/\bno-store\b|\bno-cache\b|\bprivate\b/.test(cc)) return fresh;
+
+	if (/\bmax-age\b/.test(cc)) {
+		await cache.put(cacheKey, fresh.clone());
+	} else {
+		const body = await fresh.clone().arrayBuffer();
+		const headers = new Headers(fresh.headers);
+		headers.set('Cache-Control', `public, max-age=${DEFAULT_MAX_AGE_SECONDS}`);
+		await cache.put(
+			cacheKey,
+			new Response(body, { status: fresh.status, statusText: fresh.statusText, headers })
+		);
+	}
+	return fresh;
+}
 
 async function fetchWithRetries(url: string, fetchFn: typeof fetch): Promise<Response> {
 	let lastError: unknown;
 	for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
 		try {
-			return await fetchFn(url, CACHE_INIT);
+			return await fetchWithEdgeCache(url, fetchFn);
 		} catch (err) {
 			lastError = err;
 		}
