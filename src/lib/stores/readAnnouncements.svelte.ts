@@ -1,67 +1,11 @@
-import { browser } from '$app/environment';
 import { PersistedState } from 'runed';
-import { LatestAnnouncementsSchema } from '$api/schemas';
-import { composeApiUrl, getApiUrl } from '$api/settings';
-import type { Announcement, TaggedLatestAnnouncements } from '$api/types';
+import type { Announcement } from '$api/types';
 
 const STORAGE_KEY = 'read_announcements_latest_id';
 const LEGACY_STORAGE_KEY = 'read_announcements';
 
-const DEFAULT_POLL_MS = 5 * 60 * 1000;
-const MIN_POLL_MS = 30 * 1000;
-
 function getHighestAnnouncementId(announcements: Array<{ id: number }>): number {
 	return announcements.reduce((highestId, announcement) => Math.max(highestId, announcement.id), 0);
-}
-
-function parseMaxAgeMs(response: Response): number {
-	const cc = response.headers.get('Cache-Control')?.toLowerCase() ?? '';
-	const m = cc.match(/\bmax-age\s*=\s*(\d+)/);
-	if (!m) return DEFAULT_POLL_MS;
-	return Math.max(MIN_POLL_MS, parseInt(m[1], 10) * 1000);
-}
-
-export function startLatestAnnouncementsPolling(
-	onUpdate: (data: TaggedLatestAnnouncements[]) => void
-): () => void {
-	if (!browser) return () => {};
-
-	let timer: ReturnType<typeof setTimeout> | null = null;
-	let canceled = false;
-
-	async function poll(): Promise<void> {
-		timer = null;
-		if (canceled) return;
-		let nextDelay = DEFAULT_POLL_MS;
-		try {
-			const response = await fetch(composeApiUrl(getApiUrl(), 'announcements/latest'));
-			if (response.ok) {
-				const data = await response.json();
-				const parsed = LatestAnnouncementsSchema.safeParse(data);
-				if (parsed.success) onUpdate(parsed.data);
-				nextDelay = parseMaxAgeMs(response);
-			}
-		} catch {
-		}
-		if (!canceled && document.visibilityState !== 'hidden') {
-			timer = setTimeout(poll, nextDelay);
-		}
-	}
-
-	const onVisibility = () => {
-		if (document.visibilityState === 'visible' && !timer && !canceled) {
-			void poll();
-		}
-	};
-	document.addEventListener('visibilitychange', onVisibility);
-
-	timer = setTimeout(poll, DEFAULT_POLL_MS);
-
-	return () => {
-		canceled = true;
-		if (timer) clearTimeout(timer);
-		document.removeEventListener('visibilitychange', onVisibility);
-	};
 }
 
 const latestReadId = new PersistedState<number>(STORAGE_KEY, 0, {
