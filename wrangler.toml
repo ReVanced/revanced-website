@@ -3,12 +3,11 @@ compatibility_date = "2026-03-14"
 pages_build_output_dir = ".svelte-kit/cloudflare"
 compatibility_flags = ["nodejs_compat"]
 
-# server-side persistence for the fallback URL from the /about endpoint.
-# We need this for the "recover: false" capture mechanism to also bite at the SSR layer (without it capture is browser-only)
-# Pages cant host Durable Object classes and we agreed not to deploy a separate worker just for this so KV is the persistence layer.
-# the Storage interface in src/lib/api/storage.ts keeps the impl swappable if we ever migrate to DO.
-# Create the namespace with "wrangler kv namespace create FALLBACK_STORAGE", paste the returned id below, then uncomment.
-# until then the SSR path falls through to env-only behavior.
-# [[kv_namespaces]]
-# binding = "FALLBACK_STORAGE"
-# id = ""
+# Server-side persistence for the fallback URL from the /about endpoint.
+# Required so the "recover: false" capture mechanism also applies at the SSR layer, without it capture is browser-only.
+# sveltekit does not yet support Durable Objects, so KV is the persistence layer instead of deploying a separate worker.
+# The Storage interface in src/lib/api/storage.ts keeps the implementation swappable once DO is supported.
+# The namespace id is injected by CI at deploy time from the KV_NAMESPACE_ID repository secret, probably worth looking at .github/workflows/deploy.yml.
+[[kv_namespaces]]
+binding = "STORAGE"
+id = "__KV_NAMESPACE_ID__"

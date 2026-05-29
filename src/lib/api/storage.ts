@@ -27,7 +27,29 @@ class CloudflareStorage implements Storage {
 }
 
 export function createStorageFromPlatform(platform: App.Platform | undefined): Storage | null {
-	const kv = platform?.env?.FALLBACK_STORAGE;
+	const kv = platform?.env?.STORAGE;
 	if (!kv) return null;
 	return new CloudflareStorage(kv);
+}
+
+export type StoredFallback = { url: string | null; recover: boolean };
+
+export function parseStoredFallback(raw: string | null): StoredFallback | null {
+	if (!raw) return null;
+	try {
+		return JSON.parse(raw) as StoredFallback;
+	} catch {
+		return null;
+	}
+}
+
+export function resolveActiveUrls(
+	stored: StoredFallback | null,
+	primary: string,
+	envFallback: string | null
+): { primary: string; fallback: string | null } {
+	if (stored && stored.recover === false && stored.url) {
+		return { primary: stored.url, fallback: null };
+	}
+	return { primary, fallback: stored?.url || envFallback };
 }
