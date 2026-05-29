@@ -25,26 +25,26 @@ const FALLBACK_STORAGE_KEY = 'fallback';
 
 async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<Response> {
 	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
-	if (!cache) return fetchFn(url);
 
-	const cacheKey = new Request(url);
-	const cached = await cache.match(cacheKey);
-	if (cached) return cached;
+	if (cache) {
+		const cached = await cache.match(url);
+		if (cached) return cached;
+	}
 
 	const fresh = await fetchFn(url);
-	if (!fresh.ok) return fresh;
+	if (!cache || !fresh.ok) return fresh;
 
-	const cc = fresh.headers.get('Cache-Control')?.toLowerCase() ?? '';
-	if (/\bno-store\b|\bno-cache\b|\bprivate\b/.test(cc)) return fresh;
+	const cacheControl = fresh.headers.get('Cache-Control')?.toLowerCase() ?? '';
+	if (/\bno-store\b|\bno-cache\b|\bprivate\b/.test(cacheControl)) return fresh;
 
-	if (/\bmax-age\b/.test(cc)) {
-		await cache.put(cacheKey, fresh.clone());
+	if (/\bmax-age\b/.test(cacheControl)) {
+		await cache.put(url, fresh.clone());
 	} else {
 		const body = await fresh.clone().arrayBuffer();
 		const headers = new Headers(fresh.headers);
 		headers.set('Cache-Control', `public, max-age=${DEFAULT_MAX_AGE_SECONDS}`);
 		await cache.put(
-			cacheKey,
+			url,
 			new Response(body, { status: fresh.status, statusText: fresh.statusText, headers })
 		);
 	}
@@ -90,7 +90,7 @@ async function getServerActiveUrls(
 	return { primary: RV_API_URL, fallback: stored?.url || envFallback };
 }
 
-async function resilientFetch(
+async function fetchWithFallback(
 	endpoint: string,
 	fetchFn: typeof fetch,
 	storage: Storage | null
@@ -110,7 +110,7 @@ async function fetchJsonServer<T>(
 	fetchFn: typeof fetch = fetch,
 	storage: Storage | null = null
 ): Promise<T> {
-	const response = await resilientFetch(endpoint, fetchFn, storage);
+	const response = await fetchWithFallback(endpoint, fetchFn, storage);
 
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);

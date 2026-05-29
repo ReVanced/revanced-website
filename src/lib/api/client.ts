@@ -45,7 +45,7 @@ async function tryWithRetries(url: string, init?: RequestInit): Promise<Response
 	throw lastError;
 }
 
-async function resilientFetch(endpoint: string, init?: RequestInit): Promise<Response> {
+async function fetchWithFallback(endpoint: string, init?: RequestInit): Promise<Response> {
 	try {
 		return await tryWithRetries(composeApiUrl(getApiUrl(), endpoint), init);
 	} catch (primaryErr) {
@@ -60,7 +60,7 @@ async function fetchJson<T>(
 	schema: z.ZodType<T>,
 	signal?: AbortSignal
 ): Promise<T> {
-	const response = await resilientFetch(endpoint, signal ? { signal } : undefined);
+	const response = await fetchWithFallback(endpoint, signal ? { signal } : undefined);
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
@@ -93,7 +93,7 @@ async function mutateJson<T>(
 ): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
 
-	const response = await resilientFetch(endpoint, {
+	const response = await fetchWithFallback(endpoint, {
 		method,
 		headers: buildAuthHeaders(),
 		...(body !== undefined ? { body: JSON.stringify(body) } : {})
