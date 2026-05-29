@@ -16,78 +16,25 @@ import {
 	LatestAnnouncementsSchema
 } from './schemas';
 import { composeApiUrl } from './settings';
-import { createStorageFromPlatform, type Storage } from './storage';
+import {
+	createStorageFromPlatform,
+	parseStoredFallback,
+	resolveActiveUrls,
+	type Storage
+} from './storage';
+import { createHttpCache, withRetries } from './http';
 import type { z } from 'zod';
 
-const DEFAULT_MAX_AGE_SECONDS = 300;
-const MAX_RETRIES = 3;
-const FALLBACK_STORAGE_KEY = 'fallback';
-
-async function fetchWithEdgeCache(url: string, fetchFn: typeof fetch): Promise<Response> {
-	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
-
-	if (cache) {
-		const cached = await cache.match(url);
-		if (cached) return cached;
-	}
-
-	const fresh = await fetchFn(url);
-	if (!cache || !fresh.ok) return fresh;
-
-	const cacheControl = fresh.headers.get('Cache-Control')?.toLowerCase() ?? '';
-	if (/\bno-store\b|\bno-cache\b|\bprivate\b/.test(cacheControl)) return fresh;
-
-	if (/\bmax-age\b/.test(cacheControl)) {
-		await cache.put(url, fresh.clone());
-	} else {
-		const body = await fresh.clone().arrayBuffer();
-		const headers = new Headers(fresh.headers);
-		headers.set('Cache-Control', `public, max-age=${DEFAULT_MAX_AGE_SECONDS}`);
-		await cache.put(
-			url,
-			new Response(body, { status: fresh.status, statusText: fresh.statusText, headers })
-		);
-	}
-	return fresh;
-}
-
-async function fetchWithRetries(url: string, fetchFn: typeof fetch): Promise<Response> {
-	let lastError: unknown;
-	for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-		try {
-			return await fetchWithEdgeCache(url, fetchFn);
-		} catch (err) {
-			lastError = err;
-		}
-	}
-	throw lastError;
-}
+const STORAGE_KEY = 'fallback';
+const httpCache = createHttpCache();
 
 async function getServerActiveUrls(
 	storage: Storage | null
 ): Promise<{ primary: string; fallback: string | null }> {
 	const envFallback = RV_API_URL_FALLBACK || null;
 	if (!storage) return { primary: RV_API_URL, fallback: envFallback };
-
-	let stored: { url: string | null; recover: boolean } | null = null;
-	try {
-		const raw = await storage.get(FALLBACK_STORAGE_KEY);
-		if (raw) {
-			const parsed = JSON.parse(raw);
-			if (typeof parsed === 'object' && parsed !== null) {
-				stored = {
-					url: typeof parsed.url === 'string' ? parsed.url : null,
-					recover: parsed.recover !== false
-				};
-			}
-		}
-	} catch {
-	}
-
-	if (stored && stored.recover === false && stored.url) {
-		return { primary: stored.url, fallback: null };
-	}
-	return { primary: RV_API_URL, fallback: stored?.url || envFallback };
+	const stored = parseStoredFallback(await storage.get(STORAGE_KEY));
+	return resolveActiveUrls(stored, RV_API_URL, envFallback);
 }
 
 async function fetchWithFallback(
@@ -97,10 +44,10 @@ async function fetchWithFallback(
 ): Promise<Response> {
 	const { primary, fallback } = await getServerActiveUrls(storage);
 	try {
-		return await fetchWithRetries(composeApiUrl(primary, endpoint), fetchFn);
+		return await withRetries(() => httpCache.fetch(composeApiUrl(primary, endpoint), fetchFn));
 	} catch (primaryErr) {
 		if (!fallback) throw primaryErr;
-		return fetchWithRetries(composeApiUrl(fallback, endpoint), fetchFn);
+		return withRetries(() => httpCache.fetch(composeApiUrl(fallback, endpoint), fetchFn));
 	}
 }
 
@@ -135,9 +82,9 @@ export async function fetchAbout(
 	if (storage) {
 		try {
 			if (about.fallback === null) {
-				await storage.delete(FALLBACK_STORAGE_KEY);
+				await storage.delete(STORAGE_KEY);
 			} else if (about.fallback !== undefined) {
-				await storage.set(FALLBACK_STORAGE_KEY, JSON.stringify(about.fallback));
+				await storage.set(STORAGE_KEY, JSON.stringify(about.fallback));
 			}
 		} catch {
 			// persistence failures must not break /about

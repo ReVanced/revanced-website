@@ -1,5 +1,6 @@
 import { composeApiUrl, getApiUrl, getFallbackApiUrl } from './settings';
 import { getToken, isLoggedIn } from './auth';
+import { withRetries } from './http';
 import type {
 	About,
 	TeamMember,
@@ -31,27 +32,13 @@ class ApiValidationError extends Error {
 	}
 }
 
-const MAX_RETRIES = 3;
-
-async function tryWithRetries(url: string, init?: RequestInit): Promise<Response> {
-	let lastError: unknown;
-	for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-		try {
-			return await fetch(url, init);
-		} catch (err) {
-			lastError = err;
-		}
-	}
-	throw lastError;
-}
-
 async function fetchWithFallback(endpoint: string, init?: RequestInit): Promise<Response> {
 	try {
-		return await tryWithRetries(composeApiUrl(getApiUrl(), endpoint), init);
+		return await withRetries(() => fetch(composeApiUrl(getApiUrl(), endpoint), init));
 	} catch (primaryErr) {
 		const fallback = getFallbackApiUrl();
 		if (!fallback) throw primaryErr;
-		return tryWithRetries(composeApiUrl(fallback, endpoint), init);
+		return withRetries(() => fetch(composeApiUrl(fallback, endpoint), init));
 	}
 }
 
