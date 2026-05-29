@@ -43,6 +43,11 @@ jobs:
           RV_EMAIL: ${{ vars.RV_EMAIL }}
         run: pnpm run build
 
+      - name: Inject KV namespace id
+        env:
+          KV_NAMESPACE_ID: ${{ secrets.KV_NAMESPACE_ID }}
+        run: sed -i "s/__KV_NAMESPACE_ID__/${KV_NAMESPACE_ID}/g" wrangler.toml
+
       - name: Deploy
         id: deploy
         uses: cloudflare/wrangler-action@v3

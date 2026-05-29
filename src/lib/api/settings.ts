@@ -7,9 +7,8 @@ import {
 	RV_DMCA_GUID,
 	RV_GOOGLE_TAG_MANAGER_ID
 } from '$env/static/public';
+import { parseStoredFallback, resolveActiveUrls, type StoredFallback } from './storage';
 
-const STATUS_KEY = 'revanced_status_url';
-const EMAIL_KEY = 'revanced_email';
 const FALLBACK_KEY = 'revanced_api_fallback';
 const LEGACY_FALLBACK_URL_KEY = 'revanced_api_url_fallback';
 
@@ -22,12 +21,7 @@ export const GOOGLE_TAG_MANAGER_ID = RV_GOOGLE_TAG_MANAGER_ID;
 
 export const API_VERSION = 'v5';
 
-function readLocal(key: string): string | null {
-	if (!browser) return null;
-	return localStorage.getItem(key);
-}
-
-function syncLocal(key: string, value: string | null | undefined): void {
+function setStorage(key: string, value: string | null | undefined): void {
 	if (!browser) return;
 	if (value) {
 		localStorage.setItem(key, value);
@@ -36,9 +30,7 @@ function syncLocal(key: string, value: string | null | undefined): void {
 	}
 }
 
-type StoredFallback = { url: string | null; recover: boolean };
-
-function readStoredFallback(): StoredFallback | null {
+function readInitialStoredFallback(): StoredFallback | null {
 	if (!browser) return null;
 
 	const legacy = localStorage.getItem(LEGACY_FALLBACK_URL_KEY);
@@ -46,55 +38,25 @@ function readStoredFallback(): StoredFallback | null {
 		localStorage.removeItem(LEGACY_FALLBACK_URL_KEY);
 		if (legacy) {
 			const migrated: StoredFallback = { url: legacy, recover: true };
-			writeStoredFallback(migrated);
+			setStorage(FALLBACK_KEY, JSON.stringify(migrated));
 			return migrated;
 		}
 	}
 
-	const raw = localStorage.getItem(FALLBACK_KEY);
-	if (!raw) return null;
-	try {
-		const parsed = JSON.parse(raw);
-		if (typeof parsed === 'object' && parsed !== null) {
-			return {
-				url: typeof parsed.url === 'string' ? parsed.url : null,
-				recover: parsed.recover !== false
-			};
-		}
-	} catch {
-		localStorage.removeItem(FALLBACK_KEY);
-	}
-	return null;
+	return parseStoredFallback(localStorage.getItem(FALLBACK_KEY));
 }
+
+let storedFallback: StoredFallback | null = readInitialStoredFallback();
 
 function writeStoredFallback(fallback: StoredFallback | null): void {
-	if (!browser) return;
-	if (fallback) {
-		localStorage.setItem(FALLBACK_KEY, JSON.stringify(fallback));
-	} else {
-		localStorage.removeItem(FALLBACK_KEY);
-	}
-}
-
-function getActiveUrls(): { primary: string; fallback: string | null } {
-	const stored = readStoredFallback();
-	const envFallback = DEFAULT_API_URL_FALLBACK || null;
-	if (stored && stored.recover === false && stored.url) {
-		return { primary: stored.url, fallback: null };
-	}
-	return { primary: DEFAULT_API_URL, fallback: stored?.url || envFallback };
+	storedFallback = fallback;
+	setStorage(FALLBACK_KEY, fallback ? JSON.stringify(fallback) : null);
 }
 
 export function populateDynamicSettings(
-	aboutData: {
-		status?: string;
-		contact?: { email?: string };
-		fallback?: { url: string | null; recover: boolean } | null;
-	} | null
+	aboutData: { fallback?: { url: string | null; recover: boolean } | null } | null
 ): void {
 	if (!browser || !aboutData) return;
-	syncLocal(STATUS_KEY, aboutData.status);
-	syncLocal(EMAIL_KEY, aboutData.contact?.email);
 	if (aboutData.fallback === null) {
 		writeStoredFallback(null);
 	} else if (aboutData.fallback !== undefined) {
@@ -106,19 +68,19 @@ export function populateDynamicSettings(
 }
 
 export function getApiUrl(): string {
-	return getActiveUrls().primary;
+	return resolveActiveUrls(storedFallback, DEFAULT_API_URL, DEFAULT_API_URL_FALLBACK || null).primary;
 }
 
 export function getFallbackApiUrl(): string | null {
-	return getActiveUrls().fallback;
+	return resolveActiveUrls(storedFallback, DEFAULT_API_URL, DEFAULT_API_URL_FALLBACK || null).fallback;
 }
 
 export function getStatusUrl(): string {
-	return readLocal(STATUS_KEY) ?? DEFAULT_STATUS_URL;
+	return DEFAULT_STATUS_URL;
 }
 
 export function getContactEmail(): string {
-	return readLocal(EMAIL_KEY) ?? DEFAULT_EMAIL;
+	return DEFAULT_EMAIL;
 }
 
 export function clearCacheAndReload(): void {
@@ -132,10 +94,6 @@ export function clearCacheAndReload(): void {
 }
 
 export function composeApiUrl(base: string, endpoint: string): string {
-	endpoint = endpoint.replace(/^\/+/, '');
-	if (endpoint === API_VERSION || endpoint.startsWith(API_VERSION + '/')) {
-		endpoint = endpoint.slice(API_VERSION.length).replace(/^\/+/, '');
-	}
 	return `${base}/${API_VERSION}/${endpoint}`;
 }
 
