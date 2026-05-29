@@ -46,7 +46,9 @@ jobs:
       - name: Inject KV namespace id
         env:
           KV_NAMESPACE_ID: ${{ secrets.KV_NAMESPACE_ID }}
-        run: sed -i "s/__KV_NAMESPACE_ID__/${KV_NAMESPACE_ID}/g" wrangler.toml
+        run: |
+          envsubst '${KV_NAMESPACE_ID}' < wrangler.toml > wrangler.toml.tmp
+          mv wrangler.toml.tmp wrangler.toml
 
       - name: Deploy
         id: deploy

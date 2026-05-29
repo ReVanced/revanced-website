@@ -10,4 +10,4 @@ compatibility_flags = ["nodejs_compat"]
 # The namespace id is injected by CI at deploy time from the KV_NAMESPACE_ID repository secret, probably worth looking at .github/workflows/deploy.yml.
 [[kv_namespaces]]
 binding = "STORAGE"
-id = "__KV_NAMESPACE_ID__"
+id = "${KV_NAMESPACE_ID}"
