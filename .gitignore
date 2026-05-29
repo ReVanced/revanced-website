@@ -17,6 +17,9 @@ Thumbs.db
 !.env.example
 !.env.test
 
+# generated at deploy from wrangler.template.toml via envsubst
+wrangler.toml
+
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

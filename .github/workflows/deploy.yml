@@ -43,12 +43,10 @@ jobs:
           RV_EMAIL: ${{ vars.RV_EMAIL }}
         run: pnpm run build
 
-      - name: Inject KV namespace id
+      - name: Generate wrangler.toml from template
         env:
           KV_NAMESPACE_ID: ${{ secrets.KV_NAMESPACE_ID }}
-        run: |
-          envsubst '${KV_NAMESPACE_ID}' < wrangler.toml > wrangler.toml.tmp
-          mv wrangler.toml.tmp wrangler.toml
+        run: envsubst '${KV_NAMESPACE_ID}' < wrangler.template.toml > wrangler.toml
 
       - name: Deploy
         id: deploy
