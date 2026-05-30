@@ -6,42 +6,22 @@ export interface HttpCache {
 }
 
 class CloudflareEdgeCache implements HttpCache {
-	constructor(private readonly cache: Cache) {}
-
 	async fetch(url: string, fetchFn: typeof fetch): Promise<Response> {
-		const cached = await this.cache.match(url);
-		if (cached) return cached;
-
-		const fresh = await fetchFn(url);
-		if (!fresh.ok) return fresh;
-
-		const cacheControl = fresh.headers.get('Cache-Control')?.toLowerCase() ?? '';
-		if (/\bno-store\b|\bno-cache\b|\bprivate\b/.test(cacheControl)) return fresh;
-
-		if (/\bmax-age\b/.test(cacheControl)) {
-			await this.cache.put(url, fresh.clone());
-		} else {
-			const body = await fresh.clone().arrayBuffer();
-			const headers = new Headers(fresh.headers);
-			headers.set('Cache-Control', `public, max-age=${DEFAULT_MAX_AGE_SECONDS}`);
-			await this.cache.put(
-				url,
-				new Response(body, { status: fresh.status, statusText: fresh.statusText, headers })
-			);
-		}
-		return fresh;
-	}
-}
-
-class PassthroughCache implements HttpCache {
-	fetch(url: string, fetchFn: typeof fetch): Promise<Response> {
-		return fetchFn(url);
+		const init = { cf: { cacheEverything: true } } as RequestInit;
+		const response = await fetchFn(url, init);
+		if (!response.ok || response.headers.get('Cache-Control')) return response;
+		const headers = new Headers(response.headers);
+		headers.set('Cache-Control', `public, max-age=${DEFAULT_MAX_AGE_SECONDS}`);
+		return new Response(await response.clone().arrayBuffer(), {
+			status: response.status,
+			statusText: response.statusText,
+			headers
+		});
 	}
 }
 
 export function createHttpCache(): HttpCache {
-	const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
-	return cache ? new CloudflareEdgeCache(cache) : new PassthroughCache();
+	return new CloudflareEdgeCache();
 }
 
 export async function withRetries<T>(

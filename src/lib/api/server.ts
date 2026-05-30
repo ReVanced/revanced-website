@@ -16,12 +16,7 @@ import {
 	LatestAnnouncementsSchema
 } from './schemas';
 import { composeApiUrl } from './settings';
-import {
-	createStorageFromPlatform,
-	parseStoredFallback,
-	resolveActiveUrls,
-	type Storage
-} from './storage';
+import { parseStoredFallback, resolveActiveUrls, type Storage } from './storage';
 import { createHttpCache, withRetries } from './http';
 import type { z } from 'zod';
 
@@ -74,18 +69,13 @@ async function fetchJsonServer<T>(
 
 export async function fetchAbout(
 	fetchFn?: typeof fetch,
-	platform?: App.Platform
+	storage: Storage | null = null
 ): Promise<About> {
-	const storage = createStorageFromPlatform(platform);
 	const about = await fetchJsonServer('about', AboutSchema, fetchFn, storage);
 
-	if (storage) {
+	if (storage && about.fallback !== undefined) {
 		try {
-			if (about.fallback === null) {
-				await storage.delete(STORAGE_KEY);
-			} else if (about.fallback !== undefined) {
-				await storage.set(STORAGE_KEY, JSON.stringify(about.fallback));
-			}
+			await storage.set(STORAGE_KEY, about.fallback ? JSON.stringify(about.fallback) : null);
 		} catch {
 			// persistence failures must not break /about
 		}
@@ -96,40 +86,35 @@ export async function fetchAbout(
 
 export async function fetchLatestAnnouncements(
 	fetchFn?: typeof fetch,
-	platform?: App.Platform
+	storage: Storage | null = null
 ): Promise<TaggedLatestAnnouncements[]> {
-	const storage = createStorageFromPlatform(platform);
 	return fetchJsonServer('announcements/latest', LatestAnnouncementsSchema, fetchFn, storage);
 }
 
 export async function fetchTeam(
 	fetchFn?: typeof fetch,
-	platform?: App.Platform
+	storage: Storage | null = null
 ): Promise<TeamMember[]> {
-	const storage = createStorageFromPlatform(platform);
 	return fetchJsonServer('team', TeamMembersSchema, fetchFn, storage);
 }
 
 export async function fetchManager(
 	fetchFn?: typeof fetch,
-	platform?: App.Platform
+	storage: Storage | null = null
 ): Promise<ManagerRelease> {
-	const storage = createStorageFromPlatform(platform);
 	return fetchJsonServer('manager', ManagerReleaseSchema, fetchFn, storage);
 }
 
 export async function fetchContributors(
 	fetchFn?: typeof fetch,
-	platform?: App.Platform
+	storage: Storage | null = null
 ): Promise<Contributable[]> {
-	const storage = createStorageFromPlatform(platform);
 	return fetchJsonServer('contributors', ContributablesSchema, fetchFn, storage);
 }
 
 export async function fetchAnnouncements(
 	fetchFn?: typeof fetch,
-	platform?: App.Platform
+	storage: Storage | null = null
 ): Promise<Announcement[]> {
-	const storage = createStorageFromPlatform(platform);
 	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn, storage);
 }

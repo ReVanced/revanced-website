@@ -1,7 +1,6 @@
 export interface Storage {
 	get(key: string): Promise<string | null>;
-	set(key: string, value: string): Promise<void>;
-	delete(key: string): Promise<void>;
+	set(key: string, value: string | null): Promise<void>;
 }
 
 type CloudflareKV = {
@@ -17,12 +16,12 @@ class CloudflareStorage implements Storage {
 		return this.kv.get(key);
 	}
 
-	async set(key: string, value: string): Promise<void> {
-		await this.kv.put(key, value);
-	}
-
-	async delete(key: string): Promise<void> {
-		await this.kv.delete(key);
+	async set(key: string, value: string | null): Promise<void> {
+		if (value === null) {
+			await this.kv.delete(key);
+		} else {
+			await this.kv.put(key, value);
+		}
 	}
 }
 
