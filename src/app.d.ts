@@ -9,7 +9,7 @@ declare global {
 		// interface PageState {}
 		interface Platform {
 			env?: {
-				STORAGE?: {
+				storage?: {
 					get(key: string): Promise<string | null>;
 					put(key: string, value: string): Promise<unknown>;
 					delete(key: string): Promise<unknown>;

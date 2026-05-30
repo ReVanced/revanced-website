@@ -5,10 +5,10 @@ compatibility_flags = ["nodejs_compat"]
 
 # Server-side persistence for the fallback URL from the /about endpoint.
 # Required so the "recover: false" capture mechanism also applies at the SSR layer, without it capture is browser-only.
-# sveltekit does not yet support Durable Objects, so KV is the persistence layer instead of deploying a separate worker.
+# SvelteKit does not yet support Durable Objects, so KV is the persistence layer instead of deploying a separate worker.
 # The Storage interface in src/lib/api/storage.ts keeps the implementation swappable once DO is supported.
 # This file is the source-of-truth; wrangler.toml is generated from it via envsubst at deploy time and gitignored.
 # The namespace id is injected from the KV_NAMESPACE_ID repository secret, probably worth looking at .github/workflows/deploy.yml.
 [[kv_namespaces]]
-binding = "STORAGE"
+binding = "storage"
 id = "${KV_NAMESPACE_ID}"

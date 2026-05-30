@@ -26,7 +26,7 @@ class CloudflareStorage implements Storage {
 }
 
 export function createStorageFromPlatform(platform: App.Platform | undefined): Storage | null {
-	const kv = platform?.env?.STORAGE;
+	const kv = platform?.env?.storage;
 	if (!kv) return null;
 	return new CloudflareStorage(kv);
 }
