@@ -83,16 +83,6 @@ export function getContactEmail(): string {
 	return DEFAULT_EMAIL;
 }
 
-export function clearCacheAndReload(): void {
-	if (!browser) return;
-
-	localStorage.clear();
-	sessionStorage.clear();
-
-	sessionStorage.setItem('revanced_intentional_logout', 'true');
-	location.reload();
-}
-
 export function composeApiUrl(base: string, endpoint: string): string {
 	return `${base}/${API_VERSION}/${endpoint}`;
 }
