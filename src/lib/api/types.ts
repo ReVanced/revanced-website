@@ -30,6 +30,11 @@ export type Branding = {
 	logo: string;
 };
 
+export type Fallback = {
+	url: string | null;
+	recover: boolean;
+};
+
 export type About = {
 	name: string;
 	about: string;
@@ -39,6 +44,7 @@ export type About = {
 	socials: Social[];
 	donations: Donations;
 	status: string;
+	fallback?: Fallback | null;
 };
 
 export type GpgKey = {

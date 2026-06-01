@@ -7,7 +7,15 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface PageState {}
-		// interface Platform {}
+		interface Platform {
+			env?: {
+				storage?: {
+					get(key: string): Promise<string | null>;
+					put(key: string, value: string): Promise<unknown>;
+					delete(key: string): Promise<unknown>;
+				};
+			};
+		}
 	}
 }
 

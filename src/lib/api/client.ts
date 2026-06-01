@@ -1,5 +1,6 @@
-import { buildUrl } from './settings';
+import { composeApiUrl, getApiUrl, getFallbackApiUrl } from './settings';
 import { getToken, isLoggedIn } from './auth';
+import { withRetries } from './http';
 import type {
 	About,
 	TeamMember,
@@ -31,15 +32,22 @@ class ApiValidationError extends Error {
 	}
 }
 
+async function fetchWithFallback(endpoint: string, init?: RequestInit): Promise<Response> {
+	try {
+		return await withRetries(() => fetch(composeApiUrl(getApiUrl(), endpoint), init));
+	} catch (primaryErr) {
+		const fallback = getFallbackApiUrl();
+		if (!fallback) throw primaryErr;
+		return withRetries(() => fetch(composeApiUrl(fallback, endpoint), init));
+	}
+}
+
 async function fetchJson<T>(
 	endpoint: string,
 	schema: z.ZodType<T>,
 	signal?: AbortSignal
 ): Promise<T> {
-	const response = await fetch(buildUrl(endpoint), {
-		cache: 'no-store',
-		...(signal ? { signal } : {})
-	});
+	const response = await fetchWithFallback(endpoint, signal ? { signal } : undefined);
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
 	}
@@ -72,7 +80,7 @@ async function mutateJson<T>(
 ): Promise<T | null> {
 	if (!isLoggedIn()) throw new Error('Unauthenticated');
 
-	const response = await fetch(buildUrl(endpoint), {
+	const response = await fetchWithFallback(endpoint, {
 		method,
 		headers: buildAuthHeaders(),
 		...(body !== undefined ? { body: JSON.stringify(body) } : {})

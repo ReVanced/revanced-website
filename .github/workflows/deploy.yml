@@ -43,6 +43,11 @@ jobs:
           RV_EMAIL: ${{ vars.RV_EMAIL }}
         run: pnpm run build
 
+      - name: Generate wrangler.toml from template
+        env:
+          KV_NAMESPACE_ID: ${{ secrets.KV_NAMESPACE_ID }}
+        run: envsubst '${KV_NAMESPACE_ID}' < wrangler.template.toml > wrangler.toml
+
       - name: Deploy
         id: deploy
         uses: cloudflare/wrangler-action@v3

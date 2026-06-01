@@ -1,4 +1,4 @@
-import { RV_API_URL } from '$env/static/public';
+import { RV_API_URL, RV_API_URL_FALLBACK } from '$env/static/public';
 import type {
 	About,
 	TeamMember,
@@ -15,22 +15,44 @@ import {
 	AnnouncementsSchema,
 	LatestAnnouncementsSchema
 } from './schemas';
+import { composeApiUrl } from './settings';
+import { parseStoredFallback, resolveActiveUrls, type Storage } from './storage';
+import { createHttpCache, withRetries } from './http';
 import type { z } from 'zod';
 
-const API_VERSION = 'v5';
+const STORAGE_KEY = 'fallback';
+const httpCache = createHttpCache();
 
-function buildServerUrl(endpoint: string): string {
-	endpoint = endpoint.replace(/^\/+/, '');
-	return `${RV_API_URL}/${API_VERSION}/${endpoint}`;
+async function getServerActiveUrls(
+	storage: Storage | null
+): Promise<{ primary: string; fallback: string | null }> {
+	const envFallback = RV_API_URL_FALLBACK || null;
+	if (!storage) return { primary: RV_API_URL, fallback: envFallback };
+	const stored = parseStoredFallback(await storage.get(STORAGE_KEY));
+	return resolveActiveUrls(stored, RV_API_URL, envFallback);
+}
+
+async function fetchWithFallback(
+	endpoint: string,
+	fetchFn: typeof fetch,
+	storage: Storage | null
+): Promise<Response> {
+	const { primary, fallback } = await getServerActiveUrls(storage);
+	try {
+		return await withRetries(() => httpCache.fetch(composeApiUrl(primary, endpoint), fetchFn));
+	} catch (primaryErr) {
+		if (!fallback) throw primaryErr;
+		return withRetries(() => httpCache.fetch(composeApiUrl(fallback, endpoint), fetchFn));
+	}
 }
 
 async function fetchJsonServer<T>(
 	endpoint: string,
 	schema: z.ZodType<T>,
-	fetchFn: typeof fetch = fetch
+	fetchFn: typeof fetch = fetch,
+	storage: Storage | null = null
 ): Promise<T> {
-	const url = buildServerUrl(endpoint);
-	const response = await fetchFn(url, { cache: 'no-store' });
+	const response = await fetchWithFallback(endpoint, fetchFn, storage);
 
 	if (!response.ok) {
 		throw new Error(`API error: ${response.status} ${response.statusText}`);
@@ -45,28 +67,54 @@ async function fetchJsonServer<T>(
 	return result.data;
 }
 
-export async function fetchAbout(fetchFn?: typeof fetch): Promise<About> {
-	return fetchJsonServer('about', AboutSchema, fetchFn);
-}
+export async function fetchAbout(
+	fetchFn?: typeof fetch,
+	storage: Storage | null = null
+): Promise<About> {
+	const about = await fetchJsonServer('about', AboutSchema, fetchFn, storage);
 
-export async function fetchTeam(fetchFn?: typeof fetch): Promise<TeamMember[]> {
-	return fetchJsonServer('team', TeamMembersSchema, fetchFn);
-}
+	if (storage && about.fallback !== undefined) {
+		try {
+			await storage.set(STORAGE_KEY, about.fallback ? JSON.stringify(about.fallback) : null);
+		} catch {
+			// persistence failures must not break /about
+		}
+	}
 
-export async function fetchManager(fetchFn?: typeof fetch): Promise<ManagerRelease> {
-	return fetchJsonServer('manager', ManagerReleaseSchema, fetchFn);
-}
-
-export async function fetchContributors(fetchFn?: typeof fetch): Promise<Contributable[]> {
-	return fetchJsonServer('contributors', ContributablesSchema, fetchFn);
-}
-
-export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announcement[]> {
-	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn);
+	return about;
 }
 
 export async function fetchLatestAnnouncements(
-	fetchFn?: typeof fetch
+	fetchFn?: typeof fetch,
+	storage: Storage | null = null
 ): Promise<TaggedLatestAnnouncements[]> {
-	return fetchJsonServer('announcement/latest', LatestAnnouncementsSchema, fetchFn);
+	return fetchJsonServer('announcements/latest', LatestAnnouncementsSchema, fetchFn, storage);
+}
+
+export async function fetchTeam(
+	fetchFn?: typeof fetch,
+	storage: Storage | null = null
+): Promise<TeamMember[]> {
+	return fetchJsonServer('team', TeamMembersSchema, fetchFn, storage);
+}
+
+export async function fetchManager(
+	fetchFn?: typeof fetch,
+	storage: Storage | null = null
+): Promise<ManagerRelease> {
+	return fetchJsonServer('manager', ManagerReleaseSchema, fetchFn, storage);
+}
+
+export async function fetchContributors(
+	fetchFn?: typeof fetch,
+	storage: Storage | null = null
+): Promise<Contributable[]> {
+	return fetchJsonServer('contributors', ContributablesSchema, fetchFn, storage);
+}
+
+export async function fetchAnnouncements(
+	fetchFn?: typeof fetch,
+	storage: Storage | null = null
+): Promise<Announcement[]> {
+	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn, storage);
 }

@@ -7,7 +7,7 @@ export {
 	getQueryClient,
 } from './queryClient';
 
-export { readAnnouncements, announcementPolling } from './readAnnouncements.svelte';
+export { readAnnouncements } from './readAnnouncements.svelte';
 
 export { auth } from './auth.svelte';
 
