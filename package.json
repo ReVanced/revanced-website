@@ -9,6 +9,7 @@
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"test": "node --test",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint ."
@@ -41,6 +42,7 @@
 		"@tanstack/svelte-query-persist-client": "^6.0.22",
 		"fuse.js": "^7.1.0",
 		"moment": "^2.30.1",
+		"parse5": "^8.0.1",
 		"qrious": "^4.0.2",
 		"runed": "^0.37.1",
 		"svelte-material-icons": "^3.0.5",

@@ -2,7 +2,7 @@
 	import { tick, untrack } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { goto, replaceState, invalidateAll } from '$app/navigation';
+	import { afterNavigate, goto, replaceState, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import type { Announcement } from '$lib/api/types';
@@ -14,6 +14,7 @@
 		deleteAnnouncement,
 		type AnnouncementPayload
 	} from '$lib/api/client';
+	import { buildAnnouncementPayload } from '$lib/api/announcementPayload';
 	import { auth } from '$stores';
 	import Content from './Content.svelte';
 	import DeleteConfirmDialog from './DeleteConfirmDialog.svelte';
@@ -59,14 +60,12 @@
 	let draftInitialized = $state(false);
 
 	// Correct URL slug
-	$effect(() => {
-		if (!browser || !announcement?.title) return;
+	afterNavigate(() => {
+		if (!announcement?.title) return;
 		const expectedQuery = `?id=${announcement.id}-${toSlug(announcement.title)}`;
-		untrack(() => {
-			if (page.url.search !== expectedQuery) {
-				replaceState(`/announcements${expectedQuery}`, {});
-			}
-		});
+		if (page.url.search !== expectedQuery) {
+			replaceState(`/announcements${expectedQuery}`, {});
+		}
 	});
 
 	function initializeDraft() {
@@ -114,14 +113,14 @@
 		const archivedAtFormatted = archivedAtInput ? formatUTC(archivedAtInput) : null;
 		const createdAtFormatted = createdAtInput ? String(formatUTC(createdAtInput)) : undefined;
 
-		return {
-			title: titleInput.trim(),
-			content: contentInput.trim() || undefined,
-			author: authorInput.trim() || undefined,
-			tags: tagsInput.length > 0 ? tagsInput : undefined,
-			created_at: createdAtFormatted,
-			archived_at: typeof archivedAtFormatted === 'string' ? archivedAtFormatted : null
-		};
+		return buildAnnouncementPayload({
+			title: titleInput,
+			content: contentInput,
+			author: authorInput,
+			tags: tagsInput,
+			createdAt: createdAtFormatted,
+			archivedAt: typeof archivedAtFormatted === 'string' ? archivedAtFormatted : null
+		});
 	}
 
 	function onEdit() {

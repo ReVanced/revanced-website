@@ -12,6 +12,7 @@
 	import QRCode from '$components/atoms/QRCode.svelte';
 	import Snackbar from '$components/atoms/Snackbar.svelte';
 	import type { CryptoWallet } from '$api';
+	import { hydrated } from '$stores/hydrated.svelte';
 
 	import IconCircles from 'svelte-material-icons/CircleMultipleOutline.svelte';
 	import IconWallet from 'svelte-material-icons/WalletOutline.svelte';
@@ -36,21 +37,23 @@
 	let cryptoWallets = $derived(data.about?.donations?.wallets ?? []);
 
 	let teamMembers = $derived(data.team ?? []);
+	
+	function shuffle<T>(array: readonly T[]): T[] {
+		const result = [...array];
+		for (let i = result.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[result[i], result[j]] = [result[j], result[i]];
+		}
+		return result;
+	}
+
+	let displayedTeam = $derived(hydrated.current ? shuffle(teamMembers) : teamMembers);
 
 	let cryptoModalOpen = $state(false);
 	let walletModalOpen = $state(false);
 	let selectedWallet = $state<CryptoWallet | null>(null);
 	let copySuccess = $state(false);
 	let snackbarOpen = $state(false);
-
-	function shuffle<T>(array: T[]): T[] {
-		return array
-			.map((value) => ({ value, sort: Math.random() }))
-			.sort((a, b) => a.sort - b.sort)
-			.map(({ value }) => value);
-	}
-
-	let shuffledTeam = $derived(browser ? shuffle([...teamMembers]) : teamMembers);
 
 	const schemas = [
 		{
@@ -131,7 +134,7 @@
 
 		<h3>Meet the team</h3>
 		<section class="team">
-			{#each shuffledTeam as member, i}
+			{#each displayedTeam as member, i (member.name)}
 				<TeamMemberCard {member} {i} />
 			{/each}
 		</section>

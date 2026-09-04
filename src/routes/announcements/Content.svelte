@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { relativeTime } from '$lib/utils/relativeTime';
+	import { displayTime, isoDateTime } from '$lib/utils/relativeTime';
+	import { hydrated } from '$stores/hydrated.svelte';
 	import { auth } from '$stores';
 	import TagChip from '$components/atoms/TagChip.svelte';
 	import AdminButtons from './AdminButtons.svelte';
@@ -143,10 +144,14 @@
 				/>
 			{:else}
 				<span class="date-display">
-					{relativeTime(displayCreatedAt)}
+					<time datetime={isoDateTime(displayCreatedAt)}>
+						{displayTime(displayCreatedAt, hydrated.current)}
+					</time>
 					{#if displayArchivedAt}
 						<IconArrowRight size={16} />
-						{relativeTime(displayArchivedAt)}
+						<time datetime={isoDateTime(displayArchivedAt)}>
+							{displayTime(displayArchivedAt, hydrated.current)}
+						</time>
 					{/if}
 				</span>
 				{#if displayAuthor}

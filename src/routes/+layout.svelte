@@ -5,7 +5,9 @@
 	import { isScheduled } from '$lib/utils';
 	import AppShell from '$components/organisms/AppShell.svelte';
 	import type { WithChildren } from '$types';
+	import { onMount } from 'svelte';
 	import { theme } from '$stores';
+	import { hydrated } from '$stores/hydrated.svelte';
 	import { getQueryClient } from '$stores/queryClient';
 	import { useHolidayTheme } from '$lib/utils/themeEvents.svelte';
 	import type { LayoutData } from './$types';
@@ -16,8 +18,10 @@
 	useHolidayTheme();
 
 	let publishedAnnouncements = $derived(
-        (data.latestAnnouncements ?? []).filter(item => !isScheduled(item.created_at))
+        (data.latestAnnouncements ?? []).filter(item => !isScheduled(item.announcement.created_at))
     );
+
+	onMount(() => hydrated.markHydrated());
 
 	$effect(() => {
 		if (browser) {
