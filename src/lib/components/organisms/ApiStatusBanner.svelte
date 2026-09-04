@@ -1,12 +1,25 @@
 <script lang="ts">
-	import { getStatusUrl, getContactEmail } from '$api';
+	import { browser } from '$app/environment';
+	import { getStatusUrl, getContactEmail, DEFAULT_STATUS_URL, DEFAULT_EMAIL } from '$api';
 	import Button from '$components/atoms/Button.svelte';
 	import ArrowRight from 'svelte-material-icons/ArrowRight.svelte';
 
 	let { apiIsDown = false }: { apiIsDown: boolean } = $props();
 
-	const statusUrl = getStatusUrl();
-	const email = getContactEmail();
+	// getStatusUrl() / getContactEmail() read from localStorage which isnt available during SSR.
+
+	// If we use them during the initial render the server gets the env defaults while the client gets the cached values so the href / banner text can change during hydration.
+	
+	// Start with the same defaults as the server then pick up any cached value after mount.
+
+	let statusUrl = $state(DEFAULT_STATUS_URL);
+	let email = $state(DEFAULT_EMAIL);
+
+	$effect(() => {
+		if (!browser) return;
+		statusUrl = getStatusUrl();
+		email = getContactEmail();
+	});
 </script>
 
 {#if apiIsDown}

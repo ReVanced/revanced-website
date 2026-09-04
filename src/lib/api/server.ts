@@ -16,8 +16,31 @@ import {
 	LatestAnnouncementsSchema
 } from './schemas';
 import type { z } from 'zod';
+import { parseFragment, serialize } from 'parse5';
 
 const API_VERSION = 'v5';
+
+/*
+
+Announcement bodies are raw HTML entered by admins and some of the olderones aint quite valid (<ul> / <a> left open, stray </li>, etc....).
+If we pass that straight to {@html} during SSR the browser fixes it up while parsing. That can move svelte's {@html} end marker so hydration loses its place and the whole app gets rerendered on the client.
+
+We run the same HTML5 parsing the browser uses and send the already-fixed markup instead. 
+
+That way the browser don't have to change anything and SSR + hydration stay in sync. 
+
+This is just normalisation, not sanitising, we are NOT removing content, tags or links.
+
+Server-only: this is only imported from +page.server.ts / +layout.server.ts so parse5 never ends up in the browser bundle. */
+
+export function normalizeHtml(html: string | null | undefined): string | null {
+	if (!html) return html ?? null;
+	try {
+		return serialize(parseFragment(html));
+	} catch {
+		return html;
+	}
+}
 
 function buildServerUrl(endpoint: string): string {
 	endpoint = endpoint.replace(/^\/+/, '');
@@ -62,11 +85,19 @@ export async function fetchContributors(fetchFn?: typeof fetch): Promise<Contrib
 }
 
 export async function fetchAnnouncements(fetchFn?: typeof fetch): Promise<Announcement[]> {
-	return fetchJsonServer('announcements', AnnouncementsSchema, fetchFn);
+	const announcements = await fetchJsonServer('announcements', AnnouncementsSchema, fetchFn);
+	return announcements.map((announcement) => ({
+		...announcement,
+		content: normalizeHtml(announcement.content)
+	}));
 }
 
 export async function fetchLatestAnnouncements(
 	fetchFn?: typeof fetch
 ): Promise<TaggedLatestAnnouncements[]> {
-	return fetchJsonServer('announcement/latest', LatestAnnouncementsSchema, fetchFn);
+	const latest = await fetchJsonServer('announcements/latest', LatestAnnouncementsSchema, fetchFn);
+	return latest.map((entry) => ({
+		...entry,
+		announcement: { ...entry.announcement, content: normalizeHtml(entry.announcement.content) }
+	}));
 }

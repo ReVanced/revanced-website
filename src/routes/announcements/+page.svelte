@@ -3,6 +3,7 @@
 	import { quintOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
 	import { goto, replaceState } from '$app/navigation';
+	import { untrack } from 'svelte';
 	import { page } from '$app/state';
 	import Page from '$components/templates/Page.svelte';
 	import Search from '$components/atoms/Search.svelte';
@@ -21,12 +22,9 @@
 
 	let selectedId = $derived(page.url.searchParams.get('id'));
 
-	const initialParams = browser
-		? new URL(window.location.href).searchParams
-		: new URLSearchParams();
-	let searchTerm = $state(initialParams.get('s') ?? '');
-	let displayedTerm = $state(initialParams.get('s') ?? '');
-	let selectedTags = $state<string[]>(initialParams.getAll('tag'));
+	let displayedTerm = $derived(page.url.searchParams.get('s') ?? '');
+	let selectedTags = $derived(page.url.searchParams.getAll('tag'));
+	let searchTerm = $state(page.url.searchParams.get('s') ?? '');
 	let archiveOpen = $state(false);
 	let archiveContentElement = $state<HTMLElement>();
 	let archiveContentHeight = $derived(archiveContentElement?.scrollHeight ?? 0);
@@ -43,16 +41,13 @@
 	);
 
 	$effect(() => {
-		if (!browser) return;
-
-		const urlTags = page.url.searchParams.getAll('tag');
-		if (JSON.stringify(urlTags) !== JSON.stringify(selectedTags)) {
-			selectedTags = urlTags;
-		}
+		const urlTerm = page.url.searchParams.get('s') ?? '';
+		untrack(() => {
+			if (urlTerm !== searchTerm.trim()) searchTerm = urlTerm;
+		});
 	});
 
 	const debouncedUpdate = debounce(() => {
-		displayedTerm = searchTerm;
 		syncUrlWithSearch();
 	});
 
@@ -101,7 +96,7 @@
 	);
 
 	function onTagSelect(tag: string) {
-		const url = new URL(window.location.href);
+		const url = new URL(page.url);
 		const params = url.searchParams;
 
 		if (params.getAll('tag').includes(tag)) {
@@ -139,7 +134,7 @@
 						placeholder="Search for announcements"
 						onkeyup={debouncedUpdate}
 						onclear={() => {
-							displayedTerm = '';
+							searchTerm = '';
 							syncUrlWithSearch();
 						}}
 					/>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { page } from '$app/state';
 
 	import logo from '$assets/icons/logo.svg';
 	import Divider from '$components/atoms/Divider.svelte';
@@ -31,13 +32,12 @@
 		inert = false
 	}: Props = $props();
 
-	let currentUrl = $state('');
+	
+	// page.url is available both during SSR and in the browser so the DMCA "refurl" stays the same on both sides. 
+	
+	// Using window.location.href in an effect meant refurl was empty in the server HTML and only got filled in after hydration.
 
-	$effect(() => {
-		if (typeof window !== 'undefined') {
-			currentUrl = window.location.href;
-		}
-	});
+	let currentUrl = $derived(page.url.href);
 
 	function buildDmcaStatusUrl(guid: string): string {
 		return `//www.dmca.com/Protection/Status.aspx?ID=${guid}&refurl=${currentUrl}`;

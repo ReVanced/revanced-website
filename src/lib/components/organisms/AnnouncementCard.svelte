@@ -3,8 +3,9 @@
 	import TagsFilter from '$components/molecules/TagsFilter.svelte';
 	import ToolTip from '$components/atoms/ToolTip.svelte';
 	import { readAnnouncements } from '$stores';
+	import { hydrated } from '$stores/hydrated.svelte';
 	import { browser } from '$app/environment';
-	import { relativeTime } from '$lib/utils/relativeTime';
+	import { displayTime, isoDateTime } from '$lib/utils/relativeTime';
 	import { isArchived, buildAnnouncementPath } from '$lib/utils';
 	import IconArchive from 'svelte-material-icons/ArchiveOutline.svelte';
 
@@ -22,53 +23,89 @@
 
 	let href = $derived(buildAnnouncementPath(announcement.id, announcement.title));
 	let archived = $derived(isArchived(announcement.archived_at));
-	let createdTime = $derived(relativeTime(announcement.created_at));
+	let createdTime = $derived(displayTime(announcement.created_at, hydrated.current));
 	let archivedTime = $derived(
-		announcement.archived_at ? relativeTime(announcement.archived_at) : ''
+		announcement.archived_at ? displayTime(announcement.archived_at, hydrated.current) : ''
 	);
 </script>
 
-<a {href} class="card-link" data-sveltekit-preload-data onclick={handleClick}>
-	<article class="card">
-		{#if browser && !isRead && !archived}
-			<span class="new-header">NEW</span>
-		{/if}
+<!--
+	Don't wrap the whole card in a single <a>. announcement.content is arbitrary HTML injected with {@html} and the announcement bodies already have their own <a> tags.
 
-		<div class="content">
-			<header class="header">
-				<h3>{announcement.title}</h3>
-				<span class="meta">
-					{createdTime}
-					{#if archived}
+	That means we would end up with nested anchors which is invalid HTML. The browser then rewrites the SSR markup before Svelte gets to hydrate it so the DOM no longer matches the template and hydration blows up with "Node.appendChild: Cannot add children to a Text".
+
+	So instead the anchor only wraps the title and we stretch it over the card using an ::after overlay. Same clickable-card behavior, valid markup, and still just one keyboard focus stop per card.
+-->
+
+<article class="card">
+	{#if browser && !isRead && !archived}
+		<span class="new-header">NEW</span>
+	{/if}
+
+	<div class="content">
+		<header class="header">
+			<h3>
+				<a {href} class="card-link" data-sveltekit-preload-data onclick={handleClick}>
+					{announcement.title}
+				</a>
+			</h3>
+			<span class="meta">
+				<time datetime={isoDateTime(announcement.created_at)}>{createdTime}</time>
+				{#if archived}
+					<span class="meta-interactive">
 						<ToolTip content="This announcement was archived {archivedTime}">
 							<IconArchive size={18} />
 						</ToolTip>
-					{/if}
-				</span>
-			</header>
-
-			<footer class="footer">
-				{#if announcement.content}
-					<div class="content-body">
-						{@html announcement.content}
-					</div>
+					</span>
 				{/if}
+			</span>
+		</header>
 
-				{#if announcement.tags && announcement.tags.length > 0}
-					<hr />
-					<TagsFilter tags={announcement.tags} clickable={false} />
-				{/if}
-			</footer>
-		</div>
-	</article>
-</a>
+		<footer class="footer">
+			{#if announcement.content}
+				<div class="content-body">
+					{@html announcement.content}
+				</div>
+			{/if}
+
+			{#if announcement.tags && announcement.tags.length > 0}
+				<hr />
+				<TagsFilter tags={announcement.tags} clickable={false} />
+			{/if}
+		</footer>
+	</div>
+</article>
 
 <style>
 	.card-link {
 		text-decoration: inherit;
+		color: inherit;
+	}
+
+	/* Stretch the title link over the whole card so the entire card stays clickable without nesting the announcement body inside an anchor */
+	.card-link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 12px;
+		z-index: 1;
+	}
+
+	.card-link:focus-visible::after {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
+	}
+
+	/* Keep the archive tooltip hoverable above the stretched overlay. */
+	.meta-interactive {
+		position: relative;
+		z-index: 2;
+		display: inline-flex;
+		align-items: center;
 	}
 
 	.card {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
